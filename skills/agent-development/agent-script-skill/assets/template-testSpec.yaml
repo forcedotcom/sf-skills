@@ -1,0 +1,78 @@
+# Agent Test Specification Template
+# Creates an AiEvaluationDefinition in your org for agent testing.
+# Copy this template and customize for your agent.
+# Usage: sf agent test create --spec specs/<Agent_API_Name>-testSpec.yaml --api-name <Test_Name> --force-overwrite
+
+name: Agent Tests
+description: Functional tests for the agent
+subjectType: AGENT
+subjectName: Agent_API_Name
+
+testCases:
+  # Basic topic routing test
+  - utterance: Example user request for main topic
+    expectedTopic: main
+    expectedActions:
+      - do_action
+    expectedOutcome: Describe what the agent should do. Be specific about what data should be included and how it should be formatted.
+    metrics:
+      - coherence
+      - conciseness
+      - output_latency_milliseconds
+
+  # Gating pattern test - action should NOT fire without required data
+  - utterance: Example request without providing required information
+    expectedTopic: topic_b
+    expectedActions: []
+    expectedOutcome: The agent should ask for the required information before calling the gated action.
+    metrics:
+      - coherence
+      - instruction_following
+      - output_latency_milliseconds
+
+  # Gating pattern test - action SHOULD fire with required data
+  - utterance: Example request with required information
+    expectedTopic: topic_b
+    expectedActions:
+      - action_b
+    expectedOutcome: The agent should call the gated action and provide results.
+    metrics:
+      - coherence
+      - conciseness
+      - output_latency_milliseconds
+
+  # Escalation test
+  - utterance: I need to speak with a human
+    expectedTopic: escalation
+    expectedActions: []
+    expectedOutcome: The agent should escalate the conversation to a human agent.
+    metrics:
+      - coherence
+      - output_latency_milliseconds
+
+  # Off-topic test
+  - utterance: What is the capital of France?
+    expectedTopic: off_topic
+    expectedActions: []
+    expectedOutcome: The agent should NOT answer the off-topic question. The agent should redirect the user to topics it can help with.
+    metrics:
+      - coherence
+      - instruction_following
+      - output_latency_milliseconds
+
+  # Conversation history test
+  - utterance: Follow-up question referencing previous context
+    expectedTopic: main
+    expectedActions:
+      - do_action
+    expectedOutcome: The agent should handle the follow-up question in context of the conversation history.
+    conversationHistory:
+      - role: user
+        message: Initial user message
+      - role: agent
+        message: Agent response to initial message
+        topic: main
+    metrics:
+      - coherence
+      - conciseness
+      - output_latency_milliseconds
