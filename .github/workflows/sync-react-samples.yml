@@ -1,0 +1,161 @@
+# Syncs React sample packages from npm into samples/:
+#   - @salesforce/webapp-template-app-react-sample-b2e-experimental
+#   - @salesforce/webapp-template-app-react-sample-b2x-experimental
+#
+# Opens a single PR when either (or both) npm package versions have changed.
+# Same steps as running locally: npm install && npm run sync-react-b2e-sample
+# and npm run sync-react-b2x-sample.
+#
+# Uses IDEE_GH_TOKEN (bot) for checkout and PR creation; same pattern as
+# salesforcedx-vscode-einstein-gpt/.github/workflows/build.yml
+
+name: Sync React samples from npm
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Nightly at 02:00 UTC
+    - cron: "0 2 * * *"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.IDEE_GH_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: npm
+
+      # ── B2E version check ──────────────────────────────────────────
+      - name: Get latest B2E npm version
+        id: npm-version-b2e
+        run: |
+          LATEST=$(npm view @salesforce/webapp-template-app-react-sample-b2e-experimental version)
+          echo "latest=$LATEST" >> $GITHUB_OUTPUT
+
+      - name: Read current synced B2E version
+        id: current-version-b2e
+        run: |
+          VERSION_FILE="samples/webapp-template-app-react-sample-b2e-experimental/.version"
+          if [ -f "$VERSION_FILE" ]; then
+            CURRENT=$(cat "$VERSION_FILE" | tr -d '[:space:]')
+            echo "current=$CURRENT" >> $GITHUB_OUTPUT
+          else
+            echo "current=" >> $GITHUB_OUTPUT
+          fi
+
+      # ── B2X version check ──────────────────────────────────────────
+      - name: Get latest B2X npm version
+        id: npm-version-b2x
+        run: |
+          LATEST=$(npm view @salesforce/webapp-template-app-react-sample-b2x-experimental version)
+          echo "latest=$LATEST" >> $GITHUB_OUTPUT
+
+      - name: Read current synced B2X version
+        id: current-version-b2x
+        run: |
+          VERSION_FILE="samples/webapp-template-app-react-sample-b2x-experimental/.version"
+          if [ -f "$VERSION_FILE" ]; then
+            CURRENT=$(cat "$VERSION_FILE" | tr -d '[:space:]')
+            echo "current=$CURRENT" >> $GITHUB_OUTPUT
+          else
+            echo "current=" >> $GITHUB_OUTPUT
+          fi
+
+      # ── Skip logic ─────────────────────────────────────────────────
+      - name: Check for version changes
+        id: skip
+        run: |
+          B2E_CHANGED="false"
+          B2X_CHANGED="false"
+
+          if [ "${{ steps.current-version-b2e.outputs.current }}" != "${{ steps.npm-version-b2e.outputs.latest }}" ]; then
+            B2E_CHANGED="true"
+          fi
+          if [ "${{ steps.current-version-b2x.outputs.current }}" != "${{ steps.npm-version-b2x.outputs.latest }}" ]; then
+            B2X_CHANGED="true"
+          fi
+
+          echo "b2e_changed=$B2E_CHANGED" >> $GITHUB_OUTPUT
+          echo "b2x_changed=$B2X_CHANGED" >> $GITHUB_OUTPUT
+
+          if [ "$B2E_CHANGED" = "false" ] && [ "$B2X_CHANGED" = "false" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "No version changes detected."
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "Changes detected — B2E=$B2E_CHANGED B2X=$B2X_CHANGED"
+          fi
+
+      # ── Install + sync ─────────────────────────────────────────────
+      - name: Install dependencies
+        if: steps.skip.outputs.skip != 'true'
+        run: npm install
+
+      - name: Sync B2E sample
+        if: steps.skip.outputs.skip != 'true'
+        run: npm run sync-react-b2e-sample
+
+      - name: Sync B2X sample
+        if: steps.skip.outputs.skip != 'true'
+        run: npm run sync-react-b2x-sample
+
+      # ── PR creation ────────────────────────────────────────────────
+      - name: Build PR metadata
+        if: steps.skip.outputs.skip != 'true'
+        id: pr-meta
+        run: |
+          PARTS=""
+          BODY=""
+
+          if [ "${{ steps.skip.outputs.b2e_changed }}" = "true" ]; then
+            PARTS="${PARTS}b2e-${{ steps.npm-version-b2e.outputs.latest }}"
+            BODY="${BODY}- **B2E** \`@salesforce/webapp-template-app-react-sample-b2e-experimental\`: ${{ steps.current-version-b2e.outputs.current || 'none' }} → ${{ steps.npm-version-b2e.outputs.latest }}"$'\n'
+          fi
+          if [ "${{ steps.skip.outputs.b2x_changed }}" = "true" ]; then
+            if [ -n "$PARTS" ]; then PARTS="${PARTS}-"; fi
+            PARTS="${PARTS}b2x-${{ steps.npm-version-b2x.outputs.latest }}"
+            BODY="${BODY}- **B2X** \`@salesforce/webapp-template-app-react-sample-b2x-experimental\`: ${{ steps.current-version-b2x.outputs.current || 'none' }} → ${{ steps.npm-version-b2x.outputs.latest }}"$'\n'
+          fi
+
+          echo "branch=chore/sync-react-samples-${PARTS}" >> $GITHUB_OUTPUT
+
+          # Multi-line body via heredoc
+          {
+            echo "body<<EOFBODY"
+            echo "Synced React sample packages into \`samples/\`."
+            echo ""
+            echo "${BODY}"
+            echo "Same flow as running locally: \`npm install\` then the sync scripts."
+            echo "EOFBODY"
+          } >> $GITHUB_OUTPUT
+
+          TITLE="chore: sync React samples from npm"
+          if [ "${{ steps.skip.outputs.b2e_changed }}" = "true" ] && [ "${{ steps.skip.outputs.b2x_changed }}" = "true" ]; then
+            TITLE="chore: sync React B2E (${{ steps.npm-version-b2e.outputs.latest }}) & B2X (${{ steps.npm-version-b2x.outputs.latest }}) samples from npm"
+          elif [ "${{ steps.skip.outputs.b2e_changed }}" = "true" ]; then
+            TITLE="chore: sync React B2E sample from npm @ ${{ steps.npm-version-b2e.outputs.latest }}"
+          else
+            TITLE="chore: sync React B2X sample from npm @ ${{ steps.npm-version-b2x.outputs.latest }}"
+          fi
+          echo "title=${TITLE}" >> $GITHUB_OUTPUT
+
+      - name: Create PR on version change
+        if: steps.skip.outputs.skip != 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.IDEE_GH_TOKEN }}
+          branch: ${{ steps.pr-meta.outputs.branch }}
+          base: main
+          title: ${{ steps.pr-meta.outputs.title }}
+          body: ${{ steps.pr-meta.outputs.body }}
+          commit-message: ${{ steps.pr-meta.outputs.title }}
+          committer: svc-idee-bot <svc_idee_bot@salesforce.com>
+          author: svc-idee-bot <svc_idee_bot@salesforce.com>
