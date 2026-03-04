@@ -38,14 +38,6 @@ afv-library/
 
 ## 🚀 Quick Start
 
-### Using with VS Code Extension
-
-1. Install the Agentforce Vibes VS Code extension (preview or later).
-2. Open the command palette and run `Agentforce Vibes: Add Library`.
-3. Provide the Git URL (or local path) to this repository; the extension indexes every folder and `.md` file under `prompts/`, `rules/`, and `skills/`.
-4. The extension displays prompts, rules, and skills organized by category. Select any item to preview the metadata and copy instructions into the editor.
-5. Use the refresh command whenever new prompts, rules, or skills are added.
-
 ### Manual Usage
 
 Browse the repository and copy/paste any prompt, rule, or skill directly into Agentforce Vibes or your preferred AI tool.
@@ -460,3 +452,15 @@ To update an existing skill:
 3. Test all scripts and workflows end-to-end
 4. Validate using `skills-ref validate ./skills/<category>/<skill-name>`
 5. Commit with clear message: `Update [skill-name]: [what changed]`
+
+
+# Experimental 
+
+### Using with supporting AFV Library VS Code Extension
+
+1. Install the Agentforce Vibes VS Code extension (preview or later).
+2. Install the experiemnt [AFV library VSCode extension](https://github.com/forcedotcom/afv-library-extension). 
+2. Open the command palette and run `Agentforce Vibes: Add Library`.
+3. Provide the Git URL (or local path) to this repository; the extension indexes every folder and `.md` file under `prompts/`, `rules/`, and `skills/`.
+4. The extension displays prompts, rules, and skills organized by category. Select any item to preview the metadata and copy instructions into the editor.
+5. Use the refresh command whenever new prompts, rules, or skills are added.
