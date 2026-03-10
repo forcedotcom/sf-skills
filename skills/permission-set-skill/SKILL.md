@@ -1,5 +1,5 @@
 ---
-name: permission-set-skill
+name: generate-permission-set-skill
 description: Generate correct, deployable Salesforce permission set metadata with proper object, field, user, and app permissions. Use when generating permission set metadata.
 license: Apache-2.0
 compatibility: Salesforce Metadata API v60.0+
@@ -30,8 +30,6 @@ Start by defining the required permission set properties:
 
 **Naming conventions:**
 - Use descriptive API names (e.g., `Sales_Manager_Access`)
-- Include purpose in description field
-- Follow organization's naming standards
 
 ## Step 2: Configure Object Permissions
 
@@ -50,11 +48,6 @@ Add CRUD permissions for standard and custom objects:
 </objectPermissions>
 ```
 
-**Key considerations:**
-- Grant minimum necessary permissions (least privilege)
-- Use `viewAllRecords`/`modifyAllRecords` sparingly
-- Consider record-level security implications
-
 ## Step 3: Set Field-Level Security
 
 Define field permissions for sensitive or custom fields:
@@ -69,6 +62,7 @@ Define field permissions for sensitive or custom fields:
 
 **Important:**
 - Cannot set permissions on required fields, they are readable and editable by default
+- For custom objects, read and use the object metadata file to determine correct names of fields and if they are required
 - Use format `ObjectName.FieldName` for field references
 - Both `readable` and `editable` can be true (editable implies readable)
 
@@ -118,8 +112,10 @@ Make applications and tabs visible to users:
 - `Available`: Available but not default
 - `Hidden`: Not visible
 
-**Important:**
-- Tab names should be same as the object API name, and tabs of custom objects end with "__c"
+**CRITICAL - Tab Naming:**
+- Custom object tabs: MUST include the __c suffix (e.g., MyCustomObject__c)
+- Standard object tabs: Use the object name without modification (e.g., Account, Contact)
+- The tab name matches the object's API name exactly
 
 ## Step 6: Add Apex and Visualforce Access (Optional)
 
@@ -159,6 +155,8 @@ Before deploying, verify:
 - [ ] System permissions (ViewAllData, ModifyAllData) are reviewed
 - [ ] No duplicate permissions within permission set
 - [ ] Description clearly states intended use case
+- [ ] Remove unnecessary comments, comments should be minimal and consice
+
 
 ## Deployment
 
