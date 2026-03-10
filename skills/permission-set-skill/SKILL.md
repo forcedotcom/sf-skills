@@ -1,6 +1,6 @@
 ---
 name: permission-set-skill
-description: Generate Salesforce permission set metadata with proper object, field, user, and app permissions. Use when creating access control for users beyond profile settings.
+description: Generate correct, deployable Salesforce permission set metadata with proper object, field, user, and app permissions. Use when generating permission set metadata.
 license: Apache-2.0
 compatibility: Salesforce Metadata API v60.0+
 metadata:
@@ -106,7 +106,6 @@ Make applications and tabs visible to users:
 <applicationVisibilities>
     <application>Sales_Console</application>
     <visible>true</visible>
-    <default>false</default>
 </applicationVisibilities>
 <tabSettings>
     <tab>CustomTab__c</tab>
@@ -118,6 +117,9 @@ Make applications and tabs visible to users:
 - `Visible`: Always shown
 - `Available`: Available but not default
 - `Hidden`: Not visible
+
+**Important:**
+- Tab names should be same as the object API name, and tabs of custom objects end with "__c"
 
 ## Step 6: Add Apex and Visualforce Access (Optional)
 
@@ -134,18 +136,7 @@ Grant access to custom code:
 </pageAccesses>
 ```
 
-## Step 7: Configure Custom Permissions (Optional)
-
-Enable custom permissions for feature flags:
-
-```xml
-<customPermissions>
-    <enabled>true</enabled>
-    <name>Can_Approve_Discounts</name>
-</customPermissions>
-```
-
-## Step 8: Set License and Record Type Settings (Optional)
+## Step 7: Set License and Record Type Settings (Optional)
 
 Specify license requirements and record type visibility:
 
@@ -166,9 +157,8 @@ Before deploying, verify:
 - [ ] Object permissions follow least privilege principle
 - [ ] No field permissions on required fields
 - [ ] System permissions (ViewAllData, ModifyAllData) are reviewed
-- [ ] No duplicate permissions across multiple permission sets
+- [ ] No duplicate permissions within permission set
 - [ ] Description clearly states intended use case
-- [ ] Naming follows organizational conventions
 
 ## Deployment
 
@@ -177,17 +167,9 @@ Deploy using Salesforce CLI:
 sf project deploy start --metadata-dir force-app/main/default/permissionsets
 ```
 
-Verify deployment:
-- Check permission set appears in Setup > Permission Sets
-- Assign to test user and validate access
-- Review audit trail for assignment tracking
-
 ## Best Practices
 
 - **Granularity**: Create focused permission sets for specific purposes
 - **Documentation**: Maintain clear descriptions and naming
-- **Auditing**: Regularly review assignments and usage
-- **Testing**: Always test with dedicated test users before production
-- **Groups**: Use permission set groups for complex access patterns
 - **Security**: Never grant excessive permissions like ModifyAllData without justification
 
