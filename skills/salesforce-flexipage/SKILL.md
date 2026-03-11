@@ -6,532 +6,440 @@ description: Use this skill when users need to create, generate, modify, or vali
 ## When to Use This Skill
 
 Use this skill when you need to:
-- Create Lightning page layouts (RecordPage, AppPage, HomePage)
+- Create Lightning pages (RecordPage, AppPage, HomePage)
 - Generate FlexiPage metadata XML
 - Add components to existing FlexiPages
 - Troubleshoot FlexiPage deployment errors
-- Configure field sections, highlights panels, and related lists
-- Work with FlexiPage regions, facets, and component properties
+- Understand FlexiPage structure and component configuration
+- Work with page layouts or Lightning page customization
+- Edit or update ANY *.flexipage-meta.xml file
 
 ## Specification
 
-# FlexiPage Metadata Specification
+# FlexiPage Generation Guide
 
 ## Overview
-Lightning page layouts for RecordPage, AppPage, and HomePage. Dynamic, component-based design supporting desktop, phone, and tablet.
+
+Generate Lightning pages (RecordPage, AppPage, HomePage) using CLI bootstrapping for component discovery and configuration.
 
 ---
 
-## Generation Philosophy
+## Quick Start Workflow
 
-**Deploy Incrementally, Iterate Quickly**
+### Step 1: Bootstrap with CLI
 
-FlexiPages are complex. Deploy in small increments for fast feedback:
-1. **Start simple**: Deploy with minimal components (e.g., just header region)
-2. **Add incrementally**: Add one region or component at a time
-3. **Deploy often**: Each addition = immediate validation
-4. **Use errors to learn**: Deployment errors are faster than guessing
+```bash
+sf template generate flexipage \
+  --name <PageName> \
+  --template <RecordPage|AppPage|HomePage> \
+  --sobject <SObject> \
+  --primary-field <Field1> \
+  --secondary-fields <Field2,Field3> \
+  --detail-fields <Field4,Field5,Field6,Field7> \
+  --output-dir force-app/main/default/flexipages
+```
 
-**Benefits:**
-- Isolated errors (one component at a time)
-- Faster debugging (know exactly what broke)
-- Build confidence (each success validates approach)
-- User feedback (see progress, adjust direction)
+**Template-specific requirements:**
+- **RecordPage**: Requires `--sobject` (e.g., Account, Custom_Object__c)
+- **RecordPage**: Requires `--primary-field` and `--secondary-fields` for dynamic highlights, `--detail-fields` for full record details. Use the most important identifying field as primary, e.g. Name. Use the secondary fields (max 12, recommended 4-6) to show a summary of the record. Use detail fields to show the full details of the record.
+- **AppPage**: No additional requirements
+- **HomePage**: No additional requirements
 
-**Anti-pattern:** Creating entire complex page at once → hard-to-debug error cascade
+**Note:** If the `sf template generate flexipage` command fails, recommend users upgrade to the latest version of the Salesforce CLI:
+```bash
+npm install -g @salesforce/cli@latest
+```
+
+
+**What you get:**
+- Valid FlexiPage XML with correct structure
+- Pre-configured regions and basic components
+- Proper field references and facet structure
+- Ready to deploy as-is or enhance further
+
+### Step 2: Deploy Base Page
+
+```bash
+sf project deploy start --source-dir force-app/main/default/flexipages
+```
+
+**Deploy early, deploy often.** Start with the bootstrapped page, validate it works, then enhance.
+
+### Step 3: Update and Redeploy
+
+Modify the generated XML, adding components discovered via MCP. Deploy incrementally.
+
+**Note:** Warn users to use caution with updates beyond this step when using this command.
 
 ---
 
-## Critical Rules (Read First)
+## Critical XML Rules
 
 ### 1. Property Value Encoding (MOST COMMON ERROR)
 
-**ANY property value containing HTML/XML tags MUST be manually encoded in your XML.**
+**Any property value with HTML/XML characters MUST be manually encoded in the following order** (wrong order causes double-encoding corruption):
 
-Common properties with HTML:
-- Component labels with formatting: `<b>Important</b>`
-- Rich text descriptions
-- Help text with links: `<a href="...">Link</a>`
-
-**Encoding rules you must apply:**
 ```
-< → &lt;
-> → &gt;
-& → &amp;
-" → &quot;
-' → &apos;
+1. & → &amp;   (FIRST! Encode this before others)
+2. < → &lt;
+3. > → &gt;
+4. " → &quot;
+5. ' → &apos;
 ```
 
-**Wrong XML (will fail deployment):**
+**Wrong:**
 ```xml
-<componentInstanceProperties>
-  <name>label</name>
-  <value><b>Important:</b> Read this</value>
-</componentInstanceProperties>
+<value><b>Important</b> text</value>
 ```
 
-**Correct XML (manually encoded):**
+**Correct:**
 ```xml
-<componentInstanceProperties>
-  <name>label</name>
-  <value>&lt;b&gt;Important:&lt;/b&gt; Read this</value>
-</componentInstanceProperties>
+<value>&lt;b&gt;Important&lt;/b&gt; text</value>
 ```
 
-**Process:**
-1. When writing component properties, scan for `<`, `>`, `&`, `"`, or `'` characters
-2. **BEFORE writing XML**, manually replace each with its entity
-3. Write the encoded value directly into the XML
-4. **VERIFY**: Search your generated XML for `<value>` tags - check they don't contain raw HTML tags
-
-**Self-check:** If you see `<value><b>` or `<value><a` in your XML, you forgot to encode!
-
-**Helper skill available (if you cannot encode manually):**
-```
-encode_property_value("<b>Text</b>")
-```
-Returns `encoded` field - copy that exact string into your XML `<value>` tag.
+**Check your XML:** Search for `<value>` tags - they should never contain raw `<` or `>` characters.
 
 ### 2. Field References
 
 **ALWAYS:** `Record.{FieldApiName}`  
 **NEVER:** `{ObjectName}.{FieldApiName}`
 
-**Correct:**
 ```xml
+<!-- Correct -->
 <fieldItem>Record.Name</fieldItem>
-```
 
-**Incorrect:**
-```xml
+        <!-- Wrong -->
 <fieldItem>Account.Name</fieldItem>
 ```
 
 ### 3. Region vs Facet Types
 
-- Template regions (header, main, sidebar) → `<type>Region</type>`
-- Component facets (internal slots) → `<type>Facet</type>`
+**Template Regions** (header, main, sidebar):
+```xml
+<name>header</name>
+<type>Region</type>
+```
+
+**Component Facets** (internal slots like fieldSection columns):
+```xml
+<name>Facet-12345</name>
+<type>Facet</type>
+```
+
+**Rule:** If it's a template region name → `Region`. If it's a component slot → `Facet`.
 
 ### 4. fieldInstance Structure
 
 Every fieldInstance requires:
-- Own `<itemInstances>` wrapper
-- `fieldInstanceProperties` with `uiBehavior`
-- `Record.{Field}` format
-
----
-
-## Generation Workflow
-
-### Step 1: Get Metadata Information
-```
-get_metadata_resource("flexiPage-knowledge")
-```
-Returns: This knowledge content, metadata skills, resource URIs (knowledge://, schema://, example://), and schema content
-
-### Step 2: Examine Existing FlexiPages
-**CRITICAL:** Study working FlexiPages BEFORE creating spec. Real examples show actual XML patterns.
-
-**Priority 1: Org-Retrieved FlexiPages (Best Source)**
-
-Check `<sfdx-project-dir>/main/default/flexipages/` for existing FlexiPages:
-- Use standard file tools: `list_dir`, `read_file`
-- These are org-specific, production-tested pages
-- Show real component usage, not theoretical patterns
-- **Most valuable reference** - use as primary template
-
-**Priority 2: Static Examples (Fallback)**
-
-If no org FlexiPages exist, use static examples via URIs from Step 1:
-```
-get_metadata_resource("example://FlexiPage/0")
-```
-Index 0 is the App Page example
-Index 1 is the Home Page example
-Index 2 is the Record Page example
-
-**What to learn:**
-- Complete XML structure (regions, Facets, components)
-- Remember that regions need to be adjusted to match the page template
-- fieldInstance structure (itemInstances, fieldInstanceProperties)
-- Facet definition and reference patterns
-- Component property formats
-- Valid starting point for new pages
-
-**Use as structural reference when generating XML.**
-
-### Step 3: Get Templates
-```
-get_page_templates("RecordPage")
-```
-Returns: Available templates and their required regions
-
-### Step 4: Create Specification File
-
-**Purpose:** Plan what the user wants to achieve (business requirements), NOT just inventory existing components.
-
-**File:** `.flexipage_<PageName>_spec.md` (delete after deployment)
-
-```markdown
-# FlexiPage: [Page Name]
-
-## Goal
-[1-2 sentences: what should this page accomplish for users?]
-
-## Page Info
-- Type: RecordPage|AppPage|HomePage
-- Object: [if RecordPage]
-- Template: [chosen from step 2]
-
-## Functionality Required
-
-### [Region Name]
-1. **[Functionality Description]**
-   - Purpose: [what user needs to do]
-   - Solution: [existing component URI] OR [Custom component to build]
-   - Config needed: [properties, fields, etc.]
-
-2. **[Another Functionality]**
-   - Purpose: [user need]
-   - Solution: [component or "TODO: Build CustomComponent__c"]
-   - Config needed: [details]
-
-## Custom Components Needed
-- [ ] [ComponentName] - [what it does, why existing components insufficient]
-
-## Fields to Display
-- [Field] - [why user needs to see this]
-
-## Relationships/Data
-- [ ] Verify [relationship] exists for [component]
-
-## Open Questions
-- [Anything uncertain that needs clarification]
-```
-
-**Key principle:** Spec describes DESIRED functionality, not technical inventory. Include custom components that don't exist yet.
-
-### Step 5: Discover Components
-```
-get_org_component_palette(target: "lightning__RecordPage")
-```
-Use to find components that match functionality in spec. Not all functionality may have existing components.
-
-### Step 6: Get Component Details
-```
-get_org_component_metadata([uris], includeAiInfo: true, includeSource: false)
-```
-For components identified in step 5.
-
-**When debugging property errors:** Fetch source code to understand component internals:
-```
-get_org_component_metadata([uri], includeSource: true)
-```
-Source code shows:
-- Actual property names and types
-- Required vs. optional properties
-- Property value formats
-- Decorators and annotations
-
-Use when: AI descriptions are unclear or property errors occur during deployment.
-
-### Step 7: Get Component Knowledge (When Available)
-Check metadata skills from Step 1. Call for complex components:
-```
-get_component_knowledge("fieldSection")
-```
-
-**Components with knowledge:** `fieldSection`, `dynamicHighlights`, `dynamicRelatedList`
-
-### Step 8: Update Spec with Solutions
-Mark which functionality uses existing components vs. needs custom development.
-
-### Step 9: Get User Approval
-Present spec. Confirm approach before generating XML.
-
-### Step 10: Generate XML
-Follow approved spec. **Use example file from Step 2 as structural reference.**
-
-**Incremental approach:**
-1. Start with minimal version (e.g., header + one main component)
-2. Deploy and validate
-3. Add next component or region
-4. Deploy again
-5. Repeat until complete
-
-Key patterns from examples:
-- Template regions (`type="Region"`) vs. component facets (`type="Facet"`)
-- Facet structure and references
-- fieldInstance with fieldInstanceProperties
-- Region and component nesting
-- Property value formats
-
----
-
-## Using Examples Effectively
-
-### Example Priority
-
-1. **Org FlexiPages** (in `force-app/main/default/flexipages/`) - **Best source**
-    - Production-tested, org-specific
-    - Access via `list_dir`, `read_file`
-2. **Static examples** (from metadata information response) - Fallback only
-
-### When to Reference Examples
-
-1. **Before creating spec** (Step 2): Understand existing patterns
-2. **Before generating XML** (Step 10): Copy structural patterns
-3. **When debugging errors**: Compare your XML to working examples
-
-### What Examples Show
-
-**Facet Patterns:**
-- How Facets are defined with `type="Facet"`
-- How components reference Facets in properties
-- Field Facets vs. component Facets
-
-**Field Structure:**
-- `fieldInstance` always in own `itemInstances`
-- `fieldInstanceProperties` with `uiBehavior` required
-- `Record.{Field}` format (never object name)
-
-**Component Configuration:**
-- Property formats (`componentInstanceProperties`)
-- ValueLists for arrays
-- Facet references in properties
-
-**Region Structure:**
-- Required regions for templates
-- Component placement in regions
-- Nesting patterns
-
-### How to Use Examples
-
-1. **Check org first**: `list_dir force-app/main/default/flexipages/`, then `read_file` similar page types
-2. **If no org pages**: Use static examples for your page type
-3. **Identify similar components** to what you need
-4. **Copy XML structure patterns**, not exact content
-5. **Adapt** to your specific fields/components
-6. **Maintain** the same nesting and property structure
-
-**Workflow:**
-- Need dynamicHighlights? → Find org RecordPage with header region, or use static example
-- Need fields in main? → Find org page with fieldSection, or use static example
-- Need related list? → Find org page with similar component, or use static example
-
----
-
-## Critical XML Rules
-
-### Parent flexipage
-**DO NOT** define a parent flexipage: do not include \`<parentFlexiPage>\` tags
-
-### Field References
-**ALWAYS:** `Record.{FieldApiName}`  
-**NEVER:** `{ObjectName}.{FieldApiName}`
-
-**Correct:**
 ```xml
-<fieldItem>Record.Name</fieldItem>
-```
-
-**Incorrect:**
-```xml
-<fieldItem>Account.Name</fieldItem>
-```
-
-### fieldInstance Requirements
-**Every fieldInstance MUST have:**
-1. Its own `<itemInstances>` wrapper (no grouping)
-2. `fieldInstanceProperties` with `uiBehavior`
-3. `Record.{Field}` format
-
-```xml
-<flexiPageRegions>
-    <itemInstances>
-        <fieldInstance>
+<itemInstances>
+   <fieldInstance>
       <fieldInstanceProperties>
-        <name>uiBehavior</name>
-        <value>none</value> <!-- none|readonly|required -->
+         <name>uiBehavior</name>
+         <value>none</value> <!-- none|readonly|required -->
       </fieldInstanceProperties>
-            <fieldItem>Record.Name</fieldItem>
-            <identifier>RecordNameField</identifier>
-        </fieldInstance>
-    </itemInstances>
-  <name>Facet-uuid</name>
-    <type>Facet</type>
-</flexiPageRegions>
+      <fieldItem>Record.FieldName__c</fieldItem>
+      <identifier>RecordFieldName_cField</identifier>
+   </fieldInstance>
+</itemInstances>
 ```
 
-### Region vs. Facet Types
-**CRITICAL DISTINCTION:**
-
-**Template Regions** (header, main, sidebar, etc.):
-- Use `<type>Region</type>`
-- Defined by page template
-- **ONLY** use regions defined in the page template
-- **DO NOT** define a \`<mode>\` for regions
-- Top-level containers for components
-
-```xml
-<flexiPageRegions>
-  <itemInstances>
-    <componentInstance>
-      <componentName>record_flexipage:dynamicHighlights</componentName>
-      <identifier>highlights</identifier>
-    </componentInstance>
-  </itemInstances>
-  <name>header</name>
-  <type>Region</type> <!-- Template regions are Region -->
-</flexiPageRegions>
-```
-
-**Component Facets** (component slots like column body, fieldSection columns):
-- Use `<type>Facet</type>`
-- Internal component properties
-- Referenced by component properties
-
-```xml
-<flexiPageRegions>
-    <itemInstances>
-        <fieldInstance>
-      <fieldInstanceProperties>
-        <name>uiBehavior</name>
-        <value>none</value>
-      </fieldInstanceProperties>
-            <fieldItem>Record.Name</fieldItem>
-            <identifier>RecordNameField</identifier>
-        </fieldInstance>
-    </itemInstances>
-  <name>Facet-uuid</name>
-  <type>Facet</type> <!-- Component facets are Facet -->
-</flexiPageRegions>
-```
-
-### Facet Rules
-- Each Facet referenced exactly once by a component property
-- No unused Facets
-- Unique names (use UUIDs for Facets)
-
----
-
-## Component-Specific Guidance
-
-### fieldSection
-**Retrieve knowledge before use.** Complex three-level nesting required.
-
-### dynamicHighlights
-**Retrieve knowledge before use.** Two approaches:
-- Compact Layout (no config) - if object has compact layout
-- Explicit Fields (Facets) - for new objects without compact layouts
-
-**Must be in header region.**
-
-### dynamicRelatedList
-**Retrieve knowledge before use.**
-- Use relationship name (NOT field name)
-- Format: `parentFieldApiName: {Object}.Id`
+**Rules:**
+- Each fieldInstance in its own `<itemInstances>` wrapper
+- Must have `fieldInstanceProperties` with `uiBehavior`
+- Use `Record.{Field}` format
 
 ---
 
 ## Common Deployment Errors
 
 ### "Invalid field reference"
-Wrong: `Delivery__c.Order_Number__c`  
-Fix: `Record.Order_Number__c`
+**Cause:** Used `ObjectName.Field` instead of `Record.Field`  
+**Fix:** Change to `Record.{FieldApiName}`
 
 ### "Element fieldInstance is duplicated"
-Cause: Multiple fieldInstances in one itemInstances  
-Fix: Separate itemInstances for each
+**Cause:** Multiple fieldInstances in one itemInstances  
+**Fix:** Each fieldInstance needs its own `<itemInstances>` wrapper
 
 ### "Missing fieldInstanceProperties"
-Cause: No uiBehavior  
-Fix: Add fieldInstanceProperties block with uiBehavior
-
-### "Invalid component property" / "Unknown property"
-Cause: Wrong property name or format  
-**Debug strategy:** Fetch component source code:
-```
-get_org_component_metadata([uri], includeSource: true)
-```
-Source code reveals exact property names, types, and required values.
+**Cause:** No uiBehavior specified  
+**Fix:** Add `fieldInstanceProperties` with `uiBehavior`
 
 ### "Unused Facet"
-Cause: Facet defined but not referenced  
-Fix: Reference in component property or remove
+**Cause:** Facet defined but not referenced by any component  
+**Fix:** Remove Facet or reference it in a component property
 
-### "Invalid Region/Facet type"
-**Cause:** Using wrong type for context
+### "XML parsing error"
+**Cause:** Unencoded HTML/XML in property values  
+**Fix:** Manually encode `<`, `>`, `&`, `"`, `'` in all `<value>` tags
 
-**Fix:**
-- Template regions (header, main, sidebar) → `<type>Region</type>`
-- Component facets (column body, fieldSection columns) → `<type>Facet</type>`
+### "Cannot create component with namespace"
+**Cause:** Invalid page name (don't use `__c` suffix in page names)  
+**Fix:** Use "Volunteer_Record_Page" not "Volunteer__c_Record_Page"
 
-Common mistake: Using `<type>Facet</type>` for header/main/sidebar regions
-
-### Region specifies mode that parent region doesn't support
-**Cause:** Using a mode that is not enabled for the parent region
-**Fix:** Remove the mode from the region
-
-### "XML parsing error" / "Malformed XML" / "Unexpected element"
-**Cause:** Unencoded HTML/XML tags in property values
-
-**Fix:** See "Critical Rules" section at top of this spec for encoding requirements. You must manually encode `<`, `>`, `&`, `"`, `'` characters in property values before writing XML.
-
-### Cannot create a new component with the namespace
-**Cause:** invalid flexipage name or file name
-**Fix:** Do not include \`__c\` suffix in page names and *.flexipage-meta.xml file names
+### "Region specifies mode that parent doesn't support"
+**Cause:** Added `<mode>` tag to region  
+**Fix:** Remove `<mode>` tags - they're not needed for standard regions
 
 ---
 
-## Template Region Requirements
+## Incremental Development Pattern
 
-Templates specify which regions are required. Get from `get_page_templates`.
+**Philosophy:** Deploy small, working increments. Don't build entire complex page at once.
 
-Common patterns:
-- Three-column: header, main, sidebar
-- Two-column: main, sidebar
-- Single: main
+**Process:**
+1. **CLI bootstrap** → Deploy base page
+2. **Add one component** → Deploy
+3. **Add another component** → Deploy
+4. **Repeat** until complete
 
-**All required regions must have at least one component.**
+**Benefits:**
+- Isolated errors (know exactly what broke)
+- Faster debugging
+- Build confidence with each success
+- Get user feedback early
+
+**Anti-pattern:** Building entire complex page → one giant error cascade.
 
 ---
 
-## Deprecated Components
+## Adding Components to Existing FlexiPages
 
-**DO NOT USE:**
-- `force:detailPanel` → use `flexipage:fieldSection`
-- `force:highlightsPanel` → use `record_flexipage:dynamicHighlights`
+### Workflow
+
+When user provides an existing FlexiPage file path:
+
+1. **Read the file** using native file I/O
+2. **Parse XML** to extract:
+   - Existing component identifiers
+   - Available regions (parse from file, don't assume names)
+   - Existing facets
+3. **Generate component XML** (apply all rules from "Critical XML Rules" section)
+4. **Insert** into appropriate region
+5. **Write** modified XML back to file
+6. **Deploy**: `sf project deploy start --source-dir force-app/...`
 
 ---
 
-## Required Metadata
+### Generating Unique Identifiers
+
+**Algorithm**:
+```
+1. Extract all existing <identifier> values from XML
+2. Generate base name: {componentType}_{context}
+   Examples: "relatedList_contacts", "richText_header", "tabs_main"
+3. Find first available number:
+   - Try "{base}_1"
+   - If exists, try "{base}_2", "{base}_3", etc.
+   - Use first available
+```
+
+**Examples**:
+- First contacts related list: `relatedList_contacts_1`
+- Second contacts related list: `relatedList_contacts_2`
+- Rich text in header: `richText_header_1`
+- Field section: `fieldSection_details_1`
+
+**Facet Naming - Two Patterns**:
+
+1. **Named facets** (for major content areas):
+   - `detailTabContent` (detail tab content)
+   - `maintabs` (main tab container)
+   - `sidebartabs` (sidebar tab container)
+   - Use when facet represents meaningful content area
+
+2. **UUID facets** (for internal structure):
+   - Format: `Facet-{8hex}-{4hex}-{4hex}-{4hex}-{12hex}`
+   - Example: `Facet-66d5a4b3-bf14-4665-ba75-1ceaa71b2cde`
+   - Use for field section columns, nested containers, anonymous slots
+
+---
+
+### Region Selection
+
+**Parse regions from file** - don't hardcode names. Templates vary:
+- `flexipage:recordHomeTemplateDesktop` → `header`, `main`, `sidebar`
+- `runtime_service_fieldservice:...` → `header`, `main`, `footer`
+- Others may have different region names
+
+**Default placement**: End of target region (after last `<itemInstances>`)
+
+**Insertion pattern**:
+```xml
+<flexiPageRegions>
+   <name>main</name>  <!-- or whatever region name exists -->
+   <type>Region</type>
+   <itemInstances><!-- Existing component 1 --></itemInstances>
+   <itemInstances><!-- Existing component 2 --></itemInstances>
+   <itemInstances>
+      <!-- INSERT NEW COMPONENT HERE -->
+   </itemInstances>
+</flexiPageRegions>
+```
+
+---
+
+### Container Components with Facets
+
+Components like tabs, accordions, field sections require facets.
+
+**Pattern**:
+```xml
+<!-- 1. Component in region -->
+<flexiPageRegions>
+   <itemInstances>
+      <componentInstance>
+         <componentName>flexipage:tabset2</componentName>
+         <identifier>tabs_main_1</identifier>
+         <componentInstanceProperties>
+            <name>tabs</name>
+            <value>tab1_content</value>
+            <value>tab2_content</value>
+         </componentInstanceProperties>
+      </componentInstance>
+   </itemInstances>
+   <name>main</name>
+   <type>Region</type>
+</flexiPageRegions>
+
+        <!-- 2. Facets (siblings of region, NOT nested inside) -->
+<flexiPageRegions>
+<itemInstances><!-- Tab 1 content --></itemInstances>
+<name>tab1_content</name>
+<type>Facet</type>
+</flexiPageRegions>
+
+<flexiPageRegions>
+<itemInstances><!-- Tab 2 content --></itemInstances>
+<name>tab2_content</name>
+<type>Facet</type>
+</flexiPageRegions>
+```
+
+**Critical**: Facet regions are siblings of template regions at the same level, not nested inside them.
+---
+## Component-Specific Tips
+### dynamicHighlights (RecordPage Header)
+**Location:** Must be in `header` region.
+**Explicit Fields** (via CLI): Use the most important fields to show a summary of the record. The single primary field is used to identify the record, like a name. The secondary fields (max 12, recommended 6) are used as a summary of the record.
+```bash
+--primary-field Name
+--secondary-fields Phone,Industry,AnnualRevenue
+```
+CLI generates Facets with field references automatically.
+### fieldSection
+**Use for:** Displaying fields in columns.
+**Structure:** Three-level nesting:
+1. Template Region (Region type)
+2. Column Facets (Facet type)
+3. Field Facets (Facet type)
+   **Referenced in component property:**
+```xml
+<componentInstanceProperties>
+   <name>columns</name>
+   <value>Facet-{uuid}</value>
+</componentInstanceProperties>
+```
+
+### rich Text component
+
+Component name: flexipage:richText
+
+Use for: Displaying HTML-formatted rich text content with support for text formatting, headings, lists, tables, images, links, forms, and multimedia elements. Preserves styling and layout. Escape all special characters in the default text.
+
+Location: Can be used in any region on any page type (Home, Record, App, Community pages).
+
+
+CLI generates the component directly without nested structures.
+
+User: "Add a rich text component to force-app/.../Account_Record_Page.flexipage-meta.xml"
+
+Structure: Single-level component (no facets):
+1. Component instance (flexipage:richText) with direct properties
+
+XML Structure Example:
+```xml
+<itemInstances>
+   <componentInstance>
+      <componentInstanceProperties>
+         <name>decorate</name>
+         <value>true</value>
+      </componentInstanceProperties>
+      <componentName>flexipage:richText</componentName>
+      <identifier>flexipage_richText</identifier>
+   </componentInstance>
+</itemInstances>
+```
+
+Identifier Pattern: flexipage_richText or flexipage_richText_{sequence}
+
+---
+## Required Metadata Structure
 
 ```xml
 <FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata">
-  <flexiPageRegions>...</flexiPageRegions>
-  <masterLabel>Page Label</masterLabel>
-  <template><name>template_name</name></template>
-  <type>RecordPage|AppPage|HomePage</type>
-  <sobjectType>Object__c</sobjectType> <!-- RecordPage only -->
+   <flexiPageRegions>
+      <!-- Regions and components here -->
+   </flexiPageRegions>
+   <masterLabel>Page Label</masterLabel>
+   <template>
+      <name>flexipage:recordHomeTemplateDesktop</name>
+   </template>
+   <type>RecordPage</type>
+   <sobjectType>Object__c</sobjectType> <!-- RecordPage only -->
 </FlexiPage>
 ```
 
-## Naming Conventions
-- NO `__c` suffix in page names and *.flexipage-meta.xml file names: "Volunteer_Record_Page.flexipage-meta.xml" not "Volunteer__c_Record_Page.flexipage-meta.xml"
-- Unique component identifiers
-- Exact field API names from Salesforce
+**Page Types:**
+- `RecordPage` - requires `<sobjectType>`
+- `AppPage` - no sobjectType
+- `HomePage` - no sobjectType
 
-## Validation Before Deployment
-- [ ] **Using incremental deployment** (start minimal, add iteratively)
-- [ ] **Reviewed org FlexiPages** (force-app/main/default/flexipages/) or static examples for structural reference
-- [ ] All fields: `Record.{Field}` format
-- [ ] Every fieldInstance has fieldInstanceProperties
-- [ ] Each fieldInstance in own itemInstances
-- [ ] **Template regions (header, main, sidebar): `type="Region"`**
-- [ ] **Component facets: `type="Facet"`**
-- [ ] **Property values with HTML/XML tags are XML-encoded**
-- [ ] Component knowledge followed (if available)
-- [ ] Template regions populated
+---
+
+## Validation Checklist
+
+Before deploying:
+- [ ] Used CLI to bootstrap (don't start from scratch)
+- [ ] All field references use `Record.{Field}` format
+- [ ] Each fieldInstance has `fieldInstanceProperties` with `uiBehavior`
+- [ ] Each fieldInstance in own `<itemInstances>` wrapper
+- [ ] Template regions use `<type>Region</type>`
+- [ ] Component facets use `<type>Facet</type>`
+- [ ] Property values with HTML/XML are manually encoded
 - [ ] No `<mode>` tags in regions
-- [ ] No deprecated components
+- [ ] No `__c` suffix in page names
+- [ ] Each Facet referenced by exactly one component property
+
+---
+
+## Quick Reference: CLI Command
+
+```bash
+# RecordPage with fields
+sf template generate flexipage \
+  --name Account_Custom_Page \
+  --template RecordPage \
+  --sobject Account \
+  --primary-field Name \
+  --secondary-fields Phone,Industry,AnnualRevenue \
+  --detail-fields Street,City,State,Name,Phone,Email
+
+# AppPage
+sf template generate flexipage \
+  --name Sales_Dashboard \
+  --template AppPage \
+  --label "Sales Dashboard"
+
+# HomePage
+sf template generate flexipage \
+  --name Custom_Home \
+  --template HomePage \
+  --description "Custom home for sales team"
+```
+
+**All templates support:**
+- `--output-dir` (default: current directory)
+- `--api-version` (default: latest)
+- `--label` (default: page name)
+- `--description`
