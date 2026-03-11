@@ -6,7 +6,7 @@ metadata:
   related-skills: salesforce-custom-object, salesforce-custom-field, salesforce-custom-tab, salesforce-flexipage, salesforce-custom-application, salesforce-flow, salesforce-validation-rule, salesforce-list-view
 ---
 
-# Salesforce Lightning Application Generator
+# Salesforce Lightning Application Build
 
 ## Overview
 
@@ -51,9 +51,6 @@ This table shows which metadata types are commonly needed for LEX apps and their
 | **Validation Rule** | ✅ YES | `salesforce-validation-rule` | MUST use skill (if requested) |
 | **Flow** | ✅ YES | `salesforce-flow` | MUST use skill (if requested) |
 | **Permission Set** | ❌ NO | - | Generate directly using Metadata API knowledge |
-| **Profile** | ❌ NO | - | Generate directly using Metadata API knowledge |
-| **Custom Metadata Type** | ❌ NO | - | Generate directly using Metadata API knowledge |
-| **Experience Site** | ✅ YES | `salesforce-experience-site` | MUST use skill (if requested) |
 
 ### Skill Usage Rules
 
@@ -203,37 +200,6 @@ Execute in strict dependency order. For each metadata component:
 - For Custom Application → Invoke `salesforce-custom-application`
 - For Permission Sets (no skill) → Generate XML directly
 
-### STEP 3: Post-Generation Summary
-
-Output a completion summary:
-
-```
-✅ Lightning App Built: [App Name]
-
-METADATA GENERATED:
-- Objects: [count]
-- Fields: [count]
-- Tabs: [count]
-- Pages: [count]
-- Apps: [count]
-- Permission Sets: [count]
-
-SKILLS INVOKED:
-- salesforce-custom-object: [count] invocations
-- salesforce-custom-field: [count] invocations
-- ... (list all skills used)
-
-DIRECT GENERATION (no skill available):
-- Permission Sets: [count] files
-
-WARNINGS/NOTES:
-- [Any validation concerns or recommendations]
-
-NEXT STEPS:
-1. Review generated metadata in force-app/main/default/
-2. Deploy to org: sf project deploy start
-```
-
 ---
 
 ## Error Handling
@@ -279,12 +245,6 @@ When user doesn't specify details:
 - Use AutoNumber for transactions
 - Enable Search and Reports for user-facing objects
 - Set sharingModel based on relationships
-
-### 4. Include Business Context
-Pass meaningful descriptions to skills:
-- Object description: Purpose and business context
-- Field description: What data it stores and why
-- App description: Who uses it and for what
 
 ### 5. Validate Before Building
 Check for:
