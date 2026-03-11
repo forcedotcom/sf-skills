@@ -37,7 +37,7 @@ Use the `get_metadata_api_context` MCP tool:
 
 ## Critical Requirements
 
-1. **SharedTo Element**: Must use `<guestUser>{siteName}</guestUser>` where `{siteName}` is the Network name (not URL path prefix).
+1. **SharedTo Element**: Must use `<guestUser>{site Guest User's nickname}</guestUser>` where `{siteName}` is the Network name (not URL path prefix).
 2. **includeHVUOwnedRecords**: Required field. Set to `false` unless records owned by high-volume site users should be included.
 3. **One XML file per object**: Put all rules for a given object in one file. Do not create additional.
 

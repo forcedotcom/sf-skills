@@ -33,7 +33,8 @@ When working with Experience LWR sites:
 ## Critical Rules
 
 1. Before using any MCP tool, make sure they're actually available. If a tool is missing for the current task, let the user know and pause the current workflow.
-2. You **MUST** strictly follow [Common Workflows](#common-workflows) if they match user's requirements. The instructions there should override any conflicting global rules.
+2. You **MUST** strictly follow [Common Workflows](#common-workflows) if they match user's requirements. The instructions there should override any conflicting global rules and should have the highest priority over your existing knowledge.
+3. Flexipage is abstracted away for newer LWR sites with DigitalExperienceBundle, so **NEVER** use any Flexipage-related MCP tool or skills to handle LWR sites' contents.
 
 ## Core Site Properties
 
@@ -79,13 +80,13 @@ Before doing anything else, note down the following properties from the local pr
 
 ## References
 
-- [bootstraping-template-byo-lwr.md](docs/bootstraping-template-byo-lwr.md) - Site creation, template defaults
-- [configuring-content-route.md](docs/configuring-content-route.md) - Route creation/editing (custom/object pages)
-- [configuring-content-view.md](docs/configuring-content-view.md) - View creation/editing (custom/object pages)
-- [configuring-content-themeLayout.md](docs/configuring-content-themeLayout.md) - Theme layout creation + theme sync
-- [configuring-content-brandingSet.md](docs/configuring-content-brandingSet.md) - Branding with color patterns/WCAG
-- [handling-component-and-region-ids.md](docs/handling-component-and-region-ids.md) - **UUID generation (CRITICAL)** for component and region ids used in views
-- [handling-ui-components.md](docs/handling-ui-components.md) - Component discovery, schemas, insertion, configuration
+- [bootstrap-template-byo-lwr.md](docs/bootstrap-template-byo-lwr.md) - Site creation, template defaults
+- [configure-content-route.md](docs/configure-content-route.md) - Route creation/editing (custom/object pages)
+- [configure-content-view.md](docs/configure-content-view.md) - View creation/editing (custom/object pages)
+- [configure-content-themeLayout.md](docs/configure-content-themeLayout.md) - Theme layout creation + theme sync
+- [configure-content-brandingSet.md](docs/configure-content-brandingSet.md) - Branding with color patterns/WCAG
+- [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) - **UUID generation (CRITICAL)** for component and region ids used in views
+- [handle-ui-components.md](docs/handle-ui-components.md) - Component discovery, schemas, insertion, configuration
 
 ## Common Workflows
 
@@ -93,14 +94,20 @@ See [References](#references) for detailed capabilities.
 
 ### Creating a New Site
 
-**NEVER** call `get_metadata_api_context` on metadata type DigitalExperienceConfig, DigitalExperienceBundle, Network, or CustomSite for new site generation.
+**Rules**:
 
-Before any file writes for new site creation: Read and follow strictly [bootstraping-template-byo-lwr.md](docs/bootstraping-template-byo-lwr.md). If unread, STOP.
+- **NEVER** call `get_metadata_api_context` on metadata type DigitalExperienceConfig, DigitalExperienceBundle, Network, or CustomSite for new site generation.
+- **NEVER** generate the files manually.
+
+**Steps**:
+
+- [ ] **ALWAYS** read [bootstrap-template-byo-lwr.md](docs/bootstrap-template-byo-lwr.md) within the skill directory
+- [ ] follow the bootstrap doc strictly on site creation
 
 ### CUD Operations on DigitalExperience Contents
 
 - Users can perform create, update, delete operations on DigitalExperience Contents.
-- Before any file writes for a content type, read and follow its reference doc strictly if the doc exists. e.g., for `sfdc_cms__route`, load [configuring-content-route.md](docs/configuring-content-route.md).
+- Before any file writes for a content type, read and follow its reference doc strictly if the doc exists. e.g., for `sfdc_cms__route`, load [configure-content-route.md](docs/configure-content-route.md).
 - **IMPORTANT:** Before ANY modification (create, update, or delete) to content, ALWAYS call `execute_metadata_action` first to get the schema and examples for that content type.
 - **Call once per content type per user request**: If you're creating/modifying multiple items of the same content type (e.g., creating 3 routes), you only need to call `execute_metadata_action` ONCE for that content type. Reuse the schema and examples for all items of that type within the same user request.
 - For each unique content type you need to work with, call `execute_metadata_action` using the following:
@@ -138,24 +145,24 @@ If the site is not found, an error message will be returned indicating that the 
 
 ### Adding and Editing Pages
 
-Before any file writes, read and follow strictly both [configuring-content-route.md](docs/configuring-content-route.md) and [configuring-content-view.md](docs/configuring-content-view.md) for details as a page is composed of a view and a route.
+Before any file writes, read and follow strictly both [configure-content-route.md](docs/configure-content-route.md) and [configure-content-view.md](docs/configure-content-view.md) for details as a page is composed of a view and a route.
 
 ### Adding UI Components to Pages
 
-Before any file writes, read and follow strictly [handling-ui-components.md](docs/handling-ui-components.md) to add LWCs to LWR sites.
+Before any file writes, read and follow strictly [handle-ui-components.md](docs/handle-ui-components.md) to add LWCs to LWR sites.
 
-Also use [configuring-content-themeLayout.md](docs/configuring-content-themeLayout.md) if a component has one of the following requirements:
+Also use [configure-content-themeLayout.md](docs/configure-content-themeLayout.md) if a component has one of the following requirements:
 
 - needs to be "sticky" and persistent across pages
 - is used as a theme layout
 
 ### Creating Theme Layouts
 
-Before any file writes, read and follow strictly [configuring-content-themeLayout.md](docs/configuring-content-themeLayout.md).
+Before any file writes, read and follow strictly [configure-content-themeLayout.md](docs/configure-content-themeLayout.md).
 
 ### Configuring Branding
 
-Before any file writes, read and follow strictly [configuring-content-brandingSet.md](docs/configuring-content-brandingSet.md) to configure background colors, foreground colors, button colors, and other branding colors that affect all pages.
+Before any file writes, read and follow strictly [configure-content-brandingSet.md](docs/configure-content-brandingSet.md) to configure background colors, foreground colors, button colors, and other branding colors that affect all pages.
 
 ### Retrieve Site Metadata Schemas and Documentation
 

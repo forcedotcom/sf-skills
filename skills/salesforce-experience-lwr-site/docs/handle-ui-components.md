@@ -153,7 +153,7 @@ community_layout:sldsFlexibleLayout (root)
 
 **Field Definitions**:
 
-- `id`: Unique UUID (see `handling-component-ids.md`)
+- `id`: Unique UUID (see `handle-component-and-region-ids.md`)
 - `type`: Always `"component"`
 - `definition`:
   - Custom LWC: `c:[componentName]` (e.g., `c:heroBanner`)
@@ -207,4 +207,4 @@ Correct nesting: `content` region → section → column region → components
 }
 ```
 
-**CRITICAL**: Follow UUID generation process (`handling-component-ids.md`) when inserting components.
+**CRITICAL**: Follow UUID generation process (`handle-component-and-region-ids.md`) when inserting components.
