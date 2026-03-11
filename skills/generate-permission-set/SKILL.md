@@ -1,5 +1,5 @@
 ---
-name: generate-permission-set-skill
+name: generate-permission-set
 description: Generates correct, deployable Salesforce permission set metadata (PermissionSet XML) with object, field, user, and app permissions. Use when creating or editing permission set metadata, PermissionSet XML, object permissions, field-level security (FLS), tab visibility, or deploying permission sets.
 license: Apache-2.0
 compatibility: Salesforce Metadata API v60.0+
@@ -11,11 +11,6 @@ metadata:
 ## When to Use This Skill
 
 Use when generating or editing permission set metadata, or when granting object, field, user, and app permissions.
-
-## What Causes Deployment Failure
-
-- **Field permissions on required fields:** Any required field in `<fieldPermissions>` fails deployment. Required fields cannot have FLS; omit them entirely. Always confirm from object/field metadata that a field exists and is not required—never assume.
-- **Incorrect API names:** Using the wrong name or missing suffixes (e.g. missing `__c` for custom objects, fields, tabs) cause failure.
 
 ## Step 1: Define Core Properties
 
@@ -72,7 +67,7 @@ Define field permissions for sensitive or custom fields:
 </fields>
 ```
 - Use format `ObjectName.FieldName` for field references
-- Both `readable` and `editable` can be true (editable implies readable)
+- Set both readable and editable to true when the user needs edit access; editable implies readable
 - If all fields should be visible, can alternatively enable the "viewAllFields" object permission
 
 ## Step 4: Grant User Permissions
@@ -167,16 +162,11 @@ Before deploying, verify:
 - [ ] No duplicate permissions
 - [ ] no lengthy comments
 
+## What Causes Deployment Failure
+
+- **Field permissions on required fields:** Any required field in `<fieldPermissions>` fails deployment. Required fields cannot have FLS; omit them entirely. Always confirm from object/field metadata that a field exists and is not required—never assume.
+- **Incorrect API names:** Using the wrong name or missing suffixes (e.g. missing `__c` for custom objects, fields, tabs) cause failure.
 
 ## Deployment
 
-Deploy using Salesforce CLI:
-```bash
-sf project deploy start --metadata-dir force-app/main/default/permissionsets
-```
-
-## Best Practices
-
-- **Granularity**: Create focused permission sets for specific purposes
-- **Documentation**: Maintain clear descriptions and naming
-- **Security**: Never grant excessive permissions like ModifyAllData without justification
+Deploy using Salesforce CLI
