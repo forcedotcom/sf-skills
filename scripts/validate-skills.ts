@@ -27,6 +27,14 @@ interface CheckResult {
   errors: string[]
   /** When true and errors is non-empty, skip remaining checks for this entry. */
   fatal?: boolean
+  /** Defaults to "error". Warnings are printed but do not cause a non-zero exit code. */
+  severity?: "error" | "warning"
+}
+
+/** Collected results for a single skill entry. */
+interface SkillResult {
+  errors: string[]
+  warnings: string[]
 }
 
 /** Runs before SKILL.md is read — validates directory layout. */
@@ -60,6 +68,27 @@ const STRUCTURE_CHECKS: StructureCheck[] = [
     run(dirName, dirPath) {
       if (!fs.existsSync(path.join(dirPath, "SKILL.md"))) {
         return { errors: [`Missing SKILL.md in skills/${dirName}/`], fatal: true }
+      }
+      return { errors: [] }
+    },
+  },
+  {
+    description: "Name must be kebab-case (lowercase letters, digits, and hyphens only)",
+    run(dirName) {
+      if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(dirName)) {
+        return { errors: [`skills/${dirName}: name must be kebab-case (only lowercase letters, digits, and hyphens)`] }
+      }
+      return { errors: [] }
+    },
+  },
+  {
+    description: "Name should use gerund form — first word should end in -ing (e.g. generating-apex-tests)",
+    run(dirName) {
+      if (!dirName.split("-")[0].endsWith("ing")) {
+        return {
+          errors: [`skills/${dirName}: name should use gerund form (e.g. generating-apex-tests, refactoring-triggers)`],
+          severity: "warning",
+        }
       }
       return { errors: [] }
     },
@@ -134,6 +163,46 @@ const CONTENT_CHECKS: ContentCheck[] = [
       return { errors: [] }
     },
   },
+  {
+    description: "Description must be at least 20 words to be information-rich",
+    run({ dirName, frontmatter }) {
+      if (!frontmatter) return { errors: [] }
+      const words = frontmatter.description?.trim().split(/\s+/) ?? []
+      if (words.length < 20) {
+        return {
+          errors: [`skills/${dirName}/SKILL.md: description too short (${words.length} word(s), minimum 20)`],
+        }
+      }
+      return { errors: [] }
+    },
+  },
+  {
+    description: 'Description must include trigger/activation language (contain "use")',
+    run({ dirName, frontmatter }) {
+      if (!frontmatter) return { errors: [] }
+      if (!frontmatter.description?.toLowerCase().includes("use")) {
+        return {
+          errors: [
+            `skills/${dirName}/SKILL.md: description must include trigger context (e.g. "Use this skill when...")`,
+          ],
+        }
+      }
+      return { errors: [] }
+    },
+  },
+  {
+    description: "Skill body should be under 500 lines for context efficiency",
+    run({ dirName, body }) {
+      const lines = body.split("\n").length
+      if (lines > 500) {
+        return {
+          errors: [`skills/${dirName}/SKILL.md: body is ${lines} lines (recommended maximum is 500)`],
+          severity: "warning",
+        }
+      }
+      return { errors: [] }
+    },
+  },
 ]
 
 /**
@@ -181,19 +250,24 @@ function getFrontmatterEnd(content: string): number {
 
 /**
  * Runs all structure and content checks for a single skill directory.
- * Returns an array of error messages (empty = pass).
+ * Returns errors (block CI) and warnings (advisory, printed but exit 0) separately.
  */
-function validateSkill(dirName: string, dirPath: string): string[] {
+function validateSkill(dirName: string, dirPath: string): SkillResult {
   if (!fs.existsSync(dirPath)) {
-    return [`skills/${dirName}: directory not found`]
+    return { errors: [`skills/${dirName}: directory not found`], warnings: [] }
   }
 
   const errors: string[] = []
+  const warnings: string[] = []
+
+  const collect = ({ errors: msgs, fatal, severity }: CheckResult): boolean => {
+    if (msgs.length === 0) return false
+    ;(severity === "warning" ? warnings : errors).push(...msgs)
+    return !!fatal && severity !== "warning"
+  }
 
   for (const check of STRUCTURE_CHECKS) {
-    const { errors: checkErrors, fatal } = check.run(dirName, dirPath)
-    errors.push(...checkErrors)
-    if (fatal && checkErrors.length > 0) return errors
+    if (collect(check.run(dirName, dirPath))) return { errors, warnings }
   }
 
   const content = fs.readFileSync(path.join(dirPath, "SKILL.md"), "utf8")
@@ -203,12 +277,10 @@ function validateSkill(dirName: string, dirPath: string): string[] {
   const ctx: SkillContext = { dirName, dirPath, content, frontmatter, body }
 
   for (const check of CONTENT_CHECKS) {
-    const { errors: checkErrors, fatal } = check.run(ctx)
-    errors.push(...checkErrors)
-    if (fatal && checkErrors.length > 0) return errors
+    if (collect(check.run(ctx))) return { errors, warnings }
   }
 
-  return errors
+  return { errors, warnings }
 }
 
 /** CLI entry point. Parses flags, resolves the list of skills to check, and reports results. */
@@ -237,12 +309,22 @@ function main(): void {
   }
 
   const allErrors: string[] = []
+  const allWarnings: string[] = []
   let passed = 0
 
   for (const entry of entries) {
-    const entryErrors = validateSkill(entry, path.join(SKILLS_DIR, entry))
-    allErrors.push(...entryErrors)
-    if (entryErrors.length === 0) passed++
+    const { errors, warnings } = validateSkill(entry, path.join(SKILLS_DIR, entry))
+    allErrors.push(...errors)
+    allWarnings.push(...warnings)
+    if (errors.length === 0) passed++
+  }
+
+  if (allWarnings.length > 0) {
+    console.warn(`\n${allWarnings.length} warning(s):\n`)
+    for (const w of allWarnings) {
+      console.warn(`  ⚠ ${w}`)
+    }
+    console.warn("")
   }
 
   if (allErrors.length > 0) {
