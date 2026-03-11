@@ -1,0 +1,70 @@
+name: release-skills
+
+on:
+  push:
+    branches: [main]
+    paths: ['skills/**']
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    outputs:
+      skipped: ${{ steps.changelog.outputs.skipped }}
+      version: ${{ steps.changelog.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.IDEE_GH_TOKEN }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - run: npm ci
+
+      - name: Conventional Changelog Action
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v5
+        with:
+          git-user-name: svc-idee-bot
+          git-user-email: svc_idee_bot@salesforce.com
+          github-token: ${{ secrets.IDEE_GH_TOKEN }}
+          tag-prefix: ""
+          release-count: "0"
+          skip-on-empty: ${{ github.event_name == 'push' }}
+          version-file: "package.json"
+          output-file: "CHANGELOG.md"
+
+      - name: Create Github Release
+        id: release
+        uses: ncipollo/release-action@v2
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        with:
+          name: "${{ steps.changelog.outputs.version }}"
+          tag: "${{ steps.changelog.outputs.version }}"
+          commit: ${{ github.sha }}
+          body: |
+            ## Changes in @salesforce/afv-skills
+
+            ${{ steps.changelog.outputs.clean_changelog }}
+          token: ${{ secrets.IDEE_GH_TOKEN }}
+          skipIfReleaseExists: true
+
+      - name: Publish to npm
+        if: ${{ steps.changelog.outputs.skipped == 'false' && steps.release.outputs.id != '' }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+          npm publish --access public
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Notify cline-fork
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.IDEE_GH_TOKEN }}
+          repository: forcedotcom/cline-fork
+          event-type: skills-released
+          client-payload: '{"version": "${{ steps.changelog.outputs.version }}"}'
