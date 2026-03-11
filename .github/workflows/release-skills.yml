@@ -5,6 +5,11 @@ on:
     branches: [main]
     paths: ['skills/**']
   workflow_dispatch:
+    inputs:
+      ref:
+        description: "Branch or tag to release from (must be main)"
+        required: false
+        default: main
 
 permissions:
   contents: write
@@ -17,6 +22,14 @@ jobs:
       skipped: ${{ steps.changelog.outputs.skipped }}
       version: ${{ steps.changelog.outputs.version }}
     steps:
+      - name: Require main branch
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [ "${{ github.ref_name }}" != "main" ]; then
+            echo "Releases must be run from the main branch (got '${{ github.ref_name }}')."
+            exit 1
+          fi
+
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.IDEE_GH_TOKEN }}
@@ -27,6 +40,9 @@ jobs:
           node-version-file: '.nvmrc'
 
       - run: npm ci
+
+      - name: Validate skills
+        run: npm run validate:skills
 
       - name: Conventional Changelog Action
         id: changelog

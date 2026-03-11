@@ -207,7 +207,9 @@ const CONTENT_CHECKS: ContentCheck[] = [
 
 /**
  * Returns the deduplicated list of top-level skill directory names that have
- * changed relative to `base` (e.g. `origin/main`).
+ * changed relative to `base` (e.g. `origin/main`) and still exist on disk.
+ * Deleted skill directories are intentionally excluded — removing a skill is
+ * valid and requires no structural validation.
  */
 function getChangedSkillDirs(base: string): string[] {
   const output = execSync(`git diff --name-only ${base}...HEAD`, { encoding: "utf8" })
@@ -219,7 +221,7 @@ function getChangedSkillDirs(base: string): string[] {
         .map((f) => f.split("/")[1])
         .filter(Boolean)
     ),
-  ]
+  ].filter((dir) => fs.existsSync(path.join(SKILLS_DIR, dir)))
 }
 
 /**

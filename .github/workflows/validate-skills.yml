@@ -2,7 +2,13 @@ name: Validate Skills
 
 on:
   pull_request:
-    paths: ['skills/**']
+    paths:
+      - 'skills/**'
+      - 'scripts/validate-skills.ts'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.nvmrc'
+      - '.github/workflows/validate-skills.yml'
 
 jobs:
   validate:
@@ -18,4 +24,13 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run validate:skills -- --changed --base=origin/${{ github.base_ref }}
+      # Run against only changed skills when skills files are touched; fall back
+      # to full corpus validation when only tooling files changed, so validator
+      # regressions against existing skills are caught in the same PR.
+      - name: Validate skills
+        run: |
+          if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -q '^skills/'; then
+            npm run validate:skills -- --changed --base=origin/${{ github.base_ref }}
+          else
+            npm run validate:skills
+          fi
