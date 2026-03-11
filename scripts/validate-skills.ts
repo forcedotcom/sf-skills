@@ -225,29 +225,25 @@ function getChangedSkillDirs(base: string): string[] {
 }
 
 /**
- * Parses the YAML frontmatter block (`--- ... ---`) from a markdown file.
- * Returns a flat key/value map, or `null` if no valid block is found.
- * Wrapping quotes on values are stripped.
+ * Parses a SKILL.md file into its frontmatter fields and body.
+ * `frontmatter` is `null` if the `--- ... ---` block is missing or malformed.
+ * Wrapping quotes on frontmatter values are stripped.
  */
-function parseFrontmatter(content: string): Record<string, string> | null {
-  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/)
-  if (!match) return null
-  const result: Record<string, string> = {}
+function parseSkillMd(content: string): { frontmatter: Record<string, string> | null; body: string } {
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/)
+  if (!match) return { frontmatter: null, body: content }
+
+  const frontmatter: Record<string, string> = {}
   for (const line of match[1].split(/\r?\n/)) {
     const colonIdx = line.indexOf(":")
     if (colonIdx === -1) continue
     const key = line.slice(0, colonIdx).trim()
-    // Strip wrapping single or double quotes to match how consumers read values
     const raw = line.slice(colonIdx + 1).trim()
-    result[key] = raw.replace(/^(['"])([\s\S]*)\1$/, "$2")
+    // Strip wrapping single or double quotes to match how consumers read values
+    frontmatter[key] = raw.replace(/^(['"])([\s\S]*)\1$/, "$2")
   }
-  return result
-}
 
-/** Returns the character offset immediately after the closing `---` of the frontmatter block, or -1 if absent. */
-function getFrontmatterEnd(content: string): number {
-  const match = content.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/)
-  return match ? match[0].length : -1
+  return { frontmatter, body: content.slice(match[0].length) }
 }
 
 /**
@@ -262,24 +258,26 @@ function validateSkill(dirName: string, dirPath: string): SkillResult {
   const errors: string[] = []
   const warnings: string[] = []
 
-  const collect = ({ errors: msgs, fatal, severity }: CheckResult): boolean => {
-    if (msgs.length === 0) return false
-    ;(severity === "warning" ? warnings : errors).push(...msgs)
-    return !!fatal && severity !== "warning"
+  const collectIssues = (result: CheckResult): boolean => {
+    if (result.errors.length === 0) return false
+    if (result.severity === "warning") {
+      warnings.push(...result.errors)
+    } else {
+      errors.push(...result.errors)
+    }
+    return result.fatal === true && result.severity !== "warning"
   }
 
   for (const check of STRUCTURE_CHECKS) {
-    if (collect(check.run(dirName, dirPath))) return { errors, warnings }
+    if (collectIssues(check.run(dirName, dirPath))) return { errors, warnings }
   }
 
   const content = fs.readFileSync(path.join(dirPath, "SKILL.md"), "utf8")
-  const frontmatter = parseFrontmatter(content)
-  const frontmatterEnd = getFrontmatterEnd(content)
-  const body = frontmatterEnd !== -1 ? content.slice(frontmatterEnd) : ""
+  const { frontmatter, body } = parseSkillMd(content)
   const ctx: SkillContext = { dirName, dirPath, content, frontmatter, body }
 
   for (const check of CONTENT_CHECKS) {
-    if (collect(check.run(ctx))) return { errors, warnings }
+    if (collectIssues(check.run(ctx))) return { errors, warnings }
   }
 
   return { errors, warnings }
