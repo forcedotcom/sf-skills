@@ -18,19 +18,4 @@ jobs:
 
       - run: npm ci
 
-      - name: Detect changed skill directories
-        id: changed-skills
-        run: |
-          # Collect top-level skill dirs touched by this PR (relative to skills/).
-          # Passing explicit dirs means pre-existing nested skill categories
-          # (to be flattened in a separate PR) don't block unrelated skill PRs.
-          DIRS=$(git diff --name-only origin/${{ github.base_ref }}...HEAD \
-            | grep '^skills/' \
-            | cut -d'/' -f2 \
-            | sort -u \
-            | tr '\n' ' ')
-          echo "dirs=$DIRS" >> $GITHUB_OUTPUT
-          echo "Validating skill dirs: $DIRS"
-
-      - name: Validate changed skills
-        run: npx tsx scripts/validate-skills.ts ${{ steps.changed-skills.outputs.dirs }}
+      - run: npm run validate:skills -- --changed --base=origin/${{ github.base_ref }}

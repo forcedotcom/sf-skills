@@ -3,11 +3,13 @@
 // Exits with code 1 if any violations are found.
 //
 // Usage:
-//   tsx scripts/validate-skills.ts              # validate all skills
-//   tsx scripts/validate-skills.ts apex-class   # validate specific skill dirs
+//   npm run validate:skills                                        # validate all skills
+//   npm run validate:skills -- --changed --base=origin/main       # validate only skills changed vs base
 
+import { execSync } from "child_process"
 import fs from "fs"
 import path from "path"
+import { parseArgs } from "util"
 
 const SKILLS_DIR = path.join(__dirname, "..", "skills")
 
@@ -137,6 +139,23 @@ const CONTENT_CHECKS: ContentCheck[] = [
 ]
 
 // ---------------------------------------------------------------------------
+// Changed-skills detection
+// ---------------------------------------------------------------------------
+
+function getChangedSkillDirs(base: string): string[] {
+  const output = execSync(`git diff --name-only ${base}...HEAD`, { encoding: "utf8" })
+  return [
+    ...new Set(
+      output
+        .split("\n")
+        .filter((f) => f.startsWith("skills/"))
+        .map((f) => f.split("/")[1])
+        .filter(Boolean)
+    ),
+  ]
+}
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
@@ -193,10 +212,28 @@ function validateSkill(dirName: string, dirPath: string): string[] {
 }
 
 function main(): void {
-  // If skill dir names are passed as arguments, validate only those.
-  // Otherwise validate all entries in skills/.
-  const targets = process.argv.slice(2)
-  const entries = targets.length > 0 ? targets : fs.readdirSync(SKILLS_DIR)
+  const { values } = parseArgs({
+    args: process.argv.slice(2),
+    options: {
+      /** Validate only skill dirs touched in this branch vs the given base ref. */
+      changed: { type: "boolean", default: false },
+      /** Base ref for --changed (e.g. origin/main). Defaults to origin/HEAD. */
+      base: { type: "string", default: "origin/HEAD" },
+    },
+  })
+
+  let entries: string[]
+
+  if (values.changed) {
+    entries = getChangedSkillDirs(values.base!)
+    if (entries.length === 0) {
+      console.log("No skill directories changed — nothing to validate.")
+      return
+    }
+    console.log(`Validating ${entries.length} changed skill(s): ${entries.join(", ")}`)
+  } else {
+    entries = fs.readdirSync(SKILLS_DIR)
+  }
 
   const allErrors: string[] = []
   let passed = 0
