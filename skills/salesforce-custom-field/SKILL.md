@@ -42,6 +42,10 @@ Every generated field must include these tags:
 | `<description>` | Mandatory | State the business "why" behind the field |
 | `<inlineHelpText>` | Mandatory | Provide actionable guidance for the end-user. Must add value beyond the label (e.g., "Enter the value in USD including tax" instead of just "The amount") |
 
+### XML Comments — NEVER Before Root Element
+
+**NEVER place XML comments (`<!-- ... -->`) before the root `<CustomField>` element in metadata XML files.** Comments between the XML declaration and `<CustomField>` cause a `ConversionError` during deployment. Comments inside the root element are safe.
+
 ### External ID Configuration
 
 **Trigger:** If the user mentions "integration," "importing data," "external system ID," or "unique key from [System Name]," set `<externalId>true</externalId>`.
@@ -440,6 +444,7 @@ Formula fields that reference other fields will fail deployment if the reference
 
 | Error Message | Cause | Fix |
 |---------------|-------|-----|
+| `ConversionError: Invalid XML tags or unable to find matching parent xml file for CustomField` | XML comments placed before the root `<CustomField>` element | Remove XML comments (`<!-- ... -->`) that appear before `<CustomField>` in the `.field-meta.xml` file |
 | `Field [FieldName] does not exist. Check spelling.` | Referenced field does not exist or has not been deployed yet | Verify the referenced field exists and is deployed before this field |
 | `DUPLICATE_DEVELOPER_NAME` | Field fullName already exists on the object | Use a unique business-driven name |
 | `MAX_RELATIONSHIPS_EXCEEDED` | More than 2 Master-Detail or 15 Lookup fields on the object | Use Lookup for 3rd+ Master-Detail; review Lookup count |
@@ -455,6 +460,7 @@ Before generating CustomField XML, verify:
 - [ ] Does `<fullName>` use valid format and end in `__c`?
 - [ ] Are `<description>` and `<inlineHelpText>` both populated and meaningful?
 - [ ] Is `<label>` in Title Case?
+- [ ] Are there no XML comments (`<!-- ... -->`) before the root `<CustomField>` element? (Comments before the root element break SDR's parser)
 
 ### Master-Detail Field Checks ⭐ CRITICAL
 - [ ] Is `<required>` attribute ABSENT? (Master-Detail is always required)

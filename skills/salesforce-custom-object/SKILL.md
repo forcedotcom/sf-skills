@@ -16,7 +16,9 @@ Use this skill when you need to:
 
 ## 1. Overview and Purpose
 
-This document defines the mandatory constraints for generating CustomObject metadata XML (`.object` file). The agent must verify these constraints before outputting XML to prevent Metadata API deployment errors.
+This document defines the mandatory constraints for generating CustomObject metadata XML (`.object-meta.xml` file). The agent must verify these constraints before outputting XML to prevent Metadata API deployment errors.
+
+**File extension:** `.object-meta.xml`
 
 ---
 
@@ -24,7 +26,7 @@ This document defines the mandatory constraints for generating CustomObject meta
 
 The following constraints must be true for the XML body to deploy successfully.
 
-**Note:** The API Name (fullName) is NOT a tag; it is the filename (e.g., `Vehicle__c.object`).
+**Note:** The API Name (fullName) is NOT a tag; it is the filename (e.g., `Vehicle__c.object-meta.xml`).
 
 ### Required Elements
 
@@ -145,7 +147,7 @@ Do not create more than **2 Master-Detail relationships** for a single object. I
 
 ### XML Root Element
 
-Do NOT include the `<fullName>` tag at the root of the `.object` XML file. The API name is derived from the filename.
+Do NOT include the `<fullName>` tag at the root of the `.object-meta.xml` file. The API name is derived from the filename.
 
 **❌ INCORRECT:**
 ```xml
@@ -159,7 +161,7 @@ Do NOT include the `<fullName>` tag at the root of the `.object` XML file. The A
 ```xml
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
   <label>Vehicle</label>
-  <!-- fullName comes from filename: Vehicle__c.object -->
+  <!-- fullName comes from filename: Vehicle__c.object-meta.xml -->
 </CustomObject>
 ```
 
