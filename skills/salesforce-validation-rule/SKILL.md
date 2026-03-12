@@ -67,3 +67,6 @@ Validation Rules are declarative metadata components used to enforce data qualit
 2. Interpretation of "Update" Instructions. When receiving instructions to modify a formula, distinguish between a replacement and an addition:
     - "Update the formula to [Action]": Completely replace the existing formula logic with the new requirement.
     - "Update the formula to also [Action]": Keep the existing logic and append the new requirement (usually by wrapping the logic in an AND() or OR() function).
+
+3. File Format Requirement
+    - Validation rule files MUST always use the `.validationRule-meta.xml` extension.
