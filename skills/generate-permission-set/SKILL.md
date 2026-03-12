@@ -121,7 +121,7 @@ Make applications and tabs visible to users:
 
 **CRITICAL - Tab Naming:**
 - Custom object tabs: MUST include the __c suffix (e.g., MyCustomObject__c)
-- Standard object tabs: Use the object name without modification (e.g., Account, Contact)
+- Standard object tabs: Use the object name with "standard-" prefix (e.g., standard-Account, standard-Contact)
 - The tab name matches the object's API name exactly
 
 ## Step 6: Add Apex and Visualforce Access (Optional)
