@@ -82,6 +82,15 @@ const STRUCTURE_CHECKS: StructureCheck[] = [
     },
   },
   {
+    description: "Name must be at most 64 characters",
+    run(dirName) {
+      if (dirName.length > 64) {
+        return { errors: [`skills/${dirName}: name is ${dirName.length} characters (maximum 64)`] }
+      }
+      return { errors: [] }
+    },
+  },
+  {
     description: "Name should use gerund form — first word should end in -ing (e.g. generating-apex-tests)",
     run(dirName) {
       if (!dirName.split("-")[0].endsWith("ing")) {
@@ -172,6 +181,17 @@ const CONTENT_CHECKS: ContentCheck[] = [
         return {
           errors: [`skills/${dirName}/SKILL.md: description too short (${words.length} word(s), minimum 20)`],
         }
+      }
+      return { errors: [] }
+    },
+  },
+  {
+    description: "Description must be at most 1024 characters",
+    run({ dirName, frontmatter }) {
+      if (!frontmatter) return { errors: [] }
+      const len = frontmatter.description?.length ?? 0
+      if (len > 1024) {
+        return { errors: [`skills/${dirName}/SKILL.md: description is ${len} characters (maximum 1024)`] }
       }
       return { errors: [] }
     },
@@ -319,6 +339,9 @@ function main(): void {
     if (errors.length === 0) passed++
   }
 
+  const hasIssues = allErrors.length > 0 || allWarnings.length > 0
+  const footer = "  Spec: https://agentskills.io/specification · Authoring guide: https://github.com/forcedotcom/afv-library#readme"
+
   if (allWarnings.length > 0) {
     console.warn(`\n${allWarnings.length} warning(s):\n`)
     for (const w of allWarnings) {
@@ -333,9 +356,12 @@ function main(): void {
       console.error(`  ✗ ${err}`)
     }
     console.error("")
+    console.error(footer)
+    console.error("")
     process.exit(1)
   } else {
     console.log(`Skill validation passed: ${passed} of ${entries.length} skill(s) checked.`)
+    if (hasIssues) console.warn(footer)
   }
 }
 
