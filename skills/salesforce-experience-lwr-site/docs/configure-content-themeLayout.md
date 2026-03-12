@@ -56,7 +56,7 @@ The `content.json` file must contain:
         "children": [ "[regions in the layout]" ],
         "definition": "[FQN of root layout component]",
         "id": "[root component id]",
-        "type": "component",
+        "type": "component"
     }
   },
   "urlName": "[url name]"
