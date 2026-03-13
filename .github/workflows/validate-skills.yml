@@ -1,0 +1,29 @@
+name: Validate Skills
+
+on:
+  pull_request:
+
+jobs:
+  validate-skills:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - run: npm ci
+
+      # Run against only changed skills when skills files are touched; fall back
+      # to full corpus validation when only tooling files changed, so validator
+      # regressions against existing skills are caught in the same PR.
+      - name: Validate skills
+        run: |
+          if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -q '^skills/'; then
+            npm run validate:skills -- --changed --base=origin/${{ github.base_ref }}
+          else
+            npm run validate:skills
+          fi

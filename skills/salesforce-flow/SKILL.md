@@ -1,6 +1,6 @@
 ---
 name: salesforce-flow
-description: Generate Salesforce Flows using the MCP tool execute_metadata_action. Use when the user asks to create, build, or generate a flow — including Screen, Autolaunched, Record-Triggered (before/after-save), Scheduled, or Platform Event-Triggered Flows. Also trigger for flow-like requests such as "when a record is created", "trigger daily at", "send an email when", "update the field when", "automate", "workflow", or "flow XML/metadata". This is the only skill for Salesforce Flow generation.
+description: Generate Salesforce Flows using the MCP tool execute_metadata_action. Use when the user asks to create, build, or generate a flow — including Screen, Autolaunched, Record-Triggered (before/after-save), Scheduled. Also trigger for flow-like requests such as "when a record is created", "trigger daily at", "send an email when", "update the field when", "automate", "workflow", or "flow XML/metadata". This is the only skill for Salesforce Flow generation.
 ---
 
 ## Goal
@@ -21,7 +21,7 @@ Use this skill when you need to:
 # Flow Metadata Specification
 
 ## Overview
-Salesforce Flows are powerful automation tools that enable complex business process automation without code. Flows can collect and process data through interactive screens, execute logic and calculations, manipulate records, call external services, and trigger based on various events. Flow types include Screen Flows (user-guided), Autolaunched Flows (background processing), Record-Triggered Flows (database events), Scheduled Flows (time-based), and Platform Event-Triggered Flows (event-driven).
+Salesforce Flows are powerful automation tools that enable complex business process automation without code. Flows can collect and process data through interactive screens, execute logic and calculations, manipulate records, call external services, and trigger based on various events. Flow types include Screen Flows (user-guided), Autolaunched Flows (background processing), Record-Triggered Flows (database events) and Scheduled Flows (time-based).
 
 ## Purpose
 - Automate complex business processes with declarative logic and branching
