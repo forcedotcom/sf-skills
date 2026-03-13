@@ -87,7 +87,7 @@ Reference docs within the skill directory. Note that these are **local** and not
 - [configure-content-view.md](docs/configure-content-view.md) - View creation/editing (custom/object pages)
 - [configure-content-themeLayout.md](docs/configure-content-themeLayout.md) - Theme layout creation + theme sync
 - [configure-content-brandingSet.md](docs/configure-content-brandingSet.md) - Branding with color patterns/WCAG
-- [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) - **UUID generation (CRITICAL)** for component and region ids used in views
+- [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) - **UUID generation (CRITICAL)** for component and region ids used in views and themeLayout.
 - [handle-ui-components.md](docs/handle-ui-components.md) - Component discovery, schemas, insertion, configuration
 
 ## Common Workflows
@@ -106,13 +106,43 @@ See [References](#references) for detailed capabilities.
 - [ ] **ALWAYS** read [bootstrap-template-byo-lwr.md](docs/bootstrap-template-byo-lwr.md) within the skill directory. Do not proceed to the next step without loading the file.
 - [ ] follow the bootstrap doc strictly on site creation
 
+### Creating and Editing Standard or Object Pages
+
+**Steps** (Follow each step sequentially. Do not skip any step before proceeding.):
+
+- [ ] Load [configure-content-route.md](docs/configure-content-route.md)
+- [ ] Load [configure-content-view.md](docs/configure-content-view.md)
+- [ ] Load [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md)
+- [ ] Follow the instructions of the above docs strictly to accomplish user's goal
+
+### Adding UI Components to Pages
+
+Before any file writes, read and follow strictly [handle-ui-components.md](docs/handle-ui-components.md) to add LWCs to LWR sites.
+
+Also use [configure-content-themeLayout.md](docs/configure-content-themeLayout.md) if a component has one of the following requirements:
+
+- needs to be "sticky" and persistent across pages
+- is used as a theme layout
+
+### Creating Theme Layouts
+
+Before any file writes, read and follow strictly [configure-content-themeLayout.md](docs/configure-content-themeLayout.md).
+
+### Configuring Branding
+
+Before any file writes, read and follow strictly [configure-content-brandingSet.md](docs/configure-content-brandingSet.md) to configure background colors, foreground colors, button colors, and other branding colors that affect all pages.
+
 ### CUD Operations on DigitalExperience Contents
 
 - Users can perform create, update, delete operations on DigitalExperience Contents.
-- Before any file writes for a content type, read and follow its reference doc strictly if the doc exists. e.g., for `sfdc_cms__route`, load [configure-content-route.md](docs/configure-content-route.md).
-- **IMPORTANT:** Before ANY modification (create, update, or delete) to content, ALWAYS call `execute_metadata_action` first to get the schema and examples for that content type.
-- **Call once per content type per user request**: If you're creating/modifying multiple items of the same content type (e.g., creating 3 routes), you only need to call `execute_metadata_action` ONCE for that content type. Reuse the schema and examples for all items of that type within the same user request.
-- For each unique content type you need to work with, call `execute_metadata_action` using the following:
+
+**Steps** (Follow each step sequentially. Do not skip any step before proceeding.):
+
+- [ ] Read and follow strictly the reference doc related to the content type if the doc exists. e.g., for `sfdc_cms__route`, load [configure-content-route.md](docs/configure-content-route.md).
+- [ ] Read [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) if creating or modifying view or theme layout
+- [ ] Call `execute_metadata_action` to get the schema and examples for that content type **after** loading the corresponding reference doc.
+  - **Call once per content type per user request**: If you're creating/modifying multiple items of the same content type (e.g., creating 3 routes), you only need to call `execute_metadata_action` ONCE for that content type. Reuse the schema and examples for all items of that type within the same user request.
+  - For each unique content type you need to work with, call `execute_metadata_action` using the following (Do not call the `execute_metadata_action` MCP tool with any other site actionName unless specified in this knowledge doc):
 
 ```json
 {
@@ -124,8 +154,6 @@ See [References](#references) for detailed capabilities.
   }
 }
 ```
-
-- Do not call the `execute_metadata_action` MCP tool with any other site actionName unless specified in this knowledge doc.
 
 ### Retrieving Site URLs After Deployment
 
@@ -144,27 +172,6 @@ After successfully deploying the site using `sf project deploy`, use the `execut
 The site developer name can be found in the CustomSite filename (e.g., `sites/MySite.site-meta.xml` → developer name is `MySite`).
 
 If the site is not found, an error message will be returned indicating that the site may not be deployed. Ensure the site has been successfully deployed before calling this action.
-
-### Adding and Editing Pages
-
-Before any file writes, read and follow strictly both [configure-content-route.md](docs/configure-content-route.md) and [configure-content-view.md](docs/configure-content-view.md) for details as a page is composed of a view and a route.
-
-### Adding UI Components to Pages
-
-Before any file writes, read and follow strictly [handle-ui-components.md](docs/handle-ui-components.md) to add LWCs to LWR sites.
-
-Also use [configure-content-themeLayout.md](docs/configure-content-themeLayout.md) if a component has one of the following requirements:
-
-- needs to be "sticky" and persistent across pages
-- is used as a theme layout
-
-### Creating Theme Layouts
-
-Before any file writes, read and follow strictly [configure-content-themeLayout.md](docs/configure-content-themeLayout.md).
-
-### Configuring Branding
-
-Before any file writes, read and follow strictly [configure-content-brandingSet.md](docs/configure-content-brandingSet.md) to configure background colors, foreground colors, button colors, and other branding colors that affect all pages.
 
 ### Retrieve Site Metadata Schemas and Documentation
 
