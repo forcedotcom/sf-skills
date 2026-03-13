@@ -24,7 +24,7 @@ Use the `get_metadata_api_context` MCP tool:
     <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
     <label>Share Accounts With Site Guest</label>
     <sharedTo>
-      <guestUser>[site Guest User's nickname]</guestUser>
+      <guestUser>[site Guest User's CommunityNickanme]</guestUser>
     </sharedTo>
     <criteriaItems>
       <field>Name</field>
@@ -37,7 +37,7 @@ Use the `get_metadata_api_context` MCP tool:
 
 ## Critical Requirements
 
-1. **SharedTo Element**: Must use `<guestUser>{site Guest User's nickname}</guestUser>` (not URL path prefix).
+1. **SharedTo Element**: Must use `<guestUser>{site Guest User's CommunityNickanme}</guestUser>` (not URL path prefix).
 2. **includeHVUOwnedRecords**: Required field. Set to `false` unless records owned by high-volume site users should be included.
 3. **One XML file per object**: Put all rules for a given object in one file. Do not create additional.
 
