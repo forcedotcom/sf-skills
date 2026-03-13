@@ -4,27 +4,29 @@
 
 ## Table of Contents
 
-- I. Core Principles
-- II. Directory Structure
-- III. _meta.json Structure
-- IV. content.json Structure
-- V. Naming Conventions
-- VI. Theme Sync After Creation
-- VII. Generation Checklist
+- Directory Structure
+- Purpose A: Generate new theme layouts under the `sfdc_cms__themeLayout` directory.
 
-## I. Core Principles
+  - _meta.json Structure
+  - content.json Structure
+  - Naming Conventions
+  - Theme Sync After Creation
+  - Generation Checklist
+- Purpose B: Editing existing theme layouts under the `sfdc_cms__themeLayout` directory.
 
-1. **Purpose**: Generate new theme layouts for under the `sfdc_cms__themeLayout` directory.
-2. **Naming Convention**: Theme Layout directory names should use camelCase.
-
-## II. Directory Structure
+## Directory Structure
 
 1. **Location**: `digitalExperiences/site/[SITE_NAME]/sfdc_cms__themeLayout/[THEME_LAYOUT_NAME]/`
 2. **Required Files**:
-  - `_meta.json` - Metadata file defining the API name and type
-  - `content.json` - Content file defining the configuration and layout
 
-## III. _meta.json Structure
+- `_meta.json` - Metadata file defining the API name and type
+- `content.json` - Content file defining the configuration and layout
+
+## Purpose A: Generate New Theme Layouts
+
+**IMPORTANT**: These guidelines should ONLY be applied when the user explicitly requests creating a new layout for their site. Do not apply these guidelines automatically for other tasks or when editing existing layouts.
+
+### _meta.json Structure
 
 The `_meta.json` file must contain:
 
@@ -42,7 +44,7 @@ The `_meta.json` file must contain:
 - `type`: Always `"sfdc_cms__themeLayout"`
 - `path`: Always `"themeLayouts"`
 
-## IV. content.json Structure
+### content.json Structure
 
 The `content.json` file must contain:
 
@@ -68,19 +70,17 @@ The `content.json` file must contain:
 - `type`: Always `"sfdc_cms__themeLayout"`
 - `title`: Human-readable display title, words separated by spaces (e.g. "Scoped Header and Footer")
 - `contentBody`: Include all `required` properties from `schemaDefinition`. Use `examplesOfContentType` for reference.
-
-Do not add additional fields.
-
+- Do not add additional fields.
 - `urlName`: URL identifier (lowercase, words separated by dashes e.g., "scoped-header-and-footer")
 
-## V. Naming Conventions
+### Naming Conventions
 
 1. **Directory Name**: Should be in camelCase
 2. **apiName**: Must exactly match the directory name
 3. **title**: Human-readable title with spaces (e.g., "Service Not Available Theme Layout")
 4. **urlName**: Lowercase with hyphens for URL-friendly format (e.g., "new-layout")
 
-## VI. Theme Sync After Creation
+### Theme Sync After Creation
 
 After creating a new `sfdc_cms__themeLayout`, you MUST update:
 
@@ -117,7 +117,7 @@ digitalExperiences/site/[SITE_NAME]/sfdc_cms__theme/[THEME_API_NAME]/content.jso
 }
 ```
 
-## VII. Generation Checklist
+### Generation Checklist
 
 When generating a new theme layout, ensure:
 
@@ -127,3 +127,11 @@ When generating a new theme layout, ensure:
 - [ ] `title` is human-readable (V)
 - [ ] `sfdc_cms__theme/[THEME_API_NAME]/content.json` updated by appending a new `contentBody.layouts` mapping (VI)
 - [ ] **CRITICAL**: Complete all the UUID generation steps. See `docs/handle-component-and-region-ids.md`
+
+## Purpose B: Editing Existing Theme Layouts
+
+### Component Modifications
+
+When adding, removing, or configuring components in existing theme layouts, **always** refer to [handle-ui-components.md](docs/handle-ui-components.md) for placement hierarchy, component structure, column layout, and property configuration.
+
+**Note**: Theme layouts often define the overall structure (header/footer) surrounding the main content region. Ensure components are added to the correct region (e.g., `header`, `footer`).

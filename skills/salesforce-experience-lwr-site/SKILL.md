@@ -69,12 +69,12 @@ Before doing anything else, note down the following properties from the local pr
 | `sfdc_cms__site` | Root site configuration containing site-wide settings | Required for every site; one per site |
 | `sfdc_cms__appPage` | Application page container that groups routes and views | Required; defines the app shell |
 | `sfdc_cms__route` | URL routing definition mapping paths to views | Create one for each page/URL path |
-| `sfdc_cms__view` | Page layout and component structure | Create one for each route; defines page content. Also use to edit existing views (e.g., adding/removing components, updating theme layout) |
+| `sfdc_cms__view` | Page layout and component structure | Create one for each route; defines page content. Also use to edit existing views (e.g., adding/removing components on a specific page) |
 | `sfdc_cms__brandingSet` | Brand colors, fonts, and styling tokens | Required; defines site-wide styling |
 | `sfdc_cms__languageSettings` | Language and localization configuration | Required; defines supported languages |
 | `sfdc_cms__mobilePublisherConfig` | Mobile app publishing settings | Required for mobile app deployment |
 | `sfdc_cms__theme` | Theme definition referencing layouts and branding | Required; one per site |
-| `sfdc_cms__themeLayout` | Page layout templates used by views | Create layouts for different page structures |
+| `sfdc_cms__themeLayout` | Page layout templates used by views | Create layouts for different page structures. Also use to edit existing theme layouts (e.g., updating theme layout, add a component that's persistent across pages) |
 
 **Important:** Creating any new pages require BOTH `sfdc_cms__route` AND `sfdc_cms__view`.
 
@@ -117,12 +117,13 @@ See [References](#references) for detailed capabilities.
 
 ### Adding UI Components to Pages
 
-Before any file writes, read and follow strictly [handle-ui-components.md](docs/handle-ui-components.md) to add LWCs to LWR sites.
+**Steps** (Follow each step sequentially. Do not skip any step before proceeding.):
 
-Also use [configure-content-themeLayout.md](docs/configure-content-themeLayout.md) if a component has one of the following requirements:
-
-- needs to be "sticky" and persistent across pages
-- is used as a theme layout
+- [ ] Read and follow [handle-ui-components.md](docs/handle-ui-components.md) to add LWCs to LWR sites.
+- [ ] Load and follow [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) to handle id generation
+- [ ] Read and follow [configure-content-themeLayout.md](docs/configure-content-themeLayout.md) if a component has one of the following requirements:
+  - needs to be "sticky" and persistent across pages
+  - is used as a theme layout
 
 ### Creating Theme Layouts
 

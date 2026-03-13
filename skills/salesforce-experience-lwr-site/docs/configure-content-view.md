@@ -11,23 +11,23 @@
 
 ### Generation Guidelines
 
-**PAGE TYPES:** These guidelines supports two types of pages:
+**PAGE TYPES**: These guidelines supports two types of pages:
 
-1. **Custom Pages** - Single view pages for custom content (e.g., About Us). **Note:** Standard pages (e.g., Home, Login) come pre-built with the site and cannot be created.
+1. **Custom Pages** - Single view pages for custom content (e.g., About Us). **Note**: Standard pages (e.g., Home, Login) come pre-built with the site and cannot be created.
 2. **Object Pages** - Requires 3 views: Detail, List, and Related List (e.g., Account, custom objects)
 
 ### Core Principles
 
-1. **Route Association:** Views are referenced by routes via the `activeViewId` field.
-2. **CRITICAL:** The `viewType` MUST exactly match the `routeType` in the corresponding route.
+1. **Route Association**: Views are referenced by routes via the `activeViewId` field.
+2. **CRITICAL**: The `viewType` MUST exactly match the `routeType` in the corresponding route.
 
 ### Directory Structure (All Views)
 
-1. **Location:** Views must be created under: `digitalExperiences/site/[SITE_NAME]/sfdc_cms__view/[VIEW_NAME]/`
+1. **Location**: Views must be created under: `digitalExperiences/site/[SITE_NAME]/sfdc_cms__view/[VIEW_NAME]/`
 2. **Required Files**:
   - `_meta.json` - Metadata file defining the API name and type
   - `content.json` - Content file defining the configuration and layout
-3. **Naming Convention:** Underscore-separated names, no "__c" suffix (About_Us, Account_Detail)
+3. **Naming Convention**: Underscore-separated names, no "__c" suffix (About_Us, Account_Detail)
 
 ### _meta.json Structure (All Views)
 
@@ -41,7 +41,7 @@ The `_meta.json` file must contain:
 }
 ```
 
-**Rules:**
+**Rules**:
 
 - `apiName`: Must match directory name exactly. **No "__c" suffix**.
 - `type`: Always `"sfdc_cms__view"`
@@ -51,14 +51,14 @@ The `_meta.json` file must contain:
 
 The `contentBody.themeLayoutType` field specifies which theme layout to use for the view.
 
-- **Default:** `"Inner"` - Use this default if the user does not specify a layout OR if the lookup fails to find a matching layoutType
-- **Lookup:** To find valid values:
+- **Default**: `"Inner"` - Use this default if the user does not specify a layout OR if the lookup fails to find a matching layoutType
+- **Lookup**: To find valid values:
     1. Navigate up from the current view directory to the site directory
     2. Look in `sfdc_cms__theme/` (sibling directory to `sfdc_cms__view/`)
     3. Find the theme directory (typically one per site)
     4. Check `content.json` → `contentBody.layouts[]` for the layouts array
 
-- **Layout Name/ID Resolution:** If the user provides only a layout name or ID (e.g., "scopedHeaderAndFooter"), you must look up the corresponding `layoutType`:
+- **Layout Name/ID Resolution**: If the user provides only a layout name or ID (e.g., "scopedHeaderAndFooter"), you must look up the corresponding `layoutType`:
     1. Find the theme's `content.json` as described above
     2. Locate the `contentBody.layouts` array containing `layoutId`/`layoutType` pairs
     3. Match the user-provided name/ID against `layoutId` values
@@ -83,7 +83,7 @@ The `content.json` file must contain:
 }
 ```
 
-**Field Definitions:**
+**Field Definitions**:
 
 - `type`: Always `"sfdc_cms__view"`
 - `title`: Human-readable display title (e.g., About Us)
@@ -100,11 +100,11 @@ community_layout:sldsFlexibleLayout (root)
 └── sfdcHiddenRegion (region) — hidden region for SEO and metadata
 ```
 
-**CRITICAL REQUIREMENTS:**
+**CRITICAL REQUIREMENTS**:
 
-- **Region names are fixed:** The region `name` field MUST be exactly `content` or `sfdcHiddenRegion`. Do NOT invent custom region names.
-- **sfdcHiddenRegion MUST contain seoAssistant:** The `sfdcHiddenRegion` region MUST ALWAYS include a `community_builder:seoAssistant` component in its `children` array.
-- **Components live in children:** All components are placed inside the `children` array of a region. Use an empty `children: []` array for `content` if no components exist.
+- **Region names are fixed**: The region `name` field MUST be exactly `content` or `sfdcHiddenRegion`. Do NOT invent custom region names.
+- **sfdcHiddenRegion MUST contain seoAssistant**: The `sfdcHiddenRegion` region MUST ALWAYS include a `community_builder:seoAssistant` component in its `children` array.
+- **Components live in children**: All components are placed inside the `children` array of a region. Use an empty `children: []` array for `content` if no components exist.
 
 Each region requires: `id` (unique UUID), `name`, `title`, `type: "region"`, `children`. Do not add any other fields.
 
@@ -126,7 +126,7 @@ The route's `activeViewId` must match the view's directory name exactly.
 - [ ] Directory and `_meta.json` follow structure (see Directory Structure, _meta.json Structure)
 - [ ] `content.json` has all required fields (A.1)
 - [ ] Component structure correct with both regions (A.1)
-- [ ] **CRITICAL:** Complete all the UUID generation steps. see `docs/handle-component-and-region-ids.md`
+- [ ] **CRITICAL**: Complete all the UUID generation steps. see `docs/handle-component-and-region-ids.md`
 - [ ] `viewType` matches route's `routeType` (CRITICAL)
 
 ### PART B: OBJECT PAGES
@@ -137,7 +137,7 @@ Use this section when creating object pages that require Detail, List, and Relat
 
 Object pages require **three views**: Detail, List, and Related List. All share the same object name.
 
-**Object Types & viewType Format:**
+**Object Types & viewType Format**:
 
 | Object Type | Identifier | viewType Example |
 |-|-|-|
@@ -176,20 +176,20 @@ Create three directories under `sfdc_cms__view/`:
 }
 ```
 
-**Field Definitions:**
+**Field Definitions**:
 
 - `type`: Always `"sfdc_cms__view"`
 - `title`: Human-readable (e.g., "Account Detail")
 - `contentBody`: Include all `required` properties from `schemaDefinition`. Use `examplesOfContentType` for reference.
-- `contentBody.viewType`: **CRITICAL:** Must exactly match route's `routeType`
+- `contentBody.viewType`: **CRITICAL**: Must exactly match route's `routeType`
 - `urlName`: Lowercase with hyphens (e.g., `account-detail`)
 
 #### B.4. Component Structure
 
 Uses same structure as Part A.1 (Component Structure) with these SEO assistant differences:
 
-- **Detail View:** `pageTitle: "{!Record._Object}: {!Record._Title}"`
-- **List/Related List Views:** `recordId: "{!recordId}"` (no pageTitle)
+- **Detail View**: `pageTitle: "{!Record._Object}: {!Record._Title}"`
+- **List/Related List Views**: `recordId: "{!recordId}"` (no pageTitle)
 
 Default template includes one section with one empty column. `seedComponents` must be `[]` (not `null`).
 
@@ -214,7 +214,7 @@ The route's `activeViewId` must match the view's directory name exactly. The `vi
 - [ ] `viewType` matches route's `routeType` for all three views (CRITICAL)
 - [ ] Component structure correct with both regions (see A.1)
 - [ ] SEO assistant configured correctly per view type (B.4)
-- [ ] **CRITICAL:** Complete both UUID generation steps. see `docs/handle-component-and-region-ids.md`
+- [ ] **CRITICAL**: Complete both UUID generation steps. see `docs/handle-component-and-region-ids.md`
 
 ## Purpose B: Editing Existing Views
 
@@ -222,7 +222,7 @@ Use this section when modifying existing views under the `sfdc_cms__view` direct
 
 ### Component Modifications
 
-When adding, removing, or configuring components in existing views, refer to the **Component Insertion** section for placement hierarchy, component structure, column layout, and property configuration.
+When adding, removing, or configuring components in existing views, **always** refer to [handle-ui-components.md](docs/handle-ui-components.md) for placement hierarchy, component structure, column layout, and property configuration.
 
 ### Theme Layout Type
 
