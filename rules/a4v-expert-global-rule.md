@@ -51,7 +51,7 @@ Enforce: **skill load → API context → file generation** for all Salesforce m
 
 ### 3. Deploy Verification
 ```bash
-sf project deploy start --dry-run -d "<path>" --target-org <alias> --test-level NoTestRun --wait 10 --json
+sf project deploy start --dry-run -d "force-app/main/default" --target-org <alias> --test-level NoTestRun --wait 10 --json
 ```
 On failure: attempt to fix the errors and re-run, retrying up to a maximum of 3 times until it succeeds.
 
