@@ -229,7 +229,7 @@ The completed build produces:
 3. **Deployment Manifest** (`package.xml`)
    - Lists all components with proper API version
    - Organized by metadata type in dependency order
-   - Ready for Metadata API deployment
+   - Ready for `sfdx force:source:deploy` or Metadata API deployment
 
 4. **Build Summary Report** - A markdown file listing:
    - Every component created
