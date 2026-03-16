@@ -45,7 +45,7 @@ interface RegionType {
 
 ### When to Use Each Action
 
-#### DISCOVER_UI_COMPONENTS
+#### discoverUiComponents
 
 **When:** You want to see what block components are available for fragments.
 
@@ -64,7 +64,7 @@ interface RegionType {
 
 **Use for:** Finding available blocks before building your fragment structure.
 
-#### GET_UI_COMPONENT_SCHEMAS
+#### getUiComponentSchemas
 
 **When:** You know which components you want but need to understand their properties and attributes.
 
@@ -91,7 +91,7 @@ interface RegionType {
 ## 💡 Typical Workflow
 
 1. **Discover Available Blocks**
-- Use `DISCOVER_UI_COMPONENTS` to explore what blocks are available
+- Use `discoverUiComponents` to explore what blocks are available
 - Optional: Use `searchQuery` to filter by keywords (e.g., "text", "button", "image")
 
 2. **Select Components**
@@ -99,7 +99,7 @@ interface RegionType {
 - Note their fully qualified definitions (e.g., "namespace/definition")
 
 3. **Get Component Schemas**
-- Use `GET_UI_COMPONENT_SCHEMAS` with the selected component definitions
+- Use `getUiComponentSchemas` with the selected component definitions
 - Review the JSON schemas to understand required and optional attributes
 
 4. **Build Fragment**
@@ -112,6 +112,6 @@ interface RegionType {
 ## ⚠️ Important Notes
 
 - Block definitions always follow the `{namespace}/{blockName}` convention
-- Use the same definition format returned by `DISCOVER_UI_COMPONENTS` when calling `GET_UI_COMPONENT_SCHEMAS`
+- Use the same definition format returned by `discoverUiComponents` when calling `getUiComponentSchemas`
 - The FRAGMENT page type doesn't require additional `pageContext` parameters
 - Schemas include both required and optional attributes - review carefully to ensure valid configuration
