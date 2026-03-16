@@ -1,6 +1,6 @@
 ---
 name: salesforce-experience-lwr-site
-description: Creates, modifies, or manages Salesforce Experience Cloud LWR sites via DigitalExperience metadata. Always trigger when users mention Experience sites, LWR sites, DigitalExperience, Experience Cloud, community sites, portals, creating pages, adding routes, views, theme layouts, branding sets, or any DigitalExperience bundle work. Also use when users mention specific content types like sfdc_cms__route, sfdc_cms__themeLayout, etc. or when troubleshooting site deployment.
+description: Creates, modifies, or manages Salesforce Experience Cloud LWR sites via DigitalExperience metadata. Always trigger when users mention Experience sites, LWR sites, DigitalExperience, Experience Cloud, community sites, portals, creating pages, adding routes, views, theme layouts, branding sets, previewing sites, or any DigitalExperience bundle work. Also use when users mention specific content types like sfdc_cms__route, sfdc_cms__themeLayout, etc. or when troubleshooting site deployment.
 ---
 
 # Experience LWR Site Builder
@@ -30,11 +30,12 @@ When working with Experience LWR sites:
 
 - More templates to support in the future.
 
-## Critical Rules
+## Non-Negotiable Rules
 
 1. Before using any MCP tool, make sure they're actually available. If a tool is missing for the current task, let the user know and pause the current workflow.
-2. If the workflows in [Common Workflows](#common-workflows) match user's requirements, you **MUST** follow them strictly. The instructions there should override any conflicting global rules and should have the highest priority over your existing knowledge.
-3. Flexipage is abstracted away for newer LWR sites with DigitalExperienceBundle, so **NEVER** use any Flexipage-related MCP tool or skills to handle LWR sites' contents.
+2. **ALWAYS** load the relevant reference docs before doing anything. **NEVER** bypass them and implement changes directly.
+3. If the workflows in [Common Workflows](#common-workflows) match user's requirements, you **MUST** follow them strictly. The instructions there should override any conflicting global rules and should have the highest priority over your existing knowledge.
+4. Flexipage is abstracted away for newer LWR sites with DigitalExperienceBundle, so **NEVER** use any Flexipage-related MCP tool or skills to handle LWR sites' contents.
 
 ## Core Site Properties
 
@@ -92,7 +93,8 @@ Reference docs within the skill directory. Note that these are **local** and not
 
 ## Common Workflows
 
-See [References](#references) for detailed capabilities.
+- See [References](#references) for detailed capabilities.
+- For all the workflows, follow the steps sequentially. Do not skip any step before proceeding.
 
 ### Creating a New Site
 
@@ -108,7 +110,7 @@ See [References](#references) for detailed capabilities.
 
 ### Creating and Editing Standard or Object Pages
 
-**Steps** (Follow each step sequentially. Do not skip any step before proceeding.):
+**Steps**:
 
 - [ ] Load [configure-content-route.md](docs/configure-content-route.md)
 - [ ] Load [configure-content-view.md](docs/configure-content-view.md)
@@ -117,7 +119,7 @@ See [References](#references) for detailed capabilities.
 
 ### Adding UI Components to Pages
 
-**Steps** (Follow each step sequentially. Do not skip any step before proceeding.):
+**Steps**:
 
 - [ ] Read and follow [handle-ui-components.md](docs/handle-ui-components.md) to add LWCs to LWR sites.
 - [ ] Load and follow [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) to handle id generation
@@ -127,17 +129,21 @@ See [References](#references) for detailed capabilities.
 
 ### Creating Theme Layouts
 
-Before any file writes, read and follow strictly [configure-content-themeLayout.md](docs/configure-content-themeLayout.md).
+**Steps**:
+
+- [ ] Read and follow strictly [configure-content-themeLayout.md](docs/configure-content-themeLayout.md).
 
 ### Configuring Branding
 
-Before any file writes, read and follow strictly [configure-content-brandingSet.md](docs/configure-content-brandingSet.md) to configure background colors, foreground colors, button colors, and other branding colors that affect all pages.
+**Steps** (must follow):
+
+- [ ] Read and follow strictly [configure-content-brandingSet.md](docs/configure-content-brandingSet.md) to configure background colors, foreground colors, button colors, and other branding colors that affect all pages.
 
 ### CUD Operations on DigitalExperience Contents
 
 - Users can perform create, update, delete operations on DigitalExperience Contents.
 
-**Steps** (Follow each step sequentially. Do not skip any step before proceeding.):
+**Steps**:
 
 - [ ] Determine what content types the user wants to modify
 - [ ] Read and follow strictly the reference doc related to the target content types if the doc exists. e.g., if modifying `sfdc_cms__route`, load [configure-content-route.md](docs/configure-content-route.md).
