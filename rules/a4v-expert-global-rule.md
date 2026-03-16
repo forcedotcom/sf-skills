@@ -8,7 +8,7 @@ Enforce: **skill load → API context → file generation** for all Salesforce m
 1. **Never write** without both: metadata type skill loaded AND `get_metadata_api_context` called for that type
 2. **One type at a time** - complete full cycle before next type
 3. **One type per API call** - no batching
-4. **No cross-type content** in files
+4. **Child types need own context** - if adding any child metadata inside a parent metadata's file, load skill and call `get_metadata_api_context` for each child type (e.g. CustomField inside CustomObject) separately; don't rely on the parent's schema for creating child metadata
 5. **Max one clarifying question** before starting
 
 ## Workflow
@@ -51,9 +51,9 @@ Enforce: **skill load → API context → file generation** for all Salesforce m
 
 ### 3. Deploy Verification
 ```bash
-sf project deploy start --dry-run -d "<path>" --target-org <alias> --test-level NoTestRun --wait 10 --json
+sf project deploy start --dry-run -d "force-app/main/default" --target-org <alias> --test-level NoTestRun --wait 10 --json
 ```
-On failure: attempt to fix the errors and re-run, retrying up to a maximum of 5 times until it succeeds.
+On failure: attempt to fix the errors and re-run, retrying up to a maximum of 3 times until it succeeds.
 
 ## Anti-Patterns
 
