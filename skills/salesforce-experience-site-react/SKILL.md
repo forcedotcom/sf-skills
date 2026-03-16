@@ -1,5 +1,5 @@
 ---
-name: salesforce-experience-site
+name: salesforce-experience-site-react
 description: Use this skill when users need to create or configure a Salesforce Digital Experience Site that hosts a React web application. Trigger when users mention creating an Experience site for a React app, setting up a React site on Salesforce, configuring Network/CustomSite/DigitalExperience metadata for a web app, or when they need to deploy site infrastructure for a React application. Also trigger when users mention site URL path prefixes, app namespaces, guest access configuration, DigitalExperienceConfig, DigitalExperienceBundle, or sfdc_cms__site content types in the context of React apps. Always use this skill for any React web application site creation or site infrastructure configuration work, even if the user just says "create a site for my React app."
 ---
 
