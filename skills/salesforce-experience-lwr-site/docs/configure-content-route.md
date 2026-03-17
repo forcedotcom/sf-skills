@@ -186,6 +186,10 @@ Use `[ObjectName]` as the object name (Account, Test_Object) and `[IDENTIFIER]` 
 }
 ```
 
+**Rules**:
+
+- Before any actions, *always* call `execute_metadata_action` to get the full schema and examples per the skill document.
+
 #### routeType Examples
 
 | Route Type | Standard (Account) | Custom (Test_Object__c) |

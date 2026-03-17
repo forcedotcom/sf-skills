@@ -34,7 +34,7 @@ When working with Experience LWR sites:
 
 1. Before using any MCP tool, make sure they're actually available. If a tool is missing for the current task, let the user know and pause the current workflow.
 2. **ALWAYS** load the relevant reference docs before doing anything.
-3. If the workflows in [Common Workflows](#common-workflows) match user's requirements, you **MUST** follow them strictly. The instructions there should override any conflicting global rules and should have the highest priority over your existing knowledge.
+3. **ALWAYS** strictly follow workflows in [Common Workflows](#common-workflows) that match user's requirements. The instructions there should override any conflicting global rules and should have the highest priority over your existing knowledge.
 4. Flexipage is abstracted away for newer LWR sites with DigitalExperienceBundle, so **NEVER** use any Flexipage-related MCP tool or skills to handle LWR sites' contents.
 
 ## Core Site Properties
@@ -94,12 +94,12 @@ Reference docs within the skill directory. Note that these are **local** and not
 ## Common Workflows
 
 - See [References](#references) for detailed capabilities.
+- **Always** follow the steps defined in the workflows sequentially whether the task is small, big, quick, or complex.
 
 ### Creating a New Site
 
 **Rules**:
 
-- **NEVER** call `get_metadata_api_context` on metadata type DigitalExperienceConfig, DigitalExperienceBundle, Network, or CustomSite for new site generation.
 - **NEVER** generate the files manually.
 
 **Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
@@ -147,9 +147,9 @@ Reference docs within the skill directory. Note that these are **local** and not
 - [ ] Determine what content types the user wants to modify
 - [ ] Read and follow strictly the reference doc related to the target content types if the doc exists. e.g., if modifying `sfdc_cms__route`, load [configure-content-route.md](docs/configure-content-route.md).
 - [ ] **Always** Read [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) if creating or modifying view or theme layout
-- [ ] Call `execute_metadata_action` to get the schema and examples for that content type **after** loading the corresponding reference docs.
+- [ ] **Always** Call `execute_metadata_action` to get the schema and examples for that content type **after** loading the corresponding reference docs.
   - **Call once per content type per user request**: If you're creating/modifying multiple items of the same content type (e.g., creating 3 routes), you only need to call `execute_metadata_action` ONCE for that content type. Reuse the schema and examples for all items of that type within the same user request.
-  - For each unique content type you need to work with, call `execute_metadata_action` using the following (Do not call the `execute_metadata_action` MCP tool with any other site actionName unless specified in this knowledge doc):
+  - For each unique content type you need to work with, **always** call `execute_metadata_action` using the following:
 
 ```json
 {
@@ -179,14 +179,6 @@ After successfully deploying the site using `sf project deploy`, use the `execut
 The site developer name can be found in the CustomSite filename (e.g., `sites/MySite.site-meta.xml` → developer name is `MySite`).
 
 If the site is not found, an error message will be returned indicating that the site may not be deployed. Ensure the site has been successfully deployed before calling this action.
-
-### Retrieve Site Metadata Schemas and Documentation
-
-`get_metadata_api_context` MCP tool can be used to retrieve metadata schemas and documentation. For Experience sites, these metadata types are used: DigitalExperienceConfig, DigitalExperienceBundle, Network, CustomSite.
-
-```json
-{ "metadataType": "<metadata type>" }
-```
 
 ### Validation & Deployment
 

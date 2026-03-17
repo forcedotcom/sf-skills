@@ -73,6 +73,10 @@ The `content.json` file must contain:
 - Do not add additional fields.
 - `urlName`: URL identifier (lowercase, words separated by dashes e.g., "scoped-header-and-footer")
 
+**Rules**:
+
+- Before any actions, *always* call `execute_metadata_action` to get the full schema and examples per the skill document.
+
 ### Naming Conventions
 
 1. **Directory Name**: Should be in camelCase

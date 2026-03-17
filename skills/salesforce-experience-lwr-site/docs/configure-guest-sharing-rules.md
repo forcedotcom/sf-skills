@@ -5,13 +5,7 @@ If sharingRules metadata is not available locally in force-app/main/default/shar
 
 ## Retrieve Full SharingRules Schema
 
-Use the `get_metadata_api_context` MCP tool:
-
-```json
-{
-  "metadataType": "SharingRules"
-}
-```
+Use the metadata MCP tool with metadataType "SharingRules" to retrieve schema.
 
 ## XML Example
 

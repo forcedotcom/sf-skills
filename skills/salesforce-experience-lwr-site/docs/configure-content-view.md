@@ -184,6 +184,10 @@ Create three directories under `sfdc_cms__view/`:
 - `contentBody.viewType`: **CRITICAL**: Must exactly match route's `routeType`
 - `urlName`: Lowercase with hyphens (e.g., `account-detail`)
 
+**Rules**:
+
+- Before any actions, *always* call `execute_metadata_action` to get the full schema and examples per the skill document.
+
 #### B.4. Component Structure
 
 Uses same structure as Part A.1 (Component Structure) with these SEO assistant differences:

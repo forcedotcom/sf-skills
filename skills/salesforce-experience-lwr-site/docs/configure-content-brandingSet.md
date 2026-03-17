@@ -70,6 +70,10 @@ The `content.json` file must contain:
     - **Patterns**: See the "Branding Property Patterns" section for details on value relationships.
 - `urlName`: Lowercase with hyphens (e.g., `branding-set`)
 
+**Rules**:
+
+- Before any actions, *always* call `execute_metadata_action` to get the full schema and examples per the skill document.
+
 ### 4. Naming Conventions Summary
 
 | Field | Format | Example |
