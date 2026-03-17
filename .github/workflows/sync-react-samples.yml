@@ -99,6 +99,14 @@ jobs:
         if: steps.skip.outputs.skip != 'true'
         run: npm install
 
+      - name: Install latest B2E package
+        if: steps.skip.outputs.skip != 'true' && steps.skip.outputs.b2e_changed == 'true'
+        run: npm install @salesforce/webapp-template-app-react-sample-b2e-experimental@${{ steps.npm-version-b2e.outputs.latest }}
+
+      - name: Install latest B2X package
+        if: steps.skip.outputs.skip != 'true' && steps.skip.outputs.b2x_changed == 'true'
+        run: npm install @salesforce/webapp-template-app-react-sample-b2x-experimental@${{ steps.npm-version-b2x.outputs.latest }}
+
       - name: Sync B2E sample
         if: steps.skip.outputs.skip != 'true'
         run: npm run sync-react-b2e-sample
