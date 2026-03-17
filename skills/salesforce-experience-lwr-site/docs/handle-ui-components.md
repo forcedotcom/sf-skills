@@ -89,6 +89,32 @@ community_layout:sldsFlexibleLayout (root)
 }
 ```
 
+### Named Region Creation
+In order to create a component with drag-n-droppable region/slot that can be used in Experience Builder sites and persist across views, there are multiple steps needed.
+
+Page layout components should add the lightningCommunity__Page_Layout target in js-meta.xml.
+Theme layout components should add the lightningCommunity__Theme_Layout target in js-meta.xml.
+Add lightningCommunity__Page as a target for page layouts and any component with slots that is not explicitly defined as a theme layout.
+
+The js file in LWC need to declare named slots:
+```js
+/**
+ * @slot header
+ * @slot footer
+ */
+export default class YourComponentName extends LightningElement {}
+```
+
+Do not add any other comments in the declaration comment block. The named @slot annotations must be the last comments
+in the block before the class declaration.
+
+In html, named slots are needed. <slot name="header"> and <slot name="footer"> in the above example.
+
+For theme layout component, a <slot> with no name is the main content region, a slot with name is a sticky region that doesn't change from page to page that uses the same theme layout component.
+
+No need to declare target config properties for the slots/regions.
+See the example below for adding a component with named slots into a view.
+
 ### Component Structure
 
 ```json
@@ -114,8 +140,9 @@ community_layout:sldsFlexibleLayout (root)
   - Custom LWC: Only `@api` properties in `targetConfigs` (with `lightningCommunity__Default` target)
   - OOTB: Only exposed schema properties
 
-### Complete Example
+### Complete Examples
 
+**Example 1: Overall structure**
 Correct nesting: `content` region → section → column region → components
 
 ```json
@@ -159,3 +186,30 @@ Correct nesting: `content` region → section → column region → components
 ```
 
 **CRITICAL**: Follow UUID generation process (`handle-component-and-region-ids.md`) when inserting components.
+
+**Example 2: Representing slots**
+If a component with slots (i.e. @slot annotation) is inserted, slots must appear as named regions.
+In this example the component threeColumn has 3 slots, named left, center, and right.
+```json
+{
+    "attributes" : { },
+    "children" : [ {
+    "id" : "4c6148c7-c07e-4245-ae50-ac07891046f2",
+    "name" : "left",
+    "title" : "left",
+    "type" : "region"
+    }, {
+    "id" : "f362e789-7f09-40b4-a59f-03f76ea73401",
+    "name" : "center",
+    "title" : "center",
+    "type" : "region"
+    }, {
+    "id" : "2678ddd4-a1a4-41c4-bf5a-1a3e55891eb2",
+    "name" : "right",
+    "title" : "right",
+    "type" : "region"
+    } ],
+    "definition" : "c:threeColumn",
+    "id" : "b9e517c5-90ac-49e9-91b7-3730512c95a3",
+    "type" : "component"
+}
