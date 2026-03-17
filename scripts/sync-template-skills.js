@@ -1,0 +1,89 @@
+#!/usr/bin/env node
+/**
+ * Syncs skills from @salesforce/webapp-template-* and @salesforce/webapps-features-experimental
+ * into skills/<finalSkillName>/ (flat: one folder per skill).
+ * Each skill's SKILL.md frontmatter "name:" is set to the final skill name.
+ * Discovers packages by scanning devDependencies; for each, copies from
+ * skills/, .a4drules/skills/, and .agents/skills/ (if present). Run from repo root after npm install.
+ */
+
+const fs = require('fs');
+const path = require('path');
+const { copyRecursive } = require('./lib/copy-recursive');
+const {
+  packageNameToSlug,
+  cleanPackageSlug,
+  finalSkillName,
+  matchingDeps,
+} = require('./lib/package-utils');
+
+const SKILL_ROOTS = ['skills', '.a4drules/skills', '.agents/skills'];
+const VERSIONS_FILE = '.template-versions.json';
+
+/** Update SKILL.md frontmatter name: to match the final skill folder name. */
+function updateSkillName(skillDir, name) {
+  const skillMd = path.join(skillDir, 'SKILL.md');
+  if (!fs.existsSync(skillMd)) return;
+  let content = fs.readFileSync(skillMd, 'utf8');
+  content = content.replace(/^name:\s*.*$/m, 'name: ' + name);
+  fs.writeFileSync(skillMd, content, 'utf8');
+}
+
+const repoRoot = process.cwd();
+const pkg = JSON.parse(fs.readFileSync(path.join(repoRoot, 'package.json'), 'utf8'));
+const packageNames = matchingDeps(pkg);
+
+const skillsDir = path.join(repoRoot, 'skills');
+if (!fs.existsSync(skillsDir)) fs.mkdirSync(skillsDir, { recursive: true });
+
+// Remove old package-level folders (previous nested layout) for our packages only
+for (const packageName of packageNames) {
+  const oldDir = path.join(skillsDir, packageNameToSlug(packageName));
+  if (fs.existsSync(oldDir)) fs.rmSync(oldDir, { recursive: true });
+}
+
+const versions = {};
+
+for (const packageName of packageNames) {
+  const pkgRoot = path.join(repoRoot, 'node_modules', packageName.replace('/', path.sep));
+  if (!fs.existsSync(pkgRoot)) {
+    console.warn(`Skip ${packageName}: not found in node_modules. Run "npm install" first.`);
+    continue;
+  }
+
+  const innerPkg = JSON.parse(
+    fs.readFileSync(path.join(pkgRoot, 'package.json'), 'utf8')
+  );
+  versions[packageName] = innerPkg.version || 'unknown';
+
+  const packageSlug = packageNameToSlug(packageName);
+  const cleanedSlug = cleanPackageSlug(packageSlug);
+
+  for (const root of SKILL_ROOTS) {
+    const srcRoot = path.join(pkgRoot, root);
+    if (!fs.existsSync(srcRoot) || !fs.statSync(srcRoot).isDirectory()) continue;
+
+    for (const innerName of fs.readdirSync(srcRoot)) {
+      const srcSkillDir = path.join(srcRoot, innerName);
+      if (!fs.statSync(srcSkillDir).isDirectory()) continue;
+
+      const name = finalSkillName(cleanedSlug, innerName);
+      const destDir = path.join(skillsDir, name);
+
+      if (fs.existsSync(destDir)) fs.rmSync(destDir, { recursive: true });
+      fs.mkdirSync(destDir, { recursive: true });
+      for (const entry of fs.readdirSync(srcSkillDir)) {
+        copyRecursive(path.join(srcSkillDir, entry), path.join(destDir, entry));
+      }
+      updateSkillName(destDir, name);
+      console.log(`Synced ${packageName}/${innerName} -> skills/${name}/`);
+    }
+  }
+}
+
+fs.writeFileSync(
+  path.join(skillsDir, VERSIONS_FILE),
+  JSON.stringify(versions, null, 2) + '\n',
+  'utf8'
+);
+console.log(`Wrote ${VERSIONS_FILE} with ${Object.keys(versions).length} package version(s).`);

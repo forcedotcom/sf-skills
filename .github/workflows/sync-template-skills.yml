@@ -1,0 +1,58 @@
+# Syncs skills from template npm packages into skills/salesforce-webapp-* (flat, one folder per skill).
+# Discovers packages by scanning devDependencies for @salesforce/webapp-template-*
+# and @salesforce/webapps-features-experimental. Creates a PR only when sync produces changes.
+#
+# Same steps as running locally: npm install && npm run sync-template-skills.
+# Uses IDEE_GH_TOKEN (bot) for checkout and PR creation.
+
+name: Sync template skills from npm
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Nightly at 03:00 UTC (after React samples at 02:00)
+    - cron: "0 3 * * *"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.IDEE_GH_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: npm
+
+      # ── Version check ────────────────────────────────────────────
+      - name: Check for version changes
+        id: check
+        run: node scripts/check-template-skills-versions.js
+
+      # ── Install + sync ───────────────────────────────────────────
+      - name: Install dependencies
+        if: steps.check.outputs.skip != 'true'
+        run: npm install
+
+      - name: Sync template skills
+        if: steps.check.outputs.skip != 'true'
+        run: npm run sync-template-skills
+
+      # ── PR creation ──────────────────────────────────────────────
+      - name: Create PR when there are changes
+        if: steps.check.outputs.skip != 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.IDEE_GH_TOKEN }}
+          branch: chore/sync-template-skills
+          base: main
+          title: ${{ steps.check.outputs.title }}
+          body: ${{ steps.check.outputs.body }}
+          commit-message: ${{ steps.check.outputs.title }}
+          committer: svc-idee-bot <svc_idee_bot@salesforce.com>
+          author: svc-idee-bot <svc_idee_bot@salesforce.com>

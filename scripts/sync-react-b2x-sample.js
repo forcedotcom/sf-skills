@@ -7,6 +7,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { copyRecursive } = require('./lib/copy-recursive');
 
 const PACKAGE_NAME = '@salesforce/webapp-template-app-react-sample-b2x-experimental';
 const SAMPLE_DIR = path.join(process.cwd(), 'samples', 'webapp-template-app-react-sample-b2x-experimental');
@@ -18,31 +19,14 @@ if (!fs.existsSync(pkgRoot)) {
   process.exit(1);
 }
 
-// Read version from the package we're syncing from
 const pkgJsonPath = path.join(pkgRoot, 'package.json');
 const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
 const version = pkgJson.version;
 
-function copyRecursive(src, dest, excludeDirs = new Set(['node_modules', '.git'])) {
-  const stat = fs.statSync(src);
-  const basename = path.basename(src);
-  if (excludeDirs.has(basename)) return;
-
-  if (stat.isDirectory()) {
-    if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
-    for (const name of fs.readdirSync(src)) {
-      copyRecursive(path.join(src, name), path.join(dest, name), excludeDirs);
-    }
-  } else {
-    fs.mkdirSync(path.dirname(dest), { recursive: true });
-    fs.copyFileSync(src, dest);
-  }
-}
-
 // Ensure sample dir exists and clear it (we replace with fresh copy from dist)
 if (fs.existsSync(SAMPLE_DIR)) {
   for (const name of fs.readdirSync(SAMPLE_DIR)) {
-    if (name === '.version') continue; // keep .version until we overwrite it
+    if (name === '.version') continue;
     const itemPath = path.join(SAMPLE_DIR, name);
     if (fs.statSync(itemPath).isDirectory()) {
       fs.rmSync(itemPath, { recursive: true });
