@@ -31,7 +31,9 @@ function copyRecursive(src, dest, excludeDirs = new Set(['node_modules', '.git']
   if (stat.isDirectory()) {
     if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
     for (const name of fs.readdirSync(src)) {
-      copyRecursive(path.join(src, name), path.join(dest, name), excludeDirs);
+      const sanitized = name.trim();
+      if (!sanitized) continue;
+      copyRecursive(path.join(src, name), path.join(dest, sanitized), excludeDirs);
     }
   } else {
     fs.mkdirSync(path.dirname(dest), { recursive: true });
