@@ -42,10 +42,6 @@ Every generated field must include these tags:
 | `<description>` | Mandatory | State the business "why" behind the field |
 | `<inlineHelpText>` | Mandatory | Provide actionable guidance for the end-user. Must add value beyond the label (e.g., "Enter the value in USD including tax" instead of just "The amount") |
 
-### XML Comments — NEVER Before Root Element
-
-**NEVER place XML comments (`<!-- ... -->`) before the root `<CustomField>` element in metadata XML files.** Comments between the XML declaration and `<CustomField>` cause a `ConversionError` during deployment. Comments inside the root element are safe.
-
 ### External ID Configuration
 
 **Trigger:** If the user mentions "integration," "importing data," "external system ID," or "unique key from [System Name]," set `<externalId>true</externalId>`.
