@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Pins @salesforce/webapp-template-app-react-sample-b2e-experimental to the
- * latest npm version, runs npm install, then copies skills from
+ * Sync webapp skills: pins @salesforce/webapp-template-app-react-sample-b2e-experimental
+ * to the latest npm version, runs npm install, then copies skills from
  * dist/.a4drules/skills/ into skills/. Run from repo root.
  */
 
@@ -12,7 +12,6 @@ const { copyRecursive } = require('./lib/copy-recursive');
 
 const PACKAGE_NAME = '@salesforce/webapp-template-app-react-sample-b2e-experimental';
 const SKILLS_SRC = 'dist/.a4drules/skills';
-const MANIFEST = '.synced-template-skills.json';
 
 const repoRoot = process.cwd();
 const pkgPath = path.join(repoRoot, 'package.json');
@@ -55,16 +54,6 @@ if (!fs.existsSync(srcDir)) {
 
 if (!fs.existsSync(skillsDir)) fs.mkdirSync(skillsDir, { recursive: true });
 
-// Remove skills from previous sync (tracked in manifest)
-const manifestPath = path.join(skillsDir, MANIFEST);
-if (fs.existsSync(manifestPath)) {
-  const prev = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-  for (const dir of prev.syncedDirs || []) {
-    const p = path.join(skillsDir, dir);
-    if (fs.existsSync(p)) fs.rmSync(p, { recursive: true });
-  }
-}
-
 function addWebappPrefix(name) {
   const parts = name.split('-');
   if (parts.length < 2) return name;
@@ -98,9 +87,4 @@ for (const srcName of fs.readdirSync(srcDir)) {
 const version = JSON.parse(
   fs.readFileSync(path.join(pkgRoot, 'package.json'), 'utf8')
 ).version;
-fs.writeFileSync(
-  manifestPath,
-  JSON.stringify({ package: PACKAGE_NAME, version, syncedDirs }, null, 2) + '\n',
-  'utf8'
-);
 console.log(`Done — synced ${syncedDirs.length} skills from ${PACKAGE_NAME}@${version}.`);
