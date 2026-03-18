@@ -1,5 +1,5 @@
 import React from "react";
-import type { Property } from "../lib/types.js";
+import type { Property } from "../lib/types";
 
 interface PropertyCardProps {
 	property: Property;

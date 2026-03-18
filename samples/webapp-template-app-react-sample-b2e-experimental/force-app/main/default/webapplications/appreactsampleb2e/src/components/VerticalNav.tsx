@@ -4,8 +4,8 @@ import dashboardIcon from "../assets/icons/dashboard.svg";
 import filesIcon from "../assets/icons/files.svg";
 import propertiesIcon from "../assets/icons/properties.svg";
 import maintenanceIcon from "../assets/icons/maintenance.svg";
-import usersIcon from "../assets/icons/users.svg";
-import supportIcon from "../assets/icons/support.svg";
+import maintenanceWorkerIcon from "../assets/icons/maintenance-worker.svg";
+import { PATHS } from "../lib/routeConfig";
 
 interface NavItem {
 	path: string;
@@ -14,12 +14,11 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-	{ path: "/", icon: dashboardIcon, label: "Dashboard" },
-	{ path: "/files", icon: filesIcon, label: "Files" },
-	{ path: "/properties", icon: propertiesIcon, label: "Properties" },
-	{ path: "/maintenance", icon: maintenanceIcon, label: "Maintenance" },
-	{ path: "/users", icon: usersIcon, label: "Users" },
-	{ path: "/support", icon: supportIcon, label: "Support" },
+	{ path: PATHS.HOME, icon: dashboardIcon, label: "Dashboard" },
+	{ path: PATHS.APPLICATIONS, icon: filesIcon, label: "Applications" },
+	{ path: PATHS.PROPERTIES, icon: propertiesIcon, label: "Properties" },
+	{ path: PATHS.MAINTENANCE_REQUESTS, icon: maintenanceIcon, label: "Maintenance Requests" },
+	{ path: PATHS.MAINTENANCE_WORKERS, icon: maintenanceWorkerIcon, label: "Maintenance Workers" },
 ];
 
 export const VerticalNav: React.FC = () => {
@@ -46,7 +45,7 @@ export const VerticalNav: React.FC = () => {
 					title={item.label}
 				>
 					<img src={item.icon} alt={item.label} className="w-6 h-6" />
-					<span className="text-xs font-medium">{item.label}</span>
+					<span className="text-xs font-medium text-center">{item.label}</span>
 				</Link>
 			))}
 		</div>

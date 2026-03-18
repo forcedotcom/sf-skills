@@ -1,3 +1,7 @@
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 import js from '@eslint/js';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
@@ -7,7 +11,11 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import globals from 'globals';
 import graphqlPlugin from '@graphql-eslint/eslint-plugin';
 
-export default [
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const schemaPath = resolve(__dirname, '../../../../../schema.graphql');
+const schemaExists = existsSync(schemaPath);
+
+const config = [
   // Global ignores
   {
     ignores: ['build/**/*', 'dist/**/*', 'coverage/**/*'],
@@ -111,31 +119,38 @@ export default [
       '@typescript-eslint/no-explicit-any': 'off',
     },
   },
-  // GraphQL processor - extracts GraphQL from gql template literals in TS/TSX files
-  {
-    files: ['**/*.{ts,tsx}'],
-    processor: graphqlPlugin.processor,
-  },
-  // GraphQL linting configuration for .graphql files
-  {
-    files: ['**/*.graphql'],
-    languageOptions: {
-      parser: graphqlPlugin.parser,
-      parserOptions: {
-        graphQLConfig: {
-          schema: '../../../../../schema.graphql',
+];
+
+// Only add GraphQL rules when schema exists (e.g. after graphql:schema).
+// In CI or when schema is not checked in, skip so lint succeeds.
+if (schemaExists) {
+  config.push(
+    {
+      files: ['**/*.{ts,tsx}'],
+      processor: graphqlPlugin.processor,
+    },
+    {
+      files: ['**/*.graphql'],
+      languageOptions: {
+        parser: graphqlPlugin.parser,
+        parserOptions: {
+          graphQLConfig: {
+            schema: '../../../../../schema.graphql',
+          },
         },
       },
-    },
-    plugins: {
-      '@graphql-eslint': graphqlPlugin,
-    },
-    rules: {
-      '@graphql-eslint/no-anonymous-operations': 'error',
-      '@graphql-eslint/no-duplicate-fields': 'error',
-      '@graphql-eslint/known-fragment-names': 'error',
-      '@graphql-eslint/no-undefined-variables': 'error',
-      '@graphql-eslint/no-unused-variables': 'error',
-    },
-  },
-];
+      plugins: {
+        '@graphql-eslint': graphqlPlugin,
+      },
+      rules: {
+        '@graphql-eslint/no-anonymous-operations': 'error',
+        '@graphql-eslint/no-duplicate-fields': 'error',
+        '@graphql-eslint/known-fragment-names': 'error',
+        '@graphql-eslint/no-undefined-variables': 'error',
+        '@graphql-eslint/no-unused-variables': 'error',
+      },
+    }
+  );
+}
+
+export default config;
