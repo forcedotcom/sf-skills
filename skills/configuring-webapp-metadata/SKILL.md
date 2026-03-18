@@ -1,6 +1,6 @@
 ---
 name: configuring-webapp-metadata
-description: Rules for web application metadata structure, webapplication.json configuration, and bundle organization
+description: Use this skill when configuring web application metadata structure, webapplication.json, or bundle organization. Covers WebApplication bundle layout, meta XML, build output directory, and webapplication.json settings.
 ---
 
 # WebApplication Requirements
