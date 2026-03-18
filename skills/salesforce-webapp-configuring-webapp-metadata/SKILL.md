@@ -1,6 +1,6 @@
 ---
 name: salesforce-webapp-configuring-webapp-metadata
-description: Rules for web application metadata structure, webapplication.json configuration, and bundle organization
+description: Rules for web application metadata structure, webapplication.json configuration, and bundle organization. Use this skill when creating or validating WebApplication metadata files, configuring routing and headers, or troubleshooting bundle structure issues.
 ---
 
 # WebApplication Requirements

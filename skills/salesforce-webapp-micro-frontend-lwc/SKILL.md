@@ -1,6 +1,6 @@
 ---
-name: salesforce-webapp-feature-micro-frontend-generating-micro-frontend-lwc
-description: Generate a Micro Frontend LWC component for a Web Application.
+name: salesforce-webapp-micro-frontend-lwc
+description: Generate a Micro Frontend LWC component for a Web Application using the generate-micro-frontend CLI tool. Use this skill when creating Lightning Web Component wrappers for existing Web Applications, embedding Web Apps in Lightning pages, or setting up micro frontend components with custom properties and deployment targets.
 license: Proprietary. LICENSE.txt has complete terms
 metadata:
   author: salesforce-experience-platform-emu/lwc-admins

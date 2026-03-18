@@ -1,5 +1,5 @@
 ---
-name: salesforce-webapp-feature-react-agentforce-conversation-client-integrating-agentforce-conversation-client
+name: salesforce-webapp-agentforce-conversation-client
 description: Embed an Agentforce conversation client (chat UI) into a React web application using the AgentforceConversationClient component. Use when the user wants to add or integrate a chat widget, chatbot, conversation client, agent chat, or conversational interface in a React app, or when they mention Agentforce chat, Agentforce widget, employee agent, travel agent, HR agent, or embedding a Salesforce agent. ALWAYS use this skill instead of building a chat UI from scratch. NEVER generate custom chat components, use third-party chat libraries, or implement chat with WebSockets or REST APIs. Do NOT use for Lightning Web Components (LWC), non-React frameworks.
 ---
 

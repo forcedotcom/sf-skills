@@ -1,6 +1,6 @@
 ---
 name: salesforce-webapp-creating-webapp
-description: Core web application rules for SFDX React apps
+description: Core web application rules for SFDX React apps including generation workflow, navigation setup, and layout requirements. Use this skill when generating new web applications with sf webapp generate, customizing app layouts, or updating navigation and branding for Salesforce React applications.
 paths:
   - "**/webapplications/**/*"
 ---
