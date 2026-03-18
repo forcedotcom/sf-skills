@@ -38,6 +38,10 @@ jobs:
         id: npm-version-b2e
         run: |
           LATEST=$(npm view @salesforce/webapp-template-app-react-sample-b2e-experimental version)
+          if [ -z "$LATEST" ]; then
+            echo "ERROR: npm view returned empty version for B2E package" >&2
+            exit 1
+          fi
           echo "latest=$LATEST" >> $GITHUB_OUTPUT
 
       - name: Read current synced B2E version
@@ -56,6 +60,10 @@ jobs:
         id: npm-version-b2x
         run: |
           LATEST=$(npm view @salesforce/webapp-template-app-react-sample-b2x-experimental version)
+          if [ -z "$LATEST" ]; then
+            echo "ERROR: npm view returned empty version for 2x package" >&2
+            exit 1
+          fi
           echo "latest=$LATEST" >> $GITHUB_OUTPUT
 
       - name: Read current synced B2X version
@@ -99,6 +107,14 @@ jobs:
         if: steps.skip.outputs.skip != 'true'
         run: npm install
 
+      - name: Install latest B2E package
+        if: steps.skip.outputs.skip != 'true' && steps.skip.outputs.b2e_changed == 'true'
+        run: npm install @salesforce/webapp-template-app-react-sample-b2e-experimental@latest
+
+      - name: Install latest B2X package
+        if: steps.skip.outputs.skip != 'true' && steps.skip.outputs.b2x_changed == 'true'
+        run: npm install @salesforce/webapp-template-app-react-sample-b2x-experimental@latest
+
       - name: Sync B2E sample
         if: steps.skip.outputs.skip != 'true'
         run: npm run sync-react-b2e-sample
@@ -134,6 +150,8 @@ jobs:
             echo ""
             echo "${BODY}"
             echo "Same flow as running locally: \`npm install\` then the sync scripts."
+            echo "Below line is used in automated scripts to avoid internal SF validation on this PR"
+            echo "[skip-validate-pr]"
             echo "EOFBODY"
           } >> $GITHUB_OUTPUT
 

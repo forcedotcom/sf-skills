@@ -1,16 +1,17 @@
 ---
 name: salesforce-lightning-app-build
-description: Use this skill to build and orchestrate complete Salesforce Lightning Applications (LEX Apps), custom projects, or end-to-end business solutions from a natural language scenario. Triggers when a user requests a "custom app", a "business solution", or describes any scenario requiring multiple interconnected Salesforce components to be built together into a complete Lightning Experience (LEX) Application. Orchestrates the sequenced creation of Custom Objects, Relationships, Fields, Lightning Record Pages, Custom Tabs, Custom Applications, Permission Sets, and OPTIONALLY Flows and Validation Rules.
+description: Build complete Salesforce Lightning Experience applications from natural language descriptions. Use this skill when a user requests a "complete app", "Lightning app", "business solution", "management system", or describes a scenario requiring multiple interconnected Salesforce components (objects, fields, pages, tabs, security). Orchestrates all required metadata types in proper dependency order to produce a deployable application.
 metadata:
   category: orchestration
-  related-skills: salesforce-custom-object, salesforce-custom-field, salesforce-custom-tab, salesforce-flexipage, salesforce-custom-application, salesforce-flow, salesforce-validation-rule, salesforce-list-view
+  version: "1.0"
+  related-skills: salesforce-custom-object, salesforce-custom-field, salesforce-custom-tab, salesforce-flexipage, salesforce-custom-application, salesforce-flow, salesforce-validation-rule, salesforce-list-view, generate-permission-set
 ---
 
 # Salesforce Lightning Application Build
 
 ## Overview
 
-Build complete Lightning Experience applications from natural language by orchestrating multiple metadata types in proper dependency order. This skill acts as a "conductor" that invokes specialized metadata skills when available, or generates metadata directly when no skill exists.
+Build a complete, deployable Salesforce Lightning Experience application from a natural language description by orchestrating multiple metadata types in correct dependency order. Invoke specialized metadata skills when available; generate metadata directly when no skill exists.
 
 ## When to Use This Skill
 **Use when:**
@@ -34,7 +35,6 @@ Build complete Lightning Experience applications from natural language by orches
 - Troubleshooting or debugging existing metadata
 - Building Salesforce Classic apps (not Lightning Experience)
 - User asks for just one object, or just one page, or just one permission set (without others)
----
 
 ## Metadata Type Registry
 
@@ -50,7 +50,7 @@ This table shows which metadata types are commonly needed for LEX apps and their
 | **List View** | ✅ YES | `salesforce-list-view` | MUST use skill |
 | **Validation Rule** | ✅ YES | `salesforce-validation-rule` | MUST use skill (if requested) |
 | **Flow** | ✅ YES | `salesforce-flow` | MUST use skill (if requested) |
-| **Permission Set** | ❌ NO | - | Generate directly using Metadata API knowledge |
+| **Permission Set** | ✅ YES | `generate-permission-set` | MUST use skill |
 
 ### Skill Usage Rules
 
@@ -115,8 +115,8 @@ Custom Application (depends on: Tabs exist)
 Permission Sets (depends on: Objects, Fields, Tabs, App exist)
 ```
 
-**Fallback generation (no skill available):**
-1. Generate Permission Set XML directly with access to:
+**Skills to invoke:**
+1. `generate-permission-set` for each permission set with access to:
    - Objects (Read, Create, Edit, Delete)
    - Fields (Read, Edit)
    - Tabs (Visible)
@@ -170,7 +170,7 @@ METADATA SKILLS TO INVOKE:
 - salesforce-custom-tab (x N)
 - salesforce-flexipage (x N)
 - salesforce-custom-application (x 1)
-- [fallback] Permission Set XML generation (x N)
+- generate-permission-set (x N)
 
 DEPENDENCY ORDER:
 1. Phase 1: Data Model (Objects → Fields)
@@ -198,7 +198,99 @@ Execute in strict dependency order. For each metadata component:
 - For Custom Tab → Invoke `salesforce-custom-tab`
 - For FlexiPage → Invoke `salesforce-flexipage`
 - For Custom Application → Invoke `salesforce-custom-application`
-- For Permission Sets (no skill) → Generate XML directly
+- For Permission Set → Invoke `generate-permission-set`
+
+### STEP 3: Final Artifact Assembly
+
+After all phases complete, consolidate outputs into deployment-ready structure.
+
+---
+
+## Output
+
+The completed build produces:
+
+1. **Salesforce DX Project Directory** containing all generated metadata
+   - Organized by standard SFDX structure: `force-app/main/default/`
+
+2. **Metadata Files** - One file per component, organized by type:
+   ```
+   force-app/main/default/
+   ├── objects/              # Custom Objects (.object-meta.xml)
+   ├── fields/               # Custom Fields (.field-meta.xml)
+   ├── tabs/                 # Custom Tabs (.tab-meta.xml)
+   ├── flexipages/           # Lightning Pages (.flexipage-meta.xml)
+   ├── applications/         # Custom Applications (.app-meta.xml)
+   ├── permissionsets/       # Permission Sets (.permissionset-meta.xml)
+   ├── flows/                # Flows (.flow-meta.xml) - if applicable
+   └── objects/.../validationRules/  # Validation Rules (.validationRule-meta.xml) - if applicable
+   ```
+
+3. **Deployment Manifest** (`package.xml`)
+   - Lists all components with proper API version
+   - Organized by metadata type in dependency order
+   - Ready for Salesforce CLI deployment or Metadata API deployment
+
+4. **Build Summary Report** - A markdown file listing:
+   - Every component created
+   - Component type and API name
+   - File path location
+   - Dependency relationships
+   - Any warnings or recommendations
+
+**Example Summary Structure:**
+```
+📦 Lightning App Build Complete: Project Management App
+
+METADATA GENERATED:
+✅ 3 Custom Objects
+   - Project__c → force-app/main/default/objects/Project__c/Project__c.object-meta.xml
+   - Task__c → force-app/main/default/objects/Task__c/Task__c.object-meta.xml
+   - Resource__c → force-app/main/default/objects/Resource__c/Resource__c.object-meta.xml
+
+✅ 12 Custom Fields
+   - Project__c.Name → force-app/main/default/objects/Project__c/fields/Name.field-meta.xml
+   - Project__c.Status__c → force-app/main/default/objects/Project__c/fields/Status__c.field-meta.xml
+   [... etc ...]
+
+✅ 3 Custom Tabs
+   - Project__c → force-app/main/default/tabs/Project__c.tab-meta.xml
+   [... etc ...]
+
+✅ 3 Lightning Record Pages
+   - Project_Record_Page → force-app/main/default/flexipages/Project_Record_Page.flexipage-meta.xml
+   [... etc ...]
+
+✅ 1 Custom Application
+   - Project_Management → force-app/main/default/applications/Project_Management.app-meta.xml
+
+✅ 2 Permission Sets
+   - Project_Manager → force-app/main/default/permissionsets/Project_Manager.permissionset-meta.xml
+   - Project_User → force-app/main/default/permissionsets/Project_User.permissionset-meta.xml
+
+⚠️  WARNINGS: None
+```
+
+---
+
+## Validation
+
+Before presenting the completed build to the user, verify cross-component integrity:
+
+- [ ] **Object-Tab Coverage**: Every Custom Object has at least one Custom Tab
+- [ ] **Relationship Integrity**: Every Custom Object referenced in a relationship (parent or child) exists in the build
+- [ ] **Field References in Pages**: Every field referenced in a FlexiPage exists on the corresponding object
+- [ ] **Tab References in App**: Every tab referenced in the Custom Application was successfully created
+- [ ] **Permission Set Completeness**: Permission Sets grant access to all generated objects, fields, tabs, and the application
+- [ ] **No Orphaned Components**: No tabs without objects, no pages without corresponding tabs, no app without tabs
+- [ ] **Deployment Manifest Completeness**: `package.xml` includes all generated components in proper dependency order
+
+**Validation Failure Handling:**
+- If validation fails, include failed checks in the Build Summary Report under a `⚠️ VALIDATION WARNINGS` section
+- Do NOT block delivery of the build, but clearly communicate what needs manual review or correction
+- Provide specific remediation steps for each failed validation check
+
+**Note**: Individual component validations (reserved words, name lengths, field types, etc.) are handled by specialized metadata skills and do not need to be re-validated here.
 
 ---
 
@@ -246,7 +338,7 @@ When user doesn't specify details:
 - Enable Search and Reports for user-facing objects
 - Set sharingModel based on relationships
 
-### 5. Validate Before Building
+### 4. Validate Before Building
 Check for:
 - Reserved words in API names
 - Relationship limits (max 2 M-D per object)

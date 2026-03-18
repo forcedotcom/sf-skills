@@ -2,36 +2,36 @@ import React from "react";
 import { Check } from "lucide-react";
 
 interface StatusBadgeProps {
-	status: "new" | "assigned" | "scheduled" | "in_progress" | "completed";
+	status: string;
 }
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
-	const styles = {
-		new: "bg-pink-100 text-pink-700",
-		assigned: "bg-purple-100 text-purple-700",
-		scheduled: "bg-blue-100 text-blue-700",
-		in_progress: "bg-yellow-100 text-yellow-700",
-		completed: "bg-green-100 text-green-700",
+	const statusLower = status.toLowerCase();
+
+	const getStyle = () => {
+		if (statusLower === "new") return "bg-pink-100 text-pink-700";
+		if (statusLower === "in progress") return "bg-yellow-100 text-yellow-700";
+		if (statusLower === "resolved") return "bg-green-100 text-green-700";
+		return "bg-gray-100 text-gray-700";
 	};
 
-	const labels = {
-		new: "Needs Action",
-		assigned: "Assigned",
-		scheduled: "Scheduled",
-		in_progress: "In Progress",
-		completed: "Completed",
+	const getLabel = () => {
+		if (statusLower === "new") return "Needs Action";
+		if (statusLower === "in progress") return "In Progress";
+		if (statusLower === "resolved") return "Resolved";
+		return status;
 	};
 
-	const showCheckmark = status === "completed";
-	const showDot = status === "new" || status === "in_progress";
+	const showCheckmark = statusLower === "resolved";
+	const showDot = statusLower === "new" || statusLower === "in progress";
 
 	return (
 		<span
-			className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${styles[status]}`}
+			className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${getStyle()}`}
 		>
 			{showCheckmark && <Check className="w-4 h-4" />}
 			{showDot && <span className="w-2 h-2 rounded-full bg-current" />}
-			{labels[status]}
+			{getLabel()}
 		</span>
 	);
 };

@@ -1,21 +1,20 @@
 import React from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import type { MaintenanceRequest } from "../lib/types.js";
+import { Card } from "./ui/card";
+import { Button } from "./ui/button";
+import type { MaintenanceRequest } from "../lib/types";
 
 interface MaintenanceRequestCardProps {
 	request: MaintenanceRequest;
 	onView: (id: string) => void;
 }
 
-const priorityConfig = {
-	"high (same day)": { color: "text-red-500", label: "HIGH (SAME DAY)", emoji: "🔴" },
-	standard: { color: "text-yellow-500", label: "STANDARD", emoji: "🟡" },
-	// Legacy values
-	emergency: { color: "text-red-500", label: "EMERGENCY", emoji: "🔴" },
-	high: { color: "text-orange-500", label: "HIGH", emoji: "🟠" },
-	medium: { color: "text-yellow-500", label: "MEDIUM", emoji: "🟡" },
-	low: { color: "text-green-500", label: "LOW", emoji: "🟢" },
+const priorityConfig: Record<
+	"Emergency (2hr)" | "High (Same Day)" | "Standard",
+	{ color: string; label: string; emoji: string }
+> = {
+	"Emergency (2hr)": { color: "text-red-500", label: "EMERGENCY (2HR)", emoji: "🔴" },
+	"High (Same Day)": { color: "text-orange-500", label: "HIGH (SAME DAY)", emoji: "🟠" },
+	Standard: { color: "text-blue-500", label: "STANDARD", emoji: "🔵" },
 };
 
 const issueIcons: Record<string, string> = {

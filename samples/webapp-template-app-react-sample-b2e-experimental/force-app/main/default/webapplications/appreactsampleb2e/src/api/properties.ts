@@ -1,10 +1,10 @@
-import { getDataSDK } from "@salesforce/sdk-data";
+import { gql } from "@salesforce/sdk-data";
 import type { Property } from "../lib/types.js";
-import { gql } from "./utils.js";
 import type {
 	GetPropertiesQueryVariables,
 	GetPropertiesQuery,
 } from "./graphql-operations-types.js";
+import { executeGraphQL } from "./graphqlClient.js";
 
 // GraphQL query to get properties with pagination
 const GET_PROPERTIES_PAGINATED = gql`
@@ -101,19 +101,10 @@ export async function getProperties(first: number = 12, after?: string): Promise
 	if (after) {
 		variables.after = after;
 	}
-
-	const data = await getDataSDK();
-	const result = await data.graphql?.<GetPropertiesQuery, GetPropertiesQueryVariables>(
+	const response = await executeGraphQL<GetPropertiesQuery, GetPropertiesQueryVariables>(
 		GET_PROPERTIES_PAGINATED,
 		variables,
 	);
-
-	if (result?.errors?.length) {
-		const errorMessages = result.errors.map((e) => e.message).join("; ");
-		throw new Error(`GraphQL Error: ${errorMessages}`);
-	}
-
-	const response = result?.data;
 	const edges = response?.uiapi?.query?.Property__c?.edges || [];
 	const pageInfo = response?.uiapi?.query?.Property__c?.pageInfo || {
 		hasNextPage: false,
