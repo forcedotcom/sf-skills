@@ -1,11 +1,15 @@
 # Agent guide: SFDX project with React web app
 
-This project is a **Salesforce DX (SFDX) project** containing a **React web application**. The structure is generated; the app lives under `force-app/main/default/webapplications/<appName>/`. Use this file when working in this directory.
+This project is a **Salesforce DX (SFDX) project** containing a **React web application**. The SFDX source path is defined in `sfdx-project.json` (`packageDirectories[].path`); the web app lives under `<sfdx-source>/webapplications/<appName>/`. Use this file when working in this directory.
+
+## SFDX Source Path
+
+The source path prefix is **not** always `force-app`. Read `sfdx-project.json` at the project root, take the first `packageDirectories[].path` value, and append `/main/default` to get `<sfdx-source>`. All paths below use this placeholder.
 
 ## Project layout
 
-- **Project root**: this directory — SFDX project root. Contains `sfdx-project.json`, `force-app/`, and (optionally) LWC/Aura.
-- **React web app**: `force-app/main/default/webapplications/<appName>/`  
+- **Project root**: this directory — SFDX project root. Contains `sfdx-project.json`, the SFDX source directory, and (optionally) LWC/Aura.
+- **React web app**: `<sfdx-source>/webapplications/<appName>/`  
   - Replace `<appName>` with the actual app folder name (e.g. `base-react-app`, or the name chosen when the app was generated).
   - Entry: `src/App.tsx`  
   - Routes: `src/routes.tsx`  
@@ -26,6 +30,8 @@ Used for SFDX metadata (LWC, Aura, etc.). Scripts here are for the base SFDX tem
 | `npm run prettier` | Format supported metadata files |
 | `npm run prettier:verify` | Check Prettier |
 
+**One-command setup:** From project root run `node scripts/setup-cli.mjs --target-org <alias>` to run login (if needed), deploy, optional permset/data import, GraphQL schema/codegen, web app build, and optionally the dev server. Use `node scripts/setup-cli.mjs --help` for options (e.g. `--skip-login`, `--skip-data`, `--webapp-name`).
+
 Root **does not** run the React app. The root `npm run build` is a no-op for the base SFDX project.
 
 ### 2. React web app (where you do most work)
@@ -33,7 +39,7 @@ Root **does not** run the React app. The root `npm run build` is a no-op for the
 **Always `cd` into the web app directory for dev/build/lint/test:**
 
 ```bash
-cd force-app/main/default/webapplications/<appName>
+cd <sfdx-source>/webapplications/<appName>
 ```
 
 | Command | Purpose |
@@ -52,24 +58,29 @@ cd force-app/main/default/webapplications/<appName>
 
 This project includes **.a4drules/** at the project root. Follow them when generating or editing code.
 
-When rules refer to “web app directory” or `force-app/main/default/webapplications/<appName>/`, use the **actual app folder name** for this project.
+- **Accessing Data** (`.a4drules/skills/accessing-data/`): Use for all Salesforce data fetches. Enforces Data SDK usage (`createDataSDK()` + `sdk.graphql` or `sdk.fetch`); GraphQL preferred, fetch when GraphQL is not sufficient.
+- **Fetching REST API** (`.a4drules/skills/fetching-rest-api/`): Use when implementing Chatter, Connect REST, Apex REST, UI API REST, or Einstein LLM calls via `sdk.fetch`.
+- **Using GraphQL** (`.a4drules/skills/using-graphql/`): Use when implementing Salesforce GraphQL queries or mutations. Sub-skills: `exploring-graphql-schema`, `generating-graphql-read-query`, `generating-graphql-mutation-query`.
+
+When rules refer to "web app directory" or `<sfdx-source>/webapplications/<appName>/`, resolve `<sfdx-source>` from `sfdx-project.json` and use the **actual app folder name** for this project.
 
 ## Deploying
 
-From **this project root**:
+From **this project root** (resolve the actual SFDX source path from `sfdx-project.json`):
 
 ```bash
-# Build the React app first (replace <appName> with the app folder name)
-cd force-app/main/default/webapplications/<appName> && npm i && npm run build && cd -
+# Build the React app first (replace <sfdx-source> and <appName> with actual values)
+cd <sfdx-source>/webapplications/<appName> && npm i && npm run build && cd -
 
-# Deploy web app only
-sf project deploy start --source-dir force-app/main/default/webapplications --target-org <alias>
+# Deploy web app only (replace <sfdx-source> with actual path, e.g. force-app/main/default)
+sf project deploy start --source-dir <sfdx-source>/webapplications --target-org <alias>
 
-# Deploy all metadata
-sf project deploy start --source-dir force-app --target-org <alias>
+# Deploy all metadata (use the top-level package directory, e.g. force-app)
+sf project deploy start --source-dir <packageDir> --target-org <alias>
 ```
 
 ## Conventions (quick reference)
 
 - **UI**: shadcn/ui + Tailwind. Import from `@/components/ui/...`.
-- **Entry**: Keep `App.tsx` and routes in `src/`; add features as new routes or sections, don’t replace the app shell but you may modify it to match the requested design.
+- **Entry**: Keep `App.tsx` and routes in `src/`; add features as new routes or sections, don't replace the app shell but you may modify it to match the requested design.
+- **Data (Salesforce)**: Invoke the `accessing-data` skill for all Salesforce data fetches. The skill enforces use of the Data SDK (`createDataSDK()` + `sdk.graphql` or `sdk.fetch`) — never use `fetch` or `axios` directly. GraphQL is preferred; use `sdk.fetch` when GraphQL is not sufficient (e.g., Chatter, Connect REST). For GraphQL implementation, invoke the `using-graphql` skill.
