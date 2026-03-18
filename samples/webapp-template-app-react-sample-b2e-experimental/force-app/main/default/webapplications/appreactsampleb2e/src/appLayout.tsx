@@ -1,6 +1,7 @@
 import { Outlet } from "react-router";
-import { TopBar } from "./components/TopBar.js";
-import { VerticalNav } from "./components/VerticalNav.js";
+import { TopBar } from "./components/TopBar";
+import { VerticalNav } from "./components/VerticalNav";
+import { AgentforceConversationClient } from "./components/AgentforceConversationClient";
 
 export default function AppLayout() {
 	return (
@@ -18,6 +19,9 @@ export default function AppLayout() {
 					<Outlet />
 				</main>
 			</div>
+
+			{/* Agentforce Conversation Client */}
+			<AgentforceConversationClient agentId="<USER_AGENT_ID_18_CHAR_0Xx...>" />
 		</div>
 	);
 }

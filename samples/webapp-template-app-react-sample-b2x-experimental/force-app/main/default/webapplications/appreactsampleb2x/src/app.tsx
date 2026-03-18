@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import { routes } from "@/routes";
 import { StrictMode, Component, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
+import { AuthProvider } from "./features/authentication/context/AuthContext";
 import "./styles/global.css";
 
 class ErrorBoundary extends Component<
@@ -27,14 +28,16 @@ class ErrorBoundary extends Component<
 	}
 }
 
-const baseUrl = import.meta.env.BASE_URL ?? "/";
-const router = createBrowserRouter(routes, { basename: baseUrl === "/" ? undefined : baseUrl });
+const basename = (globalThis as any).SFDC_ENV?.basePath;
+const router = createBrowserRouter(routes, { basename });
 const rootEl = document.getElementById("root");
 if (rootEl) {
 	createRoot(rootEl).render(
 		<StrictMode>
 			<ErrorBoundary>
-				<RouterProvider router={router} />
+				<AuthProvider>
+					<RouterProvider router={router} />
+				</AuthProvider>
 			</ErrorBoundary>
 		</StrictMode>,
 	);

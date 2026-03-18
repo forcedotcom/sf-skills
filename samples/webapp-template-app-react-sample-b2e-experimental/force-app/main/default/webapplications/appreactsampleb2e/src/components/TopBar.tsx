@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Search, Bell, ChevronDown, Menu } from "lucide-react";
 import zenLogo from "../assets/icons/zen-logo.svg";
-import { getUserInfo } from "../api/dashboard.js";
+import { getUserInfo } from "../api/dashboard";
 
 interface TopBarProps {
 	onMenuClick?: () => void;
@@ -9,6 +9,7 @@ interface TopBarProps {
 
 export const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
 	const [userName, setUserName] = useState<string>("User");
+	const [showNotifications, setShowNotifications] = useState(false);
 
 	useEffect(() => {
 		const loadUserInfo = async () => {
@@ -19,6 +20,14 @@ export const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
 		};
 		loadUserInfo();
 	}, []);
+
+	const handleNotificationClick = () => {
+		setShowNotifications(!showNotifications);
+	};
+
+	const handleCloseNotifications = () => {
+		setShowNotifications(false);
+	};
 	return (
 		<div className="bg-[#372949] text-white h-16 flex items-center justify-between px-6">
 			{/* Left section - Logo and Menu */}
@@ -50,13 +59,34 @@ export const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
 				</button>
 
 				{/* Notifications */}
-				<button
-					className="p-2 hover:bg-purple-700 rounded-md transition-colors relative"
-					aria-label="Notifications"
-				>
-					<Bell className="w-5 h-5" />
-					<span className="absolute top-1 right-1 w-2 h-2 bg-pink-500 rounded-full"></span>
-				</button>
+				<div className="relative">
+					<button
+						onClick={handleNotificationClick}
+						className="p-2 hover:bg-purple-700 rounded-md transition-colors relative"
+						aria-label="Notifications"
+					>
+						<Bell className="w-5 h-5" />
+					</button>
+
+					{/* Notifications Overlay */}
+					{showNotifications && (
+						<>
+							{/* Backdrop */}
+							<div className="fixed inset-0 z-40" onClick={handleCloseNotifications} />
+
+							{/* Notification Panel */}
+							<div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-lg shadow-xl z-50 overflow-hidden">
+								<div className="p-4 border-b border-gray-200">
+									<h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
+								</div>
+								<div className="p-8 text-center">
+									<Bell className="w-12 h-12 mx-auto text-gray-300 mb-3" />
+									<p className="text-sm text-gray-500">No new notifications</p>
+								</div>
+							</div>
+						</>
+					)}
+				</div>
 
 				{/* User Profile */}
 				<button className="flex items-center gap-2 px-3 py-2 hover:bg-purple-700 rounded-md transition-colors">

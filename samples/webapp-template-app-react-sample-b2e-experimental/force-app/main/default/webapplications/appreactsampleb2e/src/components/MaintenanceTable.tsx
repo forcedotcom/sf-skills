@@ -1,8 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import type { MaintenanceRequest } from "../lib/types.js";
+import { PATHS } from "../lib/routeConfig";
+import { Card } from "./ui/card";
+import { Button } from "./ui/button";
+import type { MaintenanceRequest } from "../lib/types";
 import PlumbingIcon from "../assets/icons/plumbing.svg";
 import HVACIcon from "../assets/icons/hvac.svg";
 import ElectricalIcon from "../assets/icons/electrical.svg";
@@ -34,7 +35,7 @@ export const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ requests }) 
 	const navigate = useNavigate();
 
 	const handleSeeAll = () => {
-		navigate("/maintenance");
+		navigate(PATHS.MAINTENANCE_REQUESTS);
 	};
 
 	return (

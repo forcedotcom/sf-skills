@@ -1,0 +1,1150 @@
+# Common scalar types
+scalar BigDecimal
+scalar Byte
+scalar Char
+scalar BigInteger
+scalar Short
+scalar String
+scalar Currency
+scalar Longitude
+scalar Float
+scalar PhoneNumber
+scalar Email
+scalar TextArea
+scalar Latitude
+scalar RichTextArea
+scalar EncryptedString
+scalar Long
+scalar JSON
+scalar Time
+scalar Percent
+scalar LongTextArea
+scalar DateTime
+scalar ID
+scalar Boolean
+scalar MultiPicklist
+scalar Base64
+scalar Url
+scalar Picklist
+scalar Double
+scalar Int
+scalar IdOrRef
+scalar Date
+
+# Common enums
+enum GroupByFunction {
+  DAY_IN_WEEK
+  DAY_IN_MONTH
+  DAY_IN_YEAR
+  WEEK_IN_MONTH
+  WEEK_IN_YEAR
+  CALENDAR_MONTH
+  CALENDAR_QUARTER
+  CALENDAR_YEAR
+  FISCAL_MONTH
+  FISCAL_QUARTER
+  FISCAL_YEAR
+  DAY_ONLY
+  HOUR_IN_DAY
+}
+
+enum DataType {
+  STRING
+  TEXTAREA
+  PHONE
+  EMAIL
+  URL
+  ENCRYPTEDSTRING
+  BOOLEAN
+  CURRENCY
+  INT
+  LONG
+  DOUBLE
+  PERCENT
+  DATETIME
+  TIME
+  DATE
+  REFERENCE
+  PICKLIST
+  MULTIPICKLIST
+  ADDRESS
+  LOCATION
+  BASE64
+  COMPLEXVALUE
+  COMBOBOX
+  JSON
+  JUNCTIONIDLIST
+  ANYTYPE
+}
+
+enum AggregateOrderByNumberFunction {
+  AVG
+  COUNT
+  COUNT_DISTINCT
+  MAX
+  MIN
+  SUM
+}
+
+enum AggregateOrderByStringFunction {
+  COUNT
+  COUNT_DISTINCT
+  MAX
+  MIN
+}
+
+enum GroupByType {
+  GROUP_BY
+  ROLLUP
+  CUBE
+}
+
+enum ResultsOrder {
+  ASC
+  DESC
+}
+
+enum ResultOrder {
+  ASC
+  DESC
+}
+
+enum NullOrder {
+  FIRST
+  LAST
+}
+
+enum NullsOrder {
+  FIRST
+  LAST
+}
+
+enum DateLiteral {
+  YESTERDAY
+  TODAY
+  TOMORROW
+  LAST_WEEK
+  THIS_WEEK
+  NEXT_WEEK
+  LAST_MONTH
+  THIS_MONTH
+  NEXT_MONTH
+  LAST_90_DAYS
+  NEXT_90_DAYS
+  LAST_QUARTER
+  THIS_QUARTER
+  NEXT_QUARTER
+  LAST_FISCAL_QUARTER
+  THIS_FISCAL_QUARTER
+  NEXT_FISCAL_QUARTER
+  LAST_YEAR
+  THIS_YEAR
+  NEXT_YEAR
+  LAST_FISCAL_YEAR
+  THIS_FISCAL_YEAR
+  NEXT_FISCAL_YEAR
+}
+
+enum Unit {
+  MI
+  KM
+}
+
+enum SObject__FieldType {
+  ALL
+  STANDARD
+  CUSTOM
+}
+
+enum FieldExtraTypeInfo {
+  IMAGE_URL
+  EXTERNAL_LOOKUP
+  INDIRECT_LOOKUP
+  PERSONNAME
+  SWITCHABLE_PERSONNAME
+  PLAINTEXTAREA
+  RICHTEXTAREA
+}
+
+enum RecordScope @generic {
+}
+
+# Common interfaces
+interface FieldValue {
+  displayValue: String
+}
+
+interface Field  {
+  ApiName: String!
+  calculated: Boolean!
+  compound: Boolean!
+  compoundComponentName: String
+  compoundFieldName: String
+  controllerName: String
+  controllingFields: [String]!
+  createable: Boolean!
+  custom: Boolean!
+  dataType: DataType
+  extraTypeInfo: FieldExtraTypeInfo
+  filterable: Boolean!
+  filteredLookupInfo: FilteredLookupInfo
+  highScaleNumber: Boolean!
+  htmlFormatted: Boolean!
+  inlineHelpText: String
+  label: String
+  nameField: Boolean!
+  polymorphicForeignKey: Boolean!
+  precision: Int
+  reference: Boolean!
+  referenceTargetField: String
+  referenceToInfos: [ReferenceToInfo]!
+  relationshipName: String
+  required: Boolean!
+  scale: Int
+  searchPrefilterable: Boolean
+  sortable: Boolean!
+  updateable: Boolean!
+}
+
+interface Record {
+  Id: ID!
+  ApiName: String!
+  WeakEtag: Long!
+  DisplayValue: String
+  LastModifiedById: IDValue
+  LastModifiedDate: DateTimeValue
+  SystemModstamp: DateTimeValue
+  RecordTypeId(fallback: Boolean): IDValue
+}
+
+# Common types
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type SObject__Field {
+  name: String!
+  value: String
+}
+
+type ReferenceToInfo {
+  ApiName: String!
+  nameFields: [String]!
+  objectInfo: ObjectInfo
+}
+
+type FilteredLookupInfo {
+  controllingFields: [String]!
+  dependent: Boolean!
+  optionalFilter: Boolean!
+}
+
+type DependentField {
+  controllingField: String!
+  dependentFields: [String]!
+}
+
+type RecordTypeInfo {
+  available: Boolean!
+  defaultRecordTypeMapping: Boolean!
+  master: Boolean!
+  name: String
+  recordTypeId: ID
+}
+
+type ThemeInfo {
+  color: String
+  iconUrl: String
+}
+
+type ChildRelationship {
+  childObjectApiName: String!
+  fieldName: String
+  junctionIdListNames: [String]!
+  junctionReferenceTo: [String]!
+  relationshipName: String
+  objectInfo: ObjectInfo
+}
+
+type ObjectInfo {
+  ApiName: String!
+  childRelationships: [ChildRelationship]!
+  createable: Boolean!
+  custom: Boolean!
+  defaultRecordTypeId: ID
+  deletable: Boolean!
+  dependentFields: [DependentField]!
+  feedEnabled: Boolean!
+  fields: [Field]!
+  keyPrefix: String
+  label: String
+  labelPlural: String
+  layoutable: Boolean!
+  mruEnabled: Boolean!
+  nameFields: [String]!
+  queryable: Boolean!
+  recordTypeInfos: [RecordTypeInfo]!
+  searchable: Boolean!
+  themeInfo: ThemeInfo
+  updateable: Boolean!
+  locale: String
+}
+
+type StandardField implements Field {
+  ApiName: String!
+  calculated: Boolean!
+  compound: Boolean!
+  compoundComponentName: String
+  compoundFieldName: String
+  controllerName: String
+  controllingFields: [String]!
+  createable: Boolean!
+  custom: Boolean!
+  dataType: DataType
+  extraTypeInfo: FieldExtraTypeInfo
+  filterable: Boolean!
+  filteredLookupInfo: FilteredLookupInfo
+  highScaleNumber: Boolean!
+  htmlFormatted: Boolean!
+  inlineHelpText: String
+  label: String
+  nameField: Boolean!
+  polymorphicForeignKey: Boolean!
+  precision: Int
+  reference: Boolean!
+  referenceTargetField: String
+  referenceToInfos: [ReferenceToInfo]!
+  relationshipName: String
+  required: Boolean!
+  scale: Int
+  searchPrefilterable: Boolean
+  sortable: Boolean!
+  updateable: Boolean!
+}
+
+type PicklistField implements Field {
+  ApiName: String!
+  calculated: Boolean!
+  compound: Boolean!
+  compoundComponentName: String
+  compoundFieldName: String
+  controllerName: String
+  controllingFields: [String]!
+  createable: Boolean!
+  custom: Boolean!
+  dataType: DataType
+  extraTypeInfo: FieldExtraTypeInfo
+  filterable: Boolean!
+  filteredLookupInfo: FilteredLookupInfo
+  highScaleNumber: Boolean!
+  htmlFormatted: Boolean!
+  inlineHelpText: String
+  label: String
+  nameField: Boolean!
+  polymorphicForeignKey: Boolean!
+  picklistValuesByRecordTypeIDs: [PicklistValueByRecordTypeIDs]
+  precision: Int
+  reference: Boolean!
+  referenceTargetField: String
+  referenceToInfos: [ReferenceToInfo]!
+  relationshipName: String
+  required: Boolean!
+  scale: Int
+  searchPrefilterable: Boolean
+  sortable: Boolean!
+  updateable: Boolean!
+}
+
+type PicklistValueByRecordTypeIDs {
+  recordTypeID: String!
+  controllerValues: [ControllerValues!]
+  picklistValues: [PicklistValues!]
+  defaultValue: PicklistValues
+}
+
+type ControllerValues {
+  value: String
+  index: Int
+}
+
+type PicklistValues {
+  value: String
+  label: String
+  validFor: [Int]
+  attributes: PicklistAttributes
+}
+
+type PicklistAttributes {
+  picklistAtrributesValueType: String
+  connectDisplayName: String
+  internalName: String
+}
+
+# Value types implementing FieldValue
+type IntValue implements FieldValue {
+  value: Int
+  displayValue: String
+  format: String
+}
+
+type StringValue implements FieldValue {
+  value: String
+  displayValue: String
+  label: String
+}
+
+type BooleanValue implements FieldValue {
+  value: Boolean
+  displayValue: String
+}
+
+type IDValue implements FieldValue {
+  value: ID
+  displayValue: String
+}
+
+type DateTimeValue implements FieldValue {
+  value: DateTime
+  displayValue: String
+  format: String
+}
+
+type TimeValue implements FieldValue {
+  value: Time
+  displayValue: String
+  format: String
+}
+
+type DateValue implements FieldValue {
+  value: Date
+  displayValue: String
+  format: String
+}
+
+type TextAreaValue implements FieldValue {
+  value: TextArea
+  displayValue: String
+  label: String
+}
+
+type LongTextAreaValue implements FieldValue {
+  value: LongTextArea
+  displayValue: String
+  label: String
+}
+
+type RichTextAreaValue implements FieldValue {
+  value: RichTextArea
+  displayValue: String
+  label: String
+}
+
+type PhoneNumberValue implements FieldValue {
+  value: PhoneNumber
+  displayValue: String
+}
+
+type EmailValue implements FieldValue {
+  value: Email
+  displayValue: String
+}
+
+type UrlValue implements FieldValue {
+  value: Url
+  displayValue: String
+}
+
+type EncryptedStringValue implements FieldValue {
+  value: EncryptedString
+  displayValue: String
+}
+
+type CurrencyValue implements FieldValue {
+  value: Currency
+  displayValue: String
+  format: String
+  convertCurrency: Currency
+}
+
+type LongitudeValue implements FieldValue {
+  value: Longitude
+  displayValue: String
+}
+
+type LatitudeValue implements FieldValue {
+  value: Latitude
+  displayValue: String
+}
+
+type PicklistValue implements FieldValue {
+  value: Picklist
+  displayValue: String
+  label: String
+}
+
+type MultiPicklistValue implements FieldValue {
+  value: MultiPicklist
+  displayValue: String
+  label: String
+}
+
+type LongValue implements FieldValue {
+  value: Long
+  displayValue: String
+  format: String
+}
+
+type DoubleValue implements FieldValue {
+  value: Double
+  displayValue: String
+  format: String
+}
+
+type PercentValue implements FieldValue {
+  value: Percent
+  displayValue: String
+  format: String
+}
+
+type Base64Value implements FieldValue {
+  value: Base64
+  displayValue: String
+}
+
+type JSONValue implements FieldValue {
+  value: JSON
+  displayValue: String
+}
+
+# Aggregate types implementing FieldValue
+type BooleanAggregate implements FieldValue {
+  value: Boolean
+  displayValue: String
+  grouping: IntValue
+}
+
+type CurrencyAggregate implements FieldValue {
+  value: Currency
+  displayValue: String
+  avg: DoubleValue
+  count: LongValue
+  countDistinct: LongValue
+  format: String
+  max: CurrencyValue
+  min: CurrencyValue
+  sum: CurrencyValue
+}
+
+type DateAggregate implements FieldValue {
+  value: Date
+  displayValue: String
+  calendarMonth: DateFunctionAggregation
+  calendarQuarter: DateFunctionAggregation
+  calendarYear: DateFunctionAggregation
+  count: LongValue
+  countDistinct: LongValue
+  dayInMonth: DateFunctionAggregation
+  dayInWeek: DateFunctionAggregation
+  dayInYear: DateFunctionAggregation
+  fiscalMonth: DateFunctionAggregation
+  fiscalQuarter: DateFunctionAggregation
+  fiscalYear: DateFunctionAggregation
+  format: String
+  grouping: IntValue
+  max: DateValue
+  min: DateValue
+  weekInMonth: DateFunctionAggregation
+  weekInYear: DateFunctionAggregation
+}
+
+type DateTimeAggregate implements FieldValue {
+  value: DateTime
+  displayValue: String
+  calendarMonth: DateFunctionAggregation
+  calendarQuarter: DateFunctionAggregation
+  calendarYear: DateFunctionAggregation
+  count: LongValue
+  countDistinct: LongValue
+  dayInMonth: DateFunctionAggregation
+  dayInWeek: DateFunctionAggregation
+  dayInYear: DateFunctionAggregation
+  dayOnly: DateOnlyAggregation
+  fiscalMonth: DateFunctionAggregation
+  fiscalQuarter: DateFunctionAggregation
+  fiscalYear: DateFunctionAggregation
+  format: String
+  hourInDay: DateFunctionAggregation
+  max: DateTimeValue
+  min: DateTimeValue
+  weekInMonth: DateFunctionAggregation
+  weekInYear: DateFunctionAggregation
+}
+
+type DoubleAggregate implements FieldValue {
+  value: Double
+  displayValue: String
+  avg: DoubleValue
+  count: LongValue
+  countDistinct: LongValue
+  format: String
+  max: DoubleValue
+  min: DoubleValue
+  sum: DoubleValue
+}
+
+type EmailAggregate implements FieldValue {
+  value: Email
+  displayValue: String
+  count: LongValue
+  countDistinct: LongValue
+  grouping: IntValue
+  max: EmailValue
+  min: EmailValue
+}
+
+type IDAggregate implements FieldValue {
+  value: ID
+  displayValue: String
+  count: LongValue
+  countDistinct: LongValue
+  grouping: IntValue
+  max: IDValue
+  min: IDValue
+}
+
+type IntAggregate implements FieldValue {
+  value: Int
+  displayValue: String
+  avg: DoubleValue
+  count: LongValue
+  countDistinct: LongValue
+  format: String
+  grouping: IntValue
+  max: IntValue
+  min: IntValue
+  sum: LongValue
+}
+
+type LatitudeAggregate implements FieldValue {
+  value: Latitude
+  displayValue: String
+  avg: DoubleValue
+  count: LongValue
+  countDistinct: LongValue
+  max: LatitudeValue
+  min: LatitudeValue
+  sum: DoubleValue
+}
+
+type LongitudeAggregate implements FieldValue {
+  value: Longitude
+  displayValue: String
+  avg: DoubleValue
+  count: LongValue
+  countDistinct: LongValue
+  max: LongitudeValue
+  min: LongitudeValue
+  sum: DoubleValue
+}
+
+type LongAggregate implements FieldValue {
+  value: Long
+  displayValue: String
+  avg: DoubleValue
+  count: LongValue
+  countDistinct: LongValue
+  format: String
+  grouping: IntValue
+  max: LongValue
+  min: LongValue
+  sum: LongValue
+}
+
+type PercentAggregate implements FieldValue {
+  value: Percent
+  displayValue: String
+  avg: DoubleValue
+  count: LongValue
+  countDistinct: LongValue
+  format: String
+  max: PercentValue
+  min: PercentValue
+  sum: PercentValue
+}
+
+type PhoneNumberAggregate implements FieldValue {
+  value: PhoneNumber
+  displayValue: String
+  count: LongValue
+  countDistinct: LongValue
+  grouping: IntValue
+  max: PhoneNumberValue
+  min: PhoneNumberValue
+}
+
+type PicklistAggregate implements FieldValue {
+  value: Picklist
+  displayValue: String
+  count: LongValue
+  countDistinct: LongValue
+  grouping: IntValue
+  label: String
+  max: PicklistValue
+  min: PicklistValue
+}
+
+type StringAggregate implements FieldValue {
+  value: String
+  displayValue: String
+  count: LongValue
+  countDistinct: LongValue
+  grouping: IntValue
+  label: String
+  max: StringValue
+  min: StringValue
+}
+
+type TextAreaAggregate implements FieldValue {
+  value: TextArea
+  displayValue: String
+  count: LongValue
+  countDistinct: LongValue
+  grouping: IntValue
+  label: String
+  max: TextAreaValue
+  min: TextAreaValue
+}
+
+type TimeAggregate implements FieldValue {
+  value: Time
+  displayValue: String
+  format: String
+  hourInDay: DateFunctionAggregation
+}
+
+type UrlAggregate implements FieldValue {
+  value: Url
+  displayValue: String
+  count: LongValue
+  countDistinct: LongValue
+  grouping: IntValue
+  max: UrlValue
+  min: UrlValue
+}
+
+# Helper types for aggregations
+type DateFunctionAggregation {
+  value: Long
+  format: String
+}
+
+type DateOnlyAggregation {
+  value: Date
+  format: String
+}
+
+type CompoundField @generic {
+  IntValue: IntValue @fieldCategory
+  StringValue: StringValue @fieldCategory
+  BooleanValue: BooleanValue @fieldCategory
+  IDValue: IDValue @fieldCategory
+  DateTimeValue: DateTimeValue @fieldCategory
+  TimeValue: TimeValue @fieldCategory
+  DateValue: DateValue @fieldCategory
+  TextAreaValue: TextAreaValue @fieldCategory
+  LongTextAreaValue: LongTextAreaValue @fieldCategory
+  RichTextAreaValue: RichTextAreaValue @fieldCategory
+  PhoneNumberValue: PhoneNumberValue @fieldCategory
+  EmailValue: EmailValue @fieldCategory
+  UrlValue: UrlValue @fieldCategory
+  EncryptedStringValue: EncryptedStringValue @fieldCategory
+  CurrencyValue: CurrencyValue @fieldCategory
+  LongitudeValue: LongitudeValue @fieldCategory
+  LatitudeValue: LatitudeValue @fieldCategory
+  PicklistValue: PicklistValue @fieldCategory
+  MultiPicklistValue: MultiPicklistValue @fieldCategory
+  LongValue: LongValue @fieldCategory
+  DoubleValue: DoubleValue @fieldCategory
+  PercentValue: PercentValue @fieldCategory
+  Base64Value: Base64Value @fieldCategory
+  JSONValue: JSONValue @fieldCategory
+}
+
+# Union types
+union AnyType = BooleanValue | DateValue | DateTimeValue | DoubleValue | StringValue
+
+# Common input types
+input ObjectInfoInput {
+  apiName: String!
+  recordTypeIDs: [ID!]
+  fieldNames: [String!]
+}
+
+input OrderByClause {
+  order: ResultOrder
+  nulls: NullOrder
+}
+
+input OrderByGeolocationClause {
+  distance: DistanceInput
+  order: ResultOrder
+  nulls: NullOrder
+}
+
+input DistanceInput {
+  latitude: Latitude!
+  longitude: Longitude!
+}
+
+input GeolocationInput {
+  latitude: Latitude!
+  longitude: Longitude!
+  radius: Float!
+  unit: Unit!
+}
+
+input GroupByClause {
+  group: Boolean
+}
+
+input GroupByDateFunction {
+  function: GroupByFunction
+}
+
+input NoFunctionAggregateOrderByClause {
+  order: ResultsOrder
+  nulls: NullsOrder
+}
+
+input AggregateOrderByNumberClause {
+  function: AggregateOrderByNumberFunction
+  order: ResultsOrder
+  nulls: NullsOrder
+}
+
+input AggregateOrderByStringClause {
+  function: AggregateOrderByStringFunction
+  order: ResultsOrder
+  nulls: NullsOrder
+}
+
+input DateRange {
+  last_n_days: Int
+  next_n_days: Int
+  last_n_weeks: Int
+  next_n_weeks: Int
+  last_n_months: Int
+  next_n_months: Int
+  last_n_quarters: Int
+  next_n_quarters: Int
+  last_n_fiscal_quarters: Int
+  next_n_fiscal_quarters: Int
+  last_n_years: Int
+  next_n_years: Int
+  last_n_fiscal_years: Int
+  next_n_fiscal_years: Int
+  n_days_ago: Int
+  n_weeks_ago: Int
+  n_months_ago: Int
+  n_quarters_ago: Int
+  n_years_ago: Int
+  n_fiscal_quarters_ago: Int
+  n_fiscal_years_ago: Int
+}
+
+input DateInput {
+  value: Date
+  literal: DateLiteral
+  range: DateRange
+}
+
+input DateTimeInput {
+  value: DateTime
+  literal: DateLiteral
+  range: DateRange
+}
+
+input DatePrimitiveOperators {
+  eq: Date
+  ne: Date
+  lt: Date
+  gt: Date
+  lte: Date
+  gte: Date
+  in: [Date]
+  nin: [Date]
+}
+
+input DateFunctionInput {
+  value: LongOperators
+  convertTimezoneValue: LongOperators
+}
+
+input DateTimeFunctionInput {
+  value: DatePrimitiveOperators
+  convertTimezoneValue: DatePrimitiveOperators
+}
+
+# Operator input types
+input IntegerOperators {
+  eq: Int
+  ne: Int
+  lt: Int
+  gt: Int
+  lte: Int
+  gte: Int
+  in: [Int]
+  nin: [Int]
+}
+
+input LongOperators {
+  eq: Long
+  ne: Long
+  lt: Long
+  gt: Long
+  lte: Long
+  gte: Long
+  in: [Long]
+  nin: [Long]
+}
+
+input StringOperators {
+  eq: String
+  ne: String
+  like: String
+  lt: String
+  gt: String
+  lte: String
+  gte: String
+  in: [String]
+  nin: [String]
+}
+
+input DoubleOperators {
+  eq: Double
+  ne: Double
+  lt: Double
+  gt: Double
+  lte: Double
+  gte: Double
+  in: [Double]
+  nin: [Double]
+}
+
+input PercentOperators {
+  eq: Percent
+  ne: Percent
+  lt: Percent
+  gt: Percent
+  lte: Percent
+  gte: Percent
+  in: [Percent]
+  nin: [Percent]
+}
+
+input LongitudeOperators {
+  eq: Longitude
+  ne: Longitude
+  lt: Longitude
+  gt: Longitude
+  lte: Longitude
+  gte: Longitude
+  in: [Longitude]
+  nin: [Longitude]
+}
+
+input LatitudeOperators {
+  eq: Latitude
+  ne: Latitude
+  lt: Latitude
+  gt: Latitude
+  lte: Latitude
+  gte: Latitude
+  in: [Latitude]
+  nin: [Latitude]
+}
+
+input EmailOperators {
+  eq: Email
+  ne: Email
+  like: Email
+  lt: Email
+  gt: Email
+  lte: Email
+  gte: Email
+  in: [Email]
+  nin: [Email]
+}
+
+input TextAreaOperators {
+  eq: TextArea
+  ne: TextArea
+  like: TextArea
+  lt: TextArea
+  gt: TextArea
+  lte: TextArea
+  gte: TextArea
+  in: [TextArea]
+  nin: [TextArea]
+}
+
+input LongTextAreaOperators {
+  eq: LongTextArea
+  ne: LongTextArea
+  like: LongTextArea
+  lt: LongTextArea
+  gt: LongTextArea
+  lte: LongTextArea
+  gte: LongTextArea
+  in: [LongTextArea]
+  nin: [LongTextArea]
+}
+
+input URLOperators {
+  eq: Url
+  ne: Url
+  like: Url
+  lt: Url
+  gt: Url
+  lte: Url
+  gte: Url
+  in: [Url]
+  nin: [Url]
+}
+
+input PhoneNumberOperators {
+  eq: PhoneNumber
+  ne: PhoneNumber
+  like: PhoneNumber
+  lt: PhoneNumber
+  gt: PhoneNumber
+  lte: PhoneNumber
+  gte: PhoneNumber
+  in: [PhoneNumber]
+  nin: [PhoneNumber]
+}
+
+input BooleanOperators {
+  eq: Boolean
+  ne: Boolean
+}
+
+input CurrencyOperators {
+  eq: Currency
+  ne: Currency
+  lt: Currency
+  gt: Currency
+  lte: Currency
+  gte: Currency
+  in: [Currency]
+  nin: [Currency]
+}
+
+input TimeOperators {
+  eq: Time
+  ne: Time
+  lt: Time
+  gt: Time
+  lte: Time
+  gte: Time
+  in: [Time]
+  nin: [Time]
+}
+
+input DateOperators {
+  eq: DateInput
+  ne: DateInput
+  lt: DateInput
+  gt: DateInput
+  lte: DateInput
+  gte: DateInput
+  in: [DateInput]
+  nin: [DateInput]
+  DAY_IN_WEEK: DateFunctionInput
+  DAY_IN_MONTH: DateFunctionInput
+  DAY_IN_YEAR: DateFunctionInput
+  WEEK_IN_MONTH: DateFunctionInput
+  WEEK_IN_YEAR: DateFunctionInput
+  CALENDAR_MONTH: DateFunctionInput
+  CALENDAR_QUARTER: DateFunctionInput
+  CALENDAR_YEAR: DateFunctionInput
+  FISCAL_MONTH: DateFunctionInput
+  FISCAL_QUARTER: DateFunctionInput
+  FISCAL_YEAR: DateFunctionInput
+}
+
+input DateTimeOperators {
+  eq: DateTimeInput
+  ne: DateTimeInput
+  lt: DateTimeInput
+  gt: DateTimeInput
+  lte: DateTimeInput
+  gte: DateTimeInput
+  in: [DateTimeInput]
+  nin: [DateTimeInput]
+  DAY_IN_WEEK: DateFunctionInput
+  DAY_IN_MONTH: DateFunctionInput
+  DAY_IN_YEAR: DateFunctionInput
+  WEEK_IN_MONTH: DateFunctionInput
+  WEEK_IN_YEAR: DateFunctionInput
+  CALENDAR_MONTH: DateFunctionInput
+  CALENDAR_QUARTER: DateFunctionInput
+  CALENDAR_YEAR: DateFunctionInput
+  FISCAL_MONTH: DateFunctionInput
+  FISCAL_QUARTER: DateFunctionInput
+  FISCAL_YEAR: DateFunctionInput
+  DAY_ONLY: DateTimeFunctionInput
+  HOUR_IN_DAY: DateFunctionInput
+}
+
+input PicklistOperators {
+  eq: Picklist
+  ne: Picklist
+  in: [Picklist]
+  nin: [Picklist]
+  like: Picklist
+  lt: Picklist
+  gt: Picklist
+  lte: Picklist
+  gte: Picklist
+}
+
+input MultiPicklistOperators {
+  eq: MultiPicklist
+  ne: MultiPicklist
+  includes: [MultiPicklist]
+  excludes: [MultiPicklist]
+}
+
+input GeolocationOperators {
+  lt: GeolocationInput
+  gt: GeolocationInput
+}
+
+input IgnoreRule {
+  rule: String!
+  teamName: String!
+  justification: String!
+}
+
+# Common directives
+directive @generic on OBJECT | INTERFACE | UNION | ENUM | INPUT_OBJECT
+directive @fieldCategory on FIELD_DEFINITION | ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION | ENUM_VALUE
+directive @category(name: String!) on FIELD
+"Specifies the team name for a type"
+directive @team(name: String!) on OBJECT | INPUT_OBJECT | INTERFACE | ENUM | UNION | SCALAR
+"Specifies the validation rules to ignore for this element."
+directive @ignoreRule(rules: [IgnoreRule!]!) on OBJECT
+  | INPUT_OBJECT
+  | INTERFACE
+  | ENUM
+  | UNION
+  | SCALAR
+  | FIELD_DEFINITION
+  | INPUT_FIELD_DEFINITION
+  | ARGUMENT_DEFINITION
+  | ENUM_VALUE
+directive @optional on FIELD
