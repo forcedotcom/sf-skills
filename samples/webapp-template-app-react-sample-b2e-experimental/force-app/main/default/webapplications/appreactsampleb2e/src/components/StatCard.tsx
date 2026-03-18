@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "@/components/ui/card";
+import { Card } from "./ui/card";
 import upgraphIcon from "../assets/icons/upgraph.svg";
 import downgraphIcon from "../assets/icons/downgraph.svg";
 import { MoreVertical } from "lucide-react";

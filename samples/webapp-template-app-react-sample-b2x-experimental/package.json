@@ -1,12 +1,13 @@
 {
   "name": "@salesforce/webapp-template-base-sfdx-project-experimental",
-  "version": "1.61.4",
+  "version": "1.107.0",
   "description": "Base SFDX project template",
-  "private": true,
-  "files": [
-    "dist"
-  ],
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
+    "sf-project-setup": "node scripts/sf-project-setup.mjs",
     "build": "echo 'No build required for base-sfdx-project'",
     "clean": "echo 'No clean required for base-sfdx-project'",
     "lint": "eslint **/{aura,lwc}/**/*.js",
@@ -18,7 +19,8 @@
     "test:unit:coverage": "sfdx-lwc-jest --coverage",
     "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "prettier:verify": "prettier --check \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "setup": "node scripts/setup-cli.mjs"
   },
   "devDependencies": {
     "@lwc/eslint-plugin-lwc": "^2.0.0",

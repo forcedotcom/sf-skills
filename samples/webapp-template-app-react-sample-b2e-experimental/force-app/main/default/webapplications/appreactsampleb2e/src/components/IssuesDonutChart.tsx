@@ -1,6 +1,6 @@
 import React from "react";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import { Card } from "@/components/ui/card";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { Card } from "./ui/card";
 import { MoreVertical } from "lucide-react";
 
 interface ChartData {
@@ -15,7 +15,26 @@ interface IssuesDonutChartProps {
 
 export const IssuesDonutChart: React.FC<IssuesDonutChartProps> = ({ data }) => {
 	const total = data.reduce((sum, item) => sum + item.value, 0);
-	const mainPercentage = total > 0 ? Math.round((data[0]?.value / total) * 100) : 0;
+	const maxValue = data.length > 0 ? Math.max(...data.map((item) => item.value)) : 0;
+	const mainPercentage = total > 0 ? Math.round((maxValue / total) * 100) : 0;
+
+	const CustomTooltip = ({ active, payload }: any) => {
+		if (active && payload && payload.length) {
+			const percentage = total > 0 ? Math.round((payload[0].value / total) * 100) : 0;
+			return (
+				<div className="bg-white p-3 border border-gray-200 rounded shadow-lg z-50">
+					<p className="text-sm font-semibold text-gray-800">{payload[0].name}</p>
+					<p className="text-sm text-gray-600">
+						Count: <span className="font-medium">{payload[0].value}</span>
+					</p>
+					<p className="text-sm text-gray-600">
+						Percentage: <span className="font-medium">{percentage}%</span>
+					</p>
+				</div>
+			);
+		}
+		return null;
+	};
 
 	return (
 		<Card className="p-4 border-gray-200 shadow-sm flex flex-col relative">
@@ -43,10 +62,11 @@ export const IssuesDonutChart: React.FC<IssuesDonutChartProps> = ({ data }) => {
 								<Cell key={`cell-${index}`} fill={entry.color} />
 							))}
 						</Pie>
+						<Tooltip content={<CustomTooltip />} wrapperStyle={{ zIndex: 1000 }} />
 					</PieChart>
 				</ResponsiveContainer>
 				{/* Center text */}
-				<div className="absolute inset-0 flex items-center justify-center">
+				<div className="absolute inset-0 flex items-center justify-center pointer-events-none">
 					<div className="text-center">
 						<div className="text-5xl font-bold text-primary-purple">{mainPercentage}%</div>
 					</div>

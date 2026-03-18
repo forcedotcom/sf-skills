@@ -1,7 +1,7 @@
 import React from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import type { Application } from "../lib/types.js";
+import { Card } from "./ui/card";
+import { Button } from "./ui/button";
+import type { Application } from "../lib/types";
 
 interface ApplicationCardProps {
 	application: Application;

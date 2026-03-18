@@ -1,12 +1,14 @@
-import { getDataSDK } from "@salesforce/sdk-data";
+import { gql } from "@salesforce/sdk-data";
 import type { MaintenanceRequest } from "../lib/types.js";
-import { gql } from "./utils.js";
 import type {
 	GetMaintenanceRequestsQuery,
 	GetMaintenanceRequestsQueryVariables,
 	GetAllMaintenanceRequestsQuery,
 	GetAllMaintenanceRequestsQueryVariables,
+	UpdateMaintenanceStatusMutation,
+	UpdateMaintenanceStatusMutationVariables,
 } from "./graphql-operations-types.js";
+import { executeGraphQL } from "./graphqlClient.js";
 
 // Query to get recent maintenance requests
 const GET_MAINTENANCE_REQUESTS = gql`
@@ -97,11 +99,12 @@ const GET_ALL_MAINTENANCE_REQUESTS = gql`
 									value
 								}
 							}
-							Owner {
-								... on User {
-									Name {
-										value
-									}
+							Assigned_Worker__r {
+								Name {
+									value
+								}
+								Employment_Type__c {
+									value
 								}
 							}
 							ContentDocumentLinks(first: 1) {
@@ -127,22 +130,32 @@ const GET_ALL_MAINTENANCE_REQUESTS = gql`
 	}
 `;
 
+// Mutation to update maintenance request status
+const UPDATE_MAINTENANCE_STATUS = gql`
+	mutation UpdateMaintenanceStatus($input: Maintenance_Request__cUpdateInput!) {
+		uiapi {
+			Maintenance_Request__cUpdate(input: $input) {
+				Record {
+					Id
+					Status__c {
+						value
+					}
+				}
+				success
+			}
+		}
+	}
+`;
+
 // Fetch maintenance requests for dashboard
 export async function getMaintenanceRequests(first: number = 5): Promise<MaintenanceRequest[]> {
 	const variables: GetMaintenanceRequestsQueryVariables = { first };
-	const data = await getDataSDK();
-	const result = await data.graphql?.<
+	const data = await executeGraphQL<
 		GetMaintenanceRequestsQuery,
 		GetMaintenanceRequestsQueryVariables
 	>(GET_MAINTENANCE_REQUESTS, variables);
-
-	if (result?.errors?.length) {
-		const errorMessages = result.errors.map((e) => e.message).join("; ");
-		throw new Error(`GraphQL Error: ${errorMessages}`);
-	}
-
 	const requests =
-		result?.data?.uiapi?.query?.Maintenance_Request__c?.edges?.map((edge) =>
+		data?.uiapi?.query?.Maintenance_Request__c?.edges?.map((edge) =>
 			transformMaintenanceRequest(edge?.node),
 		) || [];
 	return requests;
@@ -153,22 +166,26 @@ export async function getAllMaintenanceRequests(
 	first: number = 100,
 ): Promise<MaintenanceRequest[]> {
 	const variables: GetAllMaintenanceRequestsQueryVariables = { first };
-	const data = await getDataSDK();
-	const result = await data.graphql?.<
+	const data = await executeGraphQL<
 		GetAllMaintenanceRequestsQuery,
 		GetAllMaintenanceRequestsQueryVariables
 	>(GET_ALL_MAINTENANCE_REQUESTS, variables);
-
-	if (result?.errors?.length) {
-		const errorMessages = result.errors.map((e) => e.message).join("; ");
-		throw new Error(`GraphQL Error: ${errorMessages}`);
-	}
-
 	const requests =
-		result?.data?.uiapi?.query?.Maintenance_Request__c?.edges?.map((edge: any) =>
+		data?.uiapi?.query?.Maintenance_Request__c?.edges?.map((edge) =>
 			transformMaintenanceTaskFull(edge?.node),
 		) || [];
 	return requests;
+}
+
+// Helper function to map priority values to badge format
+function mapPriority(
+	priority: string | undefined,
+): "Emergency (2hr)" | "High (Same Day)" | "Standard" {
+	if (!priority) return "Standard";
+	const priorityLower = priority.toLowerCase();
+	if (priorityLower.includes("emergency")) return "Emergency (2hr)";
+	if (priorityLower.includes("high")) return "High (Same Day)";
+	return "Standard";
 }
 
 // Helper function to transform maintenance request data
@@ -181,8 +198,8 @@ function transformMaintenanceRequest(node: any): MaintenanceRequest {
 		id: node.Id,
 		propertyAddress: node.Property__r?.Address__c?.value || "Unknown Address",
 		issueType: node.Type__c?.value || "General",
-		priority: node.Priority__c?.value?.toLowerCase() || "medium",
-		status: node.Status__c?.value?.toLowerCase() || "new",
+		priority: mapPriority(node.Priority__c?.value),
+		status: node.Status__c?.value || "New",
 		assignedWorker: undefined,
 		scheduledDateTime: scheduledDate,
 		description: node.Description__c?.value || "",
@@ -213,15 +230,16 @@ function transformMaintenanceTaskFull(node: any): MaintenanceRequest {
 	// Get tenant unit from Property
 	const tenantUnit = node.Property__r?.Name?.value || node.Property__r?.Address__c?.value;
 
-	// Get assigned worker name from Owner
-	const assignedWorkerName = node.Owner?.Name?.value;
+	// Get assigned worker name and employment type from Assigned_Worker__r
+	const assignedWorkerName = node.Assigned_Worker__r?.Name?.value;
+	const assignedWorkerOrg = node.Assigned_Worker__r?.Employment_Type__c?.value;
 
 	return {
 		id: node.Id,
 		propertyAddress: node.Property__r?.Address__c?.value || "Unknown Address",
 		issueType: node.Type__c?.value || "General",
-		priority: node.Priority__c?.value?.toLowerCase() || "medium",
-		status: node.Status__c?.value?.toLowerCase().replace(" ", "_") || "new",
+		priority: mapPriority(node.Priority__c?.value),
+		status: node.Status__c?.value || "New",
 		assignedWorker: assignedWorkerName,
 		scheduledDateTime: scheduledDate?.toLocaleString(),
 		description: node.Description__c?.value || "",
@@ -229,7 +247,29 @@ function transformMaintenanceTaskFull(node: any): MaintenanceRequest {
 		imageUrl,
 		tenantUnit,
 		assignedWorkerName,
-		assignedWorkerOrg: "ABC Diamond Technicians", // This would come from a related object in real scenario
+		assignedWorkerOrg,
 		formattedDate,
 	};
+}
+
+// Update maintenance request status
+export async function updateMaintenanceStatus(requestId: string, status: string): Promise<boolean> {
+	const variables: UpdateMaintenanceStatusMutationVariables = {
+		input: {
+			Id: requestId,
+			Maintenance_Request__c: {
+				Status__c: status,
+			},
+		},
+	};
+	try {
+		const data = await executeGraphQL<
+			UpdateMaintenanceStatusMutation,
+			UpdateMaintenanceStatusMutationVariables
+		>(UPDATE_MAINTENANCE_STATUS, variables);
+		return !!data?.uiapi?.Maintenance_Request__cUpdate?.success;
+	} catch (error) {
+		console.error("Error updating maintenance status:", error);
+		return false;
+	}
 }

@@ -1,12 +1,52 @@
-import { useEffect, useState } from "react";
-import { StatCard } from "../components/StatCard.js";
-import { IssuesDonutChart } from "../components/IssuesDonutChart.js";
-import { MaintenanceTable } from "../components/MaintenanceTable.js";
-import { getDashboardMetrics, calculateMetrics } from "../api/dashboard.js";
-import { getMaintenanceRequests } from "../api/maintenance.js";
-import type { DashboardMetrics, MaintenanceRequest } from "../lib/types.js";
+import { useEffect, useState, useCallback, useMemo } from "react";
+import { useNavigate } from "react-router";
+import { useRecordListGraphQL } from "../features/global-search/hooks/useRecordListGraphQL";
+import { useObjectInfoBatch } from "../features/global-search/hooks/useObjectInfoBatch";
+import { useObjectListMetadata } from "../features/global-search/hooks/useObjectSearchData";
+import { IssuesDonutChart } from "../components/IssuesDonutChart";
+import { MaintenanceTable } from "../components/MaintenanceTable";
+import { GlobalSearchBar } from "../components/dashboard/GlobalSearchBar";
+import { StatCard } from "../components/StatCard";
+import { PageContainer } from "../components/layout/PageContainer";
+import { PageLoadingState } from "../components/feedback/PageLoadingState";
+import { getDashboardMetrics, calculateMetrics } from "../api/dashboard";
+import type { DashboardMetrics, MaintenanceRequest } from "../lib/types";
+import {
+	GLOBAL_SEARCH_OBJECT_API_NAME,
+	SEARCHABLE_OBJECTS,
+	MAINTENANCE_OBJECT_API_NAME,
+	type SearchableObjectConfig,
+} from "../lib/globalSearchConstants";
+import { getMaintenanceColumns } from "../lib/maintenanceColumns";
+import { nodeToMaintenanceRequest } from "../lib/maintenanceAdapter";
+import { DASHBOARD_MAINTENANCE_LIMIT } from "../lib/constants";
+import { PATHS } from "../lib/routeConfig";
+
+const CHART_ISSUE_TYPES = ["Plumbing", "HVAC", "Electrical", "Appliance", "Pest"] as const;
+const CHART_COLORS = ["#7C3AED", "#EC4899", "#14B8A6", "#06B6D4", "#F59E0B"] as const;
 
 export default function Home() {
+	const navigate = useNavigate();
+	const objectApiNames = useMemo(() => SEARCHABLE_OBJECTS.map((o) => o.objectApiName), []);
+	const { objectInfos } = useObjectInfoBatch(objectApiNames);
+
+	const [searchQuery, setSearchQuery] = useState("");
+	const [selectedObjectApiName, setSelectedObjectApiName] = useState<
+		SearchableObjectConfig["objectApiName"]
+	>(GLOBAL_SEARCH_OBJECT_API_NAME);
+
+	const selectedConfig = useMemo(
+		() => SEARCHABLE_OBJECTS.find((o) => o.objectApiName === selectedObjectApiName),
+		[selectedObjectApiName],
+	);
+	const labelPlural = useMemo(() => {
+		const idx = objectApiNames.indexOf(selectedObjectApiName);
+		const info = idx >= 0 ? objectInfos[idx] : null;
+		return (
+			(info?.labelPlural as string | undefined) ?? selectedConfig?.fallbackLabelPlural ?? "Records"
+		);
+	}, [selectedObjectApiName, objectApiNames, objectInfos, selectedConfig?.fallbackLabelPlural]);
+
 	const [metrics, setMetrics] = useState<DashboardMetrics>({
 		totalProperties: 0,
 		unitsAvailable: 0,
@@ -14,152 +54,156 @@ export default function Home() {
 		topMaintenanceIssue: "",
 		topMaintenanceIssueCount: 0,
 	});
-	const [maintenanceRequests, setMaintenanceRequests] = useState<MaintenanceRequest[]>([]);
-	const [loading, setLoading] = useState(true);
+	const [metricsLoading, setMetricsLoading] = useState(true);
+
+	const listMeta = useObjectListMetadata(MAINTENANCE_OBJECT_API_NAME);
+	const columns = useMemo(() => getMaintenanceColumns(listMeta.columns), [listMeta.columns]);
+	const { edges, loading: maintenanceLoading } = useRecordListGraphQL({
+		objectApiName: MAINTENANCE_OBJECT_API_NAME,
+		columns,
+		columnsLoading: listMeta.loading,
+		columnsError: listMeta.error,
+		first: DASHBOARD_MAINTENANCE_LIMIT,
+		after: null,
+		searchQuery: undefined,
+		sortBy: "Priority__c DESC",
+	});
+
+	const maintenanceRequests: MaintenanceRequest[] = useMemo(
+		() => edges.map((e) => nodeToMaintenanceRequest(e.node as Record<string, unknown>)),
+		[edges],
+	);
 
 	useEffect(() => {
-		loadDashboardData();
+		let cancelled = false;
+		(async () => {
+			try {
+				setMetricsLoading(true);
+				const { properties } = await getDashboardMetrics();
+				if (!cancelled) setMetrics(calculateMetrics(properties));
+			} catch (error) {
+				if (!cancelled) console.error("Error loading dashboard metrics:", error);
+			} finally {
+				if (!cancelled) setMetricsLoading(false);
+			}
+		})();
+		return () => {
+			cancelled = true;
+		};
 	}, []);
 
-	const loadDashboardData = async () => {
-		try {
-			setLoading(true);
+	const loading = metricsLoading || listMeta.loading || maintenanceLoading;
 
-			// Load metrics
-			const { properties } = await getDashboardMetrics();
-			setMetrics(calculateMetrics(properties));
-
-			// Load maintenance requests
-			const maintenanceData = await getMaintenanceRequests(5);
-			setMaintenanceRequests(maintenanceData);
-		} catch (error) {
-			console.error("Error loading dashboard data:", error);
-		} finally {
-			setLoading(false);
+	const handleSearchSubmit = useCallback(() => {
+		const trimmed = searchQuery.trim();
+		const path = selectedConfig?.path ?? SEARCHABLE_OBJECTS[0].path;
+		if (trimmed) {
+			navigate(`${path}?q=${encodeURIComponent(trimmed)}`);
+		} else {
+			navigate(path);
 		}
-	};
+	}, [searchQuery, navigate, selectedConfig?.path]);
 
-	const handleViewMaintenance = (id: string) => {
-		console.log("View maintenance request:", id);
-	};
+	const handleBrowseAll = useCallback(() => {
+		navigate(selectedConfig?.path ?? SEARCHABLE_OBJECTS[0].path);
+	}, [navigate, selectedConfig?.path]);
 
-	// Calculate chart data from maintenance requests
-	const calculateChartData = () => {
-		const issueCounts: Record<string, number> = {
+	const handleViewMaintenance = useCallback(() => {
+		navigate(PATHS.MAINTENANCE_REQUESTS);
+	}, [navigate]);
+
+	const chartData = useMemo(() => {
+		const counts: Record<string, number> = {
 			Plumbing: 0,
 			HVAC: 0,
 			Electrical: 0,
-			Other: 0,
+			Appliance: 0,
+			Pest: 0,
 		};
-
 		maintenanceRequests.forEach((request) => {
 			const type = request.issueType;
-			if (type === "Plumbing" || type === "HVAC" || type === "Electrical") {
-				issueCounts[type]++;
-			} else {
-				issueCounts.Other++;
+			if (CHART_ISSUE_TYPES.includes(type as (typeof CHART_ISSUE_TYPES)[number])) {
+				counts[type]++;
 			}
 		});
-
 		return [
-			{ name: "Plumbing", value: issueCounts.Plumbing, color: "#7C3AED" },
-			{ name: "HVAC", value: issueCounts.HVAC, color: "#EC4899" },
-			{ name: "Electrical", value: issueCounts.Electrical, color: "#14B8A6" },
-			{ name: "Other", value: issueCounts.Other, color: "#06B6D4" },
+			{ name: "Plumbing", value: counts.Plumbing, color: CHART_COLORS[0] },
+			{ name: "HVAC", value: counts.HVAC, color: CHART_COLORS[1] },
+			{ name: "Electrical", value: counts.Electrical, color: CHART_COLORS[2] },
+			{ name: "Appliance", value: counts.Appliance, color: CHART_COLORS[3] },
+			{ name: "Pest Control", value: counts.Pest, color: CHART_COLORS[4] },
 		];
-	};
+	}, [maintenanceRequests]);
 
-	// Calculate previous month's data (mock for now)
-	const getPreviousMetrics = () => ({
-		totalProperties: 12,
-		unitsAvailable: 78,
-		occupiedUnits: 422,
-	});
-
-	const previousMetrics = getPreviousMetrics();
+	const trends = useMemo(() => {
+		const totalPropertiesTrend = Math.round(metrics.totalProperties * 0.1);
+		const unitsAvailableTrend = Math.round(metrics.unitsAvailable * 0.1);
+		const occupiedUnitsTrend = Math.round(metrics.occupiedUnits * 0.1);
+		return {
+			totalProperties: {
+				trend: totalPropertiesTrend,
+				previous: metrics.totalProperties - totalPropertiesTrend,
+			},
+			unitsAvailable: {
+				trend: unitsAvailableTrend,
+				previous: metrics.unitsAvailable + unitsAvailableTrend,
+			},
+			occupiedUnits: {
+				trend: occupiedUnitsTrend,
+				previous: metrics.occupiedUnits - occupiedUnitsTrend,
+			},
+		};
+	}, [metrics]);
 
 	if (loading) {
-		return (
-			<div className="flex items-center justify-center h-screen bg-gray-50">
-				<div className="text-lg text-gray-600">Loading dashboard...</div>
-			</div>
-		);
+		return <PageLoadingState message="Loading dashboard..." />;
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50">
-			{/* Main Content Area */}
-			<div className="max-w-7xl mx-auto p-8 space-y-6">
-				{/* Search Bar (Desktop) */}
-				<div className="hidden md:flex justify-end mb-4">
-					<div className="w-96 bg-white rounded-full px-6 py-3 shadow-sm border border-gray-200 flex items-center">
-						<input
-							type="text"
-							placeholder="Search"
-							className="flex-1 outline-none text-gray-600"
-							disabled
-						/>
-						<svg
-							className="w-5 h-5 text-gray-400"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={2}
-								d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-							/>
-						</svg>
-					</div>
-				</div>
+		<PageContainer>
+			<div className="max-w-7xl mx-auto space-y-6">
+				<GlobalSearchBar
+					objectApiNames={objectApiNames}
+					objectInfos={objectInfos}
+					searchableObjects={SEARCHABLE_OBJECTS}
+					selectedObjectApiName={selectedObjectApiName}
+					onSelectedObjectChange={setSelectedObjectApiName}
+					searchQuery={searchQuery}
+					onSearchQueryChange={setSearchQuery}
+					onSearchSubmit={handleSearchSubmit}
+					onBrowseAll={handleBrowseAll}
+					labelPlural={labelPlural}
+				/>
 
-				{/* Main Layout: 70/30 split */}
 				<div className="grid grid-cols-1 lg:grid-cols-[70%_30%] gap-6">
-					{/* Left Column: Stat Cards + Maintenance Table */}
 					<div className="space-y-6">
-						{/* Stat Cards Row */}
 						<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 							<StatCard
 								title="Total Properties"
 								value={metrics.totalProperties}
-								trend={{
-									value: 20,
-									isPositive: true,
-								}}
-								subtitle={`Last month total ${previousMetrics.totalProperties}`}
+								trend={{ value: trends.totalProperties.trend, isPositive: true }}
+								subtitle={`Last month total ${trends.totalProperties.previous}`}
 							/>
 							<StatCard
 								title="Units Available"
 								value={metrics.unitsAvailable}
-								trend={{
-									value: 10,
-									isPositive: false,
-								}}
-								subtitle={`Last month total ${previousMetrics.unitsAvailable}/${metrics.totalProperties}`}
+								trend={{ value: trends.unitsAvailable.trend, isPositive: false }}
+								subtitle={`Last month total ${trends.unitsAvailable.previous}/${metrics.totalProperties}`}
 							/>
 							<StatCard
 								title="Occupied Units"
 								value={metrics.occupiedUnits}
-								trend={{
-									value: 5,
-									isPositive: true,
-								}}
-								subtitle={`Last month total ${previousMetrics.occupiedUnits}`}
+								trend={{ value: trends.occupiedUnits.trend, isPositive: true }}
+								subtitle={`Last month total ${trends.occupiedUnits.previous}`}
 							/>
 						</div>
-
-						{/* Maintenance Requests Table */}
 						<MaintenanceTable requests={maintenanceRequests} onView={handleViewMaintenance} />
 					</div>
-
-					{/* Right Column: Donut Chart */}
 					<div>
-						<IssuesDonutChart data={calculateChartData()} />
+						<IssuesDonutChart data={chartData} />
 					</div>
 				</div>
 			</div>
-		</div>
+		</PageContainer>
 	);
 }
