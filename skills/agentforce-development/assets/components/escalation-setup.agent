@@ -1,0 +1,169 @@
+# Escalation Setup Pattern
+# Complete agent template with connection block for human escalation
+#
+# ★ When To Use This Pattern:
+#   - Agent needs to transfer conversations to human agents
+#   - Using Omni-Channel for routing
+#   - Enhanced Chat or other messaging channels
+#
+# ★ Key Components:
+#   1. connection messaging: block - defines routing destination
+#   2. @utils.escalate action - triggers the transfer
+#   3. escalation topic - handles the handoff flow
+#
+# ★ Prerequisites:
+#   - Omni-Channel configured in Salesforce
+#   - Queue/Skill created for routing
+#   - Messaging channel active (Enhanced Chat, etc.)
+#
+# This is a COMPLETE template - customize for your use case
+
+system:
+	instructions: "You are a helpful customer service agent. Be professional, friendly, and helpful. If you cannot resolve an issue or the customer requests a human, transfer them to a live agent."
+	messages:
+		welcome: "Hello! I'm here to help you today. What can I assist you with?"
+		error: "I apologize, but I encountered an issue. Let me connect you with a human agent."
+
+config:
+	agent_name: "{{AGENT_NAME}}"
+	default_agent_user: "{{AGENT_USER_EMAIL}}"
+	agent_label: "{{AGENT_LABEL}}"
+	description: "Customer service agent with human escalation capability"
+
+variables:
+	# Required linked variables for messaging context
+	EndUserId: linked string
+		source: @MessagingSession.MessagingEndUserId
+		description: "Messaging End User ID"
+	RoutableId: linked string
+		source: @MessagingSession.Id
+		description: "Messaging Session ID"
+	ContactId: linked string
+		source: @MessagingEndUser.ContactId
+		description: "Contact ID"
+
+	# Escalation tracking variables
+	escalation_requested: mutable boolean = False
+		description: "Whether customer requested human agent"
+	escalation_reason: mutable string
+		description: "Reason for escalation"
+	# ⚠️ Use 'number' not 'integer' - integer type is NOT supported in AiAuthoringBundle
+	attempts_before_escalation: mutable number = 0
+		description: "Number of attempts before escalating"
+
+language:
+	default_locale: "en_US"
+	additional_locales: ""
+	all_additional_locales: False
+
+# ★ CONNECTION BLOCK - Required for @utils.escalate to work
+# This defines where escalated conversations are routed
+# Use singular 'connection' for one channel, plural 'connections' for multiple
+connection messaging:
+	# ⚠️ IMPORTANT: Only "OmniChannelFlow" is supported (not "queue", "skill", or "agent")
+	outbound_route_type: "OmniChannelFlow"
+	# API name of your Omni-Channel Flow
+	outbound_route_name: "{{OMNI_CHANNEL_FLOW_NAME}}"
+	# ⚠️ REQUIRED: escalation_message must be included when connection block is present
+	escalation_message: "Transferring you to a human agent now..."
+	# Optional: Allow agent to adapt responses during escalation
+	adaptive_response_allowed: True
+
+# ★ MULTI-CHANNEL EXAMPLE (use 'connections' plural for multiple channels)
+# connections:
+#    messaging:
+#       outbound_route_type: "OmniChannelFlow"
+#       outbound_route_name: "Chat_Support_Flow"
+#       escalation_message: "Connecting you to chat support..."
+#       adaptive_response_allowed: True
+#    telephony:
+#       outbound_route_type: "OmniChannelFlow"
+#       outbound_route_name: "Phone_Support_Flow"
+#       escalation_message: "Transferring to phone support..."
+#       adaptive_response_allowed: False
+
+# Entry point
+start_agent topic_selector:
+	label: "Topic Selector"
+	description: "Routes users to appropriate topics based on intent"
+
+	reasoning:
+		instructions: ->
+			| Greet the customer and determine their needs.
+			| If they ask for a human or live agent, route to escalation.
+			| Otherwise, try to help them directly.
+		actions:
+			go_help: @utils.transition to @topic.help
+			go_escalation: @utils.transition to @topic.escalation
+				available when @variables.escalation_requested == True
+
+topic help:
+	label: "Help"
+	description: "Provides assistance to customers"
+
+	reasoning:
+		instructions: ->
+			| Help the customer with their question.
+			| If you cannot resolve their issue after 2-3 attempts, offer to connect them with a human.
+			| If they explicitly ask for a human agent at any time, transfer immediately.
+			|
+			| Phrases that indicate escalation request:
+			| - "talk to a human"
+			| - "speak to someone"
+			| - "real person"
+			| - "live agent"
+			| - "customer service representative"
+			|
+			| Track escalation reason if provided:
+			set @variables.escalation_reason = ...
+		actions:
+			offer_escalation: @utils.transition to @topic.escalation
+
+			immediate_escalation: @utils.transition to @topic.escalation
+
+topic escalation:
+	label: "Escalation"
+	description: "Transfers conversation to human agent"
+
+	reasoning:
+		instructions: ->
+			| The customer is being transferred to a human agent.
+			| Acknowledge their request and apologize for any inconvenience.
+			| Let them know a human will be with them shortly.
+			|
+			| Say something like:
+			| "I understand you'd like to speak with a human agent. I'm connecting you now.
+			| A customer service representative will be with you shortly. Thank you for your patience."
+		actions:
+			# ★ ESCALATION ACTION
+			# This transfers the conversation to the queue defined in connection block
+			transfer_to_human: @utils.escalate
+				description: "Transfer to human agent when customer requests or issue cannot be resolved"
+
+# ★ NOTE: Skill-Based and Queue-Based Routing
+# ⚠️ As of Dec 2025, only "OmniChannelFlow" is supported for outbound_route_type
+# "queue", "skill", and "agent" cause validation errors
+# You must create an Omni-Channel Flow that routes to your desired queue/skill
+
+# ★ Alternative: GenAiPlannerBundle Escalation with Reason
+# If using GenAiPlannerBundle (not visible in Studio), you can use:
+#
+# actions:
+#    escalate_with_reason: @utils.escalate with reason="Customer requested human assistance"
+#
+# NOTE: The "with reason" syntax only works in GenAiPlannerBundle!
+# AiAuthoringBundle will fail with SyntaxError if you use it.
+
+# ★ Troubleshooting Escalation:
+#
+# Issue: "escalate" action not recognized
+# Fix: Add the connection messaging: block
+#
+# Issue: Transfer fails silently
+# Fix: Verify Omni-Channel queue exists and has available agents
+#
+# Issue: SyntaxError: Unexpected 'with'
+# Fix: You're using AiAuthoringBundle - remove "with reason" syntax
+#
+# Issue: Agent user lacks permissions
+# Fix: Grant Omni-Channel permissions to the default_agent_user

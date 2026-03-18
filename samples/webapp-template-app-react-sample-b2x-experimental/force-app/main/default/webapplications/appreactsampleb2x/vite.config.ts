@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
@@ -6,27 +7,29 @@ import tailwindcss from '@tailwindcss/vite';
 import salesforce from '@salesforce/vite-plugin-webapp-experimental';
 import codegen from 'vite-plugin-graphql-codegen';
 
+const schemaPath = resolve(__dirname, '../../../../../schema.graphql');
+const schemaExists = existsSync(schemaPath);
+
 export default defineConfig(({ mode }) => {
   return {
-    // Ensure root base for e2e/static serve; plugin may override when deployed under a path
-    base: '/',
-    // Type assertion avoids Plugin type mismatch when dist has its own node_modules (vite/rollup)
+    base: './',
     plugins: [
       tailwindcss(),
       react(),
       salesforce(),
-      codegen({
-        // Path to the codegen config file
-        configFilePathOverride: resolve(__dirname, 'codegen.yml'),
-        // Run codegen on dev server start
-        runOnStart: true,
-        // Don't run codegen on build for now
-        runOnBuild: false,
-        // Enable file watcher during development
-        enableWatcher: true,
-        // Fail build if codegen errors
-        throwOnBuild: true,
-      }),
+      // Only add codegen when schema exists (e.g. after `npm run graphql:schema`).
+      // In CI or when schema is not checked in, skip codegen so build succeeds.
+      ...(schemaExists
+        ? [
+            codegen({
+              configFilePathOverride: resolve(__dirname, 'codegen.yml'),
+              runOnStart: true,
+              runOnBuild: true,
+              enableWatcher: true,
+              throwOnBuild: true,
+            }),
+          ]
+        : []),
     ] as import('vite').PluginOption[],
 
     // Build configuration for MPA

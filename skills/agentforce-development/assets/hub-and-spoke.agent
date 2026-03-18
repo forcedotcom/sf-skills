@@ -1,0 +1,104 @@
+# Hub-and-Spoke Architecture Template
+# ====================================
+#
+# This template demonstrates the Hub-and-Spoke pattern where a central
+# topic_selector (hub) routes conversations to specialized topics (spokes).
+#
+# Pattern: Multi-purpose agents handling distinct request types
+# Use when: Users may have different intents (orders, support, returns)
+
+system:
+   messages:
+      welcome: "Welcome! I can help with orders, returns, or general support."
+      error: "I apologize, something went wrong. Let me try again."
+   instructions: "You are a customer service agent for an e-commerce company."
+
+config:
+   agent_name: "HubAndSpokeAgent"
+   agent_label: "Customer Service Agent"
+   description: "Multi-purpose agent with hub-and-spoke architecture"
+   default_agent_user: "agent@yourorg.com"  # REQUIRED: Change to valid Einstein Agent User
+
+variables:
+   customer_id: linked string
+      source: @session.customerId
+      description: "Customer ID from session"
+   order_id: mutable string = ""
+      description: "Current order being discussed"
+   issue_resolved: mutable boolean = False
+      description: "Whether the issue has been resolved"
+
+# ============================================================
+# HUB: Central Router
+# ============================================================
+
+start_agent topic_selector:
+   description: "Route to appropriate topic based on user intent"
+   reasoning:
+      instructions: |
+         Determine what the customer needs and route accordingly:
+         - Order questions → orders topic
+         - Return/refund requests → returns topic
+         - General questions → support topic
+      actions:
+         check_order: @utils.transition to @topic.orders
+            description: "Customer wants to check order status"
+         process_return: @utils.transition to @topic.returns
+            description: "Customer wants to return or refund"
+         general_help: @utils.transition to @topic.support
+            description: "General support questions"
+
+# ============================================================
+# SPOKE: Orders Topic
+# ============================================================
+
+topic orders:
+   description: "Handle order status and tracking inquiries"
+   reasoning:
+      instructions: ->
+         | Help the customer with their order inquiry.
+
+         if @variables.order_id != "":
+            | Current order: {!@variables.order_id}
+
+      actions:
+         lookup_order: @actions.get_order_status
+            description: "Look up order details"
+            with order_id = @variables.order_id
+         back_to_hub: @utils.transition to @topic.topic_selector
+            description: "Return to main menu"
+
+# ============================================================
+# SPOKE: Returns Topic
+# ============================================================
+
+topic returns:
+   description: "Handle return and refund requests"
+   reasoning:
+      instructions: ->
+         | Help the customer with their return or refund request.
+         | Verify the order details before processing.
+
+      actions:
+         start_return: @actions.initiate_return
+            description: "Start a return process"
+         process_refund: @actions.process_refund
+            description: "Process a refund"
+         back_to_hub: @utils.transition to @topic.topic_selector
+            description: "Return to main menu"
+
+# ============================================================
+# SPOKE: Support Topic
+# ============================================================
+
+topic support:
+   description: "Handle general support questions"
+   reasoning:
+      instructions: |
+         Help the customer with general questions.
+         If the question requires specialized help, route appropriately.
+      actions:
+         escalate: @utils.escalate
+            description: "Transfer to human agent"
+         back_to_hub: @utils.transition to @topic.topic_selector
+            description: "Return to main menu"

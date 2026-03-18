@@ -1,0 +1,273 @@
+# Procedural Instructions Pattern
+# Execute actions inline within instructions block for conditional data loading
+#
+# ★ When To Use This Pattern:
+#   - Fetch data only when needed (lazy loading)
+#   - Chain data lookups based on conditions
+#   - Build up context progressively
+#   - Reduce unnecessary API calls
+#
+# ★ Key Insights:
+#   - `run @actions.x` can appear INSIDE `instructions: ->` blocks
+#   - Actions execute when their containing conditional is true
+#   - Different from actions: block which defines what LLM CAN call
+#   - This is PROCEDURAL (you control when) vs DECLARATIVE (LLM chooses)
+#
+# ★ Use Case Distinction:
+#   - actions: block = "LLM, here are tools you MAY use"
+#   - run in instructions = "Do this NOW when condition met"
+#
+# This is a COMPLETE template - customize for your use case
+
+system:
+	instructions: "You are a customer service agent. Efficiently gather context as needed to help customers. Only fetch data when required for the current task."
+	messages:
+		welcome: "Hello! How can I help you today?"
+		error: "I encountered an issue retrieving your information. Let me try again."
+
+config:
+	agent_name: "Smart_Service_Agent"
+	default_agent_user: "agent@company.salesforce.com"
+	agent_label: "Smart Service Agent"
+	description: "Agent with procedural data loading"
+
+variables:
+	# Standard linked variables
+	EndUserId: linked string
+		source: @MessagingSession.MessagingEndUserId
+		description: "Messaging End User ID"
+	ContactId: linked string
+		source: @MessagingEndUser.ContactId
+		description: "Contact ID"
+
+	# Progressive data loading variables
+	customer_loaded: mutable boolean = False
+		description: "Whether customer data has been loaded"
+	orders_loaded: mutable boolean = False
+		description: "Whether order data has been loaded"
+	cases_loaded: mutable boolean = False
+		description: "Whether case data has been loaded"
+
+	# Customer data
+	customer_name: mutable string = ""
+		description: "Customer's full name"
+	customer_tier: mutable string = ""
+		description: "Customer tier: standard, premium, vip"
+	account_id: mutable string = ""
+		description: "Associated account ID"
+
+	# Order data
+	recent_order_id: mutable string = ""
+		description: "Most recent order ID"
+	order_status: mutable string = ""
+		description: "Status of the recent order"
+	tracking_number: mutable string = ""
+		description: "Shipping tracking number"
+
+	# Case data
+	open_case_count: mutable number = 0
+		description: "Number of open support cases"
+	last_case_subject: mutable string = ""
+		description: "Subject of most recent case"
+
+language:
+	default_locale: "en_US"
+
+start_agent topic_selector:
+	label: "Topic Selector"
+	description: "Routes to topics with procedural data loading"
+
+	actions:
+		# Data loading actions
+		load_customer:
+			description: "Load customer profile data"
+			inputs:
+				contact_id: string
+					description: "Contact ID to look up"
+					is_required: True
+			outputs:
+				name: string
+					description: "Customer name"
+				tier: string
+					description: "Customer tier"
+				account_id: string
+					description: "Associated account"
+			target: "flow://Get_Customer_Profile"
+
+		load_orders:
+			description: "Load recent order data"
+			inputs:
+				contact_id: string
+					description: "Contact ID"
+					is_required: True
+			outputs:
+				order_id: string
+					description: "Most recent order ID"
+				status: string
+					description: "Order status"
+				tracking: string
+					description: "Tracking number"
+			target: "flow://Get_Recent_Orders"
+
+		load_cases:
+			description: "Load support case data"
+			inputs:
+				contact_id: string
+					description: "Contact ID"
+					is_required: True
+			outputs:
+				open_count: number
+					description: "Number of open cases"
+				last_subject: string
+					description: "Last case subject"
+			target: "flow://Get_Open_Cases"
+
+	reasoning:
+		# ★ PROCEDURAL INSTRUCTIONS with inline action execution
+		instructions: ->
+			# ★ STEP 1: Always load customer data first (if not already loaded)
+			# This runs BEFORE any conversation happens
+			if @variables.customer_loaded == False:
+				run @actions.load_customer
+					with contact_id=@variables.ContactId
+					set @variables.customer_name = @outputs.name
+					set @variables.customer_tier = @outputs.tier
+					set @variables.account_id = @outputs.account_id
+				set @variables.customer_loaded = True
+
+			# Now we have customer context
+			| Hello {!@variables.customer_name}!
+			|
+			if @variables.customer_tier == "vip":
+				| As a VIP customer, I'm here to provide priority support.
+			|
+			| How can I help you today?
+			| - Order status or tracking
+			| - Support cases
+			| - Account questions
+
+		actions:
+			go_orders: @utils.transition to @topic.order_status
+			go_cases: @utils.transition to @topic.support_cases
+			go_account: @utils.transition to @topic.account_help
+
+topic order_status:
+	label: "Order Status"
+	description: "Check order status with lazy loading"
+
+	actions:
+		get_tracking_details:
+			description: "Get detailed tracking information"
+			inputs:
+				order_id: string
+					description: "Order ID to look up"
+			outputs:
+				carrier: string
+					description: "Shipping carrier"
+				estimated_delivery: string
+					description: "Estimated delivery date"
+				current_location: string
+					description: "Current package location"
+			target: "flow://Get_Tracking_Details"
+
+	reasoning:
+		instructions: ->
+			# ★ LAZY LOADING: Only fetch orders when user enters this topic
+			if @variables.orders_loaded == False:
+				run @actions.load_orders
+					with contact_id=@variables.ContactId
+					set @variables.recent_order_id = @outputs.order_id
+					set @variables.order_status = @outputs.status
+					set @variables.tracking_number = @outputs.tracking
+				set @variables.orders_loaded = True
+
+			# Now provide order information
+			| Here's your most recent order:
+			| Order ID: {!@variables.recent_order_id}
+			| Status: {!@variables.order_status}
+			|
+			if @variables.tracking_number != "":
+				| Tracking: {!@variables.tracking_number}
+			|
+			| Would you like more details or help with something else?
+
+		actions:
+			get_details: @actions.get_tracking_details
+				with order_id=@variables.recent_order_id
+			back: @utils.transition to @topic.topic_selector
+
+topic support_cases:
+	label: "Support Cases"
+	description: "Review support cases with lazy loading"
+
+	reasoning:
+		instructions: ->
+			# ★ LAZY LOADING: Only fetch cases when needed
+			if @variables.cases_loaded == False:
+				run @actions.load_cases
+					with contact_id=@variables.ContactId
+					set @variables.open_case_count = @outputs.open_count
+					set @variables.last_case_subject = @outputs.last_subject
+				set @variables.cases_loaded = True
+
+			# Present case information
+			if @variables.open_case_count == 0:
+				| You have no open support cases.
+				| Is there something I can help you with?
+
+			if @variables.open_case_count > 0:
+				| You have {!@variables.open_case_count} open case(s).
+				| Most recent: {!@variables.last_case_subject}
+				|
+				| Would you like to:
+				| - Check the status of a specific case
+				| - Create a new support case
+				| - Return to the main menu
+
+		actions:
+			back: @utils.transition to @topic.topic_selector
+			escalate: @utils.escalate
+				description: "Transfer to support specialist"
+
+topic account_help:
+	label: "Account Help"
+	description: "Account questions - customer data already loaded"
+
+	reasoning:
+		instructions: ->
+			# ★ DATA ALREADY AVAILABLE - no loading needed
+			# Customer data was loaded in topic_selector
+			| Account Information:
+			| Name: {!@variables.customer_name}
+			| Tier: {!@variables.customer_tier}
+			| Account ID: {!@variables.account_id}
+			|
+			| What would you like to know about your account?
+
+		actions:
+			back: @utils.transition to @topic.topic_selector
+
+# ★ Insight: Procedural vs Declarative Actions
+#
+# PROCEDURAL (run in instructions):
+#   - You control WHEN the action runs
+#   - Executes based on conditionals
+#   - Good for: data loading, setup, guaranteed actions
+#   - Example: "Always load customer before greeting"
+#
+# DECLARATIVE (actions: block):
+#   - LLM decides IF and WHEN to call
+#   - Based on user request
+#   - Good for: optional tools, user-triggered actions
+#   - Example: "User can ask for refund if they want"
+#
+# COMBINE BOTH:
+#   - Use procedural for setup/loading
+#   - Use declarative for user interactions
+#   - Result: Efficient, context-aware agents
+
+# ★ Performance Benefits:
+#   - Fetch only what's needed per topic
+#   - Avoid loading all data upfront
+#   - Reduce API calls for simple conversations
+#   - Better response times

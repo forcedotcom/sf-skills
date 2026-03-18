@@ -1,6 +1,6 @@
 ---
 name: generate-permission-set
-description: Generates correct, deployable Salesforce permission set metadata (PermissionSet XML) with object, field, user, and app permissions. Use when creating or editing permission set metadata, PermissionSet XML, object permissions, field-level security (FLS), tab visibility, or deploying permission sets.
+description: Generates correct, deployable Salesforce permission set metadata (PermissionSet XML) with object, field, user, and app permissions. Use this skill when creating or editing permission set metadata, object permissions, field-level security (FLS), tab visibility, or deploying permission sets.
 compatibility: Salesforce Metadata API v60.0+
 metadata:
   author: afv-library
@@ -59,6 +59,9 @@ Define field permissions for sensitive or custom fields:
 - Required fields must NEVER appear in list of field permissions. Granting field-level security on required fields is not allowed by the platform and will cause deployment failure. 
 - Before adding any field, confirm from the object metadata that the field exists and is not required
 - A field is required when its metadata contains `<required>true</required>`:
+- Formula fields cannot be editable
+- Master-detail fields are required fields on the child (detail) object
+
 ```xml
 <fields>
     <fullName>FieldName__c</fullName>
@@ -114,9 +117,9 @@ Make applications and tabs visible to users:
 - <visible> can be true or false
 
 **Tab visibility options:**
-- `Visible`: Always shown
-- `Available`: Available but not default
-- `Hidden`: Not visible
+- `Visible`: The tab is available on the All Tabs page and appears in the visible tabs for its associated app. Can be customized.
+- `Available`: The tab is available on the All Tabs page. Individual users can customize their display to make the tab visible in any app
+- `None`: Not visible
 
 **CRITICAL - Tab Naming:**
 - Custom object tabs: MUST include the __c suffix (e.g., MyCustomObject__c)

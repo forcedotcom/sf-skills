@@ -1,0 +1,293 @@
+# System Instruction Overrides Pattern
+# Customize agent behavior with dynamic system-level instructions
+#
+# ★ When To Use This Pattern:
+#   - Different behavior for different user segments (VIP, standard, etc.)
+#   - Time-based instruction changes (business hours vs after hours)
+#   - Feature flags that change agent personality
+#   - A/B testing different conversation styles
+#
+# ★ Key Insight:
+#   - System block defines BASE behavior (always applies)
+#   - Topic instructions can OVERRIDE or EXTEND system behavior
+#   - Use conditionals in reasoning to dynamically adjust tone
+#   - Variables can control instruction branches
+#
+# ★ Important Limitation:
+#   - The system: block itself cannot use conditionals or variables
+#   - Dynamic behavior must be implemented in topic reasoning
+#
+# This is a COMPLETE template - customize for your use case
+
+system:
+	# Base instructions - always apply these guardrails
+	instructions: "You are a professional customer service agent. Always be helpful, courteous, and accurate. Never share confidential information. Escalate complex issues to human agents."
+	messages:
+		welcome: "Hello! How can I assist you today?"
+		error: "I apologize, but I encountered an issue. Let me try that again."
+
+config:
+	agent_name: "Dynamic_Service_Agent"
+	default_agent_user: "agent@company.salesforce.com"
+	agent_label: "Dynamic Service Agent"
+	description: "Agent with dynamic instruction overrides based on context"
+
+variables:
+	# Standard linked variables
+	EndUserId: linked string
+		source: @MessagingSession.MessagingEndUserId
+		description: "Messaging End User ID"
+	RoutableId: linked string
+		source: @MessagingSession.Id
+		description: "Messaging Session ID"
+	ContactId: linked string
+		source: @MessagingEndUser.ContactId
+		description: "Contact ID"
+
+	# Variables for dynamic instruction control
+	customer_tier: mutable string = "standard"
+		description: "Customer tier: standard, premium, or vip"
+	business_hours: mutable boolean = True
+		description: "Whether we're in business hours"
+	agent_mode: mutable string = "helpful"
+		description: "Agent personality mode: helpful, concise, formal"
+	feature_flags: mutable string = ""
+		description: "Comma-separated feature flags"
+
+language:
+	default_locale: "en_US"
+	additional_locales: ""
+	all_additional_locales: False
+
+start_agent topic_selector:
+	label: "Topic Selector"
+	description: "Routes to appropriate topic based on user tier"
+
+	# ★ Use before_reasoning to set up context-based variables
+	before_reasoning:
+		# In a real implementation, these would come from a Flow/Apex lookup
+		# Here we show the pattern
+		run @actions.get_customer_tier
+			with contact_id=@variables.ContactId
+			set @variables.customer_tier = @outputs.tier
+		run @actions.check_business_hours
+			set @variables.business_hours = @outputs.is_business_hours
+
+	reasoning:
+		# ★ OVERRIDE PATTERN: Conditional instructions based on variables
+		instructions: ->
+			# VIP customers get personalized treatment
+			if @variables.customer_tier == "vip":
+				| PRIORITY CUSTOMER DETECTED
+				| Provide white-glove service. Use their name when possible.
+				| Offer proactive solutions. Never say "I can't" without an alternative.
+				| You have authority to offer 20% discounts.
+
+			# Premium gets enhanced support
+			if @variables.customer_tier == "premium":
+				| PREMIUM CUSTOMER
+				| Provide thorough, detailed responses.
+				| Offer to connect with a specialist if needed.
+				| You can offer 10% discounts.
+
+			# Standard tier
+			if @variables.customer_tier == "standard":
+				| Provide helpful, efficient service.
+				| Focus on resolving the issue quickly.
+
+			# After-hours override
+			if @variables.business_hours == False:
+				| NOTE: We are currently outside business hours.
+				| Complex issues should be logged for follow-up tomorrow.
+				| You cannot transfer to live agents right now.
+
+			# Mode-based personality adjustments
+			if @variables.agent_mode == "concise":
+				| Keep responses brief and to the point. Use bullet points.
+
+			if @variables.agent_mode == "formal":
+				| Use formal language. Address customer as Sir/Madam.
+
+			| Route the customer to the appropriate topic.
+
+		actions:
+			go_orders: @utils.transition to @topic.orders
+			go_billing: @utils.transition to @topic.billing
+			go_support: @utils.transition to @topic.support
+				available when @variables.business_hours == True
+
+	actions:
+		get_customer_tier:
+			description: "Get customer tier from Salesforce"
+			inputs:
+				contact_id: string
+					description: "Contact ID to look up"
+			outputs:
+				tier: string
+					description: "Customer tier: standard, premium, vip"
+			target: "flow://Get_Customer_Tier"
+
+		check_business_hours:
+			description: "Check if currently in business hours"
+			outputs:
+				is_business_hours: boolean
+					description: "True if in business hours"
+			target: "flow://Check_Business_Hours"
+
+topic orders:
+	label: "Order Management"
+	description: "Handle order inquiries with tier-appropriate service"
+
+	reasoning:
+		instructions: ->
+			# ★ Tier-specific instructions carry through to subtopics
+			if @variables.customer_tier == "vip":
+				| This is a VIP customer. Expedite all order requests.
+				| Offer free shipping upgrades proactively.
+
+			| Help the customer with their order inquiry.
+			| Look up order status, process changes, or handle returns.
+
+		actions:
+			back: @utils.transition to @topic.topic_selector
+
+topic billing:
+	label: "Billing Support"
+	description: "Handle billing with appropriate authority levels"
+
+	reasoning:
+		instructions: ->
+			# ★ Different authority based on tier
+			if @variables.customer_tier == "vip":
+				| You can waive fees up to $100 for VIP customers.
+				| Proactively offer payment plan options.
+
+			if @variables.customer_tier == "premium":
+				| You can waive fees up to $25 for premium customers.
+
+			if @variables.customer_tier == "standard":
+				| Fee waivers require manager approval. Escalate if requested.
+
+			| Help the customer understand their bill and resolve issues.
+
+		actions:
+			back: @utils.transition to @topic.topic_selector
+			escalate: @utils.escalate
+				description: "Transfer to billing specialist"
+				available when @variables.customer_tier == "standard"
+
+topic support:
+	label: "Technical Support"
+	description: "Technical support with business hours awareness"
+
+	reasoning:
+		instructions: ->
+			if @variables.business_hours == False:
+				| Technical support is limited outside business hours.
+				| Log the issue for follow-up and provide self-service resources.
+
+			if @variables.business_hours == True:
+				| Full technical support available. Troubleshoot thoroughly.
+
+			| Help resolve the customer's technical issue.
+
+		actions:
+			back: @utils.transition to @topic.topic_selector
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ★ TOPIC-LEVEL SYSTEM OVERRIDES (NEW PATTERN)
+# These topics demonstrate complete persona switching using topic-level
+# system: blocks that OVERRIDE the global system instructions.
+# ═══════════════════════════════════════════════════════════════════════════
+
+topic formal_mode:
+	label: "Formal Communication"
+	description: "Professional business communication mode"
+
+	# ★ TOPIC-LEVEL SYSTEM OVERRIDE
+	# This completely replaces global system instructions for this topic
+	system:
+		instructions: "You are a formal business professional. Use professional language at all times. Address users as Sir or Madam. Avoid contractions, slang, and casual expressions. Focus on efficiency and clarity. Maintain a respectful, corporate tone."
+
+	reasoning:
+		instructions: ->
+			| [Formal Mode Engaged]
+			|
+			| Good day. How may I be of assistance?
+			| I am prepared to address your inquiry with the utmost professionalism.
+
+		actions:
+			back: @utils.transition to @topic.topic_selector
+
+topic creative_mode:
+	label: "Creative Assistant"
+	description: "Creative and imaginative communication mode"
+
+	# ★ TOPIC-LEVEL SYSTEM OVERRIDE
+	# Different persona entirely
+	system:
+		instructions: "You are a creative and imaginative assistant. Be playful, use metaphors and analogies. Think outside the box. Encourage brainstorming and wild ideas. Use emojis sparingly but effectively. Make conversations engaging and fun while still being helpful."
+
+	reasoning:
+		instructions: ->
+			| 🎨 [Creative Mode Activated!]
+			|
+			| Hey there, creative spirit! Ready to explore some ideas together?
+			| Think of me as your brainstorming buddy - no idea is too wild!
+			|
+			| What shall we dream up today?
+
+		actions:
+			back: @utils.transition to @topic.topic_selector
+
+topic technical_expert:
+	label: "Technical Expert"
+	description: "Deep technical expertise mode"
+
+	# ★ TOPIC-LEVEL SYSTEM OVERRIDE
+	# Specialist persona
+	system:
+		instructions: "You are a technical expert with deep knowledge. Use precise technical terminology. Provide detailed explanations with examples. Reference documentation when helpful. Assume the user has technical background. Be thorough but avoid unnecessary verbosity."
+
+	reasoning:
+		instructions: ->
+			| [Technical Expert Mode]
+			|
+			| I'm ready to dive deep into technical details.
+			| Feel free to use technical terminology - I'll match your level.
+			|
+			| What technical challenge are we solving?
+
+		actions:
+			back: @utils.transition to @topic.topic_selector
+
+# ★ Insight: Three Levels of Instruction Control
+#
+# LEVEL 1: GLOBAL SYSTEM BLOCK
+#   - Static text only (no variables, no conditionals)
+#   - Applies to ALL topics as baseline
+#   - Good for: Guardrails, base personality, universal rules
+#   - Example: "Never share confidential information"
+#
+# LEVEL 2: TOPIC-LEVEL SYSTEM BLOCK (NEW!)
+#   - Placed inside topic definition
+#   - COMPLETELY OVERRIDES global system for that topic
+#   - Good for: Persona switching, mode changes, specialist behavior
+#   - Example: topic formal_mode: system: instructions: "Be professional..."
+#
+# LEVEL 3: TOPIC REASONING INSTRUCTIONS
+#   - Dynamic (variables, conditionals, template expressions)
+#   - Extends/adjusts behavior within topic
+#   - Good for: Context-aware responses, personalization
+#   - Example: if @variables.is_vip: | Provide priority service
+#
+# OVERRIDE HIERARCHY:
+#   Topic system: > Global system: > Default behavior
+#
+# COMBINING APPROACHES:
+#   - Use GLOBAL system for universal guardrails
+#   - Use TOPIC system: for complete persona changes
+#   - Use TOPIC reasoning for dynamic conditional behavior
+#
+# Best Practice: Put guardrails in global system, personas in topic system,
+# and context-aware personalization in topic reasoning instructions.

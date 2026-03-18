@@ -1,7 +1,7 @@
 import { Link } from "react-router";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Card, CardContent } from "../components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
 
 const listings = [
 	{
@@ -31,11 +31,23 @@ export default function PropertyListings() {
 					<Input
 						type="text"
 						defaultValue="San Francisco, CA"
-						className="min-w-[200px] flex-1 flex-[1_1_200px]"
+						className="min-w-[200px] flex-1 flex-[1_1_200px] rounded-xl"
 					/>
-					<Button variant="outline">Price</Button>
-					<Button variant="outline">Beds/Bath</Button>
-					<Button>All Filters</Button>
+					<Button
+						variant="outline"
+						className="cursor-pointer rounded-xl transition-colors duration-200"
+					>
+						Price
+					</Button>
+					<Button
+						variant="outline"
+						className="cursor-pointer rounded-xl transition-colors duration-200"
+					>
+						Beds/Bath
+					</Button>
+					<Button className="cursor-pointer rounded-xl transition-colors duration-200">
+						All Filters
+					</Button>
 				</div>
 				<h2 className="mb-1 text-lg font-semibold text-foreground">
 					2 Bedroom Apartments for Rent in San Francisco CA
@@ -43,13 +55,13 @@ export default function PropertyListings() {
 				<p className="mb-4 text-sm text-muted-foreground">1,181 Rentals Available</p>
 				<div className="space-y-4">
 					{listings.map((p) => (
-						<Card key={p.name}>
+						<Card key={p.name} className="rounded-2xl shadow-md">
 							<CardContent className="flex gap-4 p-4">
 								<Link
 									to={`/property/${p.id}`}
-									className="relative block size-[200px] shrink-0 rounded-xl bg-muted"
+									className="relative block size-[200px] shrink-0 cursor-pointer rounded-xl bg-muted transition-opacity duration-200 hover:opacity-95"
 								>
-									<span className="absolute left-2 top-2 rounded-md bg-primary px-2 py-1 text-xs text-primary-foreground">
+									<span className="absolute left-2 top-2 rounded-full bg-violet-600 px-2 py-0.5 text-xs font-medium text-white">
 										Virtual Tours
 									</span>
 								</Link>
@@ -57,7 +69,7 @@ export default function PropertyListings() {
 									<h3 className="mb-1 text-base font-semibold">
 										<Link
 											to={`/property/${p.id}`}
-											className="text-primary no-underline hover:underline"
+											className="cursor-pointer text-primary no-underline transition-colors duration-200 hover:underline"
 										>
 											{p.name}
 										</Link>
@@ -70,8 +82,12 @@ export default function PropertyListings() {
 										In Unit Washer & Dryer, Pets Allowed, Fitness Center
 									</p>
 									<p className="mb-2 text-sm text-primary">{p.phone}</p>
-									<Button asChild size="sm">
-										<Link to={`/property/${p.id}`}>Email Property</Link>
+									<Button
+										asChild
+										size="sm"
+										className="cursor-pointer rounded-xl transition-colors duration-200"
+									>
+										<Link to={`/application?listingId=${encodeURIComponent(p.id)}`}>Apply</Link>
 									</Button>
 								</div>
 							</CardContent>

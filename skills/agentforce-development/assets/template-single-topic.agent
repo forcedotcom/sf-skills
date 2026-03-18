@@ -1,0 +1,81 @@
+# Single-Topic Agent Template
+# Copy this file to your AiAuthoringBundle directory and rename it to match
+# your agent's developer_name. Replace all placeholder values with real ones.
+
+system:
+    instructions: "You are a helpful assistant. Describe the agent's persona and purpose here."
+    messages:
+        welcome: "Hello! How can I help you today?"
+        error: "Sorry, it looks like something has gone wrong."
+
+config:
+    developer_name: "Agent_API_Name"
+    agent_label: "Agent Display Name"
+    description: "Description of the agent's purpose"
+    # agent_type: "AgentforceServiceAgent" for customer-facing (requires default_agent_user)
+    #             "AgentforceEmployeeAgent" for internal (remove default_agent_user line)
+    agent_type: "AgentforceServiceAgent"
+    default_agent_user: "username@identifier.org"
+
+language:
+    default_locale: "en_US"
+    additional_locales: ""
+    all_additional_locales: False
+
+start_agent topic_selector:
+    description: "Welcome the user and determine the appropriate topic based on user input"
+    reasoning:
+        actions:
+            go_to_main: @utils.transition to @topic.main
+            go_to_escalation: @utils.transition to @topic.escalation
+            go_to_off_topic: @utils.transition to @topic.off_topic
+
+topic main:
+    label: "Main Topic"
+    description: "Describe what this topic handles. The Atlas Reasoning Engine matches user utterances against this description."
+
+    reasoning:
+        instructions: ->
+            | Replace this with instructions for how the agent should handle requests in this topic.
+              Reference actions with the syntax shown below.
+
+        actions:
+            do_action: @actions.do_action
+                with input_param = ...
+
+    actions:
+        do_action:
+            description: "Describe what this action does"
+            label: "Action Display Name"
+            target: "apex://ClassName"
+            inputs:
+                input_param: string
+                    description: "Describe this parameter"
+                    label: "Parameter Display Name"
+                    is_required: True
+            outputs:
+                output_field: string
+                    label: "Output Display Name"
+                    description: "Describe this output"
+                    is_displayable: True
+                    filter_from_agent: False
+
+topic escalation:
+    label: "Escalation"
+    description: "Handles requests from users who want to transfer or escalate their conversation to a live human agent."
+
+    reasoning:
+        instructions: ->
+            | If a user explicitly asks to transfer to a live agent, escalate the conversation.
+        actions:
+            escalate_to_human: @utils.escalate
+                description: "Escalate to a human agent."
+
+topic off_topic:
+    label: "Off Topic"
+    description: "Redirect conversation to relevant topics when user request goes off-topic"
+
+    reasoning:
+        instructions: ->
+            | The user request is off-topic. Do not answer general knowledge questions.
+              Redirect the conversation by asking how you can help with topics this agent supports.
