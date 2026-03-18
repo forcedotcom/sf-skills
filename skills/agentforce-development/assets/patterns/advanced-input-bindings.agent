@@ -1,0 +1,141 @@
+# Advanced Input Bindings Pattern
+# Demonstrates all parameter binding techniques for Agent Script actions
+#
+# ★ When To Use This Pattern:
+#   - Learning different ways to pass values to actions
+#   - Combining LLM slot filling with variable binding
+#   - Chaining outputs between multiple actions
+#   - Complex multi-input action scenarios
+#
+# ★ Key Insight:
+#   - `...` (ellipsis) = LLM extracts value from conversation (slot filling)
+#   - `"value"` = Fixed constant value
+#   - `@variables.x` = Value from stored state
+#   - `@outputs.x` = Value from previous action's output
+#
+# ★ Common Use Cases:
+#   - Order lookup with user-provided order ID
+#   - Multi-step workflows with data passing
+#   - Conditional parameter binding
+#
+# This is a PARTIAL template - integrate into a complete agent file
+
+# Variables for demonstrating different binding patterns
+variables:
+	# ... standard linked variables ...
+	current_account_id: mutable string = ""
+		description: "Currently selected account ID"
+	order_id: mutable string = ""
+		description: "Order ID being processed"
+	amount: mutable number = 0
+		description: "Transaction amount"
+	status: mutable string = ""
+		description: "Current operation status"
+
+topic order_processing:
+	label: "Order Processing"
+	description: "Demonstrates advanced input binding patterns"
+
+	actions:
+		# Action with multiple input types
+		process_order:
+			description: "Process an order with various input methods"
+			inputs:
+				order_id: string
+					description: "The order ID to process"
+				amount: number
+					description: "Transaction amount in USD"
+				account_id: string
+					description: "Customer account ID"
+			outputs:
+				confirmation_number: string
+					description: "Order confirmation number"
+				processed_amount: number
+					description: "Final processed amount"
+			target: "flow://Process_Order"
+
+		get_account:
+			description: "Look up account details"
+			inputs:
+				account_id: string
+					description: "Account ID to look up"
+			outputs:
+				account_name: string
+					description: "Account name"
+				credit_limit: number
+					description: "Available credit"
+			target: "flow://Get_Account_Details"
+
+		send_notification:
+			description: "Send order notification"
+			inputs:
+				confirmation_number: string
+					description: "Order confirmation to include"
+				recipient_account: string
+					description: "Account to notify"
+			outputs:
+				sent: boolean
+					description: "Whether notification was sent"
+			target: "flow://Send_Order_Notification"
+
+	reasoning:
+		instructions: ->
+			| Help the customer process their order.
+			|
+			| INPUT BINDING EXAMPLES:
+			| 1. Slot filling (...) - LLM extracts from conversation
+			| 2. Fixed values - Always use a constant
+			| 3. Variable binding - Use stored state
+			| 4. Output chaining - Use results from previous action
+			|
+			| Ask for order details and process appropriately.
+
+		actions:
+			# ★ PATTERN 1: Slot Filling (LLM extracts from conversation)
+			# User says "Process order ORD-12345" -> LLM fills order_id="ORD-12345"
+			slot_fill_lookup: @actions.process_order
+				with order_id=...
+				with amount=...
+				with account_id=...
+				set @variables.order_id = @outputs.confirmation_number
+
+			# ★ PATTERN 2: Fixed Value (constant)
+			# Always uses the same account for default lookups
+			fixed_account: @actions.get_account
+				with account_id="001DEFAULT000001"
+				set @variables.status = @outputs.account_name
+
+			# ★ PATTERN 3: Variable Binding (from stored state)
+			# Uses the account ID saved earlier in the conversation
+			variable_binding: @actions.get_account
+				with account_id=@variables.current_account_id
+				set @variables.status = @outputs.account_name
+
+			# ★ PATTERN 4: Output Chaining (from previous action)
+			# Uses confirmation_number from process_order to send notification
+			chained_output: @actions.process_order
+				with order_id=...
+				with amount=@variables.amount
+				with account_id=@variables.current_account_id
+				set @variables.order_id = @outputs.confirmation_number
+				run @actions.send_notification
+					with confirmation_number=@outputs.confirmation_number
+					with recipient_account=@variables.current_account_id
+
+			# ★ PATTERN 5: Mixed Binding (combining patterns)
+			# Some inputs from LLM, some from variables, some fixed
+			mixed_binding: @actions.process_order
+				with order_id=...                              # LLM slot fills
+				with amount=@variables.amount                   # From variable
+				with account_id="001INTERNAL00001"              # Fixed value
+
+# ★ Insight: Binding Pattern Decision Tree
+#
+# Need the LLM to extract from conversation?     -> Use `...`
+# Value is always the same constant?             -> Use "value"
+# Value was captured in a previous step?         -> Use @variables.x
+# Value comes from another action's output?      -> Use @outputs.x (in callback)
+#
+# ★ Common Mistake: Using @outputs.x outside of a `run` callback
+# @outputs.x is only available inside the action's callback chain
+# Store important outputs in @variables for use elsewhere

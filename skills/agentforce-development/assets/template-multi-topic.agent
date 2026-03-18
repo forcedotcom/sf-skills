@@ -1,0 +1,160 @@
+# Multi-Topic Agent Template
+# Copy this file to your AiAuthoringBundle directory and rename it to match
+# your agent's developer_name. Replace all placeholder values with real ones.
+# Add, remove, or rename topics as needed.
+
+system:
+    instructions: "You are a helpful assistant. Describe the agent's persona and purpose here."
+    messages:
+        welcome: "Hello! How can I help you today?"
+        error: "Sorry, it looks like something has gone wrong."
+
+config:
+    developer_name: "Agent_API_Name"
+    agent_label: "Agent Display Name"
+    description: "Description of the agent's purpose"
+    # agent_type: "AgentforceServiceAgent" for customer-facing (requires default_agent_user)
+    #             "AgentforceEmployeeAgent" for internal (remove default_agent_user line)
+    agent_type: "AgentforceServiceAgent"
+    default_agent_user: "username@identifier.org"
+
+variables:
+    collected_input: mutable string = ""
+        description: "Replace with a description of what this variable tracks"
+
+language:
+    default_locale: "en_US"
+    additional_locales: ""
+    all_additional_locales: False
+
+start_agent topic_selector:
+    description: "Welcome the user and determine the appropriate topic based on user input"
+    reasoning:
+        actions:
+            go_to_topic_a: @utils.transition to @topic.topic_a
+            go_to_topic_b: @utils.transition to @topic.topic_b
+            go_to_topic_c: @utils.transition to @topic.topic_c
+            go_to_escalation: @utils.transition to @topic.escalation
+            go_to_off_topic: @utils.transition to @topic.off_topic
+
+topic topic_a:
+    label: "Topic A"
+    description: "Describe what this topic handles"
+
+    reasoning:
+        instructions: ->
+            | Replace this with instructions for topic A.
+
+        actions:
+            action_a: @actions.action_a
+                with input_param = ...
+
+    actions:
+        action_a:
+            description: "Describe what this action does"
+            label: "Action A"
+            target: "apex://ClassName"
+            inputs:
+                input_param: string
+                    description: "Describe this parameter"
+                    label: "Parameter Name"
+                    is_required: True
+            outputs:
+                output_field: string
+                    label: "Output Name"
+                    description: "Describe this output"
+                    is_displayable: True
+                    filter_from_agent: False
+
+topic topic_b:
+    label: "Topic B"
+    description: "Describe what this topic handles"
+
+    reasoning:
+        instructions: ->
+            | Replace this with instructions for topic B. This topic demonstrates the gating pattern.
+
+        actions:
+            # Collect data into a variable first
+            collect_data: @utils.setVariables
+                description: "Collect user input into a variable"
+                with collected_input = ...
+
+            # Gate the main action behind the variable
+            main_action: @actions.action_b
+                description: "Describe what this gated action does"
+                available when @variables.collected_input != ""
+                with query_param = @variables.collected_input
+
+    actions:
+        action_b:
+            description: "Describe what this action does"
+            label: "Action B"
+            target: "prompt://PromptTemplateName"
+            inputs:
+                query_param: string
+                    description: "Describe this parameter"
+                    label: "Parameter Name"
+                    is_required: True
+            outputs:
+                result_text: string
+                    description: "Describe this output"
+                    label: "Result"
+                    is_displayable: False
+
+topic topic_c:
+    label: "Topic C"
+    description: "Describe what this topic handles"
+
+    reasoning:
+        instructions: ->
+            | Replace this with base instructions for topic C.
+
+            # Conditional instructions based on variable state
+            if @variables.collected_input != "":
+                | Additional instructions when the variable has been set.
+            else:
+                | Instructions when the variable has not been set yet.
+
+        actions:
+            action_c: @actions.action_c
+                with input_param = ...
+                # Bind an action output to an agent variable
+                set @variables.collected_input = @outputs.result_value
+
+    actions:
+        action_c:
+            description: "Describe what this action does"
+            label: "Action C"
+            target: "flow://FlowName"
+            inputs:
+                input_param: string
+                    description: "Describe this parameter"
+                    label: "Parameter Name"
+                    is_required: True
+            outputs:
+                result_value: string
+                    label: "Result Value"
+                    description: "Describe this output"
+                    is_displayable: True
+                    filter_from_agent: False
+
+topic escalation:
+    label: "Escalation"
+    description: "Handles requests from users who want to transfer or escalate their conversation to a live human agent."
+
+    reasoning:
+        instructions: ->
+            | If a user explicitly asks to transfer to a live agent, escalate the conversation.
+        actions:
+            escalate_to_human: @utils.escalate
+                description: "Escalate to a human agent."
+
+topic off_topic:
+    label: "Off Topic"
+    description: "Redirect conversation to relevant topics when user request goes off-topic"
+
+    reasoning:
+        instructions: ->
+            | The user request is off-topic. Do not answer general knowledge questions.
+              Redirect the conversation by asking how you can help with topics this agent supports.

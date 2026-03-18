@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    GenAiFunction Template: Apex Invocation (Agent Builder UI / GenAiPlannerBundle ONLY)
+
+    ⚠️ NOT NEEDED for AiAuthoringBundle (Agent Script).
+    If using Agent Script (.agent files), use `target: "apex://ClassName"` directly
+    in your topic's actions block. See SKILL.md for details.
+
+    Use Case: Register Apex @InvocableMethod as an agent action in Agent Builder UI
+    - Required ONLY for GenAiPlannerBundle / Agent Builder UI path
+    - Works with GenAiPlugin (Topic) for organization
+
+    Prerequisites:
+    1. Apex class with @InvocableMethod annotation must be deployed first
+    2. GenAiPlugin (Topic) to organize functions (optional but recommended)
+
+    Setup Steps:
+    1. Replace all {{placeholder}} values
+    2. Deploy Apex class first
+    3. Create input/schema.json and output/schema.json (see below)
+    4. Deploy this GenAiFunction bundle
+    5. Optionally deploy GenAiPlugin to group functions
+
+    Bundle Structure:
+    force-app/main/default/genAiFunctions/
+    └── {{FunctionName}}/
+        ├── {{FunctionName}}.genAiFunction-meta.xml   (this file)
+        ├── input/
+        │   └── schema.json                           (input parameters)
+        └── output/
+            └── schema.json                           (output parameters)
+
+    IMPORTANT (API v66.0):
+    - Only these XML elements are valid: description, invocationTarget,
+      invocationTargetType, isConfirmationRequired, masterLabel
+    - Do NOT use: <capability>, <genAiFunctionParameters>,
+      <genAiFunctionInputs>, <genAiFunctionOutputs>, <developerName>
+    - Input/output schemas go in schema.json files, NOT inline XML
+-->
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>{{FunctionDescription}}</description>
+    <invocationTarget>{{ApexClassName}}</invocationTarget>
+    <invocationTargetType>apex</invocationTargetType>
+    <isConfirmationRequired>{{true|false}}</isConfirmationRequired>
+    <masterLabel>{{FunctionLabel}}</masterLabel>
+</GenAiFunction>
+
+<!--
+    input/schema.json example:
+    {
+        "required": ["{{inputParam1}}"],
+        "properties": {
+            "{{inputParam1}}": {
+                "title": "{{Input Param 1 Label}}",
+                "description": "{{Input Param 1 Description}}",
+                "lightning:type": "lightning__textType",
+                "lightning:isPII": false,
+                "copilotAction:isUserInput": true
+            }
+        },
+        "lightning:type": "lightning__objectType"
+    }
+
+    output/schema.json example:
+    {
+        "properties": {
+            "{{outputParam1}}": {
+                "title": "{{Output Param 1 Label}}",
+                "description": "{{Output Param 1 Description}}",
+                "lightning:type": "lightning__textType",
+                "lightning:isPII": false,
+                "copilotAction:isDisplayable": true,
+                "copilotAction:isUsedByPlanner": true
+            }
+        },
+        "lightning:type": "lightning__objectType"
+    }
+
+    Lightning types:
+    - lightning__textType           (String)
+    - lightning__numberType         (Number/Decimal)
+    - lightning__booleanType        (Boolean)
+    - lightning__dateType           (Date)
+    - lightning__dateTimeStringType (DateTime — TDD validated v2.1.0)
+    - lightning__currencyType       (Currency)
+
+    APEX CLASS REQUIREMENTS:
+    - Must be global or public with sharing
+    - Method must have @InvocableMethod annotation
+    - Input/output use @InvocableVariable wrapper classes
+    - Parameter names in schema.json must match @InvocableVariable field names
+-->

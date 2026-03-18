@@ -1,0 +1,60 @@
+# Hello World Agent
+# The minimal viable Agentforce agent - start here!
+#
+# This template shows the absolute minimum structure required for a working agent.
+# Use this as your starting point when learning Agent Script.
+#
+# ★ Why This Structure?
+#   - system: Sets agent personality and default messages
+#   - config: Required metadata for deployment (agent_name must be unique)
+#   - variables: Linked variables connect to Messaging context (required for deployment)
+#   - language: Locale settings (required for deployment)
+#   - start_agent: Entry point topic (exactly one required)
+#
+# ★ Key Validation Points (from 100-point scoring):
+#   - [10 pts] config block with all 4 required fields
+#   - [10 pts] 3 linked variables (EndUserId, RoutableId, ContactId)
+#   - [5 pts] language block present
+#   - [10 pts] At least one start_agent topic
+#
+# Deploy with: sf agent publish authoring-bundle --api-name Hello_World_Agent --target-org [alias]
+
+system:
+	instructions: "You are a friendly assistant. Greet users warmly and help them."
+	messages:
+		welcome: "Hello! I'm here to help. What can I do for you today?"
+		error: "I'm sorry, something went wrong. Please try again."
+
+config:
+	agent_name: "Hello_World_Agent"
+	default_agent_user: "your.user@company.com"
+	agent_label: "Hello World Agent"
+	description: "A minimal example agent to learn Agent Script basics"
+
+variables:
+	# Linked variables (required) - Connect to Salesforce Messaging context
+	EndUserId: linked string
+		source: @MessagingSession.MessagingEndUserId
+		description: "Messaging End User ID"
+	RoutableId: linked string
+		source: @MessagingSession.Id
+		description: "Messaging Session ID"
+	ContactId: linked string
+		source: @MessagingEndUser.ContactId
+		description: "Contact ID"
+
+language:
+	default_locale: "en_US"
+	additional_locales: ""
+	all_additional_locales: False
+
+# Entry point topic - this is where every conversation starts
+start_agent main:
+	label: "Main"
+	description: "Greets users and provides help"
+
+	reasoning:
+		instructions: ->
+			| Welcome the user warmly.
+			| Ask how you can help them today.
+			| Be friendly and conversational.

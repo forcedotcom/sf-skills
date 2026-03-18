@@ -1,0 +1,40 @@
+# Topic with Actions Template
+# A topic that integrates with external systems via Flow or Apex actions
+# This is a PARTIAL template - use within a complete agent file
+#
+# Two-Level Action System:
+#   Level 1: topic.actions block DEFINES actions (with target:, inputs:, outputs:)
+#   Level 2: reasoning.actions block INVOKES them (with @actions.name, with/set)
+#
+# Usage: Replace {{placeholders}} with your values
+# Note: Actions defined inside topic are local to that topic
+
+topic {{topic_name}}:
+	description: "{{TopicDescription}}"
+
+	# Level 1: DEFINE actions available to this topic
+	actions:
+		{{action_name}}:
+			description: "{{ActionDescription}}"
+			inputs:
+				{{input_name}}: {{input_type}}
+					description: "{{InputDescription}}"
+			outputs:
+				{{output_name}}: {{output_type}}
+					description: "{{OutputDescription}}"
+			target: "{{ActionTarget}}"  # flow://FlowName or apex://ClassName
+
+	reasoning:
+		instructions: ->
+			| {{TopicInstructions}}
+			| Use the available actions to help the user.
+			| Capture and communicate results clearly.
+
+		# Level 2: INVOKE the actions defined above
+		actions:
+			invoke_action: @actions.{{action_name}}
+				with {{input_name}}=...
+				set @variables.{{result_variable}} = @outputs.{{output_name}}
+
+			back_to_menu: @utils.transition to @topic.topic_selector
+				description: "Return to main menu"

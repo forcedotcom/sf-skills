@@ -1,0 +1,72 @@
+# Simple Q&A Agent Template
+# A minimal agent that handles basic questions using LLM reasoning only
+# No external actions - just conversational AI
+#
+# Usage: Replace {{placeholders}} with your values
+# Required: agent_name, default_agent_user, agent_label, description
+
+system:
+	instructions: "{{SystemInstructions}}"
+	messages:
+		welcome: "{{WelcomeMessage}}"
+		error: "I'm sorry, I encountered an issue. Please try again."
+
+config:
+	agent_name: "{{AgentApiName}}"
+	default_agent_user: "{{AgentUser}}"
+	agent_label: "{{AgentLabel}}"
+	description: "{{AgentDescription}}"
+
+variables:
+	EndUserId: linked string
+		source: @MessagingSession.MessagingEndUserId
+		description: "Messaging End User ID"
+	RoutableId: linked string
+		source: @MessagingSession.Id
+		description: "Messaging Session ID"
+	ContactId: linked string
+		source: @MessagingEndUser.ContactId
+		description: "Contact ID"
+	user_query: mutable string
+		description: "The user's current question or request"
+
+language:
+	default_locale: "en_US"
+	additional_locales: ""
+	all_additional_locales: False
+
+start_agent topic_selector:
+	label: "Topic Selector"
+	description: "Routes incoming requests to the Q&A handler"
+
+	reasoning:
+		instructions: ->
+			| Listen to the user's question.
+			| Route to the Q&A handler for processing.
+		actions:
+			handle_question: @utils.transition to @topic.qa_handler
+			end_conversation: @utils.transition to @topic.farewell
+
+topic qa_handler:
+	label: "Q&A Handler"
+	description: "Handles questions and provides answers"
+
+	reasoning:
+		instructions: ->
+			| Answer the user's question based on your knowledge.
+			| Be helpful, accurate, and concise.
+			| Keep responses clear and easy to understand.
+			| If you need more information, ask clarifying questions.
+		actions:
+			new_question: @utils.transition to @topic.topic_selector
+			end_conversation: @utils.transition to @topic.farewell
+
+topic farewell:
+	label: "Farewell"
+	description: "Ends the conversation gracefully"
+
+	reasoning:
+		instructions: ->
+			| Thank the user for their questions.
+			| Wish them a great day.
+			| Let them know they can return anytime for more help.

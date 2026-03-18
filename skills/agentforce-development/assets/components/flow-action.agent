@@ -1,0 +1,66 @@
+# Flow-Based Action Template
+# Define an action that calls a Salesforce Flow
+# This is a PARTIAL template - define actions inside a topic block
+#
+# ⚠️ NOTE ON DEPLOYMENT METHODS:
+#    - AiAuthoringBundle: `with`/`set` clauses ARE supported (TDD validated v1.7.0+)
+#    - GenAiPlannerBundle: Full syntax including `with`/`set` also supported
+#
+# Both deployment methods support the Two-Level Action System:
+#   Level 1: Action definition in topic `actions:` block (with target/inputs/outputs)
+#   Level 2: Action invocation in `reasoning.actions:` block (with `with`/`set` clauses)
+#
+# Usage: Replace {{placeholders}} with your values
+# Place this inside a topic's actions: block
+
+# Action Definition (place inside topic's actions: block)
+{{action_name}}:
+	description: "{{ActionDescription}}"
+	inputs:
+		{{input_1_name}}: {{input_1_type}}
+			description: "{{Input1Description}}"
+		{{input_2_name}}: {{input_2_type}}
+			description: "{{Input2Description}}"
+	outputs:
+		{{output_1_name}}: {{output_1_type}}
+			description: "{{Output1Description}}"
+		{{output_2_name}}: {{output_2_type}}
+			description: "{{Output2Description}}"
+	target: "flow://{{FlowApiName}}"
+
+# Usage in reasoning block:
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# ✅ Recommended Pattern — Level 2 invocation with `with`/`set` (works in both
+#    AiAuthoringBundle and GenAiPlannerBundle, TDD validated v1.7.0+)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# reasoning:
+#    instructions: ->
+#       | Help the user with their request.
+#    actions:
+#       invoke_{{action_name}}: @actions.{{action_name}}
+#          with {{input_1_name}}=...  # LLM fills from conversation
+#          with {{input_2_name}}=@variables.some_var  # From variable
+#          set @variables.result1 = @outputs.{{output_1_name}}
+#          set @variables.result2 = @outputs.{{output_2_name}}
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# Alternative: LLM auto-invoke based on action description (no explicit binding)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# reasoning:
+#    instructions: ->
+#       | Help the user with their request.
+#       | Use the available actions when needed.
+#    actions:
+#       back_to_menu: @utils.transition to @topic.topic_selector
+
+# Common Flow Target Patterns:
+# - flow://Get_Account_Details
+# - flow://Create_Case
+# - flow://Update_Opportunity
+# - flow://Send_Email_Notification
+# - flow://Calculate_Discount
+
+# Input/Output Types: string, number, boolean, list[string], object

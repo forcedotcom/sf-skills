@@ -1,0 +1,89 @@
+# Topic Delegation vs Transition Pattern
+# Understanding the difference between delegation and permanent handoffs
+#
+# ★ KEY CONCEPTS:
+#
+#   DELEGATION (@topic.* syntax):
+#   - Syntax: action_name: @topic.topic_name
+#   - Control CAN return to the calling topic
+#   - Use for: consulting specialists, sub-tasks, getting help
+#
+#   TRANSITION (@utils.transition syntax):
+#   - Syntax: action_name: @utils.transition to @topic.topic_name
+#   - PERMANENT handoff - control does NOT return
+#   - Use for: menu navigation, workflow stages, permanent routing
+#
+# ★ When To Use Each:
+#   DELEGATION: "Consult an expert then continue here"
+#   TRANSITION: "Go to this topic and stay there"
+#
+# ★ Implementation Note:
+#   If delegation syntax doesn't work in your deployment method,
+#   use the bidirectional-routing.agent pattern which manually
+#   tracks return context via variables.
+#
+# This is a PARTIAL template - integrate into a complete agent file
+
+# ═══════════════════════════════════════════════════════════════
+# PATTERN 1: Topic Delegation (can return)
+# ═══════════════════════════════════════════════════════════════
+
+# Delegation syntax in reasoning.actions:
+#
+# reasoning:
+#    actions:
+#       # Delegation - specialist CAN return control to this topic
+#       consult_expert: @topic.specialist_topic
+#          description: "Consult specialist for complex questions"
+#          available when @variables.needs_expert_help == True
+#
+# The specialist topic processes the request and control returns
+# to the original topic when done.
+
+# ═══════════════════════════════════════════════════════════════
+# PATTERN 2: Transition (permanent handoff)
+# ═══════════════════════════════════════════════════════════════
+
+# Transition syntax in reasoning.actions:
+#
+# reasoning:
+#    actions:
+#       # Transition - permanent move to orders topic
+#       go_orders: @utils.transition to @topic.orders
+#
+# Control moves to orders topic and STAYS there.
+# User continues in that topic until another transition occurs.
+
+# ═══════════════════════════════════════════════════════════════
+# PATTERN 3: Manual Bidirectional (fallback pattern)
+# ═══════════════════════════════════════════════════════════════
+
+# If delegation doesn't work, use variables to track return:
+# See: bidirectional-routing.agent for full implementation
+
+variables:
+	return_topic: mutable string = ""
+		description: "Topic to return to after specialist"
+	specialist_result: mutable string = ""
+		description: "Result from specialist consultation"
+
+# Before going to specialist, store return address:
+# set @variables.return_topic = "main_hub"
+# go_specialist: @utils.transition to @topic.specialist
+
+# In specialist, transition back when done:
+# return_home: @utils.transition to @topic.main_hub
+
+# ═══════════════════════════════════════════════════════════════
+# COMPARISON TABLE
+# ═══════════════════════════════════════════════════════════════
+#
+# | Feature              | Delegation        | Transition              |
+# |----------------------|-------------------|-------------------------|
+# | Syntax               | @topic.name       | @utils.transition to    |
+# | Returns to caller?   | YES               | NO                      |
+# | Use in actions:      | YES               | YES                     |
+# | Use in lifecycle:    | NO                | YES (bare syntax)       |
+# | Best for             | Consult & return  | Menu/workflow routing   |
+#
+# ═══════════════════════════════════════════════════════════════
