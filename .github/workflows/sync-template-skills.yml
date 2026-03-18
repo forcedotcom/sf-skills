@@ -29,30 +29,21 @@ jobs:
           node-version-file: ".nvmrc"
           cache: npm
 
-      # ── Version check ────────────────────────────────────────────
-      - name: Check for version changes
-        id: check
-        run: node scripts/check-template-skills-versions.js
-
-      # ── Install + sync ───────────────────────────────────────────
-      - name: Install dependencies
-        if: steps.check.outputs.skip != 'true'
-        run: npm install
-
+      # ── Pin + install + sync (all handled by the npm script) ────
       - name: Sync template skills
-        if: steps.check.outputs.skip != 'true'
         run: npm run sync-template-skills
 
       # ── PR creation ──────────────────────────────────────────────
       - name: Create PR when there are changes
-        if: steps.check.outputs.skip != 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.IDEE_GH_TOKEN }}
           branch: chore/sync-template-skills
           base: main
-          title: ${{ steps.check.outputs.title }}
-          body: ${{ steps.check.outputs.body }}
-          commit-message: ${{ steps.check.outputs.title }}
+          title: "chore: sync template skills from npm"
+          body: |
+            Synced skills from template npm packages into `skills/salesforce-webapp-*/`.
+            Same flow as running locally: `npm install` then `npm run sync-template-skills`.
+          commit-message: "chore: sync template skills from npm"
           committer: svc-idee-bot <svc_idee_bot@salesforce.com>
           author: svc-idee-bot <svc_idee_bot@salesforce.com>
