@@ -71,7 +71,7 @@ Before doing anything else, note down the following properties from the local pr
 | `sfdc_cms__appPage` | Application page container that groups routes and views | Required; defines the app shell |
 | `sfdc_cms__route` | URL routing definition mapping paths to views | Create one for each page/URL path |
 | `sfdc_cms__view` | Page layout and component structure | Create one for each route; defines page content. Also use to edit existing views (e.g., adding/removing components on a specific page) |
-| `sfdc_cms__brandingSet` | Brand colors, fonts, and styling tokens | Required; defines site-wide styling |
+| `sfdc_cms__brandingSet` | Brand colors, fonts, and styling tokens | Required; defines site-wide styling. Use to create or edit existing branding sets |
 | `sfdc_cms__languageSettings` | Language and localization configuration | Required; defines supported languages |
 | `sfdc_cms__mobilePublisherConfig` | Mobile app publishing settings | Required for mobile app deployment |
 | `sfdc_cms__theme` | Theme definition referencing layouts and branding | Required; one per site |
