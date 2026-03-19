@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    GenAiFunction Template: Flow Invocation (Agent Builder UI / GenAiPlannerBundle ONLY)
+
+    ⚠️ NOT NEEDED for AiAuthoringBundle (Agent Script).
+    If using Agent Script (.agent files), use `target: "flow://FlowApiName"` directly
+    in your topic's actions block. See SKILL.md for details.
+
+    Use Case: Register Autolaunched Flow as an agent action in Agent Builder UI
+    - Required ONLY for GenAiPlannerBundle / Agent Builder UI path
+    - Supports HTTP callouts via Flow HTTP actions
+    - Works well with External Services
+
+    Prerequisites:
+    1. Autolaunched Flow must be deployed and active first
+    2. Flow must have defined input/output variables
+
+    Setup Steps:
+    1. Replace all {{placeholder}} values
+    2. Deploy Autolaunched Flow first
+    3. Create input/schema.json and output/schema.json (see genai-function-apex.xml for format)
+    4. Deploy this GenAiFunction bundle
+
+    Bundle Structure:
+    force-app/main/default/genAiFunctions/
+    └── {{FunctionName}}/
+        ├── {{FunctionName}}.genAiFunction-meta.xml   (this file)
+        ├── input/
+        │   └── schema.json                           (input parameters)
+        └── output/
+            └── schema.json                           (output parameters)
+
+    IMPORTANT (API v66.0):
+    - Only these XML elements are valid: description, invocationTarget,
+      invocationTargetType, isConfirmationRequired, masterLabel
+    - Do NOT use: <capability>, <genAiFunctionParameters>,
+      <genAiFunctionInputs>, <genAiFunctionOutputs>, <developerName>
+    - Input/output schemas go in schema.json files, NOT inline XML
+-->
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>{{FunctionDescription}}</description>
+    <invocationTarget>{{FlowApiName}}</invocationTarget>
+    <invocationTargetType>flow</invocationTargetType>
+    <isConfirmationRequired>{{true|false}}</isConfirmationRequired>
+    <masterLabel>{{FunctionLabel}}</masterLabel>
+</GenAiFunction>
+
+<!--
+    FLOW REQUIREMENTS:
+    1. Flow Type: Autolaunched Flow (NOT Screen Flow)
+    2. Input Variables: Must be marked "Available for input"
+    3. Output Variables: Must be marked "Available for output"
+    4. Variable names in schema.json must match Flow variable names exactly
+    5. Flow must be Active
+
+    See genai-function-apex.xml for input/schema.json and output/schema.json format examples.
+-->

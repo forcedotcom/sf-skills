@@ -1,0 +1,110 @@
+# N-ary Boolean Conditions Template
+# Demonstrates using 3+ conditions with and/or operators
+#
+# This is a PARTIAL template - integrate into a complete agent file
+#
+# ★ KEY CONCEPTS:
+#
+#   N-ary AND: All conditions must be true
+#   N-ary OR:  At least one condition must be true
+#   Grouping:  Use () for complex expressions
+#
+# ★ Supported Contexts:
+#   - if statements in before_reasoning/after_reasoning
+#   - available when clauses on actions
+#
+# ★ Common Mistake:
+#   DO NOT nest if statements. Use N-ary and/or instead.
+#   ❌ if a: if b: if c: (nested - INVALID)
+#   ✅ if a and b and c:   (flat - CORRECT)
+
+# ═══════════════════════════════════════════════════════════════
+# PATTERN 1: Three+ AND conditions in lifecycle
+# ═══════════════════════════════════════════════════════════════
+
+# Example: Require multiple authentication checks
+topic secure_action:
+	label: "Secure Action"
+	description: "Performs security-sensitive operations"
+
+	before_reasoning:
+		# All three conditions must be true
+		if @variables.is_authenticated and @variables.has_permission and @variables.session_valid:
+			transition to @topic.authorized_action
+		# Otherwise stay in this topic
+
+	reasoning:
+		instructions: ->
+			| User needs to authenticate before proceeding.
+
+# ═══════════════════════════════════════════════════════════════
+# PATTERN 2: Three+ OR conditions in lifecycle
+# ═══════════════════════════════════════════════════════════════
+
+# Example: Any elevated role gets access
+topic admin_panel:
+	label: "Admin Panel"
+	description: "Administrative features"
+
+	before_reasoning:
+		# Any one of these roles grants access
+		if @variables.is_admin or @variables.is_moderator or @variables.is_superuser:
+			transition to @topic.admin_features
+		# Non-admins redirected
+		transition to @topic.access_denied
+
+# ═══════════════════════════════════════════════════════════════
+# PATTERN 3: N-ary conditions in available when
+# ═══════════════════════════════════════════════════════════════
+
+topic order_management:
+	label: "Order Management"
+	description: "Handles order operations"
+
+	reasoning:
+		instructions: ->
+			| Help the customer with their order.
+		actions:
+			# Action available only when ALL conditions met
+			process_return: @actions.handle_return
+				description: "Process a return request"
+				available when @variables.order_exists == True and @variables.within_return_window == True and @variables.item_eligible == True
+
+			# Action available when ANY premium tier matches
+			use_priority: @actions.priority_service
+				description: "Use priority service queue"
+				available when @variables.tier == "gold" or @variables.tier == "platinum" or @variables.tier == "enterprise"
+
+			# Mixed: specific product AND any valid status
+			expedite: @actions.expedite_order
+				description: "Expedite the current order"
+				available when @variables.product_type == "perishable" and (@variables.status == "pending" or @variables.status == "processing")
+
+# ═══════════════════════════════════════════════════════════════
+# PATTERN 4: Complex grouped conditions
+# ═══════════════════════════════════════════════════════════════
+
+topic smart_routing:
+	label: "Smart Routing"
+	description: "Routes based on complex criteria"
+
+	before_reasoning:
+		# Premium with any product type OR standard with warranty
+		if (@variables.tier == "premium" and @variables.product_type != None) or (@variables.tier == "standard" and @variables.has_warranty == True):
+			transition to @topic.priority_support
+
+# ═══════════════════════════════════════════════════════════════
+# ANTI-PATTERNS - DO NOT USE
+# ═══════════════════════════════════════════════════════════════
+
+# ❌ WRONG - Nested if statements (causes "Missing required element" error)
+# before_reasoning:
+#    if @variables.a == True:
+#       if @variables.b == True:
+#          if @variables.c == True:
+#             transition to @topic.x
+
+# ✅ CORRECT - Flat N-ary condition
+# before_reasoning:
+#    if @variables.a == True and @variables.b == True and @variables.c == True:
+#       transition to @topic.x

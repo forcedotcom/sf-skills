@@ -1,0 +1,52 @@
+# Apex-Based Action Template
+# Define an action that calls a Salesforce Apex @InvocableMethod
+# This is a PARTIAL template - define actions inside a topic block
+#
+# Usage: Replace {{placeholders}} with your values
+# Place this inside a topic's actions: block
+#
+# ⚠️ The target format is apex://ClassName (NOT ClassName.MethodName)
+#    The runtime auto-discovers the @InvocableMethod on the class.
+# ⚠️ NO GenAiFunction metadata needed for AiAuthoringBundle (Agent Script).
+
+# Action Definition (place inside topic's actions: block)
+{{action_name}}:
+	description: "{{ActionDescription}}"
+	inputs:
+		{{input_1_name}}: {{input_1_type}}
+			description: "{{Input1Description}}"
+		{{input_2_name}}: {{input_2_type}}
+			description: "{{Input2Description}}"
+	outputs:
+		{{output_1_name}}: {{output_1_type}}
+			description: "{{Output1Description}}"
+		success: boolean
+			description: "Whether the operation succeeded"
+		error_message: string
+			description: "Error message if operation failed"
+	target: "apex://{{ApexClassName}}"
+
+# Usage in reasoning block:
+#
+# reasoning:
+#    instructions: ->
+#       | Help the user with their request.
+#    actions:
+#       invoke_{{action_name}}: @actions.{{action_name}}
+#          with {{input_1_name}}=...  # LLM fills from conversation
+#          with {{input_2_name}}=@variables.some_var  # From variable
+#          set @variables.result = @outputs.{{output_1_name}}
+#          set @variables.success = @outputs.success
+
+# Common Apex Target Patterns:
+# - apex://AccountService
+# - apex://CaseService
+# - apex://OrderService
+# - apex://IntegrationService
+# - apex://CalculationService
+
+# Apex Class Requirements:
+# - Must be global or public with sharing
+# - Must have exactly ONE @InvocableMethod annotation
+# - Use @InvocableVariable annotations on input/output wrapper class fields
+# - No GenAiFunction metadata needed for AiAuthoringBundle (Agent Script)

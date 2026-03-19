@@ -1,0 +1,282 @@
+# Multi-Step Workflow Pattern
+# Track progress through complex multi-stage processes using boolean flags
+#
+# ★ When To Use This Pattern:
+#   - User onboarding with multiple steps
+#   - Order/checkout processes
+#   - Application submissions (loan, support case, etc.)
+#   - Any workflow requiring completion tracking
+#
+# ★ Key Insights:
+#   - Use boolean flags to track step completion
+#   - Use number variable for step counter
+#   - Conditionally show instructions based on completion state
+#   - Chain actions with `run` for deterministic sequences
+#
+# ★ Why This Pattern:
+#   - Clear visibility into workflow progress
+#   - Resume interrupted workflows
+#   - Prevent skipping required steps
+#   - Show progress indicators to users
+#
+# This is a COMPLETE template - customize for your use case
+#
+# ★ Step Guard Pattern (Feb 2026 Community Best Practice):
+#   - The topic selector re-evaluates on EVERY user utterance
+#   - Without a step guard, follow-up messages ("my email is X") get re-routed
+#   - The `if @variables.current_step > 1:` guard in start_agent forces
+#     re-entry to the current workflow, bypassing LLM topic selection
+#   - Reset current_step to 1 when the workflow completes
+
+system:
+	instructions: "You are an onboarding assistant. Guide users through the account setup process step by step. Ensure all required steps are completed before finishing."
+	messages:
+		welcome: "Welcome! I'll help you set up your account. Let's go through this step by step."
+		error: "I encountered an issue. Let me try to continue from where we left off."
+
+config:
+	agent_name: "Onboarding_Agent"
+	default_agent_user: "agent@company.salesforce.com"
+	agent_label: "Onboarding Assistant"
+	description: "Guides users through multi-step onboarding workflow"
+
+variables:
+	# Standard linked variables
+	EndUserId: linked string
+		source: @MessagingSession.MessagingEndUserId
+		description: "Messaging End User ID"
+	RoutableId: linked string
+		source: @MessagingSession.Id
+		description: "Messaging Session ID"
+
+	# ★ WORKFLOW PROGRESS TRACKING - Boolean flags for each step
+	step_1_account_created: mutable boolean = False
+		description: "Step 1: Account has been created"
+	step_2_profile_completed: mutable boolean = False
+		description: "Step 2: Profile information has been collected"
+	step_3_preferences_set: mutable boolean = False
+		description: "Step 3: User preferences have been configured"
+	step_4_verification_done: mutable boolean = False
+		description: "Step 4: Email/phone verification completed"
+	onboarding_complete: mutable boolean = False
+		description: "All onboarding steps are complete"
+
+	# ★ STEP COUNTER - For progress indication
+	current_step: mutable number = 1
+		description: "Current step number (1-4)"
+	total_steps: mutable number = 4
+		description: "Total number of steps"
+
+	# Data collected during workflow
+	customer_id: mutable string = ""
+		description: "Created customer ID"
+	user_email: mutable string = ""
+		description: "User's email address"
+	user_name: mutable string = ""
+		description: "User's full name"
+	phone_number: mutable string = ""
+		description: "User's phone number"
+	notification_preference: mutable string = "email"
+		description: "Preferred notification method"
+	verification_code: mutable string = ""
+		description: "Verification code for confirmation"
+
+language:
+	default_locale: "en_US"
+
+start_agent onboarding:
+	description: "Multi-step account onboarding workflow"
+
+	actions:
+		# Step 1: Create account
+		create_account:
+			description: "Create a new customer account"
+			inputs:
+				email: string
+					description: "Customer email address"
+					is_required: True
+				name: string
+					description: "Customer full name"
+					is_required: True
+			outputs:
+				customer_id: string
+					description: "Newly created customer ID"
+				success: boolean
+					description: "Whether account creation succeeded"
+			target: "flow://Create_Customer_Account"
+
+		# Step 2: Update profile
+		update_profile:
+			description: "Update customer profile information"
+			inputs:
+				customer_id: string
+					description: "Customer ID to update"
+					is_required: True
+				phone: string
+					description: "Phone number"
+					is_required: False
+			outputs:
+				success: boolean
+					description: "Whether profile update succeeded"
+			target: "flow://Update_Customer_Profile"
+
+		# Step 3: Set preferences
+		set_preferences:
+			description: "Configure customer notification preferences"
+			inputs:
+				customer_id: string
+					description: "Customer ID"
+					is_required: True
+				notification_method: string
+					description: "Preferred notification method: email, sms, or both"
+					is_required: True
+			outputs:
+				success: boolean
+					description: "Whether preferences were saved"
+			target: "flow://Set_Customer_Preferences"
+
+		# Step 4: Send verification
+		send_verification:
+			description: "Send verification code to customer"
+			inputs:
+				customer_id: string
+					description: "Customer ID"
+					is_required: True
+				method: string
+					description: "Verification method: email or sms"
+					is_required: True
+			outputs:
+				success: boolean
+					description: "Whether verification was sent"
+			target: "flow://Send_Verification_Code"
+
+		# Verify code
+		verify_code:
+			description: "Verify the customer's code"
+			inputs:
+				customer_id: string
+					description: "Customer ID"
+					is_required: True
+				code: string
+					description: "Verification code entered by user"
+					is_required: True
+			outputs:
+				verified: boolean
+					description: "Whether code was correct"
+			target: "flow://Verify_Customer_Code"
+
+	reasoning:
+		instructions: ->
+			# ★ STEP GUARD — Force re-entry if workflow in progress
+			# This prevents the topic selector from re-routing the user
+			# mid-workflow when they provide follow-up information
+			if @variables.current_step > 1:
+				| Continuing your account setup...
+			# ★ PROGRESS DISPLAY - Show current status
+			| Welcome to account setup!
+			| Progress: Step {!@variables.current_step} of {!@variables.total_steps}
+			|
+			# ★ SHOW COMPLETED STEPS
+			if @variables.step_1_account_created == True:
+				| ✓ Step 1: Account Created
+			if @variables.step_1_account_created == False:
+				| ○ Step 1: Create Account (current)
+			if @variables.step_2_profile_completed == True:
+				| ✓ Step 2: Profile Complete
+			if @variables.step_2_profile_completed == False and @variables.step_1_account_created == True:
+				| ○ Step 2: Complete Profile (current)
+			if @variables.step_3_preferences_set == True:
+				| ✓ Step 3: Preferences Set
+			if @variables.step_3_preferences_set == False and @variables.step_2_profile_completed == True:
+				| ○ Step 3: Set Preferences (current)
+			if @variables.step_4_verification_done == True:
+				| ✓ Step 4: Verified
+			if @variables.step_4_verification_done == False and @variables.step_3_preferences_set == True:
+				| ○ Step 4: Verify Account (current)
+			|
+			# ★ STEP-SPECIFIC INSTRUCTIONS
+			if @variables.step_1_account_created == False:
+				| Let's start by creating your account.
+				| I'll need your email address and full name.
+
+			if @variables.step_1_account_created == True and @variables.step_2_profile_completed == False:
+				| Great! Account created. Now let's complete your profile.
+				| What's your phone number? (optional but recommended)
+
+			if @variables.step_2_profile_completed == True and @variables.step_3_preferences_set == False:
+				| Profile saved. Let's set your notification preferences.
+				| How would you like to receive notifications: email, sms, or both?
+
+			if @variables.step_3_preferences_set == True and @variables.step_4_verification_done == False:
+				| Almost done! I've sent a verification code.
+				| Please enter the code you received.
+
+			if @variables.onboarding_complete == True:
+				| 🎉 Congratulations! Your account is fully set up.
+				| Customer ID: {!@variables.customer_id}
+				| You're all ready to go!
+
+		actions:
+			# ★ STEP 1: Create Account
+			# Uses action chaining with `run` for automatic next step
+			do_step_1: @actions.create_account
+				with email=...
+				with name=...
+				set @variables.customer_id = @outputs.customer_id
+				set @variables.step_1_account_created = @outputs.success
+				set @variables.current_step = 2
+				available when @variables.step_1_account_created == False
+
+			# ★ STEP 2: Update Profile
+			do_step_2: @actions.update_profile
+				with customer_id=@variables.customer_id
+				with phone=...
+				set @variables.step_2_profile_completed = @outputs.success
+				set @variables.current_step = 3
+				available when @variables.step_1_account_created == True
+				available when @variables.step_2_profile_completed == False
+
+			# ★ STEP 3: Set Preferences
+			do_step_3: @actions.set_preferences
+				with customer_id=@variables.customer_id
+				with notification_method=...
+				set @variables.step_3_preferences_set = @outputs.success
+				set @variables.current_step = 4
+				# Automatically trigger verification after preferences
+				run @actions.send_verification
+					with customer_id=@variables.customer_id
+					with method=@variables.notification_preference
+				available when @variables.step_2_profile_completed == True
+				available when @variables.step_3_preferences_set == False
+
+			# ★ STEP 4: Verify
+			do_step_4: @actions.verify_code
+				with customer_id=@variables.customer_id
+				with code=...
+				set @variables.step_4_verification_done = @outputs.verified
+				set @variables.onboarding_complete = @outputs.verified
+				available when @variables.step_3_preferences_set == True
+				available when @variables.step_4_verification_done == False
+
+# ★ Insight: Multi-Step Workflow Best Practices
+#
+# BOOLEAN FLAGS:
+#   - One flag per step for clear completion tracking
+#   - Use meaningful names: step_1_account_created, not flag1
+#   - Check flags to enable/disable actions
+#
+# STEP COUNTER:
+#   - Provides simple progress indication
+#   - Can be used in template expressions for display
+#
+# ACTION AVAILABILITY:
+#   - Use `available when` to prevent out-of-order execution
+#   - Multiple `available when` clauses work as AND conditions
+#
+# ACTION CHAINING:
+#   - Use `run` for automatic sequential actions
+#   - Good for: send confirmation after save, log after complete
+#
+# RESUME CAPABILITY:
+#   - Boolean flags persist across conversation turns
+#   - User can pick up where they left off

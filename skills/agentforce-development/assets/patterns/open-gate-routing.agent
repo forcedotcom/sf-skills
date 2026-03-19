@@ -1,0 +1,286 @@
+# Open Gate Routing Pattern
+# 3-variable state machine for auth-gated topic routing with LLM bypass
+#
+# ★ When To Use This Pattern:
+#   - Multiple protected topics require authentication before access
+#   - You want to bypass the LLM topic selector when a gate topic holds focus
+#   - Users should be redirected to auth, then automatically returned to their
+#     original intended topic after authentication completes
+#   - You need an EXIT_PROTOCOL to reset state when users change intent
+#
+# ★ Key Insight (Zero Credit Bypass):
+#   When open_gate is set, before_reasoning in the topic_selector
+#   deterministically routes via "transition to" — the LLM never reasons.
+#   This saves credits on every turn the gate holds focus.
+#
+# ★ The 3 Variables:
+#   open_gate    — Which topic currently holds focus ("null" = none)
+#   next_topic   — Deferred destination after auth completes
+#   authenticated — Whether the user has passed authentication
+#
+# ★ EXIT_PROTOCOL:
+#   Any topic can reset open_gate to "null" when the user changes intent.
+#   This releases the gate lock and returns control to the LLM topic selector.
+#
+# ★ Related Patterns:
+#   - Latch Variable (SKILL.md) — simpler 1-variable version, no auth gate
+#   - Bidirectional Routing (bidirectional-routing.agent) — specialist consultation, not interception
+#   - Verification Gate (fsm-architecture.md) — linear one-time gate, no deferred return
+#
+# ★ Credit: Hua Xu (Salesforce APAC FDE team) — production pattern from Kogan agent deployment
+#
+# This is a PARTIAL template - integrate into a complete agent file
+
+variables:
+	# ... standard linked variables ...
+	open_gate: mutable string = "null"
+		description: "Which topic currently holds focus (null = LLM decides)"
+	next_topic: mutable string = ""
+		description: "Deferred destination after authentication completes"
+	authenticated: mutable boolean = False
+		description: "Whether the user has passed authentication"
+
+# ─────────────────────────────────────────────────────────────────────
+# TOPIC SELECTOR (Entry Point)
+# When open_gate is set, bypasses LLM entirely (zero credit cost)
+# ─────────────────────────────────────────────────────────────────────
+start_agent topic_selector:
+	description: "Routes to topics — deterministic bypass when open_gate is set"
+
+	before_reasoning:
+		# ★ GATE CHECK: If a topic holds focus, bypass LLM entirely
+		if @variables.open_gate == "protected_workflow":
+			transition to @topic.protected_workflow
+		if @variables.open_gate == "account_management":
+			transition to @topic.account_management
+		if @variables.open_gate == "authentication_gate":
+			transition to @topic.authentication_gate
+
+	reasoning:
+		instructions: ->
+			| You are a customer service agent.
+			| Route the customer to the appropriate topic:
+			| - Order status, returns, or shipping → protected workflow
+			| - Account settings or profile changes → account management
+			| - General questions → general inquiry
+		actions:
+			go_protected: @utils.transition to @topic.protected_workflow
+			go_account: @utils.transition to @topic.account_management
+			go_general: @utils.transition to @topic.general_inquiry
+
+# ─────────────────────────────────────────────────────────────────────
+# PROTECTED WORKFLOW (Requires Authentication)
+# Checks auth state, redirects to auth gate if needed, locks focus if authed
+# ─────────────────────────────────────────────────────────────────────
+topic protected_workflow:
+	description: "Handles order status, returns, and shipping (requires authentication)"
+
+	before_reasoning:
+		# ★ AUTH CHECK: Redirect unauthenticated users to auth gate
+		if @variables.authenticated == False:
+			set @variables.next_topic = "protected_workflow"
+			set @variables.open_gate = "authentication_gate"
+			transition to @topic.authentication_gate
+
+		# ★ FOCUS LOCK: Keep gate open so topic selector bypasses LLM
+		set @variables.open_gate = "protected_workflow"
+
+	reasoning:
+		instructions: ->
+			| The customer is authenticated.
+			| Help them with order status, returns, or shipping inquiries.
+			|
+			| If the customer changes the subject to something unrelated,
+			| let them know you will redirect them.
+		actions:
+			lookup_order: @actions.get_order_status
+				with order_id=...
+				set @variables.order_result = @outputs.status
+
+			# ★ EXIT_PROTOCOL: User changed intent — release gate
+			exit_to_menu: @utils.transition to @topic.exit_protocol
+
+	after_reasoning:
+		# Logging or cleanup after each turn (optional)
+		set @variables.last_topic = "protected_workflow"
+
+# ─────────────────────────────────────────────────────────────────────
+# ACCOUNT MANAGEMENT (Second Protected Topic)
+# Demonstrates the pattern scales to N protected topics
+# ─────────────────────────────────────────────────────────────────────
+topic account_management:
+	description: "Handles account settings and profile changes (requires authentication)"
+
+	before_reasoning:
+		# ★ AUTH CHECK: Same pattern as protected_workflow
+		if @variables.authenticated == False:
+			set @variables.next_topic = "account_management"
+			set @variables.open_gate = "authentication_gate"
+			transition to @topic.authentication_gate
+
+		# ★ FOCUS LOCK
+		set @variables.open_gate = "account_management"
+
+	reasoning:
+		instructions: ->
+			| The customer is authenticated.
+			| Help them with account settings and profile changes.
+			|
+			| If the customer changes the subject to something unrelated,
+			| let them know you will redirect them.
+		actions:
+			update_profile: @actions.update_customer_profile
+				with field_name=...
+				with new_value=...
+				set @variables.update_result = @outputs.success
+
+			# ★ EXIT_PROTOCOL: User changed intent — release gate
+			exit_to_menu: @utils.transition to @topic.exit_protocol
+
+# ─────────────────────────────────────────────────────────────────────
+# AUTHENTICATION GATE
+# Handles auth flow, then routes back via next_topic
+# ─────────────────────────────────────────────────────────────────────
+topic authentication_gate:
+	description: "Verifies customer identity before allowing access to protected topics"
+
+	before_reasoning:
+		# ★ FOCUS LOCK: Hold gate open during auth flow
+		set @variables.open_gate = "authentication_gate"
+
+	reasoning:
+		instructions: ->
+			if @variables.authenticated == True:
+				| You are already authenticated. Redirecting you now.
+
+			if @variables.authenticated == False:
+				| I need to verify your identity before I can help with that.
+				| Please provide your email address and verification code.
+		actions:
+			verify_identity: @actions.verify_customer
+				with email=...
+				with verification_code=...
+				set @variables.authenticated = @outputs.is_verified
+
+	after_reasoning:
+		# ★ POST-AUTH ROUTING: If authenticated, route to deferred destination
+		if @variables.authenticated == True:
+			if @variables.next_topic == "protected_workflow":
+				set @variables.open_gate = "protected_workflow"
+				transition to @topic.protected_workflow
+			if @variables.next_topic == "account_management":
+				set @variables.open_gate = "account_management"
+				transition to @topic.account_management
+
+# ─────────────────────────────────────────────────────────────────────
+# EXIT PROTOCOL (Resets Gate State)
+# Clears open_gate so LLM topic selector regains control
+# ─────────────────────────────────────────────────────────────────────
+topic exit_protocol:
+	description: "Resets gate state and returns to topic selector"
+
+	before_reasoning:
+		# ★ RELEASE GATE: Clear all gate state
+		set @variables.open_gate = "null"
+		set @variables.next_topic = ""
+		transition to @topic.topic_selector
+
+	reasoning:
+		instructions: ->
+			| Redirecting you to the main menu.
+
+# ─────────────────────────────────────────────────────────────────────
+# GENERAL INQUIRY (Unprotected Topic)
+# Demonstrates that not every topic needs gating
+# ─────────────────────────────────────────────────────────────────────
+topic general_inquiry:
+	description: "Handles general questions that do not require authentication"
+
+	reasoning:
+		instructions: ->
+			| Help the customer with general questions.
+			| No authentication is needed for this topic.
+			|
+			| If the customer needs help with orders or account settings,
+			| let them know they will need to verify their identity first.
+		actions:
+			go_protected: @utils.transition to @topic.protected_workflow
+			go_account: @utils.transition to @topic.account_management
+
+# ═════════════════════════════════════════════════════════════════════
+# ARCHITECTURE DIAGRAM
+# ═════════════════════════════════════════════════════════════════════
+#
+#                       ┌─────────────────────┐
+#                       │   topic_selector    │
+#                       │   (start_agent)     │
+#                       │                     │
+#                       │ before_reasoning:   │
+#                       │ if open_gate <> null │
+#                       │   → bypass LLM      │
+#                       └──────────┬──────────┘
+#              ┌───────────────────┼───────────────────┐
+#              ▼                   ▼                   ▼
+#   ┌──────────────────┐ ┌────────────────┐ ┌─────────────────┐
+#   │ protected_workflow│ │account_mgmt   │ │ general_inquiry  │
+#   │ (auth required)  │ │(auth required)│ │ (no auth needed) │
+#   │                  │ │               │ │                  │
+#   │ before_reasoning:│ │ before_reas.: │ │ (no gate logic)  │
+#   │ if !auth → gate  │ │ if !auth→gate │ │                  │
+#   │ if auth → lock   │ │ if auth→lock  │ │                  │
+#   └────────┬─────────┘ └───────┬───────┘ └─────────────────┘
+#            │                   │
+#            ▼                   ▼
+#   ┌──────────────────────────────────────┐
+#   │         authentication_gate          │
+#   │                                      │
+#   │ before_reasoning: lock gate          │
+#   │ reasoning: verify identity           │
+#   │ after_reasoning:                     │
+#   │   if auth → route via next_topic     │
+#   └──────────────────────────────────────┘
+#
+# ═════════════════════════════════════════════════════════════════════
+# VARIABLE STATE FLOW WALKTHROUGH
+# ═════════════════════════════════════════════════════════════════════
+#
+# User says: "I want to check my order status"
+#
+# Step 1: topic_selector
+#   open_gate = "null" → LLM reasons → routes to protected_workflow
+#
+# Step 2: protected_workflow.before_reasoning
+#   authenticated = False → set next_topic = "protected_workflow"
+#   → set open_gate = "authentication_gate"
+#   → transition to authentication_gate
+#
+# Step 3: authentication_gate.before_reasoning
+#   open_gate = "authentication_gate" (lock)
+#
+# Step 4: User provides email + code → verify_customer succeeds
+#   authenticated = True
+#
+# Step 5: authentication_gate.after_reasoning
+#   authenticated = True, next_topic = "protected_workflow"
+#   → set open_gate = "protected_workflow"
+#   → transition to protected_workflow
+#
+# Step 6: protected_workflow.before_reasoning
+#   authenticated = True → set open_gate = "protected_workflow" (lock)
+#   → LLM reasons with full access to protected actions
+#
+# Step 7: User says "actually, never mind"
+#   → LLM selects exit_to_menu action
+#   → exit_protocol.before_reasoning: open_gate = "null"
+#   → transition to topic_selector (LLM regains control)
+#
+# ═════════════════════════════════════════════════════════════════════
+# PATTERN COMPARISON
+# ═════════════════════════════════════════════════════════════════════
+#
+# Pattern              | Variables | Auth Gate | Deferred Return | LLM Bypass
+# ─────────────────────┼───────────┼───────────┼─────────────────┼───────────
+# Latch Variable       | 1         | No        | No              | Partial
+# Bidirectional Route  | 1-2       | No        | Yes (manual)    | No
+# Verification Gate    | 1         | Yes       | No              | No
+# Open Gate (this)     | 3         | Yes       | Yes (automatic) | Full

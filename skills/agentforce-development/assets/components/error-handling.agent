@@ -1,0 +1,58 @@
+# Error Handling Topic Template
+# A topic with validation and guard clauses for critical operations
+# This is a PARTIAL template - use within a complete agent file
+#
+# Usage: Replace {{placeholders}} with your values
+# Note: Includes validation patterns and error handling
+
+topic {{topic_name}}:
+	label: "{{TopicLabel}}"
+	description: "{{TopicDescription}} - includes validation and error handling"
+
+	actions:
+		{{action_name}}:
+			description: "{{ActionDescription}}"
+			inputs:
+				{{input_name}}: {{input_type}}
+					description: "{{InputDescription}}"
+			outputs:
+				success: boolean
+					description: "Whether the operation succeeded"
+				error_message: string
+					description: "Error message if operation failed"
+				{{output_name}}: {{output_type}}
+					description: "{{OutputDescription}}"
+			target: "{{ActionTarget}}"
+
+	reasoning:
+		instructions: ->
+			# Validation guard clauses
+			if @variables.{{required_field}} is None:
+				set @variables.validation_passed = False
+				| I need {{RequiredFieldDescription}} before I can proceed.
+				| Please provide this information.
+
+			if @variables.{{amount_field}} > {{MaxAmount}}:
+				set @variables.validation_passed = False
+				| The {{AmountFieldDescription}} exceeds the maximum of {{MaxAmount}}.
+				| Would you like to:
+				| - Use the maximum allowed amount
+				| - Split into multiple operations
+				| - Contact support for a higher limit
+
+			if @variables.validation_passed == True:
+				| All validations passed. Proceeding with the operation.
+
+		actions:
+			# Only available when validation passes
+			execute_action: @actions.{{action_name}}
+				with {{input_name}}=@variables.{{input_variable}}
+				set @variables.operation_success = @outputs.success
+				set @variables.result = @outputs.{{output_name}}
+				available when @variables.validation_passed == True
+
+			# Handle errors
+			retry_operation: @utils.transition to @topic.{{topic_name}}
+				available when @variables.operation_success == False
+
+			back_to_menu: @utils.transition to @topic.topic_selector

@@ -1,0 +1,166 @@
+# Deterministic Routing Template (Zero-Hallucination Pattern)
+# ============================================================
+#
+# This template demonstrates the zero-hallucination intent classification
+# pattern using action output flags to control LLM behavior.
+#
+# Pattern: Classify intent deterministically, route without hallucination
+# Use when: Critical routing decisions that must not be influenced by LLM creativity
+#
+# KEY PATTERN:
+# In Agentforce Assets, set action outputs with:
+# - is_displayable: False  (LLM cannot show this to user)
+# - is_used_by_planner: True  (LLM can use for routing)
+#
+# This ensures the LLM routes based on classification but cannot
+# generate hallucinated responses based on the classification data.
+
+system:
+   messages:
+      welcome: "Hello! How can I help you today?"
+      error: "I apologize, something went wrong. Let me try again."
+   instructions: "You are a customer service agent. Route users to the correct department based on their intent."
+
+config:
+   agent_name: "DeterministicRoutingAgent"
+   agent_label: "Smart Router Agent"
+   description: "Agent demonstrating zero-hallucination intent routing pattern"
+   default_agent_user: "agent@yourorg.com"  # REQUIRED: Change to valid Einstein Agent User
+
+variables:
+   # Intent classification (populated by action with is_displayable: False)
+   classified_intent: mutable string = ""
+      description: "Classification result - hidden from user responses"
+   confidence_score: mutable number = 0
+      description: "Classification confidence (0-100)"
+
+   # Routing state
+   needs_classification: mutable boolean = True
+      description: "Whether user intent needs classification"
+   low_confidence_warning: mutable boolean = False
+      description: "Flag for low confidence routing"
+
+start_agent topic_selector:
+   description: "Classify intent and route deterministically"
+   reasoning:
+      instructions: ->
+         # ====================================================
+         # DETERMINISTIC ROUTING (based on classified_intent)
+         # ====================================================
+
+         # Route ONLY when classification is complete
+         if @variables.needs_classification == False:
+
+            # HIGH-CONFIDENCE ROUTING
+            if @variables.confidence_score >= 80:
+               if @variables.classified_intent == "billing":
+                  transition to @topic.billing
+               if @variables.classified_intent == "technical_support":
+                  transition to @topic.technical_support
+               if @variables.classified_intent == "sales":
+                  transition to @topic.sales
+               if @variables.classified_intent == "returns":
+                  transition to @topic.returns
+
+            # LOW-CONFIDENCE: Confirm with user
+            if @variables.confidence_score < 80:
+               set @variables.low_confidence_warning = True
+               | I want to make sure I route you correctly.
+               | It sounds like you need help with **{!@variables.classified_intent}**.
+               | Is that correct?
+
+         # INITIAL STATE: Ask for help topic
+         if @variables.needs_classification == True:
+            | I can help with billing, technical support, sales, or returns.
+            | What do you need help with today?
+
+      actions:
+         # CRITICAL: This action's outputs must be configured in Agentforce Assets:
+         # - classified_intent: is_displayable=False, is_used_by_planner=True
+         # - confidence_score: is_displayable=False, is_used_by_planner=True
+         #
+         # This ensures LLM cannot hallucinate based on classification data
+         classify_intent: @actions.Classify_User_Intent
+            description: "Determine what the user needs help with"
+            with user_message = ...  # LLM extracts from conversation
+            set @variables.classified_intent = @outputs.intent
+            set @variables.confidence_score = @outputs.confidence
+            set @variables.needs_classification = False
+
+         # Manual routing for low-confidence cases
+         go_billing: @utils.transition to @topic.billing
+            description: "Yes, I need billing help"
+            available when @variables.low_confidence_warning == True and @variables.classified_intent == "billing"
+
+         go_support: @utils.transition to @topic.technical_support
+            description: "Yes, I need technical support"
+            available when @variables.low_confidence_warning == True and @variables.classified_intent == "technical_support"
+
+         go_sales: @utils.transition to @topic.sales
+            description: "Yes, I need sales help"
+            available when @variables.low_confidence_warning == True and @variables.classified_intent == "sales"
+
+         go_returns: @utils.transition to @topic.returns
+            description: "Yes, I need returns help"
+            available when @variables.low_confidence_warning == True and @variables.classified_intent == "returns"
+
+         # Reclassify if user said "no"
+         reclassify: @utils.setVariables
+            description: "That's not what I need - let me clarify"
+            available when @variables.low_confidence_warning == True
+            with needs_classification = True
+            with classified_intent = ""
+            with confidence_score = 0
+            with low_confidence_warning = False
+
+# ============================================================
+# ROUTED TOPICS
+# ============================================================
+
+topic billing:
+   description: "Handle billing inquiries"
+   reasoning:
+      instructions: |
+         Help the customer with their billing question.
+         You can view invoices, explain charges, or process payments.
+      actions:
+         back: @utils.transition to @topic.topic_selector
+            description: "Return to main menu"
+         escalate_now: @utils.escalate
+            description: "Transfer to billing specialist"
+
+topic technical_support:
+   description: "Handle technical support issues"
+   reasoning:
+      instructions: |
+         Help the customer with their technical issue.
+         Troubleshoot problems and provide solutions.
+      actions:
+         back: @utils.transition to @topic.topic_selector
+            description: "Return to main menu"
+         escalate_now: @utils.escalate
+            description: "Transfer to technical specialist"
+
+topic sales:
+   description: "Handle sales inquiries"
+   reasoning:
+      instructions: |
+         Help the customer with sales questions.
+         Provide product information and pricing.
+      actions:
+         back: @utils.transition to @topic.topic_selector
+            description: "Return to main menu"
+         escalate_now: @utils.escalate
+            description: "Transfer to sales representative"
+
+topic returns:
+   description: "Handle return requests"
+   reasoning:
+      instructions: |
+         Help the customer with their return request.
+         Check eligibility and process returns.
+      actions:
+         back: @utils.transition to @topic.topic_selector
+            description: "Return to main menu"
+         escalate_now: @utils.escalate
+            description: "Transfer to returns specialist"
