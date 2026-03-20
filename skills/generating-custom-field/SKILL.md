@@ -1,5 +1,5 @@
 ---
-name: salesforce-custom-field
+name: generating-custom-field
 description: Use this skill when users need to create, generate, or validate Salesforce Custom Field metadata. Trigger when users mention custom fields, field types, Roll-up Summary fields, Master-Detail relationships, Lookup relationships, formula fields, picklists, or field metadata. Also use when users encounter field deployment errors, especially around Roll-up Summary format, Master-Detail constraints, or formula issues. Always use this skill for any custom field metadata work, field generation, or field troubleshooting.
 ---
 
