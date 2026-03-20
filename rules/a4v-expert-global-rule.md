@@ -10,7 +10,7 @@ Process each metadata type **one at a time, in order**. Complete the full loop (
 
 **a. Load Skill** — Load the metadata type's skill once (not per record).
 
-**b. Get API Context** — Use these tools to fetch entity Context for the metadata type:
+**b. Get Entity Context** — Use these tools to fetch entity context for the metadata type:
 - `get_metadata_type_sections`
 - `get_metadata_type_context`
 - `get_metadata_type_fields`
