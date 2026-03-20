@@ -82,6 +82,7 @@ Before doing anything else, note down the following properties from the local pr
 ## References
 
 Reference docs within the skill directory. Note that these are **local** and not MCP.
+Before doing anything, you **MUST ALWAYS** load them first if they match user intent.
 
 - [bootstrap-template-byo-lwr.md](docs/bootstrap-template-byo-lwr.md) - Site creation, template defaults
 - [configure-content-route.md](docs/configure-content-route.md) - Route creation (custom/object pages)
@@ -102,66 +103,65 @@ Reference docs within the skill directory. Note that these are **local** and not
 
 - **NEVER** generate the files manually.
 
-**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
+**Mandatory Steps**:
 
 - [ ] **ALWAYS** read [bootstrap-template-byo-lwr.md](docs/bootstrap-template-byo-lwr.md) within the skill directory. Do not proceed to the next step without loading the file.
 - [ ] Follow the bootstrap doc strictly on site creation
 
 ### Creating and Editing Standard or Object Pages
 
-**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
+**Mandatory Steps**:
 
-- [ ] Load [configure-content-route.md](docs/configure-content-route.md)
-- [ ] Load [configure-content-view.md](docs/configure-content-view.md)
-- [ ] Load [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md)
-- [ ] Follow the instructions of the above docs strictly to accomplish user's goal
+- [ ] MUST read [configure-content-route.md](docs/configure-content-route.md)
+- [ ] MUST read [configure-content-view.md](docs/configure-content-view.md)
+- [ ] MUST read [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md)
 
 ### Adding UI Components to Pages
 
-**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
+**Mandatory Steps**:
 
-- [ ] Load and follow [handle-ui-components.md](docs/handle-ui-components.md) to add LWCs to LWR sites.
-- [ ] Load and follow [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) to handle id generation
-- [ ] Load and follow [configure-content-themeLayout.md](docs/configure-content-themeLayout.md) if a component has one of the following requirements:
+- [ ] MUST read [handle-ui-components.md](docs/handle-ui-components.md) to add LWCs to LWR sites.
+- [ ] MUST read [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) to handle id generation
+- [ ] MUST read [configure-content-themeLayout.md](docs/configure-content-themeLayout.md) if a component has one of the following requirements:
   - needs to be "sticky" and persistent across pages
   - is used as a theme layout
 
 ### Creating Page Layouts / Container Components
 
-**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
+**Mandatory Steps**:
 
-- [ ] Load and follow [handle-ui-components.md](docs/handle-ui-components.md)
+- [ ] MUST read [handle-ui-components.md](docs/handle-ui-components.md)
 
 ### Creating Theme Layouts
 
-**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
+**Mandatory Steps**:
 
 - [ ] Check with user whether this new theme layout reuses an existing theme layout component or requires a new one.
-- [ ] Load and follow [handle-ui-components.md](docs/handle-ui-components.md) if creating a new theme layout component.
-- [ ] Load and follow [configure-content-themeLayout.md](docs/configure-content-themeLayout.md).
-- [ ] Load and follow [configure-content-view.md](docs/configure-content-view.md) if need to apply theme layout to pages
+- [ ] MUST read [handle-ui-components.md](docs/handle-ui-components.md) if creating a new theme layout component.
+- [ ] MUST read [configure-content-themeLayout.md](docs/configure-content-themeLayout.md).
+- [ ] MUST read [configure-content-view.md](docs/configure-content-view.md) if need to apply theme layout to pages
 
 ### Applying/Setting Theme Layouts
 
-**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
+**Mandatory Steps**:
 
-- [ ] Load and follow [configure-content-view.md](docs/configure-content-view.md)
+- [ ] MUST read [configure-content-view.md](docs/configure-content-view.md)
 
 ### Configuring Branding
 
-**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
+**Mandatory Steps**:
 
-- [ ] Read and follow strictly [configure-content-brandingSet.md](docs/configure-content-brandingSet.md) to configure background colors, foreground colors, button colors, and other branding colors that affect all pages.
+- [ ] MUST read [configure-content-brandingSet.md](docs/configure-content-brandingSet.md) to configure background colors, foreground colors, button colors, and other branding colors that affect all pages.
 
 ### CUD Operations on DigitalExperience Contents
 
 - Users can perform create, update, delete operations on DigitalExperience Contents.
 
-**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
+**Mandatory Steps**:
 
 - [ ] Determine what content types the user wants to modify
-- [ ] Read and follow strictly the reference doc related to the target content types if the doc exists. e.g., if modifying `sfdc_cms__route`, load [configure-content-route.md](docs/configure-content-route.md).
-- [ ] **Always** Read [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) if creating or modifying view or theme layout
+- [ ] MUST read the reference doc related to the target content types if the doc exists. e.g., if modifying `sfdc_cms__route`, load [configure-content-route.md](docs/configure-content-route.md).
+- [ ] MUST read [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) if creating or modifying view or theme layout
 - [ ] **Always** Call `execute_metadata_action` to get the schema and examples for that content type **after** loading the corresponding reference docs.
   - **Call once per content type per user request**: If you're creating/modifying multiple items of the same content type (e.g., creating 3 routes), you only need to call `execute_metadata_action` ONCE for that content type. Reuse the schema and examples for all items of that type within the same user request.
   - For each unique content type you need to work with, **always** call `execute_metadata_action` using the following:
