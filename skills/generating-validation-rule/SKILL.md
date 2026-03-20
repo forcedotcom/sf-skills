@@ -1,5 +1,5 @@
 ---
-name: salesforce-validation-rule
+name: generating-validation-rule
 description: Use this skill when users need to create, modify, or validate Salesforce Validation Rules. Trigger when users mention validation rules, field validation, data quality rules, formula validation, error messages, or validation logic. Also use when users encounter validation errors, need to update formulas, or want to enforce business rules at the data layer. Always use this skill for any validation rule work.
 ---
 

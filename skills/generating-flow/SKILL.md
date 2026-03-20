@@ -1,5 +1,5 @@
 ---
-name: salesforce-flow
+name: generating-flow
 description: Generate Salesforce Flows using the MCP tool execute_metadata_action. Use when the user asks to create, build, or generate a flow — including Screen, Autolaunched, Record-Triggered (before/after-save), Scheduled. Also trigger for flow-like requests such as "when a record is created", "trigger daily at", "send an email when", "update the field when", "automate", "workflow", or "flow XML/metadata". This is the only skill for Salesforce Flow generation.
 ---
 

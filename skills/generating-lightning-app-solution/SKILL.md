@@ -1,13 +1,13 @@
 ---
-name: salesforce-lightning-app-build
+name: generating-lightning-app-solution
 description: Build complete Salesforce Lightning Experience applications from natural language descriptions. Use this skill when a user requests a "complete app", "Lightning app", "business solution", "management system", or describes a scenario requiring multiple interconnected Salesforce components (objects, fields, pages, tabs, security). Orchestrates all required metadata types in proper dependency order to produce a deployable application.
 metadata:
   category: orchestration
   version: "1.0"
-  related-skills: salesforce-custom-object, salesforce-custom-field, salesforce-custom-tab, salesforce-flexipage, salesforce-custom-application, salesforce-flow, salesforce-validation-rule, salesforce-list-view, generate-permission-set
+  related-skills: skills/generating-custom-object/SKILL.md, skills/generating-custom-field/SKILL.md, skills/generating-custom-tab/SKILL.md, skills/generating-flexipage/SKILL.md, skills/generating-custom-application/SKILL.md, skills/generating-flow/SKILL.md, skills/generating-validation-rule/SKILL.md, skills/generating-list-view/SKILL.md, skills/generating-permission-set/SKILL.md
 ---
 
-# Salesforce Lightning Application Build
+# Generating Lightning App Solution
 
 ## Overview
 
@@ -35,6 +35,7 @@ Build a complete, deployable Salesforce Lightning Experience application from a 
 - Troubleshooting or debugging existing metadata
 - Building Salesforce Classic apps (not Lightning Experience)
 - User asks for just one object, or just one page, or just one permission set (without others)
+- User only needs to create or configure an app container (grouping existing tabs) without other metadata — use skills/generating-custom-application/SKILL.md instead
 
 ## Metadata Type Registry
 
@@ -42,15 +43,15 @@ This table shows which metadata types are commonly needed for LEX apps and their
 
 | Metadata Type | Skill Available? | Skill Name | Usage Rule |
 |---------------|------------------|------------|------------|
-| **Custom Object** | ✅ YES | `salesforce-custom-object` | MUST use skill |
-| **Custom Field** | ✅ YES | `salesforce-custom-field` | MUST use skill |
-| **Custom Tab** | ✅ YES | `salesforce-custom-tab` | MUST use skill |
-| **FlexiPage** | ✅ YES | `salesforce-flexipage` | MUST use skill |
-| **Custom Application** | ✅ YES | `salesforce-custom-application` | MUST use skill |
-| **List View** | ✅ YES | `salesforce-list-view` | MUST use skill |
-| **Validation Rule** | ✅ YES | `salesforce-validation-rule` | MUST use skill (if requested) |
-| **Flow** | ✅ YES | `salesforce-flow` | MUST use skill (if requested) |
-| **Permission Set** | ✅ YES | `generate-permission-set` | MUST use skill |
+| **Custom Object** | ✅ YES | `skills/generating-custom-object/SKILL.md` | MUST use skill |
+| **Custom Field** | ✅ YES | `skills/generating-custom-field/SKILL.md` | MUST use skill |
+| **Custom Tab** | ✅ YES | `skills/generating-custom-tab/SKILL.md` | MUST use skill |
+| **FlexiPage** | ✅ YES | `skills/generating-flexipage/SKILL.md` | MUST use skill |
+| **Custom Application** | ✅ YES | `skills/generating-custom-application/SKILL.md` | MUST use skill |
+| **List View** | ✅ YES | `skills/generating-list-view/SKILL.md` | MUST use skill |
+| **Validation Rule** | ✅ YES | `skills/generating-validation-rule/SKILL.md` | MUST use skill (if requested) |
+| **Flow** | ✅ YES | `skills/generating-flow/SKILL.md` | MUST use skill (if requested) |
+| **Permission Set** | ✅ YES | `skills/generating-permission-set/SKILL.md` | MUST use skill |
 
 ### Skill Usage Rules
 
@@ -74,8 +75,8 @@ Relationships (depends on: Both parent and child objects + fields exist)
 ```
 
 **Skills to invoke in order:**
-1. `salesforce-custom-object` for each object
-2. `salesforce-custom-field` for each field (including Master-Detail, Lookup, Roll-up Summary)
+1. `skills/generating-custom-object/SKILL.md` — once, with all objects
+2. `skills/generating-custom-field/SKILL.md` — once, with all fields (including Master-Detail, Lookup, Roll-up Summary)
 
 ### Phase 2: Business Logic (Optional - only if requested)
 ```
@@ -85,8 +86,8 @@ Flows (depends on: Objects, Fields exist)
 ```
 
 **Skills to invoke (only if user requested):**
-1. `salesforce-validation-rule` if validation requirements mentioned
-2. `salesforce-flow` if automation/workflow requirements mentioned
+1. `skills/generating-validation-rule/SKILL.md` — once, if validation requirements mentioned
+2. `skills/generating-flow/SKILL.md` — once, if automation/workflow requirements mentioned
 
 ### Phase 3: User Interface
 ```
@@ -98,9 +99,9 @@ FlexiPages (depends on: Objects, Tabs exist)
 ```
 
 **Skills to invoke in order:**
-1. `salesforce-list-view` for filtered record views (if requested)
-2. `salesforce-custom-tab` for each object tab
-3. `salesforce-flexipage` for record/home/app pages
+1. `skills/generating-list-view/SKILL.md` — once, for filtered record views (if requested)
+2. `skills/generating-custom-tab/SKILL.md` — once, with all object tabs
+3. `skills/generating-flexipage/SKILL.md` — once, with all record/home/app pages
 
 ### Phase 4: Application Assembly
 ```
@@ -108,7 +109,7 @@ Custom Application (depends on: Tabs exist)
 ```
 
 **Skills to invoke:**
-1. `salesforce-custom-application` to create the Lightning App container
+1. `skills/generating-custom-application/SKILL.md` — once, to create the Lightning App container
 
 ### Phase 5: Security & Access
 ```
@@ -116,7 +117,7 @@ Permission Sets (depends on: Objects, Fields, Tabs, App exist)
 ```
 
 **Skills to invoke:**
-1. `generate-permission-set` for each permission set with access to:
+1. `skills/generating-permission-set/SKILL.md` — once, with all permission sets and access to:
    - Objects (Read, Create, Edit, Delete)
    - Fields (Read, Edit)
    - Tabs (Visible)
@@ -163,14 +164,14 @@ SECURITY:
 - Permission Sets: [list with purpose]
 
 METADATA SKILLS TO INVOKE:
-- salesforce-custom-object (x N)
-- salesforce-custom-field (x N)
-- salesforce-validation-rule (x N) - if validation requirements identified
-- salesforce-flow (x N) - if automation requirements identified
-- salesforce-custom-tab (x N)
-- salesforce-flexipage (x N)
-- salesforce-custom-application (x 1)
-- generate-permission-set (x N)
+- skills/generating-custom-object/SKILL.md (x 1)
+- skills/generating-custom-field/SKILL.md (x 1)
+- skills/generating-validation-rule/SKILL.md (x 1) - if validation requirements identified
+- skills/generating-flow/SKILL.md (x 1) - if automation requirements identified
+- skills/generating-custom-tab/SKILL.md (x 1)
+- skills/generating-flexipage/SKILL.md (x 1)
+- skills/generating-custom-application/SKILL.md (x 1)
+- skills/generating-permission-set/SKILL.md (x 1)
 
 DEPENDENCY ORDER:
 1. Phase 1: Data Model (Objects → Fields)
@@ -182,23 +183,23 @@ DEPENDENCY ORDER:
 
 ### STEP 2: Skill Invocation Sequence
 
-Execute in strict dependency order. For each metadata component:
+Execute in strict dependency order. Invoke each skill once with all components for that metadata type.
 
 1. **Check Metadata Type Registry**: Does a skill exist?
-2. **If YES (✅)**: Invoke the specialized skill with required parameters
+2. **If YES (✅)**: Invoke the specialized skill once with all components for that type
 3. **If NO (❌)**: Generate metadata directly using Metadata API knowledge
 4. **Handle Errors**: If skill invocation fails, log error and continue (don't block entire app)
 
-**Invocation Pattern Example:**
+**Invocation Pattern (one invocation per metadata type):**
 
-- For Custom Object → Invoke `salesforce-custom-object`
-- For Custom Field → Invoke `salesforce-custom-field`
-- For Validation Rule → Invoke `salesforce-validation-rule`
-- For Flow → Invoke `salesforce-flow`
-- For Custom Tab → Invoke `salesforce-custom-tab`
-- For FlexiPage → Invoke `salesforce-flexipage`
-- For Custom Application → Invoke `salesforce-custom-application`
-- For Permission Set → Invoke `generate-permission-set`
+- Custom Objects → Invoke `skills/generating-custom-object/SKILL.md` once with all objects
+- Custom Fields → Invoke `skills/generating-custom-field/SKILL.md` once with all fields
+- Validation Rules → Invoke `skills/generating-validation-rule/SKILL.md` once (if requested)
+- Flows → Invoke `skills/generating-flow/SKILL.md` once (if requested)
+- Custom Tabs → Invoke `skills/generating-custom-tab/SKILL.md` once with all tabs
+- FlexiPages → Invoke `skills/generating-flexipage/SKILL.md` once with all pages
+- Custom Application → Invoke `skills/generating-custom-application/SKILL.md` once
+- Permission Sets → Invoke `skills/generating-permission-set/SKILL.md` once with all permission sets
 
 ### STEP 3: Final Artifact Assembly
 

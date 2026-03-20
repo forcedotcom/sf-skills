@@ -56,6 +56,31 @@ jobs:
           skip-on-empty: ${{ github.event_name == 'push' }}
           version-file: "package.json"
           output-file: "CHANGELOG.md"
+          git-push: "false"
+
+      - name: Report validate-skills status on release commit
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        env:
+          GH_TOKEN: ${{ secrets.IDEE_GH_TOKEN }}
+        run: |
+          SHA=$(git rev-parse HEAD)
+          gh api "repos/${{ github.repository }}/statuses/$SHA" \
+            -f state=success \
+            -f context=validate-skills \
+            -f description="Validated in release workflow"
+
+      - name: Verify tag does not already exist
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        run: |
+          TAG="${{ steps.changelog.outputs.tag }}"
+          if git ls-remote --tags origin | grep -q "refs/tags/$TAG$"; then
+            echo "::error::Tag $TAG already exists on remote. Delete it first if re-releasing: git push --delete origin $TAG"
+            exit 1
+          fi
+
+      - name: Push release commit and tag
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        run: git push origin main --follow-tags
 
       - name: Create Github Release
         id: release
