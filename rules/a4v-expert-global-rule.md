@@ -8,7 +8,7 @@
 
 Process each metadata type **one at a time, in order**. Complete the full loop (a → b → c) for one type before starting the next — do not mix types.
 
-**a. Load Skill** — Load the metadata type's skill once (not per record).
+**a. Load Skill** — Load the metadata type's skill once (not per metadata file).
 
 **b. Get Entity Context** — Use these tools to fetch entity context for the metadata type:
 - `get_metadata_type_sections`
@@ -17,7 +17,7 @@ Process each metadata type **one at a time, in order**. Complete the full loop (
 - `get_metadata_type_fields_properties`
 - `search_metadata_types`
 
-**c. Generate Files** — Generate all files for that type using the skill + context output. If multiple records are needed (e.g., several Custom Fields), generate them all now — do not re-call tools per record.
+**c. Generate Files** — Generate all files for that type using the skill + context output. If multiple metadata files are needed (e.g., several Custom Fields), generate them all now — do not re-call tools per metadata file.
 
 **Child metadata:** If a parent file contains child metadata (e.g., fields inside an object), treat the child type separately — load its own skill and call its own context tools.
 
@@ -39,6 +39,6 @@ On failure: fix the errors and re-run. The task is NOT complete until this comma
 |------|------------------|
 | ALWAYS load skill + call context tools before writing any file — even for "simple" types| Skipping tools because the task "seems easy", then generating incorrect XML |
 | Complete the full loop (skill → context → generate) for one type before starting the next | Mixing types — e.g., loading skills for two types before generating either |
-| One skill load and one tool-call set per type, not per record | Reloading the skill for each Custom Field |
+| One skill load and one tool-call set per type, not per metadata file | Reloading the skill for each Custom Field |
 | Child types need their own skill + context | Using CustomObject context to generate CustomField metadata |
 | Deploy all metadata together after generation is complete | Running `sf project deploy` after each type |
