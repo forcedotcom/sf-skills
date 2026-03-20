@@ -49,7 +49,7 @@ The `_meta.json` file must contain:
 
 ### Theme Layout Type (All Views)
 
-The `contentBody.themeLayoutType` field specifies which theme layout to use for the view.
+The `contentBody.themeLayoutType` field specifies which theme layout to use for the view. There can only be one per view.
 
 - **Default**: `"Inner"` - Use this default if the user does not specify a layout OR if the lookup fails to find a matching layoutType
 - **Lookup**: To find valid values:

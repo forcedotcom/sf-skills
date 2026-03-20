@@ -72,6 +72,7 @@ The `content.json` file must contain:
 - `contentBody`: Include all `required` properties from `schemaDefinition`. Use `examplesOfContentType` for reference.
 - Do not add additional fields.
 - `urlName`: URL identifier (lowercase, words separated by dashes e.g., "scoped-header-and-footer")
+- `contentBody.compnent.definition`: The actual theme layout component that displays/renders the layout and includes theme region components.
 
 **Rules**:
 
