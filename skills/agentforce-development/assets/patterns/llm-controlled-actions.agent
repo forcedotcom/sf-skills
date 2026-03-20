@@ -1,0 +1,184 @@
+# LLM-Controlled Actions Pattern
+# Demonstrates both deterministic and LLM-controlled action invocation
+#
+# ★ When To Use This Pattern:
+#   - When the LLM should decide which actions to invoke based on context
+#   - When actions should only be available under certain conditions
+#   - When you want the agent to make intelligent choices about tool usage
+#
+# ★ Key Insight:
+#   - Deterministic: "run @actions.x" - ALWAYS runs when code path is reached
+#   - LLM-Controlled: "{!@actions.x}" in instructions - LLM decides based on context
+#   - Tools in reasoning.actions - LLM chooses which to invoke
+#
+# ★ Two Invocation Methods:
+#   1. Deterministic (run @actions.x): Use in before/after_reasoning, action callbacks
+#   2. LLM-Controlled ({!@actions.x}): Reference in reasoning instructions
+#
+# This is a PARTIAL template - integrate into a complete agent file
+
+# Variables for tracking action context
+variables:
+	# ... standard linked variables ...
+	has_order_id: mutable boolean = False
+		description: "Whether user has provided an order ID"
+	order_id: mutable string
+		description: "The order ID provided by user"
+	action_taken: mutable string
+		description: "Last action taken by agent"
+
+topic order_assistance:
+	label: "Order Assistance"
+	description: "Helps customers with order-related questions"
+
+	# Define available actions
+	actions:
+		get_order_status:
+			description: "Retrieves order status by order ID"
+			inputs:
+				order_id: string
+					description: "The order ID to look up"
+			outputs:
+				status: string
+					description: "Current order status"
+				delivery_date: string
+					description: "Expected delivery date"
+			target: "flow://Get_Order_Status"
+
+		update_order:
+			description: "Updates an existing order"
+			require_user_confirmation: True    # ★ Ask user before executing
+			inputs:
+				order_id: string
+					description: "Order to update"
+				changes: string
+					description: "Changes to make"
+			outputs:
+				success: boolean
+					description: "Whether update succeeded"
+			target: "flow://Update_Order"
+
+		cancel_order:
+			description: "Cancels an order"
+			require_user_confirmation: True    # ★ Destructive action - confirm first
+			include_in_progress_indicator: True
+			inputs:
+				order_id: string
+					description: "Order to cancel"
+				reason: string
+					description: "Cancellation reason"
+			outputs:
+				refund_amount: number
+					description: "Refund amount"
+					filter_from_agent: False     # Show this to LLM
+			target: "flow://Cancel_Order"
+
+		log_interaction:
+			description: "Logs customer interaction for analytics"
+			inputs:
+				interaction_type: string
+					description: "Type of interaction"
+			outputs:
+				logged: boolean
+					description: "Whether log succeeded"
+			target: "flow://Log_Interaction"
+
+	# ★ Deterministic logging before reasoning
+	before_reasoning:
+		run @actions.log_interaction
+			with interaction_type="order_inquiry"
+
+	reasoning:
+		# ★ LLM-Controlled: Reference actions in natural language
+		# The LLM decides when to use these based on conversation context
+		instructions: ->
+			| Help the customer with their order inquiry.
+			|
+			| Available capabilities:
+			| - Use {!@actions.get_order_status} to look up order details when they provide an order ID
+			| - Use {!@actions.update_order} if they want to modify their order (requires confirmation)
+			| - Use {!@actions.cancel_order} if they want to cancel (requires confirmation)
+			|
+			| Always confirm destructive actions before proceeding.
+			| If they haven't provided an order ID, ask for it first.
+
+		# ★ Tools: LLM chooses which to invoke based on conversation
+		actions:
+			# Slot filling - LLM extracts order_id from conversation
+			lookup: @actions.get_order_status
+				with order_id=...
+				set @variables.order_id = @outputs.status
+
+			# Conditional availability - only show when order ID is known
+			update: @actions.update_order
+				with order_id=@variables.order_id
+				with changes=...
+				available when @variables.has_order_id == True
+
+			# Conditional availability with multiple conditions
+			cancel: @actions.cancel_order
+				with order_id=@variables.order_id
+				with reason=...
+				available when @variables.has_order_id == True
+				available when @variables.order_status != "shipped"
+
+			# Topic transitions
+			go_help: @utils.transition to @topic.general_help
+			go_escalation: @utils.transition to @topic.escalation
+				available when @variables.needs_human == True
+
+# ★ Insight: When to Use Each Method
+#
+# DETERMINISTIC (run @actions.x):
+#   - Audit logging (must always run)
+#   - Required follow-up actions
+#   - Guaranteed side effects
+#   - In before_reasoning / after_reasoning blocks
+#   - In action callbacks (run after parent)
+#
+# LLM-CONTROLLED (reasoning.actions or {!@actions.x}):
+#   - User-driven choices
+#   - Context-dependent operations
+#   - Optional actions based on conversation
+#   - When intelligence is needed to decide
+#
+# CONDITIONAL (available when):
+#   - Guard destructive operations
+#   - Show options only when prerequisites met
+#   - Enforce business rules
+
+# ★ Example: Action Callback Pattern (Deterministic Chaining)
+# Use "run" for guaranteed follow-up actions after a primary action
+
+topic checkout:
+	label: "Checkout"
+	description: "Handles order checkout"
+
+	actions:
+		create_order:
+			description: "Creates a new order"
+			inputs:
+				items: list[string]
+					description: "Items to order"
+			outputs:
+				order_id: string
+					description: "Created order ID"
+			target: "flow://Create_Order"
+
+		send_confirmation:
+			description: "Sends order confirmation email"
+			inputs:
+				order_id: string
+					description: "Order to confirm"
+			target: "flow://Send_Confirmation"
+
+	reasoning:
+		instructions: ->
+			| Process the customer's checkout request.
+		actions:
+			# ★ Action callback: send_confirmation ALWAYS runs after create_order
+			process_checkout: @actions.create_order
+				with items=...
+				set @variables.order_id = @outputs.order_id
+				run @actions.send_confirmation                # ★ Guaranteed to run
+					with order_id=@variables.order_id

@@ -1,0 +1,188 @@
+# Prompt Template Action Pattern
+# Invoke Salesforce PromptTemplates directly from Agent Script
+#
+# ★ When To Use This Pattern:
+#   - Generate dynamic AI content (summaries, emails, recommendations)
+#   - Use Einstein Prompt Builder templates from agents
+#   - Combine structured data with LLM generation
+#   - Leverage existing PromptTemplate investments
+#
+# ★ Key Insights:
+#   - Target uses generatePromptResponse:// protocol (not flow://)
+#   - Input names MUST have "Input:" prefix (critical!)
+#   - Output field is always named "promptResponse"
+#   - PromptTemplate must be deployed BEFORE the agent
+#
+# ★ Important Limitation:
+#   - Template API name must exactly match target
+#   - Record-bound templates require recordId input
+#
+# This is a COMPLETE template - customize for your use case
+
+system:
+	instructions: "You are a content generation assistant. Help users create personalized content using AI templates. Always verify the generated content meets quality standards."
+	messages:
+		welcome: "Hello! I can help generate personalized content for you."
+		error: "I encountered an issue generating content. Let me try again."
+
+config:
+	agent_name: "Content_Generator_Agent"
+	default_agent_user: "agent@company.salesforce.com"
+	agent_label: "Content Generator"
+	description: "Agent that generates AI content using Prompt Templates"
+
+variables:
+	# Standard linked variables
+	EndUserId: linked string
+		source: @MessagingSession.MessagingEndUserId
+		description: "Messaging End User ID"
+	RoutableId: linked string
+		source: @MessagingSession.Id
+		description: "Messaging Session ID"
+	ContactId: linked string
+		source: @MessagingEndUser.ContactId
+		description: "Contact ID"
+
+	# Content generation variables
+	generated_schedule: mutable string = ""
+		description: "AI-generated schedule content"
+	generated_email: mutable string = ""
+		description: "AI-generated email content"
+	user_email: mutable string = ""
+		description: "User's email address"
+	user_timezone: mutable string = "America/Los_Angeles"
+		description: "User's timezone"
+	recipient_name: mutable string = ""
+		description: "Email recipient name"
+	email_topic: mutable string = ""
+		description: "Topic for email generation"
+
+language:
+	default_locale: "en_US"
+
+start_agent topic_selector:
+	label: "Content Generator"
+	description: "Routes to content generation options"
+
+	reasoning:
+		instructions: ->
+			| Ask the user what type of content they'd like to generate:
+			| 1. Personalized daily schedule
+			| 2. Professional email
+			|
+			| Route to the appropriate topic.
+		actions:
+			go_schedule: @utils.transition to @topic.schedule_generation
+			go_email: @utils.transition to @topic.email_generation
+
+topic schedule_generation:
+	label: "Schedule Generation"
+	description: "Generate personalized daily schedules"
+
+	actions:
+		# ★ PROMPT TEMPLATE ACTION - Key syntax elements:
+		# 1. target: uses generatePromptResponse:// protocol
+		# 2. inputs: MUST use "Input:" prefix
+		# 3. outputs: field name is always "promptResponse"
+		Generate_Personalized_Schedule:
+			description: "Generate a personalized daily schedule using AI."
+			inputs:
+				# ★ CRITICAL: Input names must have "Input:" prefix
+				# These map to {!email} and {!timezone} in the PromptTemplate
+				"Input:email": string
+					description: "User's email address for preference lookup"
+					is_required: True
+				"Input:timezone": string
+					description: "User's timezone for schedule formatting"
+					is_required: False
+			outputs:
+				# ★ Standard output field name for prompt responses
+				promptResponse: string
+					description: "The AI-generated schedule content"
+					is_used_by_planner: True
+					is_displayable: True
+			# ★ Target protocol: generatePromptResponse://TemplateApiName
+			target: "generatePromptResponse://Generate_Personalized_Schedule"
+
+	reasoning:
+		instructions: ->
+			| Help the user create a personalized daily schedule.
+			|
+			| 1. Ask for their email (required)
+			| 2. Ask for their timezone (optional, defaults to Pacific)
+			| 3. Generate the schedule using the AI template
+			| 4. Present the generated schedule
+			|
+			| The schedule will include morning routine, work blocks,
+			| breaks, and evening wind-down based on preferences.
+
+		actions:
+			create_schedule: @actions.Generate_Personalized_Schedule
+				# ★ Input binding with quoted field names
+				with "Input:email"=@variables.user_email
+				with "Input:timezone"=@variables.user_timezone
+				set @variables.generated_schedule = @outputs.promptResponse
+
+			back: @utils.transition to @topic.topic_selector
+
+topic email_generation:
+	label: "Email Generation"
+	description: "Generate professional emails"
+
+	actions:
+		# Another Prompt Template action example
+		Generate_Professional_Email:
+			description: "Generate a professional email draft."
+			inputs:
+				"Input:recipientName": string
+					description: "Name of the email recipient"
+					is_required: True
+				"Input:topic": string
+					description: "Topic or purpose of the email"
+					is_required: True
+				"Input:tone": string
+					description: "Desired tone: formal, friendly, urgent"
+					is_required: False
+			outputs:
+				promptResponse: string
+					description: "The generated email content"
+					is_used_by_planner: True
+					is_displayable: True
+			target: "generatePromptResponse://Generate_Professional_Email"
+
+	reasoning:
+		instructions: ->
+			| Help the user draft a professional email.
+			|
+			| Collect:
+			| 1. Recipient's name (required)
+			| 2. Email topic/purpose (required)
+			| 3. Desired tone: formal, friendly, or urgent (optional)
+			|
+			| Generate the email and present it for review.
+
+		actions:
+			create_email: @actions.Generate_Professional_Email
+				with "Input:recipientName"=...
+				with "Input:topic"=...
+				with "Input:tone"=...
+				set @variables.generated_email = @outputs.promptResponse
+
+			back: @utils.transition to @topic.topic_selector
+
+# ★ Insight: Prompt Template Integration Checklist
+#
+# BEFORE PUBLISHING AGENT:
+#   1. Create PromptTemplate metadata file
+#   2. Deploy PromptTemplate: sf project deploy start -m "PromptTemplate:Template_Name"
+#   3. Verify template exists: sf org list metadata -m PromptTemplate
+#
+# INPUT MAPPING:
+#   Agent Script "Input:fieldName" → PromptTemplate {!fieldName}
+#   "Input:email"                  → {!email}
+#   "Input:customerName"           → {!customerName}
+#
+# COMMON ERRORS:
+#   - HTTP 404: PromptTemplate not deployed yet
+#   - "property X not found": Input name doesn't match template variable
+#   - Missing "Input:" prefix: Inputs won't map correctly

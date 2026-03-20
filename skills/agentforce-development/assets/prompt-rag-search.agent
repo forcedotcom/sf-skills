@@ -1,0 +1,131 @@
+# Prompt Template with RAG Search Template
+# =========================================
+#
+# This template demonstrates the pattern for combining Prompt Templates
+# with Data Cloud RAG (Retrieval Augmented Generation) for grounded responses.
+#
+# Pattern: Knowledge search + grounded response generation
+# Use when: FAQ bots, product knowledge agents, documentation assistants
+#
+# CREDIT CONSUMPTION:
+# - Prompt Templates: 2-16 credits per invocation
+# - Retriever actions: 20 credits per search
+# - TIP: Cache retriever results in variables, reuse across topics
+
+system:
+   messages:
+      welcome: "Hello! I can help answer questions about our products and services."
+      error: "I apologize, I couldn't find the information you need."
+   instructions: "You are a helpful knowledge assistant. Always provide grounded answers based on retrieved knowledge."
+
+config:
+   agent_name: "RAGSearchAgent"
+   agent_label: "Knowledge Assistant"
+   description: "Agent demonstrating Prompt Template with Data Cloud RAG pattern"
+   default_agent_user: "agent@yourorg.com"  # REQUIRED: Change to valid Einstein Agent User
+
+variables:
+   # Search state
+   search_query: mutable string = ""
+      description: "User's current search query"
+   search_results: mutable string = ""
+      description: "Retrieved knowledge chunks (cached for reuse)"
+   has_results: mutable boolean = False
+      description: "Whether search returned results"
+
+   # Response tracking
+   response_generated: mutable boolean = False
+      description: "Whether a response has been generated for current query"
+
+start_agent entry:
+   description: "Entry point - welcome and route to knowledge search"
+   reasoning:
+      instructions: |
+         Welcome the user and offer to help with questions.
+      actions:
+         go_search: @utils.transition to @topic.knowledge_search
+            description: "Start knowledge search"
+
+# ============================================================
+# KNOWLEDGE SEARCH TOPIC (RAG Pattern)
+# ============================================================
+
+topic knowledge_search:
+   description: "Search knowledge base and generate grounded responses"
+   reasoning:
+      instructions: ->
+         # POST-ACTION: Generate response after retrieval
+         if @variables.has_results == True and @variables.response_generated == False:
+            # Use Prompt Template to generate grounded response
+            run @actions.Generate_Grounded_Response
+               with query = @variables.search_query
+               with context = @variables.search_results
+            set @variables.response_generated = True
+
+         # NO RESULTS: Escalate or try different search
+         if @variables.has_results == False and @variables.search_query != "":
+            | I couldn't find information about that topic.
+            | Would you like to try a different search, or speak with a human agent?
+
+         # INITIAL STATE: Ask for question
+         if @variables.search_query == "":
+            | What would you like to know? I can help with:
+            | - Product information
+            | - Pricing and plans
+            | - Technical specifications
+            | - Troubleshooting guides
+
+      actions:
+         # Retriever action for RAG search
+         # This searches Data Cloud knowledge base
+         search_knowledge: @actions.Search_Knowledge_Base
+            description: "Search for relevant information"
+            with query = ...  # LLM extracts user's question
+            include_in_progress_indicator: True
+            progress_indicator_message: "Searching our knowledge base..."
+            set @variables.search_query = @outputs.original_query
+            set @variables.search_results = @outputs.retrieved_chunks
+            set @variables.has_results = @outputs.has_results
+            set @variables.response_generated = False  # Reset for new search
+
+         # Prompt Template for grounded response
+         # Configure in Agentforce Assets with:
+         # - Template instructions referencing retrieved context
+         # - Set output is_displayable: True (response shown to user)
+         generate_answer: @actions.Generate_Grounded_Response
+            description: "Generate answer from retrieved knowledge"
+            available when @variables.has_results == True
+            with query = @variables.search_query
+            with context = @variables.search_results
+
+         # New search
+         new_search: @utils.setVariables
+            description: "Search for something else"
+            with search_query = ""
+            with search_results = ""
+            with has_results = False
+            with response_generated = False
+
+         escalate_now: @utils.escalate
+            description: "Transfer to human agent"
+
+# ============================================================
+# FOLLOW-UP QUESTIONS TOPIC
+# ============================================================
+
+topic follow_up:
+   description: "Handle follow-up questions using cached context"
+   reasoning:
+      instructions: ->
+         # COST OPTIMIZATION: Reuse cached search_results instead of re-searching
+         if @variables.search_results != "":
+            | Based on what we discussed:
+            run @actions.Generate_Grounded_Response
+               with query = ...  # Follow-up question extracted by LLM
+               with context = @variables.search_results  # Reuse cached results!
+         else:
+            transition to @topic.knowledge_search
+
+      actions:
+         back_to_search: @utils.transition to @topic.knowledge_search
+            description: "Start a new search"

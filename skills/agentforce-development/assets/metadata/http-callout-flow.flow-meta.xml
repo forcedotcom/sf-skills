@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    HTTP Callout Flow Template for Agent Actions
+
+    Use Case: Create Flow-based API actions for agents
+    - Enables external API calls from Agent Script
+    - Uses Named Credential for secure auth
+    - Works with flow:// target in Agent Script
+
+    Pattern:
+    Agent Script → flow://{{FlowName}} → HTTP Callout → External API
+
+    Prerequisites:
+    1. Named Credential configured for API auth
+    2. sf-integration skill used to create Named Credential
+
+    Setup Steps:
+    1. Replace all {{placeholder}} values
+    2. Deploy Named Credential first
+    3. Deploy this Flow
+    4. Reference in Agent Script: target: "flow://{{FlowApiName}}"
+
+    File Location: force-app/main/default/flows/{{FlowApiName}}.flow-meta.xml
+-->
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- API Name -->
+    <fullName>{{FlowApiName}}</fullName>
+
+    <!-- Display label -->
+    <label>{{FlowLabel}}</label>
+
+    <!-- Description -->
+    <description>HTTP callout to {{ExternalSystemName}} for agent actions</description>
+
+    <!-- Autolaunched Flow (required for agent actions) -->
+    <processType>AutoLaunchedFlow</processType>
+
+    <!-- API Version -->
+    <apiVersion>66.0</apiVersion>
+
+    <!-- Active status -->
+    <status>Active</status>
+
+    <!--
+    =========================================
+    INPUT VARIABLES
+    Must be marked "Available for Input"
+    =========================================
+    -->
+    <variables>
+        <name>input_param_1</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue></stringValue>
+        </value>
+    </variables>
+
+    <!-- Add more input variables as needed -->
+    <!--
+    <variables>
+        <name>input_param_2</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    -->
+
+    <!--
+    =========================================
+    OUTPUT VARIABLES
+    Must be marked "Available for Output"
+    =========================================
+    -->
+    <variables>
+        <name>output_result</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+
+    <variables>
+        <name>output_status</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+
+    <variables>
+        <name>output_error</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+
+    <!--
+    =========================================
+    HTTP CALLOUT ACTION
+    Core Action for making HTTP requests
+    =========================================
+    -->
+    <actionCalls>
+        <name>HTTP_Callout</name>
+        <label>Call External API</label>
+        <locationX>176</locationX>
+        <locationY>158</locationY>
+
+        <!-- HTTP Callout Core Action -->
+        <actionType>httpCallout</actionType>
+
+        <!--
+        Named Credential for authentication
+        Format: callout:NamedCredentialName
+        -->
+        <actionName>callout:{{NamedCredentialName}}</actionName>
+
+        <!-- Continue on error to handle gracefully -->
+        <connector>
+            <targetReference>Check_Response</targetReference>
+        </connector>
+
+        <faultConnector>
+            <targetReference>Handle_Error</targetReference>
+        </faultConnector>
+
+        <!-- HTTP Method: GET, POST, PUT, PATCH, DELETE -->
+        <inputParameters>
+            <name>method</name>
+            <value>
+                <stringValue>{{GET|POST|PUT|PATCH|DELETE}}</stringValue>
+            </value>
+        </inputParameters>
+
+        <!-- API Endpoint path (appended to Named Credential base URL) -->
+        <inputParameters>
+            <name>url</name>
+            <value>
+                <elementReference>API_Endpoint</elementReference>
+            </value>
+        </inputParameters>
+
+        <!-- Request body (for POST/PUT/PATCH) -->
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>Request_Body</elementReference>
+            </value>
+        </inputParameters>
+
+        <!-- Response body -->
+        <outputParameters>
+            <assignToReference>Response_Body</assignToReference>
+            <name>responseBody</name>
+        </outputParameters>
+
+        <!-- Response status code -->
+        <outputParameters>
+            <assignToReference>Response_Status_Code</assignToReference>
+            <name>statusCode</name>
+        </outputParameters>
+    </actionCalls>
+
+    <!--
+    =========================================
+    FORMULAS
+    Build request URL and body
+    =========================================
+    -->
+    <formulas>
+        <name>API_Endpoint</name>
+        <dataType>String</dataType>
+        <!-- Build endpoint with input parameters -->
+        <expression>"/{{apiPath}}/" &amp; {!input_param_1}</expression>
+    </formulas>
+
+    <formulas>
+        <name>Request_Body</name>
+        <dataType>String</dataType>
+        <!-- Build JSON request body -->
+        <expression>'{"param1": "' &amp; {!input_param_1} &amp; '"}'</expression>
+    </formulas>
+
+    <!--
+    =========================================
+    PRIVATE VARIABLES
+    For internal flow processing
+    =========================================
+    -->
+    <variables>
+        <name>Response_Body</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+
+    <variables>
+        <name>Response_Status_Code</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+
+    <!--
+    =========================================
+    DECISION: Check Response Status
+    =========================================
+    -->
+    <decisions>
+        <name>Check_Response</name>
+        <label>Check Response Status</label>
+        <locationX>176</locationX>
+        <locationY>278</locationY>
+
+        <defaultConnector>
+            <targetReference>Set_Error_Output</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Error</defaultConnectorLabel>
+
+        <rules>
+            <name>Success</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Response_Status_Code</leftValueReference>
+                <operator>GreaterThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>200</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Response_Status_Code</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>300</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Success_Output</targetReference>
+            </connector>
+            <label>Success (2xx)</label>
+        </rules>
+    </decisions>
+
+    <!--
+    =========================================
+    ASSIGNMENTS: Set Output Variables
+    =========================================
+    -->
+    <assignments>
+        <name>Set_Success_Output</name>
+        <label>Set Success Output</label>
+        <locationX>50</locationX>
+        <locationY>398</locationY>
+
+        <assignmentItems>
+            <assignToReference>output_result</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Response_Body</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>output_status</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Success</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+
+    <assignments>
+        <name>Set_Error_Output</name>
+        <label>Set Error Output</label>
+        <locationX>302</locationX>
+        <locationY>398</locationY>
+
+        <assignmentItems>
+            <assignToReference>output_status</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Error</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>output_error</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Response_Body</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+
+    <assignments>
+        <name>Handle_Error</name>
+        <label>Handle Callout Error</label>
+        <locationX>440</locationX>
+        <locationY>278</locationY>
+
+        <assignmentItems>
+            <assignToReference>output_status</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Error</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>output_error</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>HTTP callout failed</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+
+    <!-- Flow start -->
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>HTTP_Callout</targetReference>
+        </connector>
+    </start>
+
+    <!--
+    AGENT SCRIPT USAGE:
+
+    actions:
+        call_api:
+            description: "Calls external API"
+            inputs:
+                param1: string
+                    description: "Input parameter"
+            outputs:
+                result: string
+                    description: "API response"
+                status: string
+                    description: "Success or Error"
+            target: "flow://{{FlowApiName}}"
+    -->
+</Flow>

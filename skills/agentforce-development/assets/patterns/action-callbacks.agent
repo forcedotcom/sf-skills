@@ -1,0 +1,178 @@
+# Action Callbacks Pattern
+# Use the `run` keyword for deterministic post-action processing
+#
+# ★ When To Use This Pattern:
+#   - You need guaranteed follow-up after an action completes
+#   - Audit logging or notifications must ALWAYS happen
+#   - Chain multiple actions where order matters
+#
+# ★ Key Insight:
+#   The `run` keyword executes AFTER the parent action completes.
+#   This is deterministic (not LLM-decided) - the callback ALWAYS runs.
+#   Use this when you can't afford to skip follow-up steps.
+#
+# ★ Validation Impact:
+#   - [5 pts] Actions with proper callback structure
+#   - Avoid nested run (only 1 level of nesting allowed)
+#
+# This is a PARTIAL template - integrate into a complete agent file
+
+topic order_processing:
+	label: "Order Processing"
+	description: "Processes orders with guaranteed confirmation and logging"
+
+	actions:
+		create_order:
+			description: "Creates a new order in the system"
+			inputs:
+				customer_id: string
+					description: "Customer identifier"
+				items: list[string]
+					description: "List of item SKUs"
+				total: number
+					description: "Order total amount"
+			outputs:
+				order_id: string
+					description: "Generated order ID"
+				status: string
+					description: "Order creation status"
+			target: "flow://Create_Order"
+
+		send_confirmation:
+			description: "Sends order confirmation email"
+			inputs:
+				order_id: string
+					description: "Order ID to confirm"
+				customer_email: string
+					description: "Customer email address"
+			outputs:
+				sent: boolean
+					description: "Whether email was sent"
+			target: "flow://Send_Order_Confirmation"
+
+		log_activity:
+			description: "Logs activity for audit trail"
+			inputs:
+				event_type: string
+					description: "Type of event to log"
+				details: string
+					description: "Event details"
+			outputs:
+				logged: boolean
+					description: "Whether log was recorded"
+			target: "apex://AuditService.logEvent"
+
+	reasoning:
+		instructions: ->
+			| Help the customer place their order.
+			| Ensure confirmation is sent after successful orders.
+			| All order activities must be logged for compliance.
+		actions:
+			# This action uses callbacks to guarantee follow-up
+			process_order: @actions.create_order
+				with customer_id=@variables.customer_id
+				with items=...
+				with total=...
+				set @variables.order_id = @outputs.order_id
+				set @variables.order_status = @outputs.status
+				# Callback 1: Always send confirmation after order created
+				run @actions.send_confirmation
+					with order_id=@variables.order_id
+					with customer_email=@variables.customer_email
+				# Callback 2: Always log the activity
+				run @actions.log_activity
+					with event_type="ORDER_CREATED"
+					with details=@variables.order_id
+
+			back_to_menu: @utils.transition to @topic.topic_selector
+
+# ★ Anti-Pattern: Nested run (DO NOT DO THIS)
+#
+# process: @actions.first
+#    run @actions.second
+#       run @actions.third   # ❌ INVALID - nested run not allowed
+#
+# ★ Correct Pattern: Sequential callbacks (all at same level)
+#
+# process: @actions.first
+#    run @actions.second     # ✅ First callback
+#    run @actions.third      # ✅ Second callback (runs after second)
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ★ Pattern 2: Simple Variable Updates (No Callback Needed)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# For simple operations like incrementing counters or storing outputs,
+# use `set` statements directly - NO `run` keyword needed.
+#
+# ⚠️ IMPORTANT: This pattern works in BOTH GenAiPlannerBundle AND AiAuthoringBundle
+#    The `run` keyword ONLY works in GenAiPlannerBundle (not AiAuthoringBundle)
+#    Use `set` statements for AiAuthoringBundle deployments
+#
+# Example: Create case and track count (works in BOTH bundle types)
+
+topic case_management:
+	label: "Case Management"
+	description: "Creates cases and tracks statistics"
+
+	actions:
+		create_case:
+			description: "Creates a new support case"
+			inputs:
+				inp_CustomerId: string
+					description: "Contact ID for the case"
+				inp_Subject: string
+					description: "Subject line for the case"
+			outputs:
+				out_CaseNumber: string
+					description: "Generated case number"
+				out_CaseId: string
+					description: "Salesforce ID of the created case"
+			target: "flow://Create_Case"
+
+	reasoning:
+		instructions: ->
+			| Help the customer create support cases.
+			| Track case count for session statistics.
+		actions:
+			# ✅ Simple pattern - just use `set` for variable updates
+			create_support_case: @actions.create_case
+				with inp_CustomerId=@variables.ContactId
+				with inp_Subject=...
+				set @variables.case_number = @outputs.out_CaseNumber
+				set @variables.case_id = @outputs.out_CaseId
+				set @variables.cases_created = @variables.cases_created + 1  # Direct increment!
+
+			back_to_menu: @utils.transition to @topic.topic_selector
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ⛔ INVALID KEYWORDS - NEVER USE THESE
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# The following keywords DO NOT EXIST in Agent Script. Using them causes:
+#   SyntaxError: Unexpected '[keyword]'
+#
+# ❌ internal_actions  - Does not exist (Claude may invent this for "local helpers")
+# ❌ helper_actions    - Does not exist
+# ❌ private_actions   - Does not exist
+# ❌ local_actions     - Does not exist
+#
+# If you need simple variable operations after an action, use `set` directly:
+#
+# ❌ WRONG (internal_actions does not exist):
+#
+# internal_actions:
+#    increment_counter:
+#       set @variables.count = @variables.count + 1
+#
+# reasoning:
+#    actions:
+#       process: @actions.create_case
+#          run @actions.increment_counter   # ❌ Can't reference internal action
+#
+# ✅ CORRECT (use set directly in the action block):
+#
+# reasoning:
+#    actions:
+#       process: @actions.create_case
+#          set @variables.count = @variables.count + 1  # ✅ Direct set works!

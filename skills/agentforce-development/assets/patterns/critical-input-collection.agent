@@ -1,0 +1,244 @@
+# Critical Input Collection Pattern
+# Ensures reliable capture of critical data before proceeding with workflows
+#
+# ★ Problem This Solves:
+#   - LLM sends empty JSON to actions
+#   - LLM sends wrong field names (_id instead of account_id)
+#   - LLM extracts wrong values from conversation
+#   - Agent proceeds without required data, causing crashes
+#
+# ★ Root Cause:
+#   Slot filling (`with account_id=...`) relies on LLM inference, which is
+#   probabilistic and can fail in subtle ways. Critical inputs need
+#   deterministic collection with validation.
+#
+# ★ Key Patterns:
+#   1. First-Interaction Collection - Tell LLM its PRIMARY GOAL
+#   2. Variable Setter Action - Dedicated action to capture + validate + store
+#   3. Single-Use Pattern - `available when @var == ""` disables after use
+#   4. Null Guard Pattern - Block ALL downstream actions until input is valid
+#   5. Explicit Action References - Guide LLM with `{!@actions.x}` in instructions
+#
+# ★ When To Use This Pattern:
+#   - Workflows that REQUIRE a specific ID (account, order, case, etc.)
+#   - When slot filling has been unreliable
+#   - When invalid input causes downstream failures
+#   - Multi-topic agents where input must persist across transitions
+#
+# This is a COMPLETE template - customize for your use case
+
+system:
+	instructions: "You are a research assistant. Your PRIMARY GOAL is to collect the account ID before performing any research. Never proceed without a validated account ID."
+	messages:
+		welcome: "Hello! I can help you research account information. Please provide the account ID to get started."
+		error: "I encountered an issue. Let me try again."
+
+config:
+	agent_name: "Account_Research_Agent"
+	default_agent_user: "agent@company.salesforce.com"
+	agent_label: "Account Research Agent"
+	description: "Demonstrates critical input collection patterns for reliable slot filling"
+
+variables:
+	# Standard linked variables (required)
+	EndUserId: linked string
+		source: @MessagingSession.MessagingEndUserId
+		description: "Messaging End User ID"
+	RoutableId: linked string
+		source: @MessagingSession.Id
+		description: "Messaging Session ID"
+	ContactId: linked string
+		source: @MessagingEndUser.ContactId
+		description: "Contact ID"
+
+	# ★ CRITICAL INPUT - The value that MUST be collected before proceeding
+	account_id: mutable string = ""
+		description: "The Salesforce Account ID (18-char, starts with 001) - MUST be collected and validated before any research"
+
+	# ★ VALIDATION STATE - Track whether input has been validated
+	account_id_validated: mutable boolean = False
+		description: "Whether account_id has been validated as a real Salesforce ID"
+
+	# ★ COLLECTION ATTEMPTS - Track retries to prevent infinite loops
+	collection_attempts: mutable number = 0
+		description: "Number of times we've tried to collect account_id"
+
+	# Research results
+	account_name: mutable string = ""
+		description: "Name of the account (from lookup)"
+	research_summary: mutable string = ""
+		description: "Research summary for the account"
+
+language:
+	default_locale: "en_US"
+	additional_locales: ""
+	all_additional_locales: False
+
+# ★ ENTRY POINT: Input Collection Topic
+# This topic's ONLY job is to collect and validate the critical input
+start_agent input_collector:
+	label: "Input Collector"
+	description: "Collects and validates the account ID before allowing research"
+
+	actions:
+		# ★ PATTERN 2: Variable Setter Action
+		# Dedicated action that captures, validates, and stores the input
+		capture_account_id:
+			description: "Captures and validates the Salesforce Account ID from user input"
+			inputs:
+				account_id: string
+					description: "The 18-character Salesforce Account ID provided by the user (format: starts with '001')"
+					is_required: True
+			outputs:
+				validated_account_id: string
+					description: "The validated account ID (empty if invalid)"
+				is_valid: boolean
+					description: "True if the account ID is valid and exists"
+				account_name: string
+					description: "Name of the account if found"
+				error_message: string
+					description: "Error message if validation failed"
+			target: "flow://Validate_Account_Id"
+			require_user_confirmation: False
+			include_in_progress_indicator: True
+			progress_indicator_message: "Validating account ID..."
+
+	reasoning:
+		# ★ PATTERN 1: First-Interaction Collection
+		# Tell the LLM its PRIMARY GOAL is to collect the input
+		instructions: ->
+			| YOUR PRIMARY GOAL: Collect the account ID from the user.
+			|
+			| CURRENT STATE:
+			if @variables.account_id == "":
+				| ⚠️ Account ID NOT YET COLLECTED
+				| ASK the user for their Salesforce Account ID.
+				| The ID should be 18 characters and start with "001".
+				|
+				| Example prompt: "Please provide the Account ID you'd like me to research."
+
+			if @variables.account_id != "" and @variables.account_id_validated == False:
+				| 🔄 Account ID received: {!@variables.account_id}
+				| Attempting validation...
+				|
+				| Use {!@actions.capture_account_id} to validate this ID.
+
+			if @variables.account_id_validated == True:
+				| ✅ Account ID validated: {!@variables.account_id}
+				| Account Name: {!@variables.account_name}
+				|
+				| Transition to research topic to begin analysis.
+
+			if @variables.collection_attempts > 2 and @variables.account_id_validated == False:
+				| ❌ Multiple validation failures.
+				| Ask the user to verify their Account ID is correct.
+				| Suggest they check Salesforce for the correct ID format.
+
+		actions:
+			# ★ PATTERN 3: Single-Use Pattern
+			# Action becomes unavailable once account_id is successfully captured
+			validate_id: @actions.capture_account_id
+				with account_id=...
+				set @variables.account_id = @outputs.validated_account_id
+				set @variables.account_id_validated = @outputs.is_valid
+				set @variables.account_name = @outputs.account_name
+				set @variables.collection_attempts = @variables.collection_attempts + 1
+				# ★ SINGLE-USE: Unavailable once validated
+				available when @variables.account_id_validated == False
+
+			# ★ PATTERN 4: Null Guard Pattern
+			# Transition ONLY available when input is validated
+			go_research: @utils.transition to @topic.research
+				available when @variables.account_id_validated == True
+
+# ★ RESEARCH TOPIC: Only accessible after input is validated
+topic research:
+	label: "Account Research"
+	description: "Performs research on the validated account"
+
+	actions:
+		# Research action that USES the validated account_id
+		research_account:
+			description: "Performs detailed research on the account"
+			inputs:
+				account_id: string
+					description: "The validated account ID"
+					is_required: True
+			outputs:
+				research_summary: string
+					description: "Summary of research findings"
+				signal_summary: string
+					description: "Key signals detected"
+			target: "flow://Research_Account"
+			include_in_progress_indicator: True
+			progress_indicator_message: "Researching account..."
+
+	reasoning:
+		instructions: ->
+			| Researching account: {!@variables.account_name} ({!@variables.account_id})
+			|
+			if @variables.research_summary == "":
+				| Use {!@actions.research_account} to analyze this account.
+			if @variables.research_summary != "":
+				| Research complete!
+				| {!@variables.research_summary}
+
+		actions:
+			# ★ PATTERN 4: Null Guard - Uses variable binding, NOT slot filling
+			# This ensures the validated ID is used, not LLM re-extraction
+			do_research: @actions.research_account
+				with account_id=@variables.account_id
+				set @variables.research_summary = @outputs.research_summary
+				# ★ GUARD: Only available if we have validated ID (defensive)
+				available when @variables.account_id_validated == True
+				available when @variables.research_summary == ""
+
+			# Return to collector for new account
+			new_account: @utils.transition to @topic.input_collector
+				available when @variables.research_summary != ""
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ★ INSIGHTS: Critical Input Collection
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# WHY SLOT FILLING FAILS:
+#   The `...` syntax relies on LLM to extract values from conversation.
+#   This is probabilistic and can fail when:
+#   - User provides ID in unexpected format
+#   - Multiple IDs mentioned in conversation
+#   - LLM abbreviates or modifies field names
+#   - Context window is cluttered with other data
+#
+# THE SOLUTION: DETERMINISTIC COLLECTION
+#   Instead of `with account_id=...` on EVERY action:
+#   1. Collect ONCE with a dedicated setter action
+#   2. Validate BEFORE storing
+#   3. Store in variable: `set @variables.account_id = @outputs.validated_id`
+#   4. Use variable binding: `with account_id=@variables.account_id`
+#   5. Guard all actions: `available when @variables.account_id_validated == True`
+#
+# PATTERN SUMMARY:
+#
+# ┌─────────────────────────────────────────────────────────────────┐
+# │                CRITICAL INPUT COLLECTION FLOW                    │
+# ├─────────────────────────────────────────────────────────────────┤
+# │                                                                  │
+# │  User provides ID    ────►  Setter Action (slot fills once)      │
+# │                              │                                   │
+# │                              ▼                                   │
+# │                          Validation                              │
+# │                              │                                   │
+# │                    ┌────────┴────────┐                          │
+# │                    ▼                 ▼                          │
+# │               Valid               Invalid                       │
+# │                 │                    │                          │
+# │    set @variables.account_id     Ask again                      │
+# │    set @variables.validated=True (limit retries)                │
+# │                 │                                               │
+# │                 ▼                                               │
+# │    All downstream actions use                                   │
+# │    @variables.account_id (NOT ...)                              │
+# │                                                                  │
+# └─────────────────────────────────────────────────────────────────┘
+#
+# ═══════════════════════════════════════════════════════════════════════════

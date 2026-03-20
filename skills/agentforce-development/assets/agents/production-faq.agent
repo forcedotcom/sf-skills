@@ -1,0 +1,101 @@
+# Simple FAQ Agent
+# A minimal working example of an Agentforce agent
+# Uses pure LLM reasoning without external actions
+#
+# Deploy with: sf agent publish authoring-bundle --api-name Simple_FAQ_Agent --target-org [alias]
+
+system:
+	instructions: "You are a helpful FAQ assistant for our company. Answer questions accurately and concisely. If you don't know the answer, say so honestly. Never share sensitive or confidential information. Keep responses friendly and professional."
+	messages:
+		welcome: "Hello! I'm your FAQ assistant. How can I help you today?"
+		error: "I'm sorry, I encountered an issue. Please try again."
+
+config:
+	agent_name: "Simple_FAQ_Agent"
+	default_agent_user: "agent.user@company.com"
+	agent_label: "Simple FAQ Agent"
+	description: "A minimal FAQ agent that answers common questions using AI"
+
+variables:
+	EndUserId: linked string
+		source: @MessagingSession.MessagingEndUserId
+		description: "Messaging End User ID"
+	RoutableId: linked string
+		source: @MessagingSession.Id
+		description: "Messaging Session ID"
+	ContactId: linked string
+		source: @MessagingEndUser.ContactId
+		description: "Contact ID"
+	user_question: mutable string
+		description: "The user's current question"
+	conversation_topic: mutable string
+		description: "The current topic being discussed"
+	question_count: mutable number
+		description: "Number of questions answered in this session"
+
+language:
+	default_locale: "en_US"
+	additional_locales: ""
+	all_additional_locales: False
+
+start_agent topic_selector:
+	label: "Topic Selector"
+	description: "Routes incoming questions to the FAQ handler"
+
+	reasoning:
+		instructions: ->
+			| Listen to the user's question and determine how to help.
+			| If the question is about a specific topic, note it.
+			| Route to the FAQ handler for processing.
+		actions:
+			handle_faq: @utils.transition to @topic.faq_handler
+			end_conversation: @utils.transition to @topic.farewell
+
+topic faq_handler:
+	label: "FAQ Handler"
+	description: "Handles frequently asked questions and provides helpful answers"
+
+	reasoning:
+		instructions: ->
+			| Answer the user's question based on your knowledge.
+			| Be helpful, accurate, and concise.
+			| Keep responses under 3-4 sentences when possible.
+			| If you need more information, ask clarifying questions.
+			|
+			| Common topics you can help with:
+			| - Business hours and location
+			| - Return and refund policies
+			| - Shipping information
+			| - Product questions
+			| - Account and billing
+			|
+			| If the question is outside your knowledge:
+			| - Acknowledge you don't have that information
+			| - Suggest contacting customer support
+			| - Offer to help with something else
+		actions:
+			new_question: @utils.transition to @topic.topic_selector
+			end_conversation: @utils.transition to @topic.farewell
+			escalate: @utils.transition to @topic.escalation
+
+topic farewell:
+	label: "Farewell"
+	description: "Ends the conversation politely"
+
+	reasoning:
+		instructions: ->
+			| Thank the user for their questions.
+			| Wish them a great day.
+			| Let them know they can return anytime for more help.
+
+topic escalation:
+	label: "Escalation"
+	description: "Handles requests to speak with a human agent"
+
+	reasoning:
+		instructions: ->
+			| If the user wants to speak with a human, escalate gracefully.
+			| Acknowledge their request and transfer the conversation.
+		actions:
+			escalate_to_human: @utils.escalate
+				description: "Transfer to a human agent"

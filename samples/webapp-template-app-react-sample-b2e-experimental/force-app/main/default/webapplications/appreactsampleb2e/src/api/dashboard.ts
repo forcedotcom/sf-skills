@@ -1,12 +1,12 @@
-import { getDataSDK } from "@salesforce/sdk-data";
+import { gql } from "@salesforce/sdk-data";
 import type { DashboardMetrics, Application } from "../lib/types.js";
-import { gql } from "./utils.js";
 import type {
 	GetDashboardMetricsQuery,
 	GetOpenApplicationsQuery,
 	GetOpenApplicationsQueryVariables,
 	GetUserInfoQuery,
 } from "./graphql-operations-types.js";
+import { executeGraphQL } from "./graphqlClient.js";
 
 // Query to get property counts for dashboard metrics
 const GET_DASHBOARD_METRICS = gql`
@@ -100,18 +100,10 @@ const GET_USER_INFO = gql`
 
 // Fetch dashboard metrics
 export async function getDashboardMetrics(): Promise<{
-	properties: any[];
-	maintenanceRequests: any[];
+	properties: unknown[];
+	maintenanceRequests: unknown[];
 }> {
-	const data = await getDataSDK();
-	const result = await data.graphql?.<GetDashboardMetricsQuery>(GET_DASHBOARD_METRICS);
-
-	if (result?.errors?.length) {
-		const errorMessages = result.errors.map((e) => e.message).join("; ");
-		throw new Error(`GraphQL Error: ${errorMessages}`);
-	}
-
-	const response = result?.data;
+	const response = await executeGraphQL<GetDashboardMetricsQuery>(GET_DASHBOARD_METRICS);
 	const properties = response?.uiapi?.query?.allProperties?.edges?.map((edge) => edge?.node) || [];
 	const maintenanceRequests =
 		response?.uiapi?.query?.maintenanceRequests?.edges?.map((edge) => edge?.node) || [];
@@ -121,36 +113,21 @@ export async function getDashboardMetrics(): Promise<{
 // Fetch open applications
 export async function getOpenApplications(first: number = 5): Promise<Application[]> {
 	const variables: GetOpenApplicationsQueryVariables = { first };
-	const data = await getDataSDK();
-	const result = await data.graphql?.<GetOpenApplicationsQuery, GetOpenApplicationsQueryVariables>(
+	const data = await executeGraphQL<GetOpenApplicationsQuery, GetOpenApplicationsQueryVariables>(
 		GET_OPEN_APPLICATIONS,
 		variables,
 	);
-
-	if (result?.errors?.length) {
-		const errorMessages = result.errors.map((e) => e.message).join("; ");
-		throw new Error(`GraphQL Error: ${errorMessages}`);
-	}
-
 	const apps =
-		result?.data?.uiapi?.query?.Application__c?.edges?.map((edge) =>
-			transformApplication(edge?.node),
-		) || [];
+		data?.uiapi?.query?.Application__c?.edges?.map((edge) => transformApplication(edge?.node)) ||
+		[];
 	return apps;
 }
 
 // Fetch current user information
 export async function getUserInfo(): Promise<{ name: string; id: string } | null> {
 	try {
-		const data = await getDataSDK();
-		const result = await data.graphql?.<GetUserInfoQuery>(GET_USER_INFO);
-
-		if (result?.errors?.length) {
-			const errorMessages = result.errors.map((e) => e.message).join("; ");
-			throw new Error(`GraphQL Error: ${errorMessages}`);
-		}
-
-		const user = result?.data?.uiapi?.query?.User?.edges?.[0]?.node;
+		const data = await executeGraphQL<GetUserInfoQuery>(GET_USER_INFO);
+		const user = data?.uiapi?.query?.User?.edges?.[0]?.node;
 		if (user) {
 			return {
 				id: user.Id,

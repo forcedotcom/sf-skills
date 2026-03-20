@@ -1,0 +1,127 @@
+# Lifecycle Events Pattern
+# Use before_reasoning and after_reasoning for initialization and cleanup
+#
+# ★ When To Use This Pattern:
+#   - Initialize state BEFORE the LLM starts reasoning
+#   - Track metrics (turn count, session duration)
+#   - Clean up or log AFTER reasoning completes
+#   - Set up context that instructions need to reference
+#
+# ★ Key Insight:
+#   - before_reasoning: Runs BEFORE each reasoning step (use for setup)
+#   - after_reasoning: Runs AFTER each reasoning step (use for cleanup/logging)
+#   - These are deterministic - they ALWAYS run, unlike LLM-chosen actions
+#
+# ★ CRITICAL SYNTAX RULES for Lifecycle Blocks:
+#   1. Use "transition to" NOT "@utils.transition to" for transitions
+#   2. The pipe (|) command is NOT supported in lifecycle blocks
+#   3. after_reasoning may NOT run if a transition occurs mid-topic
+#   4. `run` has inconsistent runtime behavior in lifecycle blocks —
+#      reliable primitives are `set`, `if`/`else`, `transition to`
+#
+# ★ Common Use Cases:
+#   - Increment conversation turn counter
+#   - Fetch fresh data before each response
+#   - Log conversation analytics after each turn
+#   - Reset temporary flags
+#   - Conditional routing based on state (use "transition to")
+#
+# This is a PARTIAL template - integrate into a complete agent file
+
+# Variables needed for lifecycle tracking
+variables:
+	# ... standard linked variables ...
+	turn_count: mutable number = 0
+		description: "Number of turns in conversation"
+	session_start: mutable string = ""
+		description: "Timestamp when session started"
+	last_activity: mutable string = ""
+		description: "Timestamp of last activity"
+	current_context: mutable string = ""
+		description: "Refreshed context for current turn"
+
+topic conversation:
+	label: "Conversation"
+	description: "Main conversation topic with lifecycle tracking"
+
+	actions:
+		get_timestamp:
+			description: "Gets current timestamp"
+			outputs:
+				current_timestamp: string
+					description: "Current ISO timestamp"
+			target: "apex://TimeService.getCurrentTimestamp"
+
+		refresh_context:
+			description: "Fetches latest context for user"
+			inputs:
+				user_id: string
+					description: "User to get context for"
+			outputs:
+				context: string
+					description: "User's current context"
+			target: "flow://Get_User_Context"
+
+		log_turn:
+			description: "Logs conversation turn analytics"
+			inputs:
+				turn_number: number
+					description: "Which turn this is"
+				topic_name: string
+					description: "Current topic"
+			outputs:
+				logged: boolean
+					description: "Whether log succeeded"
+			target: "apex://AnalyticsService.logTurn"
+
+	# ★ before_reasoning: Runs BEFORE each reasoning step
+	before_reasoning:
+		# Increment turn counter
+		set @variables.turn_count = @variables.turn_count + 1
+
+		# On first turn, record session start
+		if @variables.turn_count == 1:
+			run @actions.get_timestamp
+				set @variables.session_start = @outputs.current_timestamp
+
+		# ★ CORRECT: Use "transition to" (not @utils.transition to) in lifecycle blocks
+		# Example: Route away if session expired
+		# if @variables.session_expired == True:
+		#    transition to @topic.session_expired
+
+		# Refresh context before every turn
+		run @actions.refresh_context
+			with user_id=@variables.EndUserId
+			set @variables.current_context = @outputs.context
+
+	# Main reasoning block
+	reasoning:
+		instructions: ->
+			| You are on turn {!@variables.turn_count} of this conversation.
+			| Session started: {!@variables.session_start}
+			|
+			| Current user context:
+			| {!@variables.current_context}
+			|
+			| Respond helpfully using the refreshed context above.
+		actions:
+			end_conversation: @utils.transition to @topic.farewell
+
+	# ★ after_reasoning: Runs AFTER each reasoning step
+	after_reasoning:
+		# Log analytics for each turn
+		run @actions.log_turn
+			with turn_number=@variables.turn_count
+			with topic_name="conversation"
+
+		# Update last activity timestamp
+		run @actions.get_timestamp
+			set @variables.last_activity = @outputs.current_timestamp
+
+# ★ Insight: Lifecycle blocks vs Action callbacks
+#
+# - before_reasoning/after_reasoning: Run every turn, automatic
+# - run callbacks: Run only when parent action is invoked
+#
+# Use lifecycle for: Metrics, context refresh, session management
+# Use callbacks for: Post-action processing, chained operations

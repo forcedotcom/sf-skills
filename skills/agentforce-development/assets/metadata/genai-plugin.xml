@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    GenAiPlugin Template: Agent Topic/Plugin Container
+
+    Use Case: Organize GenAiFunctions into logical groups (Topics)
+    - Groups related functions together
+    - Provides topic-level instructions
+    - Maps to Agent Script topic concepts
+
+    Note: GenAiPlugin is the metadata equivalent of a "topic" in Agent Script.
+    Use this when you want to organize functions deployed via metadata
+    rather than Agent Script.
+
+    Setup Steps:
+    1. Replace all {{placeholder}} values
+    2. Deploy GenAiFunctions first
+    3. Deploy this GenAiPlugin
+
+    File Location: force-app/main/default/genAiPlugins/{{PluginName}}.genAiPlugin-meta.xml
+-->
+<GenAiPlugin xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- Display name for the topic/plugin -->
+    <masterLabel>{{PluginLabel}}</masterLabel>
+
+    <!-- Description shown in Agent Builder -->
+    <description>{{PluginDescription}}</description>
+
+    <!-- Developer name (API name) -->
+    <developerName>{{PluginDeveloperName}}</developerName>
+
+    <!--
+    Plugin Instructions:
+    Natural language instructions for how the agent should use
+    functions in this plugin. Similar to topic instructions in Agent Script.
+    -->
+    <pluginInstructions>
+        {{Instructions for the agent on how to use functions in this topic.
+        Include guidance on when to use specific functions,
+        how to handle edge cases, and any constraints.}}
+    </pluginInstructions>
+
+    <!--
+    Plugin Type:
+    - Standard: Regular function grouping
+    - Copilot: For Salesforce Copilot-specific plugins
+    -->
+    <pluginType>Standard</pluginType>
+
+    <!--
+    Associated Functions:
+    List the GenAiFunction developer names that belong to this plugin.
+    -->
+    <genAiFunctions>
+        <function>{{GenAiFunction1DeveloperName}}</function>
+    </genAiFunctions>
+    <genAiFunctions>
+        <function>{{GenAiFunction2DeveloperName}}</function>
+    </genAiFunctions>
+
+    <!--
+    AGENT BUILDER INTEGRATION:
+
+    After deploying GenAiPlugin:
+    1. Open Agent Builder in Setup
+    2. Navigate to Topics
+    3. Your plugin appears as a Topic
+    4. Associated functions are available as Actions
+
+    This provides an alternative to Agent Script for more
+    complex deployments or when you need metadata-level control.
+    -->
+</GenAiPlugin>
