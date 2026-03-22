@@ -1,17 +1,6 @@
 # Rule: Salesforce Metadata Generation
 
 ## Objective
-<<<<<<< Updated upstream
-Enforce: **skill load → API context → file generation** for all Salesforce metadata.
-
-## Constraints
-
-1. **Never write** without both: metadata type skill loaded AND `Salesforce API Context` MCP Server called for that type
-2. **One type at a time** - complete full cycle before next type
-3. **Child types need own context** - if adding any child metadata inside a parent metadata's file, load skill and call `Salesforce API Context` for each child type (e.g. CustomField inside CustomObject) separately; don't rely on the parent's schema for creating child metadata
-4. **Max one clarifying question** before starting
-5. **Don't call `execute_metadata_action` unless a skill instructs to do so**
-=======
 Enforce: **skill load -> API context -> file generation** for all Salesforce metadata.
 
 ## Constraints
@@ -22,58 +11,9 @@ Enforce: **skill load -> API context -> file generation** for all Salesforce met
 4. **Child types need their own API context response** - if adding child metadata inside a parent metadata file, load the child metadata skill and use `salesforce-api-context` MCP for each child type separately; do not rely on the parent's schema or API context response for child metadata creation. The same fallback in constraint 3 applies.
 5. **Max one clarifying question** before starting.
 6. **Do not call `execute_metadata_action` unless a skill instructs you to do so.**
->>>>>>> Stashed changes
 
 ## Skill Selection
 
-<<<<<<< Updated upstream
-### 1. Detect Intent
-- **App skill** (end-to-end capability like lex/react App) → App Path
-- **Direct metadata** (specific fields/objects/pages) → Direct Path
-
-### 2. App Path
-1. Load App related skill, extract metadata type sequence
-2. For each type, execute loop (a-e below)
-3. Proceed to Step 3
-
-### 2. Direct Path
-1. Identify all needed types
-2. For each type in dependency order, execute loop (a-e below)
-3. Proceed to Step 3
-
-### Loop (a-e) - Execute for Each Type
-
-**a. Load Skill**
-- Load metadata type skill once (not per record)
-- If no skill exists, continue with API context only
-
-**b. Call API Context**
-- Use `Salesforce API Context` and make use of these tools as per requirement:
-- `get_metadata_type_sections`
-- `get_metadata_type_context`
-- `get_metadata_type_fields`
-- `get_metadata_type_fields_properties`
-- `search_metadata_types`
-
-**c. Pre-Write Gate**
-- Before EVERY write: confirm API context called for this type
-- If no → stop and call now
-
-**d. Generate Files**
-- Use skill constraints + API context
-- Generate all records for this type now
-
-**e. Checkpoint**
-- Skill loaded? API context called? All files written?
-- Only proceed to next type when all true
-
-### 3. Deploy Verification
-```bash
-sf project deploy start --dry-run -d "force-app/main/default" --target-org <alias> --test-level NoTestRun --wait 10 --json
-```
-On failure: attempt to fix the errors and re-run, retrying up to a maximum of 3 times until it succeeds.
-
-=======
 - Search available skills and load the best-matching app-level skill first when the request asks for a Lightning app, end-to-end solution, or a business app spanning multiple metadata types.
 - Search available skills and load the best-matching per-type metadata skill first when the request targets individual metadata components.
 
@@ -131,21 +71,10 @@ For each metadata type in scope, whether identified by an app-level skill or req
 - Skill loaded? API context called or unavailable after a real attempt? All files written?
 - Only proceed to the next type when all are true.
 
->>>>>>> Stashed changes
 ## Anti-Patterns
 
 | Don't | Why | Do |
 |-------|-----|-----|
-<<<<<<< Updated upstream
-| Write without API context | Missing schema validation | Call API context before first write |
-| Reload skill per record | Wastes tokens | Load once per type |
-| Skip API context for later types | No schema for those types | Call for EVERY type |
-| Skip metadata skills | Missing platform constraints | Load skill for every type |
-| Ask 3+ questions | Token waste | Max 1 question |
-| Skip App skill gates | Wrong artifacts | Follow all mandatory gates |
-| Write despite missing checkpoint | Aware violation | Stop and complete missing step |
-| Batch types in API call | Violates constraint #3 | One type per call |
-=======
 | Never write without loading the metadata skill | Missing platform constraints | Search for and load the skill before any write |
 | Never mark `skill_selection=complete` without `selected_skill=<exact-skill-name|none>` | Fake gate completion | Record the exact selected skill before continuing |
 | Never treat skill selection as skill loading | Fake gate completion | Perform the actual per-type skill load in step a |
@@ -157,4 +86,3 @@ For each metadata type in scope, whether identified by an app-level skill or req
 | Never ask more than 1 clarifying question | Token waste | Max 1 question |
 | Never skip any gate in the loop (skill load, API context, pre-write, checkpoint) | Wrong artifacts | Follow all mandatory gates in the loop (a-e) |
 | Never write with a missing checkpoint | Aware violation | Stop and complete missing step |
->>>>>>> Stashed changes
