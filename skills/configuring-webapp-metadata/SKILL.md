@@ -1,6 +1,6 @@
 ---
 name: configuring-webapp-metadata
-description: Use this skill when configuring web application metadata structure, webapplication.json, or bundle organization. Covers WebApplication bundle layout, meta XML, build output directory, and webapplication.json settings.
+description: "Use this skill when configuring web application metadata structure, webapplication.json, or bundle organization. Covers WebApplication bundle layout, meta XML, build output directory, and webapplication.json settings."
 ---
 
 # WebApplication Requirements
@@ -53,7 +53,7 @@ Applies to:
 
 Reject:
 - backslashes
-- leading `\`
+- leading `/` or `\`
 - `..` segments
 - null or control characters
 - globs: `*`, `?`, `**`
