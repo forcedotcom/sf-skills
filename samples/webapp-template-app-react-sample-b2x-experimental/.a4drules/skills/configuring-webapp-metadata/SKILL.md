@@ -53,7 +53,7 @@ Applies to:
 
 Reject:
 - backslashes
-- leading `/` or `\`
+- leading `\`
 - `..` segments
 - null or control characters
 - globs: `*`, `?`, `**`

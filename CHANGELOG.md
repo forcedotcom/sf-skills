@@ -1,3 +1,18 @@
+# [1.3.0](https://github.com/forcedotcom/afv-library/compare/1.2.0...1.3.0) (2026-03-23)
+
+
+### Bug Fixes
+
+* resolve release workflow branch protection failure @W-21658353@ ([#80](https://github.com/forcedotcom/afv-library/issues/80)) ([5d3f085](https://github.com/forcedotcom/afv-library/commit/5d3f085ad67f10be3a3a20d7dc0142a000dbd957))
+
+
+### Features
+
+* Add switching-org skill @W-21436488@ ([#74](https://github.com/forcedotcom/afv-library/issues/74)) ([5c40e3b](https://github.com/forcedotcom/afv-library/commit/5c40e3b63ed81e9559a4d64c82f112a94c5c2566))
+* syncing webapp skills sync to afv @W-21338965@ ([#57](https://github.com/forcedotcom/afv-library/issues/57)) ([9ba0641](https://github.com/forcedotcom/afv-library/commit/9ba064174a714e487c683b986c3c6e08d478b784))
+
+
+
 # [1.2.0](https://github.com/forcedotcom/afv-library/compare/1.1.0...1.2.0) (2026-03-19)
 
 
