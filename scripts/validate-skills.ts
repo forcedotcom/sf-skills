@@ -10,6 +10,7 @@ import { execSync } from "child_process"
 import fs from "fs"
 import path from "path"
 import { parseArgs } from "util"
+import yaml from "js-yaml"
 
 const SKILLS_DIR = path.join(__dirname, "..", "skills")
 
@@ -137,6 +138,29 @@ const CONTENT_CHECKS: ContentCheck[] = [
     },
   },
   {
+    description:
+      "Frontmatter must parse as strict YAML (e.g. js-yaml); unquoted colons in values break parsers like cline-fork",
+    run({ dirName, content }) {
+      const block = parseFrontmatterBlock(content)
+      if (!block) return { errors: [] }
+      try {
+        yaml.load(block.raw)
+      } catch (e) {
+        const detail = formatYamlFrontmatterParseError(e)
+        return {
+          errors: [
+            [
+              `skills/${dirName}/SKILL.md: frontmatter is not valid YAML.`,
+              detail,
+              "Wrap values that contain `: ` (colon + space), such as long descriptions with parenthetical hints, in single or double quotes.",
+            ].join("\n"),
+          ],
+        }
+      }
+      return { errors: [] }
+    },
+  },
+  {
     description: 'Frontmatter "name" must be present and match the directory name',
     run({ dirName, frontmatter }) {
       if (!frontmatter) return { errors: [] }
@@ -245,16 +269,45 @@ function getChangedSkillDirs(base: string): string[] {
 }
 
 /**
+ * Formats js-yaml's YAMLException: `mark.line` / `mark.column` (0-based in the library;
+ * we print 1-based), `mark.position` as character index in the frontmatter YAML (UTF-16),
+ * plus `mark.snippet` when present.
+ */
+function formatYamlFrontmatterParseError(e: unknown): string {
+  if (e instanceof yaml.YAMLException && e.mark) {
+    const m = e.mark
+    const line = m.line + 1
+    const col = m.column + 1
+    const index = m.position + 1
+    const bits = [`${e.reason} — line ${line}, column ${col} (1-based), character index ${index} in frontmatter YAML`]
+    if (m.snippet?.trim()) bits.push(m.snippet.trimEnd())
+    return bits.join("\n")
+  }
+  if (e instanceof Error) return e.message
+  return String(e)
+}
+
+/**
+ * Raw YAML between the opening and closing `---` lines (no delimiters).
+ * `null` if the block is missing.
+ */
+function parseFrontmatterBlock(content: string): { raw: string; delimiterLen: number } | null {
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/)
+  if (!match) return null
+  return { raw: match[1], delimiterLen: match[0].length }
+}
+
+/**
  * Parses a SKILL.md file into its frontmatter fields and body.
  * `frontmatter` is `null` if the `--- ... ---` block is missing or malformed.
  * Wrapping quotes on frontmatter values are stripped.
  */
 function parseSkillMd(content: string): { frontmatter: Record<string, string> | null; body: string } {
-  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/)
-  if (!match) return { frontmatter: null, body: content }
+  const block = parseFrontmatterBlock(content)
+  if (!block) return { frontmatter: null, body: content }
 
   const frontmatter: Record<string, string> = {}
-  for (const line of match[1].split(/\r?\n/)) {
+  for (const line of block.raw.split(/\r?\n/)) {
     const colonIdx = line.indexOf(":")
     if (colonIdx === -1) continue
     const key = line.slice(0, colonIdx).trim()
@@ -263,7 +316,7 @@ function parseSkillMd(content: string): { frontmatter: Record<string, string> | 
     frontmatter[key] = raw.replace(/^(['"])([\s\S]*)\1$/, "$2")
   }
 
-  return { frontmatter, body: content.slice(match[0].length) }
+  return { frontmatter, body: content.slice(block.delimiterLen) }
 }
 
 /**
