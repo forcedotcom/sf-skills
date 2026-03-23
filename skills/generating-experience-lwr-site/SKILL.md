@@ -112,14 +112,14 @@ Before doing anything, you **MUST ALWAYS** load them first if they match user in
 
 - **NEVER** generate the files manually.
 
-**Mandatory Steps**:
+**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
 
 - [ ] **ALWAYS** read [bootstrap-template-byo-lwr.md](docs/bootstrap-template-byo-lwr.md) within the skill directory. Do not proceed to the next step without loading the file.
 - [ ] Follow the bootstrap doc strictly on site creation
 
 ### Creating and Editing Standard or Object Pages
 
-**Mandatory Steps**:
+**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
 
 - [ ] MUST read [configure-content-route.md](docs/configure-content-route.md)
 - [ ] MUST read [configure-content-view.md](docs/configure-content-view.md)
@@ -127,7 +127,7 @@ Before doing anything, you **MUST ALWAYS** load them first if they match user in
 
 ### Adding UI Components to Pages
 
-**Mandatory Steps**:
+**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
 
 - [ ] MUST read [handle-ui-components.md](docs/handle-ui-components.md) to add LWCs to LWR sites.
 - [ ] MUST read [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) to handle id generation
@@ -137,13 +137,13 @@ Before doing anything, you **MUST ALWAYS** load them first if they match user in
 
 ### Creating Page Layouts / Container Components
 
-**Mandatory Steps**:
+**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
 
 - [ ] MUST read [handle-ui-components.md](docs/handle-ui-components.md)
 
 ### Creating Theme Layouts
 
-**Mandatory Steps**:
+**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
 
 - [ ] Check with user whether this new theme layout reuses an existing theme layout component or requires a new one.
 - [ ] MUST read [handle-ui-components.md](docs/handle-ui-components.md) if creating a new theme layout component.
@@ -152,13 +152,13 @@ Before doing anything, you **MUST ALWAYS** load them first if they match user in
 
 ### Applying/Setting Theme Layouts
 
-**Mandatory Steps**:
+**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
 
 - [ ] MUST read [configure-content-view.md](docs/configure-content-view.md)
 
 ### Configuring Branding
 
-**Mandatory Steps**:
+**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
 
 - [ ] MUST read [configure-content-brandingSet.md](docs/configure-content-brandingSet.md) to configure background colors, foreground colors, button colors, and other branding colors that affect all pages.
 
@@ -166,7 +166,7 @@ Before doing anything, you **MUST ALWAYS** load them first if they match user in
 
 - Users can perform create, update, delete operations on DigitalExperience Contents.
 
-**Mandatory Steps**:
+**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
 
 - [ ] Determine what content types the user wants to modify
 - [ ] MUST read the reference doc related to the target content types if the doc exists. e.g., if modifying `sfdc_cms__route`, load [configure-content-route.md](docs/configure-content-route.md).
