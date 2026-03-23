@@ -1,6 +1,6 @@
 ---
 name: generating-fragment
-description: Use this skill when users need to create or edit Salesforce Fragments (reusable UI pieces). Trigger when users mention fragments, UEM blocks, reusable UI templates, structured rendering across Slack/Mobile/LEX, or block-based layouts. Also use when users want to create unified experience components. Always use this skill for any fragment work.
+description: "Use this skill when users need to create or edit Salesforce Fragments (reusable UI pieces). Trigger when users mention fragments, UEM blocks, reusable UI templates, structured rendering across Slack/Mobile/LEX, or block-based layouts. Also use when users want to create unified experience components. Always use this skill for any fragment work."
 ---
 
 ## When to Use This Skill
