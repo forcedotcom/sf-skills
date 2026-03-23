@@ -2,12 +2,12 @@
 # graphql-search.sh — Look up one or more Salesforce entities in schema.graphql.
 #
 # Run from the SFDX project root (where schema.graphql lives):
-#   bash .a4drules/skills/using-salesforce-data/graphql-search.sh Account
-#   bash .a4drules/skills/using-salesforce-data/graphql-search.sh Account Contact Opportunity
+#   bash scripts/graphql-search.sh Account
+#   bash scripts/graphql-search.sh Account Contact Opportunity
 #
 # Pass a custom schema path with -s / --schema:
-#   bash .a4drules/skills/using-salesforce-data/graphql-search.sh -s /path/to/schema.graphql Account
-#   bash .a4drules/skills/using-salesforce-data/graphql-search.sh --schema ./other/schema.graphql Account Contact
+#   bash scripts/graphql-search.sh -s /path/to/schema.graphql Account
+#   bash scripts/graphql-search.sh --schema ./other/schema.graphql Account Contact
 #
 # Output sections per entity:
 #   1. Type definition   — all fields and relationships

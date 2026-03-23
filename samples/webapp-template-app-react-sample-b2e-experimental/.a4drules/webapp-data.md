@@ -74,10 +74,10 @@ Map user intent to PascalCase names ("accounts" → `Account`), then **run the s
 
 ```bash
 # From project root — look up all relevant schema info for one or more entities
-bash .a4drules/skills/using-salesforce-data/graphql-search.sh Account
+bash scripts/graphql-search.sh Account
 
 # Multiple entities at once
-bash .a4drules/skills/using-salesforce-data/graphql-search.sh Account Contact Opportunity
+bash scripts/graphql-search.sh Account Contact Opportunity
 ```
 
 The script outputs five sections per entity:
@@ -213,7 +213,7 @@ const fields = response?.data?.uiapi?.objectInfos?.[0]?.fields ?? [];
 
 ```bash
 # From project root — re-check the entity that caused the error
-bash .a4drules/skills/using-salesforce-data/graphql-search.sh <EntityName>
+bash scripts/graphql-search.sh <EntityName>
 ```
 
 Then fix the query using the exact names from the script output.
@@ -310,7 +310,7 @@ const response = await sdk.graphql?.(GET_CURRENT_USER);
 |---------|----------|-----|
 | `npm run graphql:schema` | webapp dir | Script in webapp's package.json |
 | `npx eslint <file>` | webapp dir | Reads eslint.config.js |
-| `bash .a4drules/skills/using-salesforce-data/graphql-search.sh <Entity>` | project root | Schema lookup |
+| `bash scripts/graphql-search.sh <Entity>` | project root | Schema lookup |
 | `sf api request rest` | project root | Needs sfdx-project.json |
 
 ---
@@ -322,7 +322,7 @@ const response = await sdk.graphql?.(GET_CURRENT_USER);
 Run the search script to get all relevant schema info in one step:
 
 ```bash
-bash .a4drules/skills/using-salesforce-data/graphql-search.sh <EntityName>
+bash scripts/graphql-search.sh <EntityName>
 ```
 
 | Script Output Section | Used For |

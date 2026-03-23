@@ -54,22 +54,18 @@ cd <sfdx-source>/webapplications/<appName>
 
 **Before finishing changes:** run `npm run build` and `npm run lint` from the web app directory; both must succeed.
 
-## Agent skills (.a4drules/skills/)
+## Agent rules (.a4drules/)
 
-This project includes **.a4drules/skills/** at the project root. Follow them when generating or editing code.
+Markdown rules at the project root under **.a4drules/** define platform constraints:
 
-- **Creating Webapp** (`.a4drules/skills/creating-webapp/`): First steps, skills-first protocol, React/TypeScript constraints, deployment order, navigation, aesthetics, and code quality.
-- **Building React Components** (`.a4drules/skills/building-react-components/`): Component/page/header-footer workflow, TypeScript standards, and mandatory lint+build verification.
-- **Accessing Data** (`.a4drules/skills/accessing-data/`): Use for all Salesforce data fetches. Enforces Data SDK usage (`createDataSDK()` + `sdk.graphql` or `sdk.fetch`); GraphQL preferred, fetch when GraphQL is not sufficient.
-- **Fetching REST API** (`.a4drules/skills/fetching-rest-api/`): Use when implementing Chatter, Connect REST, Apex REST, UI API REST, or Einstein LLM calls via `sdk.fetch`.
-- **Using GraphQL** (`.a4drules/skills/using-graphql/`): Use when implementing Salesforce GraphQL queries or mutations. Sub-skills: `exploring-graphql-schema`, `generating-graphql-read-query`, `generating-graphql-mutation-query`.
-- **Deploying to Salesforce** (`.a4drules/skills/deploying-to-salesforce/`): Use when deploying metadata, fetching GraphQL schema, or generating deploy/setup commands. Enforces deploy → permset → schema → codegen order; schema refetch after metadata deployment.
+- **`.a4drules/webapp-ui.md`** — Salesforce Web Application UI (scaffold with `sf webapp generate`, no LWC/Aura for new UI).
+- **`.a4drules/webapp-data.md`** — Salesforce data access (Data SDK only, supported APIs, GraphQL workflow, `scripts/graphql-search.sh` for schema lookup).
 
 When rules refer to "web app directory" or `<sfdx-source>/webapplications/<appName>/`, resolve `<sfdx-source>` from `sfdx-project.json` and use the **actual app folder name** for this project.
 
 ## Deploying
 
-**Deployment order:** Metadata (objects, permission sets) must be deployed before GraphQL schema fetch. After any metadata deployment, re-run `npm run graphql:schema` and `npm run graphql:codegen` from the webapp dir. **One-command setup:** `node scripts/setup-cli.mjs --target-org <alias>` runs deploy → permset → schema → codegen in the correct order. Invoke the `deploying-to-salesforce` skill for full guidance.
+**Deployment order:** Metadata (objects, permission sets) must be deployed before GraphQL schema fetch. After any metadata deployment, re-run `npm run graphql:schema` and `npm run graphql:codegen` from the webapp dir. **One-command setup:** `node scripts/setup-cli.mjs --target-org <alias>` runs deploy → permset → schema → codegen in the correct order.
 
 From **this project root** (resolve the actual SFDX source path from `sfdx-project.json`):
 
@@ -88,4 +84,4 @@ sf project deploy start --source-dir <packageDir> --target-org <alias>
 
 - **UI**: shadcn/ui + Tailwind. Import from `@/components/ui/...`.
 - **Entry**: Keep `App.tsx` and routes in `src/`; add features as new routes or sections, don't replace the app shell but you may modify it to match the requested design.
-- **Data (Salesforce)**: Invoke the `accessing-data` skill for all Salesforce data fetches. The skill enforces use of the Data SDK (`createDataSDK()` + `sdk.graphql` or `sdk.fetch`) — never use `fetch` or `axios` directly. GraphQL is preferred; use `sdk.fetch` when GraphQL is not sufficient (e.g., Chatter, Connect REST). For GraphQL implementation, invoke the `using-graphql` skill.
+- **Data (Salesforce)**: Follow `.a4drules/webapp-data.md` for all Salesforce data access. Use the Data SDK (`createDataSDK()` + `sdk.graphql` or `sdk.fetch`) — never use `fetch` or `axios` directly. GraphQL is preferred; use `sdk.fetch` when GraphQL is not sufficient.
