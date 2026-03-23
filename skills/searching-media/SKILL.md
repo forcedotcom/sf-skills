@@ -1,6 +1,6 @@
 ---
 name: searching-media
-description: Use when the user wants to FIND, SEARCH, or RETRIEVE images, photos, pictures, media, visuals, graphics, icons, illustrations, banners, thumbnails, logos, hero images, backgrounds, or visual assets. Trigger on search, find, get, fetch, retrieve, browse, look up, locate, or add existing media requests. ROUTING skill that presents search source options (Salesforce CMS, Data Cloud, Unsplash) and waits for user selection before calling any search tools. ALWAYS show numbered options first - NEVER call search_electronic_media or search_media_cms_channels directly. DO NOT trigger for GENERATE, CREATE, MAKE, DESIGN, or BUILD requests.
+description: Use this skill ANY TIME the user's request involves finding, searching, getting, fetching, retrieving, grabbing, looking up, or locating existing visual media (images, logos, icons, photos, graphics, banners, thumbnails, hero images, backgrounds) from any source. This skill takes PRIORITY and should be used FIRST when ANY media search/retrieval is mentioned, regardless of what else the user wants to do with the media afterward. Trigger for requests like "search for logo", "find hero image", "get company logo", "grab banner from unsplash", "locate icons", "fetch background image", "retrieve product photos". This skill handles the search and source selection workflow. Only skip if the user wants to generate NEW images with AI, design custom graphics from scratch, or edit existing images.
 metadata:
   author: afv-library
   version: "1.0"
@@ -9,23 +9,6 @@ metadata:
 # Media Search
 
 Universal routing skill for searching and retrieving existing images and media.
-
-## Scope
-
-**This skill is for FINDING existing media, not CREATING new media.**
-
-**Use this skill when the user wants to:**
-- Search for images in Salesforce CMS, Data Cloud, or Unsplash
-- Find existing visual assets
-- Retrieve media from connected sources
-- Browse available images
-- Locate specific photos or graphics
-
-**DO NOT use this skill when the user wants to:**
-- Generate new images with AI (use image generation tools)
-- Create graphics or designs from scratch
-- Edit or modify existing images
-- Build custom visuals or diagrams
 
 ## Before You Search
 
@@ -51,6 +34,23 @@ When a user requests to find an image:
 - ✅ Then call the tool they selected
 
 **Your first response when this skill triggers MUST present options and ask the user to choose. No exceptions.**
+
+## Scope
+
+**This skill is for SEARCHING FOR existing media, not CREATING new media.**
+
+**Use this skill when the user wants to:**
+- Search for images in Salesforce CMS, Data Cloud, or Unsplash
+- Find existing visual assets to use in their app
+- Retrieve media from connected sources
+- Browse available images for their project
+- Locate specific photos or graphics
+
+**DO NOT use this skill when the user wants to:**
+- Generate new images with AI (use image generation tools)
+- Create graphics or designs from scratch
+- Edit or modify existing images
+- Build custom visuals or diagrams
 
 ## Workflow Overview
 
