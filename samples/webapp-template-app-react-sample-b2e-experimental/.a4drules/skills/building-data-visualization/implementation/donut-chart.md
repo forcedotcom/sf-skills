@@ -156,7 +156,7 @@ Keep chart colors consistent with the app's design system. Define them as consta
 
 ## Other chart types
 
-For **bar charts** and **line charts**, use the `AnalyticsChart` component from `feature-react-chart` instead of raw Recharts. See the **`building-analytics-charts`** skill for usage.
+For **bar charts** and **line / area charts**, see `bar-line-chart.md` in this directory.
 
 ---
 

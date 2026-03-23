@@ -5,6 +5,7 @@
 import { useNavigate } from "react-router";
 import { useCallback, type MouseEvent } from "react";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { SearchResultRecordData } from "@/features/global-search/types/search/searchResults.js";
 
 function fieldDisplay(
@@ -34,10 +35,33 @@ function formatPrice(val: string | number | null): string {
 interface PropertyListingCardProps {
 	record: SearchResultRecordData;
 	imageUrl: string | null;
-	/** Property address (Address__c from Property__c) when available */
 	address?: string | null;
-	/** Amenities string (e.g. "In-unit washer | Pool | Gym"), separated by | */
 	amenities?: string | null;
+	/** Show skeleton while any supplementary data (image, address, amenities) is still loading. */
+	loading?: boolean;
+}
+
+export function PropertyListingCardSkeleton() {
+	return (
+		<div
+			className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
+			role="status"
+		>
+			<Skeleton className="aspect-[16/10] w-full rounded-none" />
+			<div className="space-y-3 p-3">
+				<Skeleton className="h-6 w-3/4" />
+				<Skeleton className="h-4 w-1/2" />
+				<Skeleton className="h-6 w-1/3" />
+				<div className="flex gap-1.5">
+					<Skeleton className="h-5 w-16 rounded-full" />
+					<Skeleton className="h-5 w-20 rounded-full" />
+					<Skeleton className="h-5 w-14 rounded-full" />
+				</div>
+				<Skeleton className="h-11 w-full rounded-xl" />
+			</div>
+			<span className="sr-only">Loading property…</span>
+		</div>
+	);
 }
 
 export default function PropertyListingCard({
@@ -45,6 +69,7 @@ export default function PropertyListingCard({
 	imageUrl,
 	address,
 	amenities,
+	loading = false,
 }: PropertyListingCardProps) {
 	const navigate = useNavigate();
 	const name = fieldDisplay(record.fields, "Name") ?? "Untitled";
@@ -57,7 +82,6 @@ export default function PropertyListingCard({
 			? `${bedroomsNum} Bedroom${bedroomsNum !== 1 ? "s" : ""}`
 			: null;
 	const detailPath = `/property/${record.id}`;
-	const displayAddress = (address ?? propertyRef ?? "").trim().replace(/\n/g, ", ") || null;
 
 	const handleClick = useCallback(() => {
 		navigate(detailPath);
@@ -72,6 +96,16 @@ export default function PropertyListingCard({
 		},
 		[handleClick],
 	);
+
+	if (loading) {
+		return <PropertyListingCardSkeleton />;
+	}
+
+	const displayAddress = (address ?? propertyRef ?? "").trim().replace(/\n/g, ", ") || null;
+	const amenityLabels = (amenities ?? "")
+		.split(/\s*\|\s*/)
+		.map((s) => s.trim())
+		.filter(Boolean);
 
 	return (
 		<article
@@ -125,26 +159,22 @@ export default function PropertyListingCard({
 						)}
 					</div>
 
-					{/* Amenity pills (fetched per property, string separated by |) */}
-					{amenities != null && amenities.trim() !== "" && (
+					{/* Amenity pills */}
+					{amenityLabels.length > 0 && (
 						<div className="mb-2 flex flex-wrap gap-1.5">
-							{amenities
-								.split(/\s*\|\s*/)
-								.map((label) => label.trim())
-								.filter(Boolean)
-								.map((label) => (
-									<span
-										key={label}
-										className="rounded-full border border-border bg-muted/60 px-2.5 py-0.5 text-xs font-medium text-muted-foreground"
-									>
-										{label}
-									</span>
-								))}
+							{amenityLabels.map((label) => (
+								<span
+									key={label}
+									className="rounded-full border border-border bg-muted/60 px-2.5 py-0.5 text-xs font-medium text-muted-foreground"
+								>
+									{label}
+								</span>
+							))}
 						</div>
 					)}
 				</div>
 
-				{/* Apply button – no phone, no email */}
+				{/* Apply button */}
 				<Button
 					size="sm"
 					className="mt-4 w-full cursor-pointer rounded-xl bg-primary px-5 py-5 text-lg font-medium transition-colors duration-200 hover:bg-primary/90"

@@ -30,17 +30,24 @@ export function useObjectInfoBatch(objectApiNames: string[]): UseObjectInfoBatch
 		error: null,
 	});
 	const isCancelled = useRef(false);
+	// Derive a stable primitive from the array so the effect dependency doesn't
+	// change on every render. A new array reference (even with identical contents)
+	// would otherwise trigger the effect on every render, causing an infinite loop.
+	const namesKey = objectApiNames.filter(Boolean).join(",");
 
 	useEffect(() => {
 		isCancelled.current = false;
-		const names = objectApiNames.filter(Boolean);
+		// Re-derive the array inside the effect from the stable key rather than
+		// closing over objectApiNames directly, which would require it in the dep
+		// array and reintroduce the infinite loop.
+		const names = namesKey ? namesKey.split(",") : [];
 		if (names.length === 0) {
-			setState({ objectInfos: [], loading: false, error: null });
+			queueMicrotask(() => setState({ objectInfos: [], loading: false, error: null }));
 			return;
 		}
-		setState((s) => ({ ...s, loading: true, error: null }));
+		queueMicrotask(() => setState((s) => ({ ...s, loading: true, error: null })));
 		objectInfoService
-			.getObjectInfoBatch(names.join(","))
+			.getObjectInfoBatch(namesKey)
 			.then((res) => {
 				if (isCancelled.current) return;
 				const objectInfos = names
@@ -59,7 +66,7 @@ export function useObjectInfoBatch(objectApiNames: string[]): UseObjectInfoBatch
 		return () => {
 			isCancelled.current = true;
 		};
-	}, [objectApiNames.join(",")]);
+	}, [namesKey]);
 
 	return state;
 }

@@ -23,6 +23,7 @@
  * />
  * ```
  */
+import React from "react";
 import { useNavigate } from "react-router";
 import { useMemo, useCallback } from "react";
 import {
@@ -49,26 +50,24 @@ export default function SearchResultCard({
 }: SearchResultCardProps) {
 	const navigate = useNavigate();
 
-	if (!record || !record.id) {
-		return null;
-	}
-
-	if (!columns || !Array.isArray(columns) || columns.length === 0) {
-		return null;
-	}
-
-	if (!record.fields || typeof record.fields !== "object") {
-		return null;
-	}
+	const validColumns = useMemo(
+		() => (columns && Array.isArray(columns) && columns.length > 0 ? columns : []),
+		[columns],
+	);
+	const validRecord =
+		record?.id && record?.fields && typeof record.fields === "object" ? record : null;
 
 	const detailPath = useMemo(
-		() => `/object/${objectApiName?.trim() || OBJECT_API_NAMES[0]}/${record.id}`,
-		[record.id, objectApiName],
+		() =>
+			validRecord
+				? `/object/${objectApiName?.trim() || OBJECT_API_NAMES[0]}/${validRecord.id}`
+				: "",
+		[validRecord, objectApiName],
 	);
 
 	const handleClick = useCallback(() => {
-		if (record.id) navigate(detailPath);
-	}, [record.id, detailPath, navigate]);
+		if (validRecord?.id) navigate(detailPath);
+	}, [validRecord?.id, detailPath, navigate]);
 
 	const handleKeyDown = useCallback(
 		(e: React.KeyboardEvent) => {
@@ -82,29 +81,32 @@ export default function SearchResultCard({
 
 	const primaryField = useMemo(() => {
 		return (
-			columns.find(
+			validColumns.find(
 				(col) =>
 					col &&
 					col.fieldApiName &&
 					(col.fieldApiName.toLowerCase() === "name" ||
 						col.fieldApiName.toLowerCase().includes("name")),
 			) ||
-			columns[0] ||
+			validColumns[0] ||
 			null
 		);
-	}, [columns]);
+	}, [validColumns]);
 
 	const primaryValue = useMemo(() => {
-		return primaryField && primaryField.fieldApiName
-			? getNestedFieldValue(record.fields, primaryField.fieldApiName) || "Untitled"
+		return primaryField && primaryField.fieldApiName && validRecord?.fields
+			? getNestedFieldValue(validRecord.fields, primaryField.fieldApiName) || "Untitled"
 			: "Untitled";
-	}, [primaryField, record.fields]);
+	}, [primaryField, validRecord]);
 
 	const secondaryColumns = useMemo(() => {
-		return columns.filter(
+		return validColumns.filter(
 			(col) => col && col.fieldApiName && col.fieldApiName !== primaryField?.fieldApiName,
 		);
-	}, [columns, primaryField]);
+	}, [validColumns, primaryField]);
+
+	if (!validRecord) return null;
+	if (validColumns.length === 0) return null;
 
 	return (
 		<Card
@@ -114,19 +116,19 @@ export default function SearchResultCard({
 			role="button"
 			tabIndex={0}
 			aria-label={`View details for ${primaryValue}`}
-			aria-describedby={`result-${record.id}-description`}
+			aria-describedby={`result-${validRecord.id}-description`}
 		>
 			<CardHeader>
-				<CardTitle className="text-lg" id={`result-${record.id}-title`}>
+				<CardTitle className="text-lg" id={`result-${validRecord.id}-title`}>
 					{primaryValue}
 				</CardTitle>
 			</CardHeader>
 			<CardContent>
-				<div id={`result-${record.id}-description`} className="sr-only">
+				<div id={`result-${validRecord.id}-description`} className="sr-only">
 					Search result: {primaryValue}
 				</div>
 				<ResultCardFields
-					record={record}
+					record={validRecord}
 					columns={secondaryColumns}
 					excludeFieldApiName={primaryField?.fieldApiName}
 				/>

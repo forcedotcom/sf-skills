@@ -1,0 +1,65 @@
+query SearchApplications(
+	$first: Int
+	$after: String
+	$where: Application__c_Filter
+	$orderBy: Application__c_OrderBy
+) {
+	uiapi {
+		query {
+			Application__c(first: $first, after: $after, where: $where, orderBy: $orderBy) {
+				edges {
+					node {
+						Id
+						Name {
+							value
+							displayValue
+						}
+						Status__c {
+							value
+							displayValue
+						}
+						Start_Date__c {
+							value
+							displayValue
+						}
+						Employment__c {
+							value
+							displayValue
+						}
+						References__c {
+							value
+							displayValue
+						}
+						Property__r {
+							Name {
+								value
+								displayValue
+							}
+							Address__c {
+								value
+								displayValue
+							}
+						}
+						User__r {
+							Name {
+								value
+								displayValue
+							}
+						}
+						CreatedDate {
+							value
+							displayValue
+						}
+					}
+				}
+				pageInfo {
+					hasNextPage
+					hasPreviousPage
+					endCursor
+					startCursor
+				}
+				totalCount
+			}
+		}
+	}
+}

@@ -110,7 +110,7 @@ export function useRecordDetailLayout({
 				setLayout(layoutData);
 				setRecord(recordData);
 				setObjectMetadata(objectMetadataData);
-			} catch (err) {
+			} catch {
 				if (isCancelled) return;
 				setError("Failed to load record details");
 			} finally {

@@ -19,19 +19,21 @@ export function usePropertyPrimaryImages(
 	results: SearchResultRecord[],
 ): Record<string, string> & { loading: boolean } {
 	const [map, setMap] = useState<Record<string, string>>({});
-	const [loading, setLoading] = useState(false);
+	const [fetchedKey, setFetchedKey] = useState("");
 
 	const propertyIds = results
 		.map((r) => r?.record && getPropertyIdFromRecord(r.record))
 		.filter((id): id is string => Boolean(id));
+	const idsKey = propertyIds.join(",");
+	const loading = idsKey !== "" && idsKey !== fetchedKey;
 
 	useEffect(() => {
 		if (propertyIds.length === 0) {
 			setMap({});
+			setFetchedKey("");
 			return;
 		}
 		let cancelled = false;
-		setLoading(true);
 		fetchPrimaryImagesByPropertyIds(propertyIds)
 			.then((next) => {
 				if (!cancelled) setMap(next);
@@ -40,12 +42,12 @@ export function usePropertyPrimaryImages(
 				if (!cancelled) setMap({});
 			})
 			.finally(() => {
-				if (!cancelled) setLoading(false);
+				if (!cancelled) setFetchedKey(idsKey);
 			});
 		return () => {
 			cancelled = true;
 		};
-	}, [propertyIds.join(",")]);
+	}, [idsKey]);
 
 	return Object.assign(map, { loading });
 }

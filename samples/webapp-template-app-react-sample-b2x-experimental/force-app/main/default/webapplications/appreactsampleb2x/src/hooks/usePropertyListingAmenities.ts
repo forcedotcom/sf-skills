@@ -13,20 +13,22 @@ export function usePropertyListingAmenities(
 	results: SearchResultRecord[],
 ): Record<string, string> & { loading: boolean } {
 	const [map, setMap] = useState<Record<string, string>>({});
-	const [loading, setLoading] = useState(false);
+	const [fetchedKey, setFetchedKey] = useState("");
 
 	const propertyIds = results
 		.map((r) => r?.record && getPropertyIdFromRecord(r.record))
 		.filter((id): id is string => Boolean(id));
 	const uniqueIds = [...new Set(propertyIds)];
+	const idsKey = uniqueIds.join(",");
+	const loading = idsKey !== "" && idsKey !== fetchedKey;
 
 	useEffect(() => {
 		if (uniqueIds.length === 0) {
 			setMap({});
+			setFetchedKey("");
 			return;
 		}
 		let cancelled = false;
-		setLoading(true);
 		Promise.all(uniqueIds.map((id) => fetchFeaturesByPropertyId(id)))
 			.then((featuresPerProperty) => {
 				if (cancelled) return;
@@ -44,12 +46,12 @@ export function usePropertyListingAmenities(
 				if (!cancelled) setMap({});
 			})
 			.finally(() => {
-				if (!cancelled) setLoading(false);
+				if (!cancelled) setFetchedKey(idsKey);
 			});
 		return () => {
 			cancelled = true;
 		};
-	}, [uniqueIds.join(",")]);
+	}, [idsKey]);
 
 	return Object.assign(map, { loading });
 }

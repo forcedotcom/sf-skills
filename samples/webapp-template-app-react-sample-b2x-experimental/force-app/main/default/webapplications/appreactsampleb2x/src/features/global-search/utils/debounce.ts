@@ -57,6 +57,7 @@ export function debounce<T extends (...args: any[]) => any>(
 	let lastArgs: Parameters<T> | null = null;
 	function debounced(this: ThisParameterType<T>, ...args: Parameters<T>) {
 		// 2. Context Safety: Capture 'this' to support class methods
+		// eslint-disable-next-line @typescript-eslint/no-this-alias -- required for debouncing class methods
 		lastContext = this;
 		lastArgs = args;
 		if (timeoutId) {

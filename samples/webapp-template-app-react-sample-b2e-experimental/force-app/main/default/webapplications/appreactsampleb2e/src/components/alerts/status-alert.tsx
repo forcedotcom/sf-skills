@@ -26,10 +26,10 @@ interface StatusAlertProps extends VariantProps<typeof statusAlertVariants> {
  * Returns null if no children are provided.
  */
 export function StatusAlert({ children, variant = 'error' }: StatusAlertProps) {
+  const descriptionId = useId();
   if (!children) return null;
 
   const isError = variant === 'error';
-  const descriptionId = useId();
 
   return (
     <Alert

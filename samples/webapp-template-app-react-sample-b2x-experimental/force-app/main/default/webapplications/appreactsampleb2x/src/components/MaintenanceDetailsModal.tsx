@@ -9,7 +9,6 @@ import type { MaintenanceRequestSummary } from "@/api/maintenanceRequestApi";
 
 export interface MaintenanceDetailsModalProps {
 	request: MaintenanceRequestSummary;
-	isOpen: boolean;
 	onClose: () => void;
 }
 
@@ -32,19 +31,15 @@ function formatDate(value: string | null): string {
 
 export default function MaintenanceDetailsModal({
 	request,
-	isOpen,
 	onClose,
 }: MaintenanceDetailsModalProps) {
 	useEffect(() => {
-		if (!isOpen) return;
 		const handleEscape = (e: KeyboardEvent) => {
 			if (e.key === "Escape") onClose();
 		};
 		document.addEventListener("keydown", handleEscape);
 		return () => document.removeEventListener("keydown", handleEscape);
-	}, [isOpen, onClose]);
-
-	if (!isOpen) return null;
+	}, [onClose]);
 
 	const description = request.description?.trim() || request.title?.trim() || "—";
 

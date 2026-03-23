@@ -28,7 +28,9 @@ class ErrorBoundary extends Component<
 	}
 }
 
-const basename = (globalThis as any).SFDC_ENV?.basePath;
+// Normalize basename: strip trailing slash so it matches URLs like /lwr/application/ai/c-app
+const rawBasePath = (globalThis as any).SFDC_ENV?.basePath;
+const basename = typeof rawBasePath === "string" ? rawBasePath.replace(/\/+$/, "") : undefined;
 const router = createBrowserRouter(routes, { basename });
 const rootEl = document.getElementById("root");
 if (rootEl) {

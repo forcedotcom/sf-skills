@@ -16,35 +16,35 @@ const GET_APPLICATIONS = gql`
 					edges {
 						node {
 							Id
-							Name {
+							Name @optional {
 								value
 							}
-							User__r {
-								FirstName {
+							User__r @optional {
+								FirstName @optional {
 									value
 								}
-								LastName {
-									value
-								}
-							}
-							Property__r {
-								Name {
-									value
-								}
-								Address__c {
+								LastName @optional {
 									value
 								}
 							}
-							Start_Date__c {
+							Property__r @optional {
+								Name @optional {
+									value
+								}
+								Address__c @optional {
+									value
+								}
+							}
+							Start_Date__c @optional {
 								value
 							}
-							Status__c {
+							Status__c @optional {
 								value
 							}
-							Employment__c {
+							Employment__c @optional {
 								value
 							}
-							References__c {
+							References__c @optional {
 								value
 							}
 						}
@@ -62,7 +62,7 @@ const UPDATE_APPLICATION_STATUS = gql`
 			Application__cUpdate(input: $input) {
 				Record {
 					Id
-					Status__c {
+					Status__c @optional {
 						value
 					}
 				}

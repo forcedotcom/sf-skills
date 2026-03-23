@@ -68,13 +68,29 @@ Once you have identified the type and gathered answers to the clarifying questio
 
 ---
 
-## Verification
+## TypeScript Standards
 
-Before completing, run from the web app directory `force-app/main/default/webapplications/<appName>/` (use the actual app folder name):
+- **Never use `any`** — use proper types, generics, or `unknown` with type guards.
+- **Event handlers:** `(event: React.FormEvent<HTMLFormElement>): void`
+- **State:** `useState<User | null>(null)` — always provide the type parameter.
+- **No unsafe assertions** (`obj as User`). Use type guards:
+  ```typescript
+  function isUser(obj: unknown): obj is User {
+    return typeof obj === 'object' && obj !== null && typeof (obj as User).id === 'string';
+  }
+  ```
+
+---
+
+## Verification (MANDATORY)
+
+Before completing, run from the web app directory `force-app/main/default/webapplications/<appName>/`:
 
 ```bash
 cd force-app/main/default/webapplications/<appName> && npm run lint && npm run build
 ```
 
-- **Lint:** MUST result in 0 errors. Fix any ESLint or TypeScript issues.
-- **Build:** MUST succeed. Resolve any compilation or Vite build failures before finishing.
+- **Lint:** MUST result in 0 errors.
+- **Build:** MUST succeed (includes TypeScript check).
+
+If either fails, fix the errors and re-run. Do not leave the session with failing quality gates.

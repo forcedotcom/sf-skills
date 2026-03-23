@@ -6,19 +6,19 @@ import { flattenGraphQLRecord } from "../utils/helpers";
 
 const USER_PROFILE_FIELDS_FULL = `
     Id
-    FirstName { value }
-    LastName { value }
-    Email { value }
-    Phone { value }
-    Street { value }
-    City { value }
-    State { value }
-    PostalCode { value }
-    Country { value }`;
+    FirstName @optional { value }
+    LastName @optional { value }
+    Email @optional { value }
+    Phone @optional { value }
+    Street @optional { value }
+    City @optional { value }
+    State @optional { value }
+    PostalCode @optional { value }
+    Country @optional { value }`;
 
 const USER_CONTACT_FIELDS = `
     Id
-    ContactId { value }`;
+    ContactId @optional { value }`;
 
 function getUserProfileQuery(fields: string): string {
 	return `

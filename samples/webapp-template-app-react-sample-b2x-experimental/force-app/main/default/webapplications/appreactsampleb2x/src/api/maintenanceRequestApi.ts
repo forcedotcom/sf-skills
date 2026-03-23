@@ -101,38 +101,38 @@ const MAINTENANCE_REQUESTS_QUERY = gql`
 						node {
 							Id
 							ApiName
-							Name {
+							Name @optional {
 								value
 								displayValue
 							}
-							Description__c {
+							Description__c @optional {
 								value
 								displayValue
 							}
-							Type__c {
+							Type__c @optional {
 								value
 								displayValue
 							}
-							Priority__c {
+							Priority__c @optional {
 								value
 								displayValue
 							}
-							Status__c {
+							Status__c @optional {
 								value
 								displayValue
 							}
-							Scheduled__c {
+							Scheduled__c @optional {
 								value
 								displayValue
 							}
-							User__r {
-								Name {
+							User__r @optional {
+								Name @optional {
 									value
 									displayValue
 								}
 							}
-							Property__r {
-								Address__c {
+							Property__r @optional {
+								Address__c @optional {
 									value
 									displayValue
 								}

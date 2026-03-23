@@ -55,52 +55,96 @@ export const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ requests }) 
 					requests.slice(0, 5).map((request) => (
 						<div
 							key={request.id}
-							className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+							className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
 						>
-							{/* Icon - Fixed width */}
-							<div
-								className={`flex items-center justify-center w-12 h-12 ${issueIconColors[request.issueType] || "bg-purple-100"} rounded-lg flex-shrink-0`}
-							>
-								{issueIcons[request.issueType] ? (
-									<img
-										src={issueIcons[request.issueType]}
-										alt={request.issueType}
-										className="w-6 h-6"
-									/>
-								) : (
-									<span className="text-2xl">🔧</span>
-								)}
+							{/* Mobile: stacked card layout */}
+							<div className="flex items-start gap-3 md:hidden">
+								<div
+									className={`flex items-center justify-center w-12 h-12 ${issueIconColors[request.issueType] || "bg-purple-100"} rounded-lg flex-shrink-0`}
+								>
+									{issueIcons[request.issueType] ? (
+										<img
+											src={issueIcons[request.issueType]}
+											alt={request.issueType}
+											className="w-6 h-6"
+										/>
+									) : (
+										<span className="text-2xl">🔧</span>
+									)}
+								</div>
+								<div className="min-w-0 flex-1">
+									<div className="flex items-center gap-2 mb-1 flex-wrap">
+										<h3 className="font-semibold text-gray-900">{request.issueType}</h3>
+										<span className="text-gray-500">|</span>
+										<span className="text-sm text-gray-600 truncate">
+											{request.propertyAddress.split(",")[0]}
+										</span>
+									</div>
+									<p className="text-sm text-gray-700 truncate mb-1">
+										{request.description || "No description"}
+									</p>
+									<div className="flex items-center gap-2">
+										<div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
+											<span className="text-xs font-medium text-gray-700">
+												{request.tenantName?.charAt(0) || "?"}
+											</span>
+										</div>
+										<span className="text-sm text-gray-700 font-medium truncate">
+											{request.tenantName || "Unknown"}
+										</span>
+									</div>
+								</div>
 							</div>
 
-							{/* Issue Type and Address - Fixed width */}
-							<div className="ml-4 w-64 flex-shrink-0">
-								<div className="flex items-center gap-2 mb-1">
-									<h3 className="font-semibold text-gray-900">{request.issueType}</h3>
-									<span className="text-gray-500">|</span>
-									<span className="text-sm text-gray-600 truncate">
-										{request.propertyAddress.split(",")[0]}
+							{/* Desktop: horizontal flex row with proportional columns */}
+							<div className="hidden md:flex items-center min-w-0 overflow-hidden">
+								{/* Icon */}
+								<div
+									className={`flex items-center justify-center w-12 h-12 ${issueIconColors[request.issueType] || "bg-purple-100"} rounded-lg flex-shrink-0`}
+								>
+									{issueIcons[request.issueType] ? (
+										<img
+											src={issueIcons[request.issueType]}
+											alt={request.issueType}
+											className="w-6 h-6"
+										/>
+									) : (
+										<span className="text-2xl">🔧</span>
+									)}
+								</div>
+
+								{/* Issue Type and Address */}
+								<div className="ml-4 flex-[2_2_0] min-w-0 overflow-hidden">
+									<div className="flex items-center gap-2 mb-1">
+										<h3 className="font-semibold text-gray-900 shrink-0">{request.issueType}</h3>
+										<span className="text-gray-500 shrink-0">|</span>
+										<span className="text-sm text-gray-600 truncate">
+											{request.propertyAddress.split(",")[0]}
+										</span>
+									</div>
+									<p className="text-sm text-gray-500 truncate">
+										Request ID: {request.id.substring(0, 8)}...
+									</p>
+								</div>
+
+								{/* Issue description */}
+								<div className="ml-4 flex-[3_3_0] min-w-0 overflow-hidden">
+									<p className="text-sm text-gray-700 truncate">
+										{request.description || "No description"}
+									</p>
+								</div>
+
+								{/* Tenant */}
+								<div className="ml-4 flex-[2_2_0] min-w-0 overflow-hidden flex items-center gap-2">
+									<div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
+										<span className="text-sm font-medium text-gray-700">
+											{request.tenantName?.charAt(0) || "?"}
+										</span>
+									</div>
+									<span className="text-sm text-gray-700 font-medium truncate">
+										{request.tenantName || "Unknown"}
 									</span>
 								</div>
-								<p className="text-sm text-gray-500">Request ID: {request.id.substring(0, 8)}...</p>
-							</div>
-
-							{/* Issue description - Fixed width */}
-							<div className="ml-4 w-80 flex-shrink-0">
-								<p className="text-sm text-gray-700 truncate">
-									{request.description || "No description"}
-								</p>
-							</div>
-
-							{/* Tenant - Fixed width */}
-							<div className="ml-4 w-48 flex-shrink-0 flex items-center gap-2">
-								<div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
-									<span className="text-sm font-medium text-gray-700">
-										{request.tenantName?.charAt(0) || "?"}
-									</span>
-								</div>
-								<span className="text-sm text-gray-700 font-medium truncate">
-									{request.tenantName || "Unknown"}
-								</span>
 							</div>
 						</div>
 					))

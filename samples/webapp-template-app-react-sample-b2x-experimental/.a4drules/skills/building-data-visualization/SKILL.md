@@ -46,8 +46,8 @@ Recharts is built on D3 and provides declarative React components. No additional
 
 Read the corresponding guide:
 
-- **Bar chart** — use the **`building-analytics-charts`** skill in `feature-react-chart` (AnalyticsChart component for categorical data).
-- **Line / area chart** — use the **`building-analytics-charts`** skill in `feature-react-chart` (AnalyticsChart component for time-series data).
+- **Bar chart** — read `implementation/bar-line-chart.md` (categorical data)
+- **Line / area chart** — read `implementation/bar-line-chart.md` (time-series data)
 - **Donut / pie chart** — read `implementation/donut-chart.md`
 - **Stat card with trend** — read `implementation/stat-card.md`
 - **Dashboard layout** — read `implementation/dashboard-layout.md`

@@ -4,6 +4,8 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Card, CardContent } from "../components/ui/card";
+import { Skeleton } from "../components/ui/skeleton";
+import { SkeletonField } from "@/components/SkeletonPrimitives";
 import {
 	fetchListingById,
 	fetchPropertyById,
@@ -12,6 +14,35 @@ import {
 import { createApplicationRecord } from "@/api/applicationApi";
 import { useAuth } from "../features/authentication/context/AuthContext";
 import { fetchUserContact } from "../features/authentication/api/userProfileApi";
+
+function ApplicationSkeleton() {
+	return (
+		<div className="mx-auto max-w-[900px]" role="status">
+			<Skeleton className="mb-4 h-4 w-28" />
+
+			<Card className="mb-6 flex gap-4 rounded-2xl border border-border p-6 shadow-sm">
+				<Skeleton className="size-[200px] shrink-0 rounded-xl" />
+				<div className="min-w-0 flex-1 space-y-2">
+					<Skeleton className="h-7 w-2/3" />
+					<Skeleton className="h-4 w-1/2" />
+				</div>
+			</Card>
+
+			<Card className="mb-6 rounded-2xl border border-border shadow-sm">
+				<CardContent className="space-y-4 pt-3">
+					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+						<SkeletonField labelWidth="w-20" />
+					</div>
+					<SkeletonField labelWidth="w-24" height="h-[80px]" />
+					<SkeletonField labelWidth="w-20" height="h-[80px]" />
+					<Skeleton className="h-12 w-full rounded-xl" />
+				</CardContent>
+			</Card>
+
+			<span className="sr-only">Loading…</span>
+		</div>
+	);
+}
 
 export default function Application() {
 	const { user } = useAuth();
@@ -114,12 +145,7 @@ export default function Application() {
 	);
 
 	if (loading) {
-		return (
-			<div className="mx-auto max-w-[900px]">
-				<div className="mb-6 h-48 animate-pulse rounded-2xl bg-muted" />
-				<div className="h-64 animate-pulse rounded-2xl bg-muted" />
-			</div>
-		);
+		return <ApplicationSkeleton />;
 	}
 
 	if (submittedId) {
@@ -130,7 +156,7 @@ export default function Application() {
 					<p className="text-sm text-muted-foreground">
 						Your application has been saved. Reference: {submittedId}
 					</p>
-					<div className="mt-4 flex gap-2">
+					<div className="mt-4 flex gap-2 items-center">
 						<Link to="/properties" className="text-sm text-primary no-underline hover:underline">
 							Back to search
 						</Link>
@@ -171,9 +197,11 @@ export default function Application() {
 					</h2>
 					<p className="text-sm text-muted-foreground">
 						{propertyAddress ??
-							(listingId
-								? "Loading…"
-								: "Select a property from search or listing detail to apply.")}
+							(listingId ? (
+								<Skeleton className="mt-1 h-4 w-48" />
+							) : (
+								"Select a property from search or listing detail to apply."
+							))}
 					</p>
 					{loadError && <p className="mt-2 text-sm text-destructive">{loadError}</p>}
 				</div>

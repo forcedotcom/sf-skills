@@ -59,7 +59,7 @@ export default function PropertyListings() {
 							<CardContent className="flex gap-4 p-4">
 								<Link
 									to={`/property/${p.id}`}
-									className="relative block size-[200px] shrink-0 cursor-pointer rounded-xl bg-muted transition-opacity duration-200 hover:opacity-95"
+									className="relative block size-[120px] sm:size-[200px] shrink-0 cursor-pointer rounded-xl bg-muted transition-opacity duration-200 hover:opacity-95"
 								>
 									<span className="absolute left-2 top-2 rounded-full bg-violet-600 px-2 py-0.5 text-xs font-medium text-white">
 										Virtual Tours

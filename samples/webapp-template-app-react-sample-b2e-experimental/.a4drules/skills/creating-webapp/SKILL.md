@@ -1,13 +1,36 @@
 ---
 name: creating-webapp
-description: Core web application rules for SFDX React apps
+description: Use this skill when creating or setting up a new SFDX React web application. Covers first steps, npm install, skills-first protocol, deployment order, and core web app rules.
 paths:
   - "**/webapplications/**/*"
 ---
 
+# First Steps (MUST FOLLOW)
+
+**Always run `npm install` before doing anything else** when working in a web app directory (e.g. `force-app/main/default/webapplications/<appName>/` or a dist app path). Dependencies must be installed before running `npm run dev`, `npm run build`, `npm run lint`, or any other script. If `node_modules` is missing or stale, commands will fail.
+
 # Skills-First (MUST FOLLOW)
 
-**Before writing any code or running any command**, search for relevant skills (`SKILL.md` files) that cover your task. Read the full skill and follow its instructions. Skills live in `.a4drules/skills/` and `feature/*/skills/`. See **webapp-skills-first.md** for the full protocol and a task-to-skill lookup table.
+**Before writing any code or running any command**, search for relevant skills (`SKILL.md` files) that cover your task. Read the full skill and follow its instructions. Skills live in `.a4drules/skills/` and `feature/*/skills/`.
+
+- Do not write custom scripts or complex bash commands for a workflow already covered by a loaded skill.
+- Only proceed with manual execution after confirming no relevant skill exists.
+
+# Deployment Order (MUST FOLLOW)
+
+**Metadata deployments must complete before fetching GraphQL schema or running codegen.** The schema reflects the current org state; custom objects and fields appear only after metadata is deployed. Running schema fetch or codegen too early produces incomplete or incorrect types.
+
+**Invoke the `deploying-to-salesforce` skill** (`.a4drules/skills/deploying-to-salesforce/`) whenever the task involves:
+- Deploying metadata (objects, permission sets, layouts)
+- Fetching GraphQL schema (`npm run graphql:schema`)
+- Running GraphQL codegen (`npm run graphql:codegen`)
+- Generating deploy/setup commands or syncing with the org
+
+The skill enforces the correct sequence: **deploy metadata → assign permset → schema fetch → codegen**.
+
+**Critical rules:**
+- Do **not** run `npm run graphql:schema` before metadata (objects, permission sets) is deployed — the schema will not include custom objects/fields.
+- Do **not** skip schema refetch after any metadata deployment — re-run `npm run graphql:schema` and `npm run graphql:codegen` from the webapp dir.
 
 # Web App Generation
 
@@ -71,6 +94,25 @@ Agents consistently miss these. **You must not leave them default.**
 | Root page content   | Component at root route (often `Home` in `routes.tsx`)               |
 
 
+# React & TypeScript Constraints
+
+## Routing (React Router)
+
+Use a **single** router package. When using `createBrowserRouter` / `RouterProvider`, all imports MUST come from **`react-router`** — not `react-router-dom`.
+
+## Component Library + Styling
+
+- **shadcn/ui** for components: `import { Button } from '@/components/ui/button';`
+- **Tailwind CSS** utility classes
+
+## URL & Path Handling
+
+Apps run behind dynamic base paths. Router navigation (`<Link to>`, `navigate()`) prefer absolute paths (`/x`). Non-router attributes (`<img src>`) use dot-relative (`./x`) to resolve against `<base>`. Prefer Vite `import` for static assets.
+
+## Module Restrictions
+
+React apps must NOT import Salesforce platform modules like `lightning/*` or `@wire` (LWC-only). For data access, invoke the **using-salesforce-data** skill.
+
 # Frontend Aesthetics
 
 **Avoid AI slop.** Make creative, distinctive frontends:
@@ -96,4 +138,3 @@ Only stop when:
 - All checklist items are completed and quality gates pass, or
 - A blocking error cannot be resolved after reasonable remediation, or
 - The user explicitly asks to pause.
-

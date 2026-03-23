@@ -68,6 +68,8 @@ const config = [
       globals: {
         ...globals.browser,
         JSX: 'readonly',
+        React: 'readonly',
+        process: 'readonly',
       },
     },
     plugins: {

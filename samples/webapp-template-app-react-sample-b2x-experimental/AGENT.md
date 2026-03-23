@@ -54,17 +54,22 @@ cd <sfdx-source>/webapplications/<appName>
 
 **Before finishing changes:** run `npm run build` and `npm run lint` from the web app directory; both must succeed.
 
-## Agent rules (.a4drules)
+## Agent skills (.a4drules/skills/)
 
-This project includes **.a4drules/** at the project root. Follow them when generating or editing code.
+This project includes **.a4drules/skills/** at the project root. Follow them when generating or editing code.
 
+- **Creating Webapp** (`.a4drules/skills/creating-webapp/`): First steps, skills-first protocol, React/TypeScript constraints, deployment order, navigation, aesthetics, and code quality.
+- **Building React Components** (`.a4drules/skills/building-react-components/`): Component/page/header-footer workflow, TypeScript standards, and mandatory lint+build verification.
 - **Accessing Data** (`.a4drules/skills/accessing-data/`): Use for all Salesforce data fetches. Enforces Data SDK usage (`createDataSDK()` + `sdk.graphql` or `sdk.fetch`); GraphQL preferred, fetch when GraphQL is not sufficient.
 - **Fetching REST API** (`.a4drules/skills/fetching-rest-api/`): Use when implementing Chatter, Connect REST, Apex REST, UI API REST, or Einstein LLM calls via `sdk.fetch`.
 - **Using GraphQL** (`.a4drules/skills/using-graphql/`): Use when implementing Salesforce GraphQL queries or mutations. Sub-skills: `exploring-graphql-schema`, `generating-graphql-read-query`, `generating-graphql-mutation-query`.
+- **Deploying to Salesforce** (`.a4drules/skills/deploying-to-salesforce/`): Use when deploying metadata, fetching GraphQL schema, or generating deploy/setup commands. Enforces deploy → permset → schema → codegen order; schema refetch after metadata deployment.
 
 When rules refer to "web app directory" or `<sfdx-source>/webapplications/<appName>/`, resolve `<sfdx-source>` from `sfdx-project.json` and use the **actual app folder name** for this project.
 
 ## Deploying
+
+**Deployment order:** Metadata (objects, permission sets) must be deployed before GraphQL schema fetch. After any metadata deployment, re-run `npm run graphql:schema` and `npm run graphql:codegen` from the webapp dir. **One-command setup:** `node scripts/setup-cli.mjs --target-org <alias>` runs deploy → permset → schema → codegen in the correct order. Invoke the `deploying-to-salesforce` skill for full guidance.
 
 From **this project root** (resolve the actual SFDX source path from `sfdx-project.json`):
 
