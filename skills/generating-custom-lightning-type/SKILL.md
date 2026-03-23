@@ -103,9 +103,11 @@ When strict validation is enabled (`unevaluatedProperties: false`), keep each pr
      - Top-level `editor` object.
      - Use `editor.componentOverrides` for component overrides.
      - Use `editor.layout` for layout.
+     - **DEPRECATED**: Do NOT use `propertyRenderers` or `view` — these are legacy keys. Always use `componentOverrides` and `layout` instead.
    - **Root override pattern** (most common for fully custom editing UI):
      - `editor.componentOverrides["$"] = { "definition": "c/<yourEditorComponent>", "attributes": { ... } }`
      - When passing schema data into a custom LWC, use attribute mapping with the `{!$attrs.<name>}` syntax: e.g. `"attributes": { "myField": "{!$attrs.value}" }` so the runtime binds schema values to your component's attributes.
+     - **CRITICAL**: The `<name>` in `{!$attrs.<name>}` must be a property defined in your type schema. For example, if your schema has a property called `temperature`, use `{!$attrs.temperature}`, not `{!$attrs.value}` unless `value` is an actual property.
    - **Property-level override pattern** (for individual fields):
      - `editor.componentOverrides["<propertyName>"] = { "definition": "es_property_editors/<...>" }`
      - **Valid editor components** (examples): `es_property_editors/inputText`, `es_property_editors/inputNumber`, `es_property_editors/inputRichText`, `es_property_editors/inputImage`, `es_property_editors/inputTextarea`. **Do not use** `es_property_editors/inputList`.
@@ -113,6 +115,7 @@ When strict validation is enabled (`unevaluatedProperties: false`), keep each pr
    - **Layout pattern**:
      - `editor.layout.definition = "lightning/verticalLayout"`
      - `editor.layout.children[*].definition = "lightning/propertyLayout"` with `attributes.property = "<propertyName>"`
+     - **CRITICAL**: `lightning/propertyLayout` only accepts the `property` attribute. Do NOT add `label`, `title`, or any other attributes — these will fail validation with `additionalProperties: false` errors.
    - **Avoid known-invalid patterns**:
      - Do not use `es_property_editors/inputList`.
      - Do not use `itemSchema` attributes.
@@ -121,18 +124,41 @@ When strict validation is enabled (`unevaluatedProperties: false`), keep each pr
      - Top-level `renderer` object.
      - Use `renderer.componentOverrides` for component overrides.
      - Use `renderer.layout` for layout.
+     - **DEPRECATED**: Do NOT use `propertyRenderers` or `view` — these are legacy keys. Always use `componentOverrides` and `layout` instead.
    - **Root override pattern** (most common for fully custom rendering UI):
      - `renderer.componentOverrides["$"] = { "definition": "c/<yourRendererComponent>", "attributes": { ... } }`
      - Use `{!$attrs.<name>}` in attribute mappings when binding schema data to custom renderer component attributes.
+     - **CRITICAL**: Attribute mappings like `{!$attrs.propertyName}` must reference properties that **actually exist** in your type schema. Referencing non-existent properties will fail validation.
+     - **Type matching**: Attribute values must match the expected type for the component. For example, if a component expects a string attribute, passing an integer will fail validation.
    - **Property-level override pattern**:
      - `renderer.componentOverrides["<propertyName>"] = { "definition": "es_property_editors/outputText" | "es_property_editors/outputNumber" | "es_property_editors/outputImage" | ... }`. **Valid renderer components** (examples): `es_property_editors/outputText`, `es_property_editors/outputNumber`, `es_property_editors/outputImage`. Avoid input-style components in the renderer.
+   - **Layout pattern for renderer**:
+     - `renderer.layout.definition = "lightning/verticalLayout"`
+     - `renderer.layout.children[*].definition = "lightning/propertyLayout"` with `attributes.property = "<propertyName>"`
+     - **CRITICAL**: Same as editor layouts, `lightning/propertyLayout` only accepts the `property` attribute. Do NOT add `label`, `title`, or any other attributes.
    - **Collection renderer** (for root-level `lightning__listType` properties): Use `collection.renderer.componentOverrides["$"] = { "definition": "c/<yourListRendererComponent>" }` or `es_property_editors/genericListTypeRenderer` to render the list.
 5. **Place files in the correct bundle structure**
    - `lightningTypes/<TypeName>/schema.json`
    - (Optional) `lightningTypes/<TypeName>/lightningDesktopGenAi/editor.json`
    - (Optional) `lightningTypes/<TypeName>/lightningDesktopGenAi/renderer.json`
    - For Gen AI / Copilot the standard path is `lightningDesktopGenAi/`. Other targets (e.g. Experience Builder, Mobile Copilot, Enhanced Web Chat) use different subfolders when supported: `experienceBuilder/`, `lightningMobileGenAi/`, `enhancedWebChat/`.
-6. **Deploy and validate**
+6. **Configure custom LWC components (if using custom components)**
+   - **CRITICAL**: Custom LWC components referenced in editor/renderer configs MUST have the correct target configuration in their `-meta.xml` files:
+     - **For editor components** (`c/<componentName>` used in `editor.json`): The LWC's `-meta.xml` file must include `<target>lightning__AgentforceInput</target>`
+     - **For renderer components** (`c/<componentName>` used in `renderer.json`): The LWC's `-meta.xml` file must include `<target>lightning__AgentforceOutput</target>`
+   - Without the correct target, deployment will fail with: `Invalid target configuration. To use 'c/componentName' as a renderer/editor, your js-meta.xml file must include valid target 'lightning__AgentforceOutput/Input'.`
+   - Example `-meta.xml` for a renderer component:
+     ```xml
+     <?xml version="1.0" encoding="UTF-8"?>
+     <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+         <apiVersion>60.0</apiVersion>
+         <isExposed>true</isExposed>
+         <targets>
+             <target>lightning__AgentforceOutput</target>
+         </targets>
+     </LightningComponentBundle>
+     ```
+7. **Deploy and validate**
    - Deploy the bundle using your org's standard metadata deployment flow (e.g. Salesforce CLI or IDE). The MCP client or tooling in use should provide or integrate with the appropriate deploy/retrieve commands for Lightning Type bundles.
    - Validate incrementally: if deployment fails, remove disallowed keywords first (especially `examples`, `items`, nested `lightning:type`).
 
@@ -144,6 +170,11 @@ When strict validation is enabled (`unevaluatedProperties: false`), keep each pr
 | Array property rejected | Use of `items` (or `lightning:type` in nested arrays) rejected by validator | For nested arrays: keep only `type: "array"`. For root arrays: use minimal structure; remove `items` if rejected |
 | Apex-based CLT rejected | Extra fields added (e.g., `type`, `properties`) | Use only `title`, optional `description`, and `lightning:type` |
 | Editor config rejected | Use of invalid patterns (`es_property_editors/inputList`, `itemSchema`) or unrecognized top-level keys | Use `editor.componentOverrides` and `editor.layout`; keep config minimal |
+| `additionalProperties` error on layout attributes | Adding `label` or other attributes to `lightning/propertyLayout` | Only use `property` attribute in `lightning/propertyLayout`. Remove `label`, `title`, or any other attributes |
+| Invalid target configuration for custom LWC | Custom LWC component's `-meta.xml` missing required target (`lightning__AgentforceInput` or `lightning__AgentforceOutput`) | Add correct target to LWC's `-meta.xml`: use `lightning__AgentforceInput` for editors, `lightning__AgentforceOutput` for renderers |
+| Attribute mapping doesn't exist in type schema | Using `{!$attrs.propertyName}` where `propertyName` is not defined in schema | Ensure all attribute mappings reference actual properties in your type schema's `properties` section |
+| `additionalProperties` error with deprecated keys | Using `propertyRenderers` or `view` in editor/renderer config | Replace deprecated `propertyRenderers` with `componentOverrides` and `view` with `layout` |
+| Type mismatch in component attributes | Passing wrong type for component attribute (e.g., integer instead of string) | Ensure attribute values match the expected type defined by the component |
 
 ## Verification Checklist
 - [ ] Root schema has `type: "object"`, `title`, `lightning:type: "lightning__objectType"`, and `unevaluatedProperties: false`
@@ -155,3 +186,6 @@ When strict validation is enabled (`unevaluatedProperties: false`), keep each pr
 - [ ] Bundle structure and filenames match Lightning Types requirements
 - [ ] Editor config uses only allowed patterns (no `es_property_editors/inputList`, no `itemSchema`); use valid components (e.g. `es_property_editors/inputText`, `es_property_editors/inputNumber`) or custom `c/` components
 - [ ] Renderer config uses output-style components (e.g. `es_property_editors/outputText`, `es_property_editors/outputNumber`) where applicable, not input editors
+- [ ] Layout configurations use `lightning/propertyLayout` with ONLY the `property` attribute (no `label`, `title`, or other attributes)
+- [ ] All attribute mappings (`{!$attrs.propertyName}`) reference properties that exist in the type schema
+- [ ] Custom LWC components have correct targets in `-meta.xml`: `lightning__AgentforceInput` for editors, `lightning__AgentforceOutput` for renderers
