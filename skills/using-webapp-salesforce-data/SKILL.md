@@ -1,6 +1,6 @@
 ---
 name: using-webapp-salesforce-data
-description: "Salesforce data access for reading, writing, and querying records via REST, GraphQL, Apex, or Platform SDK. Use when the user wants to fetch, search, filter, sort, display, create, update, delete, or attach files to Salesforce records (standard objects like Accounts, Contacts, Opportunities, Cases, Quotes, or any custom object) in a web app or UI component (React, Angular, Vue, etc.); call Chatter, Connect, or Apex REST APIs."
+description: "Salesforce data access for reading, writing, and querying records via REST, GraphQL, Apex, or Platform SDK. Use when the user wants to fetch, search, filter, sort, display, create, update, delete, or attach files to Salesforce records (standard objects like Accounts, Contacts, Opportunities, Cases, Quotes, or any custom object) in a web app or UI component (React, Angular, Vue, etc.); call Chatter, Connect, or Apex REST APIs; or invoke AuraEnabled Apex methods from an external app. Does not apply to authentication/OAuth setup, schema changes (adding fields, relationships), Bulk/Tooling/Metadata API usage, declarative automation (Flows, Process Builder), general LWC/Apex coding guidance without a specific data operation, or Salesforce admin/configuration tasks."
 ---
 
 # Salesforce Data Access
@@ -44,6 +44,13 @@ const res = await sdk.fetch?.("/services/apexrest/my-resource");
 | Apex REST | `sdk.fetch` | `/services/apexrest/{resource}` — custom server-side logic, aggregates, multi-step transactions |
 | Connect REST | `sdk.fetch` | `/services/data/v{ver}/connect/file/upload/config` — file upload config |
 | Einstein LLM | `sdk.fetch` | `/services/data/v{ver}/einstein/llm/prompt/generations` — AI text generation |
+
+**Not supported:**
+
+- **Enterprise REST query endpoint** (`/services/data/v*/query` with SOQL) — blocked at the proxy level. Use GraphQL for record reads; use Apex REST if server-side SOQL aggregates are required.
+- **Aura-enabled Apex** (`@AuraEnabled`) — an LWC/Aura pattern with no invocation path from React webapps.
+- **Chatter API** (`/chatter/users/me`) — use `uiapi { currentUser { ... } }` in a GraphQL query instead.
+- **Any other Salesforce REST endpoint** not listed in the supported table above.
 
 ## Decision: GraphQL vs REST
 
