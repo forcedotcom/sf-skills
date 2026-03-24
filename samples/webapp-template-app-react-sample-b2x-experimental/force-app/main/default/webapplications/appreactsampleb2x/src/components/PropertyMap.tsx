@@ -2,7 +2,7 @@
  * Leaflet map for property search and detail. Uses OpenStreetMap tiles (no API key).
  * Renders one pin per property (each marker in the markers array).
  */
-import { useMemo, useState, useEffect, type ReactNode } from "react";
+import { useMemo, useEffect, type ReactNode } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -122,6 +122,41 @@ function PopupContentWrapper({ children }: { children: ReactNode }) {
 	);
 }
 
+function MapContent({
+	center,
+	zoom,
+	markers,
+	popupContent,
+	onBoundsChange,
+}: Pick<PropertyMapProps, "center" | "zoom" | "markers" | "popupContent" | "onBoundsChange">) {
+	return (
+		<MapContainer center={center} zoom={zoom} scrollWheelZoom className="absolute inset-0">
+			<MapCenterUpdater center={center} zoom={zoom} />
+			<MapBoundsReporter onBoundsChange={onBoundsChange} />
+			<TileLayer
+				attribution='&copy; <a href="https://leafletjs.com/">Leaflet</a> | Data by &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+				url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+				maxZoom={19}
+			/>
+			{markers?.map((m, i) => (
+				<Marker
+					key={`${m.lat}-${m.lng}-${m.propertyId ?? i}`}
+					position={[m.lat, m.lng]}
+					icon={pinIcon}
+				>
+					<Popup>
+						{popupContent ? (
+							<PopupContentWrapper>{popupContent(m)}</PopupContentWrapper>
+						) : (
+							(m.label ?? "Property")
+						)}
+					</Popup>
+				</Marker>
+			))}
+		</MapContainer>
+	);
+}
+
 export default function PropertyMap({
 	center,
 	zoom = 13,
@@ -130,64 +165,21 @@ export default function PropertyMap({
 	onBoundsChange,
 	className = "h-[400px] w-full rounded-xl overflow-hidden",
 }: PropertyMapProps) {
-	const [mounted, setMounted] = useState(false);
-	useEffect(() => {
-		setMounted(true);
-	}, []);
-
 	const hasMarkers = markers.length > 0;
 	const effectiveCenter = useMemo((): [number, number] => {
-		if (hasMarkers) {
-			return [markers[0].lat, markers[0].lng];
-		}
+		if (hasMarkers) return [markers[0].lat, markers[0].lng];
 		return center;
 	}, [center, hasMarkers, markers]);
 
-	if (!mounted || typeof window === "undefined") {
-		return (
-			<div
-				className={
-					className + " bg-muted flex items-center justify-center text-muted-foreground text-sm"
-				}
-				aria-hidden
-			>
-				Loading map…
-			</div>
-		);
-	}
-
 	return (
-		<div className={className} aria-label="Property map">
-			<MapContainer
+		<div className={`relative ${className}`} aria-label="Property map">
+			<MapContent
 				center={effectiveCenter}
 				zoom={zoom}
-				scrollWheelZoom
-				className="h-full w-full"
-				style={{ minHeight: 200 }}
-			>
-				<MapCenterUpdater center={effectiveCenter} zoom={zoom} />
-				<MapBoundsReporter onBoundsChange={onBoundsChange} />
-				<TileLayer
-					attribution='&copy; <a href="https://leafletjs.com/">Leaflet</a> | Data by &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-					url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-					maxZoom={19}
-				/>
-				{markers.map((m, i) => (
-					<Marker
-						key={`${m.lat}-${m.lng}-${m.propertyId ?? i}`}
-						position={[m.lat, m.lng]}
-						icon={pinIcon}
-					>
-						<Popup>
-							{popupContent ? (
-								<PopupContentWrapper>{popupContent(m)}</PopupContentWrapper>
-							) : (
-								(m.label ?? "Property")
-							)}
-						</Popup>
-					</Marker>
-				))}
-			</MapContainer>
+				markers={markers}
+				popupContent={popupContent}
+				onBoundsChange={onBoundsChange}
+			/>
 		</div>
 	);
 }

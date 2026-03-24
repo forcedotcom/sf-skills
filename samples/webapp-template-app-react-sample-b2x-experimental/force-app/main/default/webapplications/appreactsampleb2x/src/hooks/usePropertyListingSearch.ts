@@ -17,7 +17,7 @@ export function usePropertyListingSearch(
 	const [results, setResults] = useState<SearchResultRecord[]>([]);
 	const [nextPageToken, setNextPageToken] = useState<string | null>(null);
 	const [previousPageToken, setPreviousPageToken] = useState<string | null>(null);
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
 	const abortControllerRef = useRef<AbortController | null>(null);

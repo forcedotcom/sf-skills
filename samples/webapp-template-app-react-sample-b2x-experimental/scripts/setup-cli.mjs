@@ -14,7 +14,7 @@
  *   1. login     — sf org login web only if org not already connected (skip with --skip-login)
  *   2. webapp    — (all web apps) npm install && npm run build so dist exists for deploy (skip with --skip-webapp-build)
  *   3. deploy    — sf project deploy start --target-org <alias> (requires dist for entity deployment)
- *   4. permset   — sf org assign permset (skip with --skip-permset; name via --permset-name)
+ *   4. permset   — sf org assign permset for each *.permissionset-meta.xml (skip with --skip-permset; override via --permset-name)
  *   5. data      — prepare unique fields + sf data import tree (skipped if no data dir/plan)
  *   6. graphql   — (in webapp) npm run graphql:schema then npm run graphql:codegen
  *   7. dev       — (in webapp) npm run dev — launch dev server (skip with --skip-dev)
@@ -52,7 +52,8 @@ function parseArgs() {
   const args = process.argv.slice(2);
   let targetOrg = null;
   let webappName = null;
-  let permsetName = 'Property_Management_Access';
+  /** If non-empty, only these names are assigned; otherwise all discovered from the project. */
+  const permsetNamesExplicit = [];
   let yes = false;
   const flags = {
     skipLogin: false,
@@ -69,7 +70,7 @@ function parseArgs() {
     } else if (args[i] === '--webapp-name' && args[i + 1]) {
       webappName = args[++i];
     } else if (args[i] === '--permset-name' && args[i + 1]) {
-      permsetName = args[++i];
+      permsetNamesExplicit.push(args[++i]);
     } else if (args[i] === '--skip-login') flags.skipLogin = true;
     else if (args[i] === '--skip-deploy') flags.skipDeploy = true;
     else if (args[i] === '--skip-permset') flags.skipPermset = true;
@@ -90,7 +91,7 @@ Required:
 
 Options:
   --webapp-name <name>   Web app folder name under webapplications/ (default: auto-detect)
-  --permset-name <name>  Permission set to assign (default: Property_Management_Access)
+  --permset-name <name>  Assign only this permission set (repeatable). Default: all sets under permissionsets/
   --skip-login           Skip login step (login is auto-skipped if org is already connected)
   --skip-deploy          Do not deploy metadata
   --skip-permset         Do not assign permission set
@@ -108,7 +109,7 @@ Options:
     console.error('Error: --target-org <alias> is required.');
     process.exit(1);
   }
-  return { targetOrg, webappName, permsetName, yes, ...flags };
+  return { targetOrg, webappName, permsetNamesExplicit, yes, ...flags };
 }
 
 function discoverAllWebappDirs(webappName) {
@@ -139,6 +140,19 @@ function discoverWebappDir(webappName) {
     console.log(`Multiple web apps found; using first: ${all[0].split(/[/\\]/).pop()}`);
   }
   return all[0];
+}
+
+/** API names from permissionsets/*.permissionset-meta.xml in the first package directory. */
+function discoverPermissionSetNames() {
+  const dir = resolve(SFDX_SOURCE, 'permissionsets');
+  if (!existsSync(dir)) return [];
+  const names = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (!entry.isFile()) continue;
+    const m = entry.name.match(/^(.+)\.permissionset-meta\.xml$/);
+    if (m) names.push(m[1]);
+  }
+  return names.sort();
 }
 
 function isOrgConnected(targetOrg) {
@@ -281,7 +295,7 @@ async function main() {
   const {
     targetOrg,
     webappName,
-    permsetName,
+    permsetNamesExplicit,
     yes,
     skipLogin: argSkipLogin,
     skipDeploy: argSkipDeploy,
@@ -292,13 +306,22 @@ async function main() {
     skipDev: argSkipDev,
   } = parseArgs();
 
+  const permsetNames =
+    permsetNamesExplicit.length > 0 ? permsetNamesExplicit : discoverPermissionSetNames();
+  const permsetStepLabel =
+    permsetNames.length === 0
+      ? 'Permset — (none under permissionsets/)'
+      : permsetNames.length <= 3
+        ? `Permset — assign ${permsetNames.join(', ')}`
+        : `Permset — assign ${permsetNames.length} permission sets`;
+
   const hasDataPlan = existsSync(DATA_PLAN) && existsSync(DATA_DIR);
 
   const stepDefs = [
     { key: 'login', label: 'Login — org authentication', enabled: !argSkipLogin, available: true },
     { key: 'webappBuild', label: 'Webapp Build — npm install + build (pre-deploy)', enabled: !argSkipWebappBuild, available: true },
     { key: 'deploy', label: 'Deploy — sf project deploy start', enabled: !argSkipDeploy, available: true },
-    { key: 'permset', label: `Permset — assign ${permsetName}`, enabled: !argSkipPermset, available: true },
+    { key: 'permset', label: permsetStepLabel, enabled: !argSkipPermset, available: true },
     { key: 'data', label: 'Data — delete + import records via Apex', enabled: !argSkipData && hasDataPlan, available: hasDataPlan },
     { key: 'graphql', label: 'GraphQL — schema introspect + codegen', enabled: !argSkipGraphql, available: true },
     { key: 'dev', label: 'Dev — launch dev server', enabled: !argSkipDev, available: true },
@@ -359,31 +382,38 @@ async function main() {
     });
   }
 
-  if (!skipPermset && permsetName) {
-    console.log('\n--- Assign permission set ---');
-    const permsetResult = spawnSync(
-      'sf',
-      ['org', 'assign', 'permset', '--name', permsetName, '--target-org', targetOrg],
-      {
-        cwd: ROOT,
-        stdio: 'pipe',
-        shell: true,
-      }
-    );
-    if (permsetResult.status === 0) {
-      console.log('Permission set assigned.');
+  if (!skipPermset) {
+    if (permsetNames.length === 0) {
+      console.log('\n--- Assign permission sets ---');
+      console.log('No permission sets found under permissionsets/ and none passed via --permset-name; skipping.');
     } else {
-      const out =
-        (permsetResult.stderr?.toString() || '') + (permsetResult.stdout?.toString() || '');
-      if (out.includes('Duplicate') && out.includes('PermissionSet')) {
-        console.log('Permission set already assigned; skipping.');
-      } else if (out.includes('not found') && out.includes('target org')) {
-        console.log(`Permission set "${permsetName}" not in org; skipping.`);
-      } else {
-        process.stdout.write(permsetResult.stdout?.toString() || '');
-        process.stderr.write(permsetResult.stderr?.toString() || '');
-        console.error('\nSetup failed at step: Assign permission set');
-        process.exit(permsetResult.status ?? 1);
+      console.log('\n--- Assign permission sets ---');
+      for (const permsetName of permsetNames) {
+        const permsetResult = spawnSync(
+          'sf',
+          ['org', 'assign', 'permset', '--name', permsetName, '--target-org', targetOrg],
+          {
+            cwd: ROOT,
+            stdio: 'pipe',
+            shell: true,
+          }
+        );
+        if (permsetResult.status === 0) {
+          console.log(`Permission set "${permsetName}" assigned.`);
+        } else {
+          const out =
+            (permsetResult.stderr?.toString() || '') + (permsetResult.stdout?.toString() || '');
+          if (out.includes('Duplicate') && out.includes('PermissionSet')) {
+            console.log(`Permission set "${permsetName}" already assigned; skipping.`);
+          } else if (out.includes('not found') && out.includes('target org')) {
+            console.log(`Permission set "${permsetName}" not in org; skipping.`);
+          } else {
+            process.stdout.write(permsetResult.stdout?.toString() || '');
+            process.stderr.write(permsetResult.stderr?.toString() || '');
+            console.error(`\nSetup failed at step: Assign permission set (${permsetName})`);
+            process.exit(permsetResult.status ?? 1);
+          }
+        }
       }
     }
   }

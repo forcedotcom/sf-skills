@@ -80,7 +80,7 @@ export const routes: RouteObject[] = [
         ]
       },
       {
-        element: <PrivateRoute />,
+        element: <PrivateRoute showCardSkeleton />,
         children: [
           {
             path: ROUTES.PROFILE.PATH,

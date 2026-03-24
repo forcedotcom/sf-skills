@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Bell, ChevronDown, Menu, UserPen, LogOut, User, Loader2 } from "lucide-react";
+import { ChevronDown, Menu, UserPen, LogOut, User, Loader2 } from "lucide-react";
 import { Link } from "react-router";
 import { useAuth } from "../features/authentication/context/AuthContext";
 import { ROUTES } from "../features/authentication/authenticationConfig";
@@ -67,15 +67,6 @@ function LoginLink() {
 function AuthenticatedControls({ userName }: { userName: string }) {
 	return (
 		<div className="flex items-center gap-4">
-			<button
-				type="button"
-				className="rounded-md p-2 transition-colors hover:bg-teal-600 md:hidden"
-				aria-label="Search"
-			>
-				<Search className="size-5" aria-hidden />
-			</button>
-
-			<NotificationBell />
 			<UserMenu userName={userName} />
 		</div>
 	);
@@ -134,38 +125,6 @@ function UserMenu({ userName }: { userName: string }) {
 							<LogOut className="size-4" aria-hidden />
 							Log Out
 						</button>
-					</div>
-				</>
-			)}
-		</div>
-	);
-}
-
-function NotificationBell() {
-	const [open, setOpen] = useState(false);
-
-	return (
-		<div className="relative">
-			<button
-				type="button"
-				onClick={() => setOpen((prev) => !prev)}
-				className="relative rounded-md p-2 transition-colors hover:bg-teal-600"
-				aria-label="Notifications"
-			>
-				<Bell className="size-5" aria-hidden />
-			</button>
-
-			{open && (
-				<>
-					<div className="fixed inset-0 z-40" onClick={() => setOpen(false)} aria-hidden />
-					<div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-lg bg-white shadow-xl">
-						<div className="border-b border-gray-200 p-4">
-							<h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
-						</div>
-						<div className="p-8 text-center">
-							<Bell className="mx-auto mb-3 size-12 text-gray-300" aria-hidden />
-							<p className="text-sm text-gray-500">No new notifications</p>
-						</div>
 					</div>
 				</>
 			)}

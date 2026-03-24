@@ -46,8 +46,19 @@ export default function Profile() {
 			setSubmitError(null);
 			setSuccess(false);
 			try {
-				const updated = await updateUserProfile<ProfileFormValues>(user.id, value);
-				setProfile(updated);
+				const updated = await updateUserProfile<Partial<ProfileFormValues>>(user.id, value);
+				// Merge with submitted values so missing fields (e.g. due to FLS) don't break the form
+				setProfile({
+					FirstName: updated.FirstName ?? value.FirstName ?? "",
+					LastName: updated.LastName ?? value.LastName ?? "",
+					Email: updated.Email ?? value.Email ?? "",
+					Phone: updated.Phone ?? value.Phone ?? null,
+					Street: updated.Street ?? value.Street ?? null,
+					City: updated.City ?? value.City ?? null,
+					State: updated.State ?? value.State ?? null,
+					PostalCode: updated.PostalCode ?? value.PostalCode ?? null,
+					Country: updated.Country ?? value.Country ?? null,
+				});
 				setSuccess(true);
 				window.scrollTo({ top: 0, behavior: "smooth" });
 			} catch (err) {
@@ -59,10 +70,21 @@ export default function Profile() {
 
 	useEffect(() => {
 		let mounted = true;
-		fetchUserProfile<ProfileFormValues>(user.id)
+		fetchUserProfile<Partial<ProfileFormValues>>(user.id)
 			.then((data) => {
 				if (mounted) {
-					setProfile(data);
+					// Merge with defaults so missing fields (e.g. due to FLS) don't break the form
+					setProfile({
+						FirstName: data.FirstName ?? "",
+						LastName: data.LastName ?? "",
+						Email: data.Email ?? "",
+						Phone: data.Phone ?? null,
+						Street: data.Street ?? null,
+						City: data.City ?? null,
+						State: data.State ?? null,
+						PostalCode: data.PostalCode ?? null,
+						Country: data.Country ?? null,
+					});
 				}
 			})
 			.catch((err: any) => {

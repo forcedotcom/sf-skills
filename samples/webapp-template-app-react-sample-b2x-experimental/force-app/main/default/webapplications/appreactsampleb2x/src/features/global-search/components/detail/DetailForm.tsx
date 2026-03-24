@@ -36,6 +36,8 @@ function FieldCell({
 	record: GraphQLRecordNode;
 	metadata?: ObjectInfoMetadata | null;
 }) {
+	const labelId = useId();
+	const valueId = useId();
 	if (!item.isField || item.apiName == null) return null;
 	const label = item.label ?? item.apiName;
 	const hasComponents = item.layoutComponentApiNames && item.layoutComponentApiNames.length > 0;
@@ -51,8 +53,6 @@ function FieldCell({
 		: getDisplayValueForDetailFieldFromNode(record, item.apiName, metadata);
 	const dataType =
 		(hasComponents ? layoutResult?.dataType : undefined) ?? item.dataType ?? undefined;
-	const labelId = useId();
-	const valueId = useId();
 	return (
 		<div
 			className="flex flex-col gap-1"

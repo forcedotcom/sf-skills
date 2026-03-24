@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CenteredPageLayout } from "@/features/authentication/layout/centered-page-layout";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SkeletonField } from "@/components/SkeletonPrimitives";
 import { createContactUsLead } from "@/api/leadApi";
 import { useAuth } from "@/features/authentication/context/AuthContext";
 import { fetchUserProfile } from "@/features/authentication/api/userProfileApi";
@@ -15,11 +16,19 @@ function LoadingCard() {
 	return (
 		<Card>
 			<CardHeader>
-				<Skeleton className="h-4 w-2/3" />
-				<Skeleton className="h-4 w-1/2" />
+				<Skeleton className="h-5 w-40" />
 			</CardHeader>
-			<CardContent>
-				<Skeleton className="aspect-video w-full" />
+			<CardContent className="space-y-4" role="status">
+				<div className="grid gap-4 sm:grid-cols-2">
+					<SkeletonField labelWidth="w-24" />
+					<SkeletonField labelWidth="w-20" />
+				</div>
+				<SkeletonField labelWidth="w-12" />
+				<SkeletonField labelWidth="w-14" />
+				<SkeletonField labelWidth="w-16" />
+				<SkeletonField labelWidth="w-20" height="h-[120px]" />
+				<Skeleton className="h-9 w-32" />
+				<span className="sr-only">Loading contact form…</span>
 			</CardContent>
 		</Card>
 	);

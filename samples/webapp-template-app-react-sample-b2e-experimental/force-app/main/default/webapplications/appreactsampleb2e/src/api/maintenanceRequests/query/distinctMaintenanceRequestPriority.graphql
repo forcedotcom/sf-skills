@@ -1,0 +1,19 @@
+query DistinctMaintenanceRequestPriority {
+	uiapi {
+		aggregate {
+			Maintenance_Request__c(groupBy: { Priority__c: { group: true } }) {
+				edges {
+					node {
+						aggregate {
+							Priority__c {
+								value
+								displayValue
+								label
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

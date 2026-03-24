@@ -1,18 +1,16 @@
-import type { ObjectInfoResult } from "../../features/global-search/types/objectInfo/objectInfo";
-import type { SearchableObjectConfig } from "../../lib/globalSearchConstants";
+import type { SearchableObjectConfig } from "../../lib/constants";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "../../components/ui/select";
+} from "../ui/select";
+import { Search } from "lucide-react";
 
 type SearchableObjectApiName = SearchableObjectConfig["objectApiName"];
 
-interface GlobalSearchBarProps {
-	objectApiNames: SearchableObjectApiName[];
-	objectInfos: (ObjectInfoResult | null)[];
+export interface GlobalSearchBarProps {
 	searchableObjects: readonly SearchableObjectConfig[];
 	selectedObjectApiName: SearchableObjectApiName;
 	onSelectedObjectChange: (objectApiName: SearchableObjectApiName) => void;
@@ -24,13 +22,10 @@ interface GlobalSearchBarProps {
 }
 
 /**
- * Home page search: object dropdown + search input in a single combined control.
- * Uses shadcn Select and object metadata for labels when available.
+ * Home page search: object dropdown + search input. Uses fallback labels from config.
  */
 export function GlobalSearchBar({
 	searchableObjects,
-	objectApiNames,
-	objectInfos,
 	selectedObjectApiName,
 	onSelectedObjectChange,
 	searchQuery,
@@ -47,7 +42,7 @@ export function GlobalSearchBar({
 	};
 
 	return (
-		<div className="flex flex-wrap justify-end gap-2 items-center mb-4">
+		<div className="flex flex-wrap gap-2 items-center mb-4">
 			<div
 				className="w-full max-w-xl bg-white rounded-full px-4 py-3 shadow-sm border border-gray-200 flex items-center gap-2"
 				role="search"
@@ -64,17 +59,11 @@ export function GlobalSearchBar({
 						<SelectValue />
 					</SelectTrigger>
 					<SelectContent>
-						{searchableObjects.map((obj) => {
-							const idx = objectApiNames.indexOf(obj.objectApiName);
-							const info = idx >= 0 ? objectInfos[idx] : null;
-							const label =
-								(info?.labelPlural as string | undefined) ?? obj.fallbackLabelPlural ?? "Records";
-							return (
-								<SelectItem key={obj.objectApiName} value={obj.objectApiName}>
-									{label}
-								</SelectItem>
-							);
-						})}
+						{searchableObjects.map((obj) => (
+							<SelectItem key={obj.objectApiName} value={obj.objectApiName}>
+								{obj.fallbackLabelPlural ?? "Records"}
+							</SelectItem>
+						))}
 					</SelectContent>
 				</Select>
 				<span className="text-gray-300 shrink-0" aria-hidden="true">
@@ -96,20 +85,7 @@ export function GlobalSearchBar({
 					className="p-1 rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none shrink-0"
 					aria-label="Submit search"
 				>
-					<svg
-						className="w-5 h-5 text-gray-500"
-						fill="none"
-						stroke="currentColor"
-						viewBox="0 0 24 24"
-						aria-hidden="true"
-					>
-						<path
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							strokeWidth={2}
-							d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-						/>
-					</svg>
+					<Search className="w-5 h-5 text-gray-500" aria-hidden="true" />
 				</button>
 			</div>
 			<button

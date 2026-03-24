@@ -109,32 +109,32 @@ const PROPERTY_LISTINGS_QUERY = gql`
 						node {
 							Id
 							ApiName
-							Name {
+							Name @optional {
 								value
 								displayValue
 							}
-							Listing_Price__c {
+							Listing_Price__c @optional {
 								value
 								displayValue
 							}
-							Listing_Status__c {
+							Listing_Status__c @optional {
 								value
 								displayValue
 							}
-							Property__c {
+							Property__c @optional {
 								value
 								displayValue
 							}
-							Property__r {
-								Name {
+							Property__r @optional {
+								Name @optional {
 									value
 									displayValue
 								}
-								Address__c {
+								Address__c @optional {
 									value
 									displayValue
 								}
-								Bedrooms__c {
+								Bedrooms__c @optional {
 									value
 									displayValue
 								}

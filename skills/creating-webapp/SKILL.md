@@ -1,6 +1,6 @@
 ---
 name: creating-webapp
-description: Use this skill when creating or setting up a new SFDX React web application. Covers first steps, npm install, skills-first protocol, deployment order, and core web app rules.
+description: "Use this skill when creating or setting up a new SFDX React web application. Covers first steps, npm install, skills-first protocol, deployment order, and core web app rules."
 paths:
   - "**/webapplications/**/*"
 ---
@@ -111,7 +111,7 @@ Apps run behind dynamic base paths. Router navigation (`<Link to>`, `navigate()`
 
 ## Module Restrictions
 
-React apps must NOT import Salesforce platform modules like `lightning/*` or `@wire` (LWC-only). For data access, invoke the **accessing-data** skill.
+React apps must NOT import Salesforce platform modules like `lightning/*` or `@wire` (LWC-only). For data access, invoke the **using-salesforce-data** skill.
 
 # Frontend Aesthetics
 
@@ -138,4 +138,3 @@ Only stop when:
 - All checklist items are completed and quality gates pass, or
 - A blocking error cannot be resolved after reasonable remediation, or
 - The user explicitly asks to pause.
-

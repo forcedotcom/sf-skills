@@ -1,6 +1,6 @@
 ---
 name: building-webapp-data-visualization
-description: Adds data visualization components (charts, stat cards, KPI metrics) to React pages using Recharts. Use when the user asks to add a chart, graph, donut chart, pie chart, bar chart, stat card, KPI metric, dashboard visualization, or analytics component to the web application.
+description: "Adds data visualization components (charts, stat cards, KPI metrics) to React pages using Recharts. Use when the user asks to add a chart, graph, donut chart, pie chart, bar chart, stat card, KPI metric, dashboard visualization, or analytics component to the web application."
 ---
 
 # Data Visualization
