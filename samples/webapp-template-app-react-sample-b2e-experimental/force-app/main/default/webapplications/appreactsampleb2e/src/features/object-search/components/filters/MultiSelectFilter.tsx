@@ -8,32 +8,31 @@ import { Label } from "../../../../components/ui/label";
 import { Button } from "../../../../components/ui/button";
 import { cn } from "../../../../lib/utils";
 import { ChevronDown } from "lucide-react";
-import type { FilterFieldConfig, ActiveFilterValue } from "../../utils/filterUtils";
+import { useFilterField } from "../FilterContext";
 
 interface MultiSelectFilterProps extends Omit<React.ComponentProps<"div">, "onChange"> {
-	config: FilterFieldConfig;
-	value: ActiveFilterValue | undefined;
-	onChange: (value: ActiveFilterValue | undefined) => void;
-	labelProps?: React.ComponentProps<typeof Label>;
-	helpTextProps?: React.ComponentProps<"p">;
+	field: string;
+	label: string;
+	options: Array<{ value: string; label: string }>;
+	helpText?: string;
 }
 
 export function MultiSelectFilter({
-	config,
-	value,
-	onChange,
+	field,
+	label,
+	options,
+	helpText,
 	className,
-	labelProps,
-	helpTextProps,
 	...props
 }: MultiSelectFilterProps) {
+	const { value, onChange } = useFilterField(field);
 	const selected = value?.value ? value.value.split(",") : [];
 
 	const triggerLabel =
 		selected.length === 0
-			? `Select ${config.label.toLowerCase()}`
+			? `Select ${label.toLowerCase()}`
 			: selected.length === 1
-				? (config.options?.find((o) => o.value === selected[0])?.label ?? selected[0])
+				? (options.find((o) => o.value === selected[0])?.label ?? selected[0])
 				: `${selected.length} selected`;
 
 	function handleToggle(optionValue: string) {
@@ -45,8 +44,8 @@ export function MultiSelectFilter({
 			onChange(undefined);
 		} else {
 			onChange({
-				field: config.field,
-				label: config.label,
+				field,
+				label,
 				type: "multipicklist",
 				value: next.join(","),
 			});
@@ -55,7 +54,7 @@ export function MultiSelectFilter({
 
 	return (
 		<div className={cn("space-y-1.5", className)} {...props}>
-			<Label {...labelProps}>{labelProps?.children ?? config.label}</Label>
+			<Label>{label}</Label>
 			<Popover>
 				<PopoverTrigger asChild>
 					<Button
@@ -72,8 +71,8 @@ export function MultiSelectFilter({
 				</PopoverTrigger>
 				<PopoverContent className="p-2" align="start">
 					<div className="max-h-48 overflow-y-auto space-y-1">
-						{config.options?.map((opt) => {
-							const id = `filter-${config.field}-${opt.value}`;
+						{options.map((opt) => {
+							const id = `filter-${field}-${opt.value}`;
 							return (
 								<div
 									key={opt.value}
@@ -93,14 +92,7 @@ export function MultiSelectFilter({
 					</div>
 				</PopoverContent>
 			</Popover>
-			{config.helpText && (
-				<p
-					{...helpTextProps}
-					className={cn("text-xs text-muted-foreground", helpTextProps?.className)}
-				>
-					{helpTextProps?.children ?? config.helpText}
-				</p>
-			)}
+			{helpText && <p className="text-xs text-muted-foreground">{helpText}</p>}
 		</div>
 	);
 }

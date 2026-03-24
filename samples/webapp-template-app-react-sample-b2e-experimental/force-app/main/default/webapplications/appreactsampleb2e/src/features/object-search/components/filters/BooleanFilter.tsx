@@ -7,52 +7,31 @@ import {
 } from "../../../../components/ui/select";
 import { Label } from "../../../../components/ui/label";
 import { cn } from "../../../../lib/utils";
-import type { FilterFieldConfig, ActiveFilterValue } from "../../utils/filterUtils";
+import { useFilterField } from "../FilterContext";
+import type { ActiveFilterValue } from "../../utils/filterUtils";
 
 const ALL_VALUE = "__all__";
 
 interface BooleanFilterProps extends Omit<React.ComponentProps<"div">, "onChange"> {
-	config: FilterFieldConfig;
-	value: ActiveFilterValue | undefined;
-	onChange: (value: ActiveFilterValue | undefined) => void;
-	labelProps?: React.ComponentProps<typeof Label>;
-	controlProps?: Omit<
-		React.ComponentProps<typeof BooleanFilterSelect>,
-		"config" | "value" | "onChange"
-	>;
-	helpTextProps?: React.ComponentProps<"p">;
+	field: string;
+	label: string;
+	helpText?: string;
 }
 
-export function BooleanFilter({
-	config,
-	value,
-	onChange,
-	className,
-	labelProps,
-	controlProps,
-	helpTextProps,
-	...props
-}: BooleanFilterProps) {
+export function BooleanFilter({ field, label, helpText, className, ...props }: BooleanFilterProps) {
+	const { value, onChange } = useFilterField(field);
 	return (
 		<div className={cn("space-y-1.5", className)} {...props}>
-			<Label htmlFor={`filter-${config.field}`} {...labelProps}>
-				{labelProps?.children ?? config.label}
-			</Label>
-			<BooleanFilterSelect config={config} value={value} onChange={onChange} {...controlProps} />
-			{config.helpText && (
-				<p
-					{...helpTextProps}
-					className={cn("text-xs text-muted-foreground", helpTextProps?.className)}
-				>
-					{helpTextProps?.children ?? config.helpText}
-				</p>
-			)}
+			<Label htmlFor={`filter-${field}`}>{label}</Label>
+			<BooleanFilterSelect field={field} label={label} value={value} onChange={onChange} />
+			{helpText && <p className="text-xs text-muted-foreground">{helpText}</p>}
 		</div>
 	);
 }
 
 interface BooleanFilterSelectProps {
-	config: FilterFieldConfig;
+	field: string;
+	label: string;
 	value: ActiveFilterValue | undefined;
 	onChange: (value: ActiveFilterValue | undefined) => void;
 	triggerProps?: React.ComponentProps<typeof SelectTrigger>;
@@ -60,7 +39,8 @@ interface BooleanFilterSelectProps {
 }
 
 export function BooleanFilterSelect({
-	config,
+	field,
+	label,
 	value,
 	onChange,
 	triggerProps,
@@ -73,12 +53,12 @@ export function BooleanFilterSelect({
 				if (v === ALL_VALUE) {
 					onChange(undefined);
 				} else {
-					onChange({ field: config.field, label: config.label, type: "boolean", value: v });
+					onChange({ field, label, type: "boolean", value: v });
 				}
 			}}
 		>
 			<SelectTrigger
-				id={`filter-${config.field}`}
+				id={`filter-${field}`}
 				{...triggerProps}
 				className={cn("w-full", triggerProps?.className)}
 			>

@@ -7,52 +7,46 @@ import {
 } from "../../../../components/ui/select";
 import { Label } from "../../../../components/ui/label";
 import { cn } from "../../../../lib/utils";
-import type { FilterFieldConfig, ActiveFilterValue } from "../../utils/filterUtils";
+import { useFilterField } from "../FilterContext";
+import type { ActiveFilterValue } from "../../utils/filterUtils";
 
 const ALL_VALUE = "__all__";
 
 interface SelectFilterProps extends Omit<React.ComponentProps<"div">, "onChange"> {
-	config: FilterFieldConfig;
-	value: ActiveFilterValue | undefined;
-	onChange: (value: ActiveFilterValue | undefined) => void;
-	labelProps?: React.ComponentProps<typeof Label>;
-	controlProps?: Omit<
-		React.ComponentProps<typeof SelectFilterControl>,
-		"config" | "value" | "onChange"
-	>;
-	helpTextProps?: React.ComponentProps<"p">;
+	field: string;
+	label: string;
+	options: Array<{ value: string; label: string }>;
+	helpText?: string;
 }
 
 export function SelectFilter({
-	config,
-	value,
-	onChange,
+	field,
+	label,
+	options,
+	helpText,
 	className,
-	labelProps,
-	controlProps,
-	helpTextProps,
 	...props
 }: SelectFilterProps) {
+	const { value, onChange } = useFilterField(field);
 	return (
 		<div className={cn("space-y-1.5", className)} {...props}>
-			<Label htmlFor={`filter-${config.field}`} {...labelProps}>
-				{labelProps?.children ?? config.label}
-			</Label>
-			<SelectFilterControl config={config} value={value} onChange={onChange} {...controlProps} />
-			{config.helpText && (
-				<p
-					{...helpTextProps}
-					className={cn("text-xs text-muted-foreground", helpTextProps?.className)}
-				>
-					{helpTextProps?.children ?? config.helpText}
-				</p>
-			)}
+			<Label htmlFor={`filter-${field}`}>{label}</Label>
+			<SelectFilterControl
+				field={field}
+				label={label}
+				options={options}
+				value={value}
+				onChange={onChange}
+			/>
+			{helpText && <p className="text-xs text-muted-foreground">{helpText}</p>}
 		</div>
 	);
 }
 
 interface SelectFilterControlProps {
-	config: FilterFieldConfig;
+	field: string;
+	label: string;
+	options: Array<{ value: string; label: string }>;
 	value: ActiveFilterValue | undefined;
 	onChange: (value: ActiveFilterValue | undefined) => void;
 	triggerProps?: React.ComponentProps<typeof SelectTrigger>;
@@ -60,7 +54,9 @@ interface SelectFilterControlProps {
 }
 
 export function SelectFilterControl({
-	config,
+	field,
+	label,
+	options,
 	value,
 	onChange,
 	triggerProps,
@@ -73,20 +69,20 @@ export function SelectFilterControl({
 				if (v === ALL_VALUE) {
 					onChange(undefined);
 				} else {
-					onChange({ field: config.field, label: config.label, type: "picklist", value: v });
+					onChange({ field, label, type: "picklist", value: v });
 				}
 			}}
 		>
 			<SelectTrigger
-				id={`filter-${config.field}`}
+				id={`filter-${field}`}
 				{...triggerProps}
 				className={cn("w-full", triggerProps?.className)}
 			>
-				<SelectValue placeholder={`Select ${config.label.toLowerCase()}`} />
+				<SelectValue placeholder={`Select ${label.toLowerCase()}`} />
 			</SelectTrigger>
 			<SelectContent {...contentProps}>
 				<SelectItem value={ALL_VALUE}>All</SelectItem>
-				{config.options?.map((opt) => (
+				{options.map((opt) => (
 					<SelectItem key={opt.value} value={opt.value}>
 						{opt.label}
 					</SelectItem>

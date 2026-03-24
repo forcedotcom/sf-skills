@@ -1,13 +1,6 @@
 import { useState } from "react";
 import { parseISO } from "date-fns";
-import { ChevronDown, Check } from "lucide-react";
 import { Label } from "../../../../components/ui/label";
-import { Button } from "../../../../components/ui/button";
-import {
-	Popover,
-	PopoverTrigger,
-	PopoverContent,
-} from "../../../../components/ui/popover";
 import {
 	DatePicker,
 	DatePickerTrigger,
@@ -15,7 +8,14 @@ import {
 	DatePickerCalendar,
 } from "../../../../components/ui/datePicker";
 import { cn } from "../../../../lib/utils";
-import type { FilterFieldConfig, ActiveFilterValue } from "../../utils/filterUtils";
+import { useFilterField } from "../FilterContext";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "../../../../components/ui/select";
 
 type DateOperator = "gt" | "lt";
 
@@ -24,29 +24,19 @@ const OPERATOR_OPTIONS: { value: DateOperator; label: string }[] = [
 	{ value: "lt", label: "Before" },
 ];
 
-/** Maps operator to the ActiveFilterValue field used to carry the date. */
 function operatorToField(op: DateOperator): "min" | "max" {
 	return op === "gt" ? "min" : "max";
 }
 
 interface DateFilterProps extends Omit<React.ComponentProps<"div">, "onChange"> {
-	config: FilterFieldConfig;
-	value: ActiveFilterValue | undefined;
-	onChange: (value: ActiveFilterValue | undefined) => void;
-	labelProps?: React.ComponentProps<typeof Label>;
-	helpTextProps?: React.ComponentProps<"p">;
+	field: string;
+	label: string;
+	helpText?: string;
 }
 
-export function DateFilter({
-	config,
-	value,
-	onChange,
-	className,
-	labelProps,
-	helpTextProps,
-	...props
-}: DateFilterProps) {
-	// Derive initial operator from the existing value (min → gt, max → lt)
+export function DateFilter({ field, label, helpText, className, ...props }: DateFilterProps) {
+	const { value, onChange } = useFilterField(field);
+
 	const initialOp: DateOperator = value?.min ? "gt" : "lt";
 	const [operator, setOperator] = useState<DateOperator>(initialOp);
 
@@ -69,67 +59,40 @@ export function DateFilter({
 
 	function emitChange(op: DateOperator, date: Date) {
 		const dateStr = toDateString(date);
-		const field = operatorToField(op);
+		const f = operatorToField(op);
 		onChange({
-			field: config.field,
-			label: config.label,
+			field,
+			label,
 			type: "date",
 			value: op,
-			min: field === "min" ? dateStr : undefined,
-			max: field === "max" ? dateStr : undefined,
+			min: f === "min" ? dateStr : undefined,
+			max: f === "max" ? dateStr : undefined,
 		});
 	}
 
-	const [operatorOpen, setOperatorOpen] = useState(false);
-	const operatorLabel = OPERATOR_OPTIONS.find((o) => o.value === operator)?.label ?? "After";
-
 	return (
 		<div className={cn("space-y-1.5", className)} {...props}>
-			<Label {...labelProps}>{labelProps?.children ?? config.label}</Label>
-			<div className="flex min-w-0 gap-2">
-				<Popover open={operatorOpen} onOpenChange={setOperatorOpen}>
-					<PopoverTrigger asChild>
-						<Button
-							variant="outline"
-							className="h-9 w-[7rem] shrink-0 justify-between px-2.5 font-normal"
-							aria-label="Date operator"
-						>
-							<span className="truncate">{operatorLabel}</span>
-							<ChevronDown className="ml-1 size-4 shrink-0 opacity-50" />
-						</Button>
-					</PopoverTrigger>
-					<PopoverContent align="start" className="w-auto min-w-[7rem] p-1">
+			<Label>{label}</Label>
+			<div className="flex gap-2">
+				<Select value={operator} onValueChange={(v) => handleOperatorChange(v as DateOperator)}>
+					<SelectTrigger className="w-full flex-1">
+						<SelectValue />
+					</SelectTrigger>
+					<SelectContent>
 						{OPERATOR_OPTIONS.map((opt) => (
-							<button
-								key={opt.value}
-								type="button"
-								className={cn(
-									"flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-none hover:bg-accent",
-									opt.value === operator && "font-medium",
-								)}
-								onClick={() => {
-									handleOperatorChange(opt.value);
-									setOperatorOpen(false);
-								}}
-							>
-								<Check
-									className={cn(
-										"size-4 shrink-0",
-										opt.value === operator ? "opacity-100" : "opacity-0",
-									)}
-								/>
+							<SelectItem key={opt.value} value={opt.value}>
 								{opt.label}
-							</button>
+							</SelectItem>
 						))}
-					</PopoverContent>
-				</Popover>
+					</SelectContent>
+				</Select>
 				<DatePicker>
 					<DatePickerTrigger
-						className="min-w-0 flex-1 basis-0 !w-auto max-w-full"
+						className="w-full flex-2"
 						date={currentDate}
 						dateFormat="MMM do, yyyy"
 						placeholder="Pick a date"
-						aria-label={config.label}
+						aria-label={label}
 					/>
 					<DatePickerContent>
 						<DatePickerCalendar
@@ -141,14 +104,7 @@ export function DateFilter({
 					</DatePickerContent>
 				</DatePicker>
 			</div>
-			{config.helpText && (
-				<p
-					{...helpTextProps}
-					className={cn("text-xs text-muted-foreground", helpTextProps?.className)}
-				>
-					{helpTextProps?.children ?? config.helpText}
-				</p>
-			)}
+			{helpText && <p className="text-xs text-muted-foreground">{helpText}</p>}
 		</div>
 	);
 }
