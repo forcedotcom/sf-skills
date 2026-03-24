@@ -1,0 +1,39 @@
+query GetDashboardMetrics {
+	uiapi {
+		query {
+			allProperties: Property__c {
+				edges {
+					node {
+						Id
+						Status__c @optional {
+							value
+						}
+					}
+				}
+			}
+			maintenanceRequests: Maintenance_Request__c(first: 100) {
+				edges {
+					node {
+						Id
+						Type__c @optional {
+							value
+						}
+						Description__c @optional {
+							value
+						}
+						Property__r @optional {
+							Address__c @optional {
+								value
+							}
+						}
+						User__r @optional {
+							Name {
+								value
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

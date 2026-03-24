@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Outlet } from "react-router";
-import { TopBar } from "./components/TopBar";
-import { VerticalNav } from "./components/VerticalNav";
+import { TopBar } from "./components/layout/TopBar";
+import { VerticalNav } from "./components/layout/VerticalNav";
 import { AgentforceConversationClient } from "./components/AgentforceConversationClient";
 import { Toaster } from "./components/ui/sonner";
 

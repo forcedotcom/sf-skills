@@ -14,6 +14,28 @@ export interface PaginationConfig {
 	validPageSizes: number[];
 }
 
+export interface UseObjectSearchParamsReturn<TFilter, TOrderBy> {
+	filters: {
+		active: ActiveFilterValue[];
+		set: (field: string, value: ActiveFilterValue | undefined) => void;
+		remove: (field: string) => void;
+	};
+	sort: {
+		current: SortState | null;
+		set: (sort: SortState | null) => void;
+	};
+	query: { where: TFilter; orderBy: TOrderBy };
+	pagination: {
+		pageSize: number;
+		pageIndex: number;
+		afterCursor: string | undefined;
+		setPageSize: (size: number) => void;
+		goToNextPage: (cursor: string) => void;
+		goToPreviousPage: () => void;
+	};
+	resetAll: () => void;
+}
+
 /**
  * Manages filter, sort, and cursor-based pagination state for an object search page.
  *

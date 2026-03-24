@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router";
-import { AlertCircle, SearchX } from "lucide-react";
+import { AlertCircle, ChevronDown, SearchX } from "lucide-react";
 import {
 	searchAccounts,
 	fetchDistinctIndustries,
@@ -10,8 +10,27 @@ import { useCachedAsyncData } from "../../hooks/useCachedAsyncData";
 import { fieldValue } from "../../utils/fieldUtils";
 import { useObjectSearchParams } from "../../hooks/useObjectSearchParams";
 import { Alert, AlertTitle, AlertDescription } from "../../../../components/ui/alert";
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from "../../../../components/ui/card";
+import { Button } from "../../../../components/ui/button";
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from "../../../../components/ui/collapsible";
 import { Skeleton } from "../../../../components/ui/skeleton";
-import { FilterPanel } from "../../components/FilterPanel";
+import { FilterProvider, FilterResetButton } from "../../components/FilterContext";
+import { SearchFilter } from "../../components/filters/SearchFilter";
+import { TextFilter } from "../../components/filters/TextFilter";
+import { SelectFilter } from "../../components/filters/SelectFilter";
+import { MultiSelectFilter } from "../../components/filters/MultiSelectFilter";
+import { NumericRangeFilter } from "../../components/filters/NumericRangeFilter";
+import { DateFilter } from "../../components/filters/DateFilter";
+import { DateRangeFilter } from "../../components/filters/DateRangeFilter";
 import { ActiveFilters } from "../../components/ActiveFilters";
 import { SortControl } from "../../components/SortControl";
 import type { FilterFieldConfig } from "../../utils/filterUtils";
@@ -31,48 +50,21 @@ type AccountNode = NonNullable<
 	NonNullable<NonNullable<AccountSearchResult["edges"]>[number]>["node"]
 >;
 
-// -- Configuration ----------------------------------------------------------
-// Adding a new filterable field = adding one entry here. No component changes needed.
-// Picklist options are fetched dynamically via aggregate groupBy queries.
-
-function buildAccountFilterConfigs(
-	industryOptions: Array<{ value: string; label: string }>,
-	typeOptions: Array<{ value: string; label: string }>,
-): FilterFieldConfig[] {
-	return [
-		{
-			field: "search",
-			label: "Search",
-			type: "search",
-			searchFields: ["Name", "Phone", "Industry"],
-			placeholder: "Search by name, phone, or industry...",
-		},
-		{
-			field: "Name",
-			label: "Account Name",
-			type: "text",
-			placeholder: "Search by name...",
-		},
-		{
-			field: "Industry",
-			label: "Industry",
-			type: "picklist",
-			options: industryOptions,
-		},
-		{ field: "Type", label: "Type", type: "multipicklist", options: typeOptions },
-		{ field: "AnnualRevenue", label: "Annual Revenue", type: "numeric" },
-		{
-			field: "CreatedDate",
-			label: "Created Date",
-			type: "date",
-		},
-		{
-			field: "LastModifiedDate",
-			label: "Last Modified Date",
-			type: "daterange",
-		},
-	];
-}
+const FILTER_CONFIGS: FilterFieldConfig[] = [
+	{
+		field: "search",
+		label: "Search",
+		type: "search",
+		searchFields: ["Name", "Phone", "Industry"],
+		placeholder: "Search by name, phone, or industry...",
+	},
+	{ field: "Name", label: "Account Name", type: "text", placeholder: "Search by name..." },
+	{ field: "Industry", label: "Industry", type: "picklist" },
+	{ field: "Type", label: "Type", type: "multipicklist" },
+	{ field: "AnnualRevenue", label: "Annual Revenue", type: "numeric" },
+	{ field: "CreatedDate", label: "Created Date", type: "date" },
+	{ field: "LastModifiedDate", label: "Last Modified Date", type: "daterange" },
+];
 
 const ACCOUNT_SORT_CONFIGS: SortFieldConfig<keyof Account_OrderBy>[] = [
 	{ field: "Name", label: "Name" },
@@ -84,6 +76,7 @@ const ACCOUNT_SORT_CONFIGS: SortFieldConfig<keyof Account_OrderBy>[] = [
 // -- Component --------------------------------------------------------------
 
 export default function AccountSearch() {
+	const [filtersOpen, setFiltersOpen] = useState(true);
 	const { data: industryOptions } = useCachedAsyncData(fetchDistinctIndustries, [], {
 		key: "distinctIndustries",
 		ttl: 300_000,
@@ -93,15 +86,10 @@ export default function AccountSearch() {
 		ttl: 300_000,
 	});
 
-	const filterConfigs = useMemo(
-		() => buildAccountFilterConfigs(industryOptions ?? [], typeOptions ?? []),
-		[industryOptions, typeOptions],
-	);
-
 	const { filters, sort, query, pagination, resetAll } = useObjectSearchParams<
 		Account_Filter,
 		Account_OrderBy
-	>(filterConfigs, ACCOUNT_SORT_CONFIGS, PAGINATION_CONFIG);
+	>(FILTER_CONFIGS, ACCOUNT_SORT_CONFIGS, PAGINATION_CONFIG);
 
 	const searchKey = `accounts:${JSON.stringify({ where: query.where, orderBy: query.orderBy, first: pagination.pageSize, after: pagination.afterCursor })}`;
 	const { data, loading, error } = useCachedAsyncData(
@@ -139,12 +127,52 @@ export default function AccountSearch() {
 			<div className="flex flex-col lg:flex-row gap-6">
 				{/* Sidebar — Filter Panel */}
 				<aside className="w-full lg:w-80 shrink-0">
-					<FilterPanel
-						configs={filterConfigs}
+					<FilterProvider
 						filters={filters.active}
 						onFilterChange={filters.set}
+						onFilterRemove={filters.remove}
 						onReset={resetAll}
-					/>
+					>
+						<Card>
+							<Collapsible open={filtersOpen} onOpenChange={setFiltersOpen}>
+								<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+									<CardTitle className="text-base font-semibold">
+										<h2>Filters</h2>
+									</CardTitle>
+									<div className="flex items-center gap-1">
+										<FilterResetButton variant="destructive" size="sm" />
+										<CollapsibleTrigger asChild>
+											<Button variant="ghost" size="icon">
+												<ChevronDown
+													className={`h-4 w-4 transition-transform ${filtersOpen ? "" : "-rotate-90"}`}
+												/>
+												<span className="sr-only">Toggle filters</span>
+											</Button>
+										</CollapsibleTrigger>
+									</div>
+								</CardHeader>
+								<CollapsibleContent>
+									<CardContent className="space-y-4 pt-0">
+										<SearchFilter
+											field="search"
+											label="Search"
+											placeholder="Search by name, phone, or industry..."
+										/>
+										<TextFilter field="Name" label="Account Name" placeholder="Search by name..." />
+										<SelectFilter
+											field="Industry"
+											label="Industry"
+											options={industryOptions ?? []}
+										/>
+										<MultiSelectFilter field="Type" label="Type" options={typeOptions ?? []} />
+										<NumericRangeFilter field="AnnualRevenue" label="Annual Revenue" />
+										<DateFilter field="CreatedDate" label="Created Date" />
+										<DateRangeFilter field="LastModifiedDate" label="Last Modified Date" />
+									</CardContent>
+								</CollapsibleContent>
+							</Collapsible>
+						</Card>
+					</FilterProvider>
 				</aside>
 
 				{/* Main area — Sort + Results */}

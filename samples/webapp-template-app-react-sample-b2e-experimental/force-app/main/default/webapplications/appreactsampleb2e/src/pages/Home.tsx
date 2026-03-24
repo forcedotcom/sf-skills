@@ -1,19 +1,21 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router";
-import { IssuesDonutChart } from "../components/IssuesDonutChart";
-import { MaintenanceTable } from "../components/MaintenanceTable";
-import { GlobalSearchBar } from "../features/object-search/components/GlobalSearchBar";
-import { StatCard } from "../components/StatCard";
+import { IssuesDonutChart } from "../components/dashboard/IssuesDonutChart";
+import { MaintenanceTable } from "../components/dashboard/MaintenanceTable";
+import { GlobalSearchBar } from "../components/dashboard/GlobalSearchBar";
+import { StatCard } from "../components/dashboard/StatCard";
 import { PageContainer } from "../components/layout/PageContainer";
-import { PageLoadingState } from "../components/feedback/PageLoadingState";
-import { getDashboardMetrics, calculateMetrics } from "../api/dashboard";
-import type { DashboardMetrics, MaintenanceRequest } from "../lib/types";
+import {
+	getDashboardMetrics,
+	calculateMetrics,
+	type DashboardMetrics,
+	type DashboardMaintenanceNode,
+} from "../api/dashboard/dashboard";
 import {
 	PROPERTY_OBJECT_API_NAME,
 	SEARCHABLE_OBJECTS,
 	type SearchableObjectConfig,
-} from "../features/object-search/config/searchableObjects";
-import { nodeToMaintenanceRequest } from "../lib/maintenanceAdapter";
+} from "../lib/constants";
 import { PATHS } from "../lib/routeConfig";
 
 const CHART_ISSUE_TYPES = ["Plumbing", "HVAC", "Electrical", "Appliance", "Pest"] as const;
@@ -40,7 +42,9 @@ export default function Home() {
 		topMaintenanceIssueCount: 0,
 	});
 	const [metricsLoading, setMetricsLoading] = useState(true);
-	const [maintenanceRequests, setMaintenanceRequests] = useState<MaintenanceRequest[]>([]);
+	const [maintenanceRequests, setMaintenanceRequests] = useState<
+		NonNullable<DashboardMaintenanceNode>[]
+	>([]);
 
 	useEffect(() => {
 		let cancelled = false;
@@ -50,11 +54,7 @@ export default function Home() {
 				const { properties, maintenanceRequests: rawRequests } = await getDashboardMetrics();
 				if (!cancelled) {
 					setMetrics(calculateMetrics(properties));
-					setMaintenanceRequests(
-						(rawRequests as Record<string, unknown>[]).map((node) =>
-							nodeToMaintenanceRequest(node),
-						),
-					);
+					setMaintenanceRequests(rawRequests);
 				}
 			} catch (error) {
 				if (!cancelled) console.error("Error loading dashboard metrics:", error);
@@ -94,7 +94,7 @@ export default function Home() {
 			Pest: 0,
 		};
 		maintenanceRequests.forEach((request) => {
-			const type = request.issueType;
+			const type = request.Type__c?.value || "";
 			if (CHART_ISSUE_TYPES.includes(type as (typeof CHART_ISSUE_TYPES)[number])) {
 				counts[type]++;
 			}
@@ -128,10 +128,6 @@ export default function Home() {
 		};
 	}, [metrics]);
 
-	if (metricsLoading) {
-		return <PageLoadingState message="Loading dashboard..." />;
-	}
-
 	return (
 		<PageContainer>
 			<div className="max-w-7xl mx-auto space-y-6">
@@ -151,27 +147,34 @@ export default function Home() {
 						<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 							<StatCard
 								title="Total Properties"
+								loading={metricsLoading}
 								value={metrics.totalProperties}
 								trend={{ value: trends.totalProperties.trend, isPositive: true }}
 								subtitle={`Last month total ${trends.totalProperties.previous}`}
 							/>
 							<StatCard
 								title="Units Available"
+								loading={metricsLoading}
 								value={metrics.unitsAvailable}
 								trend={{ value: trends.unitsAvailable.trend, isPositive: false }}
 								subtitle={`Last month total ${trends.unitsAvailable.previous}/${metrics.totalProperties}`}
 							/>
 							<StatCard
 								title="Occupied Units"
+								loading={metricsLoading}
 								value={metrics.occupiedUnits}
 								trend={{ value: trends.occupiedUnits.trend, isPositive: true }}
 								subtitle={`Last month total ${trends.occupiedUnits.previous}`}
 							/>
 						</div>
-						<MaintenanceTable requests={maintenanceRequests} onView={handleViewMaintenance} />
+						<MaintenanceTable
+							requests={maintenanceRequests}
+							loading={metricsLoading}
+							onView={handleViewMaintenance}
+						/>
 					</div>
 					<div>
-						<IssuesDonutChart data={chartData} />
+						<IssuesDonutChart data={chartData} loading={metricsLoading} />
 					</div>
 				</div>
 			</div>

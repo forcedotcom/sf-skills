@@ -1,53 +1,35 @@
 import { Input } from "../../../../components/ui/input";
 import { Label } from "../../../../components/ui/label";
 import { cn } from "../../../../lib/utils";
-import type { FilterFieldConfig, ActiveFilterValue } from "../../utils/filterUtils";
+import { useFilterField } from "../FilterContext";
+import type { ActiveFilterValue } from "../../utils/filterUtils";
 
 interface NumericRangeFilterProps extends Omit<React.ComponentProps<"div">, "onChange"> {
-	config: FilterFieldConfig;
-	value: ActiveFilterValue | undefined;
-	onChange: (value: ActiveFilterValue | undefined) => void;
-	labelProps?: React.ComponentProps<typeof Label>;
-	controlProps?: Omit<
-		React.ComponentProps<typeof NumericRangeFilterInputs>,
-		"config" | "value" | "onChange"
-	>;
-	helpTextProps?: React.ComponentProps<"p">;
+	field: string;
+	label: string;
+	helpText?: string;
 }
 
 export function NumericRangeFilter({
-	config,
-	value,
-	onChange,
+	field,
+	label,
+	helpText,
 	className,
-	labelProps,
-	controlProps,
-	helpTextProps,
 	...props
 }: NumericRangeFilterProps) {
+	const { value, onChange } = useFilterField(field);
 	return (
 		<div className={cn("space-y-1.5", className)} {...props}>
-			<Label {...labelProps}>{labelProps?.children ?? config.label}</Label>
-			<NumericRangeFilterInputs
-				config={config}
-				value={value}
-				onChange={onChange}
-				{...controlProps}
-			/>
-			{config.helpText && (
-				<p
-					{...helpTextProps}
-					className={cn("text-xs text-muted-foreground", helpTextProps?.className)}
-				>
-					{helpTextProps?.children ?? config.helpText}
-				</p>
-			)}
+			<Label>{label}</Label>
+			<NumericRangeFilterInputs field={field} label={label} value={value} onChange={onChange} />
+			{helpText && <p className="text-xs text-muted-foreground">{helpText}</p>}
 		</div>
 	);
 }
 
 interface NumericRangeFilterInputsProps extends Omit<React.ComponentProps<"div">, "onChange"> {
-	config: FilterFieldConfig;
+	field: string;
+	label: string;
 	value: ActiveFilterValue | undefined;
 	onChange: (value: ActiveFilterValue | undefined) => void;
 	minInputProps?: React.ComponentProps<typeof Input>;
@@ -55,7 +37,8 @@ interface NumericRangeFilterInputsProps extends Omit<React.ComponentProps<"div">
 }
 
 export function NumericRangeFilterInputs({
-	config,
+	field,
+	label,
 	value,
 	onChange,
 	className,
@@ -63,14 +46,14 @@ export function NumericRangeFilterInputs({
 	maxInputProps,
 	...props
 }: NumericRangeFilterInputsProps) {
-	const handleChange = (field: "min" | "max", v: string) => {
+	const handleChange = (bound: "min" | "max", v: string) => {
 		const next = {
-			field: config.field,
-			label: config.label,
+			field,
+			label,
 			type: "numeric" as const,
 			min: value?.min ?? "",
 			max: value?.max ?? "",
-			[field]: v,
+			[bound]: v,
 		};
 		if (!next.min && !next.max) {
 			onChange(undefined);
@@ -86,7 +69,7 @@ export function NumericRangeFilterInputs({
 				placeholder="Min"
 				value={value?.min ?? ""}
 				onChange={(e) => handleChange("min", e.target.value)}
-				aria-label={`${config.label} minimum`}
+				aria-label={`${label} minimum`}
 				{...minInputProps}
 			/>
 			<Input
@@ -94,7 +77,7 @@ export function NumericRangeFilterInputs({
 				placeholder="Max"
 				value={value?.max ?? ""}
 				onChange={(e) => handleChange("max", e.target.value)}
-				aria-label={`${config.label} maximum`}
+				aria-label={`${label} maximum`}
 				{...maxInputProps}
 			/>
 		</div>

@@ -1,0 +1,82 @@
+query SearchMaintenanceRequests(
+	$first: Int
+	$after: String
+	$where: Maintenance_Request__c_Filter
+	$orderBy: Maintenance_Request__c_OrderBy
+) {
+	uiapi {
+		query {
+			Maintenance_Request__c(first: $first, after: $after, where: $where, orderBy: $orderBy) {
+				edges {
+					node {
+						Id
+						Name {
+							value
+							displayValue
+						}
+						Description__c {
+							value
+							displayValue
+						}
+						Type__c {
+							value
+							displayValue
+						}
+						Priority__c {
+							value
+							displayValue
+						}
+						Status__c {
+							value
+							displayValue
+						}
+						Scheduled__c {
+							value
+							displayValue
+						}
+						Property__r {
+							Address__c {
+								value
+								displayValue
+							}
+							Name {
+								value
+								displayValue
+							}
+						}
+						User__r {
+							Name {
+								value
+								displayValue
+							}
+						}
+						Assigned_Worker__r {
+							Name {
+								value
+								displayValue
+							}
+						}
+						ContentDocumentLinks(first: 1) @optional {
+							edges {
+								node {
+									ContentDocument @optional {
+										LatestPublishedVersionId @optional {
+											value
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				pageInfo {
+					hasNextPage
+					hasPreviousPage
+					endCursor
+					startCursor
+				}
+				totalCount
+			}
+		}
+	}
+}

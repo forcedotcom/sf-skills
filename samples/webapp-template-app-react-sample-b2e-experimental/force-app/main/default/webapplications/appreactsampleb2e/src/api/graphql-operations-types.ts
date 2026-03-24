@@ -11336,6 +11336,28 @@ export type WorkOrder_Owner_Filters = {
 	User?: InputMaybe<User_Filter>;
 };
 
+export type DistinctApplicationStatusQueryVariables = Exact<{ [key: string]: never }>;
+
+export type DistinctApplicationStatusQuery = {
+	uiapi: {
+		aggregate: {
+			Application__c?: {
+				edges?: Array<{
+					node?: {
+						aggregate?: {
+							Status__c?: {
+								value?: string | null;
+								displayValue?: string | null;
+								label?: string | null;
+							} | null;
+						} | null;
+					} | null;
+				} | null> | null;
+			} | null;
+		};
+	};
+};
+
 export type GetApplicationsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetApplicationsQuery = {
@@ -11360,6 +11382,47 @@ export type GetApplicationsQuery = {
 						References__c?: { value?: string | null } | null;
 					} | null;
 				} | null> | null;
+			} | null;
+		};
+	};
+};
+
+export type SearchApplicationsQueryVariables = Exact<{
+	first?: InputMaybe<Scalars["Int"]["input"]>;
+	after?: InputMaybe<Scalars["String"]["input"]>;
+	where?: InputMaybe<Application__C_Filter>;
+	orderBy?: InputMaybe<Application__C_OrderBy>;
+}>;
+
+export type SearchApplicationsQuery = {
+	uiapi: {
+		query: {
+			Application__c?: {
+				totalCount: number;
+				edges?: Array<{
+					node?: {
+						Id: string;
+						Name?: { value?: string | null; displayValue?: string | null } | null;
+						Status__c?: { value?: string | null; displayValue?: string | null } | null;
+						Start_Date__c?: { value?: string | null; displayValue?: string | null } | null;
+						Employment__c?: { value?: string | null; displayValue?: string | null } | null;
+						References__c?: { value?: string | null; displayValue?: string | null } | null;
+						Property__r?: {
+							Name?: { value?: string | null; displayValue?: string | null } | null;
+							Address__c?: { value?: string | null; displayValue?: string | null } | null;
+						} | null;
+						User__r?: {
+							Name?: { value?: string | null; displayValue?: string | null } | null;
+						} | null;
+						CreatedDate?: { value?: string | null; displayValue?: string | null } | null;
+					} | null;
+				} | null> | null;
+				pageInfo: {
+					hasNextPage: boolean;
+					hasPreviousPage: boolean;
+					endCursor?: string | null;
+					startCursor?: string | null;
+				};
 			} | null;
 		};
 	};
@@ -11390,7 +11453,13 @@ export type GetDashboardMetricsQuery = {
 			} | null;
 			maintenanceRequests?: {
 				edges?: Array<{
-					node?: { Id: string; Type__c?: { value?: string | null } | null } | null;
+					node?: {
+						Id: string;
+						Type__c?: { value?: string | null } | null;
+						Description__c?: { value?: string | null } | null;
+						Property__r?: { Address__c?: { value?: string | null } | null } | null;
+						User__r?: { Name?: { value?: string | null } | null } | null;
+					} | null;
 				} | null> | null;
 			} | null;
 		};
@@ -11434,25 +11503,65 @@ export type GetUserInfoQuery = {
 	};
 };
 
-export type GetMaintenanceRequestsQueryVariables = Exact<{
-	first?: InputMaybe<Scalars["Int"]["input"]>;
-}>;
+export type DistinctMaintenanceRequestPriorityQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GetMaintenanceRequestsQuery = {
+export type DistinctMaintenanceRequestPriorityQuery = {
 	uiapi: {
-		query: {
+		aggregate: {
 			Maintenance_Request__c?: {
 				edges?: Array<{
 					node?: {
-						Id: string;
-						Name?: { value?: string | null } | null;
-						Property__r?: { Address__c?: { value?: string | null } | null } | null;
-						User__r?: { Name?: { value?: string | null } | null } | null;
-						Type__c?: { value?: string | null } | null;
-						Priority__c?: { value?: string | null } | null;
-						Status__c?: { value?: string | null } | null;
-						Description__c?: { value?: string | null } | null;
-						Scheduled__c?: { value?: string | null } | null;
+						aggregate?: {
+							Priority__c?: {
+								value?: string | null;
+								displayValue?: string | null;
+								label?: string | null;
+							} | null;
+						} | null;
+					} | null;
+				} | null> | null;
+			} | null;
+		};
+	};
+};
+
+export type DistinctMaintenanceRequestStatusQueryVariables = Exact<{ [key: string]: never }>;
+
+export type DistinctMaintenanceRequestStatusQuery = {
+	uiapi: {
+		aggregate: {
+			Maintenance_Request__c?: {
+				edges?: Array<{
+					node?: {
+						aggregate?: {
+							Status__c?: {
+								value?: string | null;
+								displayValue?: string | null;
+								label?: string | null;
+							} | null;
+						} | null;
+					} | null;
+				} | null> | null;
+			} | null;
+		};
+	};
+};
+
+export type DistinctMaintenanceRequestTypeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type DistinctMaintenanceRequestTypeQuery = {
+	uiapi: {
+		aggregate: {
+			Maintenance_Request__c?: {
+				edges?: Array<{
+					node?: {
+						aggregate?: {
+							Type__c?: {
+								value?: string | null;
+								displayValue?: string | null;
+								label?: string | null;
+							} | null;
+						} | null;
 					} | null;
 				} | null> | null;
 			} | null;
@@ -11504,6 +11613,85 @@ export type GetAllMaintenanceRequestsQuery = {
 	};
 };
 
+export type GetMaintenanceRequestsQueryVariables = Exact<{
+	first?: InputMaybe<Scalars["Int"]["input"]>;
+}>;
+
+export type GetMaintenanceRequestsQuery = {
+	uiapi: {
+		query: {
+			Maintenance_Request__c?: {
+				edges?: Array<{
+					node?: {
+						Id: string;
+						Name?: { value?: string | null } | null;
+						Property__r?: { Address__c?: { value?: string | null } | null } | null;
+						User__r?: { Name?: { value?: string | null } | null } | null;
+						Type__c?: { value?: string | null } | null;
+						Priority__c?: { value?: string | null } | null;
+						Status__c?: { value?: string | null } | null;
+						Description__c?: { value?: string | null } | null;
+						Scheduled__c?: { value?: string | null } | null;
+					} | null;
+				} | null> | null;
+			} | null;
+		};
+	};
+};
+
+export type SearchMaintenanceRequestsQueryVariables = Exact<{
+	first?: InputMaybe<Scalars["Int"]["input"]>;
+	after?: InputMaybe<Scalars["String"]["input"]>;
+	where?: InputMaybe<Maintenance_Request__C_Filter>;
+	orderBy?: InputMaybe<Maintenance_Request__C_OrderBy>;
+}>;
+
+export type SearchMaintenanceRequestsQuery = {
+	uiapi: {
+		query: {
+			Maintenance_Request__c?: {
+				totalCount: number;
+				edges?: Array<{
+					node?: {
+						Id: string;
+						Name?: { value?: string | null; displayValue?: string | null } | null;
+						Description__c?: { value?: string | null; displayValue?: string | null } | null;
+						Type__c?: { value?: string | null; displayValue?: string | null } | null;
+						Priority__c?: { value?: string | null; displayValue?: string | null } | null;
+						Status__c?: { value?: string | null; displayValue?: string | null } | null;
+						Scheduled__c?: { value?: string | null; displayValue?: string | null } | null;
+						Property__r?: {
+							Address__c?: { value?: string | null; displayValue?: string | null } | null;
+							Name?: { value?: string | null; displayValue?: string | null } | null;
+						} | null;
+						User__r?: {
+							Name?: { value?: string | null; displayValue?: string | null } | null;
+						} | null;
+						Assigned_Worker__r?: {
+							Name?: { value?: string | null; displayValue?: string | null } | null;
+						} | null;
+						ContentDocumentLinks?: {
+							edges?: Array<{
+								node?: {
+									ContentDocument?: {
+										LatestPublishedVersionId?: { value?: string | null } | null;
+									} | null;
+								} | null;
+							} | null> | null;
+						} | null;
+					} | null;
+				} | null> | null;
+				pageInfo: {
+					hasNextPage: boolean;
+					hasPreviousPage: boolean;
+					endCursor?: string | null;
+					startCursor?: string | null;
+				};
+			} | null;
+		};
+	};
+};
+
 export type UpdateMaintenanceStatusMutationVariables = Exact<{
 	input: Maintenance_Request__CUpdateInput;
 }>;
@@ -11514,6 +11702,112 @@ export type UpdateMaintenanceStatusMutation = {
 			success?: boolean | null;
 			Record?: { Id: string; Status__c?: { value?: string | null } | null } | null;
 		} | null;
+	};
+};
+
+export type DistinctMaintenanceWorkerEmploymentTypeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type DistinctMaintenanceWorkerEmploymentTypeQuery = {
+	uiapi: {
+		aggregate: {
+			Maintenance_Worker__c?: {
+				edges?: Array<{
+					node?: {
+						aggregate?: {
+							Employment_Type__c?: {
+								value?: string | null;
+								displayValue?: string | null;
+								label?: string | null;
+							} | null;
+						} | null;
+					} | null;
+				} | null> | null;
+			} | null;
+		};
+	};
+};
+
+export type SearchMaintenanceWorkersQueryVariables = Exact<{
+	first?: InputMaybe<Scalars["Int"]["input"]>;
+	after?: InputMaybe<Scalars["String"]["input"]>;
+	where?: InputMaybe<Maintenance_Worker__C_Filter>;
+	orderBy?: InputMaybe<Maintenance_Worker__C_OrderBy>;
+}>;
+
+export type SearchMaintenanceWorkersQuery = {
+	uiapi: {
+		query: {
+			Maintenance_Worker__c?: {
+				totalCount: number;
+				edges?: Array<{
+					node?: {
+						Id: string;
+						Name?: { value?: string | null; displayValue?: string | null } | null;
+						Type__c?: { value?: string | null; displayValue?: string | null } | null;
+						Employment_Type__c?: { value?: string | null; displayValue?: string | null } | null;
+						Phone__c?: { value?: string | null; displayValue?: string | null } | null;
+						Location__c?: { value?: string | null; displayValue?: string | null } | null;
+						IsActive__c?: { value?: boolean | null; displayValue?: string | null } | null;
+						Rating__c?: { value?: number | null; displayValue?: string | null } | null;
+						Hourly_Rate__c?: { value?: number | null; displayValue?: string | null } | null;
+						CreatedDate?: { value?: string | null; displayValue?: string | null } | null;
+						Maintenance_Requests__r?: {
+							totalCount: number;
+						} | null;
+					} | null;
+				} | null> | null;
+				pageInfo: {
+					hasNextPage: boolean;
+					hasPreviousPage: boolean;
+					endCursor?: string | null;
+					startCursor?: string | null;
+				};
+			} | null;
+		};
+	};
+};
+
+export type DistinctPropertyStatusQueryVariables = Exact<{ [key: string]: never }>;
+
+export type DistinctPropertyStatusQuery = {
+	uiapi: {
+		aggregate: {
+			Property__c?: {
+				edges?: Array<{
+					node?: {
+						aggregate?: {
+							Status__c?: {
+								value?: string | null;
+								displayValue?: string | null;
+								label?: string | null;
+							} | null;
+						} | null;
+					} | null;
+				} | null> | null;
+			} | null;
+		};
+	};
+};
+
+export type DistinctPropertyTypeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type DistinctPropertyTypeQuery = {
+	uiapi: {
+		aggregate: {
+			Property__c?: {
+				edges?: Array<{
+					node?: {
+						aggregate?: {
+							Type__c?: {
+								value?: string | null;
+								displayValue?: string | null;
+								label?: string | null;
+							} | null;
+						} | null;
+					} | null;
+				} | null> | null;
+			} | null;
+		};
 	};
 };
 
@@ -11552,6 +11846,54 @@ export type GetPropertiesQuery = {
 					} | null;
 				} | null> | null;
 				pageInfo: { hasNextPage: boolean; endCursor?: string | null };
+			} | null;
+		};
+	};
+};
+
+export type SearchPropertiesQueryVariables = Exact<{
+	first?: InputMaybe<Scalars["Int"]["input"]>;
+	after?: InputMaybe<Scalars["String"]["input"]>;
+	where?: InputMaybe<Property__C_Filter>;
+	orderBy?: InputMaybe<Property__C_OrderBy>;
+}>;
+
+export type SearchPropertiesQuery = {
+	uiapi: {
+		query: {
+			Property__c?: {
+				totalCount: number;
+				edges?: Array<{
+					node?: {
+						Id: string;
+						Name?: { value?: string | null; displayValue?: string | null } | null;
+						Address__c?: { value?: string | null; displayValue?: string | null } | null;
+						Status__c?: { value?: string | null; displayValue?: string | null } | null;
+						Type__c?: { value?: string | null; displayValue?: string | null } | null;
+						Monthly_Rent__c?: { value?: number | null; displayValue?: string | null } | null;
+						Bedrooms__c?: { value?: number | null; displayValue?: string | null } | null;
+						Bathrooms__c?: { value?: number | null; displayValue?: string | null } | null;
+						Description__c?: { value?: string | null; displayValue?: string | null } | null;
+						Hero_Image__c?: { value?: string | null; displayValue?: string | null } | null;
+						Sq_Ft__c?: { value?: number | null; displayValue?: string | null } | null;
+						Year_Built__c?: { value?: number | null; displayValue?: string | null } | null;
+						Deposit__c?: { value?: number | null; displayValue?: string | null } | null;
+						Parking__c?: { value?: number | null; displayValue?: string | null } | null;
+						Pet_Friendly__c?: { value?: boolean | null; displayValue?: string | null } | null;
+						Available_Date__c?: { value?: string | null; displayValue?: string | null } | null;
+						Lease_Term__c?: { value?: number | null; displayValue?: string | null } | null;
+						Features__c?: { value?: string | null; displayValue?: string | null } | null;
+						Utilities__c?: { value?: string | null; displayValue?: string | null } | null;
+						Tour_URL__c?: { value?: string | null; displayValue?: string | null } | null;
+						CreatedDate?: { value?: string | null; displayValue?: string | null } | null;
+					} | null;
+				} | null> | null;
+				pageInfo: {
+					hasNextPage: boolean;
+					hasPreviousPage: boolean;
+					endCursor?: string | null;
+					startCursor?: string | null;
+				};
 			} | null;
 		};
 	};
@@ -11675,319 +12017,6 @@ export type SearchAccountsQuery = {
 							Name?: { value?: string | null; displayValue?: string | null } | null;
 						} | null;
 						AnnualRevenue?: { value?: number | null; displayValue?: string | null } | null;
-					} | null;
-				} | null> | null;
-				pageInfo: {
-					hasNextPage: boolean;
-					hasPreviousPage: boolean;
-					endCursor?: string | null;
-					startCursor?: string | null;
-				};
-			} | null;
-		};
-	};
-};
-
-export type DistinctApplicationStatusQueryVariables = Exact<{ [key: string]: never }>;
-
-export type DistinctApplicationStatusQuery = {
-	uiapi: {
-		aggregate: {
-			Application__c?: {
-				edges?: Array<{
-					node?: {
-						aggregate?: {
-							Status__c?: {
-								value?: string | null;
-								displayValue?: string | null;
-								label?: string | null;
-							} | null;
-						} | null;
-					} | null;
-				} | null> | null;
-			} | null;
-		};
-	};
-};
-
-export type DistinctMaintenanceRequestPriorityQueryVariables = Exact<{ [key: string]: never }>;
-
-export type DistinctMaintenanceRequestPriorityQuery = {
-	uiapi: {
-		aggregate: {
-			Maintenance_Request__c?: {
-				edges?: Array<{
-					node?: {
-						aggregate?: {
-							Priority__c?: {
-								value?: string | null;
-								displayValue?: string | null;
-								label?: string | null;
-							} | null;
-						} | null;
-					} | null;
-				} | null> | null;
-			} | null;
-		};
-	};
-};
-
-export type DistinctMaintenanceRequestStatusQueryVariables = Exact<{ [key: string]: never }>;
-
-export type DistinctMaintenanceRequestStatusQuery = {
-	uiapi: {
-		aggregate: {
-			Maintenance_Request__c?: {
-				edges?: Array<{
-					node?: {
-						aggregate?: {
-							Status__c?: {
-								value?: string | null;
-								displayValue?: string | null;
-								label?: string | null;
-							} | null;
-						} | null;
-					} | null;
-				} | null> | null;
-			} | null;
-		};
-	};
-};
-
-export type DistinctMaintenanceRequestTypeQueryVariables = Exact<{ [key: string]: never }>;
-
-export type DistinctMaintenanceRequestTypeQuery = {
-	uiapi: {
-		aggregate: {
-			Maintenance_Request__c?: {
-				edges?: Array<{
-					node?: {
-						aggregate?: {
-							Type__c?: {
-								value?: string | null;
-								displayValue?: string | null;
-								label?: string | null;
-							} | null;
-						} | null;
-					} | null;
-				} | null> | null;
-			} | null;
-		};
-	};
-};
-
-export type DistinctMaintenanceWorkerEmploymentTypeQueryVariables = Exact<{ [key: string]: never }>;
-
-export type DistinctMaintenanceWorkerEmploymentTypeQuery = {
-	uiapi: {
-		aggregate: {
-			Maintenance_Worker__c?: {
-				edges?: Array<{
-					node?: {
-						aggregate?: {
-							Employment_Type__c?: {
-								value?: string | null;
-								displayValue?: string | null;
-								label?: string | null;
-							} | null;
-						} | null;
-					} | null;
-				} | null> | null;
-			} | null;
-		};
-	};
-};
-
-export type DistinctPropertyStatusQueryVariables = Exact<{ [key: string]: never }>;
-
-export type DistinctPropertyStatusQuery = {
-	uiapi: {
-		aggregate: {
-			Property__c?: {
-				edges?: Array<{
-					node?: {
-						aggregate?: {
-							Status__c?: {
-								value?: string | null;
-								displayValue?: string | null;
-								label?: string | null;
-							} | null;
-						} | null;
-					} | null;
-				} | null> | null;
-			} | null;
-		};
-	};
-};
-
-export type DistinctPropertyTypeQueryVariables = Exact<{ [key: string]: never }>;
-
-export type DistinctPropertyTypeQuery = {
-	uiapi: {
-		aggregate: {
-			Property__c?: {
-				edges?: Array<{
-					node?: {
-						aggregate?: {
-							Type__c?: {
-								value?: string | null;
-								displayValue?: string | null;
-								label?: string | null;
-							} | null;
-						} | null;
-					} | null;
-				} | null> | null;
-			} | null;
-		};
-	};
-};
-
-export type SearchApplicationsQueryVariables = Exact<{
-	first?: InputMaybe<Scalars["Int"]["input"]>;
-	after?: InputMaybe<Scalars["String"]["input"]>;
-	where?: InputMaybe<Application__C_Filter>;
-	orderBy?: InputMaybe<Application__C_OrderBy>;
-}>;
-
-export type SearchApplicationsQuery = {
-	uiapi: {
-		query: {
-			Application__c?: {
-				totalCount: number;
-				edges?: Array<{
-					node?: {
-						Id: string;
-						Name?: { value?: string | null; displayValue?: string | null } | null;
-						Status__c?: { value?: string | null; displayValue?: string | null } | null;
-						Start_Date__c?: { value?: string | null; displayValue?: string | null } | null;
-						Employment__c?: { value?: string | null; displayValue?: string | null } | null;
-						References__c?: { value?: string | null; displayValue?: string | null } | null;
-						Property__r?: {
-							Name?: { value?: string | null; displayValue?: string | null } | null;
-							Address__c?: { value?: string | null; displayValue?: string | null } | null;
-						} | null;
-						User__r?: {
-							Name?: { value?: string | null; displayValue?: string | null } | null;
-						} | null;
-						CreatedDate?: { value?: string | null; displayValue?: string | null } | null;
-					} | null;
-				} | null> | null;
-				pageInfo: {
-					hasNextPage: boolean;
-					hasPreviousPage: boolean;
-					endCursor?: string | null;
-					startCursor?: string | null;
-				};
-			} | null;
-		};
-	};
-};
-
-export type SearchMaintenanceRequestsQueryVariables = Exact<{
-	first?: InputMaybe<Scalars["Int"]["input"]>;
-	after?: InputMaybe<Scalars["String"]["input"]>;
-	where?: InputMaybe<Maintenance_Request__C_Filter>;
-	orderBy?: InputMaybe<Maintenance_Request__C_OrderBy>;
-}>;
-
-export type SearchMaintenanceRequestsQuery = {
-	uiapi: {
-		query: {
-			Maintenance_Request__c?: {
-				totalCount: number;
-				edges?: Array<{
-					node?: {
-						Id: string;
-						Name?: { value?: string | null; displayValue?: string | null } | null;
-						Description__c?: { value?: string | null; displayValue?: string | null } | null;
-						Type__c?: { value?: string | null; displayValue?: string | null } | null;
-						Priority__c?: { value?: string | null; displayValue?: string | null } | null;
-						Status__c?: { value?: string | null; displayValue?: string | null } | null;
-						Scheduled__c?: { value?: string | null; displayValue?: string | null } | null;
-						Property__r?: {
-							Address__c?: { value?: string | null; displayValue?: string | null } | null;
-							Name?: { value?: string | null; displayValue?: string | null } | null;
-						} | null;
-						User__r?: {
-							Name?: { value?: string | null; displayValue?: string | null } | null;
-						} | null;
-					} | null;
-				} | null> | null;
-				pageInfo: {
-					hasNextPage: boolean;
-					hasPreviousPage: boolean;
-					endCursor?: string | null;
-					startCursor?: string | null;
-				};
-			} | null;
-		};
-	};
-};
-
-export type SearchMaintenanceWorkersQueryVariables = Exact<{
-	first?: InputMaybe<Scalars["Int"]["input"]>;
-	after?: InputMaybe<Scalars["String"]["input"]>;
-	where?: InputMaybe<Maintenance_Worker__C_Filter>;
-	orderBy?: InputMaybe<Maintenance_Worker__C_OrderBy>;
-}>;
-
-export type SearchMaintenanceWorkersQuery = {
-	uiapi: {
-		query: {
-			Maintenance_Worker__c?: {
-				totalCount: number;
-				edges?: Array<{
-					node?: {
-						Id: string;
-						Name?: { value?: string | null; displayValue?: string | null } | null;
-						Type__c?: { value?: string | null; displayValue?: string | null } | null;
-						Employment_Type__c?: { value?: string | null; displayValue?: string | null } | null;
-						Phone__c?: { value?: string | null; displayValue?: string | null } | null;
-						Location__c?: { value?: string | null; displayValue?: string | null } | null;
-						IsActive__c?: { value?: boolean | null; displayValue?: string | null } | null;
-						Rating__c?: { value?: number | null; displayValue?: string | null } | null;
-						Hourly_Rate__c?: { value?: number | null; displayValue?: string | null } | null;
-						CreatedDate?: { value?: string | null; displayValue?: string | null } | null;
-					} | null;
-				} | null> | null;
-				pageInfo: {
-					hasNextPage: boolean;
-					hasPreviousPage: boolean;
-					endCursor?: string | null;
-					startCursor?: string | null;
-				};
-			} | null;
-		};
-	};
-};
-
-export type SearchPropertiesQueryVariables = Exact<{
-	first?: InputMaybe<Scalars["Int"]["input"]>;
-	after?: InputMaybe<Scalars["String"]["input"]>;
-	where?: InputMaybe<Property__C_Filter>;
-	orderBy?: InputMaybe<Property__C_OrderBy>;
-}>;
-
-export type SearchPropertiesQuery = {
-	uiapi: {
-		query: {
-			Property__c?: {
-				totalCount: number;
-				edges?: Array<{
-					node?: {
-						Id: string;
-						Name?: { value?: string | null; displayValue?: string | null } | null;
-						Address__c?: { value?: string | null; displayValue?: string | null } | null;
-						Status__c?: { value?: string | null; displayValue?: string | null } | null;
-						Type__c?: { value?: string | null; displayValue?: string | null } | null;
-						Monthly_Rent__c?: { value?: number | null; displayValue?: string | null } | null;
-						Bedrooms__c?: { value?: number | null; displayValue?: string | null } | null;
-						Bathrooms__c?: { value?: number | null; displayValue?: string | null } | null;
-						Description__c?: { value?: string | null; displayValue?: string | null } | null;
-						Hero_Image__c?: { value?: string | null; displayValue?: string | null } | null;
-						Sq_Ft__c?: { value?: number | null; displayValue?: string | null } | null;
-						Year_Built__c?: { value?: number | null; displayValue?: string | null } | null;
-						CreatedDate?: { value?: string | null; displayValue?: string | null } | null;
 					} | null;
 				} | null> | null;
 				pageInfo: {
