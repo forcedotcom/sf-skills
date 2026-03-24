@@ -26,19 +26,19 @@ const LISTING_QUERY = gql`
 					edges {
 						node {
 							Id
-							Name {
+							Name @optional {
 								value
 								displayValue
 							}
-							Listing_Price__c {
+							Listing_Price__c @optional {
 								value
 								displayValue
 							}
-							Listing_Status__c {
+							Listing_Status__c @optional {
 								value
 								displayValue
 							}
-							Property__c {
+							Property__c @optional {
 								value
 								displayValue
 							}
@@ -93,35 +93,35 @@ const PROPERTY_QUERY = gql`
 					edges {
 						node {
 							Id
-							Name {
+							Name @optional {
 								value
 								displayValue
 							}
-							Address__c {
+							Address__c @optional {
 								value
 								displayValue
 							}
-							Type__c {
+							Type__c @optional {
 								value
 								displayValue
 							}
-							Monthly_Rent__c {
+							Monthly_Rent__c @optional {
 								value
 								displayValue
 							}
-							Bedrooms__c {
+							Bedrooms__c @optional {
 								value
 								displayValue
 							}
-							Bathrooms__c {
+							Bathrooms__c @optional {
 								value
 								displayValue
 							}
-							Sq_Ft__c {
+							Sq_Ft__c @optional {
 								value
 								displayValue
 							}
-							Description__c {
+							Description__c @optional {
 								value
 								displayValue
 							}
@@ -204,23 +204,23 @@ const IMAGES_QUERY = gql`
 					edges {
 						node {
 							Id
-							Name {
+							Name @optional {
 								value
 								displayValue
 							}
-							Image_URL__c {
+							Image_URL__c @optional {
 								value
 								displayValue
 							}
-							Image_Type__c {
+							Image_Type__c @optional {
 								value
 								displayValue
 							}
-							Display_Order__c {
+							Display_Order__c @optional {
 								value
 								displayValue
 							}
-							Alt_Text__c {
+							Alt_Text__c @optional {
 								value
 								displayValue
 							}
@@ -284,23 +284,23 @@ const COSTS_QUERY = gql`
 					edges {
 						node {
 							Id
-							Cost_Category__c {
+							Cost_Category__c @optional {
 								value
 								displayValue
 							}
-							Cost_Amount__c {
+							Cost_Amount__c @optional {
 								value
 								displayValue
 							}
-							Cost_Date__c {
+							Cost_Date__c @optional {
 								value
 								displayValue
 							}
-							Description__c {
+							Description__c @optional {
 								value
 								displayValue
 							}
-							Vendor__c {
+							Vendor__c @optional {
 								value
 								displayValue
 							}
@@ -371,15 +371,15 @@ const FEATURES_QUERY = gql`
 					edges {
 						node {
 							Id
-							Name {
+							Name @optional {
 								value
 								displayValue
 							}
-							Feature_Category__c {
+							Feature_Category__c @optional {
 								value
 								displayValue
 							}
-							Description__c {
+							Description__c @optional {
 								value
 								displayValue
 							}

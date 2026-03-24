@@ -20,10 +20,9 @@ export interface SessionResponse {
  * Handles CSRF protection prefix
  *
  * @param text - Raw response text from servlet
- * @returns Parsed session response
- * @throws Error if response cannot be parsed
+ * @returns Parsed session response, or undefined if parsing fails
  */
-function parseResponseResult(text: string): SessionResponse {
+function parseResponseResult(text: string): SessionResponse | undefined {
 	let cleanedText = text;
 
 	// Strip CSRF protection prefix if present
@@ -45,25 +44,23 @@ function parseResponseResult(text: string): SessionResponse {
 		return parsed;
 	} catch (error) {
 		console.error("[sessionTimeService] Failed to parse response:", error, "Text:", cleanedText);
-		throw new Error(
-			`Failed to parse session response: ${error instanceof Error ? error.message : "Unknown error"}`,
-		);
 	}
 }
 
 /**
  * Call SessionTimeServlet API
- * Internal function used by both poll and extend functions
+ * Internal function used by both poll and extend functions.
+ * Returns undefined on any failure so the session timeout feature
+ * never crashes the running application.
  *
  * @param basePath - Community base path (e.g., "/sfsites/c/")
  * @param extend - Whether to extend the session (updateTimedOutSession param)
- * @returns Session response with remaining time
- * @throws Error if API call fails or security checks fail
+ * @returns Session response with remaining time, or undefined on failure
  */
 async function callSessionTimeServlet(
 	basePath: string,
 	extend: boolean = false,
-): Promise<SessionResponse> {
+): Promise<SessionResponse | undefined> {
 	// Build URL with cache-busting timestamp
 	const timestamp = Date.now();
 	let url = `${basePath}${SESSION_CONFIG.SERVLET_URL}?buster=${timestamp}`;
@@ -75,47 +72,37 @@ async function callSessionTimeServlet(
 	try {
 		const response = await fetch(url, {
 			method: "GET",
-			credentials: "same-origin", // Include cookies for session
+			credentials: "same-origin",
 			cache: "no-cache",
-			// Security headers
 			headers: {
-				"X-Requested-With": "XMLHttpRequest", // Helps identify XHR requests
+				"X-Requested-With": "XMLHttpRequest",
 			},
 		});
 
 		if (!response.ok) {
-			// Provide more context for common error codes
-			if (response.status === 401) {
-				throw new Error("Session expired or unauthorized");
-			} else if (response.status === 403) {
-				throw new Error("Access forbidden");
-			} else if (response.status === 404) {
-				throw new Error("Session endpoint not found");
-			} else {
-				throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-			}
+			console.error(`[sessionTimeService] HTTP ${response.status}: ${response.statusText}`);
+			return undefined;
 		}
 
-		// Security: Validate content type (should be text or JSON)
 		const contentType = response.headers.get("content-type");
 		if (contentType && !contentType.includes("text") && !contentType.includes("json")) {
-			throw new Error(`Unexpected content type: ${contentType}`);
+			console.error(`[sessionTimeService] Unexpected content type: ${contentType}`);
+			return undefined;
 		}
 
 		const text = await response.text();
 		const parsed = parseResponseResult(text);
-
-		// Apply latency buffer to account for network delay
-		const adjustedSecondsRemaining = Math.max(0, parsed.sr - SESSION_CONFIG.LATENCY_BUFFER_SECONDS);
+		if (!parsed) {
+			return undefined;
+		}
 
 		return {
 			sp: parsed.sp,
-			sr: adjustedSecondsRemaining,
+			sr: Math.max(0, parsed.sr - SESSION_CONFIG.LATENCY_BUFFER_SECONDS),
 		};
 	} catch (error) {
-		// Don't log the full URL in production to avoid leaking sensitive info
 		console.error("[sessionTimeService] API call failed:", error);
-		throw error;
+		return undefined;
 	}
 }
 
@@ -124,17 +111,17 @@ async function callSessionTimeServlet(
  * Called periodically to monitor session status
  *
  * @param basePath - Community base path (e.g., "/sfsites/c/")
- * @returns Session response with remaining time (after latency buffer adjustment)
- * @throws Error if API call fails
+ * @returns Session response with remaining time, or undefined on failure
  *
  * @example
- * const { sr, sp } = await pollSessionTimeServlet('/sfsites/c/');
- * if (sr <= 300) {
- *   // Less than 5 minutes remaining
+ * const response = await pollSessionTimeServlet('/sfsites/c/');
+ * if (response && response.sr <= 300) {
  *   showWarning();
  * }
  */
-export async function pollSessionTimeServlet(basePath: string): Promise<SessionResponse> {
+export async function pollSessionTimeServlet(
+	basePath: string,
+): Promise<SessionResponse | undefined> {
 	return callSessionTimeServlet(basePath, false);
 }
 
@@ -143,14 +130,15 @@ export async function pollSessionTimeServlet(basePath: string): Promise<SessionR
  * Called when user clicks "Continue Working" in warning modal
  *
  * @param basePath - Community base path (e.g., "/sfsites/c/")
- * @returns Session response with new remaining time
- * @throws Error if API call fails
+ * @returns Session response with new remaining time, or undefined on failure
  *
  * @example
- * const { sr } = await extendSessionTime('/sfsites/c/');
- * console.log(`Session extended. ${sr} seconds remaining.`);
+ * const response = await extendSessionTime('/sfsites/c/');
+ * if (response) {
+ *   console.log(`Session extended. ${response.sr} seconds remaining.`);
+ * }
  */
-export async function extendSessionTime(basePath: string): Promise<SessionResponse> {
+export async function extendSessionTime(basePath: string): Promise<SessionResponse | undefined> {
 	return callSessionTimeServlet(basePath, true);
 }
 

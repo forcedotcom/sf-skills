@@ -7,30 +7,39 @@ import { fetchPropertyAddresses } from "@/api/propertyDetailGraphQL";
 import { getPropertyIdFromRecord } from "@/hooks/usePropertyPrimaryImages";
 import type { SearchResultRecord } from "@/features/global-search/types/search/searchResults.js";
 
-export function usePropertyAddresses(results: SearchResultRecord[]): Record<string, string> {
+export function usePropertyAddresses(
+	results: SearchResultRecord[],
+): Record<string, string> & { loading: boolean } {
 	const [map, setMap] = useState<Record<string, string>>({});
+	const [fetchedKey, setFetchedKey] = useState("");
 
 	const propertyIds = results
 		.map((r) => r?.record && getPropertyIdFromRecord(r.record))
 		.filter((id): id is string => Boolean(id));
+	const idsKey = [...new Set(propertyIds)].join(",");
+	const loading = idsKey !== "" && idsKey !== fetchedKey;
 
 	useEffect(() => {
-		if (propertyIds.length === 0) {
+		if (idsKey === "") {
 			setMap({});
+			setFetchedKey("");
 			return;
 		}
 		let cancelled = false;
-		fetchPropertyAddresses([...new Set(propertyIds)])
+		fetchPropertyAddresses(idsKey.split(","))
 			.then((next) => {
 				if (!cancelled) setMap(next);
 			})
 			.catch(() => {
 				if (!cancelled) setMap({});
+			})
+			.finally(() => {
+				if (!cancelled) setFetchedKey(idsKey);
 			});
 		return () => {
 			cancelled = true;
 		};
-	}, [propertyIds.join(",")]);
+	}, [idsKey]);
 
-	return map;
+	return Object.assign(map, { loading });
 }

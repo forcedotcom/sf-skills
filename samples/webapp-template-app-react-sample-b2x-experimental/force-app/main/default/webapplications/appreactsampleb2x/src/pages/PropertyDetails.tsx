@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import PropertyMap from "@/components/PropertyMap";
 import { usePropertyDetail } from "@/hooks/usePropertyDetail";
 import { useGeocode } from "@/hooks/useGeocode";
@@ -34,6 +35,75 @@ function formatDate(val: string | null): string {
 	}
 }
 
+function PropertyDetailsSkeleton() {
+	return (
+		<div className="mx-auto max-w-[900px]" role="status">
+			<Skeleton className="mb-4 h-4 w-32" />
+
+			<div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+				<Skeleton className="aspect-[4/3] rounded-xl" />
+				<div className="flex flex-col gap-2">
+					{Array.from({ length: 5 }, (_, i) => (
+						<Skeleton key={i} className="h-20 rounded-lg" />
+					))}
+				</div>
+			</div>
+
+			<Skeleton className="mb-4 h-[280px] w-full rounded-xl" />
+
+			<Card className="mb-4 rounded-2xl border border-border shadow-sm">
+				<CardContent className="pt-3">
+					<Skeleton className="mb-1.5 h-7 w-2/3" />
+					<Skeleton className="mb-1.5 h-4 w-1/2" />
+					<Skeleton className="mb-4 h-7 w-1/4" />
+					<div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+						{Array.from({ length: 4 }, (_, i) => (
+							<Skeleton key={i} className="h-[60px] rounded-xl" />
+						))}
+					</div>
+					<Skeleton className="mt-3 h-3 w-24" />
+					<Skeleton className="mt-4 h-4 w-full" />
+					<Skeleton className="mt-1 h-4 w-3/4" />
+				</CardContent>
+			</Card>
+
+			<Card className="mb-4 rounded-2xl border border-border shadow-sm">
+				<CardHeader>
+					<Skeleton className="h-5 w-28" />
+				</CardHeader>
+				<CardContent className="space-y-2">
+					{Array.from({ length: 3 }, (_, i) => (
+						<div
+							key={i}
+							className="flex items-baseline justify-between border-b border-border/50 pb-2 last:border-0"
+						>
+							<Skeleton className="h-4 w-24" />
+							<Skeleton className="h-4 w-16" />
+						</div>
+					))}
+				</CardContent>
+			</Card>
+
+			<Card className="mb-4 rounded-2xl border border-border shadow-sm">
+				<CardHeader>
+					<Skeleton className="h-5 w-40" />
+				</CardHeader>
+				<CardContent>
+					<div className="flex flex-wrap gap-1.5">
+						{Array.from({ length: 6 }, (_, i) => (
+							<Skeleton key={i} className="h-6 w-20 rounded-full" />
+						))}
+					</div>
+				</CardContent>
+			</Card>
+
+			<Skeleton className="mb-4 h-[52px] w-full rounded-xl" />
+
+			<span className="sr-only">Loading property details…</span>
+		</div>
+	);
+}
+
 export default function PropertyDetails() {
 	const { id } = useParams<{ id: string }>();
 	const { listing, property, images, costs, features, loading, error } = usePropertyDetail(id);
@@ -41,19 +111,7 @@ export default function PropertyDetails() {
 	const { coords: addressCoords } = useGeocode(addressForGeocode);
 
 	if (loading) {
-		return (
-			<div className="mx-auto max-w-[900px]">
-				<div className="mb-4 h-4 w-32 animate-pulse rounded bg-muted" />
-				<div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-					<div className="h-72 animate-pulse rounded-xl bg-muted" />
-					<div className="flex flex-col gap-2">
-						{[1, 2, 3, 4, 5].map((i) => (
-							<div key={i} className="h-12 animate-pulse rounded-lg bg-muted" />
-						))}
-					</div>
-				</div>
-			</div>
-		);
+		return <PropertyDetailsSkeleton />;
 	}
 
 	if (error || (!listing && id)) {
@@ -94,9 +152,7 @@ export default function PropertyDetails() {
 							className="h-full w-full object-cover"
 						/>
 					) : (
-						<div className="flex h-full items-center justify-center text-muted-foreground">
-							No image
-						</div>
+						<Skeleton className="h-full w-full" />
 					)}
 				</div>
 				<div className="flex flex-col gap-2">

@@ -19,32 +19,32 @@ const GET_MAINTENANCE_REQUESTS = gql`
 					edges {
 						node {
 							Id
-							Name {
+							Name @optional {
 								value
 							}
-							Property__r {
-								Address__c {
+							Property__r @optional {
+								Address__c @optional {
 									value
 								}
 							}
-							User__r {
-								Name {
+							User__r @optional {
+								Name @optional {
 									value
 								}
 							}
-							Type__c {
+							Type__c @optional {
 								value
 							}
-							Priority__c {
+							Priority__c @optional {
 								value
 							}
-							Status__c {
+							Status__c @optional {
 								value
 							}
-							Description__c {
+							Description__c @optional {
 								value
 							}
-							Scheduled__c {
+							Scheduled__c @optional {
 								value
 							}
 						}
@@ -68,50 +68,50 @@ const GET_ALL_MAINTENANCE_REQUESTS = gql`
 					edges {
 						node {
 							Id
-							Name {
+							Name @optional {
 								value
 							}
-							Description__c {
+							Description__c @optional {
 								value
 							}
-							Type__c {
+							Type__c @optional {
 								value
 							}
-							Priority__c {
+							Priority__c @optional {
 								value
 							}
-							Status__c {
+							Status__c @optional {
 								value
 							}
-							Scheduled__c {
+							Scheduled__c @optional {
 								value
 							}
-							Property__r {
-								Address__c {
+							Property__r @optional {
+								Address__c @optional {
 									value
 								}
-								Name {
-									value
-								}
-							}
-							User__r {
-								Name {
+								Name @optional {
 									value
 								}
 							}
-							Assigned_Worker__r {
-								Name {
-									value
-								}
-								Employment_Type__c {
+							User__r @optional {
+								Name @optional {
 									value
 								}
 							}
-							ContentDocumentLinks(first: 1) {
+							Assigned_Worker__r @optional {
+								Name @optional {
+									value
+								}
+								Employment_Type__c @optional {
+									value
+								}
+							}
+							ContentDocumentLinks(first: 1) @optional {
 								edges {
 									node {
-										ContentDocument {
-											LatestPublishedVersionId {
+										ContentDocument @optional {
+											LatestPublishedVersionId @optional {
 												value
 											}
 										}
@@ -137,7 +137,7 @@ const UPDATE_MAINTENANCE_STATUS = gql`
 			Maintenance_Request__cUpdate(input: $input) {
 				Record {
 					Id
-					Status__c {
+					Status__c @optional {
 						value
 					}
 				}

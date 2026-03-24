@@ -10,7 +10,8 @@ import {
 } from "@/hooks/usePropertyPrimaryImages";
 import { usePropertyAddresses } from "@/hooks/usePropertyAddresses";
 import { usePropertyListingAmenities } from "@/hooks/usePropertyListingAmenities";
-import PropertyListingCard from "@/components/PropertyListingCard";
+import PropertyListingCard, { PropertyListingCardSkeleton } from "@/components/PropertyListingCard";
+import type { SearchResultRecord } from "@/features/global-search/types/search/searchResults.js";
 import { createNewsletterLead } from "@/api/leadApi";
 import {
 	Phone,
@@ -53,6 +54,43 @@ const FAQ_ITEMS = [
 	},
 ];
 
+function FeaturedPropertiesGrid({
+	results,
+	primaryImagesMap,
+	propertyAddressMap,
+	amenitiesMap,
+}: {
+	results: SearchResultRecord[];
+	primaryImagesMap: Record<string, string> & { loading: boolean };
+	propertyAddressMap: Record<string, string> & { loading: boolean };
+	amenitiesMap: Record<string, string> & { loading: boolean };
+}) {
+	return (
+		<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+			{results.map((item, index) => {
+				const record = item.record;
+				const propertyId = getPropertyIdFromRecord(record);
+				const imageUrl = propertyId ? (primaryImagesMap[propertyId] ?? null) : null;
+				const address = propertyId ? (propertyAddressMap[propertyId] ?? null) : null;
+				const amenities = propertyId ? (amenitiesMap[propertyId] ?? null) : null;
+				return (
+					<div key={record.id ?? index} className="min-h-0">
+						<PropertyListingCard
+							record={record}
+							imageUrl={imageUrl}
+							address={address}
+							amenities={amenities ?? undefined}
+							loading={
+								primaryImagesMap.loading || propertyAddressMap.loading || amenitiesMap.loading
+							}
+						/>
+					</div>
+				);
+			})}
+		</div>
+	);
+}
+
 export default function Home() {
 	const searchInputRef = useRef<HTMLInputElement>(null);
 	const navigate = useNavigate();
@@ -64,7 +102,11 @@ export default function Home() {
 		text: string;
 	} | null>(null);
 
-	const { results: featuredResults } = usePropertyListingSearch("", FEATURED_PAGE_SIZE, "0");
+	const { results: featuredResults, resultsLoading: featuredLoading } = usePropertyListingSearch(
+		"",
+		FEATURED_PAGE_SIZE,
+		"0",
+	);
 	const primaryImagesMap = usePropertyPrimaryImages(featuredResults);
 	const propertyAddressMap = usePropertyAddresses(featuredResults);
 	const amenitiesMap = usePropertyListingAmenities(featuredResults);
@@ -158,26 +200,19 @@ export default function Home() {
 					<h2 className="mb-8 text-2xl font-bold tracking-tight text-violet-900 md:text-3xl">
 						Featured Properties
 					</h2>
-					{validFeatured.length > 0 ? (
+					{featuredLoading ? (
 						<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-							{validFeatured.map((item, index) => {
-								const record = item.record;
-								const propertyId = getPropertyIdFromRecord(record);
-								const imageUrl = propertyId ? (primaryImagesMap[propertyId] ?? null) : null;
-								const address = propertyId ? (propertyAddressMap[propertyId] ?? null) : null;
-								const amenities = propertyId ? (amenitiesMap[propertyId] ?? null) : null;
-								return (
-									<div key={record.id ?? index} className="min-h-0">
-										<PropertyListingCard
-											record={record}
-											imageUrl={imageUrl}
-											address={address}
-											amenities={amenities ?? undefined}
-										/>
-									</div>
-								);
-							})}
+							{[1, 2, 3].map((i) => (
+								<PropertyListingCardSkeleton key={i} />
+							))}
 						</div>
+					) : validFeatured.length > 0 ? (
+						<FeaturedPropertiesGrid
+							results={validFeatured}
+							primaryImagesMap={primaryImagesMap}
+							propertyAddressMap={propertyAddressMap}
+							amenitiesMap={amenitiesMap}
+						/>
 					) : (
 						<div className="rounded-xl bg-white/60 px-6 py-10 text-center text-muted-foreground">
 							<p>No featured properties at the moment.</p>

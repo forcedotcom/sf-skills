@@ -104,10 +104,10 @@ function serializeSelectionTree(tree: SelectionTree, indent: string): string {
 			if (key === "Id") {
 				lines.push(`${indent}Id`);
 			} else {
-				lines.push(`${indent}${key} { value }`);
+				lines.push(`${indent}${key} @optional { value }`);
 			}
 		} else {
-			lines.push(`${indent}${key} {`);
+			lines.push(`${indent}${key} @optional {`);
 			lines.push(serializeSelectionTree(val, childIndent));
 			lines.push(`${indent}}`);
 		}

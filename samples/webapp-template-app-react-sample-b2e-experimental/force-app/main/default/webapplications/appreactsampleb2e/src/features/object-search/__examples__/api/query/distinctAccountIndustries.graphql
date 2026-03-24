@@ -1,0 +1,19 @@
+query DistinctAccountIndustries {
+	uiapi {
+		aggregate {
+			Account(groupBy: { Industry: { group: true } }) {
+				edges {
+					node {
+						aggregate @optional {
+							Industry @optional {
+								value
+								displayValue
+								label
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

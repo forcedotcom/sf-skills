@@ -108,8 +108,8 @@ export type FilterCriteria = z.infer<typeof FilterCriteriaSchema>;
 // Export schema for validation
 export const FilterCriteriaArraySchema = z.array(FilterCriteriaSchema);
 
-// Zod Schema for Filters Response
-const FiltersResponseSchema = z.record(z.string(), z.unknown()).and(
+// Zod Schema for Filters Response (used for type inference via z.infer)
+export const FiltersResponseSchema = z.record(z.string(), z.unknown()).and(
 	z.object({
 		filters: FilterArraySchema.optional(),
 	}),

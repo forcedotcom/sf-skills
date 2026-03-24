@@ -115,7 +115,7 @@ export function useRecordListGraphQL(
 	useEffect(() => {
 		if (!objectApiName || columnsLoading || columnsError) return;
 		if (columns.length === 0 && !columnsLoading) return;
-		fetchRecords();
+		queueMicrotask(() => fetchRecords());
 	}, [objectApiName, columns, columnsLoading, columnsError, fetchRecords]);
 
 	const objectData = data?.uiapi?.query?.[objectApiName];

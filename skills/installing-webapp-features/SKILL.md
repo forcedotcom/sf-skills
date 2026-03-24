@@ -1,6 +1,6 @@
 ---
 name: installing-webapp-features
-description: Search, describe, and install pre-built UI features (authentication, shadcn components, navigation, search, GraphQL, Agentforce AI) into Salesforce webapps. Use this when the user wants to add functionality to a webapp, or when determining what salesforce-provided features are available — whether prompted by the user or on your own initiative. Always check for an existing feature before building from scratch.
+description: "Search, describe, and install pre-built UI features (authentication, shadcn components, navigation, search, GraphQL, Agentforce AI) into Salesforce webapps. Use this when the user wants to add functionality to a webapp, or when determining what salesforce-provided features are available — whether prompted by the user or on your own initiative. Always check for an existing feature before building from scratch."
 ---
 
 # webapps-features-experimental CLI — Agent Reference

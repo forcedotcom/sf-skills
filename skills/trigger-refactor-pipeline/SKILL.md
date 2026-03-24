@@ -1,6 +1,6 @@
 ---
 name: trigger-refactor-pipeline
-description: Refactor Salesforce triggers into handler patterns with automated test generation and deployment. Use when modernizing legacy triggers with DML/SOQL in loops or inconsistent patterns.
+description: "Refactor Salesforce triggers into handler patterns with automated test generation and deployment. Use when modernizing legacy triggers with DML/SOQL in loops or inconsistent patterns."
 license: Apache-2.0
 compatibility: Requires Salesforce CLI, Python 3.9+
 metadata:

@@ -46,7 +46,7 @@ export default function GlobalSearch() {
 		if (!query) return "";
 		try {
 			return decodeURIComponent(query);
-		} catch (e) {
+		} catch {
 			return query;
 		}
 	}, [query]);
@@ -56,9 +56,11 @@ export default function GlobalSearch() {
 
 	// Reset pagination when the URL search query changes so we don't use an old cursor with a new result set
 	useEffect(() => {
-		setAfterCursor(null);
-		setPageIndex(0);
-		setCursorStack([null]);
+		queueMicrotask(() => {
+			setAfterCursor(null);
+			setPageIndex(0);
+			setCursorStack([null]);
+		});
 	}, [query]);
 
 	const listMeta = useObjectListMetadata(objectApiName);
@@ -87,10 +89,12 @@ export default function GlobalSearch() {
 		if (resultsLoading) return;
 		const cursor = pageInfo?.endCursor ?? null;
 		if (cursor == null) return;
-		setCursorStack((prev) => {
-			const next = [...prev];
-			next[pageIndex + 1] = cursor;
-			return next;
+		queueMicrotask(() => {
+			setCursorStack((prev) => {
+				const next = [...prev];
+				next[pageIndex + 1] = cursor;
+				return next;
+			});
 		});
 	}, [resultsLoading, pageInfo?.endCursor, pageIndex]);
 
@@ -116,8 +120,10 @@ export default function GlobalSearch() {
 
 	const cursorStackRef = useRef(cursorStack);
 	const pageIndexRef = useRef(pageIndex);
-	cursorStackRef.current = cursorStack;
-	pageIndexRef.current = pageIndex;
+	useEffect(() => {
+		cursorStackRef.current = cursorStack;
+		pageIndexRef.current = pageIndex;
+	}, [cursorStack, pageIndex]);
 
 	const canRenderFilters =
 		!listMeta.loading && listMeta.filters !== undefined && listMeta.picklistValues !== undefined;

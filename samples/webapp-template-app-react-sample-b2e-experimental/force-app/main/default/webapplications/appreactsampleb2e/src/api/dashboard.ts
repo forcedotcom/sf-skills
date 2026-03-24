@@ -17,7 +17,7 @@ const GET_DASHBOARD_METRICS = gql`
 					edges {
 						node {
 							Id
-							Status__c {
+							Status__c @optional {
 								value
 							}
 						}
@@ -27,7 +27,7 @@ const GET_DASHBOARD_METRICS = gql`
 					edges {
 						node {
 							Id
-							Type__c {
+							Type__c @optional {
 								value
 							}
 						}
@@ -51,23 +51,23 @@ const GET_OPEN_APPLICATIONS = gql`
 					edges {
 						node {
 							Id
-							Name {
+							Name @optional {
 								value
 							}
-							User__r {
-								Name {
+							User__r @optional {
+								Name @optional {
 									value
 								}
 							}
-							Property__r {
-								Address__c {
+							Property__r @optional {
+								Address__c @optional {
 									value
 								}
 							}
-							Status__c {
+							Status__c @optional {
 								value
 							}
-							CreatedDate {
+							CreatedDate @optional {
 								value
 							}
 						}
@@ -87,7 +87,7 @@ const GET_USER_INFO = gql`
 					edges {
 						node {
 							Id
-							Name {
+							Name @optional {
 								value
 							}
 						}

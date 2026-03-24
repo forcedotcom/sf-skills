@@ -3,12 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar, ArrowRight } from "lucide-react";
-import type { MaintenanceRequestSummary } from "@/api/maintenanceRequestApi";
-import MaintenanceRequestListItem from "@/components/MaintenanceRequestListItem";
-import MaintenanceDetailsModal from "@/components/MaintenanceDetailsModal";
+import MaintenanceRequestList from "@/components/MaintenanceRequestList";
+import { SkeletonListRows, SkeletonField } from "@/components/SkeletonPrimitives";
 import { useMaintenanceRequests } from "@/hooks/useMaintenanceRequests";
 import { createMaintenanceRequest } from "@/api/maintenanceRequestApi";
+import { useAuth } from "@/features/authentication/context/AuthContext";
 
 const TYPE_OPTIONS = [
 	"Plumbing",
@@ -28,9 +29,40 @@ const PRIORITY_OPTIONS = [
 	{ value: "Emergency", label: "Emergency (2hr)" },
 ] as const;
 
+function MaintenanceSkeleton() {
+	return (
+		<div className="mx-auto max-w-[900px]" role="status">
+			<Card className="mb-6 rounded-2xl shadow-md">
+				<CardHeader>
+					<Skeleton className="h-6 w-1/3" />
+				</CardHeader>
+				<CardContent className="space-y-4">
+					{Array.from({ length: 2 }, (_, i) => (
+						<div key={i} className="grid grid-cols-1 gap-4 md:grid-cols-2">
+							<SkeletonField labelWidth="w-1/4" />
+							<SkeletonField labelWidth="w-1/4" />
+						</div>
+					))}
+					<SkeletonField labelWidth="w-1/6" height="h-[100px]" />
+					<div className="flex justify-end">
+						<Skeleton className="h-9 w-36" />
+					</div>
+				</CardContent>
+			</Card>
+			<Card className="border-gray-200 p-6 shadow-sm">
+				<Skeleton className="mb-6 h-5 w-1/4" />
+				<CardContent className="space-y-3 p-0">
+					<SkeletonListRows />
+				</CardContent>
+			</Card>
+			<span className="sr-only">Loading maintenance…</span>
+		</div>
+	);
+}
+
 export default function Maintenance() {
+	const { loading: authLoading } = useAuth();
 	const { requests, loading, error, refetch } = useMaintenanceRequests();
-	const [selectedRequest, setSelectedRequest] = useState<MaintenanceRequestSummary | null>(null);
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [type, setType] = useState<string>("");
@@ -42,6 +74,8 @@ export default function Maintenance() {
 	const [submitting, setSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
 	const [submitSuccess, setSubmitSuccess] = useState(false);
+
+	if (authLoading) return <MaintenanceSkeleton />;
 
 	const handleSubmit = useCallback(
 		async (e: React.FormEvent) => {
@@ -81,13 +115,6 @@ export default function Maintenance() {
 
 	return (
 		<div className="mx-auto max-w-[900px]">
-			{selectedRequest && (
-				<MaintenanceDetailsModal
-					request={selectedRequest}
-					isOpen={!!selectedRequest}
-					onClose={() => setSelectedRequest(null)}
-				/>
-			)}
 			<Card className="mb-6 rounded-2xl shadow-md">
 				<CardHeader>
 					<CardTitle className="text-2xl text-primary">New maintenance request</CardTitle>
@@ -198,31 +225,15 @@ export default function Maintenance() {
 			</Card>
 			<Card className="border-gray-200 p-6 shadow-sm">
 				<div className="mb-6">
-					<h2 className="text-lg font-semibold uppercase tracking-wide text-primary">
-						Maintenance Requests
-					</h2>
+					<h2 className="text-lg font-semibold tracking-wide text-primary">Maintenance Requests</h2>
 				</div>
 				<CardContent className="space-y-4 p-0">
-					{error && (
-						<p className="py-4 text-sm text-destructive" role="alert">
-							{error}
-						</p>
-					)}
-					{loading && <p className="py-8 text-center text-sm text-muted-foreground">Loading…</p>}
-					{!loading && !error && requests.length === 0 && (
-						<div className="py-8 text-center text-gray-500">
-							No maintenance requests yet. Submit one above.
-						</div>
-					)}
-					{!loading &&
-						!error &&
-						requests.map((request) => (
-							<MaintenanceRequestListItem
-								key={request.id}
-								request={request}
-								onClick={setSelectedRequest}
-							/>
-						))}
+					<MaintenanceRequestList
+						requests={requests}
+						loading={loading}
+						error={error}
+						emptyMessage="No maintenance requests yet. Submit one above."
+					/>
 				</CardContent>
 			</Card>
 		</div>

@@ -1,0 +1,73 @@
+query SearchProperties(
+	$first: Int
+	$after: String
+	$where: Property__c_Filter
+	$orderBy: Property__c_OrderBy
+) {
+	uiapi {
+		query {
+			Property__c(first: $first, after: $after, where: $where, orderBy: $orderBy) {
+				edges {
+					node {
+						Id
+						Name {
+							value
+							displayValue
+						}
+						Address__c {
+							value
+							displayValue
+						}
+						Status__c {
+							value
+							displayValue
+						}
+						Type__c {
+							value
+							displayValue
+						}
+						Monthly_Rent__c {
+							value
+							displayValue
+						}
+						Bedrooms__c {
+							value
+							displayValue
+						}
+						Bathrooms__c {
+							value
+							displayValue
+						}
+						Description__c {
+							value
+							displayValue
+						}
+						Hero_Image__c {
+							value
+							displayValue
+						}
+						Sq_Ft__c {
+							value
+							displayValue
+						}
+						Year_Built__c {
+							value
+							displayValue
+						}
+						CreatedDate {
+							value
+							displayValue
+						}
+					}
+				}
+				pageInfo {
+					hasNextPage
+					hasPreviousPage
+					endCursor
+					startCursor
+				}
+				totalCount
+			}
+		}
+	}
+}

@@ -85,14 +85,14 @@ export function useObjectListMetadata(objectApiName: string | null): ObjectListM
 
 	useEffect(() => {
 		if (!objectApiName) {
-			setState((s) => ({ ...s, loading: false, error: "Invalid object" }));
+			queueMicrotask(() => setState((s) => ({ ...s, loading: false, error: "Invalid object" })));
 			return;
 		}
 
 		let isCancelled = false;
 
 		const run = async () => {
-			setState((s) => ({ ...s, loading: true, error: null }));
+			queueMicrotask(() => setState((s) => ({ ...s, loading: true, error: null })));
 			try {
 				const filters = await getSharedFilters(objectApiName!);
 				if (isCancelled) return;
@@ -119,7 +119,7 @@ export function useObjectListMetadata(objectApiName: string | null): ObjectListM
 					loading: false,
 					error: null,
 				});
-			} catch (err) {
+			} catch {
 				if (isCancelled) return;
 				setState((s) => ({
 					...s,

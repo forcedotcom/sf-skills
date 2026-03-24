@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/forcedotcom/afv-library/compare/1.3.0...1.4.0) (2026-03-23)
+
+
+### Features
+
+* consolidate webapp data skills into using-webapp-salesforce-data @W-21338965@ ([#81](https://github.com/forcedotcom/afv-library/issues/81)) ([9190b5c](https://github.com/forcedotcom/afv-library/commit/9190b5c97aa6ca3c7c355cac6a7417924bcdcc0f))
+
+
+
 # [1.3.0](https://github.com/forcedotcom/afv-library/compare/1.2.0...1.3.0) (2026-03-23)
 
 

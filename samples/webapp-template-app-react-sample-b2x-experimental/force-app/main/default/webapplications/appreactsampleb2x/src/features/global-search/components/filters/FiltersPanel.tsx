@@ -207,7 +207,7 @@ export default function FiltersPanel({
 		}
 
 		previousLoadingRef.current = loading;
-	}, [loading, defaultValues]);
+	}, [loading, defaultValues, form]);
 
 	const handleSuccessDismiss = useCallback(() => {
 		setSubmitSuccess(null);

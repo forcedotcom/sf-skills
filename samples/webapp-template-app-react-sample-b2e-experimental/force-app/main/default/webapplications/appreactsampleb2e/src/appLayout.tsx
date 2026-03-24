@@ -1,18 +1,23 @@
+import { useState } from "react";
 import { Outlet } from "react-router";
 import { TopBar } from "./components/TopBar";
 import { VerticalNav } from "./components/VerticalNav";
 import { AgentforceConversationClient } from "./components/AgentforceConversationClient";
+import { Toaster } from "./components/ui/sonner";
 
 export default function AppLayout() {
+	const [isNavOpen, setIsNavOpen] = useState(false);
+
 	return (
-		<div className="flex flex-col h-screen">
+		<div className="flex flex-col">
+			<Toaster />
 			{/* Top Bar */}
-			<TopBar />
+			<TopBar onMenuClick={() => setIsNavOpen(true)} />
 
 			{/* Main Content Area with Sidebar */}
 			<div className="flex flex-1 overflow-hidden">
 				{/* Vertical Navigation */}
-				<VerticalNav />
+				<VerticalNav isOpen={isNavOpen} onClose={() => setIsNavOpen(false)} />
 
 				{/* Page Content */}
 				<main className="flex-1 overflow-auto">

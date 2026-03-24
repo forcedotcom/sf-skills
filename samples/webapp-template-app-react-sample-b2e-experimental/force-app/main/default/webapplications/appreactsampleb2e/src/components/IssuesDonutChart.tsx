@@ -13,28 +13,35 @@ interface IssuesDonutChartProps {
 	data: ChartData[];
 }
 
+interface CustomTooltipProps {
+	active?: boolean;
+	payload?: Array<{ name?: string | number; value?: number }>;
+	total: number;
+}
+
+function CustomTooltip({ active, payload, total }: CustomTooltipProps) {
+	if (active && payload && payload.length && payload[0].value != null) {
+		const percentage = total > 0 ? Math.round((payload[0].value / total) * 100) : 0;
+		const name = payload[0].name != null ? String(payload[0].name) : "";
+		return (
+			<div className="bg-white p-3 border border-gray-200 rounded shadow-lg z-50">
+				<p className="text-sm font-semibold text-gray-800">{name}</p>
+				<p className="text-sm text-gray-600">
+					Count: <span className="font-medium">{payload[0].value}</span>
+				</p>
+				<p className="text-sm text-gray-600">
+					Percentage: <span className="font-medium">{percentage}%</span>
+				</p>
+			</div>
+		);
+	}
+	return null;
+}
+
 export const IssuesDonutChart: React.FC<IssuesDonutChartProps> = ({ data }) => {
 	const total = data.reduce((sum, item) => sum + item.value, 0);
 	const maxValue = data.length > 0 ? Math.max(...data.map((item) => item.value)) : 0;
 	const mainPercentage = total > 0 ? Math.round((maxValue / total) * 100) : 0;
-
-	const CustomTooltip = ({ active, payload }: any) => {
-		if (active && payload && payload.length) {
-			const percentage = total > 0 ? Math.round((payload[0].value / total) * 100) : 0;
-			return (
-				<div className="bg-white p-3 border border-gray-200 rounded shadow-lg z-50">
-					<p className="text-sm font-semibold text-gray-800">{payload[0].name}</p>
-					<p className="text-sm text-gray-600">
-						Count: <span className="font-medium">{payload[0].value}</span>
-					</p>
-					<p className="text-sm text-gray-600">
-						Percentage: <span className="font-medium">{percentage}%</span>
-					</p>
-				</div>
-			);
-		}
-		return null;
-	};
 
 	return (
 		<Card className="p-4 border-gray-200 shadow-sm flex flex-col relative">
@@ -62,7 +69,16 @@ export const IssuesDonutChart: React.FC<IssuesDonutChartProps> = ({ data }) => {
 								<Cell key={`cell-${index}`} fill={entry.color} />
 							))}
 						</Pie>
-						<Tooltip content={<CustomTooltip />} wrapperStyle={{ zIndex: 1000 }} />
+						<Tooltip
+							content={(props) => (
+								<CustomTooltip
+									active={props.active}
+									payload={props.payload as CustomTooltipProps["payload"]}
+									total={total}
+								/>
+							)}
+							wrapperStyle={{ zIndex: 1000 }}
+						/>
 					</PieChart>
 				</ResponsiveContainer>
 				{/* Center text */}

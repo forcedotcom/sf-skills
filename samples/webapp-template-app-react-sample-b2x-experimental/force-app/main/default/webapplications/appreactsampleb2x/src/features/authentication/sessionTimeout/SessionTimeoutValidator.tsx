@@ -253,19 +253,14 @@ function useSessionTimeout(config: SessionTimeoutConfig): SessionTimeoutResult {
 		isPollingRef.current = true;
 		setIsPolling(true);
 
-		try {
-			const response = await pollSessionTimeServlet(basePath);
+		const response = await pollSessionTimeServlet(basePath);
+		isPollingRef.current = false;
+		setIsPolling(false);
 
-			// Success - reset retry state and process response
-			isPollingRef.current = false;
-			setIsPolling(false);
+		if (response) {
 			retry.resetRetry();
 			processTimeoutResponse(response.sr);
-		} catch (error) {
-			console.error("[useSessionTimeout] Poll failed:", error);
-			// Reset polling flags before retry so handleRetryWithBackoff doesn't skip
-			isPollingRef.current = false;
-			setIsPolling(false);
+		} else {
 			handleRetryWithBackoff(() => checkSessionRef.current?.());
 		}
 	}, [basePath, retry, processTimeoutResponse, handleRetryWithBackoff]);
@@ -274,15 +269,12 @@ function useSessionTimeout(config: SessionTimeoutConfig): SessionTimeoutResult {
 	 * Extend the session (called when user clicks "Continue Working")
 	 */
 	const extendSession = useCallback(async () => {
-		try {
-			const response = await extendSessionTime(basePath);
+		const response = await extendSessionTime(basePath);
 
-			// Reset retry state and process the new session time
+		if (response) {
 			retry.resetRetry();
 			processTimeoutResponse(response.sr);
-		} catch (error) {
-			console.error("[useSessionTimeout] Failed to extend session:", error);
-			// On failure, retry extending session (not checkSession)
+		} else {
 			handleRetryWithBackoff(() => extendSessionRef.current?.());
 		}
 	}, [basePath, retry, processTimeoutResponse, handleRetryWithBackoff]);

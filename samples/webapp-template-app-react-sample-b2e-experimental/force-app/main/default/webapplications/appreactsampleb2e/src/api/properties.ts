@@ -15,64 +15,64 @@ const GET_PROPERTIES_PAGINATED = gql`
 					edges {
 						node {
 							Id
-							Name {
+							Name @optional {
 								value
 							}
-							Address__c {
+							Address__c @optional {
 								value
 							}
-							Description__c {
+							Description__c @optional {
 								value
 							}
-							Type__c {
+							Type__c @optional {
 								value
 							}
-							Status__c {
+							Status__c @optional {
 								value
 							}
-							Monthly_Rent__c {
+							Monthly_Rent__c @optional {
 								value
 							}
-							Bedrooms__c {
+							Bedrooms__c @optional {
 								value
 							}
-							Bathrooms__c {
+							Bathrooms__c @optional {
 								value
 							}
-							Sq_Ft__c {
+							Sq_Ft__c @optional {
 								value
 							}
-							Year_Built__c {
+							Year_Built__c @optional {
 								value
 							}
-							Hero_Image__c {
+							Hero_Image__c @optional {
 								value
 							}
-							Deposit__c {
+							Deposit__c @optional {
 								value
 							}
-							Parking__c {
+							Parking__c @optional {
 								value
 							}
-							Pet_Friendly__c {
+							Pet_Friendly__c @optional {
 								value
 							}
-							Available_Date__c {
+							Available_Date__c @optional {
 								value
 							}
-							Lease_Term__c {
+							Lease_Term__c @optional {
 								value
 							}
-							Features__c {
+							Features__c @optional {
 								value
 							}
-							Utilities__c {
+							Utilities__c @optional {
 								value
 							}
-							Tour_URL__c {
+							Tour_URL__c @optional {
 								value
 							}
-							CreatedDate {
+							CreatedDate @optional {
 								value
 							}
 						}

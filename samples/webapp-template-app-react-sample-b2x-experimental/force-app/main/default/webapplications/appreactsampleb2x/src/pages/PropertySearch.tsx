@@ -14,7 +14,7 @@ import { usePropertyAddresses } from "@/hooks/usePropertyAddresses";
 import { usePropertyListingAmenities } from "@/hooks/usePropertyListingAmenities";
 import { usePropertyMapMarkers } from "@/hooks/usePropertyMapMarkers";
 import SearchPagination from "@/features/global-search/components/search/SearchPagination";
-import PropertyListingCard from "@/components/PropertyListingCard";
+import PropertyListingCard, { PropertyListingCardSkeleton } from "@/components/PropertyListingCard";
 import PropertySearchFilters, {
 	type BedroomFilter,
 	type SortBy,
@@ -22,6 +22,7 @@ import PropertySearchFilters, {
 import PropertyMap from "@/components/PropertyMap";
 import type { MapMarker, MapBounds } from "@/components/PropertyMap";
 import PropertySearchPlaceholder from "@/pages/PropertySearchPlaceholder";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { SearchResultRecord } from "@/features/global-search/types/search/searchResults.js";
 
 /** Fallback map center when there are no geocoded markers yet. Zoom 7 ≈ 100-mile radius view. */
@@ -216,6 +217,7 @@ export default function PropertySearch() {
 						imageUrl={imageUrl}
 						address={address}
 						amenities={amenities || undefined}
+						loading={primaryImagesMap.loading || propertyAddressMap.loading || amenitiesMap.loading}
 					/>
 				</div>
 			);
@@ -246,7 +248,7 @@ export default function PropertySearch() {
 			{/* Main: map 2/3, list 1/3 */}
 			<div className="flex min-h-0 flex-1 flex-col lg:flex-row">
 				{/* Map – 2/3 on desktop */}
-				<div className="h-64 shrink-0 lg:h-full lg:min-h-0 lg:w-2/3" aria-label="Map">
+				<div className="isolate h-64 shrink-0 lg:h-full lg:min-h-0 lg:w-2/3" aria-label="Map">
 					<PropertyMap
 						center={MAP_CENTER_FALLBACK}
 						zoom={mapMarkers.length > 0 ? MAP_ZOOM_WITH_MARKERS : MAP_ZOOM_DEFAULT}
@@ -266,13 +268,15 @@ export default function PropertySearch() {
 						</h2>
 						<div className="flex flex-wrap items-center gap-2">
 							<p className="text-sm text-muted-foreground">
-								{apiUnavailable
-									? "Placeholder (API unavailable)"
-									: resultsLoading
-										? "Loading…"
-										: mapBounds != null && mapMarkers.length > 0
-											? `${visibleResults.length} of ${sortedResults.length} in map view`
-											: `${sortedResults.length} result(s)`}
+								{apiUnavailable ? (
+									"Placeholder (API unavailable)"
+								) : resultsLoading ? (
+									<Skeleton className="inline-block h-4 w-24 align-middle" />
+								) : mapBounds != null && mapMarkers.length > 0 ? (
+									`${visibleResults.length} of ${sortedResults.length} in map view`
+								) : (
+									`${sortedResults.length} result(s)`
+								)}
 							</p>
 							{mapBounds != null && sortedResults.length > 0 && !resultsLoading && (
 								<button
@@ -291,15 +295,9 @@ export default function PropertySearch() {
 								message={resultsError ?? "Search is temporarily unavailable."}
 							/>
 						) : resultsLoading ? (
-							<div className="space-y-4" role="status">
+							<div className="space-y-4">
 								{[1, 2, 3].map((i) => (
-									<div key={i} className="overflow-hidden rounded-lg border">
-										<div className="aspect-[16/10] animate-pulse bg-muted" />
-										<div className="space-y-2 p-3">
-											<div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
-											<div className="h-4 w-1/2 animate-pulse rounded bg-muted" />
-										</div>
-									</div>
+									<PropertyListingCardSkeleton key={i} />
 								))}
 							</div>
 						) : sortedResults.length === 0 ? (
@@ -336,6 +334,11 @@ export default function PropertySearch() {
 													imageUrl={imageUrl}
 													address={address}
 													amenities={amenities || undefined}
+													loading={
+														primaryImagesMap.loading ||
+														propertyAddressMap.loading ||
+														amenitiesMap.loading
+													}
 												/>
 											</li>
 										);

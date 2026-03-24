@@ -1,0 +1,61 @@
+query SearchMaintenanceWorkers(
+	$first: Int
+	$after: String
+	$where: Maintenance_Worker__c_Filter
+	$orderBy: Maintenance_Worker__c_OrderBy
+) {
+	uiapi {
+		query {
+			Maintenance_Worker__c(first: $first, after: $after, where: $where, orderBy: $orderBy) {
+				edges {
+					node {
+						Id
+						Name {
+							value
+							displayValue
+						}
+						Type__c {
+							value
+							displayValue
+						}
+						Employment_Type__c {
+							value
+							displayValue
+						}
+						Phone__c {
+							value
+							displayValue
+						}
+						Location__c {
+							value
+							displayValue
+						}
+						IsActive__c {
+							value
+							displayValue
+						}
+						Rating__c {
+							value
+							displayValue
+						}
+						Hourly_Rate__c {
+							value
+							displayValue
+						}
+						CreatedDate {
+							value
+							displayValue
+						}
+					}
+				}
+				pageInfo {
+					hasNextPage
+					hasPreviousPage
+					endCursor
+					startCursor
+				}
+				totalCount
+			}
+		}
+	}
+}
