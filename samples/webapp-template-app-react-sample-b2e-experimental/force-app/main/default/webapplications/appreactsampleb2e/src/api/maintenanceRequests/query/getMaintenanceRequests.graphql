@@ -1,0 +1,41 @@
+query GetMaintenanceRequests($first: Int) {
+	uiapi {
+		query {
+			Maintenance_Request__c(first: $first, orderBy: { Priority__c: { order: DESC } }) {
+				edges {
+					node {
+						Id
+						Name @optional {
+							value
+						}
+						Property__r @optional {
+							Address__c @optional {
+								value
+							}
+						}
+						User__r @optional {
+							Name @optional {
+								value
+							}
+						}
+						Type__c @optional {
+							value
+						}
+						Priority__c @optional {
+							value
+						}
+						Status__c @optional {
+							value
+						}
+						Description__c @optional {
+							value
+						}
+						Scheduled__c @optional {
+							value
+						}
+					}
+				}
+			}
+		}
+	}
+}

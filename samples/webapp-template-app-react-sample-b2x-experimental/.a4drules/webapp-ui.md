@@ -8,9 +8,9 @@ When any task involves creating a new UI, frontend, page, dashboard, form, or us
 2. The app must live under `<sfdx-source>/webapplications/<AppName>/` as a WebApplication bundle.
 3. Do not build new UIs as LWC components, Aura components, or Visualforce pages.
 
-Invoke the `creating-webapp` skill (`.a4drules/skills/creating-webapp/`) for the full setup workflow.
+For setup from the project root, use `node scripts/setup-cli.mjs --help` and the options documented there.
 
 ## Data Access (MUST FOLLOW)
 
 - **Never hardcode data in the app.** All data displayed in the UI must come from live Salesforce data fetching — no static arrays, mock objects, or placeholder values in production code.
-- **Always invoke the `using-salesforce-data` skill** (`.a4drules/skills/using-salesforce-data/`) before writing any data access code. All implementation must be derived from that skill.
+- **Follow `.a4drules/webapp-data.md`** before writing any data access code. All implementation must match those rules (Data SDK, supported APIs, GraphQL workflow).

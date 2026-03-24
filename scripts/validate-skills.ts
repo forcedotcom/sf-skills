@@ -10,6 +10,7 @@ import { execSync } from "child_process"
 import fs from "fs"
 import path from "path"
 import { parseArgs } from "util"
+import yaml from "js-yaml"
 
 const SKILLS_DIR = path.join(__dirname, "..", "skills")
 
@@ -18,6 +19,8 @@ interface SkillContext {
   dirName: string
   dirPath: string
   content: string
+  /** YAML source between `---` lines; `null` if the block is missing. */
+  rawFrontmatter: string | null
   frontmatter: Record<string, string> | null
   body: string
 }
@@ -137,6 +140,29 @@ const CONTENT_CHECKS: ContentCheck[] = [
     },
   },
   {
+    description:
+      "Frontmatter must parse as JSON-compatible YAML (js-yaml JSON_SCHEMA); unquoted colons in values break strict parsers",
+    run({ dirName, rawFrontmatter }) {
+      if (rawFrontmatter === null) return { errors: [] }
+      try {
+        yaml.load(rawFrontmatter, { schema: yaml.JSON_SCHEMA })
+      } catch (e) {
+        if (e instanceof yaml.YAMLException) {
+          const detail = formatYamlFrontmatterParseError(e)
+          return {
+            errors: [
+              `skills/${dirName}/SKILL.md: frontmatter is not valid YAML.
+${detail}
+Wrap values that contain \`: \` (colon + space), such as long descriptions with parenthetical hints, in single or double quotes.`,
+            ],
+          }
+        }
+        throw e
+      }
+      return { errors: [] }
+    },
+  },
+  {
     description: 'Frontmatter "name" must be present and match the directory name',
     run({ dirName, frontmatter }) {
       if (!frontmatter) return { errors: [] }
@@ -244,17 +270,46 @@ function getChangedSkillDirs(base: string): string[] {
   ].filter((dir) => fs.existsSync(path.join(SKILLS_DIR, dir)))
 }
 
+/** Formats js-yaml YAMLException with guarded mark fields and optional snippet. */
+function formatYamlFrontmatterParseError(e: yaml.YAMLException): string {
+  const reason =
+    typeof e.reason === "string" && e.reason.trim() !== "" ? e.reason : "YAML parse error"
+  const m = e.mark
+  if (!m) return reason
+
+  const line = typeof m.line === "number" ? m.line + 1 : "?"
+  const col = typeof m.column === "number" ? m.column + 1 : "?"
+  const index = typeof m.position === "number" ? m.position + 1 : "?"
+  const head = `${reason} — line ${line}, column ${col} (1-based), character index ${index} in frontmatter YAML`
+  const snippet = typeof m.snippet === "string" && m.snippet.trim() !== "" ? m.snippet.trimEnd() : ""
+  return snippet ? `${head}\n${snippet}` : head
+}
+
+/**
+ * Raw YAML between the opening and closing `---` lines (no delimiters).
+ * `null` if the block is missing.
+ */
+function parseFrontmatterBlock(content: string): { raw: string; fullMatchLen: number } | null {
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/)
+  if (!match) return null
+  return { raw: match[1], fullMatchLen: match[0].length }
+}
+
 /**
  * Parses a SKILL.md file into its frontmatter fields and body.
  * `frontmatter` is `null` if the `--- ... ---` block is missing or malformed.
  * Wrapping quotes on frontmatter values are stripped.
  */
-function parseSkillMd(content: string): { frontmatter: Record<string, string> | null; body: string } {
-  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/)
-  if (!match) return { frontmatter: null, body: content }
+function parseSkillMd(content: string): {
+  rawFrontmatter: string | null
+  frontmatter: Record<string, string> | null
+  body: string
+} {
+  const block = parseFrontmatterBlock(content)
+  if (!block) return { rawFrontmatter: null, frontmatter: null, body: content }
 
   const frontmatter: Record<string, string> = {}
-  for (const line of match[1].split(/\r?\n/)) {
+  for (const line of block.raw.split(/\r?\n/)) {
     const colonIdx = line.indexOf(":")
     if (colonIdx === -1) continue
     const key = line.slice(0, colonIdx).trim()
@@ -263,7 +318,11 @@ function parseSkillMd(content: string): { frontmatter: Record<string, string> | 
     frontmatter[key] = raw.replace(/^(['"])([\s\S]*)\1$/, "$2")
   }
 
-  return { frontmatter, body: content.slice(match[0].length) }
+  return {
+    rawFrontmatter: block.raw,
+    frontmatter,
+    body: content.slice(block.fullMatchLen),
+  }
 }
 
 /**
@@ -293,8 +352,8 @@ function validateSkill(dirName: string, dirPath: string): SkillResult {
   }
 
   const content = fs.readFileSync(path.join(dirPath, "SKILL.md"), "utf8")
-  const { frontmatter, body } = parseSkillMd(content)
-  const ctx: SkillContext = { dirName, dirPath, content, frontmatter, body }
+  const { rawFrontmatter, frontmatter, body } = parseSkillMd(content)
+  const ctx: SkillContext = { dirName, dirPath, content, rawFrontmatter, frontmatter, body }
 
   for (const check of CONTENT_CHECKS) {
     if (collectIssues(check.run(ctx))) return { errors, warnings }

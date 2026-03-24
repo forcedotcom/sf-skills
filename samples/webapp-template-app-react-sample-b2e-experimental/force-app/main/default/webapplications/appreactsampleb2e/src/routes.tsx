@@ -4,10 +4,10 @@ import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import TestAccPage from "./pages/TestAccPage";
 import { Navigate } from "react-router";
-import PropertySearch from "./features/object-search/pages/PropertySearch";
-import MaintenanceRequestSearch from "./features/object-search/pages/MaintenanceRequestSearch";
-import MaintenanceWorkerSearch from "./features/object-search/pages/MaintenanceWorkerSearch";
-import ApplicationSearch from "./features/object-search/pages/ApplicationSearch";
+import PropertySearch from "./pages/PropertySearch";
+import MaintenanceRequestSearch from "./pages/MaintenanceRequestSearch";
+import MaintenanceWorkerSearch from "./pages/MaintenanceWorkerSearch";
+import ApplicationSearch from "./pages/ApplicationSearch";
 import { PATHS } from "./lib/routeConfig";
 
 export const routes: RouteObject[] = [

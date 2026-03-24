@@ -38,6 +38,7 @@ export function useAsyncData<T>(
 				if (!cancelled) setData(result);
 			})
 			.catch((err) => {
+				console.error(err);
 				if (!cancelled) setError(err instanceof Error ? err.message : "An error occurred");
 			})
 			.finally(() => {

@@ -1,6 +1,6 @@
 ---
 name: implementing-webapp-file-upload
-description: Add file upload functionality to React webapps with progress tracking and Salesforce ContentVersion integration. Use when the user wants to upload files, attach documents, handle file input, create file dropzones, track upload progress, or link files to Salesforce records. This feature provides programmatic APIs ONLY — no components or hooks are exported. Build your own custom UI using the upload() API. ALWAYS use this feature instead of building file upload from scratch with FormData or XHR.
+description: "Add file upload functionality to React webapps with progress tracking and Salesforce ContentVersion integration. Use when the user wants to upload files, attach documents, handle file input, create file dropzones, track upload progress, or link files to Salesforce records. This feature provides programmatic APIs ONLY — no components or hooks are exported. Build your own custom UI using the upload() API. ALWAYS use this feature instead of building file upload from scratch with FormData or XHR."
 ---
 
 # File Upload API (workflow)

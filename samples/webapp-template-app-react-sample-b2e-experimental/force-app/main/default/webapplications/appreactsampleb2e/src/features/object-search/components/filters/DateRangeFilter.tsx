@@ -7,26 +7,24 @@ import {
 	DatePickerCalendar,
 } from "../../../../components/ui/datePicker";
 import { cn } from "../../../../lib/utils";
-import type { FilterFieldConfig, ActiveFilterValue } from "../../utils/filterUtils";
+import { useFilterField } from "../FilterContext";
 import { toDate, toDateString } from "./DateFilter";
 
 interface DateRangeFilterProps extends Omit<React.ComponentProps<"div">, "onChange"> {
-	config: FilterFieldConfig;
-	value: ActiveFilterValue | undefined;
-	onChange: (value: ActiveFilterValue | undefined) => void;
-	labelProps?: React.ComponentProps<typeof Label>;
-	helpTextProps?: React.ComponentProps<"p">;
+	field: string;
+	label: string;
+	helpText?: string;
 }
 
 export function DateRangeFilter({
-	config,
-	value,
-	onChange,
+	field,
+	label,
+	helpText,
 	className,
-	labelProps,
-	helpTextProps,
 	...props
 }: DateRangeFilterProps) {
+	const { value, onChange } = useFilterField(field);
+
 	const dateRange: DateRange | undefined =
 		value?.min || value?.max ? { from: toDate(value?.min), to: toDate(value?.max) } : undefined;
 
@@ -35,8 +33,8 @@ export function DateRangeFilter({
 			onChange(undefined);
 		} else {
 			onChange({
-				field: config.field,
-				label: config.label,
+				field,
+				label,
 				type: "daterange",
 				min: toDateString(range?.from),
 				max: toDateString(range?.to),
@@ -46,13 +44,13 @@ export function DateRangeFilter({
 
 	return (
 		<div className={cn("space-y-1.5", className)} {...props}>
-			<Label {...labelProps}>{labelProps?.children ?? config.label}</Label>
+			<Label>{label}</Label>
 			<DatePicker>
 				<DatePickerRangeTrigger
 					className="w-full"
 					dateRange={dateRange}
 					placeholder="Pick a date range"
-					aria-label={config.label}
+					aria-label={label}
 				/>
 				<DatePickerContent align="start">
 					<DatePickerCalendar
@@ -65,14 +63,7 @@ export function DateRangeFilter({
 					/>
 				</DatePickerContent>
 			</DatePicker>
-			{config.helpText && (
-				<p
-					{...helpTextProps}
-					className={cn("text-xs text-muted-foreground", helpTextProps?.className)}
-				>
-					{helpTextProps?.children ?? config.helpText}
-				</p>
-			)}
+			{helpText && <p className="text-xs text-muted-foreground">{helpText}</p>}
 		</div>
 	);
 }

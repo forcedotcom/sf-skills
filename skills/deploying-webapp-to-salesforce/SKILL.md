@@ -1,8 +1,6 @@
 ---
 name: deploying-webapp-to-salesforce
-description: Enforces the correct order for deploying metadata, assigning permission sets, and fetching GraphQL schema. Use for ANY deployment to a Salesforce org — webapps, LWC, Aura, Apex, metadata, schema fetch, or org sync. Codifies setup-cli.mjs.
-paths:
-  - "**/*"
+description: "Enforces the correct order for deploying metadata, assigning permission sets, and fetching GraphQL schema. Use for ANY deployment to a Salesforce org — webapps, LWC, Aura, Apex, metadata, schema fetch, or org sync. Codifies setup-cli.mjs."
 ---
 
 # Deploying to Salesforce
@@ -225,5 +223,4 @@ The project includes `scripts/setup-cli.mjs` which runs this sequence in batch. 
 
 ## Related Skills
 
-- **exploring-graphql-schema** — Schema exploration (grep-only) after schema exists
-- **using-graphql** — Full GraphQL workflow (explore, query, codegen, lint)
+- **using-salesforce-data** — Full data access workflow (GraphQL queries/mutations, REST APIs, schema exploration, webapp integration)
