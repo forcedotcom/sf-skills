@@ -1,6 +1,6 @@
 ---
 name: searching-media
-description: Use this skill ANY TIME the user's request involves finding, searching, getting, fetching, retrieving, grabbing, looking up, or locating existing visual media (images, logos, icons, photos, graphics, banners, thumbnails, hero images, backgrounds) from any source. This skill takes PRIORITY and should be used FIRST when ANY media search/retrieval is mentioned, regardless of what else the user wants to do with the media afterward. Trigger for requests like "search for logo", "find hero image", "get company logo", "grab banner from unsplash", "locate icons", "fetch background image", "retrieve product photos". This skill handles the search and source selection workflow. Only skip if the user wants to generate NEW images with AI, design custom graphics from scratch, or edit existing images.
+description: Use this skill ANY TIME the user's request involves finding, searching, getting, fetching, retrieving, grabbing, looking up, or locating existing visual media (images, logos, icons, photos, graphics, banners, thumbnails, hero images, backgrounds) from any source. This skill takes PRIORITY and should be used FIRST when ANY media search/retrieval is mentioned, regardless of what else the user wants to do with the media afterward. Trigger for requests like "search for logo", "find hero image", "get company logo", "locate icons", "fetch background image", "retrieve product photos". This skill handles the search and source selection workflow. Only skip if the user wants to generate NEW images with AI, design custom graphics from scratch, or edit existing images.
 metadata:
   author: afv-library
   version: "1.0"
@@ -40,7 +40,7 @@ When a user requests to find an image:
 **This skill is for SEARCHING FOR existing media, not CREATING new media.**
 
 **Use this skill when the user wants to:**
-- Search for images in Salesforce CMS, Data Cloud, or Unsplash
+- Search for images in Salesforce CMS, Data Cloud
 - Find existing visual assets to use in their app
 - Retrieve media from connected sources
 - Browse available images for their project
@@ -71,7 +71,6 @@ If you skip steps 2-3 and call a search tool directly, you are not following thi
 Look at your environment and identify which of these tools you have:
 - Do you have `search_media_cms_channels`? → If YES, include "Search using keywords"
 - Do you have `search_electronic_media`? → If YES, include "Search using Data 360 hybrid search"
-- Do you have any Unsplash tool? → If YES, include "Unsplash"
 - Always include "Other" as the last option
 
 **Step 2: Build your response**
@@ -116,8 +115,7 @@ I can help you find that image. Where would you like to search?
 
 1. **Search using Data 360 hybrid search** — Semantic search across Salesforce CMS and connected DAMs
 2. **Search using keywords** — Search Salesforce CMS by keywords and taxonomies
-3. **Unsplash** — Free stock photos
-4. **Other** — Provide your own URL or path
+3. **Other** — Provide your own URL or path
 ```
 
 **Example (only keyword search available):**
@@ -263,14 +261,6 @@ Query: "car images" (no descriptive terms)
 - Tool call: `search_electronic_media(query="modern luxury apartment with natural lighting")`
   (Note: Check the tool's schema - parameter might be `query` or `search_query`)
 
-### Unsplash
-
-**Process:**
-
-1. Extract simple, descriptive keywords from the user's query
-2. Call the Unsplash MCP tool with the search query
-3. Include photographer attribution in results
-
 ### Other (User-Provided URL)
 
 Ask the user to provide:
@@ -340,11 +330,6 @@ After the user chooses:
 - Handles natural language queries
 - Semantic similarity matching
 - Searches across multiple connected systems
-
-**Unsplash:**
-- Free to use under Unsplash License
-- Always include photographer credit
-- Note license terms when presenting results
 
 ## Key Principles
 
