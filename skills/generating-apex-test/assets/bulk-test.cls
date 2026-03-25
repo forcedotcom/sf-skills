@@ -1,5 +1,5 @@
 /**
- * @description Bulk testing template for trigger and service validation
+ * Bulk testing template for trigger and service validation
  *              Tests with 251+ records to ensure bulkification compliance.
  *              251 records crosses the 200-record trigger batch boundary.
  * @author      {{Author}}
@@ -18,7 +18,7 @@ private class {{ClassName}}BulkTest {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Tests bulk insert with 251 records
+     * Tests bulk insert with 251 records
      *              Verifies trigger handles multiple batch chunks correctly
      */
     @IsTest
@@ -52,7 +52,7 @@ private class {{ClassName}}BulkTest {
     }
 
     /**
-     * @description Tests bulk insert at exact batch boundary (200 records)
+     * Tests bulk insert at exact batch boundary (200 records)
      */
     @IsTest
     static void testBulkInsert_ExactBatchSize_AllProcessed() {
@@ -76,7 +76,7 @@ private class {{ClassName}}BulkTest {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Tests bulk update with 251 records
+     * Tests bulk update with 251 records
      *              Verifies update triggers handle multiple batches
      */
     @IsTest
@@ -114,7 +114,7 @@ private class {{ClassName}}BulkTest {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Tests bulk delete with 251 records
+     * Tests bulk delete with 251 records
      *              Verifies delete triggers handle cleanup correctly
      */
     @IsTest
@@ -148,7 +148,7 @@ private class {{ClassName}}BulkTest {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Tests mixed operations in bulk
+     * Tests mixed operations in bulk
      *              Verifies partial success scenarios are handled
      */
     @IsTest
@@ -195,7 +195,7 @@ private class {{ClassName}}BulkTest {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Helper method to verify governor limits not exceeded
+     * Helper method to verify governor limits not exceeded
      *              Call after Test.stopTest() to check limit usage
      */
     private static void assertGovernorLimitsNotExceeded() {
@@ -234,7 +234,7 @@ private class {{ClassName}}BulkTest {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Stress test with 501 records (multiple batch boundaries)
+     * Stress test with 501 records (multiple batch boundaries)
      *              Use sparingly - consumes significant test execution time
      */
     @IsTest

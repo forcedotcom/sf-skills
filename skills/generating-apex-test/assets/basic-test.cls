@@ -1,5 +1,5 @@
 /**
- * @description Test class for {{ClassName}}
+ * Test class for {{ClassName}}
  *              Tests core functionality with positive, negative, and bulk scenarios.
  * @author      {{Author}}
  * @created     {{Date}}
@@ -25,7 +25,7 @@ private class {{ClassName}}Test {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Tests successful {{methodUnderTest}} with valid input
+     * Tests successful {{methodUnderTest}} with valid input
      */
     @IsTest
     static void test{{MethodUnderTest}}_ValidInput_Success() {
@@ -55,7 +55,7 @@ private class {{ClassName}}Test {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Tests {{methodUnderTest}} throws exception with null input
+     * Tests {{methodUnderTest}} throws exception with null input
      */
     @IsTest
     static void test{{MethodUnderTest}}_NullInput_ThrowsException() {
@@ -82,7 +82,7 @@ private class {{ClassName}}Test {
     }
 
     /**
-     * @description Tests {{methodUnderTest}} handles invalid data gracefully
+     * Tests {{methodUnderTest}} handles invalid data gracefully
      */
     @IsTest
     static void test{{MethodUnderTest}}_InvalidData_ReturnsError() {
@@ -111,7 +111,7 @@ private class {{ClassName}}Test {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Tests {{methodUnderTest}} handles bulk operations (251 records)
+     * Tests {{methodUnderTest}} handles bulk operations (251 records)
      *              251 records crosses the 200-record trigger batch boundary
      */
     @IsTest
@@ -146,7 +146,7 @@ private class {{ClassName}}Test {
     // ═══════════════════════════════════════════════────────────────────────────
 
     /**
-     * @description Tests {{methodUnderTest}} with empty list input
+     * Tests {{methodUnderTest}} with empty list input
      */
     @IsTest
     static void test{{MethodUnderTest}}_EmptyList_NoError() {

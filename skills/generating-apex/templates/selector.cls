@@ -1,5 +1,5 @@
 /**
- * @description Selector class for {SObject} queries.
+ * Selector class for {SObject} queries.
  *              Encapsulates all SOQL for {SObject} records.
  *              All methods return bulkified results (Lists or Maps).
  * @author {Author}
@@ -9,7 +9,7 @@ public inherited sharing class {SObject}Selector {
     // ─── Field Lists ─────────────────────────────────────────────────────
 
     /**
-     * @description Returns the default set of fields to query for {SObject}.
+     * Returns the default set of fields to query for {SObject}.
      *              Centralizes field references to keep queries DRY.
      * @return Comma-separated field list as a String
      */
@@ -29,7 +29,7 @@ public inherited sharing class {SObject}Selector {
     // ─── Query Methods ───────────────────────────────────────────────────
 
     /**
-     * @description Selects {SObject} records by their Ids
+     * Selects {SObject} records by their Ids
      * @param recordIds Set of {SObject} Ids to query
      * @return List of {SObject} records matching the provided Ids
      * @example
@@ -50,7 +50,7 @@ public inherited sharing class {SObject}Selector {
     }
 
     /**
-     * @description Selects {SObject} records as a Map keyed by Id
+     * Selects {SObject} records as a Map keyed by Id
      * @param recordIds Set of {SObject} Ids to query
      * @return Map of Id to {SObject}
      */
@@ -59,7 +59,7 @@ public inherited sharing class {SObject}Selector {
     }
 
     /**
-     * @description Selects {SObject} records by a specific field value
+     * Selects {SObject} records by a specific field value
      * @param fieldName API name of the field to filter on
      * @param values Set of values to match
      * @return List of matching {SObject} records
@@ -88,7 +88,7 @@ public inherited sharing class {SObject}Selector {
     // ─── Exception ───────────────────────────────────────────────────────
 
     /**
-     * @description Custom exception for query errors
+     * Custom exception for query errors
      */
     public class QueryException extends Exception {}
 }

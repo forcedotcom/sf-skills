@@ -1,5 +1,5 @@
 /**
- * @description Invocable Apex for Flow/Process Builder integration
+ * Invocable Apex for Flow/Process Builder integration
  *              Exposes business logic as a Flow Action
  * @author {{Author}}
  * @date {{Date}}
@@ -19,7 +19,7 @@ public with sharing class {{ClassName}}Invocable {
     // ═══════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Main entry point for Flow Actions
+     * Main entry point for Flow Actions
      *              Method must be static, accept List<Request>, return List<Response>
      *              This signature supports bulkification when Flow runs for multiple records
      *
@@ -89,7 +89,7 @@ public with sharing class {{ClassName}}Invocable {
     // ═══════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Core business logic implementation
+     * Core business logic implementation
      *              Separated for testability and reuse
      *
      * @param record The record to process
@@ -115,7 +115,7 @@ public with sharing class {{ClassName}}Invocable {
     // ═══════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Request wrapper for Flow inputs
+     * Request wrapper for Flow inputs
      *              Each @InvocableVariable appears in Flow's input mapping UI
      *
      * SUPPORTED TYPES:
@@ -162,7 +162,7 @@ public with sharing class {{ClassName}}Invocable {
     }
 
     /**
-     * @description Response wrapper for Flow outputs
+     * Response wrapper for Flow outputs
      *              Each @InvocableVariable appears in Flow's output mapping UI
      *
      * TIP: Always include isSuccess and errorMessage for consistent error handling
@@ -217,14 +217,14 @@ public with sharing class {{ClassName}}Invocable {
         public List<SObject> outputRecords;
 
         /**
-         * @description Convenience constructor for success responses
+         * Convenience constructor for success responses
          */
         public Response() {
             this.isSuccess = false;
         }
 
         /**
-         * @description Factory method for success response
+         * Factory method for success response
          */
         public static Response success(String message, Id recordId) {
             Response res = new Response();
@@ -235,7 +235,7 @@ public with sharing class {{ClassName}}Invocable {
         }
 
         /**
-         * @description Factory method for error response
+         * Factory method for error response
          */
         public static Response error(String message) {
             Response res = new Response();

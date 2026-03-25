@@ -1,7 +1,7 @@
 /**
- * @description Controller for {ComponentName} Lightning Web Component.
- *              Exposes server-side operations to LWC via @AuraEnabled methods.
- *              All queries use WITH USER_MODE for CRUD/FLS enforcement.
+ * Controller for {ComponentName} Lightning Web Component.
+ * Exposes server-side operations to LWC via @AuraEnabled methods.
+ * All queries use WITH USER_MODE for CRUD/FLS enforcement.
  * @author {Author}
  */
 public with sharing class {ClassName}Controller {
@@ -9,7 +9,7 @@ public with sharing class {ClassName}Controller {
     // ─── Read Operations (cacheable) ─────────────────────────────────────
 
     /**
-     * @description Retrieves {SObject} records for the given parent Id.
+     * Retrieves {SObject} records for the given parent Id.
      *              Cacheable for LDS/wire adapter performance.
      * @param parentId The parent record Id to filter by
      * @return List of {SObject} records
@@ -32,7 +32,7 @@ public with sharing class {ClassName}Controller {
     // ─── Write Operations (non-cacheable) ────────────────────────────────
 
     /**
-     * @description Creates or updates a {SObject} record.
+     * Creates or updates a {SObject} record.
      *              Cannot use cacheable=true because this performs DML.
      * @param record The {SObject} record to save
      * @return The saved record Id
@@ -52,7 +52,7 @@ public with sharing class {ClassName}Controller {
     }
 
     /**
-     * @description Deletes a {SObject} record by Id.
+     * Deletes a {SObject} record by Id.
      * @param recordId The Id of the record to delete
      */
     @AuraEnabled
@@ -71,7 +71,7 @@ public with sharing class {ClassName}Controller {
     // ─── Action Operations ───────────────────────────────────────────────
 
     /**
-     * @description Processes a {SObject} record and returns a result map.
+     * Processes a {SObject} record and returns a result map.
      *              Use for imperative calls from LWC that need structured responses.
      * @param recordId The Id of the record to process
      * @return Map with isSuccess (Boolean), message (String), and optional data

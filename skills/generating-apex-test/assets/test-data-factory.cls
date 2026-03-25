@@ -1,5 +1,5 @@
 /**
- * @description Test Data Factory for creating consistent test data across all test classes.
+ * Test Data Factory for creating consistent test data across all test classes.
  *              Use this pattern to avoid hardcoded test data and ensure test isolation.
  *
  * USAGE:
@@ -20,7 +20,7 @@ public class TestDataFactory {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Creates Account records without inserting
+     * Creates Account records without inserting
      * @param count Number of accounts to create
      * @return List of Account records (not inserted)
      */
@@ -43,7 +43,7 @@ public class TestDataFactory {
     }
 
     /**
-     * @description Creates and inserts Account records
+     * Creates and inserts Account records
      * @param count Number of accounts to create
      * @return List of inserted Account records
      */
@@ -54,7 +54,7 @@ public class TestDataFactory {
     }
 
     /**
-     * @description Creates Account with specific attributes
+     * Creates Account with specific attributes
      * @param name Account name
      * @param industry Industry value
      * @return Account record (not inserted)
@@ -74,7 +74,7 @@ public class TestDataFactory {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Creates Contact records without inserting
+     * Creates Contact records without inserting
      * @param count Number of contacts to create
      * @param accountId Parent account ID
      * @return List of Contact records (not inserted)
@@ -100,7 +100,7 @@ public class TestDataFactory {
     }
 
     /**
-     * @description Creates and inserts Contact records
+     * Creates and inserts Contact records
      * @param count Number of contacts to create
      * @param accountId Parent account ID
      * @return List of inserted Contact records
@@ -116,7 +116,7 @@ public class TestDataFactory {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Creates Lead records without inserting
+     * Creates Lead records without inserting
      * @param count Number of leads to create
      * @return List of Lead records (not inserted)
      */
@@ -138,7 +138,7 @@ public class TestDataFactory {
     }
 
     /**
-     * @description Creates and inserts Lead records
+     * Creates and inserts Lead records
      * @param count Number of leads to create
      * @return List of inserted Lead records
      */
@@ -153,7 +153,7 @@ public class TestDataFactory {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Creates Opportunity records without inserting
+     * Creates Opportunity records without inserting
      * @param count Number of opportunities to create
      * @param accountId Parent account ID
      * @return List of Opportunity records (not inserted)
@@ -173,7 +173,7 @@ public class TestDataFactory {
     }
 
     /**
-     * @description Creates and inserts Opportunity records
+     * Creates and inserts Opportunity records
      * @param count Number of opportunities to create
      * @param accountId Parent account ID
      * @return List of inserted Opportunity records
@@ -189,7 +189,7 @@ public class TestDataFactory {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Creates Case records without inserting
+     * Creates Case records without inserting
      * @param count Number of cases to create
      * @param accountId Parent account ID (optional)
      * @param contactId Related contact ID (optional)
@@ -212,7 +212,7 @@ public class TestDataFactory {
     }
 
     /**
-     * @description Creates and inserts Case records
+     * Creates and inserts Case records
      * @param count Number of cases to create
      * @param accountId Parent account ID (optional)
      * @param contactId Related contact ID (optional)
@@ -229,7 +229,7 @@ public class TestDataFactory {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Creates a test User with specified profile
+     * Creates a test User with specified profile
      *              Use with System.runAs() for permission testing
      * @param profileName Name of the profile to assign
      * @param uniqueIdentifier Unique string to avoid duplicate usernames
@@ -256,7 +256,7 @@ public class TestDataFactory {
     }
 
     /**
-     * @description Creates and inserts a test User
+     * Creates and inserts a test User
      * @param profileName Name of the profile to assign
      * @param uniqueIdentifier Unique string to avoid duplicate usernames
      * @return Inserted User record
@@ -272,7 +272,7 @@ public class TestDataFactory {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Template for custom object creation
+     * Template for custom object creation
      *              Copy and modify for your custom objects
      * @param count Number of records to create
      * @return List of custom object records (not inserted)
@@ -302,7 +302,7 @@ public class TestDataFactory {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Generates a unique string for test data
+     * Generates a unique string for test data
      *              Useful for avoiding unique constraint violations
      * @return Unique string based on timestamp
      */
@@ -312,7 +312,7 @@ public class TestDataFactory {
     }
 
     /**
-     * @description Creates a map of records by a specified field
+     * Creates a map of records by a specified field
      *              Useful for test assertions
      * @param records List of SObjects
      * @param fieldName API name of the field to use as key

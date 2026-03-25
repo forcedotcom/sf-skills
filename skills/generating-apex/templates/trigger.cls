@@ -1,5 +1,5 @@
 /**
- * @description Trigger for {SObject}.
+ * Trigger for {SObject}.
  *              Delegates all logic to the Trigger Actions Framework (MetadataTriggerHandler).
  *              If TAF is not installed, delegate to a single handler class instead.
  * @author {Author}
