@@ -1,8 +1,6 @@
 ---
 name: creating-webapp
 description: "Use this skill when creating or setting up a new SFDX React web application. Covers first steps, npm install, skills-first protocol, deployment order, and core web app rules."
-paths:
-  - "**/webapplications/**/*"
 ---
 
 # First Steps (MUST FOLLOW)
