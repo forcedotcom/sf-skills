@@ -1,14 +1,6 @@
 ---
 name: generating-apex-test
-description: "Apex test class generation with TestDataFactory patterns, bulk testing
-  (200+ records), mocking strategies for callouts and async operations, and assertion
-  best practices. Use this skill when the user asks to create, write, or generate an
-  Apex test class, improve test coverage, refactor existing tests, or implement proper
-  testing patterns for triggers, services, controllers, batch jobs, queueables, and
-  integrations — even when they don't say 'test' explicitly. Activate on phrases like:
-  'write tests for,' 'add coverage for,' 'test this class,' 'create a mock,' 'I need
-  test data,' 'improve coverage,' or any mention of Apex testing, assertions, or test
-  factories."
+description: Apex test class generation with TestDataFactory patterns, bulk testing (200+ records), mocking strategies, and assertion best practices. Use this skill when the user asks to create, write, or improve Apex test classes, add coverage, build mocks, or implement testing patterns for triggers, services, batch jobs, queueables, and integrations.
 ---
 
 # Apex Test Class Skill

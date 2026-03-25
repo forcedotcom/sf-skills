@@ -1,14 +1,6 @@
 ---
 name: generating-apex
-description: "Generate production-ready Apex classes for Salesforce following enterprise
-  best practices. Covers all standard class types: service, selector, domain, batch,
-  queueable, schedulable, DTO, utility, interface, abstract, and custom exception
-  classes. Use this skill when the user asks to create, write, build, generate, scaffold,
-  or refactor an Apex class — even when they don't say 'Apex class' explicitly. Activate
-  on phrases like: 'build a service for,' 'create a handler,' 'I need a class that,'
-  'write Apex to,' 'scaffold a batch job,' 'create a queueable,' or any description of
-  Salesforce server-side logic that implies a class solution. SCOPE: Apex classes only.
-  Does not apply to triggers or unit tests."
+description: Generate production-ready Apex classes for Salesforce following enterprise best practices. Covers service, selector, domain, batch, queueable, schedulable, DTO, utility, interface, abstract, and custom exception classes. Use this skill when the user asks to create, build, generate, scaffold, or refactor an Apex class. SCOPE Apex classes only — does not apply to triggers or unit tests.
 ---
 
 # Apex Class
