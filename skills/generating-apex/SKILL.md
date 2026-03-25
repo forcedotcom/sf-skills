@@ -91,7 +91,7 @@ If any constraint would be violated in generated code, **stop and explain the pr
 | Use Apex-native collections (`List`, `Map`, `Set`) rather than Java types | Prevent compile errors |
 | Verify methods exist in Apex before use | Prevent reliance on non-existent APIs |
 | Use `Assert` class instead of `System.assert*` in test classes | Legacy `System.assert`, `System.assertEquals`, `System.assertNotEquals` are deprecated; use `Assert.areEqual`, `Assert.isTrue`, `Assert.fail`, etc. |
-| No `System.debug()` in production code | Debug statements pollute logs and waste CPU; use a logging framework or Custom Metadata–controlled logger instead |
+| Avoid `System.debug()` in main code paths | Debug statements that concatenate variables into the string consume CPU regardless of logging being enabled; use a logging framework or Custom Metadata–controlled logger instead if required on main code paths |
 | Never use `@future` methods | Use Queueable with `System.Finalizer` for all async work; `@future` cannot be called from Batch, cannot chain, and cannot accept non-primitive types |
 
 ### Bulkification & Governor Limits

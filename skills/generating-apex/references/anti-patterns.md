@@ -30,7 +30,7 @@ These patterns indicate poor code quality and should be refactored.
 | **Multiple triggers on object** | Unpredictable execution order | Single trigger + Trigger Actions Framework |
 | **Generic `Exception` only** | Masks specific errors | Catch specific exceptions first |
 | **No trigger bypass flag** | Can't disable for data loads | Add Custom Setting bypass |
-| **`System.debug()` everywhere** | Performance impact, clutters logs | Use logging framework with levels |
+| **`System.debug()` in main code paths** | Performance impact from concatenating variables, even when logs are disabled | Use logging framework with levels |
 | **Unnecessary `isEmpty()` before DML** | Wastes CPU | Remove - DML handles empty lists |
 | **`!= false` comparisons** | Confusing double negative | Use `== true` or just the boolean |
 | **God Class** | Single class does everything | Split into Service/Selector/Domain |
