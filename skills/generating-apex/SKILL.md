@@ -32,7 +32,7 @@ Gather or infer before authoring:
 Defaults unless specified:
 - Sharing: `with sharing` (see sharing rules per type below)
 - Access: `public` (use `global` only when required by managed packages or `@InvocableMethod`)
-- API version: `62.0`
+- API version: `66.0` (minimum version)
 - ApexDoc comments: yes
 
 ---
