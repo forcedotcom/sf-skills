@@ -6,24 +6,33 @@
 
 ## Batch Apex Testing
 
+### Critical Constraint — Single Execute in Tests
+
+In test context, Salesforce calls the batch `execute()` method **only once**, processing at most `batchSize` records. The `start()` and `finish()` methods still run normally, but only one chunk of data passes through `execute()`. This has three consequences:
+
+1. **Match record count to batch size** — create `N` test records and call `Database.executeBatch(batch, N)` so all records are processed in the single invocation. If you create more records than the batch size, the excess records are silently skipped.
+2. **One `executeBatch` call per test method** — calling `Database.executeBatch()` more than once between `Test.startTest()` and `Test.stopTest()` throws `System.UnexpectedException`. This includes chained batches triggered from the `finish()` method.
+3. **`Database.Stateful` reflects one chunk** — stateful accumulators only capture values from the single `execute()` invocation.
+
 ### Basic Batch Test
 
 ```apex
-@isTest
-static void shouldProcessAllRecords_WhenBatchExecutes() {
-    // Given: Create test data
+@IsTest
+private static void shouldProcessAllRecords_WhenBatchExecutes() {
+    // Given — record count MUST equal batch size
     List<Account> accounts = TestDataFactory.createAccounts(200, true);
     
-    // When: Execute batch
+    // When — batch size matches record count so all records are processed
     Test.startTest();
     MyBatchClass batch = new MyBatchClass();
-    Id batchId = Database.executeBatch(batch, 200);
-    Test.stopTest(); // Forces batch to complete
+    Database.executeBatch(batch, 200);
+    Test.stopTest();
     
-    // Then: Verify results
+    // Then
     List<Account> updated = [SELECT Id, Status__c FROM Account];
+    Assert.areEqual(200, updated.size(), 'All 200 accounts should be processed');
     for (Account acc : updated) {
-        System.assertEquals('Processed', acc.Status__c, 
+        Assert.areEqual('Processed', acc.Status__c, 
             'Batch should update all account statuses');
     }
 }
@@ -32,12 +41,11 @@ static void shouldProcessAllRecords_WhenBatchExecutes() {
 ### Testing Batch with Failures
 
 ```apex
-@isTest
-static void shouldLogErrors_WhenRecordsFail() {
-    // Given: Create mix of valid and invalid records
+@IsTest
+private static void shouldLogErrors_WhenRecordsFail() {
+    // Given — total records (valid + invalid) must fit within batch size
     List<Account> accounts = TestDataFactory.createAccounts(198, true);
     
-    // Create 2 accounts that will fail processing
     List<Account> invalidAccounts = new List<Account>();
     for (Integer i = 0; i < 2; i++) {
         invalidAccounts.add(new Account(
@@ -47,34 +55,81 @@ static void shouldLogErrors_WhenRecordsFail() {
     }
     insert invalidAccounts;
     
-    // When
+    // When — batch size = 200 to cover all 200 records in single execute()
     Test.startTest();
     MyBatchClass batch = new MyBatchClass();
-    Database.executeBatch(batch, 50);
+    Database.executeBatch(batch, 200);
     Test.stopTest();
     
     // Then
     List<Error_Log__c> errors = [SELECT Id, Message__c FROM Error_Log__c];
-    System.assertEquals(2, errors.size(), 'Should log 2 failed records');
+    Assert.areEqual(2, errors.size(), 'Should log 2 failed records');
 }
 ```
 
-### Testing Batch Scope
+### Testing Database.Stateful Tracking
 
 ```apex
-@isTest
-static void shouldRespectBatchSize() {
-    // Given
-    List<Account> accounts = TestDataFactory.createAccounts(250, true);
+@IsTest
+private static void shouldTrackProcessedCount_WhenStatefulBatch() {
+    // Given — use a count that fits in one execute()
+    List<Account> accounts = TestDataFactory.createAccounts(150, true);
     
+    // When
     Test.startTest();
-    MyBatchClass batch = new MyBatchClass();
-    Database.executeBatch(batch, 50); // 5 batches of 50
+    MyStatefulBatch batch = new MyStatefulBatch();
+    Database.executeBatch(batch, 150);
     Test.stopTest();
     
-    // Note: In tests, all batches execute but you can verify total processing
+    // Then — query finish-method output or assert on batch instance
+    // (stateful values reflect only the single execute() invocation)
+    List<Batch_Log__c> logs = [SELECT Records_Processed__c FROM Batch_Log__c];
+    Assert.areEqual(1, logs.size(), 'Finish should create a log record');
+    Assert.areEqual(150, logs[0].Records_Processed__c,
+        'Should track all 150 processed records');
+}
+```
+
+### Testing Batch Chaining
+
+A batch whose `finish()` method calls `Database.executeBatch()` will throw `System.UnexpectedException` in tests. Test each batch in the chain **independently** in separate test methods.
+
+```apex
+@IsTest
+private static void shouldCompleteFirstBatch_WhenChainedBatch() {
+    // Given
+    List<Account> accounts = TestDataFactory.createAccounts(100, true);
+    
+    // When — test only the first batch; suppress chaining in test context
+    Test.startTest();
+    MyChainedBatch batch = new MyChainedBatch();
+    Database.executeBatch(batch, 100);
+    Test.stopTest();
+    
+    // Then — verify first batch's work completed
     List<Account> processed = [SELECT Id FROM Account WHERE Processed__c = true];
-    System.assertEquals(250, processed.size(), 'All records should be processed');
+    Assert.areEqual(100, processed.size(), 'First batch should process all records');
+}
+
+@IsTest
+private static void shouldCompleteSecondBatch_WhenRunIndependently() {
+    // Given — setup data as if first batch already ran
+    List<Account> accounts = TestDataFactory.createAccounts(100, true);
+    for (Account acc : accounts) {
+        acc.Processed__c = true;
+        acc.NeedsFollowUp__c = true;
+    }
+    update accounts;
+    
+    // When — test second batch in isolation
+    Test.startTest();
+    MyFollowUpBatch batch = new MyFollowUpBatch();
+    Database.executeBatch(batch, 100);
+    Test.stopTest();
+    
+    // Then
+    List<Account> followedUp = [SELECT Id FROM Account WHERE FollowUpDone__c = true];
+    Assert.areEqual(100, followedUp.size(), 'Second batch should process all records');
 }
 ```
 
@@ -83,8 +138,8 @@ static void shouldRespectBatchSize() {
 ### Basic Queueable Test
 
 ```apex
-@isTest
-static void shouldCompleteProcessing_WhenQueueableEnqueued() {
+@IsTest
+private static void shouldCompleteProcessing_WhenQueueableEnqueued() {
     // Given
     Account acc = TestDataFactory.createAccount(true);
     
@@ -96,7 +151,7 @@ static void shouldCompleteProcessing_WhenQueueableEnqueued() {
     
     // Then
     Account updated = [SELECT Id, Status__c FROM Account WHERE Id = :acc.Id];
-    System.assertEquals('Processed', updated.Status__c, 
+    Assert.areEqual('Processed', updated.Status__c, 
         'Queueable should update account status');
 }
 ```
@@ -106,8 +161,8 @@ static void shouldCompleteProcessing_WhenQueueableEnqueued() {
 Chained queueables only execute the first job in tests:
 
 ```apex
-@isTest
-static void shouldChainNextJob_WhenMoreRecordsExist() {
+@IsTest
+private static void shouldChainNextJob_WhenMoreRecordsExist() {
     // Given: More records than one queueable can process
     List<Account> accounts = TestDataFactory.createAccounts(500, true);
     
@@ -119,7 +174,7 @@ static void shouldChainNextJob_WhenMoreRecordsExist() {
     
     // Verify first batch processed
     List<Account> processed = [SELECT Id FROM Account WHERE Processed__c = true];
-    System.assertEquals(100, processed.size(), 'First batch should process 100 records');
+    Assert.areEqual(100, processed.size(), 'First batch should process 100 records');
     
     // Verify chain was enqueued (check AsyncApexJob)
     List<AsyncApexJob> jobs = [
@@ -127,15 +182,15 @@ static void shouldChainNextJob_WhenMoreRecordsExist() {
         FROM AsyncApexJob 
         WHERE ApexClass.Name = 'MyChainedQueueable'
     ];
-    System.assert(jobs.size() >= 1, 'Chained job should be enqueued');
+    Assert.isTrue(jobs.size() >= 1, 'Chained job should be enqueued');
 }
 ```
 
 ### Testing Queueable with Callouts
 
 ```apex
-@isTest
-static void shouldMakeCallout_WhenQueueableWithCallout() {
+@IsTest
+private static void shouldMakeCallout_WhenQueueableWithCallout() {
     // Given
     Test.setMock(HttpCalloutMock.class, new MockHttpResponse(200, '{"status":"ok"}'));
     Account acc = TestDataFactory.createAccount(true);
@@ -148,7 +203,7 @@ static void shouldMakeCallout_WhenQueueableWithCallout() {
     
     // Then
     Account updated = [SELECT Id, External_Status__c FROM Account WHERE Id = :acc.Id];
-    System.assertEquals('Synced', updated.External_Status__c, 
+    Assert.areEqual('Synced', updated.External_Status__c, 
         'Should update status after successful callout');
 }
 ```
@@ -156,8 +211,8 @@ static void shouldMakeCallout_WhenQueueableWithCallout() {
 ## Future Method Testing
 
 ```apex
-@isTest
-static void shouldExecuteFutureMethod() {
+@IsTest
+private static void shouldExecuteFutureMethod() {
     // Given
     Account acc = TestDataFactory.createAccount(true);
     
@@ -168,7 +223,7 @@ static void shouldExecuteFutureMethod() {
     
     // Then
     Account updated = [SELECT Id, Processed__c FROM Account WHERE Id = :acc.Id];
-    System.assertEquals(true, updated.Processed__c, 'Future should process record');
+    Assert.areEqual(true, updated.Processed__c, 'Future should process record');
 }
 ```
 
@@ -177,8 +232,8 @@ static void shouldExecuteFutureMethod() {
 ### Testing Scheduled Execution
 
 ```apex
-@isTest
-static void shouldExecuteScheduledJob() {
+@IsTest
+private static void shouldExecuteScheduledJob() {
     // Given
     List<Account> accounts = TestDataFactory.createAccounts(50, true);
     
@@ -194,15 +249,15 @@ static void shouldExecuteScheduledJob() {
     
     // Then
     List<Account> processed = [SELECT Id FROM Account WHERE Processed__c = true];
-    System.assertEquals(50, processed.size(), 'Scheduled job should process records');
+    Assert.areEqual(50, processed.size(), 'Scheduled job should process records');
 }
 ```
 
 ### Testing Schedule Registration
 
 ```apex
-@isTest
-static void shouldScheduleJob() {
+@IsTest
+private static void shouldScheduleJob() {
     Test.startTest();
     String cronExp = '0 0 6 * * ?'; // Daily at 6 AM
     String jobId = System.schedule('Daily Processing', cronExp, new MyScheduledClass());
@@ -214,16 +269,16 @@ static void shouldScheduleJob() {
         FROM CronTrigger 
         WHERE Id = :jobId
     ];
-    System.assertEquals('0 0 6 * * ?', ct.CronExpression, 'CRON should match');
-    System.assertEquals('WAITING', ct.State, 'Job should be waiting');
+    Assert.areEqual('0 0 6 * * ?', ct.CronExpression, 'CRON should match');
+    Assert.areEqual('WAITING', ct.State, 'Job should be waiting');
 }
 ```
 
 ## Testing Async Limits
 
 ```apex
-@isTest
-static void shouldNotExceedQueueableLimits() {
+@IsTest
+private static void shouldNotExceedQueueableLimits() {
     // Given: Setup that might enqueue multiple jobs
     List<Account> accounts = TestDataFactory.createAccounts(100, true);
     
@@ -236,7 +291,7 @@ static void shouldNotExceedQueueableLimits() {
     Test.stopTest();
     
     // Verify limit not exceeded (50 in synchronous context, 1 in queueable)
-    System.assert(queueablesUsed <= 50, 
+    Assert.isTrue(queueablesUsed <= 50, 
         'Should not exceed queueable limit. Used: ' + queueablesUsed);
 }
 ```
@@ -252,7 +307,7 @@ System.enqueueJob(new MyQueueable());
 // Missing Test.stopTest()!
 
 List<Account> results = [SELECT Id FROM Account WHERE Processed__c = true];
-System.assertEquals(100, results.size()); // FAILS - queueable didn't run
+Assert.areEqual(100, results.size()); // FAILS - queueable didn't run
 ```
 
 ### ❌ Testing chained jobs without understanding limits
@@ -273,4 +328,24 @@ Test.setMock(HttpCalloutMock.class, new MockResponse()); // Before startTest!
 Test.startTest();
 System.enqueueJob(new QueueableWithCallout());
 Test.stopTest();
+```
+
+### ❌ Duplicate Rule violations on bulk insert
+
+```apex
+// Bad: identical or near-identical field values trigger DUPLICATES_DETECTED at row 200+
+List<Account> accounts = new List<Account>();
+for (Integer i = 0; i < 251; i++) {
+    accounts.add(new Account(Name = 'Test Account')); // same Name on all records
+}
+insert accounts; // FAILS: DUPLICATES_DETECTED
+
+// Good: unique values per record via TestDataFactory
+List<Account> accounts = TestDataFactory.createAccounts(251);
+insert accounts;
+
+// Good: bypass duplicate rules when fuzzy matching is active
+Database.DMLOptions dml = new Database.DMLOptions();
+dml.DuplicateRuleHeader.allowSave = true;
+Database.insert(accounts, dml);
 ```
