@@ -1,6 +1,6 @@
 ---
 name: generating-flexipage
-description: "Use this skill when users need to create, generate, modify, or validate Salesforce Lightning pages (FlexiPages). Trigger when users mention RecordPage, AppPage, HomePage, Lightning pages, page layouts, adding components to pages, or page customization. Also use when users say things like \"create a Lightning page\", \"add a component to a page\", \"customize the record page\", \"generate a FlexiPage\", or when they're working with FlexiPage XML files and need help with components, regions, or deployment errors. Always use this skill for any FlexiPage-related work, even if they just mention \"page\" in the context of Salesforce."
+description: "Use this skill when users need to create, generate, modify, or validate Salesforce Lightning pages (FlexiPages). Trigger when users mention RecordPage, AppPage, HomePage, Lightning pages, page layouts, adding components to pages, or page customization. Also use when users say things like 'create a Lightning page', 'add a component to a page', 'customize the record page', 'generate a FlexiPage', or when they're working with FlexiPage XML files and need help with components, regions, or deployment errors. Always use this skill for any FlexiPage-related work, even if they just mention 'page' in the context of Salesforce."
 ---
 
 ## When to Use This Skill
@@ -20,6 +20,8 @@ Use this skill when you need to:
 
 ## Overview
 
+**CRITICAL: When creating NEW FlexiPages, you MUST ALWAYS start with the CLI template command.** Never create FlexiPage XML from scratch - the CLI provides valid structure, proper regions, and correct component configuration that prevents deployment errors.
+
 Generate Lightning pages (RecordPage, AppPage, HomePage) using CLI bootstrapping for component discovery and configuration.
 
 ---
@@ -27,6 +29,8 @@ Generate Lightning pages (RecordPage, AppPage, HomePage) using CLI bootstrapping
 ## Quick Start Workflow
 
 ### Step 1: Bootstrap with CLI
+
+**MANDATORY FOR NEW PAGES: This step is NOT optional.** Always use the CLI template command when creating a new FlexiPage. The CLI generates valid XML structure, proper regions, and correct metadata that prevents common deployment errors. Only skip this step if you're editing an existing FlexiPage file.
 
 ```bash
 sf template generate flexipage \
@@ -38,6 +42,10 @@ sf template generate flexipage \
   --detail-fields <Field4,Field5,Field6,Field7> \
   --output-dir force-app/main/default/flexipages
 ```
+
+**Field Selection Guidelines:**
+- **Validate fields exist**: Use MCP tools or describe commands to discover available fields for the object before specifying them in the command
+- **Prefer compound fields**: Use `Name` (not `FirstName`/`LastName`), `BillingAddress` (not `BillingStreet`/`BillingCity`/`BillingState`), `MailingAddress`, etc. when available
 
 **Template-specific requirements:**
 - **RecordPage**: Requires `--sobject` (e.g., Account, Custom_Object__c)
@@ -474,7 +482,7 @@ Identifier Pattern: flexipage_richText or flexipage_richText_{sequence}
 ## Validation Checklist
 
 Before deploying:
-- [ ] Used CLI to bootstrap (don't start from scratch)
+- [ ] **[NEW PAGES ONLY]** Used CLI to bootstrap - NEVER create FlexiPage XML from scratch
 - [ ] **ALL identifiers are unique** - no duplicate `<identifier>` values anywhere in file
 - [ ] **ALL region/facet names are unique** - no duplicate `<name>` values in `<flexiPageRegions>`
 - [ ] **Multiple components in same facet are combined** - ONE region with multiple `<itemInstances>`, NOT separate regions with same name
