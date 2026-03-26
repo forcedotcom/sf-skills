@@ -10,8 +10,10 @@ import {
 } from "@/hooks/usePropertyPrimaryImages";
 import { usePropertyAddresses } from "@/hooks/usePropertyAddresses";
 import { usePropertyListingAmenities } from "@/hooks/usePropertyListingAmenities";
-import PropertyListingCard, { PropertyListingCardSkeleton } from "@/components/PropertyListingCard";
-import type { SearchResultRecord } from "@/features/global-search/types/search/searchResults.js";
+import PropertyListingCard, {
+	PropertyListingCardSkeleton,
+} from "@/components/properties/PropertyListingCard";
+import type { SearchResultRecord } from "@/types/searchResults.js";
 import { createNewsletterLead } from "@/api/leadApi";
 import {
 	Phone,

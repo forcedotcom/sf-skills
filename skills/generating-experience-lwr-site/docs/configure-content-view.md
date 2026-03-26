@@ -49,7 +49,7 @@ The `_meta.json` file must contain:
 
 ### Theme Layout Type (All Views)
 
-The `contentBody.themeLayoutType` field specifies which theme layout to use for the view.
+The `contentBody.themeLayoutType` field specifies which theme layout to use for the view. There can only be one per view.
 
 - **Default**: `"Inner"` - Use this default if the user does not specify a layout OR if the lookup fails to find a matching layoutType
 - **Lookup**: To find valid values:
@@ -126,7 +126,7 @@ The route's `activeViewId` must match the view's directory name exactly.
 - [ ] Directory and `_meta.json` follow structure (see Directory Structure, _meta.json Structure)
 - [ ] `content.json` has all required fields (A.1)
 - [ ] Component structure correct with both regions (A.1)
-- [ ] **CRITICAL**: Complete all the UUID generation steps. see `docs/handle-component-and-region-ids.md`
+- [ ] **CRITICAL**: Complete all the UUID generation steps. see [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md)
 - [ ] `viewType` matches route's `routeType` (CRITICAL)
 
 ### PART B: OBJECT PAGES
@@ -218,7 +218,7 @@ The route's `activeViewId` must match the view's directory name exactly. The `vi
 - [ ] `viewType` matches route's `routeType` for all three views (CRITICAL)
 - [ ] Component structure correct with both regions (see A.1)
 - [ ] SEO assistant configured correctly per view type (B.4)
-- [ ] **CRITICAL**: Complete both UUID generation steps. see `docs/handle-component-and-region-ids.md`
+- [ ] **CRITICAL**: Complete both UUID generation steps. see [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md)
 
 ## Purpose B: Editing Existing Views
 

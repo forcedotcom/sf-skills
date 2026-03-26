@@ -5,10 +5,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar, ArrowRight } from "lucide-react";
-import MaintenanceRequestList from "@/components/MaintenanceRequestList";
+import MaintenanceRequestList from "@/components/maintenanceRequests/MaintenanceRequestList";
 import { SkeletonListRows, SkeletonField } from "@/components/SkeletonPrimitives";
 import { useMaintenanceRequests } from "@/hooks/useMaintenanceRequests";
-import { createMaintenanceRequest } from "@/api/maintenanceRequestApi";
+import { createMaintenanceRequest } from "@/api/maintenanceRequests/maintenanceRequestApi";
 import { useAuth } from "@/features/authentication/context/AuthContext";
 
 const TYPE_OPTIONS = [

@@ -7,6 +7,11 @@ description: "Creates, modifies, or manages Salesforce Experience Cloud LWR site
 
 Build and configure Salesforce Experience Cloud Lightning Web Runtime (LWR) sites via metadata (DigitalExperienceConfig, DigitalExperienceBundle, Network, CustomSite, CMS contents).
 
+## IMPORTANT!!
+
+Right after loading this skill, you MUST copy the selected workflows/steps to your plan as a TODO checklist and work on each of the item carefully to ensure correctness.
+You MUST load the relevant reference docs even though they may live outside of user's project folder.
+
 ## Table of Contents
 
 - When to Use
@@ -33,8 +38,8 @@ When working with Experience LWR sites:
 ## Critical Rules
 
 1. Before using any MCP tool, make sure they're actually available. If a tool is missing for the current task, let the user know and pause the current workflow.
-2. **ALWAYS** load the relevant reference docs before doing anything.
-3. **ALWAYS** strictly follow workflows in [Common Workflows](#common-workflows) that match user's requirements. The instructions there should override any conflicting global rules and should have the highest priority over your existing knowledge.
+2. **MUST ALWAYS** load the relevant reference docs before doing anything.
+3. **MUST ALWAYS** strictly follow workflows in [Common Workflows](#common-workflows) that match user's requirements. The instructions there should override any conflicting global rules and should have the highest priority over your existing knowledge.
 4. Flexipage is abstracted away for newer LWR sites with DigitalExperienceBundle, so **NEVER** use any Flexipage-related MCP tool or skills to handle LWR sites' contents.
 
 ## Core Site Properties
@@ -71,7 +76,7 @@ Before doing anything else, note down the following properties from the local pr
 | `sfdc_cms__appPage` | Application page container that groups routes and views | Required; defines the app shell |
 | `sfdc_cms__route` | URL routing definition mapping paths to views | Create one for each page/URL path |
 | `sfdc_cms__view` | Page layout and component structure | Create one for each route; defines page content. Also use to edit existing views (e.g., adding/removing components on a specific page) |
-| `sfdc_cms__brandingSet` | Brand colors, fonts, and styling tokens | Required; defines site-wide styling |
+| `sfdc_cms__brandingSet` | Brand colors, fonts, and styling tokens | Required; defines site-wide styling. Use to create or edit existing branding sets |
 | `sfdc_cms__languageSettings` | Language and localization configuration | Required; defines supported languages |
 | `sfdc_cms__mobilePublisherConfig` | Mobile app publishing settings | Required for mobile app deployment |
 | `sfdc_cms__theme` | Theme definition referencing layouts and branding | Required; one per site |
@@ -79,9 +84,14 @@ Before doing anything else, note down the following properties from the local pr
 
 **Important:** Creating any new pages require BOTH `sfdc_cms__route` AND `sfdc_cms__view`.
 
+#### Object Pages
+
+Object Pages are dedicated pages used to display and manage record-level data for a specific Salesforce entity/object. For example, an custom object "Car" should have "Car_Detail", "Car_List", and "Car_Related_list" views.
+
 ## References
 
 Reference docs within the skill directory. Note that these are **local** and not MCP.
+Before doing anything, you **MUST ALWAYS** load them first if they match user intent.
 
 - [bootstrap-template-byo-lwr.md](docs/bootstrap-template-byo-lwr.md) - Site creation, template defaults
 - [configure-content-route.md](docs/configure-content-route.md) - Route creation (custom/object pages)
@@ -111,32 +121,46 @@ Reference docs within the skill directory. Note that these are **local** and not
 
 **Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
 
-- [ ] Load [configure-content-route.md](docs/configure-content-route.md)
-- [ ] Load [configure-content-view.md](docs/configure-content-view.md)
-- [ ] Load [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md)
-- [ ] Follow the instructions of the above docs strictly to accomplish user's goal
+- [ ] MUST read [configure-content-route.md](docs/configure-content-route.md)
+- [ ] MUST read [configure-content-view.md](docs/configure-content-view.md)
+- [ ] MUST read [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md)
 
 ### Adding UI Components to Pages
 
 **Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
 
-- [ ] Read and follow [handle-ui-components.md](docs/handle-ui-components.md) to add LWCs to LWR sites.
-- [ ] Load and follow [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) to handle id generation
-- [ ] Read and follow [configure-content-themeLayout.md](docs/configure-content-themeLayout.md) if a component has one of the following requirements:
+- [ ] MUST read [handle-ui-components.md](docs/handle-ui-components.md) to add LWCs to LWR sites.
+- [ ] MUST read [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) to handle id generation
+- [ ] MUST read [configure-content-themeLayout.md](docs/configure-content-themeLayout.md) if a component has one of the following requirements:
   - needs to be "sticky" and persistent across pages
   - is used as a theme layout
+
+### Creating Page Layouts / Container Components
+
+**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
+
+- [ ] MUST read [handle-ui-components.md](docs/handle-ui-components.md)
 
 ### Creating Theme Layouts
 
 **Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
 
-- [ ] Read and follow strictly [configure-content-themeLayout.md](docs/configure-content-themeLayout.md).
+- [ ] Check with user whether this new theme layout reuses an existing theme layout component or requires a new one.
+- [ ] MUST read [handle-ui-components.md](docs/handle-ui-components.md) if creating a new theme layout component.
+- [ ] MUST read [configure-content-themeLayout.md](docs/configure-content-themeLayout.md).
+- [ ] MUST read [configure-content-view.md](docs/configure-content-view.md) if need to apply theme layout to pages
+
+### Applying/Setting Theme Layouts
+
+**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
+
+- [ ] MUST read [configure-content-view.md](docs/configure-content-view.md)
 
 ### Configuring Branding
 
 **Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
 
-- [ ] Read and follow strictly [configure-content-brandingSet.md](docs/configure-content-brandingSet.md) to configure background colors, foreground colors, button colors, and other branding colors that affect all pages.
+- [ ] MUST read [configure-content-brandingSet.md](docs/configure-content-brandingSet.md) to configure background colors, foreground colors, button colors, and other branding colors that affect all pages.
 
 ### CUD Operations on DigitalExperience Contents
 
@@ -145,8 +169,8 @@ Reference docs within the skill directory. Note that these are **local** and not
 **Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
 
 - [ ] Determine what content types the user wants to modify
-- [ ] Read and follow strictly the reference doc related to the target content types if the doc exists. e.g., if modifying `sfdc_cms__route`, load [configure-content-route.md](docs/configure-content-route.md).
-- [ ] **Always** Read [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) if creating or modifying view or theme layout
+- [ ] MUST read the reference doc related to the target content types if the doc exists. e.g., if modifying `sfdc_cms__route`, load [configure-content-route.md](docs/configure-content-route.md).
+- [ ] MUST read [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) if creating or modifying view or theme layout
 - [ ] **Always** Call `execute_metadata_action` to get the schema and examples for that content type **after** loading the corresponding reference docs.
   - **Call once per content type per user request**: If you're creating/modifying multiple items of the same content type (e.g., creating 3 routes), you only need to call `execute_metadata_action` ONCE for that content type. Reuse the schema and examples for all items of that type within the same user request.
   - For each unique content type you need to work with, **always** call `execute_metadata_action` using the following:
@@ -162,9 +186,11 @@ Reference docs within the skill directory. Note that these are **local** and not
 }
 ```
 
-### Retrieving Site URLs After Deployment
+### Retrieving Site Preview and Builder URLs After Deployment
 
-After successfully deploying the site using `sf project deploy`, use the `execute_metadata_action` MCP tool to get the preview and builder URLs:
+**Use when** user requests to preview a site, access a builder site, or after successfully deploying a site.
+
+Use the `execute_metadata_action` MCP tool to get the preview and builder URLs:
 
 ```json
 {

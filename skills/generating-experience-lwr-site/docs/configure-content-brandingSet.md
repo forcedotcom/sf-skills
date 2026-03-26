@@ -6,6 +6,7 @@
 
 - Core Principles
 - Generation Guidelines
+- Editing Existing Branding Sets
 - Branding Property Patterns
 
 ## Core Principles
@@ -58,7 +59,11 @@ The `content.json` file must contain:
 - `title`: **Required**. Human-readable display title (e.g., Branding Set).
   - Maximum length is **100 characters**.
   - Must be **unique** within the space's brandingSet content items.
-- `contentBody`: Include all `required` properties from `schemaDefinition`. Use `examplesOfContentType` for reference.
+- `contentBody`: Include all `required` properties from `schemaDefinition`. 
+  1. **Seed**: Always call `execute_metadata_action` with `shouldIncludeExamples: true`. Copy the *entire* example object from `examplesOfContentType[0]` into `content.json`. **NEVER** start from a minimal stub.
+  2. **Recalculate (CRITICAL STOP)**: You MUST stop and perform explicit changes for dependent tokens BEFORE generating JSON.
+    - [] Refer to "Branding Property Patterns" for detailed calculations.
+
   - `brandingSetType`: Represents whether the color palette is for the entire site or a specific section.
     - `APP`: The branding set applies to the entire site. There can be only one branding set of this type.
     - `SCOPED`: A `SCOPED` branding set can be applied only to a section component for granular overrides.
@@ -70,10 +75,6 @@ The `content.json` file must contain:
     - **Patterns**: See the "Branding Property Patterns" section for details on value relationships.
 - `urlName`: Lowercase with hyphens (e.g., `branding-set`)
 
-**Rules**:
-
-- Before any actions, *always* call `execute_metadata_action` to get the full schema and examples per the skill document.
-
 ### 4. Naming Conventions Summary
 
 | Field | Format | Example |
@@ -84,9 +85,18 @@ The `content.json` file must contain:
 
 ### 5. Generation Checklist
 
-- [ ] Directory and `_meta.json` follow naming conventions (1, 2)
-- [ ] `content.json` has all required fields (3)
+- [ ] Directory and `_meta.json` follow naming conventions
+- [ ] `content.json` has all required fields
 - [ ] `contentBody` follows the schema provided by `execute_metadata_action`
+- [ ] **STOP AND VERIFY**: `contentBody.values` honors all **Branding Property Patterns** defined below and explicitly recalculated and updated all dependent tokens based on any token updates requested by the user.
+
+## Editing Existing Branding Sets
+
+Use this section when modifying existing branding sets under the `sfdc_cms__brandingSet` directory.
+
+### Editing Checklist
+
+- [ ] Ensure all modified branding properties honor the **Branding Property Patterns** defined below.
 
 ## Branding Property Patterns
 

@@ -10,9 +10,9 @@ import {
 	fetchListingById,
 	fetchPropertyById,
 	fetchPrimaryImagesByPropertyIds,
-} from "@/api/propertyDetailGraphQL";
-import { createApplicationRecord } from "@/api/applicationApi";
-import { useAuth } from "../features/authentication/context/AuthContext";
+} from "@/api/properties/propertyDetailGraphQL";
+import { createApplicationRecord } from "@/api/applications/applicationApi";
+import { useAuth } from "@/features/authentication/context/AuthContext";
 import { fetchUserContact } from "../features/authentication/api/userProfileApi";
 
 function ApplicationSkeleton() {

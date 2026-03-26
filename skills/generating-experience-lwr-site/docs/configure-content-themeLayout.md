@@ -72,6 +72,7 @@ The `content.json` file must contain:
 - `contentBody`: Include all `required` properties from `schemaDefinition`. Use `examplesOfContentType` for reference.
 - Do not add additional fields.
 - `urlName`: URL identifier (lowercase, words separated by dashes e.g., "scoped-header-and-footer")
+- `contentBody.compnent.definition`: The actual theme layout component that displays/renders the layout and includes theme region components.
 
 **Rules**:
 
@@ -130,7 +131,7 @@ When generating a new theme layout, ensure:
 - [ ] `urlName` uses lowercase with hyphens (V)
 - [ ] `title` is human-readable (V)
 - [ ] `sfdc_cms__theme/[THEME_API_NAME]/content.json` updated by appending a new `contentBody.layouts` mapping (VI)
-- [ ] **CRITICAL**: Complete all the UUID generation steps. See `docs/handle-component-and-region-ids.md`
+- [ ] **CRITICAL**: Complete all the UUID generation steps. See [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md)
 
 ## Purpose B: Editing Existing Theme Layouts
 

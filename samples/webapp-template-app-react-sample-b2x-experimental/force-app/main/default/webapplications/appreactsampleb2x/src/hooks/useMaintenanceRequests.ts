@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from "react";
 import {
 	queryMaintenanceRequests,
 	type MaintenanceRequestSummary,
-} from "@/api/maintenanceRequestApi";
+} from "@/api/maintenanceRequests/maintenanceRequestApi";
 
 export function useMaintenanceRequests(): {
 	requests: MaintenanceRequestSummary[];

@@ -3,8 +3,8 @@
  * Returns a map of propertyId -> imageUrl for use in listing cards.
  */
 import { useState, useEffect } from "react";
-import { fetchPrimaryImagesByPropertyIds } from "@/api/propertyDetailGraphQL";
-import type { SearchResultRecord } from "@/features/global-search/types/search/searchResults.js";
+import { fetchPrimaryImagesByPropertyIds } from "@/api/properties/propertyDetailGraphQL";
+import type { SearchResultRecord } from "@/types/searchResults.js";
 
 export function getPropertyIdFromRecord(record: {
 	fields?: Record<string, { value?: unknown }>;

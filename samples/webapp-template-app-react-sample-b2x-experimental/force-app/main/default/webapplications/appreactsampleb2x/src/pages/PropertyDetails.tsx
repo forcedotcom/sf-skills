@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import PropertyMap from "@/components/PropertyMap";
+import PropertyMap from "@/components/properties/PropertyMap";
 import { usePropertyDetail } from "@/hooks/usePropertyDetail";
 import { useGeocode } from "@/hooks/useGeocode";
 

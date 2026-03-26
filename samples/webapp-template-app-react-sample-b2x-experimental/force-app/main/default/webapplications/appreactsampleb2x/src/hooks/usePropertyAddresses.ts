@@ -3,9 +3,9 @@
  * Returns propertyId -> address for display on listing cards.
  */
 import { useState, useEffect } from "react";
-import { fetchPropertyAddresses } from "@/api/propertyDetailGraphQL";
+import { fetchPropertyAddresses } from "@/api/properties/propertyDetailGraphQL";
 import { getPropertyIdFromRecord } from "@/hooks/usePropertyPrimaryImages";
-import type { SearchResultRecord } from "@/features/global-search/types/search/searchResults.js";
+import type { SearchResultRecord } from "@/types/searchResults.js";
 
 export function usePropertyAddresses(
 	results: SearchResultRecord[],

@@ -3,9 +3,9 @@
  * Returns a map of propertyId -> "Amenity 1 | Amenity 2 | ..." for use in listing cards.
  */
 import { useState, useEffect } from "react";
-import { fetchFeaturesByPropertyId } from "@/api/propertyDetailGraphQL";
+import { fetchFeaturesByPropertyId } from "@/api/properties/propertyDetailGraphQL";
 import { getPropertyIdFromRecord } from "@/hooks/usePropertyPrimaryImages";
-import type { SearchResultRecord } from "@/features/global-search/types/search/searchResults.js";
+import type { SearchResultRecord } from "@/types/searchResults.js";
 
 const AMENITIES_SEPARATOR = " | ";
 

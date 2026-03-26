@@ -5,8 +5,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import {
 	queryPropertyListingsGraphQL,
 	type PropertyListingFilters,
-} from "@/api/propertyListingGraphQL";
-import type { SearchResultRecord } from "@/features/global-search/types/search/searchResults.js";
+} from "@/api/properties/propertyListingGraphQL";
+import type { SearchResultRecord } from "@/types/searchResults.js";
 
 export function usePropertyListingSearch(
 	searchQuery: string,

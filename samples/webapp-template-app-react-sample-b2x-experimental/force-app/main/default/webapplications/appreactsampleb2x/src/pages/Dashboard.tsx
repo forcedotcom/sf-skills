@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router";
-import MaintenanceRequestList from "@/components/MaintenanceRequestList";
-import { WeatherWidget } from "@/components/WeatherWidget";
+import MaintenanceRequestList from "@/components/maintenanceRequests/MaintenanceRequestList";
+import { WeatherWidget } from "@/components/dashboard/WeatherWidget";
 import { useMaintenanceRequests } from "@/hooks/useMaintenanceRequests";
 
 export default function Dashboard() {

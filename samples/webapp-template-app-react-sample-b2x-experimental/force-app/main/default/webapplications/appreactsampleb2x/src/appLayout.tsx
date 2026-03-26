@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Outlet } from "react-router";
-import { TopBar } from "@/components/TopBar";
-import { NavMenu } from "@/components/NavMenu";
+import { TopBar } from "@/components/layout/TopBar";
+import { NavMenu } from "@/components/layout/VerticalNav";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function AppLayout() {
 	const [isNavOpen, setIsNavOpen] = useState(false);
 
 	return (
 		<div className="flex flex-col">
+			<Toaster />
 			<TopBar onMenuClick={() => setIsNavOpen(true)} />
 
 			<div className="flex flex-1 overflow-hidden">

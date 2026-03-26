@@ -1,3 +1,13 @@
+# [1.5.0](https://github.com/forcedotcom/afv-library/compare/1.4.0...1.5.0) (2026-03-24)
+
+
+### Features
+
+* sync React B2E (1.112.7) & B2X (1.112.7) samples from npm @W-21361802@ ([#98](https://github.com/forcedotcom/afv-library/issues/98)) ([2e1cdf8](https://github.com/forcedotcom/afv-library/commit/2e1cdf8131a458bc40ecaf184ca410c79abafb8d))
+* **validate-skills:** require js-yaml-parsable SKILL frontmatter @W-21338965@ ([#91](https://github.com/forcedotcom/afv-library/issues/91)) ([37ab252](https://github.com/forcedotcom/afv-library/commit/37ab25279ed8596827c297b2973d751d8c3398c4))
+
+
+
 # [1.4.0](https://github.com/forcedotcom/afv-library/compare/1.3.0...1.4.0) (2026-03-23)
 
 

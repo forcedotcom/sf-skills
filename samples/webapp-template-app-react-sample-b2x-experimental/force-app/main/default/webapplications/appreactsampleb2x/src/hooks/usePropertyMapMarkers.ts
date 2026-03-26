@@ -3,11 +3,11 @@
  * and returns map markers (one pin per property in the current window).
  */
 import { useState, useEffect } from "react";
-import { fetchPropertyAddresses } from "@/api/propertyDetailGraphQL";
+import { fetchPropertyAddresses } from "@/api/properties/propertyDetailGraphQL";
 import { geocodeAddress, getStateZipFromAddress } from "@/utils/geocode";
 import { getPropertyIdFromRecord } from "@/hooks/usePropertyPrimaryImages";
-import type { SearchResultRecord } from "@/features/global-search/types/search/searchResults.js";
-import type { MapMarker } from "@/components/PropertyMap";
+import type { SearchResultRecord } from "@/types/searchResults.js";
+import type { MapMarker } from "@/components/properties/PropertyMap";
 
 function getListingName(record: {
 	fields?: Record<string, { value?: unknown; displayValue?: string | null }>;

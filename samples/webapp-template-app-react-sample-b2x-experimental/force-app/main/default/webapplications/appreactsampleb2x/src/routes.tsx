@@ -1,10 +1,8 @@
 import type { RouteObject } from 'react-router';
 import Home from '@/pages/Home';
 import NotFound from '@/pages/NotFound';
-import GlobalSearch from "./features/global-search/pages/GlobalSearch";
-import DetailPage from "./features/global-search/pages/DetailPage";
-import { Suspense } from "react";
-import LoadingFallback from "./features/global-search/components/shared/LoadingFallback";
+import AccountSearch from "./features/object-search/__examples__/pages/AccountSearch";
+import AccountObjectDetail from "./features/object-search/__examples__/pages/AccountObjectDetailPage";
 import Login from "./features/authentication/pages/Login";
 import Register from "./features/authentication/pages/Register";
 import ForgotPassword from "./features/authentication/pages/ForgotPassword";
@@ -37,22 +35,12 @@ export const routes: RouteObject[] = [
         element: <NotFound />
       },
       {
-        path: "global-search/:query",
-        element: (
-					<Suspense fallback={<LoadingFallback />}>
-						<GlobalSearch />
-					</Suspense>
-				),
-        handle: { showInNavigation: false }
+        path: "accounts/:recordId",
+        element: <AccountObjectDetail />
       },
       {
-        path: "object/:objectApiName/:recordId",
-        element: (
-					<Suspense fallback={<LoadingFallback />}>
-						<DetailPage />
-					</Suspense>
-				),
-        handle: { showInNavigation: false }
+        path: "accounts",
+        element: <AccountSearch />
       },
       {
         element: <AuthenticationRoute />,

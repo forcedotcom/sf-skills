@@ -4,7 +4,7 @@
  */
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router";
-import { DEFAULT_PAGE_SIZE } from "@/features/global-search/constants";
+import { DEFAULT_PAGE_SIZE } from "@/constants/propertyListing";
 import { usePropertyListingSearch } from "@/hooks/usePropertyListingSearch";
 import {
 	usePropertyPrimaryImages,
@@ -13,17 +13,19 @@ import {
 import { usePropertyAddresses } from "@/hooks/usePropertyAddresses";
 import { usePropertyListingAmenities } from "@/hooks/usePropertyListingAmenities";
 import { usePropertyMapMarkers } from "@/hooks/usePropertyMapMarkers";
-import SearchPagination from "@/features/global-search/components/search/SearchPagination";
-import PropertyListingCard, { PropertyListingCardSkeleton } from "@/components/PropertyListingCard";
+import PropertyListingSearchPagination from "@/components/properties/PropertyListingSearchPagination";
+import PropertyListingCard, {
+	PropertyListingCardSkeleton,
+} from "@/components/properties/PropertyListingCard";
 import PropertySearchFilters, {
 	type BedroomFilter,
 	type SortBy,
-} from "@/components/PropertySearchFilters";
-import PropertyMap from "@/components/PropertyMap";
-import type { MapMarker, MapBounds } from "@/components/PropertyMap";
+} from "@/components/properties/PropertySearchFilters";
+import PropertyMap from "@/components/properties/PropertyMap";
+import type { MapMarker, MapBounds } from "@/components/properties/PropertyMap";
 import PropertySearchPlaceholder from "@/pages/PropertySearchPlaceholder";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { SearchResultRecord } from "@/features/global-search/types/search/searchResults.js";
+import type { SearchResultRecord } from "@/types/searchResults.js";
 
 /** Fallback map center when there are no geocoded markers yet. Zoom 7 ≈ 100-mile radius view. */
 const MAP_CENTER_FALLBACK: [number, number] = [37.7897484, -122.3998086];
@@ -267,7 +269,7 @@ export default function PropertySearch() {
 							{searchQuery.trim() ? ` matching "${searchQuery.trim()}"` : ""}
 						</h2>
 						<div className="flex flex-wrap items-center gap-2">
-							<p className="text-sm text-muted-foreground">
+							<div className="text-sm text-muted-foreground">
 								{apiUnavailable ? (
 									"Placeholder (API unavailable)"
 								) : resultsLoading ? (
@@ -277,7 +279,7 @@ export default function PropertySearch() {
 								) : (
 									`${sortedResults.length} result(s)`
 								)}
-							</p>
+							</div>
 							{mapBounds != null && sortedResults.length > 0 && !resultsLoading && (
 								<button
 									type="button"
@@ -345,7 +347,7 @@ export default function PropertySearch() {
 									})}
 								</ul>
 								<div className="mt-4">
-									<SearchPagination
+									<PropertyListingSearchPagination
 										currentPageToken={currentPageToken}
 										nextPageToken={nextPageToken}
 										previousPageToken={previousPageToken}

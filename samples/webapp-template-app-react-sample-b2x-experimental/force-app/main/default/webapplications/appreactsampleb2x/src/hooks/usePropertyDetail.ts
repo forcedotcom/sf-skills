@@ -13,7 +13,7 @@ import {
 	type PropertyImageRecord,
 	type PropertyCostRecord,
 	type PropertyFeatureRecord,
-} from "@/api/propertyDetailGraphQL";
+} from "@/api/properties/propertyDetailGraphQL";
 
 export interface PropertyDetailState {
 	listing: ListingDetail | null;
