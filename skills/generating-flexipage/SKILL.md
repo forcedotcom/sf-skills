@@ -43,23 +43,22 @@ sf template generate flexipage \
   --output-dir force-app/main/default/flexipages
 ```
 
-**Field Selection Guidelines:**
-- **Validate fields exist**: Use MCP tools or describe commands to discover available fields for the object before specifying them in the command
-- **Prefer compound fields**: Use `Name` (not `FirstName`/`LastName`), `BillingAddress` (not `BillingStreet`/`BillingCity`/`BillingState`), `MailingAddress`, etc. when available
-
-**Template-specific requirements:**
-- **RecordPage**: Requires `--sobject` (e.g., Account, Custom_Object__c)
-- **RecordPage**: Requires `--primary-field` and `--secondary-fields` for dynamic highlights, `--detail-fields` for full record details. Use the most important identifying field as primary, e.g. Name. Use the secondary fields (max 12, recommended 4-6) to show a summary of the record. Use detail fields to show the full details of the record.
-- **AppPage**: No additional requirements
-- **HomePage**: No additional requirements
-
 **Note:** If the `sf template generate flexipage` command fails, recommend users upgrade to the latest version of the Salesforce CLI:
 ```bash
 npm install -g @salesforce/cli@latest
 ```
 
+#### **Field Selection Guidelines**
+- **Validate fields exist**: Use MCP tools or describe commands to discover available fields for the object before specifying them in the command
+- **Prefer compound fields**: Use `Name` (not `FirstName`/`LastName`), `BillingAddress` (not `BillingStreet`/`BillingCity`/`BillingState`), `MailingAddress`, etc. when available
 
-**What you get:**
+#### **Template-specific requirements**
+- **RecordPage**: Requires `--sobject` (e.g., Account, Custom_Object__c)
+- **RecordPage**: Requires `--primary-field` and `--secondary-fields` for dynamic highlights, `--detail-fields` for full record details. Use the most important identifying field as primary, e.g. Name. Use the secondary fields (max 12, recommended 4-6) to show a summary of the record. Use detail fields to show the full details of the record.
+- **AppPage**: No additional requirements
+- **HomePage**: No additional requirements
+
+#### **What you get**
 - Valid FlexiPage XML with correct structure
 - Pre-configured regions and basic components
 - Proper field references and facet structure
@@ -67,17 +66,31 @@ npm install -g @salesforce/cli@latest
 
 ### Step 2: Deploy Base Page
 
+Run a **dry-run** deployment of the entire project to validate the page and dependencies:
 ```bash
-sf project deploy start --source-dir force-app/main/default/flexipages
+sf project deploy start --dry-run -d "force-app/main/default" --test-level NoTestRun --wait 10 --json
 ```
 
-**Deploy early, deploy often.** Start with the bootstrapped page, validate it works, then enhance.
+**Critical:** Fix any deployment errors before proceeding. The page must validate successfully.
 
-### Step 3: Update and Redeploy
+### Step 3: **STOP - No Further Modifications**
 
-Modify the generated XML, adding components discovered via MCP. Deploy incrementally.
+**MANDATORY: Stop after Step 2. Do not add components or edit the FlexiPage XML.**
 
-**Note:** Warn users to use caution with updates beyond this step when using this command.
+This applies even if the user requested:
+- Additional components
+- Page customization
+- Component configuration
+
+What you CAN do:
+- Suggest what components would be useful
+- Explain what enhancements are possible
+- Document what would need to be added manually
+
+What you CANNOT do:
+- Modify the XML file
+- Add any components
+- Make any enhancements
 
 ---
 
@@ -223,6 +236,10 @@ Every fieldInstance requires:
 
 ## Common Deployment Errors
 
+### "We couldn't retrieve or load the information on the field"
+**Cause:** Invalid field API name - field doesn't exist on the object or has incorrect spelling
+**Fix:** Use MCP tools or describe commands to discover valid fields, then update the field reference (see Field Selection Guidelines)
+
 ### "Invalid field reference"
 **Cause:** Used `ObjectName.Field` instead of `Record.Field`  
 **Fix:** Change to `Record.{FieldApiName}`
@@ -250,49 +267,6 @@ Every fieldInstance requires:
 ### "Region specifies mode that parent doesn't support"
 **Cause:** Added `<mode>` tag to region
 **Fix:** Remove `<mode>` tags - they're not needed for standard regions
-
----
-
-## Incremental Development Pattern
-
-**Philosophy:** Deploy small, working increments. Don't build entire complex page at once.
-
-**Process:**
-1. **CLI bootstrap** → Deploy base page
-2. **Add one component** → Deploy
-3. **Add another component** → Deploy
-4. **Repeat** until complete
-
-**Benefits:**
-- Isolated errors (know exactly what broke)
-- Faster debugging
-- Build confidence with each success
-- Get user feedback early
-
-**Anti-pattern:** Building entire complex page → one giant error cascade.
-
----
-
-## Adding Components to Existing FlexiPages
-
-### Workflow
-
-When user provides an existing FlexiPage file path:
-
-1. **Read the file** using native file I/O
-2. **Parse XML** to extract:
-   - **ALL existing component identifiers** (search for all `<identifier>` tags)
-   - **ALL existing region/facet names** (search for all `<name>` tags in `<flexiPageRegions>`)
-   - Available regions (parse from file, don't assume names)
-   - Existing facets
-3. **Verify uniqueness** - ensure your new identifiers and names don't conflict with ANY existing ones
-4. **Check if target facet exists** - if adding to a named facet like `detailTabContent` that already exists:
-   - **Add new `<itemInstances>` to existing region** (don't create duplicate region)
-   - **Insert before the closing `</flexiPageRegions>` tag of that region**
-5. **Generate component XML** (apply all rules from "Critical XML Rules" section)
-6. **Insert** into appropriate region or add itemInstances to existing facet
-7. **Write** modified XML back to file
-8. **Deploy**: `sf project deploy start --source-dir force-app/...`
 
 ---
 
