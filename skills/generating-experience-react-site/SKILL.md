@@ -51,6 +51,17 @@ Use the default templates in the docs below. Values in `{braces}` are resolved p
 | DigitalExperienceBundle | [configure-metadata-digital-experience-bundle.md](docs/configure-metadata-digital-experience-bundle.md) |
 | DigitalExperience (sfdc_cms__site) | [configure-metadata-digital-experience.md](docs/configure-metadata-digital-experience.md) |
 
+### Execution Note for Step 3: Load and use the docs
+- Agents MUST read the full contents of each docs/*.md file referenced in Step 3 before attempting to populate metadata fields.
+- Use your platform's file-read tool (for example, `read_file`) to load these files in full, then perform placeholder substitution for values in `{braces}` using the resolved properties from Step 1.
+- Files to load:
+  - `docs/configure-metadata-network.md`
+  - `docs/configure-metadata-custom-site.md`
+  - `docs/configure-metadata-digital-experience-config.md`
+  - `docs/configure-metadata-digital-experience-bundle.md`
+  - `docs/configure-metadata-digital-experience.md`
+- Read entire file contents, replace placeholders (e.g. `{siteName}`) with the resolved values, then use the expanded templates to populate the metadata XML/JSON content.
+  
 ### Step 4: Resolve Additional Configurations
 Address any extra configurations the user requests. Use the schemas returned by `get_metadata_api_context` in Step 2 to understand each field's purpose, and update only the minimum necessary fields.
 
