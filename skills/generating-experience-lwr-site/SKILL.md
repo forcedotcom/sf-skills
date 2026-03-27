@@ -213,10 +213,16 @@ Use `sf` CLI to validate and deploy. Access help docs by attaching `--help`, e.g
 - `sf project deploy --help`
 - `sf project deploy validate --help`
 
-Note that metadata types are space-delimited.
+Note that metadata types are space-delimited. **Never** wrap them in quotes or use commas. For example, `--metadata "DigitalExperienceBundle DigitalExperience"` is **incorrect** — always use `--metadata DigitalExperienceBundle DigitalExperience`.
 
 **Validate**:
-`sf project deploy validate --metadata DigitalExperienceBundle DigitalExperience DigitalExperienceConfig Network CustomSite --target-org ${usernameOrAlias}`
+
+```bash
+sf project deploy validate --metadata DigitalExperienceBundle DigitalExperience DigitalExperienceConfig Network CustomSite --target-org ${usernameOrAlias}
+```
 
 **Deploy**:
-`sf project deploy start --metadata DigitalExperienceBundle DigitalExperience DigitalExperienceConfig Network CustomSite --target-org ${usernameOrAlias}`
+
+```bash
+sf project deploy start --metadata DigitalExperienceBundle DigitalExperience DigitalExperienceConfig Network CustomSite --target-org ${usernameOrAlias}
+```

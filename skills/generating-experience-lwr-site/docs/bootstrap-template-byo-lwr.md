@@ -21,7 +21,7 @@ Ask user to choose:
 **Step 1:** Run the create command:
 
 ```bash
-sf community create --name "{siteName}" --template-name 'Build Your Own (LWR)' --url-path-prefix "{prefix}" --json
+sf community create --name "{siteName}" --template-name 'Build Your Own (LWR)' --url-path-prefix "{prefix}" --target-org {usernameOrAlias} --json
 ```
 
 Site creation is an async job. As soon as the terminal returns output, capture the `jobId` and move on — do not wait for the shell command to fully exit.
@@ -40,9 +40,15 @@ Poll the `BackgroundOperation` object using the following command, replacing `{j
 SELECT Status FROM BackgroundOperation WHERE Id = '{jobId}'
 ```
 
-Use the MCP tool `run_soql_query` to run this query on the given target org. Repeat until `Status` is `Complete`. 
+Use the MCP tool `run_soql_query` to run this query on the given target org. If the MCP tool is not available, run the following command instead, replacing `{jobId}` and `{usernameOrAlias}` with the appropriate values:
 
-Once complete, run each of the following retrieval commands **one at a time**. Do not chain them together (e.g. do not use `&&`). Wait for each command to return output before running the next:
+```bash
+sf data query --query "SELECT Status FROM BackgroundOperation WHERE Id = '{jobId}'" --target-org {usernameOrAlias} --json
+```
+
+Repeat until `Status` is `Complete`. If the query does not return `Complete` after several attempts, ask the user to manually check their target org to confirm whether site creation has completed. **Stop here and do not proceed until the user confirms the site is ready.**
+
+Once complete, run each of the following retrieval commands **one at a time**. Do not chain them together (e.g. do not use `&&`). Wait for each command to return output before running the next. Metadata types are space-delimited — **never** wrap them in quotes or use commas:
 
 ```bash
 sf project retrieve start --metadata DigitalExperienceBundle --target-org {usernameOrAlias} --json
@@ -64,7 +70,7 @@ sf project retrieve start --metadata CustomSite --target-org {usernameOrAlias} -
 
 **If the user wants to retrieve themselves:**
 
-Provide them with the retrieval command to run once the site is ready:
+Provide them with the retrieval command to run once the site is ready. Metadata types are space-delimited — **never** wrap them in quotes or use commas:
 
 ```bash
 sf project retrieve start --metadata DigitalExperienceBundle DigitalExperienceConfig Network CustomSite --target-org {usernameOrAlias} --json
