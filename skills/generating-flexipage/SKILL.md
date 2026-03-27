@@ -48,15 +48,25 @@ sf template generate flexipage \
 npm install -g @salesforce/cli@latest
 ```
 
-#### **Field Selection Guidelines**
+#### **Template-specific requirements**
+
+**RecordPage:**
+- Requires `--sobject` (e.g., Account, Custom_Object__c)
+- Requires field parameters:
+  - `--primary-field`: Most important identifying field (e.g., Name)
+  - `--secondary-fields`: Record summary (recommended 4-6, max 12)
+  - `--detail-fields`: Full record details, including required fields (e.g., Name)
+
+**AppPage:**
+- No additional requirements
+
+**HomePage:**
+- No additional requirements
+
+#### **Field Selection Rules**
 - **Validate fields exist**: Use MCP tools or describe commands to discover available fields for the object before specifying them in the command
 - **Prefer compound fields**: Use `Name` (not `FirstName`/`LastName`), `BillingAddress` (not `BillingStreet`/`BillingCity`/`BillingState`), `MailingAddress`, etc. when available
-
-#### **Template-specific requirements**
-- **RecordPage**: Requires `--sobject` (e.g., Account, Custom_Object__c)
-- **RecordPage**: Requires `--primary-field` and `--secondary-fields` for dynamic highlights, `--detail-fields` for full record details. Use the most important identifying field as primary, e.g. Name. Use the secondary fields (max 12, recommended 4-6) to show a summary of the record. Use detail fields to show the full details of the record.
-- **AppPage**: No additional requirements
-- **HomePage**: No additional requirements
+- **Include required fields in detail-fields**: Always include object required fields (like `Name`) in the `--detail-fields` parameter, even if they're also used in `--primary-field` or `--secondary-fields`
 
 #### **What you get**
 - Valid FlexiPage XML with correct structure
@@ -238,7 +248,7 @@ Every fieldInstance requires:
 
 ### "We couldn't retrieve or load the information on the field"
 **Cause:** Invalid field API name - field doesn't exist on the object or has incorrect spelling
-**Fix:** Use MCP tools or describe commands to discover valid fields, then update the field reference (see Field Selection Guidelines)
+**Fix:** Use MCP tools or describe commands to discover valid fields, then update the field reference (see Field Selection Rules)
 
 ### "Invalid field reference"
 **Cause:** Used `ObjectName.Field` instead of `Record.Field`  

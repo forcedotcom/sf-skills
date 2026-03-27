@@ -1,9 +1,0 @@
----
-name: Compliment Mixer App
-description: Build a playful compliment generator with custom UI, persistence, and recent history.
-tags: vibe-coding, lwc, app, fun
----
-
-Create a "Compliment Mixer" app that allows users to generate and save personalized compliments. Create a custom UI so the user can enter two adjectives that describe a person (e.g., "brilliant", "fearless") and a name (e.g., "Alex"). The app then generates a compliment sentence that combines those words and the name using a random sentence template. The user can save the compliment to Salesforce and view a list of the 5 most recent compliments they've generated.
-
-The code should follow standard Salesforce styling and development best practices and be deployable to a scratch org or sandbox. Keep it fun, readable, and beginner-friendly.
