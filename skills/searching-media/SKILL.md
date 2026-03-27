@@ -152,7 +152,7 @@ After the user selects an option, execute the corresponding search method below.
    - Maximum 10 terms
    - Examples:
      - "luxury apartments" → apartment, villa, penthouse, residence, condo
-     - "company logo" → logo, brand, emblem, corporate logo
+     - "company logo" → logo, emblem, corporate logo
      - "bright room" → _(empty if no concrete nouns)_
 
 3. **Extract taxonomies** — Descriptive qualities, styles, moods, categories
