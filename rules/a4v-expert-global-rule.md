@@ -17,6 +17,17 @@ Enforce: **skill load -> API context -> file generation** for all Salesforce met
 - Search available skills and load the best-matching app-level skill first when the request asks for a Lightning app, end-to-end solution, or a business app spanning multiple metadata types.
 - Search available skills and load the best-matching per-type metadata skill first when the request targets individual metadata components.
 
+## Task Planning and Skill Re-evaluation
+
+Before starting metadata generation, create a short plan with clearly separated, atomic tasks.
+
+- Each task must include `task=<name> selected_skill=<exact-skill-name|none>`.
+- Determine the most appropriate skill before each task.
+- Prefer specialized skills over general skills when both are available.
+- Re-evaluate the selected skill after each task completes.
+- Switch skills when a different skill is better suited.
+- Do not reuse the same skill across unrelated tasks unless it is still the best match.
+
 ## Initial Gate
 
 Never create files or generate metadata before completing skill selection.
@@ -83,6 +94,7 @@ For each metadata type in scope, whether identified by an app-level skill or req
 | Never skip the API context attempt for any type | No schema for those types | Attempt API context for EVERY type |
 | Never write using API context alone without a loaded skill | Missing platform constraints | Stop and ask for guidance when no skill exists |
 | Never write without recorded `mcp_tools` or `mcp=unavailable` | No evidence of MCP gate completion | Record MCP tool usage before any write |
+| Never keep one skill for unrelated tasks | Poor task-skill fit | Re-evaluate and switch skills at each task boundary |
 | Never ask more than 1 clarifying question | Token waste | Max 1 question |
 | Never skip any gate in the loop (skill load, API context, pre-write, checkpoint) | Wrong artifacts | Follow all mandatory gates in the loop (a-e) |
 | Never write with a missing checkpoint | Aware violation | Stop and complete missing step |
