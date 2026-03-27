@@ -1,5 +1,5 @@
 ---
-name: deploying-webapp
+name: deploying-webapplication
 description: "Deploy a Salesforce web application to an org — the full deployment sequence including org authentication, pre-deploy build, metadata deployment, permission set assignment, data import, GraphQL schema fetch, and codegen. Use whenever the user wants to deploy, push to org, assign permission sets, import data, fetch GraphQL schema, run codegen, or set up an org after development. Triggers on: deploy, push to org, deploy metadata, assign permission set, import data, schema fetch, codegen, org auth, authenticate org, build and deploy, post-deploy, org setup."
 ---
 
@@ -11,11 +11,11 @@ The order of operations is critical when deploying to a Salesforce org. This seq
 
 Check if the org is connected. If not, authenticate. All subsequent steps require an authenticated org.
 
-## Step 2: Pre-deploy Webapp Build
+## Step 2: Pre-deploy Web Application Build
 
-Install dependencies and build the webapp to produce `dist/`. Required before deploying web application entities.
+Install dependencies and build the web application to produce `dist/`. Required before deploying web application entities.
 
-Run when: deploying web apps and `dist/` is missing or source has changed.
+Run when: deploying web applications and `dist/` is missing or source has changed.
 
 ## Step 3: Deploy Metadata
 
@@ -47,19 +47,19 @@ Always ask the user before importing or cleaning data.
 
 Run when: schema missing, or metadata/permissions changed since last fetch.
 
-## Step 7: Final Webapp Build
+## Step 7: Final Web Application Build
 
-Build the webapp if not already done in Step 2.
+Build the web application if not already done in Step 2.
 
 ## Summary: Interaction Order
 
 1. Check/authenticate org
-2. Build webapp (if deploying web apps)
+2. Build web application (if deploying web applications)
 3. Deploy metadata
 4. Assign permissions and configure
 5. Import data (if data plan exists, with user confirmation)
 6. Fetch GraphQL schema and run codegen
-7. Build webapp (if needed)
+7. Build web application (if needed)
 
 ## Critical Rules
 
@@ -74,4 +74,4 @@ After every successful metadata deploy:
 
 1. Discover and assign permission sets (or ask the user)
 2. If `data/data-plan.json` exists, ask the user about data import
-3. Re-run schema fetch and codegen from the webapp directory
+3. Re-run schema fetch and codegen from the web application directory
