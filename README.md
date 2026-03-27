@@ -1,16 +1,15 @@
 # Agentforce Vibes Library
 
-AI skills and rules library for Agentforce Vibes development of Salesforce metadata.
+AI skills library for Agentforce Vibes development of Salesforce metadata.
 
 ## 📚 About
 
-This repository curates Salesforce-focused skills and system rules from the wider developer community to accelerate Agentforce Vibes agentic workflows. 
+This repository curates Salesforce-focused skills from the wider developer community to accelerate Agentforce Vibes agentic workflows. 
 
 ## 🗂️ Structure
 
 ```
 afv-library/
-├── rules/                # Single-file guardrails and standards
 ├── skills/               # Directory-based executable workflows
 │   ├── generating-apex/
 │   ├── generating-custom-object/
@@ -19,14 +18,14 @@ afv-library/
 ├── samples/              # Synced sample apps (e.g. from npm)
 │   └── ui-bundle-template-app-react-sample-b2e/
 │   └── ...
-├── scripts/              
+├── scripts/
 │   └── ...
 └── README.md
 ```
 
 ## Manual Usage
 
-Browse the repository and copy/paste any rule or skill directly into Agentforce Vibes or your preferred AI tool.
+Browse the repository and copy/paste any skill directly into Agentforce Vibes or your preferred AI tool.
 
 ## Samples
 
@@ -42,7 +41,7 @@ The GitHub Action runs these same commands and opens a PR only when the npm pack
 
 ## 🛠️ Agent Skills
 
-Agent Skills extend rules by bundling executable workflows, scripts, and reference materials into self-contained directories. Skills follow the open [Agent Skills specification](https://agentskills.io/) and are portable across many agent tools (Cursor, Claude Code, VS Code extensions, etc.).
+Agent Skills are modular capabilities that bundle executable workflows, scripts, and reference materials into self-contained directories. Skills follow the open [Agent Skills specification](https://agentskills.io/) and are portable across many agent tools (Agentforce Vibes, Cursor, Claude Code, etc).
 
 ### Directory Structure
 
