@@ -1,5 +1,5 @@
 ---
-name: generating-webapp-ui
+name: generating-webapplication-ui
 description: "Build and modify React UI for Salesforce web applications — pages, components, layout, navigation, and headers/footers. Use whenever creating or editing TSX/JSX files or making visual/layout changes. Triggers on: add page, add component, header, footer, navigation, layout, styling, Tailwind, shadcn, React component, appLayout."
 ---
 
@@ -61,7 +61,7 @@ Apps run behind dynamic base paths. Router navigation (`<Link to>`, `navigate()`
 
 ### Module Restrictions
 
-React apps must not import Salesforce platform modules like `lightning/*` or `@wire` (LWC-only). For data access, use the `using-webapp-salesforce-data` skill.
+React apps must not import Salesforce platform modules like `lightning/*` or `@wire` (LWC-only). For data access, use the `using-webapplication-salesforce-data` skill.
 
 ---
 
@@ -119,4 +119,4 @@ Ask one question at a time and stop when you have enough context.
 
 ## Verification
 
-Before completing, run lint and build from the webapp directory. Lint must result in 0 errors and build must succeed.
+Before completing, run lint and build from the web application directory. Lint must result in 0 errors and build must succeed.
