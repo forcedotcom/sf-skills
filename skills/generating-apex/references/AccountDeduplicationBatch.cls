@@ -1,9 +1,5 @@
 /**
-<<<<<<< Updated upstream
- * @description Batch Apex class for identifying and flagging duplicate Account records.
-=======
  * Batch Apex class for identifying and flagging duplicate Account records.
->>>>>>> Stashed changes
  *              Compares Accounts by Name and BillingPostalCode to find potential duplicates.
  *              Flags duplicates by setting the Is_Potential_Duplicate__c checkbox.
  *              Implements Database.Stateful to track results across batch chunks.
@@ -30,11 +26,7 @@ public with sharing class AccountDeduplicationBatch implements Database.Batchabl
     // ─── Batchable Interface ─────────────────────────────────────────────
 
     /**
-<<<<<<< Updated upstream
-     * @description Queries all active Accounts that haven't already been flagged
-=======
      * Queries all active Accounts that haven't already been flagged
->>>>>>> Stashed changes
      * @param bc The batch context
      * @return QueryLocator scoped to unflagged active Accounts
      */
@@ -49,11 +41,7 @@ public with sharing class AccountDeduplicationBatch implements Database.Batchabl
     }
 
     /**
-<<<<<<< Updated upstream
-     * @description Processes each batch by building a duplicate key and checking for matches.
-=======
      * Processes each batch by building a duplicate key and checking for matches.
->>>>>>> Stashed changes
      *              Uses a composite key of normalized Name + BillingPostalCode.
      * @param bc The batch context
      * @param scope List of Account records in the current batch
@@ -94,11 +82,7 @@ public with sharing class AccountDeduplicationBatch implements Database.Batchabl
     }
 
     /**
-<<<<<<< Updated upstream
-     * @description Logs a summary of the deduplication batch run
-=======
      * Logs a summary of the deduplication batch run
->>>>>>> Stashed changes
      * @param bc The batch context
      */
     public void finish(Database.BatchableContext bc) {
@@ -117,11 +101,7 @@ public with sharing class AccountDeduplicationBatch implements Database.Batchabl
     // ─── Private Helpers ─────────────────────────────────────────────────
 
     /**
-<<<<<<< Updated upstream
-     * @description Builds a normalized composite key for duplicate detection
-=======
      * Builds a normalized composite key for duplicate detection
->>>>>>> Stashed changes
      * @param acct The Account record
      * @return Normalized key string, or null if insufficient data
      */
@@ -137,11 +117,7 @@ public with sharing class AccountDeduplicationBatch implements Database.Batchabl
     }
 
     /**
-<<<<<<< Updated upstream
-     * @description Processes DML results, tracking successes and failures
-=======
      * Processes DML results, tracking successes and failures
->>>>>>> Stashed changes
      * @param results List of Database.SaveResult from update operation
      */
     private void processResults(List<Database.SaveResult> results) {
@@ -163,11 +139,7 @@ public with sharing class AccountDeduplicationBatch implements Database.Batchabl
     // ─── Static Helpers ──────────────────────────────────────────────────
 
     /**
-<<<<<<< Updated upstream
-     * @description Convenience method to execute with default batch size
-=======
      * Convenience method to execute with default batch size
->>>>>>> Stashed changes
      * @return The batch job Id
      */
     public static Id run() {

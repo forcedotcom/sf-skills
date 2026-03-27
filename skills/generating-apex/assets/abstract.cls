@@ -33,11 +33,7 @@ public abstract with sharing class {ClassName} {
     // ─── Constructor ─────────────────────────────────────────────────────
 
     /**
-<<<<<<< Updated upstream
-     * @description Initializes the base class with default configuration
-=======
      * Initializes the base class with default configuration
->>>>>>> Stashed changes
      */
     protected {ClassName}() {
         this.timeoutMs = DEFAULT_TIMEOUT_MS;
@@ -46,22 +42,14 @@ public abstract with sharing class {ClassName} {
     // ─── Abstract Methods (must be implemented by subclasses) ────────────
 
     /**
-<<<<<<< Updated upstream
-     * @description Returns the endpoint URL for this integration.
-=======
      * Returns the endpoint URL for this integration.
->>>>>>> Stashed changes
      *              Subclasses must provide their specific endpoint.
      * @return The endpoint URL as a String
      */
     protected abstract String getEndpoint();
 
     /**
-<<<<<<< Updated upstream
-     * @description Returns the HTTP headers for this integration.
-=======
      * Returns the HTTP headers for this integration.
->>>>>>> Stashed changes
      *              Subclasses define their own required headers.
      * @return Map of header name to header value
      */
@@ -70,11 +58,7 @@ public abstract with sharing class {ClassName} {
     // ─── Virtual Methods (can be overridden by subclasses) ───────────────
 
     /**
-<<<<<<< Updated upstream
-     * @description Hook called before the main operation executes.
-=======
      * Hook called before the main operation executes.
->>>>>>> Stashed changes
      *              Override to add pre-processing logic.
      *              Default implementation does nothing.
      * @param context Map of contextual data
@@ -84,11 +68,7 @@ public abstract with sharing class {ClassName} {
     }
 
     /**
-<<<<<<< Updated upstream
-     * @description Hook called after the main operation completes.
-=======
      * Hook called after the main operation completes.
->>>>>>> Stashed changes
      *              Override to add post-processing logic.
      *              Default implementation does nothing.
      * @param context Map of contextual data
@@ -101,11 +81,7 @@ public abstract with sharing class {ClassName} {
     // ─── Template Method (common workflow) ───────────────────────────────
 
     /**
-<<<<<<< Updated upstream
-     * @description Executes the operation using the template method pattern.
-=======
      * Executes the operation using the template method pattern.
->>>>>>> Stashed changes
      *              Calls beforeExecute → doExecute → afterExecute in sequence.
      * @param context Map of data needed for the operation
      * @return The result of the operation
@@ -128,11 +104,7 @@ public abstract with sharing class {ClassName} {
     // ─── Protected Helpers ───────────────────────────────────────────────
 
     /**
-<<<<<<< Updated upstream
-     * @description Core execution logic — override this for the main operation.
-=======
      * Core execution logic — override this for the main operation.
->>>>>>> Stashed changes
      *              Default implementation throws — subclass must provide implementation.
      * @param context Map of data needed for the operation
      * @return The result of the operation
@@ -144,11 +116,7 @@ public abstract with sharing class {ClassName} {
     }
 
     /**
-<<<<<<< Updated upstream
-     * @description Error handler called when doExecute throws.
-=======
      * Error handler called when doExecute throws.
->>>>>>> Stashed changes
      *              Override to customize error handling (e.g., logging, retry).
      * @param e The exception that was thrown
      */
