@@ -17,7 +17,7 @@ afv-library/
 │   ├── generating-flow/
 │   └── ...
 ├── samples/              # Synced sample apps (e.g. from npm)
-│   └── webapp-template-app-react-sample-b2e-experimental/
+│   └── ui-bundle-template-app-react-sample-b2e/
 │   └── ...
 ├── scripts/              
 │   └── ...
@@ -30,7 +30,7 @@ Browse the repository and copy/paste any rule or skill directly into Agentforce 
 
 ## Samples
 
-The `samples/` folder contains synced sample apps. For example, `samples/webapp-template-app-react-sample-b2e-experimental/` is kept in sync with the npm package `@salesforce/webapp-template-app-react-sample-b2e-experimental` (nightly and on manual trigger via GitHub Actions). To run the same sync locally from the repo root:
+The `samples/` folder contains synced sample apps. For example, `samples/ui-bundle-template-app-react-sample-b2e/` is kept in sync with the npm package `@salesforce/ui-bundle-template-app-react-sample-b2e` (nightly and on manual trigger via GitHub Actions). To run the same sync locally from the repo root:
 
 ```bash
 npm install

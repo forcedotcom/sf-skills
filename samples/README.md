@@ -2,9 +2,9 @@
 
 Sample apps and templates synced into this repo for reference and reuse.
 
-## webapp-template-app-react-sample-b2e-experimental
+## ui-bundle-template-app-react-sample-b2e
 
-Source is synced from the npm package [@salesforce/webapp-template-app-react-sample-b2e-experimental](https://www.npmjs.com/package/@salesforce/webapp-template-app-react-sample-b2e-experimental). Only the package's source (no `node_modules`) is copied into `samples/webapp-template-app-react-sample-b2e-experimental/`.
+Source is synced from the npm package [@salesforce/ui-bundle-template-app-react-sample-b2e](https://www.npmjs.com/package/@salesforce/ui-bundle-template-app-react-sample-b2e). Only the package's source (no `node_modules`) is copied into `samples/ui-bundle-template-app-react-sample-b2e/`.
 
 ### How it's updated
 
@@ -16,15 +16,15 @@ Source is synced from the npm package [@salesforce/webapp-template-app-react-sam
   npm run sync-react-b2e-sample
   ```
 
-  This installs the package into root `node_modules` and copies its source into `samples/webapp-template-app-react-sample-b2e-experimental/`, and updates `.version` in that folder.
+  This installs the package into root `node_modules` and copies its source into `samples/ui-bundle-template-app-react-sample-b2e/`, and updates `.version` in that folder.
 
 ### Version tracking
 
-The file `samples/webapp-template-app-react-sample-b2e-experimental/.version` stores the last-synced npm version. The Action compares it to the latest on npm and only creates a PR when they differ.
+The file `samples/ui-bundle-template-app-react-sample-b2e/.version` stores the last-synced npm version. The Action compares it to the latest on npm and only creates a PR when they differ.
 
-## webapp-template-app-react-sample-b2x-experimental
+## ui-bundle-template-app-react-sample-b2x
 
-Source is synced from the npm package [@salesforce/webapp-template-app-react-sample-b2x-experimental](https://www.npmjs.com/package/@salesforce/webapp-template-app-react-sample-b2x-experimental). Only the package's source (no `node_modules`) is copied into `samples/webapp-template-app-react-sample-b2x-experimental/`.
+Source is synced from the npm package [@salesforce/ui-bundle-template-app-react-sample-b2x](https://www.npmjs.com/package/@salesforce/ui-bundle-template-app-react-sample-b2x). Only the package's source (no `node_modules`) is copied into `samples/ui-bundle-template-app-react-sample-b2x/`.
 
 ### How it's updated
 
@@ -36,11 +36,11 @@ Source is synced from the npm package [@salesforce/webapp-template-app-react-sam
   npm run sync-react-b2x-sample
   ```
 
-  This installs the package into root `node_modules` and copies its source into `samples/webapp-template-app-react-sample-b2x-experimental/`, and updates `.version` in that folder.
+  This installs the package into root `node_modules` and copies its source into `samples/ui-bundle-template-app-react-sample-b2x/`, and updates `.version` in that folder.
 
 ### Version tracking
 
-The file `samples/webapp-template-app-react-sample-b2x-experimental/.version` stores the last-synced npm version. The Action compares it to the latest on npm and only creates a PR when they differ.
+The file `samples/ui-bundle-template-app-react-sample-b2x/.version` stores the last-synced npm version. The Action compares it to the latest on npm and only creates a PR when they differ.
 
 ## native-mobile-rental-tenant-app
 

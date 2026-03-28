@@ -1,10 +1,10 @@
 ---
 name: generating-experience-react-site
-description: "Use this skill when users need to create or configure a Salesforce Digital Experience Site specifically for hosting a React web application. Trigger when users mention creating an Experience site for a React app, setting up a React site on Salesforce, configuring Network/CustomSite/DigitalExperience metadata for a web app, or deploying site infrastructure for a React application. Also trigger when users mention site URL path prefixes, app namespaces, appDevName, guest access configuration, DigitalExperienceConfig, DigitalExperienceBundle, or sfdc_cms__site content types in the context of React apps. Always use this skill for any React web application site creation or site infrastructure configuration work, even if the user just says \"create a site for my React app\" or \"set up the site for my web application.\""
+description: "Use this skill when users need to create or configure a Salesforce Digital Experience Site specifically for hosting a React UI bundle. Trigger when users mention creating an Experience site for a React app, setting up a React site on Salesforce, configuring Network/CustomSite/DigitalExperience metadata for a UI bundle, or deploying site infrastructure for a React application. Also trigger when users mention site URL path prefixes, app namespaces, appDevName, guest access configuration, DigitalExperienceConfig, DigitalExperienceBundle, or sfdc_cms__site content types in the context of React apps. Always use this skill for any React UI bundle site creation or site infrastructure configuration work, even if the user just says \"create a site for my React app\" or \"set up the site for my UI bundle.\""
 ---
 
-# Digital Experience Site for React Web Applications
-Create and configure Digital Experience Sites that host React web applications on Salesforce. This skill generates the minimum necessary site infrastructure — Network, CustomSite, DigitalExperienceConfig, DigitalExperienceBundle, and the `sfdc_cms__site` content type — so a React app can be served from Salesforce.
+# Digital Experience Site for React UI Bundles
+Create and configure Digital Experience Sites that host React UI bundles on Salesforce. This skill generates the minimum necessary site infrastructure — Network, CustomSite, DigitalExperienceConfig, DigitalExperienceBundle, and the `sfdc_cms__site` content type — so a React app can be served from Salesforce.
 
 React sites differ from standard LWR sites: they don't need routes, views, theme layouts, or branding sets. The site acts as a thin container (`appContainer: true`) that delegates rendering to the React application referenced by `appSpace`.
 
@@ -16,7 +16,7 @@ Resolve all five properties before generating any metadata. Each has a fallback 
 | **siteName** | `UpperCamelCase` (e.g., `MyCommunity`) | Ask user or derive from context |
 | **siteUrlPathPrefix** | `kebab-case` (e.g., `my-community`) | User-provided, or convert siteName to kebab-case |
 | **appNamespace** | String | `namespace` in `sfdx-project.json` → `sf data query -q "SELECT NamespacePrefix FROM Organization" --target-org ${usernameOrAlias}` → default `c` |
-| **appDevName** | String | `webApplication` metadata in the project → `sf data query -q "SELECT DeveloperName FROM WebApplication" --target-org ${usernameOrAlias}` → default to siteName |
+| **appDevName** | String | `uiBundle` metadata in the project → `sf data query -q "SELECT DeveloperName FROM UIBundle" --target-org ${usernameOrAlias}` → default to siteName |
 | **enableGuestAccess** | Boolean | Ask user whether unauthenticated guest users can access site APIs → default `false` |
 
 The `appNamespace` and `appDevName` properties connect the site to the correct React application. Getting these wrong means the site deploys but shows a blank page, so take care to resolve them from real project data.
@@ -71,7 +71,7 @@ Before deploying, confirm:
 - [ ] All five required properties are resolved
 - [ ] All metadata directories and files exist per the project structure
 - [ ] All metadata fields are populated per the templates and user requests
-- [ ] `appSpace` in `content.json` matches an existing `WebApplication` metadata record
+- [ ] `appSpace` in `content.json` matches an existing `UIBundle` metadata record
 - [ ] Deployment validates successfully:
 ```bash
 sf project deploy validate --metadata Network CustomSite DigitalExperienceConfig DigitalExperienceBundle DigitalExperience --target-org ${usernameOrAlias}

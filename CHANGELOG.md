@@ -22,7 +22,7 @@
 
 ### Features
 
-* consolidate webapp data skills into using-webapp-salesforce-data @W-21338965@ ([#81](https://github.com/forcedotcom/afv-library/issues/81)) ([9190b5c](https://github.com/forcedotcom/afv-library/commit/9190b5c97aa6ca3c7c355cac6a7417924bcdcc0f))
+* consolidate UI bundle data skills into using-salesforce-ui-bundle-salesforce-data @W-21338965@ ([#81](https://github.com/forcedotcom/afv-library/issues/81)) ([9190b5c](https://github.com/forcedotcom/afv-library/commit/9190b5c97aa6ca3c7c355cac6a7417924bcdcc0f))
 
 
 
@@ -37,7 +37,7 @@
 ### Features
 
 * Add switching-org skill @W-21436488@ ([#74](https://github.com/forcedotcom/afv-library/issues/74)) ([5c40e3b](https://github.com/forcedotcom/afv-library/commit/5c40e3b63ed81e9559a4d64c82f112a94c5c2566))
-* syncing webapp skills sync to afv @W-21338965@ ([#57](https://github.com/forcedotcom/afv-library/issues/57)) ([9ba0641](https://github.com/forcedotcom/afv-library/commit/9ba064174a714e487c683b986c3c6e08d478b784))
+* syncing UI bundle skills sync to afv @W-21338965@ ([#57](https://github.com/forcedotcom/afv-library/issues/57)) ([9ba0641](https://github.com/forcedotcom/afv-library/commit/9ba064174a714e487c683b986c3c6e08d478b784))
 
 
 

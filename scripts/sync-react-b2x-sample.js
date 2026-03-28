@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /**
- * Syncs source from @salesforce/webapp-template-app-react-sample-b2x-experimental
- * into samples/webapp-template-app-react-sample-b2x-experimental/.
+ * Syncs source from @salesforce/ui-bundle-template-app-react-sample-b2x
+ * into samples/ui-bundle-template-app-react-sample-b2x/.
  * Run from repo root after npm install. Same flow used locally and in CI.
  */
 
 const fs = require('fs');
 const path = require('path');
 
-const PACKAGE_NAME = '@salesforce/webapp-template-app-react-sample-b2x-experimental';
-const SAMPLE_DIR = path.join(process.cwd(), 'samples', 'webapp-template-app-react-sample-b2x-experimental');
+const PACKAGE_NAME = '@salesforce/ui-bundle-template-app-react-sample-b2x';
+const SAMPLE_DIR = path.join(process.cwd(), 'samples', 'ui-bundle-template-app-react-sample-b2x');
 
 const pkgRoot = path.join(process.cwd(), 'node_modules', PACKAGE_NAME.replace('/', path.sep));
 
