@@ -29,7 +29,15 @@ public with sharing class TenantTriggerHandler {
         if (userIds.isEmpty()) {
             return;
         }
+        assignTenantMaintenanceAccessAsync(new List<Id>(userIds));
+    }
 
+    @future
+    private static void assignTenantMaintenanceAccessAsync(List<Id> userIdsList) {
+        Set<Id> userIds = new Set<Id>(userIdsList);
+        if (userIds.isEmpty()) {
+            return;
+        }
         List<PermissionSet> permSets = [
             SELECT Id
             FROM PermissionSet

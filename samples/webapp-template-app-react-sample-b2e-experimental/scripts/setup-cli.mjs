@@ -1,23 +1,23 @@
 #!/usr/bin/env node
 /**
- * One-command setup: login, deploy, optional permset/data, GraphQL schema/codegen, web app build.
+ * One-command setup: login, deploy, optional permset/data, GraphQL schema/codegen, UI bundle build.
  * Use this script to make setup easier for each app generated from this template.
  *
  * Usage:
  *   node scripts/setup-cli.mjs --target-org <alias>           # interactive step picker (all selected)
  *   node scripts/setup-cli.mjs --target-org <alias> --yes     # skip picker, run all steps
  *   node scripts/setup-cli.mjs --target-org afv5 --skip-login
- *   node scripts/setup-cli.mjs --target-org afv5 --skip-data --skip-webapp-build
- *   node scripts/setup-cli.mjs --target-org myorg --webapp-name my-app
+ *   node scripts/setup-cli.mjs --target-org afv5 --skip-data --skip-ui-bundle-build
+ *   node scripts/setup-cli.mjs --target-org myorg --ui-bundle-name my-app
  *
  * Steps (in order):
  *   1. login     — sf org login web only if org not already connected (skip with --skip-login)
- *   2. webapp    — (all web apps) npm install && npm run build so dist exists for deploy (skip with --skip-webapp-build)
+ *   2. uiBundle  — (all UI bundles) npm install && npm run build so dist exists for deploy (skip with --skip-ui-bundle-build)
  *   3. deploy    — sf project deploy start --target-org <alias> (requires dist for entity deployment)
  *   4. permset   — sf org assign permset for each *.permissionset-meta.xml (skip with --skip-permset; override via --permset-name)
  *   5. data      — prepare unique fields + sf data import tree (skipped if no data dir/plan)
- *   6. graphql   — (in webapp) npm run graphql:schema then npm run graphql:codegen
- *   7. dev       — (in webapp) npm run dev — launch dev server (skip with --skip-dev)
+ *   6. graphql   — (in UI bundle) npm run graphql:schema then npm run graphql:codegen
+ *   7. dev       — (in UI bundle) npm run dev — launch dev server (skip with --skip-dev)
  */
 
 import { spawnSync } from 'node:child_process';
@@ -44,14 +44,14 @@ function resolveSfdxSource() {
 }
 
 const SFDX_SOURCE = resolveSfdxSource();
-const WEBAPPLICATIONS_DIR = resolve(SFDX_SOURCE, 'webapplications');
+const UIBUNDLES_DIR = resolve(SFDX_SOURCE, 'uiBundles');
 const DATA_DIR = resolve(SFDX_SOURCE, 'data');
 const DATA_PLAN = resolve(SFDX_SOURCE, 'data/data-plan.json');
 
 function parseArgs() {
   const args = process.argv.slice(2);
   let targetOrg = null;
-  let webappName = null;
+  let uiBundleName = null;
   /** If non-empty, only these names are assigned; otherwise all discovered from the project. */
   const permsetNamesExplicit = [];
   let yes = false;
@@ -61,14 +61,14 @@ function parseArgs() {
     skipPermset: false,
     skipData: false,
     skipGraphql: false,
-    skipWebappBuild: false,
+    skipUIBundleBuild: false,
     skipDev: false,
   };
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--target-org' && args[i + 1]) {
       targetOrg = args[++i];
-    } else if (args[i] === '--webapp-name' && args[i + 1]) {
-      webappName = args[++i];
+    } else if (args[i] === '--ui-bundle-name' && args[i + 1]) {
+      uiBundleName = args[++i];
     } else if (args[i] === '--permset-name' && args[i + 1]) {
       permsetNamesExplicit.push(args[++i]);
     } else if (args[i] === '--skip-login') flags.skipLogin = true;
@@ -76,7 +76,7 @@ function parseArgs() {
     else if (args[i] === '--skip-permset') flags.skipPermset = true;
     else if (args[i] === '--skip-data') flags.skipData = true;
     else if (args[i] === '--skip-graphql') flags.skipGraphql = true;
-    else if (args[i] === '--skip-webapp-build') flags.skipWebappBuild = true;
+    else if (args[i] === '--skip-ui-bundle-build') flags.skipUIBundleBuild = true;
     else if (args[i] === '--skip-dev') flags.skipDev = true;
     else if (args[i] === '--yes' || args[i] === '-y') yes = true;
     else if (args[i] === '--help' || args[i] === '-h') {
@@ -90,14 +90,14 @@ Required:
   --target-org <alias>   Target Salesforce org alias (e.g. myorg)
 
 Options:
-  --webapp-name <name>   Web app folder name under webapplications/ (default: auto-detect)
+  --ui-bundle-name <name> UI bundle folder name under uiBundles/ (default: auto-detect)
   --permset-name <name>  Assign only this permission set (repeatable). Default: all sets under permissionsets/
   --skip-login           Skip login step (login is auto-skipped if org is already connected)
   --skip-deploy          Do not deploy metadata
   --skip-permset         Do not assign permission set
   --skip-data            Do not prepare data or run data import
   --skip-graphql         Do not fetch schema or run GraphQL codegen
-  --skip-webapp-build    Do not npm install / build the web application
+  --skip-ui-bundle-build Do not npm install / build the UI bundle
   --skip-dev             Do not launch the dev server at the end
   -y, --yes              Skip interactive step picker; run all enabled steps immediately
   -h, --help             Show this help
@@ -109,35 +109,35 @@ Options:
     console.error('Error: --target-org <alias> is required.');
     process.exit(1);
   }
-  return { targetOrg, webappName, permsetNamesExplicit, yes, ...flags };
+  return { targetOrg, uiBundleName, permsetNamesExplicit, yes, ...flags };
 }
 
-function discoverAllWebappDirs(webappName) {
-  if (!existsSync(WEBAPPLICATIONS_DIR)) {
-    console.error(`Error: webapplications directory not found: ${WEBAPPLICATIONS_DIR}`);
+function discoverAllUIBundleDirs(uiBundleName) {
+  if (!existsSync(UIBUNDLES_DIR)) {
+    console.error(`Error: uiBundles directory not found: ${UIBUNDLES_DIR}`);
     process.exit(1);
   }
-  const entries = readdirSync(WEBAPPLICATIONS_DIR, { withFileTypes: true });
+  const entries = readdirSync(UIBUNDLES_DIR, { withFileTypes: true });
   const dirs = entries.filter((e) => e.isDirectory() && !e.name.startsWith('.'));
   if (dirs.length === 0) {
-    console.error(`Error: No web app folder found under ${WEBAPPLICATIONS_DIR}`);
+    console.error(`Error: No UI bundle folder found under ${UIBUNDLES_DIR}`);
     process.exit(1);
   }
-  if (webappName) {
-    const requested = dirs.find((d) => d.name === webappName);
+  if (uiBundleName) {
+    const requested = dirs.find((d) => d.name === uiBundleName);
     if (!requested) {
-      console.error(`Error: Web app directory not found: ${webappName}`);
+      console.error(`Error: UI bundle directory not found: ${uiBundleName}`);
       process.exit(1);
     }
-    return [resolve(WEBAPPLICATIONS_DIR, requested.name)];
+    return [resolve(UIBUNDLES_DIR, requested.name)];
   }
-  return dirs.map((d) => resolve(WEBAPPLICATIONS_DIR, d.name));
+  return dirs.map((d) => resolve(UIBUNDLES_DIR, d.name));
 }
 
-function discoverWebappDir(webappName) {
-  const all = discoverAllWebappDirs(webappName);
-  if (all.length > 1 && !webappName) {
-    console.log(`Multiple web apps found; using first: ${all[0].split(/[/\\]/).pop()}`);
+function discoverUIBundleDir(uiBundleName) {
+  const all = discoverAllUIBundleDirs(uiBundleName);
+  if (all.length > 1 && !uiBundleName) {
+    console.log(`Multiple UI bundles found; using first: ${all[0].split(/[/\\]/).pop()}`);
   }
   return all[0];
 }
@@ -294,7 +294,7 @@ function run(name, cmd, args, opts = {}) {
 async function main() {
   const {
     targetOrg,
-    webappName,
+    uiBundleName,
     permsetNamesExplicit,
     yes,
     skipLogin: argSkipLogin,
@@ -302,7 +302,7 @@ async function main() {
     skipPermset: argSkipPermset,
     skipData: argSkipData,
     skipGraphql: argSkipGraphql,
-    skipWebappBuild: argSkipWebappBuild,
+    skipUIBundleBuild: argSkipUIBundleBuild,
     skipDev: argSkipDev,
   } = parseArgs();
 
@@ -319,7 +319,7 @@ async function main() {
 
   const stepDefs = [
     { key: 'login', label: 'Login — org authentication', enabled: !argSkipLogin, available: true },
-    { key: 'webappBuild', label: 'Webapp Build — npm install + build (pre-deploy)', enabled: !argSkipWebappBuild, available: true },
+    { key: 'uiBundleBuild', label: 'UI Bundle Build — npm install + build (pre-deploy)', enabled: !argSkipUIBundleBuild, available: true },
     { key: 'deploy', label: 'Deploy — sf project deploy start', enabled: !argSkipDeploy, available: true },
     { key: 'permset', label: permsetStepLabel, enabled: !argSkipPermset, available: true },
     { key: 'data', label: 'Data — delete + import records via Apex', enabled: !argSkipData && hasDataPlan, available: hasDataPlan },
@@ -334,26 +334,26 @@ async function main() {
   });
 
   const skipLogin = !on.login;
-  const skipWebappBuild = !on.webappBuild;
+  const skipUIBundleBuild = !on.uiBundleBuild;
   const skipDeploy = !on.deploy;
   const skipPermset = !on.permset;
   const skipData = !on.data;
   const skipGraphql = !on.graphql;
   const skipDev = !on.dev;
 
-  const needsWebapp = !skipWebappBuild || !skipGraphql || !skipDev;
-  const webappDir = needsWebapp ? discoverWebappDir(webappName) : null;
+  const needsUIBundle = !skipUIBundleBuild || !skipGraphql || !skipDev;
+  const uiBundleDir = needsUIBundle ? discoverUIBundleDir(uiBundleName) : null;
   const doData = !skipData;
 
-  console.log('Setup — target org:', targetOrg, '| web app:', webappDir ?? '(none)');
+  console.log('Setup — target org:', targetOrg, '| UI bundle:', uiBundleDir ?? '(none)');
   console.log(
-    'Steps: login=%s deploy=%s permset=%s data=%s graphql=%s webapp=%s dev=%s',
+    'Steps: login=%s deploy=%s permset=%s data=%s graphql=%s uiBundle=%s dev=%s',
     !skipLogin,
     !skipDeploy,
     !skipPermset,
     doData,
     !skipGraphql,
-    !skipWebappBuild,
+    !skipUIBundleBuild,
     !skipDev
   );
 
@@ -366,13 +366,13 @@ async function main() {
     }
   }
 
-  // Build all web apps before deploy so dist exists for entity deployment
-  if (!skipDeploy && !skipWebappBuild) {
-    const allWebappDirs = discoverAllWebappDirs(webappName);
-    for (const dir of allWebappDirs) {
+  // Build all UI Bundles before deploy so dist exists for entity deployment
+  if (!skipDeploy && !skipUIBundleBuild) {
+    const allUIBundleDirs = discoverAllUIBundleDirs(uiBundleName);
+    for (const dir of allUIBundleDirs) {
       const name = dir.split(/[/\\]/).pop();
-      run(`Web app install (${name})`, 'npm', ['install'], { cwd: dir });
-      run(`Web app build (${name})`, 'npm', ['run', 'build'], { cwd: dir });
+      run(`UI Bundle install (${name})`, 'npm', ['install'], { cwd: dir });
+      run(`UI Bundle build (${name})`, 'npm', ['run', 'build'], { cwd: dir });
     }
   }
 
@@ -535,25 +535,25 @@ async function main() {
     if (existsSync(tmpApex)) unlinkSync(tmpApex);
   }
 
-  if (!skipGraphql || !skipWebappBuild) {
-    run('Web app npm install', 'npm', ['install'], { cwd: webappDir });
+  if (!skipGraphql || !skipUIBundleBuild) {
+    run('UI Bundle npm install', 'npm', ['install'], { cwd: uiBundleDir });
   }
 
   if (!skipGraphql) {
     run('Set default org for schema', 'sf', ['config', 'set', 'target-org', targetOrg, '--global']);
-    run('GraphQL schema (introspect)', 'npm', ['run', 'graphql:schema'], { cwd: webappDir });
-    run('GraphQL codegen', 'npm', ['run', 'graphql:codegen'], { cwd: webappDir });
+    run('GraphQL schema (introspect)', 'npm', ['run', 'graphql:schema'], { cwd: uiBundleDir });
+    run('GraphQL codegen', 'npm', ['run', 'graphql:codegen'], { cwd: uiBundleDir });
   }
 
-  if (!skipWebappBuild) {
-    run('Web app build', 'npm', ['run', 'build'], { cwd: webappDir });
+  if (!skipUIBundleBuild) {
+    run('UI Bundle build', 'npm', ['run', 'build'], { cwd: uiBundleDir });
   }
 
   console.log('\n--- Setup complete ---');
 
   if (!skipDev) {
     console.log('\n--- Launching dev server (Ctrl+C to stop) ---\n');
-    run('Dev server', 'npm', ['run', 'dev'], { cwd: webappDir });
+    run('Dev server', 'npm', ['run', 'dev'], { cwd: uiBundleDir });
   }
 }
 

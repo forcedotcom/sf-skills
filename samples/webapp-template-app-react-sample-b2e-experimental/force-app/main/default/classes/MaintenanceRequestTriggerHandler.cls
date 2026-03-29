@@ -1,4 +1,4 @@
-public with sharing class MaintenanceRequestTriggerHandler {
+public without sharing class MaintenanceRequestTriggerHandler {
 
     /**
      * Handles before insert logic for Maintenance Request records
@@ -7,11 +7,14 @@ public with sharing class MaintenanceRequestTriggerHandler {
     public static void handleBeforeInsert(List<Maintenance_Request__c> newRequests) {
         // Map to store request type to worker type mappings
         Map<String, String> requestTypeToWorkerType = new Map<String, String>{
-            'Plumbing' => 'Plumbing',
-            'Electrical' => 'Electrical',
-            'HVAC' => 'HVAC (Heating & Cooling)',
-            'Appliance' => 'Appliance Repair',
-            'Pest' => 'Pest Control'
+            'Plumbing'    => 'Plumbing',
+            'Electrical'  => 'Electrical',
+            'HVAC'        => 'HVAC (Heating & Cooling)',
+            'Appliance'   => 'Appliance Repair',
+            'Carpentry'   => 'General Carpentry',
+            'Landscaping' => 'Landscaping / Grounds',
+            'Cleaning'    => 'Janitorial / Cleaning',
+            'Pest'        => 'Pest Control'
         };
 
         // Collect unique worker types needed

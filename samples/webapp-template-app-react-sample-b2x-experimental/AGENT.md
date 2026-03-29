@@ -1,87 +1,193 @@
-# Agent guide: SFDX project with React web app
+# Agent guide: Salesforce UI Bundle development
 
-This project is a **Salesforce DX (SFDX) project** containing a **React web application**. The SFDX source path is defined in `sfdx-project.json` (`packageDirectories[].path`); the web app lives under `<sfdx-source>/webapplications/<appName>/`. Use this file when working in this directory.
+This project is a **Salesforce DX (SFDX) project** containing a **React UI Bundle**. The UI Bundle is a standalone Vite + React SPA that runs inside the Salesforce platform. Use this file when working in this project.
 
-## SFDX Source Path
+## Resolving paths
 
-The source path prefix is **not** always `force-app`. Read `sfdx-project.json` at the project root, take the first `packageDirectories[].path` value, and append `/main/default` to get `<sfdx-source>`. All paths below use this placeholder.
+Read `sfdx-project.json` at the project root. Take the first `packageDirectories[].path` value and append `/main/default` to get `<sfdx-source>`. The UI Bundle directory is:
+
+```
+<sfdx-source>/uiBundles/<appName>/
+```
+
+Replace `<appName>` with the actual folder name found under `uiBundles/`. The source path is **not** always `force-app` — always resolve it from `sfdx-project.json`.
 
 ## Project layout
 
-- **Project root**: this directory — SFDX project root. Contains `sfdx-project.json`, the SFDX source directory, and (optionally) LWC/Aura.
-- **React web app**: `<sfdx-source>/webapplications/<appName>/`  
-  - Replace `<appName>` with the actual app folder name (e.g. `base-react-app`, or the name chosen when the app was generated).
-  - Entry: `src/App.tsx`  
-  - Routes: `src/routes.tsx`  
-  - API/GraphQL: `src/api/` (e.g. `graphql.ts`, `graphql-operations-types.ts`, `utils/`)
+```
+<project-root>/
+├── sfdx-project.json
+├── package.json                         # SFDX root scripts 
+├── scripts/
+│   ├── setup-cli.mjs                    # One-command setup (deploy, schema, build)
+│   └── graphql-search.sh               # Schema entity lookup
+├── config/
+│   └── project-scratch-def.json
+│
+└── <sfdx-source>/
+    ├── uiBundles/
+    │   └── <appName>/                   # ← React UI Bundle (primary workspace)
+    │       ├── <appName>.uibundle-meta.xml
+    │       ├── ui-bundle.json
+    │       ├── index.html
+    │       ├── package.json
+    │       ├── vite.config.ts / tsconfig.json
+    │       ├── vitest.config.ts / playwright.config.ts
+    │       ├── codegen.yml / .graphqlrc.yml
+    │       └── src/                     # All application code lives here
+    │
+    ├── classes/                          # Apex classes (optional)
+    ├── objects/                          # Custom objects and fields (optional)
+    ├── permissionsets/                   # Permission sets (optional)
+    ├── cspTrustedSites/                 # CSP trusted site definitions (optional)
+    ├── layouts/                          # Object layouts (optional)
+    ├── triggers/                         # Apex triggers (optional)
+    └── data/                            # Sample data for import (optional)
+```
 
-Path convention: **webapplications** (lowercase).
+## Web application source structure
+
+All application code lives inside the UI Bundle's `src/` directory:
+
+```
+src/
+├── app.tsx                  # Entry point — creates the browser router
+├── appLayout.tsx            # Shell layout (header, navigation, Outlet, footer)
+├── routes.tsx               # Single route registry for the entire app
+├── navigationMenu.tsx       # Navigation component
+├── router-utils.tsx         # Router helpers
+├── lib/utils.ts             # Utility functions (cn, etc.)
+├── styles/global.css        # Tailwind global styles
+├── api/                     # GraphQL operations, clients, data services
+├── assets/                  # Static SVGs, images
+├── components/
+│   ├── ui/                  # Shared primitives (shadcn-style: button, card, input, etc.)
+│   ├── layout/              # Layout components (header, footer, sidebar)
+│   └── <feature>/           # Feature-specific components
+├── features/                # Feature modules (auth, search, etc.)
+├── hooks/                   # Custom React hooks
+├── pages/                   # Page components (one per route)
+├── public/                  # Static assets served as-is
+└── utils/                   # Shared utilities
+```
+
+### Key files
+
+| File | Role |
+|------|------|
+| `app.tsx` | Creates `BrowserRouter`; do not add UI here |
+| `appLayout.tsx` | Source of truth for navigation, header, footer, and page shell |
+| `routes.tsx` | Single route registry; all pages are children of the layout route |
+| `<appName>.uibundle-meta.xml` | Salesforce deploy descriptor (`masterLabel`, `version`, `isActive`) |
+| `ui-bundle.json` | Runtime config (`outputDir`, routing) |
 
 ## Two package.json contexts
 
-### 1. Project root (this directory)
+### 1. Project root
 
-Used for SFDX metadata (LWC, Aura, etc.). Scripts here are for the base SFDX template:
+Used for SFDX metadata tooling. Scripts here target LWC/Aura, not the React app.
 
 | Command | Purpose |
 |---------|---------|
-| `npm run lint` | ESLint for `aura/` and `lwc/` |
 | `npm run test` | LWC Jest (passWithNoTests) |
-| `npm run prettier` | Format supported metadata files |
+| `npm run prettier` | Format metadata files |
 | `npm run prettier:verify` | Check Prettier |
 
-**One-command setup:** From project root run `node scripts/setup-cli.mjs --target-org <alias>` to run login (if needed), deploy, optional permset/data import, GraphQL schema/codegen, web app build, and optionally the dev server. Use `node scripts/setup-cli.mjs --help` for options (e.g. `--skip-login`, `--skip-data`, `--webapp-name`).
+**One-command setup:** `node scripts/setup-cli.mjs --target-org <alias>` runs login, deploy, permset assignment, data import, GraphQL schema/codegen, UI Bundle build, and optionally the dev server. Use `--help` for all flags.
 
-Root **does not** run the React app. The root `npm run build` is a no-op for the base SFDX project.
+### 2. Web app directory (primary workspace)
 
-### 2. React web app (where you do most work)
-
-**Always `cd` into the web app directory for dev/build/lint/test:**
-
-```bash
-cd <sfdx-source>/webapplications/<appName>
-```
+**Always `cd` into the UI Bundle directory for dev/build/lint/test:**
 
 | Command | Purpose |
 |---------|---------|
 | `npm run dev` | Start Vite dev server |
-| `npm run build` | TypeScript (`tsc -b`) + Vite build |
+| `npm run build` | TypeScript check + Vite production build |
 | `npm run lint` | ESLint for the React app |
-| `npm run test` | Vitest |
+| `npm run test` | Vitest unit tests |
 | `npm run preview` | Preview production build |
-| `npm run graphql:codegen` | Generate GraphQL types |
-| `npm run graphql:schema` | Fetch GraphQL schema |
+| `npm run graphql:codegen` | Generate GraphQL types from schema |
+| `npm run graphql:schema` | Fetch GraphQL schema from org |
 
-**Before finishing changes:** run `npm run build` and `npm run lint` from the web app directory; both must succeed.
+**Before completing any change:** run `npm run build` and `npm run lint` from the UI Bundle directory. Both must pass with zero errors.
 
-## Agent rules (.a4drules/)
+## Development conventions
 
-Markdown rules at the project root under **.a4drules/** define platform constraints:
+### UI
 
-- **`.a4drules/webapp-ui.md`** — Salesforce Web Application UI (scaffold with `sf webapp generate`, no LWC/Aura for new UI).
-- **`.a4drules/webapp-data.md`** — Salesforce data access (Data SDK only, supported APIs, GraphQL workflow, `scripts/graphql-search.sh` for schema lookup).
+- **Component library:** shadcn/ui primitives in `src/components/ui/`. Always use these over raw HTML equivalents.
+- **Styling:** Tailwind CSS only. No inline `style={{}}`. Use `cn()` from `@/lib/utils` for conditional classes.
+- **Icons:** Lucide React.
+- **Path alias:** `@/*` maps to `src/*`. Use it for all imports.
+- **TypeScript:** No `any`. Use proper types, generics, or `unknown`.
+- **Components:** Accept `className?: string` prop. Extract shared state to custom hooks in `src/hooks/`.
+- **React apps must not** import Salesforce platform modules (`lightning/*`, `@wire`, LWC APIs).
 
-When rules refer to "web app directory" or `<sfdx-source>/webapplications/<appName>/`, resolve `<sfdx-source>` from `sfdx-project.json` and use the **actual app folder name** for this project.
+### Routing
+
+- React Router with `createBrowserRouter`. Route definitions live exclusively in `routes.tsx`.
+- All page routes are children of the layout route (which renders `appLayout.tsx`).
+- Default-export one component per page file.
+- The catch-all `path: '*'` route must always be last.
+- Navigation uses absolute paths (`/dashboard`). Non-router imports use dot-relative paths (`./utils`).
+- Navigation visibility is driven by `handle.showInNavigation` on route definitions.
+
+### Layout and navigation
+
+- `appLayout.tsx` owns the header, navigation menu, footer, and `<Outlet />`.
+- To modify header or footer, edit `appLayout.tsx` and create components in `src/components/layout/`.
+- To add a page, add a route in `routes.tsx` and create the page component — do not modify `appLayout.tsx` or `app.tsx` for page additions.
+
+### Data access (Salesforce)
+
+- **All data access uses the Data SDK** (`@salesforce/sdk-data`) via `createDataSDK()`.
+- **Never** use `fetch()` or `axios` directly for Salesforce data.
+- **GraphQL is preferred** for record operations (`sdk.graphql`). Use `sdk.fetch` only when GraphQL cannot cover the case (UI API REST, Apex REST, Connect REST, Einstein LLM).
+- Use optional chaining: `sdk.graphql?.()`, `sdk.fetch?.()`.
+- Apply the `@optional` directive to all record fields for field-level security resilience.
+- Verify field and object names via `scripts/graphql-search.sh` before writing queries.
+- Use `__SF_API_VERSION__` global for API version in REST calls.
+- **Blocked APIs:** Enterprise REST query endpoint (`/query` with SOQL), `@AuraEnabled` Apex, Chatter API.
+
+### CSP trusted sites
+
+Any external domain the app calls (APIs, CDNs, fonts) must have a `.cspTrustedSite-meta.xml` file under `<sfdx-source>/cspTrustedSites/`. Unregistered domains are blocked at runtime. Each subdomain needs its own entry. URLs must be HTTPS with no trailing slash, no path, and no wildcards.
 
 ## Deploying
 
-**Deployment order:** Metadata (objects, permission sets) must be deployed before GraphQL schema fetch. After any metadata deployment, re-run `npm run graphql:schema` and `npm run graphql:codegen` from the webapp dir. **One-command setup:** `node scripts/setup-cli.mjs --target-org <alias>` runs deploy → permset → schema → codegen in the correct order.
+**Deployment order matters.** Metadata (objects, permission sets) must be deployed before fetching the GraphQL schema. After any metadata deployment that changes objects, fields, or permissions, re-run schema fetch and codegen.
 
-From **this project root** (resolve the actual SFDX source path from `sfdx-project.json`):
+**Recommended sequence:**
+
+1. Authenticate to the target org
+2. Build the UI Bundle (`npm run build` in the UI Bundle directory)
+3. Deploy metadata (`sf project deploy start --source-dir <packageDir> --target-org <alias>`)
+4. Assign permission sets
+5. Import data (only with user confirmation)
+6. Fetch GraphQL schema + run codegen (`npm run graphql:schema && npm run graphql:codegen`)
+7. Rebuild the UI Bundle (schema changes may affect generated types)
+
+**Or use the one-command setup:** `node scripts/setup-cli.mjs --target-org <alias>`
 
 ```bash
-# Build the React app first (replace <sfdx-source> and <appName> with actual values)
-cd <sfdx-source>/webapplications/<appName> && npm i && npm run build && cd -
+# Deploy UI Bundle only
+sf project deploy start --source-dir <sfdx-source>/ui-bundles --target-org <alias>
 
-# Deploy web app only (replace <sfdx-source> with actual path, e.g. force-app/main/default)
-sf project deploy start --source-dir <sfdx-source>/webapplications --target-org <alias>
-
-# Deploy all metadata (use the top-level package directory, e.g. force-app)
+# Deploy all metadata
 sf project deploy start --source-dir <packageDir> --target-org <alias>
 ```
 
-## Conventions (quick reference)
+## Skills
 
-- **UI**: shadcn/ui + Tailwind. Import from `@/components/ui/...`.
-- **Entry**: Keep `App.tsx` and routes in `src/`; add features as new routes or sections, don't replace the app shell but you may modify it to match the requested design.
-- **Data (Salesforce)**: Follow `.a4drules/webapp-data.md` for all Salesforce data access. Use the Data SDK (`createDataSDK()` + `sdk.graphql` or `sdk.fetch`) — never use `fetch` or `axios` directly. GraphQL is preferred; use `sdk.fetch` when GraphQL is not sufficient.
+Check for available skills before implementing any of the following:
+
+| Area | When to consult |
+|------|----------------|
+| UI generation | Building pages, components, modifying header/footer/layout |
+| Salesforce data access | Reading/writing records, GraphQL queries, REST calls |
+| Metadata and deployment | Scaffolding apps, configuring CSP, deployment sequencing |
+| Feature installation | Before building something from scratch — check if a pre-built feature exists |
+| File upload | Adding file upload with Salesforce ContentVersion |
+| Agentforce conversation | Adding or modifying the Agentforce chat widget |
+
+Skills are the authoritative source for detailed patterns, constraints, and code examples in each area. This file provides project-level orientation; skills provide implementation depth.

@@ -1,0 +1,85 @@
+query SearchProperties(
+	$first: Int
+	$after: String
+	$where: Property__c_Filter
+	$orderBy: Property__c_OrderBy
+) {
+	uiapi {
+		query {
+			Property__c(first: $first, after: $after, where: $where, orderBy: $orderBy) {
+				edges {
+					node {
+						Id
+						Name {
+							value
+							displayValue
+						}
+						Address__c {
+							value
+							displayValue
+						}
+						Status__c {
+							value
+							displayValue
+						}
+						Type__c {
+							value
+							displayValue
+						}
+						Monthly_Rent__c {
+							value
+							displayValue
+						}
+						Bedrooms__c {
+							value
+							displayValue
+						}
+						Coordinates__Latitude__s {
+							value
+						}
+						Coordinates__Longitude__s {
+							value
+						}
+						CreatedDate {
+							value
+							displayValue
+						}
+						Property_Images__r(first: 5, orderBy: { Display_Order__c: { order: ASC } }) {
+							edges {
+								node {
+									Id
+									Image_URL__c {
+										value
+									}
+									Image_Type__c {
+										value
+									}
+									Display_Order__c {
+										value
+									}
+								}
+							}
+						}
+						Property_Features__r(first: 20) {
+							edges {
+								node {
+									Id
+									Description__c {
+										value
+									}
+								}
+							}
+						}
+					}
+				}
+				pageInfo {
+					hasNextPage
+					hasPreviousPage
+					endCursor
+					startCursor
+				}
+				totalCount
+			}
+		}
+	}
+}

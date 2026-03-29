@@ -3,9 +3,100 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [1.116.6](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.5...v1.116.6) (2026-03-26)
+## [1.117.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.117.2...v1.117.3) (2026-03-29)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.117.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.117.1...v1.117.2) (2026-03-29)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.117.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.117.0...v1.117.1) (2026-03-28)
 
 **Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+
+
+
+
+
+# [1.117.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.13...v1.117.0) (2026-03-27)
+
+**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+
+
+
+
+
+## [1.116.13](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.12...v1.116.13) (2026-03-27)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.116.12](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.11...v1.116.12) (2026-03-27)
+
+
+### Bug Fixes
+
+* updating AGENT.md to focus on UI Bundle development ([#366](https://github.com/salesforce-experience-platform-emu/webapps/issues/366)) ([59b94d7](https://github.com/salesforce-experience-platform-emu/webapps/commit/59b94d7b995042051e1622c78f8cd562b6f99244))
+
+
+
+
+
+## [1.116.11](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.10...v1.116.11) (2026-03-27)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.116.10](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.9...v1.116.10) (2026-03-27)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.116.9](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.8...v1.116.9) (2026-03-27)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.116.8](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.7...v1.116.8) (2026-03-27)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.116.7](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.6...v1.116.7) (2026-03-27)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.116.6](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.5...v1.116.6) (2026-03-26)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -13,7 +104,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.116.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.4...v1.116.5) (2026-03-26)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -21,7 +112,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.116.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.3...v1.116.4) (2026-03-26)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -29,7 +120,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.116.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.2...v1.116.3) (2026-03-26)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -48,7 +139,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.116.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.0...v1.116.1) (2026-03-25)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -56,7 +147,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.116.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.115.0...v1.116.0) (2026-03-25)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -64,7 +155,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.115.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.114.0...v1.115.0) (2026-03-25)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -72,7 +163,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.114.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.113.0...v1.114.0) (2026-03-25)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -80,7 +171,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.113.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.112.10...v1.113.0) (2026-03-25)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -88,7 +179,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.112.10](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.112.9...v1.112.10) (2026-03-24)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -107,7 +198,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.112.8](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.112.7...v1.112.8) (2026-03-24)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -115,7 +206,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.112.7](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.112.6...v1.112.7) (2026-03-23)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -123,7 +214,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.112.6](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.112.5...v1.112.6) (2026-03-23)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -131,7 +222,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.112.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.112.4...v1.112.5) (2026-03-21)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -161,7 +252,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.112.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.112.1...v1.112.2) (2026-03-20)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -169,7 +260,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.112.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.112.0...v1.112.1) (2026-03-20)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -188,7 +279,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.111.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.110.1...v1.111.0) (2026-03-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -207,7 +298,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.110.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.109.9...v1.110.0) (2026-03-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -215,7 +306,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.109.9](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.109.8...v1.109.9) (2026-03-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -223,7 +314,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.109.8](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.109.7...v1.109.8) (2026-03-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -231,7 +322,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.109.7](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.109.6...v1.109.7) (2026-03-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -239,7 +330,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.109.6](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.109.5...v1.109.6) (2026-03-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -247,7 +338,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.109.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.109.4...v1.109.5) (2026-03-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -255,7 +346,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.109.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.109.3...v1.109.4) (2026-03-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -263,7 +354,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.109.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.109.2...v1.109.3) (2026-03-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -271,7 +362,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.109.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.109.1...v1.109.2) (2026-03-18)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -279,7 +370,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.109.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.109.0...v1.109.1) (2026-03-18)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -287,7 +378,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.109.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.108.1...v1.109.0) (2026-03-18)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -295,7 +386,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.108.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.108.0...v1.108.1) (2026-03-18)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -303,7 +394,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.108.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.107.6...v1.108.0) (2026-03-18)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -322,7 +413,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.107.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.107.4...v1.107.5) (2026-03-18)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -330,7 +421,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.107.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.107.3...v1.107.4) (2026-03-18)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -349,7 +440,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.107.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.107.1...v1.107.2) (2026-03-18)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -357,7 +448,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.107.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.107.0...v1.107.1) (2026-03-18)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -409,7 +500,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.105.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.105.0...v1.105.1) (2026-03-17)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -417,7 +508,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.105.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.104.1...v1.105.0) (2026-03-17)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -425,7 +516,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.104.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.104.0...v1.104.1) (2026-03-17)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -433,7 +524,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.104.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.103.6...v1.104.0) (2026-03-17)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -441,7 +532,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.103.6](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.103.5...v1.103.6) (2026-03-17)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -449,7 +540,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.103.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.103.4...v1.103.5) (2026-03-17)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -457,7 +548,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.103.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.103.3...v1.103.4) (2026-03-17)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -465,7 +556,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.103.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.103.2...v1.103.3) (2026-03-17)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -484,7 +575,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.103.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.103.0...v1.103.1) (2026-03-16)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -492,7 +583,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.103.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.102.1...v1.103.0) (2026-03-16)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -500,7 +591,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.102.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.102.0...v1.102.1) (2026-03-16)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -508,7 +599,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.102.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.101.5...v1.102.0) (2026-03-16)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -516,7 +607,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.101.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.101.4...v1.101.5) (2026-03-16)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -524,7 +615,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.101.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.101.3...v1.101.4) (2026-03-16)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -532,7 +623,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.101.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.101.2...v1.101.3) (2026-03-14)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -540,7 +631,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.101.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.101.1...v1.101.2) (2026-03-14)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -548,7 +639,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.101.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.101.0...v1.101.1) (2026-03-13)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -556,7 +647,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.101.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.100.2...v1.101.0) (2026-03-13)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -564,7 +655,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.100.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.100.1...v1.100.2) (2026-03-13)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -572,7 +663,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.100.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.100.0...v1.100.1) (2026-03-13)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -580,7 +671,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.100.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.99.0...v1.100.0) (2026-03-13)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -588,7 +679,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.99.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.98.0...v1.99.0) (2026-03-13)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -596,7 +687,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.98.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.97.2...v1.98.0) (2026-03-13)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -604,7 +695,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.97.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.97.1...v1.97.2) (2026-03-13)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -612,7 +703,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.97.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.97.0...v1.97.1) (2026-03-13)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -620,7 +711,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.97.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.96.0...v1.97.0) (2026-03-12)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -628,7 +719,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.96.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.95.0...v1.96.0) (2026-03-12)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -636,7 +727,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.95.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.94.1...v1.95.0) (2026-03-12)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -655,7 +746,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.94.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.93.1...v1.94.0) (2026-03-12)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -663,7 +754,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.93.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.93.0...v1.93.1) (2026-03-12)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -671,7 +762,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.93.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.92.1...v1.93.0) (2026-03-11)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -690,7 +781,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.92.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.91.0...v1.92.0) (2026-03-11)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -698,7 +789,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.91.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.90.4...v1.91.0) (2026-03-11)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -706,7 +797,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.90.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.90.3...v1.90.4) (2026-03-11)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -714,7 +805,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.90.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.90.2...v1.90.3) (2026-03-11)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -722,7 +813,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.90.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.90.1...v1.90.2) (2026-03-11)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -730,7 +821,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.90.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.90.0...v1.90.1) (2026-03-11)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -749,7 +840,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.89.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.88.1...v1.89.0) (2026-03-10)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -757,7 +848,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.88.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.88.0...v1.88.1) (2026-03-10)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -765,7 +856,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.88.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.87.0...v1.88.0) (2026-03-10)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -776,7 +867,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* new webapp specific rules ([#246](https://github.com/salesforce-experience-platform-emu/webapps/issues/246)) ([cff4738](https://github.com/salesforce-experience-platform-emu/webapps/commit/cff4738ed407828c844e1cd412c962e2a64d869d))
+* new UI Bundle specific rules ([#246](https://github.com/salesforce-experience-platform-emu/webapps/issues/246)) ([cff4738](https://github.com/salesforce-experience-platform-emu/webapps/commit/cff4738ed407828c844e1cd412c962e2a64d869d))
 
 
 
@@ -784,7 +875,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.86.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.85.0...v1.86.0) (2026-03-10)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -792,7 +883,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.85.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.84.1...v1.85.0) (2026-03-10)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -800,7 +891,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.84.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.84.0...v1.84.1) (2026-03-10)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -822,7 +913,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* dedupe with feature skills, rename to webapp-react-* where relevant @W-21338965@ ([#233](https://github.com/salesforce-experience-platform-emu/webapps/issues/233)) ([9e4e4d8](https://github.com/salesforce-experience-platform-emu/webapps/commit/9e4e4d80f4a33575412e1940a8cbfaae6c035a12))
+* dedupe with feature skills, rename to ui-bundle-react-* where relevant @W-21338965@ ([#233](https://github.com/salesforce-experience-platform-emu/webapps/issues/233)) ([9e4e4d8](https://github.com/salesforce-experience-platform-emu/webapps/commit/9e4e4d80f4a33575412e1940a8cbfaae6c035a12))
 
 
 
@@ -830,7 +921,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.82.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.81.0...v1.82.0) (2026-03-09)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -838,7 +929,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.81.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.80.1...v1.81.0) (2026-03-09)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -846,7 +937,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.80.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.80.0...v1.80.1) (2026-03-09)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -854,7 +945,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.80.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.79.2...v1.80.0) (2026-03-07)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -862,7 +953,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.79.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.79.1...v1.79.2) (2026-03-06)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -870,7 +961,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.79.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.79.0...v1.79.1) (2026-03-06)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -878,7 +969,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.79.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.78.0...v1.79.0) (2026-03-06)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -886,7 +977,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.78.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.77.0...v1.78.0) (2026-03-06)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -894,7 +985,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.77.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.76.1...v1.77.0) (2026-03-06)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -902,7 +993,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.76.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.76.0...v1.76.1) (2026-03-06)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -921,7 +1012,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.75.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.75.0...v1.75.1) (2026-03-05)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -929,7 +1020,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.75.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.74.0...v1.75.0) (2026-03-05)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -937,7 +1028,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.74.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.73.1...v1.74.0) (2026-03-05)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -945,7 +1036,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.73.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.73.0...v1.73.1) (2026-03-05)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -953,7 +1044,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.73.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.72.0...v1.73.0) (2026-03-05)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -961,7 +1052,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.72.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.71.3...v1.72.0) (2026-03-05)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -969,7 +1060,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.71.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.71.2...v1.71.3) (2026-03-05)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -977,7 +1068,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.71.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.71.1...v1.71.2) (2026-03-05)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -985,7 +1076,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.71.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.71.0...v1.71.1) (2026-03-05)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -993,7 +1084,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.71.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.70.0...v1.71.0) (2026-03-05)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1001,7 +1092,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.70.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.69.0...v1.70.0) (2026-03-04)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1009,7 +1100,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.69.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.68.1...v1.69.0) (2026-03-04)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1017,7 +1108,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.68.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.68.0...v1.68.1) (2026-03-04)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1025,7 +1116,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.68.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.67.1...v1.68.0) (2026-03-04)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1033,7 +1124,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.67.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.67.0...v1.67.1) (2026-03-04)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1041,7 +1132,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.67.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.66.0...v1.67.0) (2026-03-03)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1049,7 +1140,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.66.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.65.0...v1.66.0) (2026-03-03)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1057,7 +1148,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.65.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.64.0...v1.65.0) (2026-03-03)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1065,7 +1156,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.64.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.63.0...v1.64.0) (2026-03-03)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1084,7 +1175,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.62.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.62.1...v1.62.2) (2026-03-02)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1092,7 +1183,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.62.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.62.0...v1.62.1) (2026-03-02)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1100,7 +1191,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.62.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.61.4...v1.62.0) (2026-03-02)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1108,7 +1199,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.61.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.61.3...v1.61.4) (2026-03-02)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1116,7 +1207,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.61.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.61.2...v1.61.3) (2026-03-02)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1124,7 +1215,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.61.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.61.1...v1.61.2) (2026-03-02)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1132,7 +1223,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.61.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.61.0...v1.61.1) (2026-03-02)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1140,7 +1231,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.61.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.60.2...v1.61.0) (2026-03-02)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1148,7 +1239,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.60.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.60.1...v1.60.2) (2026-02-27)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1156,7 +1247,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.60.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.60.0...v1.60.1) (2026-02-27)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1164,7 +1255,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.60.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.59.2...v1.60.0) (2026-02-27)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1172,7 +1263,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.59.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.59.1...v1.59.2) (2026-02-27)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1180,7 +1271,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.59.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.59.0...v1.59.1) (2026-02-27)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1188,7 +1279,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.59.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.58.2...v1.59.0) (2026-02-27)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1207,7 +1298,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.58.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.58.0...v1.58.1) (2026-02-26)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1215,7 +1306,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.58.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.57.0...v1.58.0) (2026-02-26)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1223,7 +1314,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.57.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.56.1...v1.57.0) (2026-02-26)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1231,7 +1322,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.56.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.56.0...v1.56.1) (2026-02-25)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1239,7 +1330,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.56.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.55.0...v1.56.0) (2026-02-25)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1247,7 +1338,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.55.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.54.1...v1.55.0) (2026-02-25)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1255,7 +1346,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.54.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.54.0...v1.54.1) (2026-02-25)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1263,7 +1354,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.54.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.53.2...v1.54.0) (2026-02-25)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1282,7 +1373,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.53.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.53.0...v1.53.1) (2026-02-25)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1290,7 +1381,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.53.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.52.1...v1.53.0) (2026-02-24)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1298,7 +1389,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.52.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.52.0...v1.52.1) (2026-02-24)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1306,7 +1397,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.52.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.51.0...v1.52.0) (2026-02-24)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1314,7 +1405,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.51.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.50.1...v1.51.0) (2026-02-24)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1322,7 +1413,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.50.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.50.0...v1.50.1) (2026-02-24)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1330,7 +1421,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.50.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.49.0...v1.50.0) (2026-02-24)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1338,7 +1429,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.49.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.48.3...v1.49.0) (2026-02-23)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1346,7 +1437,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.48.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.48.2...v1.48.3) (2026-02-23)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1354,7 +1445,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.48.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.48.1...v1.48.2) (2026-02-23)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1362,7 +1453,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.48.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.48.0...v1.48.1) (2026-02-21)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1370,7 +1461,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.48.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.47.0...v1.48.0) (2026-02-20)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1378,7 +1469,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.47.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.46.2...v1.47.0) (2026-02-20)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1386,7 +1477,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.46.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.46.1...v1.46.2) (2026-02-20)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1394,7 +1485,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.46.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.46.0...v1.46.1) (2026-02-20)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1402,7 +1493,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.46.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.45.1...v1.46.0) (2026-02-20)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1410,7 +1501,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.45.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.45.0...v1.45.1) (2026-02-20)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1418,7 +1509,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.45.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.44.0...v1.45.0) (2026-02-20)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1426,7 +1517,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.44.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.43.1...v1.44.0) (2026-02-20)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1445,7 +1536,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.43.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.42.0...v1.43.0) (2026-02-20)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1453,7 +1544,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.42.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.41.0...v1.42.0) (2026-02-20)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1461,7 +1552,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.41.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.40.0...v1.41.0) (2026-02-20)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1469,7 +1560,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.40.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.39.0...v1.40.0) (2026-02-20)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1477,7 +1568,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.39.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.38.1...v1.39.0) (2026-02-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1485,7 +1576,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.38.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.38.0...v1.38.1) (2026-02-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1493,7 +1584,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.38.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.37.0...v1.38.0) (2026-02-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1501,7 +1592,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.37.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.36.4...v1.37.0) (2026-02-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1509,7 +1600,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.36.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.36.3...v1.36.4) (2026-02-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1517,7 +1608,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.36.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.36.2...v1.36.3) (2026-02-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1525,7 +1616,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.36.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.36.1...v1.36.2) (2026-02-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1533,7 +1624,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.36.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.36.0...v1.36.1) (2026-02-19)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1563,7 +1654,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.35.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.35.0...v1.35.1) (2026-02-18)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1571,7 +1662,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.35.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.34.0...v1.35.0) (2026-02-18)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1579,7 +1670,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.34.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.33.6...v1.34.0) (2026-02-18)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1587,7 +1678,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.33.6](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.33.5...v1.33.6) (2026-02-18)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1595,7 +1686,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.33.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.33.4...v1.33.5) (2026-02-18)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1603,7 +1694,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.33.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.33.3...v1.33.4) (2026-02-17)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1611,7 +1702,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.33.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.33.2...v1.33.3) (2026-02-17)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1619,7 +1710,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.33.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.33.1...v1.33.2) (2026-02-17)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1627,7 +1718,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.33.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.33.0...v1.33.1) (2026-02-17)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1635,7 +1726,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.33.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.32.0...v1.33.0) (2026-02-17)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1643,7 +1734,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.32.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.31.0...v1.32.0) (2026-02-17)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1651,7 +1742,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.31.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.30.1...v1.31.0) (2026-02-16)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1659,7 +1750,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.30.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.30.0...v1.30.1) (2026-02-16)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1678,7 +1769,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.29.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.29.0...v1.29.1) (2026-02-13)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1686,7 +1777,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.29.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.28.2...v1.29.0) (2026-02-12)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1694,7 +1785,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.28.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.28.1...v1.28.2) (2026-02-12)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1702,7 +1793,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.28.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.28.0...v1.28.1) (2026-02-12)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1710,7 +1801,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.28.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.27.1...v1.28.0) (2026-02-12)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1718,7 +1809,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.27.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.27.0...v1.27.1) (2026-02-12)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1737,7 +1828,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.26.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.25.2...v1.26.0) (2026-02-11)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1745,7 +1836,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.25.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.25.1...v1.25.2) (2026-02-11)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1753,7 +1844,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.25.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.25.0...v1.25.1) (2026-02-11)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1761,7 +1852,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.25.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.24.0...v1.25.0) (2026-02-11)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1769,7 +1860,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.24.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.23.0...v1.24.0) (2026-02-11)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1777,7 +1868,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.23.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.22.1...v1.23.0) (2026-02-11)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1785,7 +1876,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.22.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.22.0...v1.22.1) (2026-02-11)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1804,7 +1895,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.21.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.20.0...v1.21.0) (2026-02-10)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1812,7 +1903,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.20.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.19.1...v1.20.0) (2026-02-10)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1820,7 +1911,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.19.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.19.0...v1.19.1) (2026-02-10)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1828,7 +1919,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.19.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.18.0...v1.19.0) (2026-02-10)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1836,7 +1927,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.18.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.17.1...v1.18.0) (2026-02-10)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1844,7 +1935,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.17.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.17.0...v1.17.1) (2026-02-09)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1852,7 +1943,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.17.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.16.1...v1.17.0) (2026-02-09)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1860,7 +1951,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.16.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.16.0...v1.16.1) (2026-02-09)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1868,7 +1959,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.16.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.15.0...v1.16.0) (2026-02-09)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1876,7 +1967,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.15.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.14.0...v1.15.0) (2026-02-07)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1884,7 +1975,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.14.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.13.0...v1.14.0) (2026-02-06)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1903,7 +1994,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.12.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.11.2...v1.12.0) (2026-02-06)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1911,7 +2002,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.11.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.11.1...v1.11.2) (2026-02-06)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1919,7 +2010,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.11.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.11.0...v1.11.1) (2026-02-05)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1927,7 +2018,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.11.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.10.0...v1.11.0) (2026-02-05)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1935,7 +2026,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.10.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.9.0...v1.10.0) (2026-02-05)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1943,7 +2034,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.9.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.8.1...v1.9.0) (2026-02-05)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1951,7 +2042,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.8.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.8.0...v1.8.1) (2026-02-04)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1959,7 +2050,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.8.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.7.0...v1.8.0) (2026-02-04)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1967,7 +2058,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.7.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.6.2...v1.7.0) (2026-02-04)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1975,7 +2066,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.6.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.6.1...v1.6.2) (2026-02-04)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1983,7 +2074,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.6.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.6.0...v1.6.1) (2026-02-04)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1991,7 +2082,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.6.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.5.1...v1.6.0) (2026-02-04)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -1999,7 +2090,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.5.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.5.0...v1.5.1) (2026-02-04)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -2007,7 +2098,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.5.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.4.0...v1.5.0) (2026-02-03)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -2015,7 +2106,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.4.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.3.5...v1.4.0) (2026-02-03)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -2023,7 +2114,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.3.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.3.4...v1.3.5) (2026-01-31)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
@@ -2031,7 +2122,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.3.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.3.3...v1.3.4) (2026-01-31)
 
-**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
 
 
 
