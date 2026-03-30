@@ -1,5 +1,5 @@
 ---
-name: managing-webapp-agentforce-conversation-client
+name: implementing-webapp-agentforce-conversation-client
 description: "Adds or modifies AgentforceConversationClient in React apps (.tsx or .jsx files). Use when user says \"add chat widget\", \"embed agentforce\", \"add agent\", \"add chatbot\", \"integrate conversational AI\", or asks to change colors, dimensions, styling, or configure agentId, width, height, inline mode, or styleTokens for travel agent, HR agent, employee agent, or any Salesforce agent chat."
 metadata:
   author: ACC Components
