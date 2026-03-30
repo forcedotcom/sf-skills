@@ -1,3 +1,12 @@
+## [1.5.1](https://github.com/forcedotcom/afv-library/compare/1.5.0...1.5.1) (2026-03-27)
+
+
+### Bug Fixes
+
+* correct .gitignore to track sample lib/ folders @W-21361802@ ([#119](https://github.com/forcedotcom/afv-library/issues/119)) ([7018d49](https://github.com/forcedotcom/afv-library/commit/7018d49e26aa366962e0073f3e964adab47ccea2))
+
+
+
 # [1.5.0](https://github.com/forcedotcom/afv-library/compare/1.4.0...1.5.0) (2026-03-24)
 
 

@@ -1,42 +1,42 @@
-# App React Sample B2E
+# Property Management App
 
-A B2E (Business-to-Employee) sample React web app for the Salesforce platform. Demonstrates property management, maintenance requests, tenant applications, a dashboard, and an Agentforce conversation client. Built with React, Vite, TypeScript, and Tailwind/shadcn.
+A property management sample React web app for the Salesforce platform. Demonstrates property management, maintenance requests, tenant applications, a dashboard, and an Agentforce conversation client. Built with React, Vite, TypeScript, and Tailwind/shadcn.
 
 ## What's included
 
-| Path                                                        | Description                                                                                                                                                                                                                                                                                                                                                       |
-| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `force-app/main/default/webapplications/appreactsampleb2e/` | React web app (source, config, tests)                                                                                                                                                                                                                                                                                                                             |
-| `force-app/main/default/objects/`                           | 17 custom objects — Agent\_\_c, Application\_\_c, KPI_Snapshot\_\_c, Lease\_\_c, Maintenance_Request\_\_c, Maintenance_Worker\_\_c, Notification\_\_c, Payment\_\_c, Property\_\_c, Property_Cost\_\_c, Property_Feature\_\_c, Property_Image\_\_c, Property_Listing\_\_c, Property_Management_Company\_\_c, Property_Owner\_\_c, Property_Sale\_\_c, Tenant\_\_c |
-| `force-app/main/default/layouts/`                           | Page layouts for each custom object                                                                                                                                                                                                                                                                                                                               |
-| `force-app/main/default/permissionsets/`                    | `Property_Management_Access` permission set                                                                                                                                                                                                                                                                                                                       |
-| `force-app/main/default/data/`                              | Sample data (JSON) for all objects, importable via `sf data import tree`                                                                                                                                                                                                                                                                                          |
+| Path                                                            | Description                                                                                                                                                                                                                                                                                                                                                       |
+| --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `force-app/main/default/webapplications/propertymanagementapp/` | React web app (source, config, tests)                                                                                                                                                                                                                                                                                                                             |
+| `force-app/main/default/objects/`                               | 17 custom objects — Agent\_\_c, Application\_\_c, KPI_Snapshot\_\_c, Lease\_\_c, Maintenance_Request\_\_c, Maintenance_Worker\_\_c, Notification\_\_c, Payment\_\_c, Property\_\_c, Property_Cost\_\_c, Property_Feature\_\_c, Property_Image\_\_c, Property_Listing\_\_c, Property_Management_Company\_\_c, Property_Owner\_\_c, Property_Sale\_\_c, Tenant\_\_c |
+| `force-app/main/default/layouts/`                               | Page layouts for each custom object                                                                                                                                                                                                                                                                                                                               |
+| `force-app/main/default/permissionsets/`                        | `Property_Management_Access` permission set                                                                                                                                                                                                                                                                                                                       |
+| `force-app/main/default/data/`                                  | Sample data (JSON) for all objects, importable via `sf data import tree`                                                                                                                                                                                                                                                                                          |
 
 ## Getting started
 
 Navigate to the web app and install dependencies:
 
 ```bash
-cd force-app/main/default/webapplications/appreactsampleb2e
+cd force-app/main/default/webapplications/propertymanagementapp
 npm install
 npm run dev
 ```
 
-Opens at http://localhost:5173 by default. For build and test instructions, see the [web app README](force-app/main/default/webapplications/appreactsampleb2e/README.md).
+Opens at http://localhost:5173 by default. For build and test instructions, see the [web app README](force-app/main/default/webapplications/propertymanagementapp/README.md).
 
 ## Deploy
 
 ### Deploy everything (metadata + web app)
 
 ```bash
-cd force-app/main/default/webapplications/appreactsampleb2e && npm install && npm run build && cd -
+cd force-app/main/default/webapplications/propertymanagementapp && npm install && npm run build && cd -
 sf project deploy start --source-dir force-app --target-org <alias>
 ```
 
 ### Deploy the web app only
 
 ```bash
-cd force-app/main/default/webapplications/appreactsampleb2e && npm install && npm run build && cd -
+cd force-app/main/default/webapplications/propertymanagementapp && npm install && npm run build && cd -
 sf project deploy start --source-dir force-app/main/default/webapplications --target-org <alias>
 ```
 

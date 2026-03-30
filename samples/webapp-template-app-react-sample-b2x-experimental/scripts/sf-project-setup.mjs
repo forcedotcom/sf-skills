@@ -60,7 +60,7 @@ const webappDir = discoverWebappDir();
 console.log('SFDX project root:', ROOT);
 console.log('Web app directory:', webappDir);
 
-run('npm install', 'npm', ['install'], { cwd: webappDir });
+run('npm install', 'npm', ['install', '--registry', 'https://registry.npmjs.org/'], { cwd: webappDir });
 run('npm run build', 'npm', ['run', 'build'], { cwd: webappDir });
 console.log('\n--- Launching dev server (Ctrl+C to stop) ---\n');
 run('npm run dev', 'npm', ['run', 'dev'], { cwd: webappDir });
