@@ -26,7 +26,7 @@ The `appNamespace` and `appDevName` properties connect the site to the correct R
 Determine values for all five properties before constructing anything. Use the resolution strategies in the table above, falling through each option until a value is found.
 
 ### Step 2: Create the Project Structure
-Call the `get_metadata_type_sections` and `get_metadata_type_context` MCP tools to retrieve section-level schema and detailed field context for `Network`, `CustomSite`, `DigitalExperienceConfig`, and `DigitalExperienceBundle` metadata types. These schemas define the valid XML structure for each file.
+Use available Salesforce metadata schema and field context for `Network`, `CustomSite`, `DigitalExperienceConfig`, and `DigitalExperienceBundle` to ensure each file uses valid structure.
 
 Create any files and directories that don't already exist, using these paths:
 
@@ -63,7 +63,7 @@ Use the default templates in the docs below. Values in `{braces}` are resolved p
 - Read entire file contents, replace placeholders (e.g. `{siteName}`) with the resolved values, then use the expanded templates to populate the metadata XML/JSON content.
   
 ### Step 4: Resolve Additional Configurations
-Address any extra configurations the user requests. Use the metadata sections and field context returned in Step 2 by `get_metadata_type_sections` and `get_metadata_type_context` to understand each field’s purpose and constraints, then update only the minimum necessary fields.
+Address any extra configurations the user requests. Use the metadata sections and field context identified in Step 2 to understand each field’s purpose and constraints, then update only the minimum necessary fields.
 
 ## Verification Checklist
 Before deploying, confirm:
