@@ -14,7 +14,7 @@ Resolve all five properties before generating any metadata. Each has a fallback 
 | Property | Format | How to Resolve |
 |----------|--------|----------------|
 | **siteName** | `UpperCamelCase` (e.g., `MyCommunity`) | Ask user or derive from context |
-| **siteUrlPathPrefix** | `kebab-case` (e.g., `my-community`) | User-provided, or convert siteName to kebab-case |
+| **siteUrlPathPrefix** | `All lowercase` (e.g., `mycommunity`) | User-provided, or convert siteName to all lowercase with alphanumeric characters only |
 | **appNamespace** | String | `namespace` in `sfdx-project.json` → `sf data query -q "SELECT NamespacePrefix FROM Organization" --target-org ${usernameOrAlias}` → default `c` |
 | **appDevName** | String | `webApplication` metadata in the project → `sf data query -q "SELECT DeveloperName FROM WebApplication" --target-org ${usernameOrAlias}` → default to siteName |
 | **enableGuestAccess** | Boolean | Ask user whether unauthenticated guest users can access site APIs → default `false` |
