@@ -18,7 +18,12 @@ const schemaExists = existsSync(schemaPath);
 const config = [
   // Global ignores
   {
-    ignores: ['build/**/*', 'dist/**/*', 'coverage/**/*'],
+    ignores: [
+      'build/**/*',
+      'dist/**/*',
+      'coverage/**/*',
+      'src/api/graphql-operations-types.ts',
+    ],
   },
   // Config files and build tools (first to avoid inheritance)
   {
@@ -89,11 +94,17 @@ const config = [
       'react/no-unescaped-entities': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
-        { argsIgnorePattern: '^_' },
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
       ],
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
+      'react-hooks/set-state-in-effect': 'warn',
     },
     settings: {
       react: {

@@ -32,6 +32,7 @@ export default function Dashboard() {
 							requests={recentMaintenance}
 							loading={maintenanceLoading}
 							error={maintenanceError}
+							skeletonCount={5}
 						/>
 					</CardContent>
 				</Card>

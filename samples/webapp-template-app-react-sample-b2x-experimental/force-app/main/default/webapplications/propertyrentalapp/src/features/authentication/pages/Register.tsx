@@ -46,7 +46,7 @@ export default function Register() {
 				// "/services/apexrest/auth/register" refers to a custom Apex Class exposed as a REST resource.
 				// You must ensure this Apex class exists in your org and handles registration
 				// (e.g., duplicate checks and user creation such as Site.createExternalUser).
-				const { confirmPassword, ...request } = formFieldValues;
+				const { confirmPassword: _confirmPassword, ...request } = formFieldValues;
 				const sdk = await createDataSDK();
 				const response = await sdk.fetch!("/services/apexrest/auth/register", {
 					method: "POST",

@@ -2,25 +2,26 @@
  * Single maintenance request row: icon (teal) | Type & address + title | tenant (gray circle) [| status].
  */
 import { useCallback } from "react";
-import type { MaintenanceRequestSummary } from "@/api/maintenanceRequests/maintenanceRequestApi";
+import type { MaintenanceRequestNode } from "@/api/maintenanceRequests/maintenanceRequestApi";
 import { MaintenanceRequestIcon } from "@/components/maintenanceRequests/MaintenanceRequestIcon";
 import { StatusBadge } from "@/components/maintenanceRequests/StatusBadge";
 
 export interface MaintenanceRequestListItemProps {
-	request: MaintenanceRequestSummary;
+	request: MaintenanceRequestNode;
 	/** When set, row is clickable and opens details (e.g. modal). */
-	onClick?: (request: MaintenanceRequestSummary) => void;
+	onClick?: (request: MaintenanceRequestNode) => void;
 }
 
 export default function MaintenanceRequestListItem({
 	request,
 	onClick,
 }: MaintenanceRequestListItemProps) {
-	const issueType = request.type ?? "General";
-	const addressFirstPart = request.propertyAddress
-		? request.propertyAddress.split(",")[0].trim()
-		: (request.name ?? "—");
-	const title = request.title?.trim() || request.name?.trim() || "—";
+	const issueType = request.Type__c?.value ?? "General";
+	const propertyAddress = request.Property__r?.Address__c?.value ?? null;
+	const addressFirstPart = propertyAddress
+		? propertyAddress.split(",")[0].trim()
+		: (request.Name?.value ?? "—");
+	const title = request.Description__c?.value?.trim() || request.Name?.value?.trim() || "—";
 
 	const handleClick = useCallback(() => {
 		onClick?.(request);
@@ -51,7 +52,7 @@ export default function MaintenanceRequestListItem({
 					: undefined
 			}
 		>
-			<MaintenanceRequestIcon type={request.type} />
+			<MaintenanceRequestIcon type={request.Type__c?.value ?? null} />
 
 			{/* Issue Type and Address - Fixed width; title below to save space (avoids clipping) */}
 			<div className="ml-4 min-w-0 grow">
@@ -66,7 +67,7 @@ export default function MaintenanceRequestListItem({
 			</div>
 
 			<div className="ml-4 flex flex-shrink-0 items-center">
-				<StatusBadge status={request.status ?? "—"} />
+				<StatusBadge status={request.Status__c?.value ?? "—"} />
 			</div>
 		</div>
 	);

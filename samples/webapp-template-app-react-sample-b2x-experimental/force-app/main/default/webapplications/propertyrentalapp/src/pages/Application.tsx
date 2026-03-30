@@ -1,19 +1,16 @@
 import { useSearchParams, Link } from "react-router";
-import { useCallback, useEffect, useState, type ChangeEvent, type SubmitEvent } from "react";
+import { useCallback, useState, type ChangeEvent, type SubmitEvent } from "react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Card, CardContent } from "../components/ui/card";
 import { Skeleton } from "../components/ui/skeleton";
 import { SkeletonField } from "@/components/SkeletonPrimitives";
-import {
-	fetchListingById,
-	fetchPropertyById,
-	fetchPrimaryImagesByPropertyIds,
-} from "@/api/properties/propertyDetailGraphQL";
+import { fetchPropertyDetailById } from "@/api/properties/propertyDetailGraphQL";
 import { createApplicationRecord } from "@/api/applications/applicationApi";
 import { useAuth } from "@/features/authentication/context/AuthContext";
 import { fetchUserContact } from "../features/authentication/api/userProfileApi";
+import { useCachedAsyncData } from "@/features/object-search/hooks/useCachedAsyncData";
 
 function ApplicationSkeleton() {
 	return (
@@ -47,15 +44,40 @@ function ApplicationSkeleton() {
 export default function Application() {
 	const { user } = useAuth();
 	const [searchParams] = useSearchParams();
-	const listingId = searchParams.get("listingId") ?? "";
+	const propertyId = searchParams.get("propertyId") ?? "";
 
-	const [listingName, setListingName] = useState<string | null>(null);
-	const [propertyAddress, setPropertyAddress] = useState<string | null>(null);
-	const [propertyId, setPropertyId] = useState<string | null>(null);
-	const [propertyImageUrl, setPropertyImageUrl] = useState<string | null>(null);
-	const [contactId, setContactId] = useState<string | null>(null);
-	const [loading, setLoading] = useState(!!listingId);
-	const [loadError, setLoadError] = useState<string | null>(null);
+	const { data: contactData } = useCachedAsyncData(
+		() => {
+			if (!user?.id) return Promise.resolve(null);
+			return fetchUserContact<{ ContactId?: string }>(user.id);
+		},
+		[user?.id],
+		{ key: `contact:${user?.id ?? ""}`, ttl: 300_000 },
+	);
+	const contactId = contactData?.ContactId ?? null;
+
+	const {
+		data: property,
+		loading,
+		error: loadError,
+	} = useCachedAsyncData(
+		() => {
+			if (!propertyId?.trim()) return Promise.resolve(null);
+			return fetchPropertyDetailById(propertyId);
+		},
+		[propertyId],
+		{ key: `app-property:${propertyId}` },
+	);
+
+	const listing = property?.Property_Listings__r?.edges?.[0]?.node ?? null;
+	const images = (property?.Property_Images__r?.edges ?? []).flatMap((e) =>
+		e?.node ? [e.node] : [],
+	);
+	const primaryImage =
+		images.find((i) => i.Image_Type__c?.value === "Primary") ?? images[0] ?? null;
+	const propertyImageUrl = primaryImage?.Image_URL__c?.value ?? null;
+	const propertyName = listing?.Name?.value ?? property?.Name?.value ?? null;
+	const propertyAddress = property?.Address__c?.value ?? null;
 
 	const [moveInDate, setMoveInDate] = useState("");
 	const [employment, setEmployment] = useState("");
@@ -64,61 +86,6 @@ export default function Application() {
 	const [submitting, setSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
 	const [submittedId, setSubmittedId] = useState<string | null>(null);
-
-	useEffect(() => {
-		if (!user?.id) return;
-		let mounted = true;
-		fetchUserContact<{ ContactId?: string }>(user.id)
-			.then((contact) => {
-				if (mounted) setContactId(contact.ContactId ?? null);
-			})
-			.catch((err) => {
-				if (mounted) console.error("Failed to fetch contact ID", err);
-			});
-		return () => {
-			mounted = false;
-		};
-	}, [user]);
-
-	useEffect(() => {
-		if (!listingId?.trim()) {
-			setLoading(false);
-			return;
-		}
-		let cancelled = false;
-		setLoadError(null);
-		(async () => {
-			try {
-				const listing = await fetchListingById(listingId);
-				if (cancelled) return;
-				if (!listing) {
-					setLoadError("Listing not found.");
-					setLoading(false);
-					return;
-				}
-				setListingName(listing.name);
-				if (listing.propertyId) {
-					setPropertyId(listing.propertyId);
-					const [property, primaryImages] = await Promise.all([
-						fetchPropertyById(listing.propertyId),
-						fetchPrimaryImagesByPropertyIds([listing.propertyId]),
-					]);
-					if (cancelled) return;
-					setPropertyAddress(property?.address ?? null);
-					setPropertyImageUrl(primaryImages[listing.propertyId] ?? null);
-				}
-			} catch (e) {
-				if (!cancelled) {
-					setLoadError(e instanceof Error ? e.message : "Failed to load listing.");
-				}
-			} finally {
-				if (!cancelled) setLoading(false);
-			}
-		})();
-		return () => {
-			cancelled = true;
-		};
-	}, [listingId]);
 
 	const handleSubmit = useCallback(
 		async (e: SubmitEvent<HTMLFormElement>) => {
@@ -141,7 +108,7 @@ export default function Application() {
 				setSubmitting(false);
 			}
 		},
-		[propertyId, contactId, moveInDate, employment, references],
+		[propertyId, contactId, moveInDate, employment, references, user?.id],
 	);
 
 	if (loading) {
@@ -177,10 +144,10 @@ export default function Application() {
 		<div className="mx-auto max-w-[900px]">
 			<div className="mb-4">
 				<Link
-					to={listingId ? `/property/${listingId}` : "/properties"}
+					to={propertyId ? `/property/${propertyId}` : "/properties"}
 					className="text-sm text-primary no-underline hover:underline"
 				>
-					{listingId ? "← Back to listing" : "← Back to search"}
+					{propertyId ? "← Back to listing" : "← Back to search"}
 				</Link>
 			</div>
 			<Card className="mb-6 flex gap-4 rounded-2xl border border-border p-6 shadow-sm">
@@ -193,17 +160,21 @@ export default function Application() {
 				</div>
 				<div className="min-w-0 flex-1">
 					<h2 className="mb-1.5 text-2xl font-semibold text-foreground">
-						{listingName ?? "Apply for a property"}
+						{propertyName ?? "Apply for a property"}
 					</h2>
 					<p className="text-sm text-muted-foreground">
 						{propertyAddress ??
-							(listingId ? (
+							(propertyId ? (
 								<Skeleton className="mt-1 h-4 w-48" />
 							) : (
 								"Select a property from search or listing detail to apply."
 							))}
 					</p>
-					{loadError && <p className="mt-2 text-sm text-destructive">{loadError}</p>}
+					{loadError && (
+						<p className="mt-2 text-sm text-destructive">
+							Something went wrong. Please try again later.
+						</p>
+					)}
 				</div>
 			</Card>
 
@@ -241,7 +212,11 @@ export default function Application() {
 								onChange={(e) => setReferences(e.target.value)}
 							/>
 						</div>
-						{submitError && <p className="mb-4 text-sm text-destructive">{submitError}</p>}
+						{submitError && (
+							<p className="mb-4 text-sm text-destructive">
+								Something went wrong. Please try again later.
+							</p>
+						)}
 						<div className="flex gap-2">
 							<Button
 								type="submit"

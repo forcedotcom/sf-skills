@@ -107,20 +107,38 @@ function PropertyDetailsSkeleton() {
 
 export default function PropertyDetails() {
 	const { id } = useParams<{ id: string }>();
-	const { listing, property, images, costs, features, loading, error } = usePropertyDetail(id);
-	const addressForGeocode = property?.address?.replace(/\n/g, ", ") ?? null;
+	const { property, loading, error } = usePropertyDetail(id);
+
+	// Extract nested relationships from the single property node.
+	const images = (property?.Property_Images__r?.edges ?? []).flatMap((e) =>
+		e?.node ? [e.node] : [],
+	);
+	const features = (property?.Property_Features__r?.edges ?? []).flatMap((e) =>
+		e?.node ? [e.node] : [],
+	);
+	const costs = (property?.Property_Costs__r?.edges ?? []).flatMap((e) =>
+		e?.node ? [e.node] : [],
+	);
+	const listing = property?.Property_Listings__r?.edges?.[0]?.node ?? null;
+
+	const addressForGeocode = property?.Address__c?.value?.replace(/\n/g, ", ") ?? null;
+	const hasCoordinates =
+		property?.Coordinates__Latitude__s?.value != null &&
+		property?.Coordinates__Longitude__s?.value != null;
 	// Always call hook in the same order; disable geocoding when coordinates already exist.
-	const { coords: geocodedCoords } = useGeocode(property?.coordinates ? null : addressForGeocode);
-	const addressCoords: GeocodeResult | null =
-		property?.coordinates?.lat != null && property?.coordinates?.lng != null
-			? { lat: property.coordinates.lat, lng: property.coordinates.lng }
-			: geocodedCoords;
+	const { coords: geocodedCoords } = useGeocode(hasCoordinates ? null : addressForGeocode);
+	const addressCoords: GeocodeResult | null = hasCoordinates
+		? {
+				lat: Number(property!.Coordinates__Latitude__s!.value),
+				lng: Number(property!.Coordinates__Longitude__s!.value),
+			}
+		: geocodedCoords;
 
 	if (loading) {
 		return <PropertyDetailsSkeleton />;
 	}
 
-	if (error || (!listing && id)) {
+	if (error) {
 		return (
 			<div className="mx-auto max-w-[900px]">
 				<div className="mb-4">
@@ -130,15 +148,32 @@ export default function PropertyDetails() {
 				</div>
 				<Card className="rounded-2xl border border-border shadow-sm">
 					<CardContent className="pt-6">
-						<p className="text-destructive">{error ?? "Listing not found."}</p>
+						<p className="text-destructive">Something went wrong. Please try again later.</p>
 					</CardContent>
 				</Card>
 			</div>
 		);
 	}
 
-	const primaryImage = images.find((i) => i.imageType === "Primary") ?? images[0];
-	const otherImages = images.filter((i) => i.id !== primaryImage?.id);
+	if (!property && id) {
+		return (
+			<div className="mx-auto max-w-[900px]">
+				<div className="mb-4">
+					<Link to="/properties" className="text-sm text-primary no-underline hover:underline">
+						← Back to listings
+					</Link>
+				</div>
+				<Card className="rounded-2xl border border-border shadow-sm">
+					<CardContent className="pt-6">
+						<p className="text-destructive">Listing not found.</p>
+					</CardContent>
+				</Card>
+			</div>
+		);
+	}
+
+	const primaryImage = images.find((i) => i.Image_Type__c?.value === "Primary") ?? images[0];
+	const otherImages = images.filter((i) => i.Id !== primaryImage?.Id);
 
 	return (
 		<div className="mx-auto max-w-[900px]">
@@ -151,10 +186,10 @@ export default function PropertyDetails() {
 			{/* Hero image + thumbnails */}
 			<div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
 				<div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-muted">
-					{primaryImage?.imageUrl ? (
+					{primaryImage?.Image_URL__c?.value ? (
 						<img
-							src={primaryImage.imageUrl}
-							alt={primaryImage.altText ?? primaryImage.name ?? "Property"}
+							src={primaryImage.Image_URL__c.value}
+							alt={primaryImage.Alt_Text__c?.value ?? primaryImage.Name?.value ?? "Property"}
 							className="h-full w-full object-cover"
 						/>
 					) : (
@@ -163,11 +198,11 @@ export default function PropertyDetails() {
 				</div>
 				<div className="flex flex-col gap-2">
 					{otherImages.slice(0, 5).map((img) => (
-						<div key={img.id} className="relative h-20 overflow-hidden rounded-lg bg-muted">
-							{img.imageUrl ? (
+						<div key={img.Id} className="relative h-20 overflow-hidden rounded-lg bg-muted">
+							{img.Image_URL__c?.value ? (
 								<img
-									src={img.imageUrl}
-									alt={img.altText ?? img.name ?? "Property"}
+									src={img.Image_URL__c.value}
+									alt={img.Alt_Text__c?.value ?? img.Name?.value ?? "Property"}
 									className="h-full w-full object-cover"
 								/>
 							) : null}
@@ -186,7 +221,7 @@ export default function PropertyDetails() {
 							{
 								lat: addressCoords.lat,
 								lng: addressCoords.lng,
-								label: listing?.name ?? property?.name ?? "Property",
+								label: listing?.Name?.value ?? property?.Name?.value ?? "Property",
 							},
 						]}
 						className="h-[280px] w-full rounded-xl"
@@ -194,56 +229,56 @@ export default function PropertyDetails() {
 				</div>
 			)}
 
-			{/* Name, address, price (same order and price format as PropertyListingCard) */}
+			{/* Name, address, price */}
 			<Card className="mb-4 rounded-2xl border border-border shadow-sm">
 				<CardContent className="pt-3">
 					<h1 className="mb-1.5 text-2xl font-semibold text-foreground">
-						{listing?.name ?? property?.name ?? "Untitled"}
+						{listing?.Name?.value ?? property?.Name?.value ?? "Untitled"}
 					</h1>
-					{property?.address && (
+					{property?.Address__c?.value && (
 						<p className="mb-1.5 text-sm text-muted-foreground">
-							{property.address.replace(/\n/g, ", ")}
+							{property.Address__c.value.replace(/\n/g, ", ")}
 						</p>
 					)}
 					<p className="mb-4 text-2xl font-semibold text-primary">
-						{listing?.listingPrice != null
-							? formatListingPrice(listing.listingPrice)
-							: property?.monthlyRent != null
-								? formatListingPrice(property.monthlyRent) + " / Month"
+						{listing?.Listing_Price__c?.value != null
+							? formatListingPrice(listing.Listing_Price__c.value)
+							: property?.Monthly_Rent__c?.value != null
+								? formatListingPrice(property.Monthly_Rent__c.value) + " / Month"
 								: "—"}
 					</p>
-					{/* Stat cards: value on top, label below, rounded panels (same order as reference) */}
+					{/* Stat cards */}
 					<div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
 						<div className="flex flex-col items-center justify-center rounded-xl bg-primary px-4 py-3 text-center">
 							<span className="text-xl font-semibold text-primary-foreground">
-								{property?.bedrooms ?? "—"}
+								{property?.Bedrooms__c?.value ?? "—"}
 							</span>
 							<span className="text-xs text-primary-foreground/90">Bedrooms</span>
 						</div>
 						<div className="flex flex-col items-center justify-center rounded-xl bg-primary px-4 py-3 text-center">
 							<span className="text-xl font-semibold text-primary-foreground">
-								{property?.bathrooms ?? "—"}
+								{property?.Bathrooms__c?.value ?? "—"}
 							</span>
 							<span className="text-xs text-primary-foreground/90">Baths</span>
 						</div>
 						<div className="flex flex-col items-center justify-center rounded-xl bg-primary px-4 py-3 text-center">
 							<span className="text-xl font-semibold text-primary-foreground">
-								{property?.squareFootage ?? "—"}
+								{property?.Sq_Ft__c?.value ?? "—"}
 							</span>
 							<span className="text-xs text-primary-foreground/90">Square Feet</span>
 						</div>
 						<div className="flex flex-col items-center justify-center rounded-xl bg-primary px-4 py-3 text-center">
 							<span className="text-xl font-semibold text-primary-foreground">
-								{listing?.listingStatus ?? "Now"}
+								{listing?.Listing_Status__c?.value ?? "Now"}
 							</span>
 							<span className="text-xs text-primary-foreground/90">Available</span>
 						</div>
 					</div>
-					{property?.propertyType && (
-						<p className="mt-3 text-sm text-muted-foreground">{property.propertyType}</p>
+					{property?.Type__c?.value && (
+						<p className="mt-3 text-sm text-muted-foreground">{property.Type__c.value}</p>
 					)}
-					{property?.description && (
-						<p className="mt-4 text-sm text-foreground">{property.description}</p>
+					{property?.Description__c?.value && (
+						<p className="mt-4 text-sm text-foreground">{property.Description__c.value}</p>
 					)}
 				</CardContent>
 			</Card>
@@ -258,17 +293,21 @@ export default function PropertyDetails() {
 						<ul className="space-y-2">
 							{costs.slice(0, 10).map((c) => (
 								<li
-									key={c.id}
+									key={c.Id}
 									className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border/50 pb-2 last:border-0"
 								>
-									<span className="text-sm font-medium">{c.category ?? "Cost"}</span>
-									<span className="text-sm text-muted-foreground">{formatCurrency(c.amount)}</span>
-									{c.date && (
+									<span className="text-sm font-medium">{c.Cost_Category__c?.value ?? "Cost"}</span>
+									<span className="text-sm text-muted-foreground">
+										{formatCurrency(c.Cost_Amount__c?.value ?? null)}
+									</span>
+									{c.Cost_Date__c?.value && (
 										<span className="w-full text-xs text-muted-foreground">
-											{formatDate(c.date)}
+											{formatDate(c.Cost_Date__c.value)}
 										</span>
 									)}
-									{c.description && <span className="w-full text-xs">{c.description}</span>}
+									{c.Description__c?.value && (
+										<span className="w-full text-xs">{c.Description__c.value}</span>
+									)}
 								</li>
 							))}
 						</ul>
@@ -289,11 +328,11 @@ export default function PropertyDetails() {
 						<div className="flex flex-wrap gap-1.5">
 							{features.map((f) => (
 								<span
-									key={f.id}
+									key={f.Id}
 									className="rounded-full border border-border bg-muted/60 px-2.5 py-0.5 text-xs font-medium text-muted-foreground"
 								>
-									{f.category ? `${f.category}: ` : ""}
-									{f.description ?? f.name ?? "—"}
+									{f.Feature_Category__c?.value ? `${f.Feature_Category__c.value}: ` : ""}
+									{f.Description__c?.value ?? f.Name?.value ?? "—"}
 								</span>
 							))}
 						</div>
@@ -307,7 +346,7 @@ export default function PropertyDetails() {
 					size="sm"
 					className="w-full cursor-pointer rounded-xl bg-primary px-5 py-5 text-lg font-medium transition-colors duration-200 hover:bg-primary/90"
 				>
-					<Link to={`/application?listingId=${encodeURIComponent(id ?? "")}`}>
+					<Link to={`/application?propertyId=${encodeURIComponent(id ?? "")}`}>
 						Fill out an application
 					</Link>
 				</Button>

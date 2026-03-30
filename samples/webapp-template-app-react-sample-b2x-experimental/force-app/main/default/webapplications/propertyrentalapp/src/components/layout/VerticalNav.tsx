@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router";
 import { Home, Search, BarChart3, Wrench, Phone, type LucideIcon } from "lucide-react";
 import { useAuth } from "@/features/authentication/context/AuthContext";
+import { useTenantAccess } from "@/hooks/useTenantAccess";
 import { useMemo } from "react";
 
 interface NavItem {
@@ -25,11 +26,20 @@ interface NavMenuProps {
 
 export function NavMenu({ isOpen = false, onClose }: NavMenuProps) {
 	const location = useLocation();
-	const { isAuthenticated } = useAuth();
+	const { isAuthenticated, user } = useAuth();
+	const { hasTenantRecord } = useTenantAccess(user?.id);
 
 	const visibleItems = useMemo(
-		() => navItems.filter((item) => !item.authRequired || isAuthenticated),
-		[isAuthenticated],
+		() =>
+			navItems.filter((item) => {
+				if (!item.authRequired) return true;
+				if (!isAuthenticated) return false;
+				if (item.path === "/dashboard" || item.path === "/maintenance") {
+					return hasTenantRecord;
+				}
+				return true;
+			}),
+		[hasTenantRecord, isAuthenticated],
 	);
 
 	const isActive = (path: string) => {

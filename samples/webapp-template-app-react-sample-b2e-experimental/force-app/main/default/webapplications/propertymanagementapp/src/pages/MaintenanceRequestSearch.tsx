@@ -23,7 +23,7 @@ import {
 } from "../features/object-search/components/FilterContext";
 import { FilterRow } from "../components/layout/FilterRow";
 import { SearchFilter } from "../features/object-search/components/filters/SearchFilter";
-import { SelectFilter } from "../features/object-search/components/filters/SelectFilter";
+import { MultiSelectFilter } from "../features/object-search/components/filters/MultiSelectFilter";
 import { DateFilter } from "../features/object-search/components/filters/DateFilter";
 import { ObjectSearchErrorState } from "../components/shared/ObjectSearchErrorState";
 import PaginationControls from "../features/object-search/components/PaginationControls";
@@ -51,6 +51,7 @@ import type {
 	Maintenance_Request__C_Filter,
 	Maintenance_Request__C_OrderBy,
 } from "../api/graphql-operations-types";
+import { ResultOrder } from "../api/graphql-operations-types";
 import { cn } from "../lib/utils";
 
 const issueIcons: Record<string, string> = {
@@ -72,7 +73,7 @@ const FILTER_CONFIGS: FilterFieldConfig[] = [
 	{ field: "Status__c", label: "Status", type: "picklist" },
 	{ field: "Type__c", label: "Type", type: "picklist" },
 	{ field: "Priority__c", label: "Priority", type: "picklist" },
-	{ field: "Scheduled__c", label: "Scheduled", type: "date" },
+	{ field: "Scheduled__c", label: "Scheduled", type: "datetime" },
 ];
 
 const SORT_CONFIGS: SortFieldConfig<string>[] = [
@@ -104,17 +105,20 @@ export default function MaintenanceRequestSearch() {
 		Maintenance_Request__C_Filter,
 		Maintenance_Request__C_OrderBy
 	>(FILTER_CONFIGS, SORT_CONFIGS, PAGINATION_CONFIG);
-
-	const searchKey = `maintenance-requests:${JSON.stringify({ where: query.where, orderBy: query.orderBy, first: pagination.pageSize, after: pagination.afterCursor })}`;
+	const effectiveOrderBy = useMemo<Maintenance_Request__C_OrderBy>(
+		() => query.orderBy ?? { CreatedDate: { order: ResultOrder.Desc } },
+		[query.orderBy],
+	);
+	const searchKey = `maintenance-requests:${JSON.stringify({ where: query.where, orderBy: effectiveOrderBy, first: pagination.pageSize, after: pagination.afterCursor })}`;
 	const { data, loading, error } = useCachedAsyncData(
 		() =>
 			searchMaintenanceRequests({
 				where: query.where,
-				orderBy: query.orderBy,
+				orderBy: effectiveOrderBy,
 				first: pagination.pageSize,
 				after: pagination.afterCursor,
 			}),
-		[query.where, query.orderBy, pagination.pageSize, pagination.afterCursor],
+		[query.where, effectiveOrderBy, pagination.pageSize, pagination.afterCursor],
 		{ key: searchKey },
 	);
 
@@ -248,25 +252,30 @@ function MaintenanceRequestSearchFilters({
 					placeholder="Search by name..."
 					className="w-full sm:w-50"
 				/>
-				<SelectFilter
+				<MultiSelectFilter
 					field="Status__c"
 					label="Status"
 					options={statusOptions}
 					className="w-full sm:w-36"
 				/>
-				<SelectFilter
+				<MultiSelectFilter
 					field="Type__c"
 					label="Type"
 					options={typeOptions}
 					className="w-full sm:w-36"
 				/>
-				<SelectFilter
+				<MultiSelectFilter
 					field="Priority__c"
 					label="Priority"
 					options={priorityOptions}
 					className="w-full sm:w-36"
 				/>
-				<DateFilter field="Scheduled__c" label="Scheduled" className="w-full sm:w-56" />
+				<DateFilter
+					field="Scheduled__c"
+					label="Scheduled"
+					filterType="datetime"
+					className="w-full sm:w-56"
+				/>
 				<FilterResetButton />
 			</FilterRow>
 		</FilterProvider>

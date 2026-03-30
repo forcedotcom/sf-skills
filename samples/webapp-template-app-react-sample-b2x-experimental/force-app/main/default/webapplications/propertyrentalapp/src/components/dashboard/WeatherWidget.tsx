@@ -52,40 +52,56 @@ const Divider = () => <div className="my-5 border-t border-gray-200" />;
 
 function WeatherSkeleton() {
 	return (
-		<div className="mt-5 space-y-5" aria-hidden="true">
-			<Skeleton className="h-4 w-32" />
-			<div className="flex items-center justify-between">
-				<div className="space-y-2">
-					<Skeleton className="h-4 w-20" />
-					<Skeleton className="h-14 w-32" />
+		<div className="mt-5" aria-hidden="true">
+			{/* CurrentConditions: date row + city */}
+			<div className="flex items-baseline justify-between">
+				<Skeleton className="h-5 w-32" />
+				<Skeleton className="h-5 w-24" />
+			</div>
+
+			{/* CurrentConditions: description + temperature + icon */}
+			<div className="mt-2 flex items-center justify-between">
+				<div>
+					<Skeleton className="h-5 w-24" />
+					<Skeleton className="mt-1 h-[72px] w-36" />
 				</div>
 				<Skeleton className="h-20 w-20 rounded-full" />
 			</div>
-			<div className="border-t border-gray-200" />
-			<div className="grid grid-cols-3 gap-2">
+
+			{/* Divider */}
+			<div className="my-5 border-t border-gray-200" />
+
+			{/* CurrentConditions: stats grid */}
+			<div className="grid grid-cols-3 gap-2 text-center">
 				{[0, 1, 2].map((i) => (
-					<div key={i} className="flex flex-col items-center gap-1.5">
+					<div key={i} className="flex flex-col items-center gap-1">
 						<Skeleton className="h-5 w-5 rounded-full" />
-						<Skeleton className="h-4 w-14" />
-						<Skeleton className="h-3 w-10" />
+						<Skeleton className="h-5 w-16" />
+						<Skeleton className="h-4 w-12" />
 					</div>
 				))}
 			</div>
-			<div className="border-t border-gray-200" />
+
+			{/* Divider */}
+			<div className="my-5 border-t border-gray-200" />
+
+			{/* ForecastTabs */}
 			<div className="flex gap-6">
-				<Skeleton className="h-4 w-12" />
-				<Skeleton className="h-4 w-16" />
-				<Skeleton className="h-4 w-20" />
+				<Skeleton className="h-5 w-12" />
+				<Skeleton className="h-5 w-16" />
+				<Skeleton className="h-5 w-20" />
 			</div>
-			<div className="flex gap-3">
+
+			{/* HourlyForecast */}
+			<div className="mt-4 flex gap-3 overflow-x-auto pb-1">
 				{[0, 1, 2, 3].map((i) => (
 					<div
 						key={i}
-						className="flex w-[70px] flex-col items-center gap-1.5 rounded-2xl border border-gray-100 px-3 py-3"
+						className="flex min-w-[70px] flex-col items-center gap-1.5 rounded-2xl border border-gray-100 bg-gray-50/80 px-3 py-3"
 					>
-						<Skeleton className="h-3 w-10" />
+						<Skeleton className="h-4 w-10" />
 						<Skeleton className="h-5 w-5 rounded-full" />
-						<Skeleton className="h-4 w-8" />
+						<Skeleton className="h-5 w-8" />
 					</div>
 				))}
 			</div>

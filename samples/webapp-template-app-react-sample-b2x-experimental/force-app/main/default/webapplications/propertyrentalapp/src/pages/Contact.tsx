@@ -1,38 +1,16 @@
-import { useState, useCallback, useEffect, type SubmitEvent } from "react";
+import { useState, useCallback, type SubmitEvent } from "react";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CenteredPageLayout } from "@/features/authentication/layout/centered-page-layout";
-import { Skeleton } from "@/components/ui/skeleton";
-import { SkeletonField } from "@/components/SkeletonPrimitives";
-import { createContactUsLead } from "@/api/leadApi";
+import { Loader2 } from "lucide-react";
+import { createContactUsLead } from "@/api/leads/leadApi";
 import { useAuth } from "@/features/authentication/context/AuthContext";
 import { fetchUserProfile } from "@/features/authentication/api/userProfileApi";
-import type { UserInfo } from "@/api/leadApi";
-
-function LoadingCard() {
-	return (
-		<Card>
-			<CardHeader>
-				<Skeleton className="h-5 w-40" />
-			</CardHeader>
-			<CardContent className="space-y-4" role="status">
-				<div className="grid gap-4 sm:grid-cols-2">
-					<SkeletonField labelWidth="w-24" />
-					<SkeletonField labelWidth="w-20" />
-				</div>
-				<SkeletonField labelWidth="w-12" />
-				<SkeletonField labelWidth="w-14" />
-				<SkeletonField labelWidth="w-16" />
-				<SkeletonField labelWidth="w-20" height="h-[120px]" />
-				<Skeleton className="h-9 w-32" />
-				<span className="sr-only">Loading contact form…</span>
-			</CardContent>
-		</Card>
-	);
-}
+import { useCachedAsyncData } from "@/features/object-search/hooks/useCachedAsyncData";
+import type { UserInfo } from "@/api/leads/leadApi";
 
 function SuccessCard() {
 	return (
@@ -61,6 +39,7 @@ interface ContactFormProps {
 	onSubmit: (e: SubmitEvent<HTMLFormElement>) => void;
 	submitting: boolean;
 	submitError: string | null;
+	loading?: boolean;
 }
 
 function ContactForm({
@@ -69,6 +48,7 @@ function ContactForm({
 	onSubmit,
 	submitting,
 	submitError,
+	loading,
 }: ContactFormProps) {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
@@ -78,12 +58,23 @@ function ContactForm({
 	const [message, setMessage] = useState("");
 
 	return (
-		<Card>
+		<Card className="relative">
+			{loading && (
+				<div className="absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-muted/60">
+					<Loader2 className="size-8 animate-spin text-muted-foreground" />
+					<span className="sr-only">Loading contact form…</span>
+				</div>
+			)}
 			<CardHeader>
 				<CardTitle className="text-lg">Send a message</CardTitle>
 			</CardHeader>
 			<CardContent>
-				<form onSubmit={onSubmit} className="space-y-4">
+				<form
+					onSubmit={onSubmit}
+					className="space-y-4"
+					aria-disabled={loading}
+					inert={loading ? true : undefined}
+				>
 					<div className="grid gap-4 sm:grid-cols-2">
 						<div className="space-y-2">
 							<Label htmlFor="contact-first">First name {!isAuthenticated && "*"}</Label>
@@ -156,7 +147,11 @@ function ContactForm({
 							className="min-h-[120px] w-full resize-y rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none focus-visible:ring-2 focus-visible:ring-ring"
 						/>
 					</div>
-					{submitError && <p className="text-sm text-destructive">{submitError}</p>}
+					{submitError && (
+						<p className="text-sm text-destructive">
+							Something went wrong. Please try again later.
+						</p>
+					)}
 					<Button type="submit" disabled={submitting} className="bg-teal-600 hover:bg-teal-700">
 						{submitting ? "Sending…" : "Send message"}
 					</Button>
@@ -168,25 +163,18 @@ function ContactForm({
 
 export default function Contact() {
 	const { isAuthenticated, loading, user } = useAuth();
-	const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 	const [submitting, setSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
 	const [submitted, setSubmitted] = useState(false);
 
-	useEffect(() => {
-		if (!isAuthenticated) return;
-		let mounted = true;
-		fetchUserProfile<UserInfo>(user?.id ?? "")
-			.then((data) => {
-				if (mounted) setUserInfo(data);
-			})
-			.catch((err) => {
-				if (mounted) console.error("Failed to load user contact info", err);
-			});
-		return () => {
-			mounted = false;
-		};
-	}, [isAuthenticated, user]);
+	const { data: userInfo } = useCachedAsyncData(
+		() => {
+			if (!isAuthenticated || !user?.id) return Promise.resolve(null);
+			return fetchUserProfile<UserInfo>(user.id);
+		},
+		[isAuthenticated, user?.id],
+		{ key: `contact-user-profile:${user?.id ?? ""}`, ttl: 300_000 },
+	);
 
 	const handleSubmit = useCallback(
 		async (e: SubmitEvent<HTMLFormElement>) => {
@@ -228,17 +216,15 @@ export default function Contact() {
 
 	const isLoading = loading || (isAuthenticated && !userInfo);
 
-	function renderCard() {
-		if (isLoading) return <LoadingCard />;
-		if (submitted) return <SuccessCard />;
+	if (submitted) {
 		return (
-			<ContactForm
-				isAuthenticated={isAuthenticated}
-				userInfo={userInfo}
-				onSubmit={handleSubmit}
-				submitting={submitting}
-				submitError={submitError}
-			/>
+			<CenteredPageLayout contentMaxWidth="md">
+				<h1 className="mb-2 text-2xl font-semibold text-foreground">Contact Us</h1>
+				<p className="mb-6 text-muted-foreground">
+					Have a question or feedback? Send us a message and we'll respond as soon as we can.
+				</p>
+				<SuccessCard />
+			</CenteredPageLayout>
 		);
 	}
 
@@ -248,7 +234,14 @@ export default function Contact() {
 			<p className="mb-6 text-muted-foreground">
 				Have a question or feedback? Send us a message and we'll respond as soon as we can.
 			</p>
-			{renderCard()}
+			<ContactForm
+				isAuthenticated={isAuthenticated}
+				userInfo={userInfo}
+				onSubmit={handleSubmit}
+				submitting={submitting}
+				submitError={submitError}
+				loading={isLoading}
+			/>
 		</CenteredPageLayout>
 	);
 }

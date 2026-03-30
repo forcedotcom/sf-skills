@@ -86,7 +86,7 @@ export function useAuth(): AuthContextType {
  * @returns {User} The authenticated user object
  * @throws {Error} If not used within AuthProvider or user is not authenticated
  */
-export function getUser(): User {
+export function useUser(): User {
 	const context = useAuth();
 	if (!context.user) {
 		throw new Error("Authenticated context not established");

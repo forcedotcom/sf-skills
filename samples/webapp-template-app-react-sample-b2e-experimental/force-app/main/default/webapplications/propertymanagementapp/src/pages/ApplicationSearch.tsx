@@ -21,7 +21,7 @@ import {
 } from "../features/object-search/components/FilterContext";
 import { FilterRow } from "../components/layout/FilterRow";
 import { SearchFilter } from "../features/object-search/components/filters/SearchFilter";
-import { SelectFilter } from "../features/object-search/components/filters/SelectFilter";
+import { MultiSelectFilter } from "../features/object-search/components/filters/MultiSelectFilter";
 import { DateFilter } from "../features/object-search/components/filters/DateFilter";
 import { ObjectSearchErrorState } from "../components/shared/ObjectSearchErrorState";
 import PaginationControls from "../features/object-search/components/PaginationControls";
@@ -40,6 +40,7 @@ import type {
 	Application__C_Filter,
 	Application__C_OrderBy,
 } from "../api/graphql-operations-types";
+import { ResultOrder } from "../api/graphql-operations-types";
 import { Badge } from "../components/ui/badge";
 import { PAGINATION_CONFIG } from "../lib/constants";
 import { cn } from "../lib/utils";
@@ -54,7 +55,7 @@ const FILTER_CONFIGS: FilterFieldConfig[] = [
 	},
 	{ field: "Status__c", label: "Status", type: "picklist" },
 	{ field: "Start_Date__c", label: "Start Date", type: "date" },
-	{ field: "CreatedDate", label: "Created Date", type: "date" },
+	{ field: "CreatedDate", label: "Created Date", type: "datetime" },
 ];
 
 const SORT_CONFIGS: SortFieldConfig<string>[] = [
@@ -78,17 +79,20 @@ export default function ApplicationSearch() {
 		Application__C_Filter,
 		Application__C_OrderBy
 	>(FILTER_CONFIGS, SORT_CONFIGS, PAGINATION_CONFIG);
-
-	const searchKey = `applications:${JSON.stringify({ where: query.where, orderBy: query.orderBy, first: pagination.pageSize, after: pagination.afterCursor })}`;
+	const effectiveOrderBy = useMemo<Application__C_OrderBy>(
+		() => query.orderBy ?? { CreatedDate: { order: ResultOrder.Desc } },
+		[query.orderBy],
+	);
+	const searchKey = `applications:${JSON.stringify({ where: query.where, orderBy: effectiveOrderBy, first: pagination.pageSize, after: pagination.afterCursor })}`;
 	const { data, loading, error } = useCachedAsyncData(
 		() =>
 			searchApplications({
 				where: query.where,
-				orderBy: query.orderBy,
+				orderBy: effectiveOrderBy,
 				first: pagination.pageSize,
 				after: pagination.afterCursor,
 			}),
-		[query.where, query.orderBy, pagination.pageSize, pagination.afterCursor],
+		[query.where, effectiveOrderBy, pagination.pageSize, pagination.afterCursor],
 		{ key: searchKey },
 	);
 
@@ -209,14 +213,19 @@ function ApplicationSearchFilters({
 					placeholder="Search by name..."
 					className="w-full sm:w-50"
 				/>
-				<SelectFilter
+				<MultiSelectFilter
 					field="Status__c"
 					label="Status"
 					options={statusOptions ?? []}
 					className="w-full sm:w-36"
 				/>
 				<DateFilter field="Start_Date__c" label="Start Date" className="w-full sm:w-56" />
-				<DateFilter field="CreatedDate" label="Created Date" className="w-full sm:w-56" />
+				<DateFilter
+					field="CreatedDate"
+					label="Created Date"
+					filterType="datetime"
+					className="w-full sm:w-56"
+				/>
 				<FilterResetButton />
 			</FilterRow>
 		</FilterProvider>

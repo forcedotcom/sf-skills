@@ -5,9 +5,9 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "../../../../components/ui/select";
-import { Label } from "../../../../components/ui/label";
 import { cn } from "../../../../lib/utils";
 import { useFilterField } from "../FilterContext";
+import { FilterFieldWrapper } from "./FilterFieldWrapper";
 import type { ActiveFilterValue } from "../../utils/filterUtils";
 
 const ALL_VALUE = "__all__";
@@ -21,11 +21,15 @@ interface BooleanFilterProps extends Omit<React.ComponentProps<"div">, "onChange
 export function BooleanFilter({ field, label, helpText, className, ...props }: BooleanFilterProps) {
 	const { value, onChange } = useFilterField(field);
 	return (
-		<div className={cn("space-y-1.5", className)} {...props}>
-			<Label htmlFor={`filter-${field}`}>{label}</Label>
+		<FilterFieldWrapper
+			label={label}
+			htmlFor={`filter-${field}`}
+			helpText={helpText}
+			className={className}
+			{...props}
+		>
 			<BooleanFilterSelect field={field} label={label} value={value} onChange={onChange} />
-			{helpText && <p className="text-xs text-muted-foreground">{helpText}</p>}
-		</div>
+		</FilterFieldWrapper>
 	);
 }
 

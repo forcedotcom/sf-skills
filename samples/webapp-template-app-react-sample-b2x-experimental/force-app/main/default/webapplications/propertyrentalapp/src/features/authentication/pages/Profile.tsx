@@ -8,7 +8,7 @@ import { useAppForm } from "../hooks/form";
 import { ROUTES } from "../authenticationConfig";
 import { emailSchema } from "../authHelpers";
 import { getErrorMessage } from "../utils/helpers";
-import { getUser } from "../context/AuthContext";
+import { useUser } from "../context/AuthContext";
 import { fetchUserProfile, updateUserProfile } from "../api/userProfileApi";
 
 const optionalString = z
@@ -33,7 +33,7 @@ const profileSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
 export default function Profile() {
-	const user = getUser();
+	const user = useUser();
 	const [profile, setProfile] = useState<ProfileFormValues | null>(null);
 	const [loadError, setLoadError] = useState<string | null>(null);
 	const [success, setSuccess] = useState(false);
@@ -104,7 +104,7 @@ export default function Profile() {
 			const formData = profileSchema.parse(profile);
 			form.reset(formData);
 		}
-	}, [profile]);
+	}, [profile, form]);
 
 	if (!profile && !loadError) {
 		return <CardSkeleton contentMaxWidth="md" loadingText="Loading profile…" />;

@@ -1,99 +1,63 @@
 /**
- * Fetches Property_Listing__c by id, then related Property__c, images, costs, and features.
+ * Fetches Property__c by id with all related data (images, costs, features, listings)
+ * in a single GraphQL query.
  */
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import {
+	fetchPropertyDetailById,
 	fetchListingById,
-	fetchPropertyById,
-	fetchImagesByPropertyId,
-	fetchCostsByPropertyId,
-	fetchFeaturesByPropertyId,
-	type ListingDetail,
-	type PropertyDetail,
-	type PropertyImageRecord,
-	type PropertyCostRecord,
-	type PropertyFeatureRecord,
+	type PropertyDetailNode,
 } from "@/api/properties/propertyDetailGraphQL";
+import {
+	useCachedAsyncData,
+	clearCacheEntry,
+} from "@/features/object-search/hooks/useCachedAsyncData";
 
 export interface PropertyDetailState {
-	listing: ListingDetail | null;
-	property: PropertyDetail | null;
-	images: PropertyImageRecord[];
-	costs: PropertyCostRecord[];
-	features: PropertyFeatureRecord[];
+	property: PropertyDetailNode | null;
 	loading: boolean;
 	error: string | null;
 }
 
+const CACHE_KEY_PREFIX = "property-detail";
+
+async function fetchDetail(id: string): Promise<PropertyDetailNode | null> {
+	// First try directly as a Property__c ID (common path).
+	const detail = await fetchPropertyDetailById(id);
+	if (detail) return detail;
+
+	// Fall back: treat as a Property_Listing__c ID and resolve to its Property__c.
+	const listing = await fetchListingById(id);
+	const propertyId = listing?.Property__c?.value ?? null;
+	if (!propertyId) return null;
+	return fetchPropertyDetailById(propertyId);
+}
+
 export function usePropertyDetail(
-	listingId: string | undefined,
+	id: string | undefined,
 ): PropertyDetailState & { refetch: () => void } {
-	const [listing, setListing] = useState<ListingDetail | null>(null);
-	const [property, setProperty] = useState<PropertyDetail | null>(null);
-	const [images, setImages] = useState<PropertyImageRecord[]>([]);
-	const [costs, setCosts] = useState<PropertyCostRecord[]>([]);
-	const [features, setFeatures] = useState<PropertyFeatureRecord[]>([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
+	const [generation, setGeneration] = useState(0);
+	const trimmedId = id?.trim() ?? "";
+	const cacheKey = `${CACHE_KEY_PREFIX}:${trimmedId}:${generation}`;
 
-	const load = useCallback(async () => {
-		if (!listingId?.trim()) {
-			setListing(null);
-			setProperty(null);
-			setImages([]);
-			setCosts([]);
-			setFeatures([]);
-			setLoading(false);
-			setError(null);
-			return;
-		}
-		setLoading(true);
-		setError(null);
-		try {
-			const listingData = await fetchListingById(listingId);
-			setListing(listingData ?? null);
-			if (!listingData?.propertyId) {
-				setProperty(null);
-				setImages([]);
-				setCosts([]);
-				setFeatures([]);
-				setLoading(false);
-				return;
-			}
-			const [propertyData, imagesData, costsData, featuresData] = await Promise.all([
-				fetchPropertyById(listingData.propertyId),
-				fetchImagesByPropertyId(listingData.propertyId),
-				fetchCostsByPropertyId(listingData.propertyId),
-				fetchFeaturesByPropertyId(listingData.propertyId),
-			]);
-			setProperty(propertyData ?? null);
-			setImages(imagesData ?? []);
-			setCosts(costsData ?? []);
-			setFeatures(featuresData ?? []);
-		} catch (e) {
-			setError(e instanceof Error ? e.message : String(e));
-			setListing(null);
-			setProperty(null);
-			setImages([]);
-			setCosts([]);
-			setFeatures([]);
-		} finally {
-			setLoading(false);
-		}
-	}, [listingId]);
+	const { data, loading, error } = useCachedAsyncData(
+		() => {
+			if (!trimmedId) return Promise.resolve(null);
+			return fetchDetail(trimmedId);
+		},
+		[trimmedId, generation],
+		{ key: cacheKey },
+	);
 
-	useEffect(() => {
-		load();
-	}, [load]);
+	const refetch = useCallback(() => {
+		clearCacheEntry(cacheKey);
+		setGeneration((g) => g + 1);
+	}, [cacheKey]);
 
 	return {
-		listing,
-		property,
-		images,
-		costs,
-		features,
+		property: data ?? null,
 		loading,
 		error,
-		refetch: load,
+		refetch,
 	};
 }

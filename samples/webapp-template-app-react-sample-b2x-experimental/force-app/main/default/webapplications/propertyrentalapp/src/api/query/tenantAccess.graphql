@@ -1,0 +1,13 @@
+query TenantAccess($userId: ID!) {
+	uiapi {
+		query {
+			Tenant__c(where: { User__c: { eq: $userId } }, first: 1) {
+				edges {
+					node {
+						Id
+					}
+				}
+			}
+		}
+	}
+}

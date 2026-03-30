@@ -18,6 +18,8 @@ export interface AgentforceConversationClientProps {
 	inline?: boolean;
 	/** Show/hide chat header. Defaults to true for floating; can only be set for inline mode. */
 	headerEnabled?: boolean;
+	/** Show/hide agent icon in the header. */
+	showHeaderIcon?: boolean;
 	/** Inline width. */
 	width?: string | number;
 	/** Inline height. */

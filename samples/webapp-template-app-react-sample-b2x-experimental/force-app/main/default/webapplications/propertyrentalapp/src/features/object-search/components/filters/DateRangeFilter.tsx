@@ -1,25 +1,28 @@
 import type { DateRange } from "react-day-picker";
-import { Label } from "../../../../components/ui/label";
 import {
 	DatePicker,
 	DatePickerRangeTrigger,
 	DatePickerContent,
 	DatePickerCalendar,
 } from "../../../../components/ui/datePicker";
-import { cn } from "../../../../lib/utils";
+
 import { useFilterField } from "../FilterContext";
+import { FilterFieldWrapper } from "./FilterFieldWrapper";
+import type { FilterFieldType } from "../../utils/filterUtils";
 import { toDate, toDateString } from "./DateFilter";
 
 interface DateRangeFilterProps extends Omit<React.ComponentProps<"div">, "onChange"> {
 	field: string;
 	label: string;
 	helpText?: string;
+	filterType?: FilterFieldType;
 }
 
 export function DateRangeFilter({
 	field,
 	label,
 	helpText,
+	filterType = "daterange",
 	className,
 	...props
 }: DateRangeFilterProps) {
@@ -35,7 +38,7 @@ export function DateRangeFilter({
 			onChange({
 				field,
 				label,
-				type: "daterange",
+				type: filterType,
 				min: toDateString(range?.from),
 				max: toDateString(range?.to),
 			});
@@ -43,8 +46,7 @@ export function DateRangeFilter({
 	}
 
 	return (
-		<div className={cn("space-y-1.5", className)} {...props}>
-			<Label>{label}</Label>
+		<FilterFieldWrapper label={label} helpText={helpText} className={className} {...props}>
 			<DatePicker>
 				<DatePickerRangeTrigger
 					className="w-full"
@@ -63,7 +65,6 @@ export function DateRangeFilter({
 					/>
 				</DatePickerContent>
 			</DatePicker>
-			{helpText && <p className="text-xs text-muted-foreground">{helpText}</p>}
-		</div>
+		</FilterFieldWrapper>
 	);
 }

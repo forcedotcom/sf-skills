@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { parseISO } from "date-fns";
-import { Label } from "../../../../components/ui/label";
 import {
 	DatePicker,
 	DatePickerTrigger,
 	DatePickerContent,
 	DatePickerCalendar,
 } from "../../../../components/ui/datePicker";
-import { cn } from "../../../../lib/utils";
+
 import { useFilterField } from "../FilterContext";
+import { FilterFieldWrapper } from "./FilterFieldWrapper";
+import type { FilterFieldType } from "../../utils/filterUtils";
 import {
 	Select,
 	SelectContent,
@@ -32,9 +33,17 @@ interface DateFilterProps extends Omit<React.ComponentProps<"div">, "onChange"> 
 	field: string;
 	label: string;
 	helpText?: string;
+	filterType?: FilterFieldType;
 }
 
-export function DateFilter({ field, label, helpText, className, ...props }: DateFilterProps) {
+export function DateFilter({
+	field,
+	label,
+	helpText,
+	filterType = "date",
+	className,
+	...props
+}: DateFilterProps) {
 	const { value, onChange } = useFilterField(field);
 
 	const initialOp: DateOperator = value?.min ? "gt" : "lt";
@@ -63,7 +72,7 @@ export function DateFilter({ field, label, helpText, className, ...props }: Date
 		onChange({
 			field,
 			label,
-			type: "date",
+			type: filterType,
 			value: op,
 			min: f === "min" ? dateStr : undefined,
 			max: f === "max" ? dateStr : undefined,
@@ -71,8 +80,7 @@ export function DateFilter({ field, label, helpText, className, ...props }: Date
 	}
 
 	return (
-		<div className={cn("space-y-1.5", className)} {...props}>
-			<Label>{label}</Label>
+		<FilterFieldWrapper label={label} helpText={helpText} className={className} {...props}>
 			<div className="flex gap-2">
 				<Select value={operator} onValueChange={(v) => handleOperatorChange(v as DateOperator)}>
 					<SelectTrigger className="w-full flex-1">
@@ -104,8 +112,7 @@ export function DateFilter({ field, label, helpText, className, ...props }: Date
 					</DatePickerContent>
 				</DatePicker>
 			</div>
-			{helpText && <p className="text-xs text-muted-foreground">{helpText}</p>}
-		</div>
+		</FilterFieldWrapper>
 	);
 }
 

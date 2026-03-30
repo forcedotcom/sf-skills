@@ -62,8 +62,8 @@ const FILTER_CONFIGS: FilterFieldConfig[] = [
 	{ field: "Industry", label: "Industry", type: "picklist" },
 	{ field: "Type", label: "Type", type: "multipicklist" },
 	{ field: "AnnualRevenue", label: "Annual Revenue", type: "numeric" },
-	{ field: "CreatedDate", label: "Created Date", type: "date" },
-	{ field: "LastModifiedDate", label: "Last Modified Date", type: "daterange" },
+	{ field: "CreatedDate", label: "Created Date", type: "datetime" },
+	{ field: "LastModifiedDate", label: "Last Modified Date", type: "datetimerange" },
 ];
 
 const ACCOUNT_SORT_CONFIGS: SortFieldConfig<keyof Account_OrderBy>[] = [
@@ -152,7 +152,7 @@ export default function AccountSearch() {
 									</div>
 								</CardHeader>
 								<CollapsibleContent>
-									<CardContent className="space-y-4 pt-0">
+									<CardContent className="space-y-1 pt-0">
 										<SearchFilter
 											field="search"
 											label="Search"
@@ -165,9 +165,18 @@ export default function AccountSearch() {
 											options={industryOptions ?? []}
 										/>
 										<MultiSelectFilter field="Type" label="Type" options={typeOptions ?? []} />
-										<NumericRangeFilter field="AnnualRevenue" label="Annual Revenue" />
-										<DateFilter field="CreatedDate" label="Created Date" />
-										<DateRangeFilter field="LastModifiedDate" label="Last Modified Date" />
+										<NumericRangeFilter
+											field="AnnualRevenue"
+											label="Annual Revenue"
+											min={0}
+											max={1_000_000_000_000}
+										/>
+										<DateFilter field="CreatedDate" label="Created Date" filterType="datetime" />
+										<DateRangeFilter
+											field="LastModifiedDate"
+											label="Last Modified Date"
+											filterType="datetimerange"
+										/>
 									</CardContent>
 								</CollapsibleContent>
 							</Collapsible>

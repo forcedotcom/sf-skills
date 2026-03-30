@@ -1,4 +1,4 @@
-import { useState, useCallback, type ChangeEvent } from "react";
+import { useState, useCallback, useMemo, type ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,27 +7,55 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar, ArrowRight } from "lucide-react";
 import MaintenanceRequestList from "@/components/maintenanceRequests/MaintenanceRequestList";
 import { SkeletonListRows, SkeletonField } from "@/components/SkeletonPrimitives";
-import { useMaintenanceRequests } from "@/hooks/useMaintenanceRequests";
-import { createMaintenanceRequest } from "@/api/maintenanceRequests/maintenanceRequestApi";
+import {
+	searchMaintenanceRequests,
+	createMaintenanceRequest,
+	type MaintenanceRequestNode,
+} from "@/api/maintenanceRequests/maintenanceRequestApi";
 import { useAuth } from "@/features/authentication/context/AuthContext";
+import {
+	useObjectSearchParams,
+	type PaginationConfig,
+} from "@/features/object-search/hooks/useObjectSearchParams";
+import {
+	useCachedAsyncData,
+	clearCacheEntry,
+} from "@/features/object-search/hooks/useCachedAsyncData";
+import PaginationControls from "@/features/object-search/components/PaginationControls";
+import type {
+	Maintenance_Request__C_Filter,
+	Maintenance_Request__C_OrderBy,
+} from "@/api/graphql-operations-types";
+import { ResultOrder } from "@/api/graphql-operations-types";
+import type { FilterFieldConfig } from "@/features/object-search/utils/filterUtils";
+import type { SortFieldConfig } from "@/features/object-search/utils/sortUtils";
 
 const TYPE_OPTIONS = [
-	"Plumbing",
-	"Electrical",
-	"HVAC",
-	"Appliance",
-	"Structural",
-	"Cleaning",
-	"Security",
-	"Pest",
-	"Other",
+	{ value: "Plumbing", label: "Plumbing" },
+	{ value: "Electrical", label: "Electrical" },
+	{ value: "HVAC", label: "HVAC" },
+	{ value: "Appliance", label: "Appliance" },
+	{ value: "Carpentry", label: "Carpentry" },
+	{ value: "Landscaping", label: "Landscaping" },
+	{ value: "Cleaning", label: "Cleaning" },
+	{ value: "Pest", label: "Pest Control" },
+	{ value: "Other", label: "Other" },
 ] as const;
 
 const PRIORITY_OPTIONS = [
 	{ value: "Standard", label: "Standard" },
-	{ value: "High", label: "High (Same Day)" },
-	{ value: "Emergency", label: "Emergency (2hr)" },
+	{ value: "High (Same Day)", label: "High (Same Day)" },
+	{ value: "Emergency (2hr)", label: "Emergency (2hr)" },
 ] as const;
+
+const FILTER_CONFIGS: FilterFieldConfig[] = [];
+
+const SORT_CONFIGS: SortFieldConfig[] = [{ field: "Scheduled__c", label: "Scheduled" }];
+
+const PAGINATION_CONFIG: PaginationConfig = {
+	defaultPageSize: 10,
+	validPageSizes: [10, 20, 50],
+};
 
 function MaintenanceSkeleton() {
 	return (
@@ -62,7 +90,50 @@ function MaintenanceSkeleton() {
 
 export default function Maintenance() {
 	const { loading: authLoading } = useAuth();
-	const { requests, loading, error, refetch } = useMaintenanceRequests();
+
+	const { query, pagination } = useObjectSearchParams<
+		Maintenance_Request__C_Filter,
+		Maintenance_Request__C_OrderBy
+	>(FILTER_CONFIGS, SORT_CONFIGS, PAGINATION_CONFIG);
+
+	const [refreshCounter, setRefreshCounter] = useState(0);
+
+	const searchKey = `maintenance-requests:${JSON.stringify({
+		orderBy: query.orderBy,
+		first: pagination.pageSize,
+		after: pagination.afterCursor,
+		refresh: refreshCounter,
+	})}`;
+
+	const {
+		data: searchResult,
+		loading,
+		error,
+	} = useCachedAsyncData(
+		() =>
+			searchMaintenanceRequests({
+				where: query.where,
+				orderBy: { Scheduled__c: { order: ResultOrder.Desc } },
+				first: pagination.pageSize,
+				after: pagination.afterCursor,
+			}),
+		[query.where, query.orderBy, pagination.pageSize, pagination.afterCursor, refreshCounter],
+		{ key: searchKey },
+	);
+
+	const requests = useMemo(
+		() =>
+			(searchResult?.edges ?? []).reduce<MaintenanceRequestNode[]>((acc, edge) => {
+				if (edge?.node) acc.push(edge.node);
+				return acc;
+			}, []),
+		[searchResult?.edges],
+	);
+
+	const pageInfo = searchResult?.pageInfo;
+	const hasNextPage = pageInfo?.hasNextPage ?? false;
+	const hasPreviousPage = pagination.pageIndex > 0;
+
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [type, setType] = useState<string>("");
@@ -74,8 +145,6 @@ export default function Maintenance() {
 	const [submitting, setSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
 	const [submitSuccess, setSubmitSuccess] = useState(false);
-
-	if (authLoading) return <MaintenanceSkeleton />;
 
 	const handleSubmit = useCallback(
 		async (e: React.FormEvent) => {
@@ -103,15 +172,18 @@ export default function Maintenance() {
 				setType("");
 				setPriority("Standard");
 				setDateRequested(new Date().toISOString().slice(0, 10));
-				await refetch();
+				clearCacheEntry(searchKey);
+				setRefreshCounter((c) => c + 1);
 			} catch (err) {
 				setSubmitError(err instanceof Error ? err.message : "Failed to submit request");
 			} finally {
 				setSubmitting(false);
 			}
 		},
-		[title, description, type, priority, dateRequested, refetch],
+		[title, description, type, priority, dateRequested, searchKey],
 	);
+
+	if (authLoading) return <MaintenanceSkeleton />;
 
 	return (
 		<div className="mx-auto max-w-[900px]">
@@ -181,8 +253,8 @@ export default function Maintenance() {
 								>
 									<option value="">—</option>
 									{TYPE_OPTIONS.map((o) => (
-										<option key={o} value={o}>
-											{o}
+										<option key={o.value} value={o.value}>
+											{o.label}
 										</option>
 									))}
 								</select>
@@ -202,7 +274,7 @@ export default function Maintenance() {
 						</div>
 						{submitError && (
 							<p className="text-sm text-destructive" role="alert">
-								{submitError}
+								Something went wrong. Please try again later.
 							</p>
 						)}
 						{submitSuccess && (
@@ -235,6 +307,23 @@ export default function Maintenance() {
 						emptyMessage="No maintenance requests yet. Submit one above."
 					/>
 				</CardContent>
+				{!loading && !error && requests.length > 0 && (
+					<div className="px-6 pb-6">
+						<PaginationControls
+							pageIndex={pagination.pageIndex}
+							hasNextPage={hasNextPage}
+							hasPreviousPage={hasPreviousPage}
+							pageSize={pagination.pageSize}
+							pageSizeOptions={PAGINATION_CONFIG.validPageSizes}
+							onNextPage={() => {
+								if (pageInfo?.endCursor) pagination.goToNextPage(pageInfo.endCursor);
+							}}
+							onPreviousPage={pagination.goToPreviousPage}
+							onPageSizeChange={pagination.setPageSize}
+							disabled={loading || !!error}
+						/>
+					</div>
+				)}
 			</Card>
 		</div>
 	);

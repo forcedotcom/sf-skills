@@ -1,20 +1,23 @@
 import { Link, useNavigate } from "react-router";
-import { useRef, useState, type ChangeEvent } from "react";
+import { useRef, useState, useMemo, type ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { usePropertyListingSearch } from "@/hooks/usePropertyListingSearch";
 import {
-	usePropertyPrimaryImages,
-	getPropertyIdFromRecord,
-} from "@/hooks/usePropertyPrimaryImages";
-import { usePropertyAddresses } from "@/hooks/usePropertyAddresses";
-import { usePropertyListingAmenities } from "@/hooks/usePropertyListingAmenities";
+	searchProperties,
+	type PropertySearchNode,
+	type PropertySearchResult,
+} from "@/api/properties/propertySearchService";
+import {
+	extractPrimaryImageUrl,
+	extractAmenities,
+	extractAddress,
+} from "@/api/properties/propertyNodeUtils";
+import { useCachedAsyncData } from "@/features/object-search/hooks/useCachedAsyncData";
 import PropertyListingCard, {
 	PropertyListingCardSkeleton,
 } from "@/components/properties/PropertyListingCard";
-import type { SearchResultRecord } from "@/types/searchResults.js";
-import { createNewsletterLead } from "@/api/leadApi";
+import { createNewsletterLead } from "@/api/leads/leadApi";
 import {
 	Phone,
 	Send,
@@ -62,29 +65,24 @@ function FeaturedPropertiesGrid({
 	propertyAddressMap,
 	amenitiesMap,
 }: {
-	results: SearchResultRecord[];
-	primaryImagesMap: Record<string, string> & { loading: boolean };
-	propertyAddressMap: Record<string, string> & { loading: boolean };
-	amenitiesMap: Record<string, string> & { loading: boolean };
+	results: PropertySearchNode[];
+	primaryImagesMap: Record<string, string>;
+	propertyAddressMap: Record<string, string>;
+	amenitiesMap: Record<string, string>;
 }) {
 	return (
 		<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-			{results.map((item, index) => {
-				const record = item.record;
-				const propertyId = getPropertyIdFromRecord(record);
-				const imageUrl = propertyId ? (primaryImagesMap[propertyId] ?? null) : null;
-				const address = propertyId ? (propertyAddressMap[propertyId] ?? null) : null;
-				const amenities = propertyId ? (amenitiesMap[propertyId] ?? null) : null;
+			{results.map((node, index) => {
+				const imageUrl = primaryImagesMap[node.Id] ?? null;
+				const address = propertyAddressMap[node.Id] ?? null;
+				const amenities = amenitiesMap[node.Id] ?? null;
 				return (
-					<div key={record.id ?? index} className="min-h-0">
+					<div key={node.Id ?? index} className="min-h-0">
 						<PropertyListingCard
-							record={record}
+							node={node}
 							imageUrl={imageUrl}
 							address={address}
 							amenities={amenities ?? undefined}
-							loading={
-								primaryImagesMap.loading || propertyAddressMap.loading || amenitiesMap.loading
-							}
 						/>
 					</div>
 				);
@@ -104,19 +102,52 @@ export default function Home() {
 		text: string;
 	} | null>(null);
 
-	const { results: featuredResults, resultsLoading: featuredLoading } = usePropertyListingSearch(
-		"",
-		FEATURED_PAGE_SIZE,
-		"0",
+	const { data: searchResult, loading: featuredLoading } = useCachedAsyncData<PropertySearchResult>(
+		() => searchProperties({ first: FEATURED_PAGE_SIZE }),
+		[],
+		{ key: "featuredProperties" },
 	);
-	const primaryImagesMap = usePropertyPrimaryImages(featuredResults);
-	const propertyAddressMap = usePropertyAddresses(featuredResults);
-	const amenitiesMap = usePropertyListingAmenities(featuredResults);
+
+	const featuredResults = useMemo(
+		() =>
+			(searchResult?.edges ?? []).reduce<PropertySearchNode[]>((acc, edge) => {
+				if (edge?.node) acc.push(edge.node);
+				return acc;
+			}, []),
+		[searchResult?.edges],
+	);
+
+	const primaryImagesMap = useMemo(() => {
+		const map: Record<string, string> = {};
+		for (const node of featuredResults) {
+			const url = extractPrimaryImageUrl(node);
+			if (url) map[node.Id] = url;
+		}
+		return map;
+	}, [featuredResults]);
+
+	const propertyAddressMap = useMemo(() => {
+		const map: Record<string, string> = {};
+		for (const node of featuredResults) {
+			const addr = extractAddress(node);
+			if (addr) map[node.Id] = String(addr);
+		}
+		return map;
+	}, [featuredResults]);
+
+	const amenitiesMap = useMemo(() => {
+		const map: Record<string, string> = {};
+		for (const node of featuredResults) {
+			const amenities = extractAmenities(node);
+			if (amenities) map[node.Id] = amenities;
+		}
+		return map;
+	}, [featuredResults]);
 
 	const handleFindHome = (e: React.FormEvent) => {
 		e.preventDefault();
 		const q = searchInputRef.current?.value?.trim() ?? "";
-		navigate(q ? `/properties?search=${encodeURIComponent(q)}` : "/properties");
+		navigate(q ? `/properties?q=${encodeURIComponent(q)}` : "/properties");
 	};
 
 	const handleFooterSubmit = async (e: React.FormEvent) => {
@@ -136,7 +167,7 @@ export default function Home() {
 		}
 	};
 
-	const validFeatured = featuredResults.filter((r) => r?.record?.id);
+	const validFeatured = featuredResults.filter((r) => r?.Id);
 
 	return (
 		<div className="space-y-0">

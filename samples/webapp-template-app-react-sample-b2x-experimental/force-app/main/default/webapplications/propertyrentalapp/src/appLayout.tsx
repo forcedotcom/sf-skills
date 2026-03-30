@@ -8,7 +8,7 @@ export default function AppLayout() {
 	const [isNavOpen, setIsNavOpen] = useState(false);
 
 	return (
-		<div className="flex flex-col">
+		<div className="flex min-h-screen flex-col bg-gray-50">
 			<Toaster />
 			<TopBar onMenuClick={() => setIsNavOpen(true)} />
 

@@ -19,6 +19,7 @@ import PropertySearch from "@/pages/PropertySearch";
 import PropertyDetails from "@/pages/PropertyDetails";
 import Application from "@/pages/Application";
 import Contact from "@/pages/Contact";
+import TenantRoute from "./features/authentication/layouts/TenantRoute";
 
 export const routes: RouteObject[] = [
   {
@@ -104,6 +105,15 @@ export const routes: RouteObject[] = [
         element: <PrivateRoute />,
         children: [
           {
+            path: "application",
+            element: <Application />
+          }
+        ]
+      },
+      {
+        element: <TenantRoute />,
+        children: [
+          {
             path: "dashboard",
             element: <Dashboard />,
             handle: { showInNavigation: true, label: "Dashboard" }
@@ -112,10 +122,6 @@ export const routes: RouteObject[] = [
             path: "maintenance",
             element: <Maintenance />,
             handle: { showInNavigation: true, label: "Maintenance" }
-          },
-          {
-            path: "application",
-            element: <Application />
           }
         ]
       }

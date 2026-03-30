@@ -6,20 +6,9 @@ import { useNavigate } from "react-router";
 import { useCallback, type MouseEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { SearchResultRecordData } from "@/types/searchResults.js";
+import type { PropertySearchNode } from "@/api/properties/propertySearchService";
 
-function fieldDisplay(
-	fields: Record<string, { value?: unknown; displayValue?: string | null }> | undefined,
-	apiName: string,
-): string | null {
-	const f = fields?.[apiName];
-	if (!f || typeof f !== "object") return null;
-	if (f.displayValue != null && f.displayValue !== "") return String(f.displayValue);
-	if (f.value != null) return typeof f.value === "object" ? null : String(f.value);
-	return null;
-}
-
-function formatPrice(val: string | number | null): string {
+function formatPrice(val: string | number | null | undefined): string {
 	if (val == null) return "—";
 	const n = typeof val === "number" ? val : Number(val);
 	if (Number.isNaN(n)) return String(val);
@@ -32,8 +21,8 @@ function formatPrice(val: string | number | null): string {
 	);
 }
 
-interface PropertyListingCardProps {
-	record: SearchResultRecordData;
+export interface PropertyListingCardProps {
+	node: PropertySearchNode;
 	imageUrl: string | null;
 	address?: string | null;
 	amenities?: string | null;
@@ -65,23 +54,21 @@ export function PropertyListingCardSkeleton() {
 }
 
 export default function PropertyListingCard({
-	record,
+	node,
 	imageUrl,
 	address,
 	amenities,
 	loading = false,
 }: PropertyListingCardProps) {
 	const navigate = useNavigate();
-	const name = fieldDisplay(record.fields, "Name") ?? "Untitled";
-	const price = fieldDisplay(record.fields, "Listing_Price__c");
-	const propertyRef = fieldDisplay(record.fields, "Property__c");
-	const bedroomsRaw = fieldDisplay(record.fields, "Property__r.Bedrooms__c");
-	const bedroomsNum = bedroomsRaw != null && bedroomsRaw !== "" ? Number(bedroomsRaw) : NaN;
+	const name = node.Name?.displayValue ?? node.Name?.value ?? "Untitled";
+	const price = node.Monthly_Rent__c?.value;
+	const bedroomsNum = typeof node.Bedrooms__c?.value === "number" ? node.Bedrooms__c.value : NaN;
 	const bedroomsLabel =
 		!Number.isNaN(bedroomsNum) && bedroomsNum >= 0
 			? `${bedroomsNum} Bedroom${bedroomsNum !== 1 ? "s" : ""}`
 			: null;
-	const detailPath = `/property/${record.id}`;
+	const detailPath = `/property/${node.Id}`;
 
 	const handleClick = useCallback(() => {
 		navigate(detailPath);
@@ -101,7 +88,7 @@ export default function PropertyListingCard({
 		return <PropertyListingCardSkeleton />;
 	}
 
-	const displayAddress = (address ?? propertyRef ?? "").trim().replace(/\n/g, ", ") || null;
+	const displayAddress = (address ?? "").trim().replace(/\n/g, ", ") || null;
 	const amenityLabels = (amenities ?? "")
 		.split(/\s*\|\s*/)
 		.map((s) => s.trim())
@@ -180,7 +167,7 @@ export default function PropertyListingCard({
 					className="mt-4 w-full cursor-pointer rounded-xl bg-primary px-5 py-5 text-lg font-medium transition-colors duration-200 hover:bg-primary/90"
 					onClick={(e: MouseEvent<HTMLButtonElement>) => {
 						e.stopPropagation();
-						navigate(`/application?listingId=${encodeURIComponent(record.id)}`);
+						navigate(`/application?propertyId=${encodeURIComponent(node.Id)}`);
 					}}
 				>
 					Apply

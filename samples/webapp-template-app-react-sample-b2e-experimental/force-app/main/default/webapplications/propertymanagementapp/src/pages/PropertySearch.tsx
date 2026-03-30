@@ -22,7 +22,7 @@ import {
 } from "../features/object-search/components/FilterContext";
 import { FilterRow } from "../components/layout/FilterRow";
 import { SearchFilter } from "../features/object-search/components/filters/SearchFilter";
-import { SelectFilter } from "../features/object-search/components/filters/SelectFilter";
+import { MultiSelectFilter } from "../features/object-search/components/filters/MultiSelectFilter";
 import { NumericRangeFilter } from "../features/object-search/components/filters/NumericRangeFilter";
 import { ObjectSearchErrorState } from "../components/shared/ObjectSearchErrorState";
 import PaginationControls from "../features/object-search/components/PaginationControls";
@@ -171,13 +171,13 @@ function PropertySearchFilters({
 					placeholder="Search by name or address..."
 					className="w-full sm:w-50"
 				/>
-				<SelectFilter
+				<MultiSelectFilter
 					field="Status__c"
 					label="Status"
 					options={statusOptions}
 					className="w-full sm:w-36"
 				/>
-				<SelectFilter
+				<MultiSelectFilter
 					field="Type__c"
 					label="Type"
 					options={typeOptions}
@@ -186,9 +186,17 @@ function PropertySearchFilters({
 				<NumericRangeFilter
 					field="Monthly_Rent__c"
 					label="Monthly Rent"
+					min={0}
+					max={100_000}
 					className="w-full sm:w-50"
 				/>
-				<NumericRangeFilter field="Bedrooms__c" label="Bedrooms" className="w-full sm:w-50" />
+				<NumericRangeFilter
+					field="Bedrooms__c"
+					label="Bedrooms"
+					min={0}
+					max={20}
+					className="w-full sm:w-50"
+				/>
 				<FilterResetButton />
 			</FilterRow>
 		</FilterProvider>

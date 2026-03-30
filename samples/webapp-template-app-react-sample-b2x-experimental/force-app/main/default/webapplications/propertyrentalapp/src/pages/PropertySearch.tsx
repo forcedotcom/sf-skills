@@ -3,17 +3,29 @@
  * Map ~2/3 left, scrollable listings ~1/3 right; search/filter bar above.
  */
 import { useState, useCallback, useMemo, useEffect } from "react";
-import { useSearchParams } from "react-router";
-import { DEFAULT_PAGE_SIZE } from "@/constants/propertyListing";
-import { usePropertyListingSearch } from "@/hooks/usePropertyListingSearch";
 import {
-	usePropertyPrimaryImages,
-	getPropertyIdFromRecord,
-} from "@/hooks/usePropertyPrimaryImages";
-import { usePropertyAddresses } from "@/hooks/usePropertyAddresses";
-import { usePropertyListingAmenities } from "@/hooks/usePropertyListingAmenities";
+	searchProperties,
+	type PropertySearchNode,
+	type PropertySearchResult,
+} from "@/api/properties/propertySearchService";
+import {
+	extractPrimaryImageUrl,
+	extractAmenities,
+	extractAddress,
+} from "@/api/properties/propertyNodeUtils";
+import type { Property__C_Filter, Property__C_OrderBy } from "@/api/graphql-operations-types";
+import {
+	useObjectSearchParams,
+	type PaginationConfig,
+} from "@/features/object-search/hooks/useObjectSearchParams";
+import { useCachedAsyncData } from "@/features/object-search/hooks/useCachedAsyncData";
+import type { FilterFieldConfig } from "@/features/object-search/utils/filterUtils";
+import type {
+	SortFieldConfig,
+	SortState,
+} from "@/features/object-search/utils/sortUtils";
 import { usePropertyMapMarkers } from "@/hooks/usePropertyMapMarkers";
-import PropertyListingSearchPagination from "@/components/properties/PropertyListingSearchPagination";
+import PaginationControls from "@/features/object-search/components/PaginationControls";
 import PropertyListingCard, {
 	PropertyListingCardSkeleton,
 } from "@/components/properties/PropertyListingCard";
@@ -25,151 +37,143 @@ import PropertyMap from "@/components/properties/PropertyMap";
 import type { MapMarker, MapBounds } from "@/components/properties/PropertyMap";
 import PropertySearchPlaceholder from "@/pages/PropertySearchPlaceholder";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { SearchResultRecord } from "@/types/searchResults.js";
 
 /** Fallback map center when there are no geocoded markers yet. Zoom 7 ≈ 100-mile radius view. */
 const MAP_CENTER_FALLBACK: [number, number] = [37.7897484, -122.3998086];
 const MAP_ZOOM_DEFAULT = 10;
 const MAP_ZOOM_WITH_MARKERS = 12;
 
-/** Delay before applying any filter change to the search (avoids refetch on every keystroke/slider tick). */
+/** Delay before applying search text change to the committed filter. */
 const SEARCH_FILTER_DEBOUNCE_MS = 400;
 
+const FILTER_CONFIGS: FilterFieldConfig[] = [
+	{
+		field: "search",
+		label: "Search",
+		type: "search",
+		searchFields: ["Name", "Address__c"],
+		placeholder: "Area or search",
+	},
+	{ field: "Monthly_Rent__c", label: "Price", type: "numeric" },
+	{ field: "Bedrooms__c", label: "Bedrooms", type: "numeric" },
+];
+
+const SORT_CONFIGS: SortFieldConfig[] = [
+	{ field: "Monthly_Rent__c", label: "Monthly Rent" },
+	{ field: "Bedrooms__c", label: "Bedrooms" },
+];
+
+const PAGINATION_CONFIG: PaginationConfig = {
+	defaultPageSize: 20,
+	validPageSizes: [10, 20, 50],
+};
+
+/* ── Adapter helpers: translate between popover pill UI types and object-search state ── */
+
+const SORT_TO_STATE: Record<NonNullable<SortBy>, SortState> = {
+	price_asc: { field: "Monthly_Rent__c", direction: "ASC" },
+	price_desc: { field: "Monthly_Rent__c", direction: "DESC" },
+	beds_asc: { field: "Bedrooms__c", direction: "ASC" },
+	beds_desc: { field: "Bedrooms__c", direction: "DESC" },
+};
+
+function sortStateToSortBy(s: SortState | null): SortBy {
+	if (!s) return null;
+	for (const [key, val] of Object.entries(SORT_TO_STATE)) {
+		if (val.field === s.field && val.direction === s.direction) return key as SortBy;
+	}
+	return null;
+}
+
+function bedroomBucketToRange(value: BedroomFilter): { min?: string; max?: string } | null {
+	if (value === "le2") return { max: "2" };
+	if (value === "3") return { min: "3", max: "3" };
+	if (value === "ge4") return { min: "4" };
+	return null;
+}
+
+function rangeToBedroomBucket(min?: string, max?: string): BedroomFilter {
+	if (!min && max === "2") return "le2";
+	if (min === "3" && max === "3") return "3";
+	if (min === "4" && !max) return "ge4";
+	return null;
+}
+
 export default function PropertySearch() {
-	const [searchParams] = useSearchParams();
-	const initialSearch = searchParams.get("search") ?? "";
-	const [searchQuery, setSearchQuery] = useState(initialSearch);
-	const [searchPageSize, setSearchPageSize] = useState(DEFAULT_PAGE_SIZE);
-	const [searchPageToken, setSearchPageToken] = useState("0");
-	const [priceMin, setPriceMin] = useState<string>("");
-	const [priceMax, setPriceMax] = useState<string>("");
-	const [bedrooms, setBedrooms] = useState<BedroomFilter>(null);
-	const [committedSearchQuery, setCommittedSearchQuery] = useState(initialSearch);
-	const [committedPriceMin, setCommittedPriceMin] = useState<string>("");
-	const [committedPriceMax, setCommittedPriceMax] = useState<string>("");
-	const [committedBedrooms, setCommittedBedrooms] = useState<BedroomFilter>(null);
-	const [stagedSortBy, setStagedSortBy] = useState<SortBy>(null);
-	const [committedSortBy, setCommittedSortBy] = useState<SortBy>("price_asc");
+	/* ── Object-search infrastructure ── */
+	const { filters, sort, query, pagination } = useObjectSearchParams<
+		Property__C_Filter,
+		Property__C_OrderBy
+	>(FILTER_CONFIGS, SORT_CONFIGS, PAGINATION_CONFIG);
 
-	// Sync from URL when navigating with ?search=... (e.g. from Home "Find Home")
-	useEffect(() => {
-		const q = searchParams.get("search") ?? "";
-		setSearchQuery(q);
-		setCommittedSearchQuery(q);
-		setSearchPageToken("0");
-	}, [searchParams]);
-
-	// Debounce search query only; price and bedrooms commit only when user clicks Save in the popover.
-	useEffect(() => {
-		const t = setTimeout(() => {
-			setCommittedSearchQuery(searchQuery);
-		}, SEARCH_FILTER_DEBOUNCE_MS);
-		return () => clearTimeout(t);
-	}, [searchQuery]);
-
-	const handlePriceSave = useCallback((min: string, max: string) => {
-		setCommittedPriceMin(min);
-		setCommittedPriceMax(max);
-		setSearchPageToken("0");
-	}, []);
-
-	const handleBedsSave = useCallback((value: BedroomFilter) => {
-		setCommittedBedrooms(value);
-		setSearchPageToken("0");
-	}, []);
-
-	const handleSortSave = useCallback((value: SortBy) => {
-		setCommittedSortBy(value);
-		setSearchPageToken("0");
-	}, []);
-
-	const filters = useMemo(() => {
-		const out: {
-			priceMin?: number;
-			priceMax?: number;
-			bedroomsMin?: number;
-			bedroomsMax?: number;
-			sortBy?: SortBy;
-		} = {};
-		const min = committedPriceMin.trim() ? Number(committedPriceMin.replace(/[^0-9.]/g, "")) : NaN;
-		const max = committedPriceMax.trim() ? Number(committedPriceMax.replace(/[^0-9.]/g, "")) : NaN;
-		if (Number.isFinite(min) && min >= 0) out.priceMin = min;
-		if (Number.isFinite(max) && max >= 0) out.priceMax = max;
-		if (committedBedrooms === "le2") {
-			out.bedroomsMax = 2;
-		} else if (committedBedrooms === "3") {
-			out.bedroomsMin = 3;
-			out.bedroomsMax = 3;
-		} else if (committedBedrooms === "ge4") {
-			out.bedroomsMin = 4;
-		}
-		if (committedSortBy != null) out.sortBy = committedSortBy;
-		return out;
-	}, [committedPriceMin, committedPriceMax, committedBedrooms, committedSortBy]);
+	/* ── Data fetching ── */
+	const searchKey = `rentalProperties:${JSON.stringify({
+		where: query.where,
+		orderBy: query.orderBy,
+		first: pagination.pageSize,
+		after: pagination.afterCursor,
+	})}`;
 
 	const {
-		results,
-		nextPageToken,
-		previousPageToken,
-		currentPageToken,
-		resultsLoading,
-		resultsError,
-	} = usePropertyListingSearch(committedSearchQuery, searchPageSize, searchPageToken, filters);
+		data: searchResult,
+		loading: resultsLoading,
+		error: resultsError,
+	} = useCachedAsyncData<PropertySearchResult>(
+		() =>
+			searchProperties({
+				where: query.where,
+				orderBy: query.orderBy,
+				first: pagination.pageSize,
+				after: pagination.afterCursor,
+			}),
+		[query.where, query.orderBy, pagination.pageSize, pagination.afterCursor],
+		{ key: searchKey },
+	);
 
-	const primaryImagesMap = usePropertyPrimaryImages(results);
-	const propertyAddressMap = usePropertyAddresses(results);
-	const amenitiesMap = usePropertyListingAmenities(results);
+	/* ── Derive results + maps ── */
+	const results = useMemo(
+		() =>
+			(searchResult?.edges ?? []).reduce<PropertySearchNode[]>((acc, edge) => {
+				if (edge?.node) acc.push(edge.node);
+				return acc;
+			}, []),
+		[searchResult?.edges],
+	);
+
+	const primaryImagesMap = useMemo(() => {
+		const map: Record<string, string> = {};
+		for (const node of results) {
+			const url = extractPrimaryImageUrl(node);
+			if (url) map[node.Id] = url;
+		}
+		return map;
+	}, [results]);
+
+	const propertyAddressMap = useMemo(() => {
+		const map: Record<string, string> = {};
+		for (const node of results) {
+			const addr = extractAddress(node);
+			if (addr) map[node.Id] = String(addr);
+		}
+		return map;
+	}, [results]);
+
+	const amenitiesMap = useMemo(() => {
+		const map: Record<string, string> = {};
+		for (const node of results) {
+			const amenities = extractAmenities(node);
+			if (amenities) map[node.Id] = amenities;
+		}
+		return map;
+	}, [results]);
+
+	/* ── Map markers + bounds ── */
 	const { markers: mapMarkers } = usePropertyMapMarkers(results);
 	const apiUnavailable = Boolean(resultsError);
-
 	const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
 
-	const validResults = useMemo(() => results.filter((r) => r?.record?.id), [results]);
-
-	function getSortPrice(r: SearchResultRecord): number {
-		const raw = r?.record?.fields?.["Listing_Price__c"];
-		if (raw == null || typeof raw !== "object") return NaN;
-		const v = (raw as { value?: unknown }).value;
-		return typeof v === "number" ? v : Number(v);
-	}
-	function getSortBeds(r: SearchResultRecord): number {
-		const raw = r?.record?.fields?.["Property__r.Bedrooms__c"];
-		if (raw == null || typeof raw !== "object") return NaN;
-		const v = (raw as { value?: unknown }).value;
-		return typeof v === "number" ? v : Number(v);
-	}
-
-	// Order applied only after user clicks Save (committedSortBy); server may also apply orderBy.
-	const sortedResults = useMemo(() => {
-		if (!committedSortBy) return validResults;
-		const list = [...validResults];
-		if (committedSortBy === "price_asc" || committedSortBy === "price_desc") {
-			const dir = committedSortBy === "price_asc" ? 1 : -1;
-			list.sort((a, b) => {
-				const pa = getSortPrice(a);
-				const pb = getSortPrice(b);
-				if (Number.isNaN(pa) && Number.isNaN(pb)) return 0;
-				if (Number.isNaN(pa)) return 1;
-				if (Number.isNaN(pb)) return -1;
-				return dir * (pa - pb);
-			});
-		} else {
-			const dir = committedSortBy === "beds_asc" ? 1 : -1;
-			list.sort((a, b) => {
-				const ba = getSortBeds(a);
-				const bb = getSortBeds(b);
-				if (Number.isNaN(ba) && Number.isNaN(bb)) return 0;
-				if (Number.isNaN(ba)) return 1;
-				if (Number.isNaN(bb)) return -1;
-				return dir * (ba - bb);
-			});
-		}
-		return list;
-	}, [validResults, committedSortBy]);
-
-	// When user pans/zooms, filter list to properties whose pin is visible on the map
 	const visibleResults = useMemo(() => {
-		if (!mapBounds || mapMarkers.length === 0) return sortedResults;
+		if (!mapBounds || mapMarkers.length === 0) return results;
 		const visiblePropertyIds = new Set(
 			mapMarkers
 				.filter(
@@ -182,49 +186,153 @@ export default function PropertySearch() {
 				)
 				.map((m) => m.propertyId as string),
 		);
-		return sortedResults.filter((r) => {
-			const id = getPropertyIdFromRecord(r.record);
-			return id != null && visiblePropertyIds.has(id);
-		});
-	}, [sortedResults, mapMarkers, mapBounds]);
+		return results.filter((r) => visiblePropertyIds.has(r.Id));
+	}, [results, mapMarkers, mapBounds]);
 
-	const handlePageChange = useCallback((newPageToken: string) => {
-		setSearchPageToken(newPageToken);
-	}, []);
+	/* ── Staged filter state for popover edits (committed on Save) ── */
+	const committedSearchValue = filters.active.find((f) => f.field === "search")?.value ?? "";
+	const [searchQuery, setSearchQuery] = useState(committedSearchValue);
 
-	const handlePageSizeChange = useCallback((newPageSize: number) => {
-		setSearchPageSize(newPageSize);
-		setSearchPageToken("0");
-	}, []);
+	// Debounce search text → filters.set
+	useEffect(() => {
+		const t = setTimeout(() => {
+			if (searchQuery.trim()) {
+				filters.set("search", {
+					field: "search",
+					label: "Search",
+					type: "search",
+					value: searchQuery,
+				});
+			} else {
+				filters.remove("search");
+			}
+		}, SEARCH_FILTER_DEBOUNCE_MS);
+		return () => clearTimeout(t);
+	}, [searchQuery]);
+
+	// Sync local searchQuery when the committed value changes externally (e.g. URL nav)
+	useEffect(() => {
+		setSearchQuery(committedSearchValue);
+	}, [committedSearchValue]);
+
+	const committedPriceFilter = filters.active.find((f) => f.field === "Monthly_Rent__c");
+	const [stagedPriceMin, setStagedPriceMin] = useState(committedPriceFilter?.min ?? "");
+	const [stagedPriceMax, setStagedPriceMax] = useState(committedPriceFilter?.max ?? "");
+	useEffect(() => {
+		setStagedPriceMin(committedPriceFilter?.min ?? "");
+		setStagedPriceMax(committedPriceFilter?.max ?? "");
+	}, [committedPriceFilter?.min, committedPriceFilter?.max]);
+
+	const committedBedroomFilter = filters.active.find((f) => f.field === "Bedrooms__c");
+	const committedBedrooms = rangeToBedroomBucket(
+		committedBedroomFilter?.min,
+		committedBedroomFilter?.max,
+	);
+	const [stagedBedrooms, setStagedBedrooms] = useState<BedroomFilter>(committedBedrooms);
+	useEffect(() => {
+		setStagedBedrooms(committedBedrooms);
+	}, [committedBedrooms]);
+
+	const committedSortBy = sortStateToSortBy(sort.current);
+	const [stagedSortBy, setStagedSortBy] = useState<SortBy>(committedSortBy ?? "price_asc");
+	useEffect(() => {
+		setStagedSortBy(committedSortBy ?? "price_asc");
+	}, [committedSortBy]);
+
+	// Set default sort on mount if none set
+	useEffect(() => {
+		if (!sort.current) {
+			sort.set(SORT_TO_STATE.price_asc);
+		}
+	}, [sort]);
+
+	/* ── Save handlers: commit staged state to infrastructure ── */
+	const handlePriceSave = useCallback(
+		(min: string, max: string) => {
+			if (min.trim() || max.trim()) {
+				filters.set("Monthly_Rent__c", {
+					field: "Monthly_Rent__c",
+					label: "Price",
+					type: "numeric",
+					min: min.trim() || undefined,
+					max: max.trim() || undefined,
+				});
+			} else {
+				filters.remove("Monthly_Rent__c");
+			}
+		},
+		[filters],
+	);
+
+	const handleBedsSave = useCallback(
+		(value: BedroomFilter) => {
+			const range = bedroomBucketToRange(value);
+			if (range) {
+				filters.set("Bedrooms__c", {
+					field: "Bedrooms__c",
+					label: "Bedrooms",
+					type: "numeric",
+					...range,
+				});
+			} else {
+				filters.remove("Bedrooms__c");
+			}
+		},
+		[filters],
+	);
+
+	const handleSortSave = useCallback(
+		(value: SortBy) => {
+			if (value && SORT_TO_STATE[value]) {
+				sort.set(SORT_TO_STATE[value]);
+			} else {
+				sort.set(null);
+			}
+		},
+		[sort],
+	);
 
 	const handleSearchSubmit = useCallback(() => {
-		setSearchPageToken("0");
-	}, []);
+		// Immediately commit the current search text (bypass debounce)
+		if (searchQuery.trim()) {
+			filters.set("search", {
+				field: "search",
+				label: "Search",
+				type: "search",
+				value: searchQuery,
+			});
+		} else {
+			filters.remove("search");
+		}
+	}, [searchQuery, filters]);
 
+	/* ── Pagination ── */
+	const pageInfo = searchResult?.pageInfo;
+	const hasNextPage = pageInfo?.hasNextPage ?? false;
+	const hasPreviousPage = pagination.pageIndex > 0;
+
+	/* ── Map popup ── */
 	const popupContent = useCallback(
 		(marker: MapMarker) => {
 			if (!marker.propertyId) return marker.label ?? "Property";
-			const result = results.find(
-				(r) => r?.record && getPropertyIdFromRecord(r.record) === marker.propertyId,
-			);
-			if (!result?.record) return marker.label ?? "Property";
-			const propertyId = getPropertyIdFromRecord(result.record);
-			const imageUrl = propertyId ? (primaryImagesMap[propertyId] ?? null) : null;
-			const address = propertyId ? (propertyAddressMap[propertyId] ?? null) : null;
-			const amenities = propertyId ? (amenitiesMap[propertyId] ?? null) : null;
+			const node = results.find((r) => r.Id === marker.propertyId);
+			if (!node) return marker.label ?? "Property";
+			const imageUrl = primaryImagesMap[node.Id] ?? null;
+			const address = propertyAddressMap[node.Id] ?? null;
+			const amenities = amenitiesMap[node.Id] ?? null;
 			return (
 				<div className="w-[280px] min-w-0">
 					<PropertyListingCard
-						record={result.record}
+						node={node}
 						imageUrl={imageUrl}
 						address={address}
 						amenities={amenities || undefined}
-						loading={primaryImagesMap.loading || propertyAddressMap.loading || amenitiesMap.loading}
+						loading={resultsLoading}
 					/>
 				</div>
 			);
 		},
-		[results, primaryImagesMap, propertyAddressMap, amenitiesMap],
+		[results, primaryImagesMap, propertyAddressMap, amenitiesMap, resultsLoading],
 	);
 
 	return (
@@ -232,15 +340,15 @@ export default function PropertySearch() {
 			<PropertySearchFilters
 				searchQuery={searchQuery}
 				onSearchQueryChange={setSearchQuery}
-				priceMin={priceMin}
-				onPriceMinChange={setPriceMin}
-				priceMax={priceMax}
-				onPriceMaxChange={setPriceMax}
+				priceMin={stagedPriceMin}
+				onPriceMinChange={setStagedPriceMin}
+				priceMax={stagedPriceMax}
+				onPriceMaxChange={setStagedPriceMax}
 				onPriceSave={handlePriceSave}
-				bedrooms={bedrooms}
-				onBedroomsChange={setBedrooms}
+				bedrooms={stagedBedrooms}
+				onBedroomsChange={setStagedBedrooms}
 				onBedsSave={handleBedsSave}
-				sortBy={stagedSortBy ?? committedSortBy}
+				sortBy={stagedSortBy}
 				onSortChange={setStagedSortBy}
 				onSortSave={handleSortSave}
 				appliedSortBy={committedSortBy}
@@ -275,12 +383,12 @@ export default function PropertySearch() {
 								) : resultsLoading ? (
 									<Skeleton className="inline-block h-4 w-24 align-middle" />
 								) : mapBounds != null && mapMarkers.length > 0 ? (
-									`${visibleResults.length} of ${sortedResults.length} in map view`
+									`${visibleResults.length} of ${results.length} in map view`
 								) : (
-									`${sortedResults.length} result(s)`
+									`${results.length} result(s)`
 								)}
 							</div>
-							{mapBounds != null && sortedResults.length > 0 && !resultsLoading && (
+							{mapBounds != null && results.length > 0 && !resultsLoading && (
 								<button
 									type="button"
 									onClick={() => setMapBounds(null)}
@@ -293,16 +401,14 @@ export default function PropertySearch() {
 					</div>
 					<div className="flex-1 overflow-y-auto p-4">
 						{apiUnavailable ? (
-							<PropertySearchPlaceholder
-								message={resultsError ?? "Search is temporarily unavailable."}
-							/>
+							<PropertySearchPlaceholder message="Search is temporarily unavailable." />
 						) : resultsLoading ? (
 							<div className="space-y-4">
 								{[1, 2, 3].map((i) => (
 									<PropertyListingCardSkeleton key={i} />
 								))}
 							</div>
-						) : sortedResults.length === 0 ? (
+						) : results.length === 0 ? (
 							<div className="py-12 text-center">
 								<p className="mb-2 font-medium">No results found</p>
 								<p className="text-sm text-muted-foreground">Try adjusting search or filters</p>
@@ -318,42 +424,42 @@ export default function PropertySearch() {
 									onClick={() => setMapBounds(null)}
 									className="mt-3 text-sm font-medium text-primary hover:underline"
 								>
-									Show all {sortedResults.length} result(s)
+									Show all {results.length} result(s)
 								</button>
 							</div>
 						) : (
 							<>
 								<ul className="space-y-4" role="list" aria-label="Search results">
-									{visibleResults.map((record, index) => {
-										const propertyId = getPropertyIdFromRecord(record.record);
-										const imageUrl = propertyId ? (primaryImagesMap[propertyId] ?? null) : null;
-										const address = propertyId ? (propertyAddressMap[propertyId] ?? null) : null;
-										const amenities = propertyId ? (amenitiesMap[propertyId] ?? null) : null;
+									{visibleResults.map((node, index) => {
+										const imageUrl = primaryImagesMap[node.Id] ?? null;
+										const address = propertyAddressMap[node.Id] ?? null;
+										const amenities = amenitiesMap[node.Id] ?? null;
 										return (
-											<li key={record.record.id ?? index}>
+											<li key={node.Id ?? index}>
 												<PropertyListingCard
-													record={record.record}
+													node={node}
 													imageUrl={imageUrl}
 													address={address}
 													amenities={amenities || undefined}
-													loading={
-														primaryImagesMap.loading ||
-														propertyAddressMap.loading ||
-														amenitiesMap.loading
-													}
+													loading={resultsLoading}
 												/>
 											</li>
 										);
 									})}
 								</ul>
 								<div className="mt-4">
-									<PropertyListingSearchPagination
-										currentPageToken={currentPageToken}
-										nextPageToken={nextPageToken}
-										previousPageToken={previousPageToken}
-										pageSize={searchPageSize}
-										onPageChange={handlePageChange}
-										onPageSizeChange={handlePageSizeChange}
+									<PaginationControls
+										pageIndex={pagination.pageIndex}
+										hasNextPage={hasNextPage}
+										hasPreviousPage={hasPreviousPage}
+										pageSize={pagination.pageSize}
+										pageSizeOptions={PAGINATION_CONFIG.validPageSizes}
+										onNextPage={() => {
+											if (pageInfo?.endCursor) pagination.goToNextPage(pageInfo.endCursor);
+										}}
+										onPreviousPage={pagination.goToPreviousPage}
+										onPageSizeChange={pagination.setPageSize}
+										disabled={resultsLoading || apiUnavailable}
 									/>
 								</div>
 							</>

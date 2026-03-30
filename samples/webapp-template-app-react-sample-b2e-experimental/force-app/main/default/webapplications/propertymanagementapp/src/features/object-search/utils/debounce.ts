@@ -1,3 +1,6 @@
+/** Default debounce delay for keystroke-driven filter inputs (search, text, numeric). */
+export const FILTER_DEBOUNCE_MS = 300;
+
 /**
  * Creates a debounced version of the provided function.
  *
@@ -10,7 +13,7 @@
  * @param ms - The debounce delay in milliseconds.
  * @returns A new function with the same signature that delays execution.
  */
-export function debounce<T extends (...args: never[]) => void>(
+export function debounce<T extends (...args: any[]) => void>(
 	fn: T,
 	ms: number,
 ): (...args: Parameters<T>) => void {

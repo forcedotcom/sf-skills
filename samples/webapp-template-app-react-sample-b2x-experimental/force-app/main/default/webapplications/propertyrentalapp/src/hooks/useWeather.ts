@@ -3,6 +3,7 @@
  * Detects user location via Geolocation API; falls back to San Francisco.
  */
 import { useState, useEffect } from "react";
+import { useCachedAsyncData } from "@/features/object-search/hooks/useCachedAsyncData";
 
 const FALLBACK = {
 	LAT: 37.7749,
@@ -268,17 +269,14 @@ interface GeoPosition {
 }
 
 function useGeolocation(): GeoPosition {
-	const [position, setPosition] = useState<GeoPosition>({
+	const [position, setPosition] = useState<GeoPosition>(() => ({
 		latitude: FALLBACK.LAT,
 		longitude: FALLBACK.LNG,
-		resolved: false,
-	});
+		resolved: typeof navigator === "undefined" || !navigator.geolocation,
+	}));
 
 	useEffect(() => {
-		if (!navigator.geolocation) {
-			setPosition((prev) => ({ ...prev, resolved: true }));
-			return;
-		}
+		if (!navigator.geolocation) return;
 		navigator.geolocation.getCurrentPosition(
 			(pos) =>
 				setPosition({
@@ -299,29 +297,15 @@ export function useWeather(lat?: number | null, lng?: number | null) {
 	const longitude = lng ?? geo.longitude;
 	const canFetch = lat != null || geo.resolved;
 
-	const [data, setData] = useState<WeatherData | null>(null);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
+	const cached = useCachedAsyncData(
+		() => fetchWeather(latitude, longitude),
+		[latitude, longitude, canFetch],
+		{ key: `weather:${latitude},${longitude}:${canFetch}`, ttl: 300_000 },
+	);
 
-	useEffect(() => {
-		if (!canFetch) return;
-		let cancelled = false;
-		setLoading(true);
-		setError(null);
-		fetchWeather(latitude, longitude)
-			.then((result) => {
-				if (!cancelled) setData(result);
-			})
-			.catch((err) => {
-				if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load weather");
-			})
-			.finally(() => {
-				if (!cancelled) setLoading(false);
-			});
-		return () => {
-			cancelled = true;
-		};
-	}, [latitude, longitude, canFetch]);
+	if (!canFetch) {
+		return { data: null, loading: true, error: null };
+	}
 
-	return { data, loading, error };
+	return { data: cached.data, loading: cached.loading, error: cached.error };
 }

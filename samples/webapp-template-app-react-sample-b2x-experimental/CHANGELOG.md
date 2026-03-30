@@ -3,6 +3,81 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.117.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.117.0...v1.117.1) (2026-03-28)
+
+**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+
+
+
+
+
+# [1.117.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.13...v1.117.0) (2026-03-27)
+
+**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+
+
+
+
+
+## [1.116.13](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.12...v1.116.13) (2026-03-27)
+
+**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+
+
+
+
+
+## [1.116.12](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.11...v1.116.12) (2026-03-27)
+
+
+### Bug Fixes
+
+* updating AGENT.md to focus on web application development ([#366](https://github.com/salesforce-experience-platform-emu/webapps/issues/366)) ([59b94d7](https://github.com/salesforce-experience-platform-emu/webapps/commit/59b94d7b995042051e1622c78f8cd562b6f99244))
+
+
+
+
+
+## [1.116.11](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.10...v1.116.11) (2026-03-27)
+
+**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+
+
+
+
+
+## [1.116.10](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.9...v1.116.10) (2026-03-27)
+
+**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+
+
+
+
+
+## [1.116.9](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.8...v1.116.9) (2026-03-27)
+
+**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+
+
+
+
+
+## [1.116.8](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.7...v1.116.8) (2026-03-27)
+
+**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+
+
+
+
+
+## [1.116.7](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.6...v1.116.7) (2026-03-27)
+
+**Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental
+
+
+
+
+
 ## [1.116.6](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.116.5...v1.116.6) (2026-03-26)
 
 **Note:** Version bump only for package @salesforce/webapp-template-base-sfdx-project-experimental

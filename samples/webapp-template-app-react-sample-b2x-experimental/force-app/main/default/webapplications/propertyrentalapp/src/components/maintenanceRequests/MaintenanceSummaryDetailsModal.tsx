@@ -4,10 +4,10 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
 import { StatusBadge } from "@/components/maintenanceRequests/StatusBadge";
-import type { MaintenanceRequestSummary } from "@/api/maintenanceRequests/maintenanceRequestApi";
+import type { MaintenanceRequestNode } from "@/api/maintenanceRequests/maintenanceRequestApi";
 
 export interface MaintenanceSummaryDetailsModalProps {
-	request: MaintenanceRequestSummary;
+	request: MaintenanceRequestNode;
 	onClose: () => void;
 }
 
@@ -49,35 +49,40 @@ export default function MaintenanceSummaryDetailsModal({
 				className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-lg bg-white shadow-xl"
 			>
 				<div className="flex items-center justify-between border-b p-4">
-					<h2 className="text-lg font-semibold">{request.title ?? request.name ?? "Request"}</h2>
+					<h2 className="text-lg font-semibold">
+						{request.Description__c?.value ?? request.Name?.value ?? "Request"}
+					</h2>
 					<button type="button" onClick={onClose} className="text-gray-500 hover:text-gray-800">
 						<X className="h-5 w-5" />
 					</button>
 				</div>
 				<div className="space-y-3 p-4 text-sm">
-					{request.description && <p className="text-gray-700">{request.description}</p>}
+					{request.Description__c?.value && (
+						<p className="text-gray-700">{request.Description__c.value}</p>
+					)}
 					<div className="flex flex-wrap gap-2">
-						{request.type && (
-							<span className="rounded bg-gray-100 px-2 py-0.5">{request.type}</span>
+						{request.Type__c?.value && (
+							<span className="rounded bg-gray-100 px-2 py-0.5">{request.Type__c.value}</span>
 						)}
-						{request.priority && (
-							<span className="rounded bg-gray-100 px-2 py-0.5">{request.priority}</span>
+						{request.Priority__c?.value && (
+							<span className="rounded bg-gray-100 px-2 py-0.5">{request.Priority__c.value}</span>
 						)}
-						{request.status && <StatusBadge status={request.status} />}
+						{request.Status__c?.value && <StatusBadge status={request.Status__c.value} />}
 					</div>
-					{request.propertyAddress && (
+					{request.Property__r?.Address__c?.value && (
 						<p>
-							<span className="font-medium">Property:</span> {request.propertyAddress}
+							<span className="font-medium">Property:</span> {request.Property__r.Address__c.value}
 						</p>
 					)}
-					{request.tenantName && (
+					{request.User__r?.Name?.value && (
 						<p>
-							<span className="font-medium">Tenant:</span> {request.tenantName}
+							<span className="font-medium">Tenant:</span> {request.User__r.Name.value}
 						</p>
 					)}
-					{request.dateRequested && (
+					{request.Scheduled__c?.value && (
 						<p>
-							<span className="font-medium">Requested:</span> {formatDate(request.dateRequested)}
+							<span className="font-medium">Requested:</span>{" "}
+							{formatDate(request.Scheduled__c.value)}
 						</p>
 					)}
 				</div>

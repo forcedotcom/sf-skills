@@ -496,30 +496,24 @@ export default function SessionTimeoutValidator({
 	// Get current location from React Router
 	const location = useLocation();
 
-	// State for session expired alert
-	const [showExpiredAlert, setShowExpiredAlert] = useState(false);
+	// Session expired alert — checked once at mount via lazy initializer.
+	// The session timeout handler triggers a hard navigation (window.location.replace),
+	// so the component always mounts fresh on the login page after expiry.
+	const [showExpiredAlert, setShowExpiredAlert] = useState(() => {
+		const isLoginPage = location.pathname === ROUTES.LOGIN.PATH;
+		const shouldShow =
+			isLoginPage && sessionStorage.getItem(STORAGE_KEYS.SHOW_SESSION_MESSAGE) === "true";
+		if (shouldShow) {
+			sessionStorage.removeItem(STORAGE_KEYS.SHOW_SESSION_MESSAGE);
+		}
+		return shouldShow;
+	});
 
 	// Session timeout monitoring hook
 	const sessionTimeout = useSessionTimeout({
 		basePath,
 		isGuest,
 	});
-
-	/**
-	 * Check if we should show expired session message
-	 * Called on mount and whenever pathname changes
-	 */
-	useEffect(() => {
-		// Check if we're on the login page and should show expired message
-		const isLoginPage = location.pathname === ROUTES.LOGIN.PATH;
-		const shouldShowMessage = sessionStorage.getItem(STORAGE_KEYS.SHOW_SESSION_MESSAGE) === "true";
-
-		if (isLoginPage && shouldShowMessage) {
-			setShowExpiredAlert(true);
-			// Clear the flag immediately after reading
-			sessionStorage.removeItem(STORAGE_KEYS.SHOW_SESSION_MESSAGE);
-		}
-	}, [location.pathname]);
 
 	/**
 	 * Handle session extension

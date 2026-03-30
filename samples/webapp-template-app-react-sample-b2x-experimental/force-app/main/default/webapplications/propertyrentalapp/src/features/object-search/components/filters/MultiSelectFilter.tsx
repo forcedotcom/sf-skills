@@ -4,11 +4,12 @@ import {
 	PopoverTrigger,
 } from "../../../../components/ui/popover";
 import { Checkbox } from "../../../../components/ui/checkbox";
-import { Label } from "../../../../components/ui/label";
 import { Button } from "../../../../components/ui/button";
 import { cn } from "../../../../lib/utils";
+import { Label } from "../../../../components/ui/label";
 import { ChevronDown } from "lucide-react";
 import { useFilterField } from "../FilterContext";
+import { FilterFieldWrapper } from "./FilterFieldWrapper";
 
 interface MultiSelectFilterProps extends Omit<React.ComponentProps<"div">, "onChange"> {
 	field: string;
@@ -53,8 +54,7 @@ export function MultiSelectFilter({
 	}
 
 	return (
-		<div className={cn("space-y-1.5", className)} {...props}>
-			<Label>{label}</Label>
+		<FilterFieldWrapper label={label} helpText={helpText} className={className} {...props}>
 			<Popover>
 				<PopoverTrigger asChild>
 					<Button
@@ -92,7 +92,6 @@ export function MultiSelectFilter({
 					</div>
 				</PopoverContent>
 			</Popover>
-			{helpText && <p className="text-xs text-muted-foreground">{helpText}</p>}
-		</div>
+		</FilterFieldWrapper>
 	);
 }

@@ -25,6 +25,8 @@ export type FilterFieldType =
 	| "boolean"
 	| "date"
 	| "daterange"
+	| "datetime"
+	| "datetimerange"
 	| "multipicklist"
 	| "search";
 
@@ -340,10 +342,31 @@ function buildSingleFilter<TFilter>(
 			if (!min && !max) return null;
 			const op = value ?? (min ? "gte" : "lte");
 			const dateStr = min ?? max;
+			return { [field]: { [op]: { value: dateStr } } } as TFilter;
+		}
+		case "daterange": {
+			if (!min && !max) return null;
+			const clauses: TFilter[] = [];
+			if (min) {
+				clauses.push({
+					[field]: { gte: { value: min } },
+				} as TFilter);
+			}
+			if (max) {
+				clauses.push({
+					[field]: { lte: { value: max } },
+				} as TFilter);
+			}
+			return clauses.length === 1 ? clauses[0] : ({ and: clauses } as TFilter);
+		}
+		case "datetime": {
+			if (!min && !max) return null;
+			const op = value ?? (min ? "gte" : "lte");
+			const dateStr = min ?? max;
 			const isoStr = op === "gte" || op === "gt" ? toStartOfDay(dateStr!) : toEndOfDay(dateStr!);
 			return { [field]: { [op]: { value: isoStr } } } as TFilter;
 		}
-		case "daterange": {
+		case "datetimerange": {
 			if (!min && !max) return null;
 			const clauses: TFilter[] = [];
 			if (min) {

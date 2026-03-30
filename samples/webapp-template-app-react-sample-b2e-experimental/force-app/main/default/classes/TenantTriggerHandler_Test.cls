@@ -73,7 +73,9 @@ private class TenantTriggerHandler_Test {
     static void testNoDuplicateAssign() {
         Id runAsUserId = UserInfo.getUserId();
         Tenant__c tenant = new Tenant__c(User__c = runAsUserId);
+        Test.startTest();
         insert tenant;
+        Test.stopTest();
 
         Integer countBefore = [
             SELECT COUNT()
@@ -82,8 +84,10 @@ private class TenantTriggerHandler_Test {
             AND PermissionSet.Name = 'Tenant_Maintenance_Access'
         ];
 
+        Test.startTest();
         tenant.Status__c = 'Active';
         update tenant;
+        Test.stopTest();
 
         Integer countAfter = [
             SELECT COUNT()

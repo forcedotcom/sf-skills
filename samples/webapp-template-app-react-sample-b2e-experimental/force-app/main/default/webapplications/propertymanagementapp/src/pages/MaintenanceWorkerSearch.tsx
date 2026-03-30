@@ -20,7 +20,7 @@ import {
 } from "../features/object-search/components/FilterContext";
 import { FilterRow } from "../components/layout/FilterRow";
 import { SearchFilter } from "../features/object-search/components/filters/SearchFilter";
-import { SelectFilter } from "../features/object-search/components/filters/SelectFilter";
+import { MultiSelectFilter } from "../features/object-search/components/filters/MultiSelectFilter";
 import { TextFilter } from "../features/object-search/components/filters/TextFilter";
 import { NumericRangeFilter } from "../features/object-search/components/filters/NumericRangeFilter";
 import { DateFilter } from "../features/object-search/components/filters/DateFilter";
@@ -53,7 +53,7 @@ const FILTER_CONFIGS: FilterFieldConfig[] = [
 	{ field: "Employment_Type__c", label: "Employment Type", type: "picklist" },
 	{ field: "Location__c", label: "Location", type: "text", placeholder: "Location" },
 	{ field: "Hourly_Rate__c", label: "Hourly Rate", type: "numeric" },
-	{ field: "CreatedDate", label: "Created Date", type: "date" },
+	{ field: "CreatedDate", label: "Created Date", type: "datetime" },
 ];
 
 const SORT_CONFIGS: SortFieldConfig<string>[] = [
@@ -187,7 +187,7 @@ function MaintenanceWorkerSearchFilters({
 					placeholder="By name, or phone..."
 					className="w-full sm:w-50"
 				/>
-				<SelectFilter
+				<MultiSelectFilter
 					field="Employment_Type__c"
 					label="Employment Type"
 					options={typeOptions}
@@ -199,8 +199,19 @@ function MaintenanceWorkerSearchFilters({
 					placeholder="Location"
 					className="w-full sm:w-50"
 				/>
-				<NumericRangeFilter field="Hourly_Rate__c" label="Hourly Rate" className="w-full sm:w-50" />
-				<DateFilter field="CreatedDate" label="Created Date" className="w-full sm:w-56" />
+				<NumericRangeFilter
+					field="Hourly_Rate__c"
+					label="Hourly Rate"
+					min={0}
+					max={1000}
+					className="w-full sm:w-50"
+				/>
+				<DateFilter
+					field="CreatedDate"
+					label="Created Date"
+					filterType="datetime"
+					className="w-full sm:w-56"
+				/>
 				<FilterResetButton />
 			</FilterRow>
 		</FilterProvider>

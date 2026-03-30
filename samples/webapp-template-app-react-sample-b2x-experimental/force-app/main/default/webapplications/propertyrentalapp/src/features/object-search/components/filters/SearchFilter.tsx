@@ -1,7 +1,9 @@
-import { Label } from "../../../../components/ui/label";
-import { cn } from "../../../../lib/utils";
+import { useEffect, useState } from "react";
+
 import { SearchBar } from "../SearchBar";
 import { useFilterField } from "../FilterContext";
+import { FilterFieldWrapper } from "./FilterFieldWrapper";
+import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 
 interface SearchFilterProps extends Omit<React.ComponentProps<"div">, "onChange"> {
 	field: string;
@@ -17,21 +19,32 @@ export function SearchFilter({
 	...props
 }: SearchFilterProps) {
 	const { value, onChange } = useFilterField(field);
+	const [localValue, setLocalValue] = useState(value?.value ?? "");
+
+	const externalValue = value?.value ?? "";
+	useEffect(() => {
+		setLocalValue(externalValue);
+	}, [externalValue]);
+
+	const debouncedOnChange = useDebouncedCallback((v: string) => {
+		if (v) {
+			onChange({ field, label, type: "search", value: v });
+		} else {
+			onChange(undefined);
+		}
+	});
+
 	return (
-		<div className={cn("space-y-1.5", className)} {...props}>
-			<Label htmlFor={`filter-${field}`}>{label}</Label>
+		<FilterFieldWrapper label={label} htmlFor={`filter-${field}`} className={className} {...props}>
 			<SearchBar
-				value={value?.value ?? ""}
+				value={localValue}
 				handleChange={(v) => {
-					if (v) {
-						onChange({ field, label, type: "search", value: v });
-					} else {
-						onChange(undefined);
-					}
+					setLocalValue(v);
+					debouncedOnChange(v);
 				}}
 				placeholder={placeholder}
 				inputProps={{ id: `filter-${field}` }}
 			/>
-		</div>
+		</FilterFieldWrapper>
 	);
 }

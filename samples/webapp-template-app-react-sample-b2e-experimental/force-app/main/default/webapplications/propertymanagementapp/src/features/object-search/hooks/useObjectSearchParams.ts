@@ -61,7 +61,10 @@ export function useObjectSearchParams<TFilter, TOrderBy>(
 	paginationConfig?: PaginationConfig,
 ) {
 	const defaultPageSize = paginationConfig?.defaultPageSize ?? 10;
-	const validPageSizes = paginationConfig?.validPageSizes ?? [defaultPageSize];
+	const validPageSizes = useMemo(
+		() => paginationConfig?.validPageSizes ?? [defaultPageSize],
+		[paginationConfig?.validPageSizes, defaultPageSize],
+	);
 	const [searchParams, setSearchParams] = useSearchParams();
 
 	// Seed local state from URL on initial load
@@ -76,8 +79,10 @@ export function useObjectSearchParams<TFilter, TOrderBy>(
 	const [sort, setLocalSort] = useState<SortState | null>(initial.sort);
 
 	// Pagination — cursor-based with a stack to support "previous page" navigation.
-	const getValidPageSize = (size: number) =>
-		validPageSizes.includes(size) ? size : defaultPageSize;
+	const getValidPageSize = useCallback(
+		(size: number) => (validPageSizes.includes(size) ? size : defaultPageSize),
+		[validPageSizes, defaultPageSize],
+	);
 
 	const [pageSize, setPageSizeState] = useState<number>(
 		getValidPageSize(initial.pageSize ?? defaultPageSize),
@@ -166,7 +171,7 @@ export function useObjectSearchParams<TFilter, TOrderBy>(
 		resetPagination();
 		syncToUrl([], null, defaultPageSize, 0);
 		setPageSizeState(defaultPageSize);
-	}, [syncToUrl, resetPagination]);
+	}, [syncToUrl, resetPagination, defaultPageSize]);
 
 	// -- Pagination callbacks ---------------------------------------------------
 	// Uses a cursor stack to track visited pages. "Next" pushes the current
@@ -204,7 +209,7 @@ export function useObjectSearchParams<TFilter, TOrderBy>(
 			resetPagination();
 			debouncedSyncRef.current(f, s, validated);
 		},
-		[resetPagination],
+		[resetPagination, getValidPageSize],
 	);
 
 	// -- Derived query objects ---------------------------------------------------

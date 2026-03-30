@@ -39,6 +39,159 @@ export type Scalars = {
 	Url: { input: string; output: string };
 };
 
+export type AbnExperimentCohort_Filter = {
+	AbnExperiment?: InputMaybe<AbnExperiment_Filter>;
+	AbnExperimentId?: InputMaybe<IdOperators>;
+	AllocationWeight?: InputMaybe<IntegerOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	DeveloperName?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsControl?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsFallThrough?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Personalizer?: InputMaybe<PersonalizationRecommender_Filter>;
+	PersonalizerId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<AbnExperimentCohort_Filter>>>;
+	not?: InputMaybe<AbnExperimentCohort_Filter>;
+	or?: InputMaybe<Array<InputMaybe<AbnExperimentCohort_Filter>>>;
+};
+
+export type AbnExperimentEngmtSgnlMtrc_Filter = {
+	AbnExperiment?: InputMaybe<AbnExperiment_Filter>;
+	AbnExperimentId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsHigherBetter?: InputMaybe<BooleanOperators>;
+	IsPrimary?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	Metric?: InputMaybe<AbnExperimentEngmtSgnlMtrc_Metric_Filters>;
+	MetricId?: InputMaybe<IdOperators>;
+	OverallScoreWeight?: InputMaybe<IntegerOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<AbnExperimentEngmtSgnlMtrc_Filter>>>;
+	not?: InputMaybe<AbnExperimentEngmtSgnlMtrc_Filter>;
+	or?: InputMaybe<Array<InputMaybe<AbnExperimentEngmtSgnlMtrc_Filter>>>;
+};
+
+export type AbnExperimentEngmtSgnlMtrc_Metric_Filters = {
+	EngagementSignalCmpndMetric?: InputMaybe<EngagementSignalCmpndMetric_Filter>;
+	EngagementSignalMetric?: InputMaybe<EngagementSignalMetric_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+};
+
+export type AbnExperiment_Filter = {
+	ChanceToWinThreshold?: InputMaybe<DoubleOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	DeveloperName?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsRemote?: InputMaybe<BooleanOperators>;
+	LastAnalyzed?: InputMaybe<DateTimeOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	MaximumDurationInMinutes?: InputMaybe<IntegerOperators>;
+	MinimumDurationInMinutes?: InputMaybe<IntegerOperators>;
+	MinimumRequiredParticipants?: InputMaybe<IntegerOperators>;
+	Name?: InputMaybe<StringOperators>;
+	PersonalizationSchema?: InputMaybe<PersonalizationSchema_Filter>;
+	PersonalizationSchemaEnum?: InputMaybe<PicklistOperators>;
+	PersonalizationSchemaId?: InputMaybe<IdOperators>;
+	PrimaryMetric?: InputMaybe<AbnExperiment_PrimaryMetric_Filters>;
+	PrimaryMetricId?: InputMaybe<IdOperators>;
+	ProfileDataGraph?: InputMaybe<DataGraph_Filter>;
+	ProfileDataGraphId?: InputMaybe<IdOperators>;
+	ScheduleFrequencyInMinutes?: InputMaybe<IntegerOperators>;
+	Source?: InputMaybe<PicklistOperators>;
+	SourceRecord?: InputMaybe<AbnExperiment_SourceRecord_Filters>;
+	SourceRecordId?: InputMaybe<IdOperators>;
+	StartedDate?: InputMaybe<DateTimeOperators>;
+	State?: InputMaybe<PicklistOperators>;
+	Status?: InputMaybe<PicklistOperators>;
+	StoppedDate?: InputMaybe<DateTimeOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	WinnerSelectionMode?: InputMaybe<PicklistOperators>;
+	and?: InputMaybe<Array<InputMaybe<AbnExperiment_Filter>>>;
+	not?: InputMaybe<AbnExperiment_Filter>;
+	or?: InputMaybe<Array<InputMaybe<AbnExperiment_Filter>>>;
+};
+
+export type AbnExperiment_PrimaryMetric_Filters = {
+	EngagementSignalCmpndMetric?: InputMaybe<EngagementSignalCmpndMetric_Filter>;
+	EngagementSignalMetric?: InputMaybe<EngagementSignalMetric_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+};
+
+export type AbnExperiment_SourceRecord_Filters = {
+	FlowRecordElement?: InputMaybe<FlowRecordElement_Filter>;
+	ManagedContent?: InputMaybe<ManagedContent_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+};
+
+export type AccountBrand_Filter = {
+	Account?: InputMaybe<Account_Filter>;
+	AccountId?: InputMaybe<IdOperators>;
+	City?: InputMaybe<StringOperators>;
+	CompanyName?: InputMaybe<StringOperators>;
+	Country?: InputMaybe<StringOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Email?: InputMaybe<EmailOperators>;
+	GeocodeAccuracy?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Latitude?: InputMaybe<LatitudeOperators>;
+	LogoId?: InputMaybe<IdOperators>;
+	LogoUrl?: InputMaybe<UrlOperators>;
+	Longitude?: InputMaybe<LongitudeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<AccountBrand_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	Phone?: InputMaybe<PhoneNumberOperators>;
+	PostalCode?: InputMaybe<StringOperators>;
+	State?: InputMaybe<StringOperators>;
+	Street?: InputMaybe<TextAreaOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	Website?: InputMaybe<UrlOperators>;
+	and?: InputMaybe<Array<InputMaybe<AccountBrand_Filter>>>;
+	not?: InputMaybe<AccountBrand_Filter>;
+	or?: InputMaybe<Array<InputMaybe<AccountBrand_Filter>>>;
+};
+
+export type AccountBrand_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
 export type AccountHistory_Filter = {
 	Account?: InputMaybe<Account_Filter>;
 	AccountId?: InputMaybe<IdOperators>;
@@ -93,6 +246,8 @@ export type Account_Filter = {
 	BillingPostalCode?: InputMaybe<StringOperators>;
 	BillingState?: InputMaybe<StringOperators>;
 	BillingStreet?: InputMaybe<TextAreaOperators>;
+	ChannelProgramLevelName?: InputMaybe<StringOperators>;
+	ChannelProgramName?: InputMaybe<StringOperators>;
 	CreatedBy?: InputMaybe<User_Filter>;
 	CreatedById?: InputMaybe<IdOperators>;
 	CreatedDate?: InputMaybe<DateTimeOperators>;
@@ -100,7 +255,9 @@ export type Account_Filter = {
 	Fax?: InputMaybe<PhoneNumberOperators>;
 	Id?: InputMaybe<IdOperators>;
 	Industry?: InputMaybe<PicklistOperators>;
+	IsCustomerPortal?: InputMaybe<BooleanOperators>;
 	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsPartner?: InputMaybe<BooleanOperators>;
 	Jigsaw?: InputMaybe<StringOperators>;
 	JigsawCompanyId?: InputMaybe<StringOperators>;
 	LastActivityDate?: InputMaybe<DateOperators>;
@@ -147,6 +304,8 @@ export type Account_OrderBy = {
 	BillingPostalCode?: InputMaybe<OrderByClause>;
 	BillingState?: InputMaybe<OrderByClause>;
 	BillingStreet?: InputMaybe<OrderByClause>;
+	ChannelProgramLevelName?: InputMaybe<AggregateOrderByStringClause>;
+	ChannelProgramName?: InputMaybe<AggregateOrderByStringClause>;
 	CreatedBy?: InputMaybe<User_OrderBy>;
 	CreatedById?: InputMaybe<OrderByClause>;
 	CreatedDate?: InputMaybe<OrderByClause>;
@@ -154,7 +313,9 @@ export type Account_OrderBy = {
 	Fax?: InputMaybe<OrderByClause>;
 	Id?: InputMaybe<OrderByClause>;
 	Industry?: InputMaybe<OrderByClause>;
+	IsCustomerPortal?: InputMaybe<OrderByClause>;
 	IsDeleted?: InputMaybe<OrderByClause>;
+	IsPartner?: InputMaybe<OrderByClause>;
 	Jigsaw?: InputMaybe<OrderByClause>;
 	JigsawCompanyId?: InputMaybe<OrderByClause>;
 	LastActivityDate?: InputMaybe<OrderByClause>;
@@ -185,6 +346,165 @@ export type Account_OrderBy = {
 	SystemModstamp?: InputMaybe<OrderByClause>;
 	Type?: InputMaybe<OrderByClause>;
 	Website?: InputMaybe<OrderByClause>;
+};
+
+export type ActivationTargetHistory_Filter = {
+	ActivationTarget?: InputMaybe<ActivationTarget_Filter>;
+	ActivationTargetId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<ActivationTargetHistory_Filter>>>;
+	not?: InputMaybe<ActivationTargetHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<ActivationTargetHistory_Filter>>>;
+};
+
+export type ActivationTargetPlatformHistory_Filter = {
+	ActivationTargetPlatformId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<ActivationTargetPlatformHistory_Filter>>>;
+	not?: InputMaybe<ActivationTargetPlatformHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<ActivationTargetPlatformHistory_Filter>>>;
+};
+
+export type ActivationTargetSecureFtp_Filter = {
+	ActivationTarget?: InputMaybe<ActivationTarget_Filter>;
+	ActivationTargetId?: InputMaybe<IdOperators>;
+	ChildDirectory?: InputMaybe<StringOperators>;
+	Compression?: InputMaybe<PicklistOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	CustomFileName?: InputMaybe<StringOperators>;
+	Delimiter?: InputMaybe<PicklistOperators>;
+	FileDateTimeSuffix?: InputMaybe<PicklistOperators>;
+	FileNameType?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsCreateFolderWithInChildDir?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	MaxFileSizeInBytes?: InputMaybe<LongOperators>;
+	MaxRecordsPerFile?: InputMaybe<LongOperators>;
+	Name?: InputMaybe<StringOperators>;
+	PreDeterminedFileName?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<ActivationTargetSecureFtp_Filter>>>;
+	not?: InputMaybe<ActivationTargetSecureFtp_Filter>;
+	or?: InputMaybe<Array<InputMaybe<ActivationTargetSecureFtp_Filter>>>;
+};
+
+export type ActivationTarget_DataConConfiguration_Filters = {
+	DataConnectorS3?: InputMaybe<DataConnectorS3_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+};
+
+export type ActivationTarget_Filter = {
+	AudienceHistoryDmoId?: InputMaybe<IdOperators>;
+	AudienceHistoryDmoName?: InputMaybe<StringOperators>;
+	AudienceLatestDmoId?: InputMaybe<IdOperators>;
+	AudienceLatestDmoName?: InputMaybe<StringOperators>;
+	AuditDmoId?: InputMaybe<IdOperators>;
+	AuditDmoName?: InputMaybe<StringOperators>;
+	ConnectionType?: InputMaybe<PicklistOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataConConfiguration?: InputMaybe<ActivationTarget_DataConConfiguration_Filters>;
+	DataConConfigurationId?: InputMaybe<IdOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	ExportToDirectory?: InputMaybe<StringOperators>;
+	ExportToEndpoint?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsCommunicationCappingEnabled?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsRemote?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastPublishStatusDate?: InputMaybe<DateTimeOperators>;
+	LastPublishStatusErrorMessage?: InputMaybe<StringOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastTargetStatusDateTime?: InputMaybe<DateTimeOperators>;
+	LastTargetStatusErrorCode?: InputMaybe<PicklistOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	MasterLabel?: InputMaybe<StringOperators>;
+	OutputFormat?: InputMaybe<PicklistOperators>;
+	OwnedByOrg?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<ActivationTarget_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	PlatformName?: InputMaybe<StringOperators>;
+	PlatformPrivacyType?: InputMaybe<StringOperators>;
+	RunStatus?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	TargetStatus?: InputMaybe<PicklistOperators>;
+	TargetType?: InputMaybe<PicklistOperators>;
+	and?: InputMaybe<Array<InputMaybe<ActivationTarget_Filter>>>;
+	not?: InputMaybe<ActivationTarget_Filter>;
+	or?: InputMaybe<Array<InputMaybe<ActivationTarget_Filter>>>;
+};
+
+export type ActivationTarget_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type ActivationTrgtIntOrgAccessHistory_Filter = {
+	ActivationTrgtIntOrgAccessId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<ActivationTrgtIntOrgAccessHistory_Filter>>>;
+	not?: InputMaybe<ActivationTrgtIntOrgAccessHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<ActivationTrgtIntOrgAccessHistory_Filter>>>;
+};
+
+export type ActvTgtPlatformFieldValueHistory_Filter = {
+	ActvTgtPlatformFieldValueId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<ActvTgtPlatformFieldValueHistory_Filter>>>;
+	not?: InputMaybe<ActvTgtPlatformFieldValueHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<ActvTgtPlatformFieldValueHistory_Filter>>>;
 };
 
 export type Agent__History_Filter = {
@@ -275,14 +595,12 @@ export type AggregateOrderByStringClause = {
 	order?: InputMaybe<ResultsOrder>;
 };
 
-export const AggregateOrderByStringFunction = {
-	Count: "COUNT",
-	CountDistinct: "COUNT_DISTINCT",
-	Max: "MAX",
-	Min: "MIN",
-} as const;
-export type AggregateOrderByStringFunction =
-	(typeof AggregateOrderByStringFunction)[keyof typeof AggregateOrderByStringFunction];
+export enum AggregateOrderByStringFunction {
+	Count = "COUNT",
+	CountDistinct = "COUNT_DISTINCT",
+	Max = "MAX",
+	Min = "MIN",
+}
 
 export type AnalyticsUserAttrFuncTkn_Filter = {
 	CreatedBy?: InputMaybe<User_Filter>;
@@ -484,8 +802,6 @@ export type ApprovalSubmissionDetail_Filter = {
 	LastModifiedBy?: InputMaybe<User_Filter>;
 	LastModifiedById?: InputMaybe<IdOperators>;
 	LastModifiedDate?: InputMaybe<DateTimeOperators>;
-	LastReferencedDate?: InputMaybe<DateTimeOperators>;
-	LastViewedDate?: InputMaybe<DateTimeOperators>;
 	Name?: InputMaybe<StringOperators>;
 	SystemModstamp?: InputMaybe<DateTimeOperators>;
 	and?: InputMaybe<Array<InputMaybe<ApprovalSubmissionDetail_Filter>>>;
@@ -524,8 +840,6 @@ export type ApprovalSubmission_Filter = {
 	LastModifiedBy?: InputMaybe<User_Filter>;
 	LastModifiedById?: InputMaybe<IdOperators>;
 	LastModifiedDate?: InputMaybe<DateTimeOperators>;
-	LastReferencedDate?: InputMaybe<DateTimeOperators>;
-	LastViewedDate?: InputMaybe<DateTimeOperators>;
 	Name?: InputMaybe<StringOperators>;
 	Owner?: InputMaybe<ApprovalSubmission_Owner_Filters>;
 	OwnerId?: InputMaybe<IdOperators>;
@@ -549,6 +863,7 @@ export type ApprovalSubmission_Owner_Filters = {
 
 export type ApprovalSubmission_RelatedRecord_Filters = {
 	Account?: InputMaybe<Account_Filter>;
+	ActivationTarget?: InputMaybe<ActivationTarget_Filter>;
 	Agent__c?: InputMaybe<Agent__C_Filter>;
 	AnalyticsUserAttrFuncTkn?: InputMaybe<AnalyticsUserAttrFuncTkn_Filter>;
 	Application__c?: InputMaybe<Application__C_Filter>;
@@ -558,14 +873,19 @@ export type ApprovalSubmission_RelatedRecord_Filters = {
 	Asset?: InputMaybe<Asset_Filter>;
 	AssetRelationship?: InputMaybe<AssetRelationship_Filter>;
 	AssociatedLocation?: InputMaybe<AssociatedLocation_Filter>;
+	AsyncOperationTracker?: InputMaybe<AsyncOperationTracker_Filter>;
 	AuthorizationForm?: InputMaybe<AuthorizationForm_Filter>;
 	AuthorizationFormConsent?: InputMaybe<AuthorizationFormConsent_Filter>;
 	AuthorizationFormDataUse?: InputMaybe<AuthorizationFormDataUse_Filter>;
 	AuthorizationFormText?: InputMaybe<AuthorizationFormText_Filter>;
+	BriefPlanStep?: InputMaybe<BriefPlanStep_Filter>;
 	BusinessBrand?: InputMaybe<BusinessBrand_Filter>;
 	Campaign?: InputMaybe<Campaign_Filter>;
 	Case?: InputMaybe<Case_Filter>;
 	CaseComment?: InputMaybe<CaseComment_Filter>;
+	ChannelProgram?: InputMaybe<ChannelProgram_Filter>;
+	ChannelProgramLevel?: InputMaybe<ChannelProgramLevel_Filter>;
+	ChannelProgramMember?: InputMaybe<ChannelProgramMember_Filter>;
 	CommSubscription?: InputMaybe<CommSubscription_Filter>;
 	CommSubscriptionChannelType?: InputMaybe<CommSubscriptionChannelType_Filter>;
 	CommSubscriptionConsent?: InputMaybe<CommSubscriptionConsent_Filter>;
@@ -581,17 +901,37 @@ export type ApprovalSubmission_RelatedRecord_Filters = {
 	ContentVersion?: InputMaybe<ContentVersion_Filter>;
 	Contract?: InputMaybe<Contract_Filter>;
 	Customer?: InputMaybe<Customer_Filter>;
+	DataAction?: InputMaybe<DataAction_Filter>;
+	DataActionJobSummary?: InputMaybe<DataActionJobSummary_Filter>;
+	DataActionTarget?: InputMaybe<DataActionTarget_Filter>;
+	DataCommCapActvTarget?: InputMaybe<DataCommCapActvTarget_Filter>;
+	DataCommunicationCap?: InputMaybe<DataCommunicationCap_Filter>;
+	DataGraph?: InputMaybe<DataGraph_Filter>;
+	DataKitDeploymentLog?: InputMaybe<DataKitDeploymentLog_Filter>;
+	DataKnowledgeSpace?: InputMaybe<DataKnowledgeSpace_Filter>;
+	DataKnowledgeSpcJobRun?: InputMaybe<DataKnowledgeSpcJobRun_Filter>;
+	DataKnowledgeSrcFileRef?: InputMaybe<DataKnowledgeSrcFileRef_Filter>;
+	DataLakeObjectInstance?: InputMaybe<DataLakeObjectInstance_Filter>;
+	DataLineageNodeDefSyncLog?: InputMaybe<DataLineageNodeDefSyncLog_Filter>;
+	DataQueryWorkspace?: InputMaybe<DataQueryWorkspace_Filter>;
+	DataQueryWorkspaceTab?: InputMaybe<DataQueryWorkspaceTab_Filter>;
+	DataQuickAttribute?: InputMaybe<DataQuickAttribute_Filter>;
+	DataStream?: InputMaybe<DataStream_Filter>;
 	DataUseLegalBasis?: InputMaybe<DataUseLegalBasis_Filter>;
 	DataUsePurpose?: InputMaybe<DataUsePurpose_Filter>;
 	DelegatedAccount?: InputMaybe<DelegatedAccount_Filter>;
+	DevopsActivityLog?: InputMaybe<DevopsActivityLog_Filter>;
 	DevopsEnvironment?: InputMaybe<DevopsEnvironment_Filter>;
 	DevopsRequestInfo?: InputMaybe<DevopsRequestInfo_Filter>;
 	DuplicateRecordItem?: InputMaybe<DuplicateRecordItem_Filter>;
 	DuplicateRecordSet?: InputMaybe<DuplicateRecordSet_Filter>;
 	EmailMessage?: InputMaybe<EmailMessage_Filter>;
 	EngagementChannelType?: InputMaybe<EngagementChannelType_Filter>;
+	ExtDataShare?: InputMaybe<ExtDataShare_Filter>;
+	ExtDataShareTarget?: InputMaybe<ExtDataShareTarget_Filter>;
 	FlowOrchestrationInstance?: InputMaybe<FlowOrchestrationInstance_Filter>;
 	FlowOrchestrationVersion?: InputMaybe<FlowOrchestrationVersion_Filter>;
+	IdentityResolution?: InputMaybe<IdentityResolution_Filter>;
 	Image?: InputMaybe<Image_Filter>;
 	Individual?: InputMaybe<Individual_Filter>;
 	KPI_Snapshot__c?: InputMaybe<Kpi_Snapshot__C_Filter>;
@@ -602,6 +942,11 @@ export type ApprovalSubmission_RelatedRecord_Filters = {
 	Maintenance_Request__c?: InputMaybe<Maintenance_Request__C_Filter>;
 	Maintenance_Worker__c?: InputMaybe<Maintenance_Worker__C_Filter>;
 	ManagedContentVariant?: InputMaybe<ManagedContentVariant_Filter>;
+	MarketSegment?: InputMaybe<MarketSegment_Filter>;
+	MarketSegmentActivation?: InputMaybe<MarketSegmentActivation_Filter>;
+	MktCalculatedInsight?: InputMaybe<MktCalculatedInsight_Filter>;
+	MktDataTransform?: InputMaybe<MktDataTransform_Filter>;
+	MktMLModel?: InputMaybe<MktMlModel_Filter>;
 	Name?: InputMaybe<Name_Filter>;
 	Notification__c?: InputMaybe<Notification__C_Filter>;
 	Opportunity?: InputMaybe<Opportunity_Filter>;
@@ -610,6 +955,10 @@ export type ApprovalSubmission_RelatedRecord_Filters = {
 	OrderItem?: InputMaybe<OrderItem_Filter>;
 	OrgMetricScanSummary?: InputMaybe<OrgMetricScanSummary_Filter>;
 	Organization?: InputMaybe<Organization_Filter>;
+	PartnerFundAllocation?: InputMaybe<PartnerFundAllocation_Filter>;
+	PartnerFundClaim?: InputMaybe<PartnerFundClaim_Filter>;
+	PartnerFundRequest?: InputMaybe<PartnerFundRequest_Filter>;
+	PartnerMarketingBudget?: InputMaybe<PartnerMarketingBudget_Filter>;
 	PartyConsent?: InputMaybe<PartyConsent_Filter>;
 	Payment__c?: InputMaybe<Payment__C_Filter>;
 	ProcessException?: InputMaybe<ProcessException_Filter>;
@@ -625,11 +974,12 @@ export type ApprovalSubmission_RelatedRecord_Filters = {
 	Property_Owner__c?: InputMaybe<Property_Owner__C_Filter>;
 	Property_Sale__c?: InputMaybe<Property_Sale__C_Filter>;
 	Property__c?: InputMaybe<Property__C_Filter>;
+	Prospect?: InputMaybe<Prospect_Filter>;
 	QuickText?: InputMaybe<QuickText_Filter>;
-	ReportHierarchyObjectField?: InputMaybe<ReportHierarchyObjectField_Filter>;
 	SecurityHealthCheckAlertRecipient?: InputMaybe<SecurityHealthCheckAlertRecipient_Filter>;
 	SecurityHealthCheckResult?: InputMaybe<SecurityHealthCheckResult_Filter>;
 	Seller?: InputMaybe<Seller_Filter>;
+	SenderEmailAddress?: InputMaybe<SenderEmailAddress_Filter>;
 	SocialPersona?: InputMaybe<SocialPersona_Filter>;
 	SocialPost?: InputMaybe<SocialPost_Filter>;
 	StreamingChannel?: InputMaybe<StreamingChannel_Filter>;
@@ -684,11 +1034,7 @@ export type ApprovalWorkItem_Filter = {
 	LastModifiedBy?: InputMaybe<User_Filter>;
 	LastModifiedById?: InputMaybe<IdOperators>;
 	LastModifiedDate?: InputMaybe<DateTimeOperators>;
-	LastReferencedDate?: InputMaybe<DateTimeOperators>;
-	LastViewedDate?: InputMaybe<DateTimeOperators>;
 	Name?: InputMaybe<StringOperators>;
-	ParentWorkItem?: InputMaybe<ApprovalWorkItem_Filter>;
-	ParentWorkItemId?: InputMaybe<IdOperators>;
 	RelatedRecord?: InputMaybe<ApprovalWorkItem_RelatedRecord_Filters>;
 	RelatedRecordId?: InputMaybe<IdOperators>;
 	RelatedRecordObjectName?: InputMaybe<StringOperators>;
@@ -704,6 +1050,7 @@ export type ApprovalWorkItem_Filter = {
 
 export type ApprovalWorkItem_RelatedRecord_Filters = {
 	Account?: InputMaybe<Account_Filter>;
+	ActivationTarget?: InputMaybe<ActivationTarget_Filter>;
 	Agent__c?: InputMaybe<Agent__C_Filter>;
 	AnalyticsUserAttrFuncTkn?: InputMaybe<AnalyticsUserAttrFuncTkn_Filter>;
 	Application__c?: InputMaybe<Application__C_Filter>;
@@ -713,14 +1060,19 @@ export type ApprovalWorkItem_RelatedRecord_Filters = {
 	Asset?: InputMaybe<Asset_Filter>;
 	AssetRelationship?: InputMaybe<AssetRelationship_Filter>;
 	AssociatedLocation?: InputMaybe<AssociatedLocation_Filter>;
+	AsyncOperationTracker?: InputMaybe<AsyncOperationTracker_Filter>;
 	AuthorizationForm?: InputMaybe<AuthorizationForm_Filter>;
 	AuthorizationFormConsent?: InputMaybe<AuthorizationFormConsent_Filter>;
 	AuthorizationFormDataUse?: InputMaybe<AuthorizationFormDataUse_Filter>;
 	AuthorizationFormText?: InputMaybe<AuthorizationFormText_Filter>;
+	BriefPlanStep?: InputMaybe<BriefPlanStep_Filter>;
 	BusinessBrand?: InputMaybe<BusinessBrand_Filter>;
 	Campaign?: InputMaybe<Campaign_Filter>;
 	Case?: InputMaybe<Case_Filter>;
 	CaseComment?: InputMaybe<CaseComment_Filter>;
+	ChannelProgram?: InputMaybe<ChannelProgram_Filter>;
+	ChannelProgramLevel?: InputMaybe<ChannelProgramLevel_Filter>;
+	ChannelProgramMember?: InputMaybe<ChannelProgramMember_Filter>;
 	CommSubscription?: InputMaybe<CommSubscription_Filter>;
 	CommSubscriptionChannelType?: InputMaybe<CommSubscriptionChannelType_Filter>;
 	CommSubscriptionConsent?: InputMaybe<CommSubscriptionConsent_Filter>;
@@ -736,17 +1088,37 @@ export type ApprovalWorkItem_RelatedRecord_Filters = {
 	ContentVersion?: InputMaybe<ContentVersion_Filter>;
 	Contract?: InputMaybe<Contract_Filter>;
 	Customer?: InputMaybe<Customer_Filter>;
+	DataAction?: InputMaybe<DataAction_Filter>;
+	DataActionJobSummary?: InputMaybe<DataActionJobSummary_Filter>;
+	DataActionTarget?: InputMaybe<DataActionTarget_Filter>;
+	DataCommCapActvTarget?: InputMaybe<DataCommCapActvTarget_Filter>;
+	DataCommunicationCap?: InputMaybe<DataCommunicationCap_Filter>;
+	DataGraph?: InputMaybe<DataGraph_Filter>;
+	DataKitDeploymentLog?: InputMaybe<DataKitDeploymentLog_Filter>;
+	DataKnowledgeSpace?: InputMaybe<DataKnowledgeSpace_Filter>;
+	DataKnowledgeSpcJobRun?: InputMaybe<DataKnowledgeSpcJobRun_Filter>;
+	DataKnowledgeSrcFileRef?: InputMaybe<DataKnowledgeSrcFileRef_Filter>;
+	DataLakeObjectInstance?: InputMaybe<DataLakeObjectInstance_Filter>;
+	DataLineageNodeDefSyncLog?: InputMaybe<DataLineageNodeDefSyncLog_Filter>;
+	DataQueryWorkspace?: InputMaybe<DataQueryWorkspace_Filter>;
+	DataQueryWorkspaceTab?: InputMaybe<DataQueryWorkspaceTab_Filter>;
+	DataQuickAttribute?: InputMaybe<DataQuickAttribute_Filter>;
+	DataStream?: InputMaybe<DataStream_Filter>;
 	DataUseLegalBasis?: InputMaybe<DataUseLegalBasis_Filter>;
 	DataUsePurpose?: InputMaybe<DataUsePurpose_Filter>;
 	DelegatedAccount?: InputMaybe<DelegatedAccount_Filter>;
+	DevopsActivityLog?: InputMaybe<DevopsActivityLog_Filter>;
 	DevopsEnvironment?: InputMaybe<DevopsEnvironment_Filter>;
 	DevopsRequestInfo?: InputMaybe<DevopsRequestInfo_Filter>;
 	DuplicateRecordItem?: InputMaybe<DuplicateRecordItem_Filter>;
 	DuplicateRecordSet?: InputMaybe<DuplicateRecordSet_Filter>;
 	EmailMessage?: InputMaybe<EmailMessage_Filter>;
 	EngagementChannelType?: InputMaybe<EngagementChannelType_Filter>;
+	ExtDataShare?: InputMaybe<ExtDataShare_Filter>;
+	ExtDataShareTarget?: InputMaybe<ExtDataShareTarget_Filter>;
 	FlowOrchestrationInstance?: InputMaybe<FlowOrchestrationInstance_Filter>;
 	FlowOrchestrationVersion?: InputMaybe<FlowOrchestrationVersion_Filter>;
+	IdentityResolution?: InputMaybe<IdentityResolution_Filter>;
 	Image?: InputMaybe<Image_Filter>;
 	Individual?: InputMaybe<Individual_Filter>;
 	KPI_Snapshot__c?: InputMaybe<Kpi_Snapshot__C_Filter>;
@@ -757,6 +1129,11 @@ export type ApprovalWorkItem_RelatedRecord_Filters = {
 	Maintenance_Request__c?: InputMaybe<Maintenance_Request__C_Filter>;
 	Maintenance_Worker__c?: InputMaybe<Maintenance_Worker__C_Filter>;
 	ManagedContentVariant?: InputMaybe<ManagedContentVariant_Filter>;
+	MarketSegment?: InputMaybe<MarketSegment_Filter>;
+	MarketSegmentActivation?: InputMaybe<MarketSegmentActivation_Filter>;
+	MktCalculatedInsight?: InputMaybe<MktCalculatedInsight_Filter>;
+	MktDataTransform?: InputMaybe<MktDataTransform_Filter>;
+	MktMLModel?: InputMaybe<MktMlModel_Filter>;
 	Name?: InputMaybe<Name_Filter>;
 	Notification__c?: InputMaybe<Notification__C_Filter>;
 	Opportunity?: InputMaybe<Opportunity_Filter>;
@@ -765,6 +1142,10 @@ export type ApprovalWorkItem_RelatedRecord_Filters = {
 	OrderItem?: InputMaybe<OrderItem_Filter>;
 	OrgMetricScanSummary?: InputMaybe<OrgMetricScanSummary_Filter>;
 	Organization?: InputMaybe<Organization_Filter>;
+	PartnerFundAllocation?: InputMaybe<PartnerFundAllocation_Filter>;
+	PartnerFundClaim?: InputMaybe<PartnerFundClaim_Filter>;
+	PartnerFundRequest?: InputMaybe<PartnerFundRequest_Filter>;
+	PartnerMarketingBudget?: InputMaybe<PartnerMarketingBudget_Filter>;
 	PartyConsent?: InputMaybe<PartyConsent_Filter>;
 	Payment__c?: InputMaybe<Payment__C_Filter>;
 	ProcessException?: InputMaybe<ProcessException_Filter>;
@@ -780,11 +1161,12 @@ export type ApprovalWorkItem_RelatedRecord_Filters = {
 	Property_Owner__c?: InputMaybe<Property_Owner__C_Filter>;
 	Property_Sale__c?: InputMaybe<Property_Sale__C_Filter>;
 	Property__c?: InputMaybe<Property__C_Filter>;
+	Prospect?: InputMaybe<Prospect_Filter>;
 	QuickText?: InputMaybe<QuickText_Filter>;
-	ReportHierarchyObjectField?: InputMaybe<ReportHierarchyObjectField_Filter>;
 	SecurityHealthCheckAlertRecipient?: InputMaybe<SecurityHealthCheckAlertRecipient_Filter>;
 	SecurityHealthCheckResult?: InputMaybe<SecurityHealthCheckResult_Filter>;
 	Seller?: InputMaybe<Seller_Filter>;
+	SenderEmailAddress?: InputMaybe<SenderEmailAddress_Filter>;
 	SocialPersona?: InputMaybe<SocialPersona_Filter>;
 	SocialPost?: InputMaybe<SocialPost_Filter>;
 	StreamingChannel?: InputMaybe<StreamingChannel_Filter>;
@@ -960,84 +1342,150 @@ export type AssociatedLocation_Filter = {
 	or?: InputMaybe<Array<InputMaybe<AssociatedLocation_Filter>>>;
 };
 
-export type Attachment_Filter = {
-	BodyLength?: InputMaybe<IntegerOperators>;
-	ContentType?: InputMaybe<StringOperators>;
+export type AsyncOperationTracker_Filter = {
+	AsyncOperationNumber?: InputMaybe<StringOperators>;
+	CorrelationIdentifier?: InputMaybe<StringOperators>;
 	CreatedBy?: InputMaybe<User_Filter>;
 	CreatedById?: InputMaybe<IdOperators>;
 	CreatedDate?: InputMaybe<DateTimeOperators>;
-	Description?: InputMaybe<LongTextAreaOperators>;
+	ExpiresAt?: InputMaybe<DateTimeOperators>;
+	FailedJobItems?: InputMaybe<IntegerOperators>;
+	FinishedAt?: InputMaybe<DateTimeOperators>;
 	Id?: InputMaybe<IdOperators>;
 	IsDeleted?: InputMaybe<BooleanOperators>;
-	IsPrivate?: InputMaybe<BooleanOperators>;
+	JobType?: InputMaybe<PicklistOperators>;
 	LastModifiedBy?: InputMaybe<User_Filter>;
 	LastModifiedById?: InputMaybe<IdOperators>;
 	LastModifiedDate?: InputMaybe<DateTimeOperators>;
-	Name?: InputMaybe<StringOperators>;
-	Owner?: InputMaybe<Attachment_Owner_Filters>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Owner?: InputMaybe<AsyncOperationTracker_Owner_Filters>;
 	OwnerId?: InputMaybe<IdOperators>;
-	Parent?: InputMaybe<Attachment_Parent_Filters>;
-	ParentId?: InputMaybe<IdOperators>;
+	ParentOperation?: InputMaybe<AsyncOperationTracker_Filter>;
+	ParentOperationId?: InputMaybe<IdOperators>;
+	ReferenceEntity?: InputMaybe<AsyncOperationTracker_ReferenceEntity_Filters>;
+	ReferenceEntityId?: InputMaybe<IdOperators>;
+	Request?: InputMaybe<LongTextAreaOperators>;
+	Response?: InputMaybe<LongTextAreaOperators>;
+	SequenceNumber?: InputMaybe<IntegerOperators>;
+	StartedAt?: InputMaybe<DateTimeOperators>;
+	Status?: InputMaybe<PicklistOperators>;
+	StepName?: InputMaybe<PicklistOperators>;
+	SubmittedAt?: InputMaybe<DateTimeOperators>;
+	SuccessfulJobItems?: InputMaybe<IntegerOperators>;
 	SystemModstamp?: InputMaybe<DateTimeOperators>;
-	and?: InputMaybe<Array<InputMaybe<Attachment_Filter>>>;
-	not?: InputMaybe<Attachment_Filter>;
-	or?: InputMaybe<Array<InputMaybe<Attachment_Filter>>>;
+	TotalJobItems?: InputMaybe<IntegerOperators>;
+	and?: InputMaybe<Array<InputMaybe<AsyncOperationTracker_Filter>>>;
+	not?: InputMaybe<AsyncOperationTracker_Filter>;
+	or?: InputMaybe<Array<InputMaybe<AsyncOperationTracker_Filter>>>;
 };
 
-export type Attachment_Owner_Filters = {
+export type AsyncOperationTracker_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
 	Name?: InputMaybe<Name_Filter>;
 	User?: InputMaybe<User_Filter>;
 };
 
-export type Attachment_Parent_Filters = {
-	Account?: InputMaybe<Account_Filter>;
-	Agent__c?: InputMaybe<Agent__C_Filter>;
-	Application__c?: InputMaybe<Application__C_Filter>;
-	ApprovalSubmission?: InputMaybe<ApprovalSubmission_Filter>;
-	ApprovalSubmissionDetail?: InputMaybe<ApprovalSubmissionDetail_Filter>;
-	ApprovalWorkItem?: InputMaybe<ApprovalWorkItem_Filter>;
-	Asset?: InputMaybe<Asset_Filter>;
-	Campaign?: InputMaybe<Campaign_Filter>;
-	Case?: InputMaybe<Case_Filter>;
-	CommSubscription?: InputMaybe<CommSubscription_Filter>;
-	CommSubscriptionChannelType?: InputMaybe<CommSubscriptionChannelType_Filter>;
-	CommSubscriptionConsent?: InputMaybe<CommSubscriptionConsent_Filter>;
-	CommSubscriptionTiming?: InputMaybe<CommSubscriptionTiming_Filter>;
-	Contact?: InputMaybe<Contact_Filter>;
-	Contract?: InputMaybe<Contract_Filter>;
-	DelegatedAccount?: InputMaybe<DelegatedAccount_Filter>;
-	DevopsEnvironment?: InputMaybe<DevopsEnvironment_Filter>;
-	DevopsRequestInfo?: InputMaybe<DevopsRequestInfo_Filter>;
-	EmailMessage?: InputMaybe<EmailMessage_Filter>;
-	EmailTemplate?: InputMaybe<EmailTemplate_Filter>;
-	EngagementChannelType?: InputMaybe<EngagementChannelType_Filter>;
-	Event?: InputMaybe<Event_Filter>;
-	Image?: InputMaybe<Image_Filter>;
-	KPI_Snapshot__c?: InputMaybe<Kpi_Snapshot__C_Filter>;
-	Lead?: InputMaybe<Lead_Filter>;
-	Lease__c?: InputMaybe<Lease__C_Filter>;
-	Location?: InputMaybe<Location_Filter>;
-	Maintenance_Request__c?: InputMaybe<Maintenance_Request__C_Filter>;
-	Maintenance_Worker__c?: InputMaybe<Maintenance_Worker__C_Filter>;
+export type AsyncOperationTracker_ReferenceEntity_Filters = {
 	Name?: InputMaybe<Name_Filter>;
-	Notification__c?: InputMaybe<Notification__C_Filter>;
-	Opportunity?: InputMaybe<Opportunity_Filter>;
 	Order?: InputMaybe<Order_Filter>;
-	Payment__c?: InputMaybe<Payment__C_Filter>;
 	Product2?: InputMaybe<Product2_Filter>;
-	Property_Cost__c?: InputMaybe<Property_Cost__C_Filter>;
-	Property_Feature__c?: InputMaybe<Property_Feature__C_Filter>;
-	Property_Image__c?: InputMaybe<Property_Image__C_Filter>;
-	Property_Listing__c?: InputMaybe<Property_Listing__C_Filter>;
-	Property_Management_Company__c?: InputMaybe<Property_Management_Company__C_Filter>;
-	Property_Owner__c?: InputMaybe<Property_Owner__C_Filter>;
-	Property_Sale__c?: InputMaybe<Property_Sale__C_Filter>;
-	Property__c?: InputMaybe<Property__C_Filter>;
-	SocialPost?: InputMaybe<SocialPost_Filter>;
-	Task?: InputMaybe<Task_Filter>;
-	Tenant__c?: InputMaybe<Tenant__C_Filter>;
-	WorkOrder?: InputMaybe<WorkOrder_Filter>;
-	WorkOrderLineItem?: InputMaybe<WorkOrderLineItem_Filter>;
+};
+
+export type AttribModelStageMetric_Filter = {
+	AggregateFunction?: InputMaybe<PicklistOperators>;
+	Alias?: InputMaybe<StringOperators>;
+	AttribModelStage?: InputMaybe<AttribModelStage_Filter>;
+	AttribModelStageId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	EngagementSignalMetric?: InputMaybe<EngagementSignalMetric_Filter>;
+	EngagementSignalMetricId?: InputMaybe<IdOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<AttribModelStageMetric_Filter>>>;
+	not?: InputMaybe<AttribModelStageMetric_Filter>;
+	or?: InputMaybe<Array<InputMaybe<AttribModelStageMetric_Filter>>>;
+};
+
+export type AttribModelStage_Filter = {
+	AttribModel?: InputMaybe<AttribModel_Filter>;
+	AttribModelId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	EngagementSignal?: InputMaybe<EngagementSignal_Filter>;
+	EngagementSignalEnum?: InputMaybe<PicklistOperators>;
+	EngagementSignalId?: InputMaybe<IdOperators>;
+	EngagementSignalType?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsContentMatchRequired?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Sequence?: InputMaybe<IntegerOperators>;
+	StageUnionGroupName?: InputMaybe<StringOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<AttribModelStage_Filter>>>;
+	not?: InputMaybe<AttribModelStage_Filter>;
+	or?: InputMaybe<Array<InputMaybe<AttribModelStage_Filter>>>;
+};
+
+export type AttribModel_Filter = {
+	AttribModelStatus?: InputMaybe<PicklistOperators>;
+	AttribRecordOutputObjectApiName?: InputMaybe<StringOperators>;
+	AttribRecordOutputObjectId?: InputMaybe<IdOperators>;
+	AttributionModelType?: InputMaybe<PicklistOperators>;
+	AttributionType?: InputMaybe<PicklistOperators>;
+	ContentObjectId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DailyContentOutputObjectId?: InputMaybe<IdOperators>;
+	DailyOutputObjectId?: InputMaybe<IdOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	DeveloperName?: InputMaybe<StringOperators>;
+	ErrorCode?: InputMaybe<PicklistOperators>;
+	GlobalAttributionWindowDays?: InputMaybe<IntegerOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IdentityResolutionMode?: InputMaybe<PicklistOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsRemote?: InputMaybe<BooleanOperators>;
+	IsZeroDayLoadRequired?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastRefresh?: InputMaybe<DateTimeOperators>;
+	LastSuccessfulRefresh?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	LatestRefreshedStatus?: InputMaybe<PicklistOperators>;
+	ModelContext?: InputMaybe<PicklistOperators>;
+	ModelRevision?: InputMaybe<IntegerOperators>;
+	ModelVersion?: InputMaybe<IntegerOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Partner?: InputMaybe<StringOperators>;
+	ProfileDataGraph?: InputMaybe<DataGraph_Filter>;
+	ProfileDataGraphId?: InputMaybe<IdOperators>;
+	ProfileLinkObjectId?: InputMaybe<IdOperators>;
+	ScheduledFrequencyMins?: InputMaybe<IntegerOperators>;
+	SyncStatus?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	Tags?: InputMaybe<StringOperators>;
+	UnifiedProfileObjectId?: InputMaybe<IdOperators>;
+	and?: InputMaybe<Array<InputMaybe<AttribModel_Filter>>>;
+	not?: InputMaybe<AttribModel_Filter>;
+	or?: InputMaybe<Array<InputMaybe<AttribModel_Filter>>>;
 };
 
 export type AuthorizationFormConsentHistory_Filter = {
@@ -1292,6 +1740,62 @@ export type BooleanOperators = {
 	ne?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
+export type BriefPlanStep_Filter = {
+	Brief?: InputMaybe<Brief_Filter>;
+	BriefId?: InputMaybe<IdOperators>;
+	Channel?: InputMaybe<StringOperators>;
+	Content?: InputMaybe<LongTextAreaOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	StepNumber?: InputMaybe<IntegerOperators>;
+	StepType?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	TargetingRule?: InputMaybe<LongTextAreaOperators>;
+	WaitNumber?: InputMaybe<IntegerOperators>;
+	WaitUnit?: InputMaybe<PicklistOperators>;
+	and?: InputMaybe<Array<InputMaybe<BriefPlanStep_Filter>>>;
+	not?: InputMaybe<BriefPlanStep_Filter>;
+	or?: InputMaybe<Array<InputMaybe<BriefPlanStep_Filter>>>;
+};
+
+export type Brief_Filter = {
+	AdditionalNotes?: InputMaybe<LongTextAreaOperators>;
+	AgentGuardrails?: InputMaybe<LongTextAreaOperators>;
+	Brand?: InputMaybe<ManagedContent_Filter>;
+	BrandId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Description?: InputMaybe<LongTextAreaOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsConversational?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	KeyMessage?: InputMaybe<LongTextAreaOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	PlanName?: InputMaybe<LongTextAreaOperators>;
+	PrimaryCtas?: InputMaybe<LongTextAreaOperators>;
+	PrimaryGoal?: InputMaybe<LongTextAreaOperators>;
+	PrimaryKpi?: InputMaybe<LongTextAreaOperators>;
+	Priority?: InputMaybe<LongTextAreaOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	TargetAudience?: InputMaybe<LongTextAreaOperators>;
+	and?: InputMaybe<Array<InputMaybe<Brief_Filter>>>;
+	not?: InputMaybe<Brief_Filter>;
+	or?: InputMaybe<Array<InputMaybe<Brief_Filter>>>;
+};
+
 export type BusinessBrand_Filter = {
 	CreatedBy?: InputMaybe<User_Filter>;
 	CreatedById?: InputMaybe<IdOperators>;
@@ -1352,6 +1856,80 @@ export type BusinessHours_Filter = {
 	and?: InputMaybe<Array<InputMaybe<BusinessHours_Filter>>>;
 	not?: InputMaybe<BusinessHours_Filter>;
 	or?: InputMaybe<Array<InputMaybe<BusinessHours_Filter>>>;
+};
+
+export type CalcAffinityEngmtSgnl_Filter = {
+	CalculatedAffinity?: InputMaybe<CalculatedAffinity_Filter>;
+	CalculatedAffinityId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	EngagementSignal?: InputMaybe<EngagementSignal_Filter>;
+	EngagementSignalId?: InputMaybe<IdOperators>;
+	EngagementSignalImpact?: InputMaybe<PicklistOperators>;
+	EngagementSignalStrength?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<CalcAffinityEngmtSgnl_Filter>>>;
+	not?: InputMaybe<CalcAffinityEngmtSgnl_Filter>;
+	or?: InputMaybe<Array<InputMaybe<CalcAffinityEngmtSgnl_Filter>>>;
+};
+
+export type CalculatedAffinityField_Filter = {
+	CalculatedAffinity?: InputMaybe<CalculatedAffinity_Filter>;
+	CalculatedAffinityId?: InputMaybe<IdOperators>;
+	CalculatedInsight?: InputMaybe<MktCalculatedInsight_Filter>;
+	CalculatedInsightId?: InputMaybe<IdOperators>;
+	ContentObjectFieldId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<CalculatedAffinityField_Filter>>>;
+	not?: InputMaybe<CalculatedAffinityField_Filter>;
+	or?: InputMaybe<Array<InputMaybe<CalculatedAffinityField_Filter>>>;
+};
+
+export type CalculatedAffinity_Filter = {
+	ContentObjectId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	DeveloperName?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDecay?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	LookBackWindow?: InputMaybe<IntegerOperators>;
+	Name?: InputMaybe<StringOperators>;
+	ProfileDataGraph?: InputMaybe<DataGraph_Filter>;
+	ProfileDataGraphId?: InputMaybe<IdOperators>;
+	ScoringModel?: InputMaybe<PicklistOperators>;
+	Status?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<CalculatedAffinity_Filter>>>;
+	not?: InputMaybe<CalculatedAffinity_Filter>;
+	or?: InputMaybe<Array<InputMaybe<CalculatedAffinity_Filter>>>;
 };
 
 export type CampaignHistory_Filter = {
@@ -1451,7 +2029,10 @@ export type Campaign_Filter = {
 	ActualCost?: InputMaybe<CurrencyOperators>;
 	AmountAllOpportunities?: InputMaybe<CurrencyOperators>;
 	AmountWonOpportunities?: InputMaybe<CurrencyOperators>;
+	Brief?: InputMaybe<Brief_Filter>;
+	BriefId?: InputMaybe<IdOperators>;
 	BudgetedCost?: InputMaybe<CurrencyOperators>;
+	CampaignImageId?: InputMaybe<IdOperators>;
 	CampaignMemberRecordType?: InputMaybe<RecordType_Filter>;
 	CampaignMemberRecordTypeId?: InputMaybe<IdOperators>;
 	CreatedBy?: InputMaybe<User_Filter>;
@@ -1604,6 +2185,154 @@ export type Case_Owner_Filters = {
 	User?: InputMaybe<User_Filter>;
 };
 
+export type ChannelProgramHistory_Filter = {
+	ChannelProgram?: InputMaybe<ChannelProgram_Filter>;
+	ChannelProgramId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<ChannelProgramHistory_Filter>>>;
+	not?: InputMaybe<ChannelProgramHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<ChannelProgramHistory_Filter>>>;
+};
+
+export type ChannelProgramLevelHistory_Filter = {
+	ChannelProgramLevel?: InputMaybe<ChannelProgramLevel_Filter>;
+	ChannelProgramLevelId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<ChannelProgramLevelHistory_Filter>>>;
+	not?: InputMaybe<ChannelProgramLevelHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<ChannelProgramLevelHistory_Filter>>>;
+};
+
+export type ChannelProgramLevel_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Description?: InputMaybe<TextAreaOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<ChannelProgramLevel_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	Program?: InputMaybe<ChannelProgram_Filter>;
+	ProgramId?: InputMaybe<IdOperators>;
+	Rank?: InputMaybe<IntegerOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<ChannelProgramLevel_Filter>>>;
+	not?: InputMaybe<ChannelProgramLevel_Filter>;
+	or?: InputMaybe<Array<InputMaybe<ChannelProgramLevel_Filter>>>;
+};
+
+export type ChannelProgramLevel_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type ChannelProgramMemberHistory_Filter = {
+	ChannelProgramMember?: InputMaybe<ChannelProgramMember_Filter>;
+	ChannelProgramMemberId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<ChannelProgramMemberHistory_Filter>>>;
+	not?: InputMaybe<ChannelProgramMemberHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<ChannelProgramMemberHistory_Filter>>>;
+};
+
+export type ChannelProgramMember_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Level?: InputMaybe<ChannelProgramLevel_Filter>;
+	LevelId?: InputMaybe<IdOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<ChannelProgramMember_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	Partner?: InputMaybe<Account_Filter>;
+	PartnerId?: InputMaybe<IdOperators>;
+	Program?: InputMaybe<ChannelProgram_Filter>;
+	ProgramId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<ChannelProgramMember_Filter>>>;
+	not?: InputMaybe<ChannelProgramMember_Filter>;
+	or?: InputMaybe<Array<InputMaybe<ChannelProgramMember_Filter>>>;
+};
+
+export type ChannelProgramMember_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type ChannelProgram_Filter = {
+	Category?: InputMaybe<PicklistOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Description?: InputMaybe<TextAreaOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsActive?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<ChannelProgram_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<ChannelProgram_Filter>>>;
+	not?: InputMaybe<ChannelProgram_Filter>;
+	or?: InputMaybe<Array<InputMaybe<ChannelProgram_Filter>>>;
+};
+
+export type ChannelProgram_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
 export type CommSubscriptionChannelTypeHistory_Filter = {
 	CommSubscriptionChannelType?: InputMaybe<CommSubscriptionChannelType_Filter>;
 	CommSubscriptionChannelTypeId?: InputMaybe<IdOperators>;
@@ -1640,6 +2369,10 @@ export type CommSubscriptionChannelType_Filter = {
 	LastModifiedDate?: InputMaybe<DateTimeOperators>;
 	LastReferencedDate?: InputMaybe<DateTimeOperators>;
 	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	MessagingChannel?: InputMaybe<MessagingChannel_Filter>;
+	MessagingChannelId?: InputMaybe<IdOperators>;
+	MessagingChannelUsage?: InputMaybe<MessagingChannelUsage_Filter>;
+	MessagingChannelUsageId?: InputMaybe<IdOperators>;
 	Name?: InputMaybe<StringOperators>;
 	Owner?: InputMaybe<CommSubscriptionChannelType_Owner_Filters>;
 	OwnerId?: InputMaybe<IdOperators>;
@@ -1802,6 +2535,7 @@ export type CommSubscriptionTiming_Filter = {
 };
 
 export type CommSubscription_Filter = {
+	BusinessUnitId?: InputMaybe<IdOperators>;
 	CreatedBy?: InputMaybe<User_Filter>;
 	CreatedById?: InputMaybe<IdOperators>;
 	CreatedDate?: InputMaybe<DateTimeOperators>;
@@ -2447,6 +3181,8 @@ export type ContentDocumentLink_Filter = {
 
 export type ContentDocumentLink_LinkedEntity_Filters = {
 	Account?: InputMaybe<Account_Filter>;
+	AccountBrand?: InputMaybe<AccountBrand_Filter>;
+	ActivationTarget?: InputMaybe<ActivationTarget_Filter>;
 	Agent__c?: InputMaybe<Agent__C_Filter>;
 	Application__c?: InputMaybe<Application__C_Filter>;
 	ApprovalSubmission?: InputMaybe<ApprovalSubmission_Filter>;
@@ -2455,8 +3191,12 @@ export type ContentDocumentLink_LinkedEntity_Filters = {
 	Asset?: InputMaybe<Asset_Filter>;
 	AssetRelationship?: InputMaybe<AssetRelationship_Filter>;
 	AuthorizationFormText?: InputMaybe<AuthorizationFormText_Filter>;
+	Brief?: InputMaybe<Brief_Filter>;
 	Campaign?: InputMaybe<Campaign_Filter>;
 	Case?: InputMaybe<Case_Filter>;
+	ChannelProgram?: InputMaybe<ChannelProgram_Filter>;
+	ChannelProgramLevel?: InputMaybe<ChannelProgramLevel_Filter>;
+	ChannelProgramMember?: InputMaybe<ChannelProgramMember_Filter>;
 	CommSubscription?: InputMaybe<CommSubscription_Filter>;
 	CommSubscriptionChannelType?: InputMaybe<CommSubscriptionChannelType_Filter>;
 	CommSubscriptionConsent?: InputMaybe<CommSubscriptionConsent_Filter>;
@@ -2464,14 +3204,34 @@ export type ContentDocumentLink_LinkedEntity_Filters = {
 	Contact?: InputMaybe<Contact_Filter>;
 	ContentWorkspace?: InputMaybe<ContentWorkspace_Filter>;
 	Contract?: InputMaybe<Contract_Filter>;
+	DataAction?: InputMaybe<DataAction_Filter>;
+	DataActionJobSummary?: InputMaybe<DataActionJobSummary_Filter>;
+	DataActionTarget?: InputMaybe<DataActionTarget_Filter>;
+	DataCommCapActvTarget?: InputMaybe<DataCommCapActvTarget_Filter>;
+	DataCommunicationCap?: InputMaybe<DataCommunicationCap_Filter>;
+	DataContentLensSource?: InputMaybe<DataContentLensSource_Filter>;
+	DataLakeObjectInstance?: InputMaybe<DataLakeObjectInstance_Filter>;
+	DataLineageNodeDefSyncLog?: InputMaybe<DataLineageNodeDefSyncLog_Filter>;
+	DataObjSecondaryIndex?: InputMaybe<DataObjSecondaryIndex_Filter>;
+	DataQueryWorkspace?: InputMaybe<DataQueryWorkspace_Filter>;
+	DataQuickAttribute?: InputMaybe<DataQuickAttribute_Filter>;
+	DataSemanticSearch?: InputMaybe<DataSemanticSearch_Filter>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataStream?: InputMaybe<DataStream_Filter>;
 	DelegatedAccount?: InputMaybe<DelegatedAccount_Filter>;
+	DevopsActivityLog?: InputMaybe<DevopsActivityLog_Filter>;
 	DevopsEnvironment?: InputMaybe<DevopsEnvironment_Filter>;
 	DevopsRequestInfo?: InputMaybe<DevopsRequestInfo_Filter>;
+	EmailContent?: InputMaybe<EmailContent_Filter>;
 	EmailMessage?: InputMaybe<EmailMessage_Filter>;
 	EmailTemplate?: InputMaybe<EmailTemplate_Filter>;
 	EngagementChannelType?: InputMaybe<EngagementChannelType_Filter>;
+	EngagementSignal?: InputMaybe<EngagementSignal_Filter>;
 	EnhancedLetterhead?: InputMaybe<EnhancedLetterhead_Filter>;
 	Event?: InputMaybe<Event_Filter>;
+	ExtDataShare?: InputMaybe<ExtDataShare_Filter>;
+	ExtDataShareTarget?: InputMaybe<ExtDataShareTarget_Filter>;
+	IdentityResolution?: InputMaybe<IdentityResolution_Filter>;
 	Image?: InputMaybe<Image_Filter>;
 	KPI_Snapshot__c?: InputMaybe<Kpi_Snapshot__C_Filter>;
 	Lead?: InputMaybe<Lead_Filter>;
@@ -2480,6 +3240,11 @@ export type ContentDocumentLink_LinkedEntity_Filters = {
 	Location?: InputMaybe<Location_Filter>;
 	Maintenance_Request__c?: InputMaybe<Maintenance_Request__C_Filter>;
 	Maintenance_Worker__c?: InputMaybe<Maintenance_Worker__C_Filter>;
+	MarketSegment?: InputMaybe<MarketSegment_Filter>;
+	MarketSegmentActivation?: InputMaybe<MarketSegmentActivation_Filter>;
+	MktCalculatedInsight?: InputMaybe<MktCalculatedInsight_Filter>;
+	MktDataTransform?: InputMaybe<MktDataTransform_Filter>;
+	MktMLModel?: InputMaybe<MktMlModel_Filter>;
 	Name?: InputMaybe<Name_Filter>;
 	Network?: InputMaybe<Network_Filter>;
 	Notification__c?: InputMaybe<Notification__C_Filter>;
@@ -2487,6 +3252,10 @@ export type ContentDocumentLink_LinkedEntity_Filters = {
 	Order?: InputMaybe<Order_Filter>;
 	OrderItem?: InputMaybe<OrderItem_Filter>;
 	Organization?: InputMaybe<Organization_Filter>;
+	PartnerFundAllocation?: InputMaybe<PartnerFundAllocation_Filter>;
+	PartnerFundClaim?: InputMaybe<PartnerFundClaim_Filter>;
+	PartnerFundRequest?: InputMaybe<PartnerFundRequest_Filter>;
+	PartnerMarketingBudget?: InputMaybe<PartnerMarketingBudget_Filter>;
 	PartyConsent?: InputMaybe<PartyConsent_Filter>;
 	Payment__c?: InputMaybe<Payment__C_Filter>;
 	Product2?: InputMaybe<Product2_Filter>;
@@ -2760,6 +3529,8 @@ export type ContentVersion_Filter = {
 
 export type ContentVersion_FirstPublishLocation_Filters = {
 	Account?: InputMaybe<Account_Filter>;
+	AccountBrand?: InputMaybe<AccountBrand_Filter>;
+	ActivationTarget?: InputMaybe<ActivationTarget_Filter>;
 	Agent__c?: InputMaybe<Agent__C_Filter>;
 	Application__c?: InputMaybe<Application__C_Filter>;
 	ApprovalSubmission?: InputMaybe<ApprovalSubmission_Filter>;
@@ -2768,8 +3539,12 @@ export type ContentVersion_FirstPublishLocation_Filters = {
 	Asset?: InputMaybe<Asset_Filter>;
 	AssetRelationship?: InputMaybe<AssetRelationship_Filter>;
 	AuthorizationFormText?: InputMaybe<AuthorizationFormText_Filter>;
+	Brief?: InputMaybe<Brief_Filter>;
 	Campaign?: InputMaybe<Campaign_Filter>;
 	Case?: InputMaybe<Case_Filter>;
+	ChannelProgram?: InputMaybe<ChannelProgram_Filter>;
+	ChannelProgramLevel?: InputMaybe<ChannelProgramLevel_Filter>;
+	ChannelProgramMember?: InputMaybe<ChannelProgramMember_Filter>;
 	CommSubscription?: InputMaybe<CommSubscription_Filter>;
 	CommSubscriptionChannelType?: InputMaybe<CommSubscriptionChannelType_Filter>;
 	CommSubscriptionConsent?: InputMaybe<CommSubscriptionConsent_Filter>;
@@ -2777,14 +3552,34 @@ export type ContentVersion_FirstPublishLocation_Filters = {
 	Contact?: InputMaybe<Contact_Filter>;
 	ContentWorkspace?: InputMaybe<ContentWorkspace_Filter>;
 	Contract?: InputMaybe<Contract_Filter>;
+	DataAction?: InputMaybe<DataAction_Filter>;
+	DataActionJobSummary?: InputMaybe<DataActionJobSummary_Filter>;
+	DataActionTarget?: InputMaybe<DataActionTarget_Filter>;
+	DataCommCapActvTarget?: InputMaybe<DataCommCapActvTarget_Filter>;
+	DataCommunicationCap?: InputMaybe<DataCommunicationCap_Filter>;
+	DataContentLensSource?: InputMaybe<DataContentLensSource_Filter>;
+	DataLakeObjectInstance?: InputMaybe<DataLakeObjectInstance_Filter>;
+	DataLineageNodeDefSyncLog?: InputMaybe<DataLineageNodeDefSyncLog_Filter>;
+	DataObjSecondaryIndex?: InputMaybe<DataObjSecondaryIndex_Filter>;
+	DataQueryWorkspace?: InputMaybe<DataQueryWorkspace_Filter>;
+	DataQuickAttribute?: InputMaybe<DataQuickAttribute_Filter>;
+	DataSemanticSearch?: InputMaybe<DataSemanticSearch_Filter>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataStream?: InputMaybe<DataStream_Filter>;
 	DelegatedAccount?: InputMaybe<DelegatedAccount_Filter>;
+	DevopsActivityLog?: InputMaybe<DevopsActivityLog_Filter>;
 	DevopsEnvironment?: InputMaybe<DevopsEnvironment_Filter>;
 	DevopsRequestInfo?: InputMaybe<DevopsRequestInfo_Filter>;
+	EmailContent?: InputMaybe<EmailContent_Filter>;
 	EmailMessage?: InputMaybe<EmailMessage_Filter>;
 	EmailTemplate?: InputMaybe<EmailTemplate_Filter>;
 	EngagementChannelType?: InputMaybe<EngagementChannelType_Filter>;
+	EngagementSignal?: InputMaybe<EngagementSignal_Filter>;
 	EnhancedLetterhead?: InputMaybe<EnhancedLetterhead_Filter>;
 	Event?: InputMaybe<Event_Filter>;
+	ExtDataShare?: InputMaybe<ExtDataShare_Filter>;
+	ExtDataShareTarget?: InputMaybe<ExtDataShareTarget_Filter>;
+	IdentityResolution?: InputMaybe<IdentityResolution_Filter>;
 	Image?: InputMaybe<Image_Filter>;
 	KPI_Snapshot__c?: InputMaybe<Kpi_Snapshot__C_Filter>;
 	Lead?: InputMaybe<Lead_Filter>;
@@ -2793,6 +3588,11 @@ export type ContentVersion_FirstPublishLocation_Filters = {
 	Location?: InputMaybe<Location_Filter>;
 	Maintenance_Request__c?: InputMaybe<Maintenance_Request__C_Filter>;
 	Maintenance_Worker__c?: InputMaybe<Maintenance_Worker__C_Filter>;
+	MarketSegment?: InputMaybe<MarketSegment_Filter>;
+	MarketSegmentActivation?: InputMaybe<MarketSegmentActivation_Filter>;
+	MktCalculatedInsight?: InputMaybe<MktCalculatedInsight_Filter>;
+	MktDataTransform?: InputMaybe<MktDataTransform_Filter>;
+	MktMLModel?: InputMaybe<MktMlModel_Filter>;
 	Name?: InputMaybe<Name_Filter>;
 	Network?: InputMaybe<Network_Filter>;
 	Notification__c?: InputMaybe<Notification__C_Filter>;
@@ -2800,6 +3600,10 @@ export type ContentVersion_FirstPublishLocation_Filters = {
 	Order?: InputMaybe<Order_Filter>;
 	OrderItem?: InputMaybe<OrderItem_Filter>;
 	Organization?: InputMaybe<Organization_Filter>;
+	PartnerFundAllocation?: InputMaybe<PartnerFundAllocation_Filter>;
+	PartnerFundClaim?: InputMaybe<PartnerFundClaim_Filter>;
+	PartnerFundRequest?: InputMaybe<PartnerFundRequest_Filter>;
+	PartnerMarketingBudget?: InputMaybe<PartnerMarketingBudget_Filter>;
 	PartyConsent?: InputMaybe<PartyConsent_Filter>;
 	Payment__c?: InputMaybe<Payment__C_Filter>;
 	Product2?: InputMaybe<Product2_Filter>;
@@ -3044,35 +3848,1041 @@ export type Customer_Owner_Filters = {
 	User?: InputMaybe<User_Filter>;
 };
 
-export const DataType = {
-	Address: "ADDRESS",
-	Anytype: "ANYTYPE",
-	Base64: "BASE64",
-	Boolean: "BOOLEAN",
-	Combobox: "COMBOBOX",
-	Complexvalue: "COMPLEXVALUE",
-	Currency: "CURRENCY",
-	Date: "DATE",
-	Datetime: "DATETIME",
-	Double: "DOUBLE",
-	Email: "EMAIL",
-	Encryptedstring: "ENCRYPTEDSTRING",
-	Int: "INT",
-	Json: "JSON",
-	Junctionidlist: "JUNCTIONIDLIST",
-	Location: "LOCATION",
-	Long: "LONG",
-	Multipicklist: "MULTIPICKLIST",
-	Percent: "PERCENT",
-	Phone: "PHONE",
-	Picklist: "PICKLIST",
-	Reference: "REFERENCE",
-	String: "STRING",
-	Textarea: "TEXTAREA",
-	Time: "TIME",
-	Url: "URL",
-} as const;
-export type DataType = (typeof DataType)[keyof typeof DataType];
+export type DataActionHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataAction?: InputMaybe<DataAction_Filter>;
+	DataActionId?: InputMaybe<IdOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataActionHistory_Filter>>>;
+	not?: InputMaybe<DataActionHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataActionHistory_Filter>>>;
+};
+
+export type DataActionJobSummaryHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataActionJobSummary?: InputMaybe<DataActionJobSummary_Filter>;
+	DataActionJobSummaryId?: InputMaybe<IdOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataActionJobSummaryHistory_Filter>>>;
+	not?: InputMaybe<DataActionJobSummaryHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataActionJobSummaryHistory_Filter>>>;
+};
+
+export type DataActionJobSummary_DataActionDefinition_Filters = {
+	DataAction?: InputMaybe<DataAction_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+};
+
+export type DataActionJobSummary_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataActionDefinition?: InputMaybe<DataActionJobSummary_DataActionDefinition_Filters>;
+	DataActionDefinitionId?: InputMaybe<IdOperators>;
+	EndExecutionTime?: InputMaybe<DateTimeOperators>;
+	ExecutionDetails?: InputMaybe<LongTextAreaOperators>;
+	ExternalRequestName?: InputMaybe<StringOperators>;
+	FailedRecordCount?: InputMaybe<IntegerOperators>;
+	FailedRecords?: InputMaybe<LongTextAreaOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	JobStatus?: InputMaybe<PicklistOperators>;
+	JobType?: InputMaybe<PicklistOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<DataActionJobSummary_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	ProcessName?: InputMaybe<StringOperators>;
+	ProcessedRecordCount?: InputMaybe<IntegerOperators>;
+	PublishDateTime?: InputMaybe<DateTimeOperators>;
+	SkippedRecords?: InputMaybe<IntegerOperators>;
+	StartExecutionTime?: InputMaybe<DateTimeOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	UpdatedRecordCount?: InputMaybe<IntegerOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataActionJobSummary_Filter>>>;
+	not?: InputMaybe<DataActionJobSummary_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataActionJobSummary_Filter>>>;
+};
+
+export type DataActionJobSummary_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type DataActionTargetHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataActionTarget?: InputMaybe<DataActionTarget_Filter>;
+	DataActionTargetId?: InputMaybe<IdOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataActionTargetHistory_Filter>>>;
+	not?: InputMaybe<DataActionTargetHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataActionTargetHistory_Filter>>>;
+};
+
+export type DataActionTarget_Filter = {
+	ApiContract?: InputMaybe<StringOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastSigningKeyDateTime?: InputMaybe<DateTimeOperators>;
+	LastTargetStatusDateTime?: InputMaybe<DateTimeOperators>;
+	LastTargetStatusErrorCode?: InputMaybe<PicklistOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	ManagedBy?: InputMaybe<PicklistOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<DataActionTarget_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	TargetApiName?: InputMaybe<StringOperators>;
+	TargetDefinitionId?: InputMaybe<IdOperators>;
+	TargetEndpoint?: InputMaybe<UrlOperators>;
+	TargetStatus?: InputMaybe<PicklistOperators>;
+	TargetType?: InputMaybe<PicklistOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataActionTarget_Filter>>>;
+	not?: InputMaybe<DataActionTarget_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataActionTarget_Filter>>>;
+};
+
+export type DataActionTarget_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type DataAction_Filter = {
+	ActionApiName?: InputMaybe<StringOperators>;
+	ActionDefinitionId?: InputMaybe<IdOperators>;
+	ActionStatus?: InputMaybe<PicklistOperators>;
+	AffiliationDmoDeveloperName?: InputMaybe<StringOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastActionStatusDateTime?: InputMaybe<DateTimeOperators>;
+	LastActionStatusErrorCode?: InputMaybe<PicklistOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	ManagedBy?: InputMaybe<PicklistOperators>;
+	Name?: InputMaybe<StringOperators>;
+	ShouldProcessDayZero?: InputMaybe<BooleanOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataAction_Filter>>>;
+	not?: InputMaybe<DataAction_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataAction_Filter>>>;
+};
+
+export type DataCommCapActvTargetHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataCommCapActvTarget?: InputMaybe<DataCommCapActvTarget_Filter>;
+	DataCommCapActvTargetId?: InputMaybe<IdOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataCommCapActvTargetHistory_Filter>>>;
+	not?: InputMaybe<DataCommCapActvTargetHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataCommCapActvTargetHistory_Filter>>>;
+};
+
+export type DataCommCapActvTarget_Filter = {
+	ActivationTarget?: InputMaybe<ActivationTarget_Filter>;
+	ActivationTargetId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataCommCapDimId?: InputMaybe<IdOperators>;
+	DataCommCapDimValueId?: InputMaybe<IdOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<DataCommCapActvTarget_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataCommCapActvTarget_Filter>>>;
+	not?: InputMaybe<DataCommCapActvTarget_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataCommCapActvTarget_Filter>>>;
+};
+
+export type DataCommCapActvTarget_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type DataCommunicationCapHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataCommunicationCap?: InputMaybe<DataCommunicationCap_Filter>;
+	DataCommunicationCapId?: InputMaybe<IdOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataCommunicationCapHistory_Filter>>>;
+	not?: InputMaybe<DataCommunicationCapHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataCommunicationCapHistory_Filter>>>;
+};
+
+export type DataCommunicationCap_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataCommunicationCapDefId?: InputMaybe<IdOperators>;
+	DataCommunicationCapStatus?: InputMaybe<PicklistOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastStatusDateTime?: InputMaybe<DateTimeOperators>;
+	LastStatusErrorCode?: InputMaybe<PicklistOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<DataCommunicationCap_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataCommunicationCap_Filter>>>;
+	not?: InputMaybe<DataCommunicationCap_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataCommunicationCap_Filter>>>;
+};
+
+export type DataCommunicationCap_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type DataConnectorS3_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Delimiter?: InputMaybe<StringOperators>;
+	DeveloperName?: InputMaybe<StringOperators>;
+	FileNameWildcard?: InputMaybe<StringOperators>;
+	FileType?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	ImportFromDirectory?: InputMaybe<StringOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	Language?: InputMaybe<PicklistOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	MasterLabel?: InputMaybe<StringOperators>;
+	NamespacePrefix?: InputMaybe<StringOperators>;
+	S3BucketName?: InputMaybe<UrlOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataConnectorS3_Filter>>>;
+	not?: InputMaybe<DataConnectorS3_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataConnectorS3_Filter>>>;
+};
+
+export type DataContentLensSourceHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataContentLensSource?: InputMaybe<DataContentLensSource_Filter>;
+	DataContentLensSourceId?: InputMaybe<IdOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataContentLensSourceHistory_Filter>>>;
+	not?: InputMaybe<DataContentLensSourceHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataContentLensSourceHistory_Filter>>>;
+};
+
+export type DataContentLensSource_Filter = {
+	ContentVersion?: InputMaybe<StringOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DocumentVersion?: InputMaybe<StringOperators>;
+	FileKey?: InputMaybe<StringOperators>;
+	FileName?: InputMaybe<StringOperators>;
+	FullyQualifiedFilePath?: InputMaybe<LongTextAreaOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IdentifierField?: InputMaybe<StringOperators>;
+	IndexStatus?: InputMaybe<PicklistOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	MimeType?: InputMaybe<StringOperators>;
+	Name?: InputMaybe<StringOperators>;
+	RecordIds?: InputMaybe<LongTextAreaOperators>;
+	Status?: InputMaybe<StringOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataContentLensSource_Filter>>>;
+	not?: InputMaybe<DataContentLensSource_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataContentLensSource_Filter>>>;
+};
+
+export type DataGraph_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DaoDefinitionId?: InputMaybe<IdOperators>;
+	DaoFieldsCount?: InputMaybe<IntegerOperators>;
+	DataGraphApiName?: InputMaybe<StringOperators>;
+	DataGraphType?: InputMaybe<PicklistOperators>;
+	DataSourceObjCount?: InputMaybe<IntegerOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	FullRefreshConfig?: InputMaybe<LongTextAreaOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IncrementalRefreshConfig?: InputMaybe<LongTextAreaOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsRemote?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastRefreshDate?: InputMaybe<DateTimeOperators>;
+	LastRunStatus?: InputMaybe<PicklistOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Levels?: InputMaybe<IntegerOperators>;
+	Name?: InputMaybe<StringOperators>;
+	OwnedBy?: InputMaybe<StringOperators>;
+	PrimaryDmo?: InputMaybe<StringOperators>;
+	RecordCount?: InputMaybe<LongOperators>;
+	RolloutVersion?: InputMaybe<StringOperators>;
+	Schedule?: InputMaybe<StringOperators>;
+	Status?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	Version?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataGraph_Filter>>>;
+	not?: InputMaybe<DataGraph_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataGraph_Filter>>>;
+};
+
+export type DataHarmonizedModelObjRef_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataCloudContentIdentifier?: InputMaybe<StringOperators>;
+	FileType?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	ObjectDeveloperName?: InputMaybe<StringOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	Title?: InputMaybe<LongTextAreaOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataHarmonizedModelObjRef_Filter>>>;
+	not?: InputMaybe<DataHarmonizedModelObjRef_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataHarmonizedModelObjRef_Filter>>>;
+};
+
+export type DataKitDeploymentLog_Filter = {
+	BundleName?: InputMaybe<StringOperators>;
+	ComponentName?: InputMaybe<StringOperators>;
+	ComponentTemplateId?: InputMaybe<IdOperators>;
+	ComponentType?: InputMaybe<PicklistOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataKitName?: InputMaybe<StringOperators>;
+	DataPackageKitDefinition?: InputMaybe<PicklistOperators>;
+	DataSpaceName?: InputMaybe<StringOperators>;
+	DeployJob?: InputMaybe<StringOperators>;
+	DeploymentAction?: InputMaybe<PicklistOperators>;
+	DeploymentError?: InputMaybe<LongTextAreaOperators>;
+	DeploymentStatus?: InputMaybe<PicklistOperators>;
+	FileBasedComponentTemplate?: InputMaybe<StringOperators>;
+	FlowInterviewIdentifier?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	JobIdentifier?: InputMaybe<StringOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<DataKitDeploymentLog_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	PublisherOrgComponent?: InputMaybe<DataKitDeploymentLog_PublisherOrgComponent_Filters>;
+	PublisherOrgComponentId?: InputMaybe<IdOperators>;
+	SubscriberOrgComponent?: InputMaybe<DataKitDeploymentLog_SubscriberOrgComponent_Filters>;
+	SubscriberOrgComponentId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	TemplateVersion?: InputMaybe<DoubleOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataKitDeploymentLog_Filter>>>;
+	not?: InputMaybe<DataKitDeploymentLog_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataKitDeploymentLog_Filter>>>;
+};
+
+export type DataKitDeploymentLog_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type DataKitDeploymentLog_PublisherOrgComponent_Filters = {
+	MktCalculatedInsight?: InputMaybe<MktCalculatedInsight_Filter>;
+	MktDataTransform?: InputMaybe<MktDataTransform_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+};
+
+export type DataKitDeploymentLog_SubscriberOrgComponent_Filters = {
+	ActivationTarget?: InputMaybe<ActivationTarget_Filter>;
+	DataAction?: InputMaybe<DataAction_Filter>;
+	DataActionTarget?: InputMaybe<DataActionTarget_Filter>;
+	DataGraph?: InputMaybe<DataGraph_Filter>;
+	DataSemanticSearch?: InputMaybe<DataSemanticSearch_Filter>;
+	DataStream?: InputMaybe<DataStream_Filter>;
+	EngagementSignal?: InputMaybe<EngagementSignal_Filter>;
+	ExtDataShare?: InputMaybe<ExtDataShare_Filter>;
+	IdentityResolution?: InputMaybe<IdentityResolution_Filter>;
+	MarketSegment?: InputMaybe<MarketSegment_Filter>;
+	MarketSegmentActivation?: InputMaybe<MarketSegmentActivation_Filter>;
+	MktCalculatedInsight?: InputMaybe<MktCalculatedInsight_Filter>;
+	MktDataTransform?: InputMaybe<MktDataTransform_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	PersnlBatchDecision?: InputMaybe<PersnlBatchDecision_Filter>;
+	PersonalizationObjective?: InputMaybe<PersonalizationObjective_Filter>;
+	PersonalizationPoint?: InputMaybe<PersonalizationPoint_Filter>;
+	PersonalizationRecommender?: InputMaybe<PersonalizationRecommender_Filter>;
+	PersonalizationSchema?: InputMaybe<PersonalizationSchema_Filter>;
+};
+
+export type DataKnowledgeSpaceSession_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastActiveTime?: InputMaybe<DateTimeOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	SessionKey?: InputMaybe<StringOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataKnowledgeSpaceSession_Filter>>>;
+	not?: InputMaybe<DataKnowledgeSpaceSession_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataKnowledgeSpaceSession_Filter>>>;
+};
+
+export type DataKnowledgeSpace_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<DataKnowledgeSpace_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataKnowledgeSpace_Filter>>>;
+	not?: InputMaybe<DataKnowledgeSpace_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataKnowledgeSpace_Filter>>>;
+};
+
+export type DataKnowledgeSpace_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type DataKnowledgeSpcJobRun_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	ErrorMessage?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	JobIdentifier?: InputMaybe<StringOperators>;
+	JobStatus?: InputMaybe<PicklistOperators>;
+	JobType?: InputMaybe<PicklistOperators>;
+	KnowledgeSpcObjRef?: InputMaybe<DataKnowledgeSrcFileRef_Filter>;
+	KnowledgeSpcObjRefId?: InputMaybe<IdOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<DataKnowledgeSpcJobRun_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataKnowledgeSpcJobRun_Filter>>>;
+	not?: InputMaybe<DataKnowledgeSpcJobRun_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataKnowledgeSpcJobRun_Filter>>>;
+};
+
+export type DataKnowledgeSpcJobRun_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type DataKnowledgeSrcFileRef_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataKnowledgeLibraryId?: InputMaybe<IdOperators>;
+	DataKnowledgeSourceId?: InputMaybe<IdOperators>;
+	FileName?: InputMaybe<StringOperators>;
+	FilePath?: InputMaybe<StringOperators>;
+	FileType?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<DataKnowledgeSrcFileRef_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	SourceFileStatus?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataKnowledgeSrcFileRef_Filter>>>;
+	not?: InputMaybe<DataKnowledgeSrcFileRef_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataKnowledgeSrcFileRef_Filter>>>;
+};
+
+export type DataKnowledgeSrcFileRef_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type DataLakeObjectInstanceHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataLakeObjectInstance?: InputMaybe<DataLakeObjectInstance_Filter>;
+	DataLakeObjectInstanceId?: InputMaybe<IdOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataLakeObjectInstanceHistory_Filter>>>;
+	not?: InputMaybe<DataLakeObjectInstanceHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataLakeObjectInstanceHistory_Filter>>>;
+};
+
+export type DataLakeObjectInstance_Filter = {
+	AccelerationEnabled?: InputMaybe<PicklistOperators>;
+	AccelerationSchedule?: InputMaybe<PicklistOperators>;
+	Billable?: InputMaybe<PicklistOperators>;
+	Category?: InputMaybe<StringOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataLakeObjectNamespacePrefix?: InputMaybe<StringOperators>;
+	DataLakeObjectRef?: InputMaybe<PicklistOperators>;
+	DataLakeObjectStatus?: InputMaybe<PicklistOperators>;
+	DeletionRecordsDataLakeObject?: InputMaybe<StringOperators>;
+	Description?: InputMaybe<StringOperators>;
+	ExternalName?: InputMaybe<StringOperators>;
+	ExternalObjectErrorCode?: InputMaybe<StringOperators>;
+	ExternalObjectErrorStatus?: InputMaybe<PicklistOperators>;
+	HydrationStatus?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastDataChangeStatusDateTime?: InputMaybe<DateTimeOperators>;
+	LastDataChangeStatusErrorCode?: InputMaybe<StringOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastRefreshDate?: InputMaybe<DateTimeOperators>;
+	LastSyncedFingerprint?: InputMaybe<LongTextAreaOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	MktDataLakeObjectDeveloperName?: InputMaybe<StringOperators>;
+	MktDataLakeObjectId?: InputMaybe<IdOperators>;
+	MktDataLakeObjectLabel?: InputMaybe<StringOperators>;
+	Name?: InputMaybe<StringOperators>;
+	ProblemRecordsDataLakeObject?: InputMaybe<StringOperators>;
+	Storage?: InputMaybe<PicklistOperators>;
+	SyncStatus?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	TotalNumberOfFields?: InputMaybe<IntegerOperators>;
+	TotalRecords?: InputMaybe<LongOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataLakeObjectInstance_Filter>>>;
+	not?: InputMaybe<DataLakeObjectInstance_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataLakeObjectInstance_Filter>>>;
+};
+
+export type DataLineageNodeDefSyncLogHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataLineageNodeDefSyncLog?: InputMaybe<DataLineageNodeDefSyncLog_Filter>;
+	DataLineageNodeDefSyncLogId?: InputMaybe<IdOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataLineageNodeDefSyncLogHistory_Filter>>>;
+	not?: InputMaybe<DataLineageNodeDefSyncLogHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataLineageNodeDefSyncLogHistory_Filter>>>;
+};
+
+export type DataLineageNodeDefSyncLog_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<StringOperators>;
+	DevName?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastFailureReason?: InputMaybe<StringOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	ObjectType?: InputMaybe<StringOperators>;
+	OperationTime?: InputMaybe<DateTimeOperators>;
+	OperationType?: InputMaybe<PicklistOperators>;
+	Owner?: InputMaybe<DataLineageNodeDefSyncLog_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	Payload?: InputMaybe<StringOperators>;
+	RecordIdentifier?: InputMaybe<StringOperators>;
+	RetryCount?: InputMaybe<IntegerOperators>;
+	SyncStatus?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataLineageNodeDefSyncLog_Filter>>>;
+	not?: InputMaybe<DataLineageNodeDefSyncLog_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataLineageNodeDefSyncLog_Filter>>>;
+};
+
+export type DataLineageNodeDefSyncLog_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type DataObjSecondaryIndexHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataObjSecondaryIndex?: InputMaybe<DataObjSecondaryIndex_Filter>;
+	DataObjSecondaryIndexId?: InputMaybe<IdOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataObjSecondaryIndexHistory_Filter>>>;
+	not?: InputMaybe<DataObjSecondaryIndexHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataObjSecondaryIndexHistory_Filter>>>;
+};
+
+export type DataObjSecondaryIndex_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IndexedFields?: InputMaybe<StringOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastRefreshTime?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	RuntimeStatus?: InputMaybe<PicklistOperators>;
+	SecondaryIndexDeveloperName?: InputMaybe<StringOperators>;
+	SourceObjectName?: InputMaybe<StringOperators>;
+	SourceObjectType?: InputMaybe<PicklistOperators>;
+	Status?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataObjSecondaryIndex_Filter>>>;
+	not?: InputMaybe<DataObjSecondaryIndex_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataObjSecondaryIndex_Filter>>>;
+};
+
+export type DataQueryWorkspaceHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataQueryWorkspace?: InputMaybe<DataQueryWorkspace_Filter>;
+	DataQueryWorkspaceId?: InputMaybe<IdOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataQueryWorkspaceHistory_Filter>>>;
+	not?: InputMaybe<DataQueryWorkspaceHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataQueryWorkspaceHistory_Filter>>>;
+};
+
+export type DataQueryWorkspaceTab_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Entity?: InputMaybe<StringOperators>;
+	EntityType?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Query?: InputMaybe<LongTextAreaOperators>;
+	QueryWorkspace?: InputMaybe<DataQueryWorkspace_Filter>;
+	QueryWorkspaceId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	TabOption?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataQueryWorkspaceTab_Filter>>>;
+	not?: InputMaybe<DataQueryWorkspaceTab_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataQueryWorkspaceTab_Filter>>>;
+};
+
+export type DataQueryWorkspace_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LandingTab?: InputMaybe<DataQueryWorkspaceTab_Filter>;
+	LandingTabId?: InputMaybe<IdOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<DataQueryWorkspace_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataQueryWorkspace_Filter>>>;
+	not?: InputMaybe<DataQueryWorkspace_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataQueryWorkspace_Filter>>>;
+};
+
+export type DataQueryWorkspace_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type DataQuickAttributeHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataQuickAttribute?: InputMaybe<DataQuickAttribute_Filter>;
+	DataQuickAttributeId?: InputMaybe<IdOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataQuickAttributeHistory_Filter>>>;
+	not?: InputMaybe<DataQuickAttributeHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataQuickAttributeHistory_Filter>>>;
+};
+
+export type DataQuickAttribute_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataQuickAttributeType?: InputMaybe<PicklistOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<TextAreaOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsRemote?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	OwnedBy?: InputMaybe<StringOperators>;
+	PathSignature?: InputMaybe<LongTextAreaOperators>;
+	PrimaryObjectId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	Tags?: InputMaybe<StringOperators>;
+	TargetFieldApiName?: InputMaybe<StringOperators>;
+	TargetFieldId?: InputMaybe<IdOperators>;
+	TargetObjectApiName?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataQuickAttribute_Filter>>>;
+	not?: InputMaybe<DataQuickAttribute_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataQuickAttribute_Filter>>>;
+};
+
+export type DataSemanticSearchHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSemanticSearch?: InputMaybe<DataSemanticSearch_Filter>;
+	DataSemanticSearchId?: InputMaybe<IdOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataSemanticSearchHistory_Filter>>>;
+	not?: InputMaybe<DataSemanticSearchHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataSemanticSearchHistory_Filter>>>;
+};
+
+export type DataSemanticSearch_Filter = {
+	AttachmentDmo?: InputMaybe<StringOperators>;
+	ChunkDmo?: InputMaybe<StringOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	CreationType?: InputMaybe<PicklistOperators>;
+	DataSemanticSearchDefId?: InputMaybe<IdOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IndexRefreshedOn?: InputMaybe<DateTimeOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	PrimaryDmo?: InputMaybe<StringOperators>;
+	RuntimeStatus?: InputMaybe<PicklistOperators>;
+	SearchType?: InputMaybe<PicklistOperators>;
+	SemanticSearchApiName?: InputMaybe<StringOperators>;
+	SharingStatus?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	VectorDmo?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataSemanticSearch_Filter>>>;
+	not?: InputMaybe<DataSemanticSearch_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataSemanticSearch_Filter>>>;
+};
+
+export type DataSpaceHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataSpaceHistory_Filter>>>;
+	not?: InputMaybe<DataSpaceHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataSpaceHistory_Filter>>>;
+};
+
+export type DataSpace_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpaceApiName?: InputMaybe<StringOperators>;
+	DataSpaceDefinitionId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<TextAreaOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Status?: InputMaybe<StringOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataSpace_Filter>>>;
+	not?: InputMaybe<DataSpace_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataSpace_Filter>>>;
+};
+
+export type DataStreamHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataStream?: InputMaybe<DataStream_Filter>;
+	DataStreamId?: InputMaybe<IdOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataStreamHistory_Filter>>>;
+	not?: InputMaybe<DataStreamHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataStreamHistory_Filter>>>;
+};
+
+export type DataStream_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataStreamDefinitionId?: InputMaybe<IdOperators>;
+	DataStreamStatus?: InputMaybe<PicklistOperators>;
+	DeletionRecordsDataLakeObject?: InputMaybe<StringOperators>;
+	Description?: InputMaybe<StringOperators>;
+	ExternalRecordIdentifier?: InputMaybe<StringOperators>;
+	ExternalStreamErrorCode?: InputMaybe<StringOperators>;
+	ExtractionTime?: InputMaybe<DateTimeOperators>;
+	FullRefreshIntervalDays?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	ImportRunStatus?: InputMaybe<PicklistOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsNewFieldsAvailable?: InputMaybe<BooleanOperators>;
+	IsRefreshDeliveryHourAutomatic?: InputMaybe<BooleanOperators>;
+	LastDataChangeStatusDateTime?: InputMaybe<DateTimeOperators>;
+	LastDataChangeStatusErrorCode?: InputMaybe<StringOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastNumberOfRowsAddedCount?: InputMaybe<LongOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastRefreshDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	ProblemRecordsDataLakeObject?: InputMaybe<StringOperators>;
+	RefreshDayOfMonth?: InputMaybe<IntegerOperators>;
+	RefreshDayOfWeek?: InputMaybe<IntegerOperators>;
+	RefreshFrequency?: InputMaybe<PicklistOperators>;
+	RefreshHours?: InputMaybe<MultiPicklistOperators>;
+	RefreshMode?: InputMaybe<PicklistOperators>;
+	StreamType?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	TotalNumberOfRowsAdded?: InputMaybe<LongOperators>;
+	TotalRowsProcessed?: InputMaybe<LongOperators>;
+	and?: InputMaybe<Array<InputMaybe<DataStream_Filter>>>;
+	not?: InputMaybe<DataStream_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DataStream_Filter>>>;
+};
+
+export enum DataType {
+	Address = "ADDRESS",
+	Anytype = "ANYTYPE",
+	Base64 = "BASE64",
+	Boolean = "BOOLEAN",
+	Combobox = "COMBOBOX",
+	Complexvalue = "COMPLEXVALUE",
+	Currency = "CURRENCY",
+	Date = "DATE",
+	Datetime = "DATETIME",
+	Double = "DOUBLE",
+	Email = "EMAIL",
+	Encryptedstring = "ENCRYPTEDSTRING",
+	Int = "INT",
+	Json = "JSON",
+	Junctionidlist = "JUNCTIONIDLIST",
+	Location = "LOCATION",
+	Long = "LONG",
+	Multipicklist = "MULTIPICKLIST",
+	Percent = "PERCENT",
+	Phone = "PHONE",
+	Picklist = "PICKLIST",
+	Reference = "REFERENCE",
+	String = "STRING",
+	Textarea = "TEXTAREA",
+	Time = "TIME",
+	Url = "URL",
+}
 
 export type DataUseLegalBasisHistory_Filter = {
 	CreatedBy?: InputMaybe<User_Filter>;
@@ -3181,32 +4991,31 @@ export type DateInput = {
 	value?: InputMaybe<Scalars["Date"]["input"]>;
 };
 
-export const DateLiteral = {
-	Last_90Days: "LAST_90_DAYS",
-	LastFiscalQuarter: "LAST_FISCAL_QUARTER",
-	LastFiscalYear: "LAST_FISCAL_YEAR",
-	LastMonth: "LAST_MONTH",
-	LastQuarter: "LAST_QUARTER",
-	LastWeek: "LAST_WEEK",
-	LastYear: "LAST_YEAR",
-	Next_90Days: "NEXT_90_DAYS",
-	NextFiscalQuarter: "NEXT_FISCAL_QUARTER",
-	NextFiscalYear: "NEXT_FISCAL_YEAR",
-	NextMonth: "NEXT_MONTH",
-	NextQuarter: "NEXT_QUARTER",
-	NextWeek: "NEXT_WEEK",
-	NextYear: "NEXT_YEAR",
-	ThisFiscalQuarter: "THIS_FISCAL_QUARTER",
-	ThisFiscalYear: "THIS_FISCAL_YEAR",
-	ThisMonth: "THIS_MONTH",
-	ThisQuarter: "THIS_QUARTER",
-	ThisWeek: "THIS_WEEK",
-	ThisYear: "THIS_YEAR",
-	Today: "TODAY",
-	Tomorrow: "TOMORROW",
-	Yesterday: "YESTERDAY",
-} as const;
-export type DateLiteral = (typeof DateLiteral)[keyof typeof DateLiteral];
+export enum DateLiteral {
+	Last_90Days = "LAST_90_DAYS",
+	LastFiscalQuarter = "LAST_FISCAL_QUARTER",
+	LastFiscalYear = "LAST_FISCAL_YEAR",
+	LastMonth = "LAST_MONTH",
+	LastQuarter = "LAST_QUARTER",
+	LastWeek = "LAST_WEEK",
+	LastYear = "LAST_YEAR",
+	Next_90Days = "NEXT_90_DAYS",
+	NextFiscalQuarter = "NEXT_FISCAL_QUARTER",
+	NextFiscalYear = "NEXT_FISCAL_YEAR",
+	NextMonth = "NEXT_MONTH",
+	NextQuarter = "NEXT_QUARTER",
+	NextWeek = "NEXT_WEEK",
+	NextYear = "NEXT_YEAR",
+	ThisFiscalQuarter = "THIS_FISCAL_QUARTER",
+	ThisFiscalYear = "THIS_FISCAL_YEAR",
+	ThisMonth = "THIS_MONTH",
+	ThisQuarter = "THIS_QUARTER",
+	ThisWeek = "THIS_WEEK",
+	ThisYear = "THIS_YEAR",
+	Today = "TODAY",
+	Tomorrow = "TOMORROW",
+	Yesterday = "YESTERDAY",
+}
 
 export type DateOperators = {
 	CALENDAR_MONTH?: InputMaybe<DateFunctionInput>;
@@ -3366,6 +5175,63 @@ export type DeleteEvent_Filter = {
 	or?: InputMaybe<Array<InputMaybe<DeleteEvent_Filter>>>;
 };
 
+export type DevopsActivityLogHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	DevopsActivityLog?: InputMaybe<DevopsActivityLog_Filter>;
+	DevopsActivityLogId?: InputMaybe<IdOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<DevopsActivityLogHistory_Filter>>>;
+	not?: InputMaybe<DevopsActivityLogHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DevopsActivityLogHistory_Filter>>>;
+};
+
+export type DevopsActivityLog_Filter = {
+	Activity?: InputMaybe<StringOperators>;
+	ActivityDate?: InputMaybe<DateTimeOperators>;
+	ActivityType?: InputMaybe<PicklistOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Description?: InputMaybe<LongTextAreaOperators>;
+	DevopsRequestInfo?: InputMaybe<DevopsRequestInfo_Filter>;
+	DevopsRequestInfoId?: InputMaybe<IdOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<DevopsActivityLog_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	ParentActivity?: InputMaybe<DevopsActivityLog_Filter>;
+	ParentActivityId?: InputMaybe<IdOperators>;
+	PerformedBy?: InputMaybe<User_Filter>;
+	PerformedById?: InputMaybe<IdOperators>;
+	RequestInfoErrorDetails?: InputMaybe<StringOperators>;
+	Status?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<DevopsActivityLog_Filter>>>;
+	not?: InputMaybe<DevopsActivityLog_Filter>;
+	or?: InputMaybe<Array<InputMaybe<DevopsActivityLog_Filter>>>;
+};
+
+export type DevopsActivityLog_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
 export type DevopsEnvironmentHistory_Filter = {
 	CreatedBy?: InputMaybe<User_Filter>;
 	CreatedById?: InputMaybe<IdOperators>;
@@ -3463,8 +5329,6 @@ export type DevopsRequestInfo_Filter = {
 	OperationType?: InputMaybe<PicklistOperators>;
 	Owner?: InputMaybe<DevopsRequestInfo_Owner_Filters>;
 	OwnerId?: InputMaybe<IdOperators>;
-	ParentRequestInfo?: InputMaybe<DevopsRequestInfo_Filter>;
-	ParentRequestInfoId?: InputMaybe<IdOperators>;
 	RequestCompletionDate?: InputMaybe<DateTimeOperators>;
 	RequestToken?: InputMaybe<StringOperators>;
 	Status?: InputMaybe<PicklistOperators>;
@@ -3520,7 +5384,6 @@ export type DuplicateRecordItem_Record_Filters = {
 	Account?: InputMaybe<Account_Filter>;
 	Agent__c?: InputMaybe<Agent__C_Filter>;
 	Application__c?: InputMaybe<Application__C_Filter>;
-	Case?: InputMaybe<Case_Filter>;
 	Contact?: InputMaybe<Contact_Filter>;
 	Individual?: InputMaybe<Individual_Filter>;
 	KPI_Snapshot__c?: InputMaybe<Kpi_Snapshot__C_Filter>;
@@ -3560,6 +5423,50 @@ export type DuplicateRecordSet_Filter = {
 	and?: InputMaybe<Array<InputMaybe<DuplicateRecordSet_Filter>>>;
 	not?: InputMaybe<DuplicateRecordSet_Filter>;
 	or?: InputMaybe<Array<InputMaybe<DuplicateRecordSet_Filter>>>;
+};
+
+export type EmailContent_Filter = {
+	ClickThroughRate?: InputMaybe<PercentOperators>;
+	ClickToOpenRatio?: InputMaybe<PercentOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DeliveryRate?: InputMaybe<PercentOperators>;
+	Description?: InputMaybe<LongTextAreaOperators>;
+	HtmlBody?: InputMaybe<LongTextAreaOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	ManagedContent?: InputMaybe<ManagedContent_Filter>;
+	ManagedContentId?: InputMaybe<IdOperators>;
+	Name?: InputMaybe<StringOperators>;
+	OpenRate?: InputMaybe<PercentOperators>;
+	OptOutRate?: InputMaybe<PercentOperators>;
+	PageId?: InputMaybe<IdOperators>;
+	SpamComplaintRate?: InputMaybe<PercentOperators>;
+	Subject?: InputMaybe<LongTextAreaOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	Template?: InputMaybe<EmailTemplate_Filter>;
+	TemplateId?: InputMaybe<IdOperators>;
+	TextBody?: InputMaybe<LongTextAreaOperators>;
+	TotalDelivered?: InputMaybe<IntegerOperators>;
+	TotalHardBounced?: InputMaybe<IntegerOperators>;
+	TotalOpens?: InputMaybe<IntegerOperators>;
+	TotalSent?: InputMaybe<IntegerOperators>;
+	TotalSoftBounced?: InputMaybe<IntegerOperators>;
+	TotalSpamComplaints?: InputMaybe<IntegerOperators>;
+	TotalTrackedLinkClicks?: InputMaybe<IntegerOperators>;
+	UniqueClickThroughRate?: InputMaybe<PercentOperators>;
+	UniqueOpens?: InputMaybe<IntegerOperators>;
+	UniqueOptOuts?: InputMaybe<IntegerOperators>;
+	UniqueTrackedLinkClicks?: InputMaybe<IntegerOperators>;
+	and?: InputMaybe<Array<InputMaybe<EmailContent_Filter>>>;
+	not?: InputMaybe<EmailContent_Filter>;
+	or?: InputMaybe<Array<InputMaybe<EmailContent_Filter>>>;
 };
 
 export type EmailMessageRelation_Filter = {
@@ -3652,10 +5559,14 @@ export type EmailMessage_RelatedTo_Filters = {
 	AssetRelationship?: InputMaybe<AssetRelationship_Filter>;
 	Campaign?: InputMaybe<Campaign_Filter>;
 	Case?: InputMaybe<Case_Filter>;
+	ChannelProgram?: InputMaybe<ChannelProgram_Filter>;
+	ChannelProgramLevel?: InputMaybe<ChannelProgramLevel_Filter>;
 	CommSubscriptionConsent?: InputMaybe<CommSubscriptionConsent_Filter>;
 	ContactRequest?: InputMaybe<ContactRequest_Filter>;
 	Contract?: InputMaybe<Contract_Filter>;
+	DataQueryWorkspace?: InputMaybe<DataQueryWorkspace_Filter>;
 	DelegatedAccount?: InputMaybe<DelegatedAccount_Filter>;
+	DevopsActivityLog?: InputMaybe<DevopsActivityLog_Filter>;
 	DevopsEnvironment?: InputMaybe<DevopsEnvironment_Filter>;
 	DevopsRequestInfo?: InputMaybe<DevopsRequestInfo_Filter>;
 	Image?: InputMaybe<Image_Filter>;
@@ -3667,6 +5578,10 @@ export type EmailMessage_RelatedTo_Filters = {
 	Name?: InputMaybe<Name_Filter>;
 	Opportunity?: InputMaybe<Opportunity_Filter>;
 	Order?: InputMaybe<Order_Filter>;
+	PartnerFundAllocation?: InputMaybe<PartnerFundAllocation_Filter>;
+	PartnerFundClaim?: InputMaybe<PartnerFundClaim_Filter>;
+	PartnerFundRequest?: InputMaybe<PartnerFundRequest_Filter>;
+	PartnerMarketingBudget?: InputMaybe<PartnerMarketingBudget_Filter>;
 	PartyConsent?: InputMaybe<PartyConsent_Filter>;
 	Payment__c?: InputMaybe<Payment__C_Filter>;
 	ProcessException?: InputMaybe<ProcessException_Filter>;
@@ -3709,6 +5624,7 @@ export type EmailTemplate_Filter = {
 	Folder?: InputMaybe<EmailTemplate_Folder_Filters>;
 	FolderId?: InputMaybe<IdOperators>;
 	FolderName?: InputMaybe<StringOperators>;
+	HasSalesforceFiles?: InputMaybe<BooleanOperators>;
 	HtmlValue?: InputMaybe<LongTextAreaOperators>;
 	Id?: InputMaybe<IdOperators>;
 	IsActive?: InputMaybe<BooleanOperators>;
@@ -3785,6 +5701,110 @@ export type EngagementChannelType_Owner_Filters = {
 	Group?: InputMaybe<Group_Filter>;
 	Name?: InputMaybe<Name_Filter>;
 	User?: InputMaybe<User_Filter>;
+};
+
+export type EngagementSignalCmpndMetric_Filter = {
+	CompoundMetricFormula?: InputMaybe<StringOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DenomEngmtSignalMetric?: InputMaybe<EngagementSignalMetric_Filter>;
+	DenomEngmtSignalMetricId?: InputMaybe<IdOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsRemote?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	NumerEngmtSignalMetric?: InputMaybe<EngagementSignalMetric_Filter>;
+	NumerEngmtSignalMetricId?: InputMaybe<IdOperators>;
+	Operator?: InputMaybe<PicklistOperators>;
+	Owner?: InputMaybe<EngagementSignalCmpndMetric_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<EngagementSignalCmpndMetric_Filter>>>;
+	not?: InputMaybe<EngagementSignalCmpndMetric_Filter>;
+	or?: InputMaybe<Array<InputMaybe<EngagementSignalCmpndMetric_Filter>>>;
+};
+
+export type EngagementSignalCmpndMetric_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type EngagementSignalHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	EngagementSignal?: InputMaybe<EngagementSignal_Filter>;
+	EngagementSignalId?: InputMaybe<IdOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<EngagementSignalHistory_Filter>>>;
+	not?: InputMaybe<EngagementSignalHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<EngagementSignalHistory_Filter>>>;
+};
+
+export type EngagementSignalMetric_Filter = {
+	AggregateFunction?: InputMaybe<PicklistOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	EngagementSignal?: InputMaybe<EngagementSignal_Filter>;
+	EngagementSignalId?: InputMaybe<IdOperators>;
+	FieldId?: InputMaybe<IdOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsRemote?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<EngagementSignalMetric_Filter>>>;
+	not?: InputMaybe<EngagementSignalMetric_Filter>;
+	or?: InputMaybe<Array<InputMaybe<EngagementSignalMetric_Filter>>>;
+};
+
+export type EngagementSignal_Filter = {
+	CatalogIdFieldId?: InputMaybe<IdOperators>;
+	ContentObjectId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	DeveloperName?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsRemote?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Status?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	TimestampFieldId?: InputMaybe<IdOperators>;
+	UniqueIdentifierFieldId?: InputMaybe<IdOperators>;
+	UserIdFieldId?: InputMaybe<IdOperators>;
+	and?: InputMaybe<Array<InputMaybe<EngagementSignal_Filter>>>;
+	not?: InputMaybe<EngagementSignal_Filter>;
+	or?: InputMaybe<Array<InputMaybe<EngagementSignal_Filter>>>;
 };
 
 export type EnhancedLetterhead_Filter = {
@@ -3945,10 +5965,14 @@ export type Event_What_Filters = {
 	AssetRelationship?: InputMaybe<AssetRelationship_Filter>;
 	Campaign?: InputMaybe<Campaign_Filter>;
 	Case?: InputMaybe<Case_Filter>;
+	ChannelProgram?: InputMaybe<ChannelProgram_Filter>;
+	ChannelProgramLevel?: InputMaybe<ChannelProgramLevel_Filter>;
 	CommSubscriptionConsent?: InputMaybe<CommSubscriptionConsent_Filter>;
 	ContactRequest?: InputMaybe<ContactRequest_Filter>;
 	Contract?: InputMaybe<Contract_Filter>;
+	DataQueryWorkspace?: InputMaybe<DataQueryWorkspace_Filter>;
 	DelegatedAccount?: InputMaybe<DelegatedAccount_Filter>;
+	DevopsActivityLog?: InputMaybe<DevopsActivityLog_Filter>;
 	DevopsEnvironment?: InputMaybe<DevopsEnvironment_Filter>;
 	DevopsRequestInfo?: InputMaybe<DevopsRequestInfo_Filter>;
 	Image?: InputMaybe<Image_Filter>;
@@ -3960,6 +5984,10 @@ export type Event_What_Filters = {
 	Name?: InputMaybe<Name_Filter>;
 	Opportunity?: InputMaybe<Opportunity_Filter>;
 	Order?: InputMaybe<Order_Filter>;
+	PartnerFundAllocation?: InputMaybe<PartnerFundAllocation_Filter>;
+	PartnerFundClaim?: InputMaybe<PartnerFundClaim_Filter>;
+	PartnerFundRequest?: InputMaybe<PartnerFundRequest_Filter>;
+	PartnerMarketingBudget?: InputMaybe<PartnerMarketingBudget_Filter>;
 	PartyConsent?: InputMaybe<PartyConsent_Filter>;
 	Payment__c?: InputMaybe<Payment__C_Filter>;
 	ProcessException?: InputMaybe<ProcessException_Filter>;
@@ -3998,6 +6026,104 @@ export type ExpressionSetView_Filter = {
 	and?: InputMaybe<Array<InputMaybe<ExpressionSetView_Filter>>>;
 	not?: InputMaybe<ExpressionSetView_Filter>;
 	or?: InputMaybe<Array<InputMaybe<ExpressionSetView_Filter>>>;
+};
+
+export type ExtDataShareHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	ExtDataShare?: InputMaybe<ExtDataShare_Filter>;
+	ExtDataShareId?: InputMaybe<IdOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<ExtDataShareHistory_Filter>>>;
+	not?: InputMaybe<ExtDataShareHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<ExtDataShareHistory_Filter>>>;
+};
+
+export type ExtDataShareTargetHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	ExtDataShareTarget?: InputMaybe<ExtDataShareTarget_Filter>;
+	ExtDataShareTargetId?: InputMaybe<IdOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<ExtDataShareTargetHistory_Filter>>>;
+	not?: InputMaybe<ExtDataShareTargetHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<ExtDataShareTargetHistory_Filter>>>;
+};
+
+export type ExtDataShareTarget_Filter = {
+	ConnectionType?: InputMaybe<PicklistOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataShareTargetDefinitionId?: InputMaybe<IdOperators>;
+	DataShareTargetStatus?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastDataChangeStatusDateTime?: InputMaybe<DateTimeOperators>;
+	LastDataChangeStatusErrorCode?: InputMaybe<StringOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<ExtDataShareTarget_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<ExtDataShareTarget_Filter>>>;
+	not?: InputMaybe<ExtDataShareTarget_Filter>;
+	or?: InputMaybe<Array<InputMaybe<ExtDataShareTarget_Filter>>>;
+};
+
+export type ExtDataShareTarget_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type ExtDataShare_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataShareConsentFormStatus?: InputMaybe<PicklistOperators>;
+	DataShareDefinitionId?: InputMaybe<IdOperators>;
+	DataShareStatus?: InputMaybe<PicklistOperators>;
+	DataShareType?: InputMaybe<PicklistOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Id?: InputMaybe<IdOperators>;
+	InboundDataShareName?: InputMaybe<StringOperators>;
+	InboundDataShareOrgIdentifier?: InputMaybe<StringOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastDataChangeStatusDateTime?: InputMaybe<DateTimeOperators>;
+	LastDataChangeStatusErrorCode?: InputMaybe<StringOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	ObjectCount?: InputMaybe<IntegerOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<ExtDataShare_Filter>>>;
+	not?: InputMaybe<ExtDataShare_Filter>;
+	or?: InputMaybe<Array<InputMaybe<ExtDataShare_Filter>>>;
 };
 
 export type FeedItem_Filter = {
@@ -4039,6 +6165,7 @@ export type FeedItem_Filter = {
 
 export type FeedItem_Parent_Filters = {
 	Account?: InputMaybe<Account_Filter>;
+	ActivationTarget?: InputMaybe<ActivationTarget_Filter>;
 	Agent__c?: InputMaybe<Agent__C_Filter>;
 	Application__c?: InputMaybe<Application__C_Filter>;
 	ApprovalSubmission?: InputMaybe<ApprovalSubmission_Filter>;
@@ -4047,8 +6174,12 @@ export type FeedItem_Parent_Filters = {
 	Asset?: InputMaybe<Asset_Filter>;
 	AssetRelationship?: InputMaybe<AssetRelationship_Filter>;
 	AuthorizationFormText?: InputMaybe<AuthorizationFormText_Filter>;
+	Brief?: InputMaybe<Brief_Filter>;
 	Campaign?: InputMaybe<Campaign_Filter>;
 	Case?: InputMaybe<Case_Filter>;
+	ChannelProgram?: InputMaybe<ChannelProgram_Filter>;
+	ChannelProgramLevel?: InputMaybe<ChannelProgramLevel_Filter>;
+	ChannelProgramMember?: InputMaybe<ChannelProgramMember_Filter>;
 	CommSubscription?: InputMaybe<CommSubscription_Filter>;
 	CommSubscriptionChannelType?: InputMaybe<CommSubscriptionChannelType_Filter>;
 	CommSubscriptionConsent?: InputMaybe<CommSubscriptionConsent_Filter>;
@@ -4056,12 +6187,32 @@ export type FeedItem_Parent_Filters = {
 	Contact?: InputMaybe<Contact_Filter>;
 	ContentDocument?: InputMaybe<ContentDocument_Filter>;
 	Contract?: InputMaybe<Contract_Filter>;
+	DataAction?: InputMaybe<DataAction_Filter>;
+	DataActionJobSummary?: InputMaybe<DataActionJobSummary_Filter>;
+	DataActionTarget?: InputMaybe<DataActionTarget_Filter>;
+	DataCommCapActvTarget?: InputMaybe<DataCommCapActvTarget_Filter>;
+	DataCommunicationCap?: InputMaybe<DataCommunicationCap_Filter>;
+	DataContentLensSource?: InputMaybe<DataContentLensSource_Filter>;
+	DataLakeObjectInstance?: InputMaybe<DataLakeObjectInstance_Filter>;
+	DataLineageNodeDefSyncLog?: InputMaybe<DataLineageNodeDefSyncLog_Filter>;
+	DataObjSecondaryIndex?: InputMaybe<DataObjSecondaryIndex_Filter>;
+	DataQueryWorkspace?: InputMaybe<DataQueryWorkspace_Filter>;
+	DataQuickAttribute?: InputMaybe<DataQuickAttribute_Filter>;
+	DataSemanticSearch?: InputMaybe<DataSemanticSearch_Filter>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataStream?: InputMaybe<DataStream_Filter>;
 	DelegatedAccount?: InputMaybe<DelegatedAccount_Filter>;
+	DevopsActivityLog?: InputMaybe<DevopsActivityLog_Filter>;
 	DevopsEnvironment?: InputMaybe<DevopsEnvironment_Filter>;
 	DevopsRequestInfo?: InputMaybe<DevopsRequestInfo_Filter>;
+	EmailContent?: InputMaybe<EmailContent_Filter>;
 	EngagementChannelType?: InputMaybe<EngagementChannelType_Filter>;
+	EngagementSignal?: InputMaybe<EngagementSignal_Filter>;
 	EnhancedLetterhead?: InputMaybe<EnhancedLetterhead_Filter>;
 	Event?: InputMaybe<Event_Filter>;
+	ExtDataShare?: InputMaybe<ExtDataShare_Filter>;
+	ExtDataShareTarget?: InputMaybe<ExtDataShareTarget_Filter>;
+	IdentityResolution?: InputMaybe<IdentityResolution_Filter>;
 	Image?: InputMaybe<Image_Filter>;
 	KPI_Snapshot__c?: InputMaybe<Kpi_Snapshot__C_Filter>;
 	Lead?: InputMaybe<Lead_Filter>;
@@ -4069,11 +6220,20 @@ export type FeedItem_Parent_Filters = {
 	Location?: InputMaybe<Location_Filter>;
 	Maintenance_Request__c?: InputMaybe<Maintenance_Request__C_Filter>;
 	Maintenance_Worker__c?: InputMaybe<Maintenance_Worker__C_Filter>;
+	MarketSegment?: InputMaybe<MarketSegment_Filter>;
+	MarketSegmentActivation?: InputMaybe<MarketSegmentActivation_Filter>;
+	MktCalculatedInsight?: InputMaybe<MktCalculatedInsight_Filter>;
+	MktDataTransform?: InputMaybe<MktDataTransform_Filter>;
+	MktMLModel?: InputMaybe<MktMlModel_Filter>;
 	Name?: InputMaybe<Name_Filter>;
 	Notification__c?: InputMaybe<Notification__C_Filter>;
 	Opportunity?: InputMaybe<Opportunity_Filter>;
 	Order?: InputMaybe<Order_Filter>;
 	OrderItem?: InputMaybe<OrderItem_Filter>;
+	PartnerFundAllocation?: InputMaybe<PartnerFundAllocation_Filter>;
+	PartnerFundClaim?: InputMaybe<PartnerFundClaim_Filter>;
+	PartnerFundRequest?: InputMaybe<PartnerFundRequest_Filter>;
+	PartnerMarketingBudget?: InputMaybe<PartnerMarketingBudget_Filter>;
 	PartyConsent?: InputMaybe<PartyConsent_Filter>;
 	Payment__c?: InputMaybe<Payment__C_Filter>;
 	Product2?: InputMaybe<Product2_Filter>;
@@ -4098,16 +6258,15 @@ export type FeedItem_Parent_Filters = {
 	WorkOrderLineItem?: InputMaybe<WorkOrderLineItem_Filter>;
 };
 
-export const FieldExtraTypeInfo = {
-	ExternalLookup: "EXTERNAL_LOOKUP",
-	ImageUrl: "IMAGE_URL",
-	IndirectLookup: "INDIRECT_LOOKUP",
-	Personname: "PERSONNAME",
-	Plaintextarea: "PLAINTEXTAREA",
-	Richtextarea: "RICHTEXTAREA",
-	SwitchablePersonname: "SWITCHABLE_PERSONNAME",
-} as const;
-export type FieldExtraTypeInfo = (typeof FieldExtraTypeInfo)[keyof typeof FieldExtraTypeInfo];
+export enum FieldExtraTypeInfo {
+	ExternalLookup = "EXTERNAL_LOOKUP",
+	ImageUrl = "IMAGE_URL",
+	IndirectLookup = "INDIRECT_LOOKUP",
+	Personname = "PERSONNAME",
+	Plaintextarea = "PLAINTEXTAREA",
+	Richtextarea = "RICHTEXTAREA",
+	SwitchablePersonname = "SWITCHABLE_PERSONNAME",
+}
 
 export type FieldPermissions_Filter = {
 	Field?: InputMaybe<PicklistOperators>;
@@ -4370,8 +6529,6 @@ export type FlowOrchestrationWorkItem_Filter = {
 	OrchestrationName?: InputMaybe<StringOperators>;
 	Owner?: InputMaybe<FlowOrchestrationWorkItem_Owner_Filters>;
 	OwnerId?: InputMaybe<IdOperators>;
-	ParentWorkItem?: InputMaybe<FlowOrchestrationWorkItem_Filter>;
-	ParentWorkItemId?: InputMaybe<IdOperators>;
 	RelatedRecord?: InputMaybe<FlowOrchestrationWorkItem_RelatedRecord_Filters>;
 	RelatedRecordId?: InputMaybe<IdOperators>;
 	ScreenFlow?: InputMaybe<PicklistOperators>;
@@ -4393,6 +6550,7 @@ export type FlowOrchestrationWorkItem_Owner_Filters = {
 
 export type FlowOrchestrationWorkItem_RelatedRecord_Filters = {
 	Account?: InputMaybe<Account_Filter>;
+	ActivationTarget?: InputMaybe<ActivationTarget_Filter>;
 	Agent__c?: InputMaybe<Agent__C_Filter>;
 	AnalyticsUserAttrFuncTkn?: InputMaybe<AnalyticsUserAttrFuncTkn_Filter>;
 	Application__c?: InputMaybe<Application__C_Filter>;
@@ -4402,14 +6560,19 @@ export type FlowOrchestrationWorkItem_RelatedRecord_Filters = {
 	Asset?: InputMaybe<Asset_Filter>;
 	AssetRelationship?: InputMaybe<AssetRelationship_Filter>;
 	AssociatedLocation?: InputMaybe<AssociatedLocation_Filter>;
+	AsyncOperationTracker?: InputMaybe<AsyncOperationTracker_Filter>;
 	AuthorizationForm?: InputMaybe<AuthorizationForm_Filter>;
 	AuthorizationFormConsent?: InputMaybe<AuthorizationFormConsent_Filter>;
 	AuthorizationFormDataUse?: InputMaybe<AuthorizationFormDataUse_Filter>;
 	AuthorizationFormText?: InputMaybe<AuthorizationFormText_Filter>;
+	BriefPlanStep?: InputMaybe<BriefPlanStep_Filter>;
 	BusinessBrand?: InputMaybe<BusinessBrand_Filter>;
 	Campaign?: InputMaybe<Campaign_Filter>;
 	Case?: InputMaybe<Case_Filter>;
 	CaseComment?: InputMaybe<CaseComment_Filter>;
+	ChannelProgram?: InputMaybe<ChannelProgram_Filter>;
+	ChannelProgramLevel?: InputMaybe<ChannelProgramLevel_Filter>;
+	ChannelProgramMember?: InputMaybe<ChannelProgramMember_Filter>;
 	CommSubscription?: InputMaybe<CommSubscription_Filter>;
 	CommSubscriptionChannelType?: InputMaybe<CommSubscriptionChannelType_Filter>;
 	CommSubscriptionConsent?: InputMaybe<CommSubscriptionConsent_Filter>;
@@ -4425,17 +6588,37 @@ export type FlowOrchestrationWorkItem_RelatedRecord_Filters = {
 	ContentVersion?: InputMaybe<ContentVersion_Filter>;
 	Contract?: InputMaybe<Contract_Filter>;
 	Customer?: InputMaybe<Customer_Filter>;
+	DataAction?: InputMaybe<DataAction_Filter>;
+	DataActionJobSummary?: InputMaybe<DataActionJobSummary_Filter>;
+	DataActionTarget?: InputMaybe<DataActionTarget_Filter>;
+	DataCommCapActvTarget?: InputMaybe<DataCommCapActvTarget_Filter>;
+	DataCommunicationCap?: InputMaybe<DataCommunicationCap_Filter>;
+	DataGraph?: InputMaybe<DataGraph_Filter>;
+	DataKitDeploymentLog?: InputMaybe<DataKitDeploymentLog_Filter>;
+	DataKnowledgeSpace?: InputMaybe<DataKnowledgeSpace_Filter>;
+	DataKnowledgeSpcJobRun?: InputMaybe<DataKnowledgeSpcJobRun_Filter>;
+	DataKnowledgeSrcFileRef?: InputMaybe<DataKnowledgeSrcFileRef_Filter>;
+	DataLakeObjectInstance?: InputMaybe<DataLakeObjectInstance_Filter>;
+	DataLineageNodeDefSyncLog?: InputMaybe<DataLineageNodeDefSyncLog_Filter>;
+	DataQueryWorkspace?: InputMaybe<DataQueryWorkspace_Filter>;
+	DataQueryWorkspaceTab?: InputMaybe<DataQueryWorkspaceTab_Filter>;
+	DataQuickAttribute?: InputMaybe<DataQuickAttribute_Filter>;
+	DataStream?: InputMaybe<DataStream_Filter>;
 	DataUseLegalBasis?: InputMaybe<DataUseLegalBasis_Filter>;
 	DataUsePurpose?: InputMaybe<DataUsePurpose_Filter>;
 	DelegatedAccount?: InputMaybe<DelegatedAccount_Filter>;
+	DevopsActivityLog?: InputMaybe<DevopsActivityLog_Filter>;
 	DevopsEnvironment?: InputMaybe<DevopsEnvironment_Filter>;
 	DevopsRequestInfo?: InputMaybe<DevopsRequestInfo_Filter>;
 	DuplicateRecordItem?: InputMaybe<DuplicateRecordItem_Filter>;
 	DuplicateRecordSet?: InputMaybe<DuplicateRecordSet_Filter>;
 	EmailMessage?: InputMaybe<EmailMessage_Filter>;
 	EngagementChannelType?: InputMaybe<EngagementChannelType_Filter>;
+	ExtDataShare?: InputMaybe<ExtDataShare_Filter>;
+	ExtDataShareTarget?: InputMaybe<ExtDataShareTarget_Filter>;
 	FlowOrchestrationInstance?: InputMaybe<FlowOrchestrationInstance_Filter>;
 	FlowOrchestrationVersion?: InputMaybe<FlowOrchestrationVersion_Filter>;
+	IdentityResolution?: InputMaybe<IdentityResolution_Filter>;
 	Image?: InputMaybe<Image_Filter>;
 	Individual?: InputMaybe<Individual_Filter>;
 	KPI_Snapshot__c?: InputMaybe<Kpi_Snapshot__C_Filter>;
@@ -4446,6 +6629,11 @@ export type FlowOrchestrationWorkItem_RelatedRecord_Filters = {
 	Maintenance_Request__c?: InputMaybe<Maintenance_Request__C_Filter>;
 	Maintenance_Worker__c?: InputMaybe<Maintenance_Worker__C_Filter>;
 	ManagedContentVariant?: InputMaybe<ManagedContentVariant_Filter>;
+	MarketSegment?: InputMaybe<MarketSegment_Filter>;
+	MarketSegmentActivation?: InputMaybe<MarketSegmentActivation_Filter>;
+	MktCalculatedInsight?: InputMaybe<MktCalculatedInsight_Filter>;
+	MktDataTransform?: InputMaybe<MktDataTransform_Filter>;
+	MktMLModel?: InputMaybe<MktMlModel_Filter>;
 	Name?: InputMaybe<Name_Filter>;
 	Notification__c?: InputMaybe<Notification__C_Filter>;
 	Opportunity?: InputMaybe<Opportunity_Filter>;
@@ -4454,6 +6642,10 @@ export type FlowOrchestrationWorkItem_RelatedRecord_Filters = {
 	OrderItem?: InputMaybe<OrderItem_Filter>;
 	OrgMetricScanSummary?: InputMaybe<OrgMetricScanSummary_Filter>;
 	Organization?: InputMaybe<Organization_Filter>;
+	PartnerFundAllocation?: InputMaybe<PartnerFundAllocation_Filter>;
+	PartnerFundClaim?: InputMaybe<PartnerFundClaim_Filter>;
+	PartnerFundRequest?: InputMaybe<PartnerFundRequest_Filter>;
+	PartnerMarketingBudget?: InputMaybe<PartnerMarketingBudget_Filter>;
 	PartyConsent?: InputMaybe<PartyConsent_Filter>;
 	Payment__c?: InputMaybe<Payment__C_Filter>;
 	ProcessException?: InputMaybe<ProcessException_Filter>;
@@ -4469,11 +6661,12 @@ export type FlowOrchestrationWorkItem_RelatedRecord_Filters = {
 	Property_Owner__c?: InputMaybe<Property_Owner__C_Filter>;
 	Property_Sale__c?: InputMaybe<Property_Sale__C_Filter>;
 	Property__c?: InputMaybe<Property__C_Filter>;
+	Prospect?: InputMaybe<Prospect_Filter>;
 	QuickText?: InputMaybe<QuickText_Filter>;
-	ReportHierarchyObjectField?: InputMaybe<ReportHierarchyObjectField_Filter>;
 	SecurityHealthCheckAlertRecipient?: InputMaybe<SecurityHealthCheckAlertRecipient_Filter>;
 	SecurityHealthCheckResult?: InputMaybe<SecurityHealthCheckResult_Filter>;
 	Seller?: InputMaybe<Seller_Filter>;
+	SenderEmailAddress?: InputMaybe<SenderEmailAddress_Filter>;
 	SocialPersona?: InputMaybe<SocialPersona_Filter>;
 	SocialPost?: InputMaybe<SocialPost_Filter>;
 	StreamingChannel?: InputMaybe<StreamingChannel_Filter>;
@@ -4535,6 +6728,11 @@ export type FlowRecordElementOccurrence_Filter = {
 	CreatedBy?: InputMaybe<User_Filter>;
 	CreatedById?: InputMaybe<IdOperators>;
 	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Entries?: InputMaybe<IntegerOperators>;
+	Errors?: InputMaybe<IntegerOperators>;
+	Exits?: InputMaybe<IntegerOperators>;
 	FlowRecord?: InputMaybe<FlowRecord_Filter>;
 	FlowRecordElement?: InputMaybe<FlowRecordElement_Filter>;
 	FlowRecordElementId?: InputMaybe<IdOperators>;
@@ -4549,7 +6747,12 @@ export type FlowRecordElementOccurrence_Filter = {
 	LastModifiedById?: InputMaybe<IdOperators>;
 	LastModifiedDate?: InputMaybe<DateTimeOperators>;
 	Name?: InputMaybe<StringOperators>;
+	Paused?: InputMaybe<IntegerOperators>;
+	Retrying?: InputMaybe<IntegerOperators>;
+	Stopped?: InputMaybe<IntegerOperators>;
 	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	TotalDuration?: InputMaybe<LongOperators>;
+	Waiting?: InputMaybe<IntegerOperators>;
 	and?: InputMaybe<Array<InputMaybe<FlowRecordElementOccurrence_Filter>>>;
 	not?: InputMaybe<FlowRecordElementOccurrence_Filter>;
 	or?: InputMaybe<Array<InputMaybe<FlowRecordElementOccurrence_Filter>>>;
@@ -4559,6 +6762,8 @@ export type FlowRecordElement_Filter = {
 	CreatedBy?: InputMaybe<User_Filter>;
 	CreatedById?: InputMaybe<IdOperators>;
 	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
 	ElementName?: InputMaybe<StringOperators>;
 	FlowRecordVersion?: InputMaybe<FlowRecordVersion_Filter>;
 	FlowRecordVersionId?: InputMaybe<IdOperators>;
@@ -4600,6 +6805,8 @@ export type FlowRecordVersionOccurrence_Filter = {
 	CreatedBy?: InputMaybe<User_Filter>;
 	CreatedById?: InputMaybe<IdOperators>;
 	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
 	Enqueued?: InputMaybe<IntegerOperators>;
 	Entries?: InputMaybe<IntegerOperators>;
 	ErrorDetail?: InputMaybe<StringOperators>;
@@ -4619,6 +6826,7 @@ export type FlowRecordVersionOccurrence_Filter = {
 	Name?: InputMaybe<StringOperators>;
 	ProgressStatus?: InputMaybe<PicklistOperators>;
 	ScheduledDate?: InputMaybe<DateTimeOperators>;
+	Stopped?: InputMaybe<IntegerOperators>;
 	SystemModstamp?: InputMaybe<DateTimeOperators>;
 	and?: InputMaybe<Array<InputMaybe<FlowRecordVersionOccurrence_Filter>>>;
 	not?: InputMaybe<FlowRecordVersionOccurrence_Filter>;
@@ -4626,7 +6834,6 @@ export type FlowRecordVersionOccurrence_Filter = {
 };
 
 export type FlowRecordVersion_Filter = {
-	AccessType?: InputMaybe<PicklistOperators>;
 	ActivatedBy?: InputMaybe<User_Filter>;
 	ActivatedById?: InputMaybe<IdOperators>;
 	ActivatedDate?: InputMaybe<DateTimeOperators>;
@@ -4637,7 +6844,12 @@ export type FlowRecordVersion_Filter = {
 	CreatedBy?: InputMaybe<User_Filter>;
 	CreatedById?: InputMaybe<IdOperators>;
 	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
 	Description?: InputMaybe<LongTextAreaOperators>;
+	Entries?: InputMaybe<IntegerOperators>;
+	Errors?: InputMaybe<IntegerOperators>;
+	Exits?: InputMaybe<IntegerOperators>;
 	FlowRecord?: InputMaybe<FlowRecord_Filter>;
 	FlowRecordId?: InputMaybe<IdOperators>;
 	FlowType?: InputMaybe<PicklistOperators>;
@@ -4684,6 +6896,8 @@ export type FlowRecord_AssociatedRecord_Filters = {
 };
 
 export type FlowRecord_Filter = {
+	Activation?: InputMaybe<MarketSegmentActivation_Filter>;
+	ActivationId?: InputMaybe<IdOperators>;
 	ActiveVersion?: InputMaybe<FlowRecordVersion_Filter>;
 	ActiveVersionId?: InputMaybe<IdOperators>;
 	ApiName?: InputMaybe<StringOperators>;
@@ -4696,9 +6910,9 @@ export type FlowRecord_Filter = {
 	CreatedBy?: InputMaybe<User_Filter>;
 	CreatedById?: InputMaybe<IdOperators>;
 	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
 	Description?: InputMaybe<LongTextAreaOperators>;
-	ElementEntries?: InputMaybe<IntegerOperators>;
-	ElementErrors?: InputMaybe<IntegerOperators>;
 	ErrorCode?: InputMaybe<PicklistOperators>;
 	ErrorDetails?: InputMaybe<StringOperators>;
 	FlowCategory?: InputMaybe<StringOperators>;
@@ -4706,7 +6920,6 @@ export type FlowRecord_Filter = {
 	FlowLabel?: InputMaybe<StringOperators>;
 	FlowSubcategory?: InputMaybe<StringOperators>;
 	FlowType?: InputMaybe<PicklistOperators>;
-	Health?: InputMaybe<IntegerOperators>;
 	Id?: InputMaybe<IdOperators>;
 	InstalledPackageName?: InputMaybe<StringOperators>;
 	IsCitizenEnabled?: InputMaybe<BooleanOperators>;
@@ -4719,8 +6932,6 @@ export type FlowRecord_Filter = {
 	LastModifiedDate?: InputMaybe<DateTimeOperators>;
 	LastReferencedDate?: InputMaybe<DateTimeOperators>;
 	LastViewedDate?: InputMaybe<DateTimeOperators>;
-	List?: InputMaybe<Campaign_Filter>;
-	ListId?: InputMaybe<IdOperators>;
 	LogsEnabledFlowVersion?: InputMaybe<IntegerOperators>;
 	ManageableState?: InputMaybe<PicklistOperators>;
 	Name?: InputMaybe<StringOperators>;
@@ -4733,6 +6944,8 @@ export type FlowRecord_Filter = {
 	OwnerId?: InputMaybe<IdOperators>;
 	ProgressStatus?: InputMaybe<PicklistOperators>;
 	ScheduledStartDate?: InputMaybe<DateTimeOperators>;
+	Segment?: InputMaybe<MarketSegment_Filter>;
+	SegmentId?: InputMaybe<IdOperators>;
 	SourceTemplate?: InputMaybe<FlowRecord_Filter>;
 	SourceTemplateId?: InputMaybe<IdOperators>;
 	StartSource?: InputMaybe<StringOperators>;
@@ -5047,6 +7260,68 @@ export type IdOperators = {
 	ninq?: InputMaybe<JoinInput>;
 };
 
+export type IdentityResolutionHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IdentityResolution?: InputMaybe<IdentityResolution_Filter>;
+	IdentityResolutionId?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<IdentityResolutionHistory_Filter>>>;
+	not?: InputMaybe<IdentityResolutionHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<IdentityResolutionHistory_Filter>>>;
+};
+
+export type IdentityResolution_Filter = {
+	ConsolidationRate?: InputMaybe<PercentOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	ErrorCode?: InputMaybe<PicklistOperators>;
+	ErrorMessage?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IdentityResolutionDefId?: InputMaybe<IdOperators>;
+	IsCaseSensitive?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsLimitedToSingleHousehold?: InputMaybe<BooleanOperators>;
+	IsScheduled?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastRunStatus?: InputMaybe<PicklistOperators>;
+	LastRunStatusDateTime?: InputMaybe<DateTimeOperators>;
+	LastSuccessfulRunDateTime?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	MatchedCount?: InputMaybe<LongOperators>;
+	Name?: InputMaybe<StringOperators>;
+	RootEntityLabel?: InputMaybe<StringOperators>;
+	SecondaryEntityLabel?: InputMaybe<StringOperators>;
+	SourceCount?: InputMaybe<LongOperators>;
+	SourceIr?: InputMaybe<IdentityResolution_Filter>;
+	SourceIrId?: InputMaybe<IdOperators>;
+	Status?: InputMaybe<PicklistOperators>;
+	StatusDetails?: InputMaybe<LongTextAreaOperators>;
+	Suffix?: InputMaybe<StringOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	TotalAnonymousRecords?: InputMaybe<LongOperators>;
+	TotalNonAnonymousRecords?: InputMaybe<LongOperators>;
+	UnifiedCount?: InputMaybe<LongOperators>;
+	and?: InputMaybe<Array<InputMaybe<IdentityResolution_Filter>>>;
+	not?: InputMaybe<IdentityResolution_Filter>;
+	or?: InputMaybe<Array<InputMaybe<IdentityResolution_Filter>>>;
+};
+
 export type ImageHistory_Filter = {
 	CreatedBy?: InputMaybe<User_Filter>;
 	CreatedById?: InputMaybe<IdOperators>;
@@ -5100,6 +7375,31 @@ export type Image_Owner_Filters = {
 	Group?: InputMaybe<Group_Filter>;
 	Name?: InputMaybe<Name_Filter>;
 	User?: InputMaybe<User_Filter>;
+};
+
+export type IndividualGdprState__Dlm_Filter = {
+	CreatedBy__c?: InputMaybe<StringOperators>;
+	CreatedDate__c?: InputMaybe<DateTimeOperators>;
+	DataSourceObject__c?: InputMaybe<StringOperators>;
+	DataSource__c?: InputMaybe<StringOperators>;
+	HasOptedOutProcessing__c?: InputMaybe<DoubleOperators>;
+	Id?: InputMaybe<IdOperators>;
+	Id__c?: InputMaybe<StringOperators>;
+	IndividualId__c?: InputMaybe<StringOperators>;
+	LastModifiedBy__c?: InputMaybe<StringOperators>;
+	LastModifiedDate__c?: InputMaybe<DateTimeOperators>;
+	OptOutProcessRequestCompletionDate__c?: InputMaybe<DateTimeOperators>;
+	OptOutProcessRequestDate__c?: InputMaybe<DateTimeOperators>;
+	SendIndividualDataRequestCompletionDate__c?: InputMaybe<DateTimeOperators>;
+	SendIndividualDataRequestDate__c?: InputMaybe<DateTimeOperators>;
+	SendIndividualData__c?: InputMaybe<DoubleOperators>;
+	ShouldForgetRequestCompletionDate__c?: InputMaybe<DateTimeOperators>;
+	ShouldForgetRequestDate__c?: InputMaybe<DateTimeOperators>;
+	ShouldForget__c?: InputMaybe<DoubleOperators>;
+	TenantId__c?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<IndividualGdprState__Dlm_Filter>>>;
+	not?: InputMaybe<IndividualGdprState__Dlm_Filter>;
+	or?: InputMaybe<Array<InputMaybe<IndividualGdprState__Dlm_Filter>>>;
 };
 
 export type IndividualHistory_Filter = {
@@ -5206,6 +7506,62 @@ export type Individual_OrderBy = {
 	Website?: InputMaybe<OrderByClause>;
 };
 
+export type InsightsExternalDataPart_Filter = {
+	CompressedDataLength?: InputMaybe<IntegerOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataLength?: InputMaybe<IntegerOperators>;
+	Id?: InputMaybe<IdOperators>;
+	InsightsExternalData?: InputMaybe<InsightsExternalData_Filter>;
+	InsightsExternalDataId?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	PartNumber?: InputMaybe<IntegerOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<InsightsExternalDataPart_Filter>>>;
+	not?: InputMaybe<InsightsExternalDataPart_Filter>;
+	or?: InputMaybe<Array<InputMaybe<InsightsExternalDataPart_Filter>>>;
+};
+
+export type InsightsExternalData_Filter = {
+	Action?: InputMaybe<PicklistOperators>;
+	CompressedMetadataLength?: InputMaybe<IntegerOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Dataflow?: InputMaybe<StringOperators>;
+	Description?: InputMaybe<LongTextAreaOperators>;
+	EdgemartAlias?: InputMaybe<StringOperators>;
+	EdgemartContainer?: InputMaybe<StringOperators>;
+	EdgemartLabel?: InputMaybe<StringOperators>;
+	FileName?: InputMaybe<StringOperators>;
+	Format?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsDependentOnLastUpload?: InputMaybe<BooleanOperators>;
+	IsIndependentParts?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LicenseType?: InputMaybe<PicklistOperators>;
+	MetaDataLength?: InputMaybe<IntegerOperators>;
+	Mode?: InputMaybe<PicklistOperators>;
+	NotificationEmail?: InputMaybe<StringOperators>;
+	NotificationSent?: InputMaybe<PicklistOperators>;
+	Operation?: InputMaybe<PicklistOperators>;
+	Status?: InputMaybe<PicklistOperators>;
+	StatusMessage?: InputMaybe<LongTextAreaOperators>;
+	SubmittedDate?: InputMaybe<DateTimeOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	Target?: InputMaybe<PicklistOperators>;
+	and?: InputMaybe<Array<InputMaybe<InsightsExternalData_Filter>>>;
+	not?: InputMaybe<InsightsExternalData_Filter>;
+	or?: InputMaybe<Array<InputMaybe<InsightsExternalData_Filter>>>;
+};
+
 export type IntegerOperators = {
 	eq?: InputMaybe<Scalars["Int"]["input"]>;
 	gt?: InputMaybe<Scalars["Int"]["input"]>;
@@ -5218,9 +7574,19 @@ export type IntegerOperators = {
 };
 
 export type JoinInput = {
+	AbnExperiment?: InputMaybe<AbnExperiment_Filter>;
+	AbnExperimentCohort?: InputMaybe<AbnExperimentCohort_Filter>;
+	AbnExperimentEngmtSgnlMtrc?: InputMaybe<AbnExperimentEngmtSgnlMtrc_Filter>;
 	Account?: InputMaybe<Account_Filter>;
+	AccountBrand?: InputMaybe<AccountBrand_Filter>;
 	AccountHistory?: InputMaybe<AccountHistory_Filter>;
 	AccountPartner?: InputMaybe<AccountPartner_Filter>;
+	ActivationTarget?: InputMaybe<ActivationTarget_Filter>;
+	ActivationTargetHistory?: InputMaybe<ActivationTargetHistory_Filter>;
+	ActivationTargetPlatformHistory?: InputMaybe<ActivationTargetPlatformHistory_Filter>;
+	ActivationTargetSecureFTP?: InputMaybe<ActivationTargetSecureFtp_Filter>;
+	ActivationTrgtIntOrgAccessHistory?: InputMaybe<ActivationTrgtIntOrgAccessHistory_Filter>;
+	ActvTgtPlatformFieldValueHistory?: InputMaybe<ActvTgtPlatformFieldValueHistory_Filter>;
 	Agent__History?: InputMaybe<Agent__History_Filter>;
 	Agent__c?: InputMaybe<Agent__C_Filter>;
 	AnalyticsUserAttrFuncTkn?: InputMaybe<AnalyticsUserAttrFuncTkn_Filter>;
@@ -5241,7 +7607,10 @@ export type JoinInput = {
 	AssetRelationshipHistory?: InputMaybe<AssetRelationshipHistory_Filter>;
 	AssociatedLocation?: InputMaybe<AssociatedLocation_Filter>;
 	AssociatedLocationHistory?: InputMaybe<AssociatedLocationHistory_Filter>;
-	Attachment?: InputMaybe<Attachment_Filter>;
+	AsyncOperationTracker?: InputMaybe<AsyncOperationTracker_Filter>;
+	AttribModel?: InputMaybe<AttribModel_Filter>;
+	AttribModelStage?: InputMaybe<AttribModelStage_Filter>;
+	AttribModelStageMetric?: InputMaybe<AttribModelStageMetric_Filter>;
 	AuthorizationForm?: InputMaybe<AuthorizationForm_Filter>;
 	AuthorizationFormConsent?: InputMaybe<AuthorizationFormConsent_Filter>;
 	AuthorizationFormConsentHistory?: InputMaybe<AuthorizationFormConsentHistory_Filter>;
@@ -5251,8 +7620,13 @@ export type JoinInput = {
 	AuthorizationFormText?: InputMaybe<AuthorizationFormText_Filter>;
 	AuthorizationFormTextHistory?: InputMaybe<AuthorizationFormTextHistory_Filter>;
 	BackgroundOperation?: InputMaybe<BackgroundOperation_Filter>;
+	Brief?: InputMaybe<Brief_Filter>;
+	BriefPlanStep?: InputMaybe<BriefPlanStep_Filter>;
 	BusinessBrand?: InputMaybe<BusinessBrand_Filter>;
 	BusinessHours?: InputMaybe<BusinessHours_Filter>;
+	CalcAffinityEngmtSgnl?: InputMaybe<CalcAffinityEngmtSgnl_Filter>;
+	CalculatedAffinity?: InputMaybe<CalculatedAffinity_Filter>;
+	CalculatedAffinityField?: InputMaybe<CalculatedAffinityField_Filter>;
 	Campaign?: InputMaybe<Campaign_Filter>;
 	CampaignHistory?: InputMaybe<CampaignHistory_Filter>;
 	CampaignMember?: InputMaybe<CampaignMember_Filter>;
@@ -5261,6 +7635,12 @@ export type JoinInput = {
 	CaseComment?: InputMaybe<CaseComment_Filter>;
 	CaseContactRole?: InputMaybe<CaseContactRole_Filter>;
 	CaseHistory?: InputMaybe<CaseHistory_Filter>;
+	ChannelProgram?: InputMaybe<ChannelProgram_Filter>;
+	ChannelProgramHistory?: InputMaybe<ChannelProgramHistory_Filter>;
+	ChannelProgramLevel?: InputMaybe<ChannelProgramLevel_Filter>;
+	ChannelProgramLevelHistory?: InputMaybe<ChannelProgramLevelHistory_Filter>;
+	ChannelProgramMember?: InputMaybe<ChannelProgramMember_Filter>;
+	ChannelProgramMemberHistory?: InputMaybe<ChannelProgramMemberHistory_Filter>;
 	CommSubscription?: InputMaybe<CommSubscription_Filter>;
 	CommSubscriptionChannelType?: InputMaybe<CommSubscriptionChannelType_Filter>;
 	CommSubscriptionChannelTypeHistory?: InputMaybe<CommSubscriptionChannelTypeHistory_Filter>;
@@ -5301,6 +7681,43 @@ export type JoinInput = {
 	CspTrustedSite?: InputMaybe<CspTrustedSite_Filter>;
 	CustomPermission?: InputMaybe<CustomPermission_Filter>;
 	Customer?: InputMaybe<Customer_Filter>;
+	DataAction?: InputMaybe<DataAction_Filter>;
+	DataActionHistory?: InputMaybe<DataActionHistory_Filter>;
+	DataActionJobSummary?: InputMaybe<DataActionJobSummary_Filter>;
+	DataActionJobSummaryHistory?: InputMaybe<DataActionJobSummaryHistory_Filter>;
+	DataActionTarget?: InputMaybe<DataActionTarget_Filter>;
+	DataActionTargetHistory?: InputMaybe<DataActionTargetHistory_Filter>;
+	DataCommCapActvTarget?: InputMaybe<DataCommCapActvTarget_Filter>;
+	DataCommCapActvTargetHistory?: InputMaybe<DataCommCapActvTargetHistory_Filter>;
+	DataCommunicationCap?: InputMaybe<DataCommunicationCap_Filter>;
+	DataCommunicationCapHistory?: InputMaybe<DataCommunicationCapHistory_Filter>;
+	DataConnectorS3?: InputMaybe<DataConnectorS3_Filter>;
+	DataContentLensSource?: InputMaybe<DataContentLensSource_Filter>;
+	DataContentLensSourceHistory?: InputMaybe<DataContentLensSourceHistory_Filter>;
+	DataGraph?: InputMaybe<DataGraph_Filter>;
+	DataHarmonizedModelObjRef?: InputMaybe<DataHarmonizedModelObjRef_Filter>;
+	DataKitDeploymentLog?: InputMaybe<DataKitDeploymentLog_Filter>;
+	DataKnowledgeSpace?: InputMaybe<DataKnowledgeSpace_Filter>;
+	DataKnowledgeSpaceSession?: InputMaybe<DataKnowledgeSpaceSession_Filter>;
+	DataKnowledgeSpcJobRun?: InputMaybe<DataKnowledgeSpcJobRun_Filter>;
+	DataKnowledgeSrcFileRef?: InputMaybe<DataKnowledgeSrcFileRef_Filter>;
+	DataLakeObjectInstance?: InputMaybe<DataLakeObjectInstance_Filter>;
+	DataLakeObjectInstanceHistory?: InputMaybe<DataLakeObjectInstanceHistory_Filter>;
+	DataLineageNodeDefSyncLog?: InputMaybe<DataLineageNodeDefSyncLog_Filter>;
+	DataLineageNodeDefSyncLogHistory?: InputMaybe<DataLineageNodeDefSyncLogHistory_Filter>;
+	DataObjSecondaryIndex?: InputMaybe<DataObjSecondaryIndex_Filter>;
+	DataObjSecondaryIndexHistory?: InputMaybe<DataObjSecondaryIndexHistory_Filter>;
+	DataQueryWorkspace?: InputMaybe<DataQueryWorkspace_Filter>;
+	DataQueryWorkspaceHistory?: InputMaybe<DataQueryWorkspaceHistory_Filter>;
+	DataQueryWorkspaceTab?: InputMaybe<DataQueryWorkspaceTab_Filter>;
+	DataQuickAttribute?: InputMaybe<DataQuickAttribute_Filter>;
+	DataQuickAttributeHistory?: InputMaybe<DataQuickAttributeHistory_Filter>;
+	DataSemanticSearch?: InputMaybe<DataSemanticSearch_Filter>;
+	DataSemanticSearchHistory?: InputMaybe<DataSemanticSearchHistory_Filter>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceHistory?: InputMaybe<DataSpaceHistory_Filter>;
+	DataStream?: InputMaybe<DataStream_Filter>;
+	DataStreamHistory?: InputMaybe<DataStreamHistory_Filter>;
 	DataUseLegalBasis?: InputMaybe<DataUseLegalBasis_Filter>;
 	DataUseLegalBasisHistory?: InputMaybe<DataUseLegalBasisHistory_Filter>;
 	DataUsePurpose?: InputMaybe<DataUsePurpose_Filter>;
@@ -5308,21 +7725,32 @@ export type JoinInput = {
 	DelegatedAccount?: InputMaybe<DelegatedAccount_Filter>;
 	DelegatedAccountHistory?: InputMaybe<DelegatedAccountHistory_Filter>;
 	DeleteEvent?: InputMaybe<DeleteEvent_Filter>;
+	DevopsActivityLog?: InputMaybe<DevopsActivityLog_Filter>;
+	DevopsActivityLogHistory?: InputMaybe<DevopsActivityLogHistory_Filter>;
 	DevopsEnvironment?: InputMaybe<DevopsEnvironment_Filter>;
 	DevopsEnvironmentHistory?: InputMaybe<DevopsEnvironmentHistory_Filter>;
 	DevopsRequestInfo?: InputMaybe<DevopsRequestInfo_Filter>;
 	DevopsRequestInfoHistory?: InputMaybe<DevopsRequestInfoHistory_Filter>;
 	DuplicateRecordItem?: InputMaybe<DuplicateRecordItem_Filter>;
 	DuplicateRecordSet?: InputMaybe<DuplicateRecordSet_Filter>;
+	EmailContent?: InputMaybe<EmailContent_Filter>;
 	EmailMessage?: InputMaybe<EmailMessage_Filter>;
 	EmailMessageRelation?: InputMaybe<EmailMessageRelation_Filter>;
 	EmailTemplate?: InputMaybe<EmailTemplate_Filter>;
 	EngagementChannelType?: InputMaybe<EngagementChannelType_Filter>;
 	EngagementChannelTypeHistory?: InputMaybe<EngagementChannelTypeHistory_Filter>;
+	EngagementSignal?: InputMaybe<EngagementSignal_Filter>;
+	EngagementSignalCmpndMetric?: InputMaybe<EngagementSignalCmpndMetric_Filter>;
+	EngagementSignalHistory?: InputMaybe<EngagementSignalHistory_Filter>;
+	EngagementSignalMetric?: InputMaybe<EngagementSignalMetric_Filter>;
 	EnhancedLetterhead?: InputMaybe<EnhancedLetterhead_Filter>;
 	EntityDefinition?: InputMaybe<EntityDefinition_Filter>;
 	Event?: InputMaybe<Event_Filter>;
 	ExpressionSetView?: InputMaybe<ExpressionSetView_Filter>;
+	ExtDataShare?: InputMaybe<ExtDataShare_Filter>;
+	ExtDataShareHistory?: InputMaybe<ExtDataShareHistory_Filter>;
+	ExtDataShareTarget?: InputMaybe<ExtDataShareTarget_Filter>;
+	ExtDataShareTargetHistory?: InputMaybe<ExtDataShareTargetHistory_Filter>;
 	FeedItem?: InputMaybe<FeedItem_Filter>;
 	FieldPermissions?: InputMaybe<FieldPermissions_Filter>;
 	FlowInterview?: InputMaybe<FlowInterview_Filter>;
@@ -5348,10 +7776,15 @@ export type JoinInput = {
 	GroupMember?: InputMaybe<GroupMember_Filter>;
 	Holiday?: InputMaybe<Holiday_Filter>;
 	IPAddressRange?: InputMaybe<IpAddressRange_Filter>;
+	IdentityResolution?: InputMaybe<IdentityResolution_Filter>;
+	IdentityResolutionHistory?: InputMaybe<IdentityResolutionHistory_Filter>;
 	Image?: InputMaybe<Image_Filter>;
 	ImageHistory?: InputMaybe<ImageHistory_Filter>;
 	Individual?: InputMaybe<Individual_Filter>;
+	IndividualGDPRState__dlm?: InputMaybe<IndividualGdprState__Dlm_Filter>;
 	IndividualHistory?: InputMaybe<IndividualHistory_Filter>;
+	InsightsExternalData?: InputMaybe<InsightsExternalData_Filter>;
+	InsightsExternalDataPart?: InputMaybe<InsightsExternalDataPart_Filter>;
 	KPI_Snapshot__c?: InputMaybe<Kpi_Snapshot__C_Filter>;
 	Lead?: InputMaybe<Lead_Filter>;
 	LeadHistory?: InputMaybe<LeadHistory_Filter>;
@@ -5368,6 +7801,24 @@ export type JoinInput = {
 	ManagedContent?: InputMaybe<ManagedContent_Filter>;
 	ManagedContentPublishedUrl?: InputMaybe<ManagedContentPublishedUrl_Filter>;
 	ManagedContentVariant?: InputMaybe<ManagedContentVariant_Filter>;
+	MarketSegment?: InputMaybe<MarketSegment_Filter>;
+	MarketSegmentActivation?: InputMaybe<MarketSegmentActivation_Filter>;
+	MarketSegmentActivationHistory?: InputMaybe<MarketSegmentActivationHistory_Filter>;
+	MarketSegmentDefinition?: InputMaybe<MarketSegmentDefinition_Filter>;
+	MarketSegmentHistory?: InputMaybe<MarketSegmentHistory_Filter>;
+	MessagingChannel?: InputMaybe<MessagingChannel_Filter>;
+	MessagingChannelUsage?: InputMaybe<MessagingChannelUsage_Filter>;
+	MktCalculatedInsight?: InputMaybe<MktCalculatedInsight_Filter>;
+	MktCalculatedInsightHistory?: InputMaybe<MktCalculatedInsightHistory_Filter>;
+	MktDataTransform?: InputMaybe<MktDataTransform_Filter>;
+	MktDataTransformHistory?: InputMaybe<MktDataTransformHistory_Filter>;
+	MktMLAIModelHistory?: InputMaybe<MktMlaiModelHistory_Filter>;
+	MktMLModel?: InputMaybe<MktMlModel_Filter>;
+	MktMLModelHistory?: InputMaybe<MktMlModelHistory_Filter>;
+	MktMLModelKitHistory?: InputMaybe<MktMlModelKitHistory_Filter>;
+	MktMLPredictionJobHistory?: InputMaybe<MktMlPredictionJobHistory_Filter>;
+	MktSgmtActvDataModelFld?: InputMaybe<MktSgmtActvDataModelFld_Filter>;
+	MktSgmtActvDataSource?: InputMaybe<MktSgmtActvDataSource_Filter>;
 	Network?: InputMaybe<Network_Filter>;
 	NetworkDataCategory?: InputMaybe<NetworkDataCategory_Filter>;
 	Note?: InputMaybe<Note_Filter>;
@@ -5390,6 +7841,14 @@ export type JoinInput = {
 	OrgMetricScanSummary?: InputMaybe<OrgMetricScanSummary_Filter>;
 	Organization?: InputMaybe<Organization_Filter>;
 	Partner?: InputMaybe<Partner_Filter>;
+	PartnerFundAllocation?: InputMaybe<PartnerFundAllocation_Filter>;
+	PartnerFundAllocationHistory?: InputMaybe<PartnerFundAllocationHistory_Filter>;
+	PartnerFundClaim?: InputMaybe<PartnerFundClaim_Filter>;
+	PartnerFundClaimHistory?: InputMaybe<PartnerFundClaimHistory_Filter>;
+	PartnerFundRequest?: InputMaybe<PartnerFundRequest_Filter>;
+	PartnerFundRequestHistory?: InputMaybe<PartnerFundRequestHistory_Filter>;
+	PartnerMarketingBudget?: InputMaybe<PartnerMarketingBudget_Filter>;
+	PartnerMarketingBudgetHistory?: InputMaybe<PartnerMarketingBudgetHistory_Filter>;
 	PartyConsent?: InputMaybe<PartyConsent_Filter>;
 	PartyConsentHistory?: InputMaybe<PartyConsentHistory_Filter>;
 	Payment__History?: InputMaybe<Payment__History_Filter>;
@@ -5398,6 +7857,15 @@ export type JoinInput = {
 	PermissionSet?: InputMaybe<PermissionSet_Filter>;
 	PermissionSetGroup?: InputMaybe<PermissionSetGroup_Filter>;
 	PermissionSetLicense?: InputMaybe<PermissionSetLicense_Filter>;
+	PersnlBatchDecision?: InputMaybe<PersnlBatchDecision_Filter>;
+	PersnlContextVariable?: InputMaybe<PersnlContextVariable_Filter>;
+	PersnlExperience?: InputMaybe<PersnlExperience_Filter>;
+	PersnlTransformer?: InputMaybe<PersnlTransformer_Filter>;
+	PersonalizationDecision?: InputMaybe<PersonalizationDecision_Filter>;
+	PersonalizationObjective?: InputMaybe<PersonalizationObjective_Filter>;
+	PersonalizationPoint?: InputMaybe<PersonalizationPoint_Filter>;
+	PersonalizationRecommender?: InputMaybe<PersonalizationRecommender_Filter>;
+	PersonalizationSchema?: InputMaybe<PersonalizationSchema_Filter>;
 	Pricebook2?: InputMaybe<Pricebook2_Filter>;
 	Pricebook2History?: InputMaybe<Pricebook2History_Filter>;
 	PricebookEntry?: InputMaybe<PricebookEntry_Filter>;
@@ -5428,21 +7896,21 @@ export type JoinInput = {
 	Property_Sale__c?: InputMaybe<Property_Sale__C_Filter>;
 	Property__History?: InputMaybe<Property__History_Filter>;
 	Property__c?: InputMaybe<Property__C_Filter>;
+	Prospect?: InputMaybe<Prospect_Filter>;
 	QuickText?: InputMaybe<QuickText_Filter>;
 	QuickTextHistory?: InputMaybe<QuickTextHistory_Filter>;
 	Recommendation?: InputMaybe<Recommendation_Filter>;
 	RecordAction?: InputMaybe<RecordAction_Filter>;
 	RecordType?: InputMaybe<RecordType_Filter>;
 	Report?: InputMaybe<Report_Filter>;
-	ReportHierarchyObjectField?: InputMaybe<ReportHierarchyObjectField_Filter>;
 	Scorecard?: InputMaybe<Scorecard_Filter>;
 	ScorecardAssociation?: InputMaybe<ScorecardAssociation_Filter>;
 	ScorecardMetric?: InputMaybe<ScorecardMetric_Filter>;
 	SecurityHealthCheckAlertRecipient?: InputMaybe<SecurityHealthCheckAlertRecipient_Filter>;
 	SecurityHealthCheckResult?: InputMaybe<SecurityHealthCheckResult_Filter>;
-	SelfSvcPortalTopic?: InputMaybe<SelfSvcPortalTopic_Filter>;
 	Seller?: InputMaybe<Seller_Filter>;
 	SellerHistory?: InputMaybe<SellerHistory_Filter>;
+	SenderEmailAddress?: InputMaybe<SenderEmailAddress_Filter>;
 	SetupAssistantStep?: InputMaybe<SetupAssistantStep_Filter>;
 	SiteHistory?: InputMaybe<SiteHistory_Filter>;
 	SocialPersona?: InputMaybe<SocialPersona_Filter>;
@@ -5468,6 +7936,7 @@ export type JoinInput = {
 	UserLocalWebServerIdentity?: InputMaybe<UserLocalWebServerIdentity_Filter>;
 	UserRole?: InputMaybe<UserRole_Filter>;
 	UserSharedFeature?: InputMaybe<UserSharedFeature_Filter>;
+	WaveAutoInstallRequest?: InputMaybe<WaveAutoInstallRequest_Filter>;
 	WorkBadgeDefinitionHistory?: InputMaybe<WorkBadgeDefinitionHistory_Filter>;
 	WorkOrder?: InputMaybe<WorkOrder_Filter>;
 	WorkOrderHistory?: InputMaybe<WorkOrderHistory_Filter>;
@@ -5518,28 +7987,25 @@ export type LatitudeOperators = {
 	nin?: InputMaybe<Array<InputMaybe<Scalars["Latitude"]["input"]>>>;
 };
 
-export const LayoutComponentType = {
-	Canvas: "CANVAS",
-	CustomLink: "CUSTOM_LINK",
-	EmptySpace: "EMPTY_SPACE",
-	Field: "FIELD",
-	ReportChart: "REPORT_CHART",
-	VisualforcePage: "VISUALFORCE_PAGE",
-} as const;
-export type LayoutComponentType = (typeof LayoutComponentType)[keyof typeof LayoutComponentType];
+export enum LayoutComponentType {
+	Canvas = "CANVAS",
+	CustomLink = "CUSTOM_LINK",
+	EmptySpace = "EMPTY_SPACE",
+	Field = "FIELD",
+	ReportChart = "REPORT_CHART",
+	VisualforcePage = "VISUALFORCE_PAGE",
+}
 
-export const LayoutMode = {
-	Create: "CREATE",
-	Edit: "EDIT",
-	View: "VIEW",
-} as const;
-export type LayoutMode = (typeof LayoutMode)[keyof typeof LayoutMode];
+export enum LayoutMode {
+	Create = "CREATE",
+	Edit = "EDIT",
+	View = "VIEW",
+}
 
-export const LayoutType = {
-	Compact: "COMPACT",
-	Full: "FULL",
-} as const;
-export type LayoutType = (typeof LayoutType)[keyof typeof LayoutType];
+export enum LayoutType {
+	Compact = "COMPACT",
+	Full = "FULL",
+}
 
 export type LeadHistory_Filter = {
 	CreatedBy?: InputMaybe<User_Filter>;
@@ -5676,33 +8142,46 @@ export type Lease__C_Filter = {
 export type ListEmail_Filter = {
 	Campaign?: InputMaybe<Campaign_Filter>;
 	CampaignId?: InputMaybe<IdOperators>;
-	CcAddress?: InputMaybe<LongTextAreaOperators>;
+	CommSubscription?: InputMaybe<CommSubscription_Filter>;
+	CommSubscriptionChannelType?: InputMaybe<CommSubscriptionChannelType_Filter>;
+	CommSubscriptionChannelTypeId?: InputMaybe<IdOperators>;
+	CommSubscriptionId?: InputMaybe<IdOperators>;
 	CreatedBy?: InputMaybe<User_Filter>;
 	CreatedById?: InputMaybe<IdOperators>;
 	CreatedDate?: InputMaybe<DateTimeOperators>;
+	CustomDomainAddress?: InputMaybe<StringOperators>;
+	EmailContent?: InputMaybe<EmailContent_Filter>;
+	EmailContentId?: InputMaybe<IdOperators>;
+	FlowRecordElement?: InputMaybe<FlowRecordElement_Filter>;
+	FlowRecordElementId?: InputMaybe<IdOperators>;
 	FromAddress?: InputMaybe<LongTextAreaOperators>;
 	FromName?: InputMaybe<StringOperators>;
 	HasAttachment?: InputMaybe<BooleanOperators>;
 	HtmlBody?: InputMaybe<LongTextAreaOperators>;
 	Id?: InputMaybe<IdOperators>;
+	IsClickTrackingEnabled?: InputMaybe<BooleanOperators>;
 	IsDeleted?: InputMaybe<BooleanOperators>;
-	IsEmailArchiveRequired?: InputMaybe<BooleanOperators>;
-	IsSyntheticCcEnabled?: InputMaybe<BooleanOperators>;
+	IsOpenTrackingEnabled?: InputMaybe<BooleanOperators>;
 	IsTracked?: InputMaybe<BooleanOperators>;
 	LastModifiedBy?: InputMaybe<User_Filter>;
 	LastModifiedById?: InputMaybe<IdOperators>;
 	LastModifiedDate?: InputMaybe<DateTimeOperators>;
 	LastReferencedDate?: InputMaybe<DateTimeOperators>;
 	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	ManagedContent?: InputMaybe<ManagedContent_Filter>;
+	ManagedContentId?: InputMaybe<IdOperators>;
+	MessagePurpose?: InputMaybe<PicklistOperators>;
 	Name?: InputMaybe<StringOperators>;
 	Owner?: InputMaybe<ListEmail_Owner_Filters>;
 	OwnerId?: InputMaybe<IdOperators>;
 	PardotAsset?: InputMaybe<StringOperators>;
 	PardotTenant?: InputMaybe<StringOperators>;
+	PreHeader?: InputMaybe<StringOperators>;
 	RelatedTo?: InputMaybe<ListEmail_RelatedTo_Filters>;
 	RelatedToId?: InputMaybe<IdOperators>;
-	ReplyToName?: InputMaybe<StringOperators>;
 	ScheduledDate?: InputMaybe<DateTimeOperators>;
+	Segment?: InputMaybe<MarketSegment_Filter>;
+	SegmentId?: InputMaybe<IdOperators>;
 	SentVia?: InputMaybe<PicklistOperators>;
 	Status?: InputMaybe<PicklistOperators>;
 	Subject?: InputMaybe<LongTextAreaOperators>;
@@ -5909,10 +8388,47 @@ export type Maintenance_Request__C_Filter = {
 	or?: InputMaybe<Array<InputMaybe<Maintenance_Request__C_Filter>>>;
 };
 
+export type Maintenance_Request__C_OrderBy = {
+	Actual_Cost__c?: InputMaybe<OrderByClause>;
+	Assigned_Worker__c?: InputMaybe<OrderByClause>;
+	Assigned_Worker__r?: InputMaybe<Maintenance_Worker__C_OrderBy>;
+	Completed__c?: InputMaybe<OrderByClause>;
+	CreatedBy?: InputMaybe<User_OrderBy>;
+	CreatedById?: InputMaybe<OrderByClause>;
+	CreatedDate?: InputMaybe<OrderByClause>;
+	Description__c?: InputMaybe<AggregateOrderByStringClause>;
+	Est_Cost__c?: InputMaybe<OrderByClause>;
+	Id?: InputMaybe<OrderByClause>;
+	IsDeleted?: InputMaybe<OrderByClause>;
+	LastActivityDate?: InputMaybe<OrderByClause>;
+	LastModifiedBy?: InputMaybe<User_OrderBy>;
+	LastModifiedById?: InputMaybe<OrderByClause>;
+	LastModifiedDate?: InputMaybe<OrderByClause>;
+	Name?: InputMaybe<OrderByClause>;
+	Owner?: InputMaybe<Maintenance_Request__C_Owner_OrderBys>;
+	OwnerId?: InputMaybe<OrderByClause>;
+	Priority__c?: InputMaybe<OrderByClause>;
+	Property__c?: InputMaybe<OrderByClause>;
+	Property__r?: InputMaybe<Property__C_OrderBy>;
+	Scheduled__c?: InputMaybe<OrderByClause>;
+	Status__c?: InputMaybe<OrderByClause>;
+	SystemModstamp?: InputMaybe<OrderByClause>;
+	Tenant_Home__c?: InputMaybe<OrderByClause>;
+	Type__c?: InputMaybe<OrderByClause>;
+	User__c?: InputMaybe<OrderByClause>;
+	User__r?: InputMaybe<Tenant__C_OrderBy>;
+};
+
 export type Maintenance_Request__C_Owner_Filters = {
 	Group?: InputMaybe<Group_Filter>;
 	Name?: InputMaybe<Name_Filter>;
 	User?: InputMaybe<User_Filter>;
+};
+
+export type Maintenance_Request__C_Owner_OrderBys = {
+	Group?: InputMaybe<Group_OrderBy>;
+	Name?: InputMaybe<Name_OrderBy>;
+	User?: InputMaybe<User_OrderBy>;
 };
 
 export type Maintenance_Worker__History_Filter = {
@@ -5961,10 +8477,40 @@ export type Maintenance_Worker__C_Filter = {
 	or?: InputMaybe<Array<InputMaybe<Maintenance_Worker__C_Filter>>>;
 };
 
+export type Maintenance_Worker__C_OrderBy = {
+	Certifications__c?: InputMaybe<AggregateOrderByStringClause>;
+	CreatedBy?: InputMaybe<User_OrderBy>;
+	CreatedById?: InputMaybe<OrderByClause>;
+	CreatedDate?: InputMaybe<OrderByClause>;
+	Employment_Type__c?: InputMaybe<OrderByClause>;
+	Hourly_Rate__c?: InputMaybe<OrderByClause>;
+	Id?: InputMaybe<OrderByClause>;
+	IsActive__c?: InputMaybe<OrderByClause>;
+	IsDeleted?: InputMaybe<OrderByClause>;
+	LastActivityDate?: InputMaybe<OrderByClause>;
+	LastModifiedBy?: InputMaybe<User_OrderBy>;
+	LastModifiedById?: InputMaybe<OrderByClause>;
+	LastModifiedDate?: InputMaybe<OrderByClause>;
+	Location__c?: InputMaybe<OrderByClause>;
+	Name?: InputMaybe<OrderByClause>;
+	Owner?: InputMaybe<Maintenance_Worker__C_Owner_OrderBys>;
+	OwnerId?: InputMaybe<OrderByClause>;
+	Phone__c?: InputMaybe<OrderByClause>;
+	Rating__c?: InputMaybe<OrderByClause>;
+	SystemModstamp?: InputMaybe<OrderByClause>;
+	Type__c?: InputMaybe<OrderByClause>;
+};
+
 export type Maintenance_Worker__C_Owner_Filters = {
 	Group?: InputMaybe<Group_Filter>;
 	Name?: InputMaybe<Name_Filter>;
 	User?: InputMaybe<User_Filter>;
+};
+
+export type Maintenance_Worker__C_Owner_OrderBys = {
+	Group?: InputMaybe<Group_OrderBy>;
+	Name?: InputMaybe<Name_OrderBy>;
+	User?: InputMaybe<User_OrderBy>;
 };
 
 export type ManagedContentPublishedUrl_Filter = {
@@ -6051,6 +8597,8 @@ export type ManagedContent_Filter = {
 	LastPublishedVersionId?: InputMaybe<IdOperators>;
 	LastStagedVersionId?: InputMaybe<IdOperators>;
 	LatestVersionId?: InputMaybe<IdOperators>;
+	LinkedAttributeEntity?: InputMaybe<EmailContent_Filter>;
+	LinkedAttributeEntityId?: InputMaybe<IdOperators>;
 	Name?: InputMaybe<StringOperators>;
 	PrimaryLanguage?: InputMaybe<PicklistOperators>;
 	SourceContext?: InputMaybe<PicklistOperators>;
@@ -6060,6 +8608,576 @@ export type ManagedContent_Filter = {
 	and?: InputMaybe<Array<InputMaybe<ManagedContent_Filter>>>;
 	not?: InputMaybe<ManagedContent_Filter>;
 	or?: InputMaybe<Array<InputMaybe<ManagedContent_Filter>>>;
+};
+
+export type MarketSegmentActivationHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	MarketSegmentActivation?: InputMaybe<MarketSegmentActivation_Filter>;
+	MarketSegmentActivationId?: InputMaybe<IdOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<MarketSegmentActivationHistory_Filter>>>;
+	not?: InputMaybe<MarketSegmentActivationHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MarketSegmentActivationHistory_Filter>>>;
+};
+
+export type MarketSegmentActivation_Filter = {
+	ActivationEventMetadata?: InputMaybe<LongTextAreaOperators>;
+	ActivationFlowType?: InputMaybe<PicklistOperators>;
+	ActivationMappingSchema?: InputMaybe<StringOperators>;
+	ActivationObjectFilter?: InputMaybe<StringOperators>;
+	ActivationObjectId?: InputMaybe<IdOperators>;
+	ActivationObjectName?: InputMaybe<StringOperators>;
+	ActivationObjectPath?: InputMaybe<LongTextAreaOperators>;
+	ActivationProcessingType?: InputMaybe<PicklistOperators>;
+	ActivationRecordSchema?: InputMaybe<LongTextAreaOperators>;
+	ActivationRefreshType?: InputMaybe<PicklistOperators>;
+	ActivationStatus?: InputMaybe<PicklistOperators>;
+	ActivationTarget?: InputMaybe<ActivationTarget_Filter>;
+	ActivationTargetId?: InputMaybe<IdOperators>;
+	AudienceDmoLastRunTimestamp?: InputMaybe<DateTimeOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	CuratedEntityId?: InputMaybe<IdOperators>;
+	CuratedEntityName?: InputMaybe<StringOperators>;
+	CustomerFileSource?: InputMaybe<PicklistOperators>;
+	DataGraphId?: InputMaybe<IdOperators>;
+	DataGraphName?: InputMaybe<StringOperators>;
+	DataGraphPath?: InputMaybe<LongTextAreaOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	DirectAttributeDmoFilterExpression?: InputMaybe<LongTextAreaOperators>;
+	DmoFilterExpression?: InputMaybe<LongTextAreaOperators>;
+	DoExcludeDeletes?: InputMaybe<BooleanOperators>;
+	DoExcludeUpdates?: InputMaybe<BooleanOperators>;
+	EndDate?: InputMaybe<DateTimeOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsRemote?: InputMaybe<BooleanOperators>;
+	LastActivationStatusDateTime?: InputMaybe<DateTimeOperators>;
+	LastActivationStatusErrorCode?: InputMaybe<PicklistOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastPublishStatus?: InputMaybe<PicklistOperators>;
+	LastPublishStatusErrorMessage?: InputMaybe<StringOperators>;
+	LastPublishedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	LimitValue?: InputMaybe<IntegerOperators>;
+	LimitingAttributesExpression?: InputMaybe<LongTextAreaOperators>;
+	MarketSegment?: InputMaybe<MarketSegment_Filter>;
+	MarketSegmentActivationDefId?: InputMaybe<IdOperators>;
+	MarketSegmentId?: InputMaybe<IdOperators>;
+	Name?: InputMaybe<StringOperators>;
+	OwnedByOrg?: InputMaybe<StringOperators>;
+	PartnerObjectIds?: InputMaybe<LongTextAreaOperators>;
+	PlatformName?: InputMaybe<StringOperators>;
+	RecordCount?: InputMaybe<LongOperators>;
+	SourceDmoApiName?: InputMaybe<StringOperators>;
+	SourceDmoId?: InputMaybe<IdOperators>;
+	StartDate?: InputMaybe<DateTimeOperators>;
+	StaticAttributes?: InputMaybe<LongTextAreaOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	WaterfallSelectedChildSegmentsConfig?: InputMaybe<LongTextAreaOperators>;
+	and?: InputMaybe<Array<InputMaybe<MarketSegmentActivation_Filter>>>;
+	not?: InputMaybe<MarketSegmentActivation_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MarketSegmentActivation_Filter>>>;
+};
+
+export type MarketSegmentDefinition_Filter = {
+	AdditionalMetadata?: InputMaybe<LongTextAreaOperators>;
+	AdditionalMetadataInfo?: InputMaybe<LongTextAreaOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataGraphDefinitionId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<TextAreaOperators>;
+	DeveloperName?: InputMaybe<StringOperators>;
+	ExcludeCriteria?: InputMaybe<LongTextAreaOperators>;
+	GroupSortLimitFilterCriteria?: InputMaybe<LongTextAreaOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IncludeCriteria?: InputMaybe<LongTextAreaOperators>;
+	IsCurrentSaveApproxCount?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsPrevSaveApproxCount?: InputMaybe<BooleanOperators>;
+	IsRemote?: InputMaybe<BooleanOperators>;
+	IsSeedSegment?: InputMaybe<BooleanOperators>;
+	Language?: InputMaybe<PicklistOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LookbackPeriod?: InputMaybe<StringOperators>;
+	MasterLabel?: InputMaybe<StringOperators>;
+	NamespacePrefix?: InputMaybe<StringOperators>;
+	OwnedBy?: InputMaybe<StringOperators>;
+	PublishScheduleEndDate?: InputMaybe<DateOperators>;
+	PublishScheduleEndDateTime?: InputMaybe<DateTimeOperators>;
+	PublishScheduleInfo?: InputMaybe<LongTextAreaOperators>;
+	PublishScheduleInterval?: InputMaybe<PicklistOperators>;
+	PublishScheduleStartDateTime?: InputMaybe<DateTimeOperators>;
+	PublishType?: InputMaybe<PicklistOperators>;
+	SegmentOnId?: InputMaybe<IdOperators>;
+	SegmentType?: InputMaybe<PicklistOperators>;
+	SourceMarketSegment?: InputMaybe<StringOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<MarketSegmentDefinition_Filter>>>;
+	not?: InputMaybe<MarketSegmentDefinition_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MarketSegmentDefinition_Filter>>>;
+};
+
+export type MarketSegmentHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	MarketSegment?: InputMaybe<MarketSegment_Filter>;
+	MarketSegmentId?: InputMaybe<IdOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<MarketSegmentHistory_Filter>>>;
+	not?: InputMaybe<MarketSegmentHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MarketSegmentHistory_Filter>>>;
+};
+
+export type MarketSegment_Filter = {
+	AdditionalMetadataInfo?: InputMaybe<LongTextAreaOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataGraph?: InputMaybe<DataGraph_Filter>;
+	DataGraphId?: InputMaybe<IdOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<TextAreaOperators>;
+	ExcludeCriteria?: InputMaybe<LongTextAreaOperators>;
+	GroupSortLimitFilterCriteria?: InputMaybe<LongTextAreaOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IncludeCriteria?: InputMaybe<LongTextAreaOperators>;
+	IsCurrentSaveApproxCount?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsPrevSaveApproxCount?: InputMaybe<BooleanOperators>;
+	IsRemote?: InputMaybe<BooleanOperators>;
+	IsSeedSegment?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastPublishStatusDateTime?: InputMaybe<DateTimeOperators>;
+	LastPublishStatusErrorCode?: InputMaybe<PicklistOperators>;
+	LastPublishedEndDateTime?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastSeedModelRunDateTime?: InputMaybe<DateTimeOperators>;
+	LastSeedModelStatusDateTime?: InputMaybe<DateTimeOperators>;
+	LastSeedModelStatusErrorCode?: InputMaybe<StringOperators>;
+	LastSegmentCountEndDateTime?: InputMaybe<DateTimeOperators>;
+	LastSegmentExcludedCount?: InputMaybe<LongOperators>;
+	LastSegmentExcludedCountError?: InputMaybe<LongOperators>;
+	LastSegmentIncludedCount?: InputMaybe<LongOperators>;
+	LastSegmentMemberCount?: InputMaybe<LongOperators>;
+	LastSegmentMemberCountError?: InputMaybe<LongOperators>;
+	LastSegmentRemainderCount?: InputMaybe<LongOperators>;
+	LastSegmentStatusDateTime?: InputMaybe<DateTimeOperators>;
+	LastSegmentStatusErrorCode?: InputMaybe<PicklistOperators>;
+	LastSegmentStatusErrorDetails?: InputMaybe<LongTextAreaOperators>;
+	LastSegmentTotalCount?: InputMaybe<LongOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	LookbackPeriod?: InputMaybe<StringOperators>;
+	MarketSegmentDefinition?: InputMaybe<MarketSegmentDefinition_Filter>;
+	MarketSegmentDefinitionId?: InputMaybe<IdOperators>;
+	MarketSegmentType?: InputMaybe<PicklistOperators>;
+	Name?: InputMaybe<StringOperators>;
+	NextPublishDateTime?: InputMaybe<DateTimeOperators>;
+	OwnedBy?: InputMaybe<StringOperators>;
+	PublishScheduleEndDate?: InputMaybe<DateOperators>;
+	PublishScheduleEndDateTime?: InputMaybe<DateTimeOperators>;
+	PublishScheduleInfo?: InputMaybe<LongTextAreaOperators>;
+	PublishScheduleInterval?: InputMaybe<PicklistOperators>;
+	PublishScheduleStartDateTime?: InputMaybe<DateTimeOperators>;
+	PublishStatus?: InputMaybe<PicklistOperators>;
+	PublishType?: InputMaybe<PicklistOperators>;
+	SeedModelStatus?: InputMaybe<PicklistOperators>;
+	SeedSimilarity?: InputMaybe<PicklistOperators>;
+	SeedSimilarityHighToMedium?: InputMaybe<LongOperators>;
+	SeedSimilarityMediumToLow?: InputMaybe<LongOperators>;
+	SegmentMembershipDataModelList?: InputMaybe<LongTextAreaOperators>;
+	SegmentMembershipTable?: InputMaybe<StringOperators>;
+	SegmentOnId?: InputMaybe<IdOperators>;
+	SegmentStatus?: InputMaybe<PicklistOperators>;
+	SourceMarketSegment?: InputMaybe<StringOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<MarketSegment_Filter>>>;
+	not?: InputMaybe<MarketSegment_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MarketSegment_Filter>>>;
+};
+
+export type MessagingChannelUsage_Filter = {
+	ConsentType?: InputMaybe<PicklistOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DeploymentStatus?: InputMaybe<PicklistOperators>;
+	DeploymentType?: InputMaybe<PicklistOperators>;
+	DisabledTime?: InputMaybe<DateTimeOperators>;
+	ErrorDetails?: InputMaybe<StringOperators>;
+	ErrorReason?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	MessagingChannel?: InputMaybe<MessagingChannel_Filter>;
+	MessagingChannelId?: InputMaybe<IdOperators>;
+	RoutingOverride?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<MessagingChannelUsage_Filter>>>;
+	not?: InputMaybe<MessagingChannelUsage_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MessagingChannelUsage_Filter>>>;
+};
+
+export type MessagingChannel_Filter = {
+	BusinessHours?: InputMaybe<BusinessHours_Filter>;
+	BusinessHoursId?: InputMaybe<IdOperators>;
+	ChannelAddressIdentifier?: InputMaybe<StringOperators>;
+	ChannelProviderStatus?: InputMaybe<PicklistOperators>;
+	ConsentType?: InputMaybe<PicklistOperators>;
+	ConversationEndResponse?: InputMaybe<LongTextAreaOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DefaultResponse?: InputMaybe<LongTextAreaOperators>;
+	Description?: InputMaybe<LongTextAreaOperators>;
+	DeveloperName?: InputMaybe<StringOperators>;
+	DoubleOptInPrompt?: InputMaybe<LongTextAreaOperators>;
+	EndUserIdleTimeOut?: InputMaybe<IntegerOperators>;
+	EngagedResponse?: InputMaybe<LongTextAreaOperators>;
+	ExternalAccountIdentifier?: InputMaybe<StringOperators>;
+	ExternalBusinessIdentifier?: InputMaybe<StringOperators>;
+	FallbackQueue?: InputMaybe<Group_Filter>;
+	FallbackQueueId?: InputMaybe<IdOperators>;
+	Id?: InputMaybe<IdOperators>;
+	InitialResponse?: InputMaybe<LongTextAreaOperators>;
+	IsActive?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsLinkedRecordOpenedAsSubTab?: InputMaybe<BooleanOperators>;
+	IsRequireDoubleOptIn?: InputMaybe<BooleanOperators>;
+	IsRestrictedToBusinessHours?: InputMaybe<BooleanOperators>;
+	IsUnifiedMessagingEnabled?: InputMaybe<BooleanOperators>;
+	IsoCountryCode?: InputMaybe<StringOperators>;
+	Language?: InputMaybe<PicklistOperators>;
+	LastMilePlatform?: InputMaybe<PicklistOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LinkingPreference?: InputMaybe<PicklistOperators>;
+	MasterLabel?: InputMaybe<StringOperators>;
+	MessageType?: InputMaybe<PicklistOperators>;
+	MessagingPlatformKey?: InputMaybe<StringOperators>;
+	OfflineAgentsResponse?: InputMaybe<LongTextAreaOperators>;
+	OptInPrompt?: InputMaybe<LongTextAreaOperators>;
+	OptionsConversationalSurveysToggle?: InputMaybe<BooleanOperators>;
+	OptionsIdentifyEndUserLanguage?: InputMaybe<BooleanOperators>;
+	OptionsIsBusinessNameAsSenderEnabled?: InputMaybe<BooleanOperators>;
+	OptionsIsEstimatedWaitTimeEnabled?: InputMaybe<BooleanOperators>;
+	OptionsIsOutboundOnly?: InputMaybe<BooleanOperators>;
+	OptionsIsQueuePositionEnabled?: InputMaybe<BooleanOperators>;
+	OptionsIsReadReceiptsEnabled?: InputMaybe<BooleanOperators>;
+	OptionsIsSynchronousChatEnabled?: InputMaybe<BooleanOperators>;
+	OptionsIsTypingIndicatorsEnabled?: InputMaybe<BooleanOperators>;
+	OptionsIsVoiceModeEnabled?: InputMaybe<BooleanOperators>;
+	OutsideBusinessHoursResponse?: InputMaybe<LongTextAreaOperators>;
+	PlatformType?: InputMaybe<PicklistOperators>;
+	RoutingType?: InputMaybe<PicklistOperators>;
+	SessionHandler?: InputMaybe<MessagingChannel_SessionHandler_Filters>;
+	SessionHandlerId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	TargetQueue?: InputMaybe<Group_Filter>;
+	TargetQueueId?: InputMaybe<IdOperators>;
+	and?: InputMaybe<Array<InputMaybe<MessagingChannel_Filter>>>;
+	not?: InputMaybe<MessagingChannel_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MessagingChannel_Filter>>>;
+};
+
+export type MessagingChannel_SessionHandler_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type MktCalculatedInsightHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	MktCalculatedInsight?: InputMaybe<MktCalculatedInsight_Filter>;
+	MktCalculatedInsightId?: InputMaybe<IdOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<MktCalculatedInsightHistory_Filter>>>;
+	not?: InputMaybe<MktCalculatedInsightHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MktCalculatedInsightHistory_Filter>>>;
+};
+
+export type MktCalculatedInsight_Filter = {
+	CalculatedInsightStatus?: InputMaybe<PicklistOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	ExternalErrorProperties?: InputMaybe<LongTextAreaOperators>;
+	HistoryCi?: InputMaybe<MktCalculatedInsight_Filter>;
+	HistoryCiId?: InputMaybe<IdOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsRemote?: InputMaybe<BooleanOperators>;
+	LastCalcInsightStatusDateTime?: InputMaybe<DateTimeOperators>;
+	LastCalcInsightStatusErrorCode?: InputMaybe<PicklistOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastRunDateTime?: InputMaybe<DateTimeOperators>;
+	LastRunStatus?: InputMaybe<PicklistOperators>;
+	LastRunStatusDateTime?: InputMaybe<DateTimeOperators>;
+	LastRunStatusErrorCode?: InputMaybe<PicklistOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	MktCalcInsightObjectDefId?: InputMaybe<IdOperators>;
+	Name?: InputMaybe<StringOperators>;
+	OwnedBy?: InputMaybe<StringOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<MktCalculatedInsight_Filter>>>;
+	not?: InputMaybe<MktCalculatedInsight_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MktCalculatedInsight_Filter>>>;
+};
+
+export type MktDataTransformHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	MktDataTransform?: InputMaybe<MktDataTransform_Filter>;
+	MktDataTransformId?: InputMaybe<IdOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<MktDataTransformHistory_Filter>>>;
+	not?: InputMaybe<MktDataTransformHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MktDataTransformHistory_Filter>>>;
+};
+
+export type MktDataTransform_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	CreationSource?: InputMaybe<PicklistOperators>;
+	CreationType?: InputMaybe<PicklistOperators>;
+	CurrencyCode?: InputMaybe<StringOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	DataTransformDefinitionId?: InputMaybe<IdOperators>;
+	DataTransformStatus?: InputMaybe<PicklistOperators>;
+	DataTransformStatusDetails?: InputMaybe<LongTextAreaOperators>;
+	FullRunFrequency?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsCreatedAsMultiDefinition?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsSystem?: InputMaybe<BooleanOperators>;
+	LastDataChangeStatusDateTime?: InputMaybe<DateTimeOperators>;
+	LastDataChangeStatusErrorCode?: InputMaybe<StringOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastRunStatus?: InputMaybe<PicklistOperators>;
+	LastRunTime?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	MktDataTransformSetupId?: InputMaybe<IdOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<MktDataTransform_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	TargetObject?: InputMaybe<StringOperators>;
+	Type?: InputMaybe<PicklistOperators>;
+	and?: InputMaybe<Array<InputMaybe<MktDataTransform_Filter>>>;
+	not?: InputMaybe<MktDataTransform_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MktDataTransform_Filter>>>;
+};
+
+export type MktDataTransform_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type MktMlaiModelHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	MktMLAIModelId?: InputMaybe<IdOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<MktMlaiModelHistory_Filter>>>;
+	not?: InputMaybe<MktMlaiModelHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MktMlaiModelHistory_Filter>>>;
+};
+
+export type MktMlModelHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	MktMLModel?: InputMaybe<MktMlModel_Filter>;
+	MktMLModelId?: InputMaybe<IdOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<MktMlModelHistory_Filter>>>;
+	not?: InputMaybe<MktMlModelHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MktMlModelHistory_Filter>>>;
+};
+
+export type MktMlModelKitHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	MktMLModelKitId?: InputMaybe<IdOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<MktMlModelKitHistory_Filter>>>;
+	not?: InputMaybe<MktMlModelKitHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MktMlModelKitHistory_Filter>>>;
+};
+
+export type MktMlModel_Filter = {
+	AggregatedStatus?: InputMaybe<PicklistOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DeployStatus?: InputMaybe<PicklistOperators>;
+	Description?: InputMaybe<LongTextAreaOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastProcessedRecords?: InputMaybe<LongOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastRefreshDate?: InputMaybe<DateTimeOperators>;
+	LastRunStatus?: InputMaybe<PicklistOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	MktMlModelDefinitionId?: InputMaybe<IdOperators>;
+	MlModelApiName?: InputMaybe<StringOperators>;
+	Name?: InputMaybe<StringOperators>;
+	OffCoreSyncStatus?: InputMaybe<PicklistOperators>;
+	Owner?: InputMaybe<MktMlModel_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	ScoringMode?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<MktMlModel_Filter>>>;
+	not?: InputMaybe<MktMlModel_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MktMlModel_Filter>>>;
+};
+
+export type MktMlModel_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type MktMlPredictionJobHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	MktMLPredictionJobId?: InputMaybe<IdOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<MktMlPredictionJobHistory_Filter>>>;
+	not?: InputMaybe<MktMlPredictionJobHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MktMlPredictionJobHistory_Filter>>>;
+};
+
+export type MktSgmtActvDataModelFld_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	MarketSegmentActivation?: InputMaybe<MarketSegmentActivation_Filter>;
+	MarketSegmentActivationId?: InputMaybe<IdOperators>;
+	MktDataModelFieldId?: InputMaybe<IdOperators>;
+	Name?: InputMaybe<StringOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<MktSgmtActvDataModelFld_Filter>>>;
+	not?: InputMaybe<MktSgmtActvDataModelFld_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MktSgmtActvDataModelFld_Filter>>>;
+};
+
+export type MktSgmtActvDataSource_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSourceId?: InputMaybe<IdOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	MarketSegmentActivation?: InputMaybe<MarketSegmentActivation_Filter>;
+	MarketSegmentActivationId?: InputMaybe<IdOperators>;
+	Name?: InputMaybe<StringOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<MktSgmtActvDataSource_Filter>>>;
+	not?: InputMaybe<MktSgmtActvDataSource_Filter>;
+	or?: InputMaybe<Array<InputMaybe<MktSgmtActvDataSource_Filter>>>;
 };
 
 export type MultiPicklistOperators = {
@@ -6205,21 +9323,19 @@ export type Network_Filter = {
 	OptionsNicknameDisplayEnabled?: InputMaybe<BooleanOperators>;
 	OptionsPrivateMessagesEnabled?: InputMaybe<BooleanOperators>;
 	OptionsProfileBasedLayoutsForKnowledgeSearchEnabled?: InputMaybe<BooleanOperators>;
-	OptionsPvtPagesPwdResetAccessDisabled?: InputMaybe<BooleanOperators>;
 	OptionsRecognitionBadgingEnabled?: InputMaybe<BooleanOperators>;
 	OptionsReputationEnabled?: InputMaybe<BooleanOperators>;
 	OptionsReputationRecordConversationsDisabled?: InputMaybe<BooleanOperators>;
-	OptionsSecondaryEmailSenderEnabled?: InputMaybe<BooleanOperators>;
 	OptionsSelfRegistrationEnabled?: InputMaybe<BooleanOperators>;
 	OptionsSendWelcomeEmail?: InputMaybe<BooleanOperators>;
 	OptionsShowAllNetworkSettings?: InputMaybe<BooleanOperators>;
 	OptionsSiteAsContainerEnabled?: InputMaybe<BooleanOperators>;
+	OptionsSlfSrvcPersonalizationEnabled?: InputMaybe<BooleanOperators>;
 	OptionsThreadedDiscussionsEnabled?: InputMaybe<BooleanOperators>;
 	OptionsTopicFilteringForKnowledgeSearchEnabled?: InputMaybe<BooleanOperators>;
 	OptionsTopicSuggestionsEnabled?: InputMaybe<BooleanOperators>;
 	OptionsTwilioCallbackApiEnabled?: InputMaybe<BooleanOperators>;
 	OptionsUpDownVoteEnabled?: InputMaybe<BooleanOperators>;
-	PendingSecondaryEmailAddress?: InputMaybe<EmailOperators>;
 	PwdlessRegEmailTemplateId?: InputMaybe<IdOperators>;
 	SelfRegMicroBatchSubErrorEmailTemplateId?: InputMaybe<IdOperators>;
 	SelfRegProfileId?: InputMaybe<IdOperators>;
@@ -6228,7 +9344,6 @@ export type Network_Filter = {
 	TabSetId?: InputMaybe<IdOperators>;
 	UrlPathPrefix?: InputMaybe<StringOperators>;
 	VerificationEmailTemplateId?: InputMaybe<IdOperators>;
-	VerifiedSecondaryEmailAddress?: InputMaybe<EmailOperators>;
 	WelcomeEmailTemplateId?: InputMaybe<IdOperators>;
 	and?: InputMaybe<Array<InputMaybe<Network_Filter>>>;
 	not?: InputMaybe<Network_Filter>;
@@ -6270,13 +9385,18 @@ export type Note_Parent_Filters = {
 	ApprovalSubmissionDetail?: InputMaybe<ApprovalSubmissionDetail_Filter>;
 	ApprovalWorkItem?: InputMaybe<ApprovalWorkItem_Filter>;
 	Asset?: InputMaybe<Asset_Filter>;
+	Brief?: InputMaybe<Brief_Filter>;
+	ChannelProgram?: InputMaybe<ChannelProgram_Filter>;
+	ChannelProgramLevel?: InputMaybe<ChannelProgramLevel_Filter>;
 	CommSubscription?: InputMaybe<CommSubscription_Filter>;
 	CommSubscriptionChannelType?: InputMaybe<CommSubscriptionChannelType_Filter>;
 	CommSubscriptionConsent?: InputMaybe<CommSubscriptionConsent_Filter>;
 	CommSubscriptionTiming?: InputMaybe<CommSubscriptionTiming_Filter>;
 	Contact?: InputMaybe<Contact_Filter>;
 	Contract?: InputMaybe<Contract_Filter>;
+	DataQueryWorkspace?: InputMaybe<DataQueryWorkspace_Filter>;
 	DelegatedAccount?: InputMaybe<DelegatedAccount_Filter>;
+	DevopsActivityLog?: InputMaybe<DevopsActivityLog_Filter>;
 	DevopsEnvironment?: InputMaybe<DevopsEnvironment_Filter>;
 	DevopsRequestInfo?: InputMaybe<DevopsRequestInfo_Filter>;
 	EngagementChannelType?: InputMaybe<EngagementChannelType_Filter>;
@@ -6291,6 +9411,10 @@ export type Note_Parent_Filters = {
 	Notification__c?: InputMaybe<Notification__C_Filter>;
 	Opportunity?: InputMaybe<Opportunity_Filter>;
 	Order?: InputMaybe<Order_Filter>;
+	PartnerFundAllocation?: InputMaybe<PartnerFundAllocation_Filter>;
+	PartnerFundClaim?: InputMaybe<PartnerFundClaim_Filter>;
+	PartnerFundRequest?: InputMaybe<PartnerFundRequest_Filter>;
+	PartnerMarketingBudget?: InputMaybe<PartnerMarketingBudget_Filter>;
 	Payment__c?: InputMaybe<Payment__C_Filter>;
 	Product2?: InputMaybe<Product2_Filter>;
 	Property_Cost__c?: InputMaybe<Property_Cost__C_Filter>;
@@ -6340,17 +9464,15 @@ export type Notification__C_Owner_Filters = {
 	User?: InputMaybe<User_Filter>;
 };
 
-export const NullOrder = {
-	First: "FIRST",
-	Last: "LAST",
-} as const;
-export type NullOrder = (typeof NullOrder)[keyof typeof NullOrder];
+export enum NullOrder {
+	First = "FIRST",
+	Last = "LAST",
+}
 
-export const NullsOrder = {
-	First: "FIRST",
-	Last: "LAST",
-} as const;
-export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder];
+export enum NullsOrder {
+	First = "FIRST",
+	Last = "LAST",
+}
 
 export type ObjectMetadataTag_Filter = {
 	CreatedBy?: InputMaybe<User_Filter>;
@@ -6972,6 +10094,234 @@ export type Organization_OrderBy = {
 	WebToCaseDefaultOrigin?: InputMaybe<OrderByClause>;
 };
 
+export type PartnerFundAllocationHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	PartnerFundAllocation?: InputMaybe<PartnerFundAllocation_Filter>;
+	PartnerFundAllocationId?: InputMaybe<IdOperators>;
+	and?: InputMaybe<Array<InputMaybe<PartnerFundAllocationHistory_Filter>>>;
+	not?: InputMaybe<PartnerFundAllocationHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PartnerFundAllocationHistory_Filter>>>;
+};
+
+export type PartnerFundAllocation_Filter = {
+	Amount?: InputMaybe<CurrencyOperators>;
+	Budget?: InputMaybe<PartnerMarketingBudget_Filter>;
+	BudgetId?: InputMaybe<IdOperators>;
+	ChannelPartner?: InputMaybe<Account_Filter>;
+	ChannelPartnerId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Description?: InputMaybe<TextAreaOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Owner?: InputMaybe<PartnerFundAllocation_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	Title?: InputMaybe<StringOperators>;
+	TotalApprovedFcs?: InputMaybe<CurrencyOperators>;
+	TotalApprovedFrs?: InputMaybe<CurrencyOperators>;
+	TotalReimbursedFcs?: InputMaybe<CurrencyOperators>;
+	and?: InputMaybe<Array<InputMaybe<PartnerFundAllocation_Filter>>>;
+	not?: InputMaybe<PartnerFundAllocation_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PartnerFundAllocation_Filter>>>;
+};
+
+export type PartnerFundAllocation_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type PartnerFundClaimHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	PartnerFundClaim?: InputMaybe<PartnerFundClaim_Filter>;
+	PartnerFundClaimId?: InputMaybe<IdOperators>;
+	and?: InputMaybe<Array<InputMaybe<PartnerFundClaimHistory_Filter>>>;
+	not?: InputMaybe<PartnerFundClaimHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PartnerFundClaimHistory_Filter>>>;
+};
+
+export type PartnerFundClaim_Filter = {
+	Allocation?: InputMaybe<PartnerFundAllocation_Filter>;
+	AllocationId?: InputMaybe<IdOperators>;
+	Amount?: InputMaybe<CurrencyOperators>;
+	Budget?: InputMaybe<PartnerMarketingBudget_Filter>;
+	BudgetId?: InputMaybe<IdOperators>;
+	ChannelPartner?: InputMaybe<Account_Filter>;
+	ChannelPartnerId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Description?: InputMaybe<TextAreaOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Owner?: InputMaybe<PartnerFundClaim_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	Request?: InputMaybe<PartnerFundRequest_Filter>;
+	RequestId?: InputMaybe<IdOperators>;
+	Status?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	Title?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<PartnerFundClaim_Filter>>>;
+	not?: InputMaybe<PartnerFundClaim_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PartnerFundClaim_Filter>>>;
+};
+
+export type PartnerFundClaim_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type PartnerFundRequestHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	PartnerFundRequest?: InputMaybe<PartnerFundRequest_Filter>;
+	PartnerFundRequestId?: InputMaybe<IdOperators>;
+	and?: InputMaybe<Array<InputMaybe<PartnerFundRequestHistory_Filter>>>;
+	not?: InputMaybe<PartnerFundRequestHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PartnerFundRequestHistory_Filter>>>;
+};
+
+export type PartnerFundRequest_Filter = {
+	Activity?: InputMaybe<PicklistOperators>;
+	Allocation?: InputMaybe<PartnerFundAllocation_Filter>;
+	AllocationId?: InputMaybe<IdOperators>;
+	Amount?: InputMaybe<CurrencyOperators>;
+	Budget?: InputMaybe<PartnerMarketingBudget_Filter>;
+	BudgetId?: InputMaybe<IdOperators>;
+	Campaign?: InputMaybe<Campaign_Filter>;
+	CampaignId?: InputMaybe<IdOperators>;
+	ChannelPartner?: InputMaybe<Account_Filter>;
+	ChannelPartnerId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Description?: InputMaybe<TextAreaOperators>;
+	DesiredOutcome?: InputMaybe<TextAreaOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Owner?: InputMaybe<PartnerFundRequest_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	RequestedAmount?: InputMaybe<CurrencyOperators>;
+	Status?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	Title?: InputMaybe<StringOperators>;
+	TotalApprovedFcs?: InputMaybe<CurrencyOperators>;
+	TotalReimbursedFcs?: InputMaybe<CurrencyOperators>;
+	and?: InputMaybe<Array<InputMaybe<PartnerFundRequest_Filter>>>;
+	not?: InputMaybe<PartnerFundRequest_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PartnerFundRequest_Filter>>>;
+};
+
+export type PartnerFundRequest_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type PartnerMarketingBudgetHistory_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataType?: InputMaybe<PicklistOperators>;
+	Field?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	NewvalNumber?: InputMaybe<DoubleOperators>;
+	NewvalString?: InputMaybe<StringOperators>;
+	OldvalNumber?: InputMaybe<DoubleOperators>;
+	OldvalString?: InputMaybe<StringOperators>;
+	PartnerMarketingBudget?: InputMaybe<PartnerMarketingBudget_Filter>;
+	PartnerMarketingBudgetId?: InputMaybe<IdOperators>;
+	and?: InputMaybe<Array<InputMaybe<PartnerMarketingBudgetHistory_Filter>>>;
+	not?: InputMaybe<PartnerMarketingBudgetHistory_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PartnerMarketingBudgetHistory_Filter>>>;
+};
+
+export type PartnerMarketingBudget_Filter = {
+	Amount?: InputMaybe<CurrencyOperators>;
+	ChannelPartner?: InputMaybe<Account_Filter>;
+	ChannelPartnerId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Description?: InputMaybe<TextAreaOperators>;
+	EndDate?: InputMaybe<DateOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsIgnoreValidation?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Owner?: InputMaybe<PartnerMarketingBudget_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	StartDate?: InputMaybe<DateOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	Title?: InputMaybe<StringOperators>;
+	TotalAllocatedAmount?: InputMaybe<CurrencyOperators>;
+	TotalApprovedFcs?: InputMaybe<CurrencyOperators>;
+	TotalApprovedFrs?: InputMaybe<CurrencyOperators>;
+	TotalReimbursedFcs?: InputMaybe<CurrencyOperators>;
+	Type?: InputMaybe<PicklistOperators>;
+	and?: InputMaybe<Array<InputMaybe<PartnerMarketingBudget_Filter>>>;
+	not?: InputMaybe<PartnerMarketingBudget_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PartnerMarketingBudget_Filter>>>;
+};
+
+export type PartnerMarketingBudget_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
 export type Partner_Filter = {
 	AccountFrom?: InputMaybe<Account_Filter>;
 	AccountFromId?: InputMaybe<IdOperators>;
@@ -7169,12 +10519,18 @@ export type PermissionSetLicense_Filter = {
 	LastModifiedDate?: InputMaybe<DateTimeOperators>;
 	LicenseExpirationPolicy?: InputMaybe<PicklistOperators>;
 	MasterLabel?: InputMaybe<StringOperators>;
-	MaximumPermissionsAcceptInboundBundling?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAICreateInsightObjects?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAIViewInsightObjects?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsAccessBankingRelationshipAssistance?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsAccessBankingServiceAgent?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsAccessCMC?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAccessCdpApp?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAccessCdpDataExplorer?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAccessCdpProfileExplorer?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsAccessContentBuilder?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAccessCustomerDataCloudSetup?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsAccessDisputePrompts?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAccessKnowledgeSpace?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsAccessOrchestrationObjects?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsAccessPolicyAgent?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsAccessServiceEinstein?: InputMaybe<BooleanOperators>;
@@ -7186,10 +10542,23 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsAccessWealthAdvisorAgent?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsAccountSwitcherUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsActivateContract?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsActivateDeactivateNonSetupFlow?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsActivateOrder?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsActivateSystemModeFlows?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsActivitiesAccess?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAddAsgntElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAddCollFltrElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAddCollSrtElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAddCreaRecElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAddDecisionElmntNonSetupFlow?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAddDelRecElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsAddDirectMessageMembers?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAddGetRecElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAddLoopElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAddSubflowElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAddTrfmElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAddUpdtRecElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsAddWaitToNonSetupFlow?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsAdvancedCsvDataImportUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsAgentforceServiceAgentUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsAllowEmailIC?: InputMaybe<BooleanOperators>;
@@ -7216,7 +10585,9 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsCanApproveUninstalledApps?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCanDoActAsUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCanEditPrompts?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsCanExitFlowViaAPI?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCanInsertFeedSystemFields?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsCanMarketingUserDebugFlow?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCanTranslateScrt2Conversation?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCanUpdateEmailMessage?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCanUseNewDashboardBuilder?: InputMaybe<BooleanOperators>;
@@ -7225,6 +10596,7 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsCdcReportingCreateReports?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCdcReportingManageFolders?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCdcReportingViewReports?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsCdpConnectionManagementUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsChangeDashboardColors?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsChatterComposeUiCodesnippet?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsChatterEditOwnPost?: InputMaybe<BooleanOperators>;
@@ -7235,20 +10607,30 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsChatterOwnGroups?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsClientSecretRotation?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCloseConversations?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsCodeBuilderUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsConfigCustomRecs?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsConfigureDataspaceScope?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsConnectOrgToEnvironmentHub?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsConsentApiUpdate?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsConsentBannerSettingsSetup?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsContentAdministrator?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsContentHubUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsContentWorkspaces?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsConvertLeads?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsCosellAuthSetupUser?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsCosellExportUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCreateCustomizeDashboards?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCreateCustomizeFilters?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCreateCustomizeReports?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCreateDashboardFolders?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsCreateEditNonSetupFlow?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCreateLtngTempFolder?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCreateLtngTempInPub?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsCreateModAutEvtNonSetupFlow?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsCreateModDGTrigNonSetupFlow?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsCreateModFormTrigNonSetupFlow?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsCreateModIndRecNonSetupFlow?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsCreateModOnDemandNonSetupFlow?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCreatePackaging?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCreateReportFolders?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCreateReportInLightning?: InputMaybe<BooleanOperators>;
@@ -7260,9 +10642,11 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsCustomSidebarOnAllPages?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsCustomizeApplication?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsDataExport?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsDelegatedPortalUserAdmin?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsDelegatedTwoFactor?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsDeleteActivatedContract?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsDeleteCrMemoAndInvoice?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsDeleteNonSetupFlow?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsDeleteSalesforceFiles?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsDeleteTopics?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsDigitalLendingAdminUser?: InputMaybe<BooleanOperators>;
@@ -7287,6 +10671,7 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsEditReadonlyFields?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsEditTask?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsEditTopics?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsEinsteinMetadataUserAccess?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsEmailAdministration?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsEmailMass?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsEmailSingle?: InputMaybe<BooleanOperators>;
@@ -7308,7 +10693,6 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsFreezeUsers?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsGiveRecognitionBadge?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsGovernNetworks?: InputMaybe<BooleanOperators>;
-	MaximumPermissionsGrantOutboundBundling?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsHasUnlimitedNBAExecutions?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsHeadlessCMSAccess?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsHeadlessPublishNudges?: InputMaybe<BooleanOperators>;
@@ -7333,16 +10717,20 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsListEmailSend?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsLobbyManagementUserAccess?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsLtngPromoReserved01UserPerm?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsMCGSetupUserPerm?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsMCPMetadataApi?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageAccessPolicies?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageAgentforceServiceAgent?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageAnalyticSnapshots?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageApiNamedQueries?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageAuthProviders?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsManageBriefs?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageBusinessHourHolidays?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsManageBusinessUnit?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageC360AConnections?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageCMS?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageCallCenters?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsManageCampaigns?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageCases?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageCategories?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageCdpMlModels?: InputMaybe<BooleanOperators>;
@@ -7353,19 +10741,26 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsManageContentProperties?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageContentTaxonomy?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageContentTypes?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsManageCssUsers?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageCustomDomains?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageCustomPermissions?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageCustomReportTypes?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsManageCustomerDataOptOut?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageDashbdsInPubFolders?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsManageDataAnalyticsGroups?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageDataCategories?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageDataIntegrations?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageDataspaceScope?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsManageDevSandboxes?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageDynamicDashboards?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageEmailClientConfig?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsManageEmailContent?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsManageEmailMessagingSetup?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageExchangeConfig?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageExternalConnections?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageFilesAndAttachments?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageForecastingCustomData?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsManageGlobalPrivacyCenterVO?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageHealthCheck?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageHerokuAppLink?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageHubConnections?: InputMaybe<BooleanOperators>;
@@ -7378,11 +10773,14 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsManageMaliciousFiles?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageMobile?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageMobileAppSecurity?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsManageMyExternalUsers?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageNamedCredentials?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageNetworks?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageOrchInstsAndWorkItems?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageOrchestrationRuns?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsManagePartners?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManagePasswordPolicies?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsManagePreferenceCenter?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageProfilesPermissionsets?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManagePropositions?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManagePvtRptsAndDashbds?: InputMaybe<BooleanOperators>;
@@ -7392,10 +10790,11 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsManageRemoteAccess?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageReportsInPubFolders?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageRoles?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsManageSMSDomainSetup?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsManageSMSMessagingSetup?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsManageSandboxes?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageSessionPermissionSets?: InputMaybe<BooleanOperators>;
-	MaximumPermissionsManageSharedListViews?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageSharing?: InputMaybe<BooleanOperators>;
-	MaximumPermissionsManageSocialPosting?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageSolutions?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageSubscriptions?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageSurveys?: InputMaybe<BooleanOperators>;
@@ -7405,8 +10804,7 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsManageUnlistedGroups?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsManageUsers?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsMassInlineEdit?: InputMaybe<BooleanOperators>;
-	MaximumPermissionsMeetingEngagementUser?: InputMaybe<BooleanOperators>;
-	MaximumPermissionsMemberSelfServiceAgentAccess?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsMcScoringRulesConfig?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsMergeTopics?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsMetadataStudioUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsMicrobatching?: InputMaybe<BooleanOperators>;
@@ -7426,19 +10824,27 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsMonitorLoginHistory?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsNativeWebviewScrolling?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsNewReportBuilder?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsOpportunityInfluence?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsOrgPerformanceAccess?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsOutboundMigrationToolsUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsOverrideForecasts?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsPRMChannelMgmtConsoleUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsPackaging2?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsPackaging2Delete?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsPasswordNeverExpires?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsPerformanceAnalysisAccess?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsPersonalizationDecisioningUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsPersonalizationIntelUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsPersonalizationPlatform?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsPersonalizedFinanceUserAccess?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsPortalSuperUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsPreventClassicExperience?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsPreviewTestSendEmail?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsPreviewTestSendSMS?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsPrismBackofficeUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsPrismPlaygroundUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsPrivacyDataAccess?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsPrmEnhancedPortalUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsPrmExtIntPrtnrAdminUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsPublishPackaging?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsQrCodeGeneratorMobilePublisherPlayground?: InputMaybe<BooleanOperators>;
@@ -7447,6 +10853,7 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsQuipMetricsAccess?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsQuipUserEngagementMetrics?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsReassignOrchestrationWorkItems?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsRecordVisibilityAPI?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsRegrelloUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsRemoveDirectMessageMembers?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsResetPasswords?: InputMaybe<BooleanOperators>;
@@ -7460,6 +10867,8 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsSelectFilesFromSalesforce?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsSendAnnouncementEmails?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsSendCustomNotifications?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsSendEmail?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsSendSMS?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsSendSitRequests?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsShareFilesWithNetworks?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsShowCompanyNameAsUserBadge?: InputMaybe<BooleanOperators>;
@@ -7481,8 +10890,12 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsTransferAnyEntity?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsTransferAnyLead?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsTwoFactorApi?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsUMAStandaloneUserPerm?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsUMAWebTrackingSetup?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsUmaEditConsentSettings?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsUmaQueryCMSEmailContent?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsUnifiedEHDViewer?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsUpdateReportTypeReferences?: InputMaybe<BooleanOperators>;
-	MaximumPermissionsUseAnyApiAuth?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsUseAssistantDialog?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsUseMySearch?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsUseQuerySuggestions?: InputMaybe<BooleanOperators>;
@@ -7494,6 +10907,7 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsUseTeamsForItSrvcs?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsUseWebLink?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsUserCanDeployStore?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsUserHasSendToListFilterAccess?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsUserInteractionInsights?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewAccessPolicies?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewAllActivities?: InputMaybe<BooleanOperators>;
@@ -7502,10 +10916,12 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsViewAllFieldsGlobal?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewAllForecasts?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewAllForeignKeyNames?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsViewAllNonSetupFlows?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewAllPolicyCenterPolicies?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewAllProfiles?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewAllUsers?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewApiNamedQueries?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsViewBusinessUnit?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewClientSecret?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewContent?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewContentTaxonomy?: InputMaybe<BooleanOperators>;
@@ -7513,13 +10929,17 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsViewDataAssessment?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewDataCategories?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewDeveloperName?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsViewEmailMessagingSetup?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewEncryptedData?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewEventLogFiles?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewGlobalHeader?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewHealthCheck?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewHelpLink?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewLicenseUtilization?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsViewMLModels?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewMyTeamsDashboards?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsViewNonSetupFlow?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsViewOnlyEmbeddedAppUser?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewOrchestrationsInAutomApp?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewPrivateStaticResources?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewPublicCapstoneFolders?: InputMaybe<BooleanOperators>;
@@ -7528,8 +10948,10 @@ export type PermissionSetLicense_Filter = {
 	MaximumPermissionsViewRecommendations?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewRestrictionAndScopingRules?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewRoles?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsViewSMSMessagingSetup?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewSetup?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewTrustMeasures?: InputMaybe<BooleanOperators>;
+	MaximumPermissionsViewUMACalendar?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsViewUserPII?: InputMaybe<BooleanOperators>;
 	MaximumPermissionsYourAccountCDAPublishEvents?: InputMaybe<BooleanOperators>;
 	MigratableLicenses?: InputMaybe<IntegerOperators>;
@@ -7562,12 +10984,18 @@ export type PermissionSet_Filter = {
 	NamespacePrefix?: InputMaybe<StringOperators>;
 	PermissionSetGroup?: InputMaybe<PermissionSetGroup_Filter>;
 	PermissionSetGroupId?: InputMaybe<IdOperators>;
-	PermissionsAcceptInboundBundling?: InputMaybe<BooleanOperators>;
+	PermissionsAICreateInsightObjects?: InputMaybe<BooleanOperators>;
+	PermissionsAIViewInsightObjects?: InputMaybe<BooleanOperators>;
 	PermissionsAccessBankingRelationshipAssistance?: InputMaybe<BooleanOperators>;
 	PermissionsAccessBankingServiceAgent?: InputMaybe<BooleanOperators>;
 	PermissionsAccessCMC?: InputMaybe<BooleanOperators>;
+	PermissionsAccessCdpApp?: InputMaybe<BooleanOperators>;
+	PermissionsAccessCdpDataExplorer?: InputMaybe<BooleanOperators>;
+	PermissionsAccessCdpProfileExplorer?: InputMaybe<BooleanOperators>;
 	PermissionsAccessContentBuilder?: InputMaybe<BooleanOperators>;
+	PermissionsAccessCustomerDataCloudSetup?: InputMaybe<BooleanOperators>;
 	PermissionsAccessDisputePrompts?: InputMaybe<BooleanOperators>;
+	PermissionsAccessKnowledgeSpace?: InputMaybe<BooleanOperators>;
 	PermissionsAccessOrchestrationObjects?: InputMaybe<BooleanOperators>;
 	PermissionsAccessPolicyAgent?: InputMaybe<BooleanOperators>;
 	PermissionsAccessServiceEinstein?: InputMaybe<BooleanOperators>;
@@ -7579,10 +11007,23 @@ export type PermissionSet_Filter = {
 	PermissionsAccessWealthAdvisorAgent?: InputMaybe<BooleanOperators>;
 	PermissionsAccountSwitcherUser?: InputMaybe<BooleanOperators>;
 	PermissionsActivateContract?: InputMaybe<BooleanOperators>;
+	PermissionsActivateDeactivateNonSetupFlow?: InputMaybe<BooleanOperators>;
 	PermissionsActivateOrder?: InputMaybe<BooleanOperators>;
 	PermissionsActivateSystemModeFlows?: InputMaybe<BooleanOperators>;
 	PermissionsActivitiesAccess?: InputMaybe<BooleanOperators>;
+	PermissionsAddAsgntElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddCollFltrElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddCollSrtElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddCreaRecElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddDecisionElmntNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddDelRecElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
 	PermissionsAddDirectMessageMembers?: InputMaybe<BooleanOperators>;
+	PermissionsAddGetRecElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddLoopElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddSubflowElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddTrfmElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddUpdtRecElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddWaitToNonSetupFlow?: InputMaybe<BooleanOperators>;
 	PermissionsAdvancedCsvDataImportUser?: InputMaybe<BooleanOperators>;
 	PermissionsAgentforceServiceAgentUser?: InputMaybe<BooleanOperators>;
 	PermissionsAllowEmailIC?: InputMaybe<BooleanOperators>;
@@ -7609,7 +11050,9 @@ export type PermissionSet_Filter = {
 	PermissionsCanApproveUninstalledApps?: InputMaybe<BooleanOperators>;
 	PermissionsCanDoActAsUser?: InputMaybe<BooleanOperators>;
 	PermissionsCanEditPrompts?: InputMaybe<BooleanOperators>;
+	PermissionsCanExitFlowViaAPI?: InputMaybe<BooleanOperators>;
 	PermissionsCanInsertFeedSystemFields?: InputMaybe<BooleanOperators>;
+	PermissionsCanMarketingUserDebugFlow?: InputMaybe<BooleanOperators>;
 	PermissionsCanTranslateScrt2Conversation?: InputMaybe<BooleanOperators>;
 	PermissionsCanUpdateEmailMessage?: InputMaybe<BooleanOperators>;
 	PermissionsCanUseNewDashboardBuilder?: InputMaybe<BooleanOperators>;
@@ -7618,6 +11061,7 @@ export type PermissionSet_Filter = {
 	PermissionsCdcReportingCreateReports?: InputMaybe<BooleanOperators>;
 	PermissionsCdcReportingManageFolders?: InputMaybe<BooleanOperators>;
 	PermissionsCdcReportingViewReports?: InputMaybe<BooleanOperators>;
+	PermissionsCdpConnectionManagementUser?: InputMaybe<BooleanOperators>;
 	PermissionsChangeDashboardColors?: InputMaybe<BooleanOperators>;
 	PermissionsChatterComposeUiCodesnippet?: InputMaybe<BooleanOperators>;
 	PermissionsChatterEditOwnPost?: InputMaybe<BooleanOperators>;
@@ -7628,20 +11072,30 @@ export type PermissionSet_Filter = {
 	PermissionsChatterOwnGroups?: InputMaybe<BooleanOperators>;
 	PermissionsClientSecretRotation?: InputMaybe<BooleanOperators>;
 	PermissionsCloseConversations?: InputMaybe<BooleanOperators>;
+	PermissionsCodeBuilderUser?: InputMaybe<BooleanOperators>;
 	PermissionsConfigCustomRecs?: InputMaybe<BooleanOperators>;
 	PermissionsConfigureDataspaceScope?: InputMaybe<BooleanOperators>;
 	PermissionsConnectOrgToEnvironmentHub?: InputMaybe<BooleanOperators>;
 	PermissionsConsentApiUpdate?: InputMaybe<BooleanOperators>;
+	PermissionsConsentBannerSettingsSetup?: InputMaybe<BooleanOperators>;
 	PermissionsContentAdministrator?: InputMaybe<BooleanOperators>;
 	PermissionsContentHubUser?: InputMaybe<BooleanOperators>;
 	PermissionsContentWorkspaces?: InputMaybe<BooleanOperators>;
 	PermissionsConvertLeads?: InputMaybe<BooleanOperators>;
+	PermissionsCosellAuthSetupUser?: InputMaybe<BooleanOperators>;
+	PermissionsCosellExportUser?: InputMaybe<BooleanOperators>;
 	PermissionsCreateCustomizeDashboards?: InputMaybe<BooleanOperators>;
 	PermissionsCreateCustomizeFilters?: InputMaybe<BooleanOperators>;
 	PermissionsCreateCustomizeReports?: InputMaybe<BooleanOperators>;
 	PermissionsCreateDashboardFolders?: InputMaybe<BooleanOperators>;
+	PermissionsCreateEditNonSetupFlow?: InputMaybe<BooleanOperators>;
 	PermissionsCreateLtngTempFolder?: InputMaybe<BooleanOperators>;
 	PermissionsCreateLtngTempInPub?: InputMaybe<BooleanOperators>;
+	PermissionsCreateModAutEvtNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsCreateModDGTrigNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsCreateModFormTrigNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsCreateModIndRecNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsCreateModOnDemandNonSetupFlow?: InputMaybe<BooleanOperators>;
 	PermissionsCreatePackaging?: InputMaybe<BooleanOperators>;
 	PermissionsCreateReportFolders?: InputMaybe<BooleanOperators>;
 	PermissionsCreateReportInLightning?: InputMaybe<BooleanOperators>;
@@ -7653,9 +11107,11 @@ export type PermissionSet_Filter = {
 	PermissionsCustomSidebarOnAllPages?: InputMaybe<BooleanOperators>;
 	PermissionsCustomizeApplication?: InputMaybe<BooleanOperators>;
 	PermissionsDataExport?: InputMaybe<BooleanOperators>;
+	PermissionsDelegatedPortalUserAdmin?: InputMaybe<BooleanOperators>;
 	PermissionsDelegatedTwoFactor?: InputMaybe<BooleanOperators>;
 	PermissionsDeleteActivatedContract?: InputMaybe<BooleanOperators>;
 	PermissionsDeleteCrMemoAndInvoice?: InputMaybe<BooleanOperators>;
+	PermissionsDeleteNonSetupFlow?: InputMaybe<BooleanOperators>;
 	PermissionsDeleteSalesforceFiles?: InputMaybe<BooleanOperators>;
 	PermissionsDeleteTopics?: InputMaybe<BooleanOperators>;
 	PermissionsDigitalLendingAdminUser?: InputMaybe<BooleanOperators>;
@@ -7680,6 +11136,7 @@ export type PermissionSet_Filter = {
 	PermissionsEditReadonlyFields?: InputMaybe<BooleanOperators>;
 	PermissionsEditTask?: InputMaybe<BooleanOperators>;
 	PermissionsEditTopics?: InputMaybe<BooleanOperators>;
+	PermissionsEinsteinMetadataUserAccess?: InputMaybe<BooleanOperators>;
 	PermissionsEmailAdministration?: InputMaybe<BooleanOperators>;
 	PermissionsEmailMass?: InputMaybe<BooleanOperators>;
 	PermissionsEmailSingle?: InputMaybe<BooleanOperators>;
@@ -7701,7 +11158,6 @@ export type PermissionSet_Filter = {
 	PermissionsFreezeUsers?: InputMaybe<BooleanOperators>;
 	PermissionsGiveRecognitionBadge?: InputMaybe<BooleanOperators>;
 	PermissionsGovernNetworks?: InputMaybe<BooleanOperators>;
-	PermissionsGrantOutboundBundling?: InputMaybe<BooleanOperators>;
 	PermissionsHasUnlimitedNBAExecutions?: InputMaybe<BooleanOperators>;
 	PermissionsHeadlessCMSAccess?: InputMaybe<BooleanOperators>;
 	PermissionsHeadlessPublishNudges?: InputMaybe<BooleanOperators>;
@@ -7726,16 +11182,20 @@ export type PermissionSet_Filter = {
 	PermissionsListEmailSend?: InputMaybe<BooleanOperators>;
 	PermissionsLobbyManagementUserAccess?: InputMaybe<BooleanOperators>;
 	PermissionsLtngPromoReserved01UserPerm?: InputMaybe<BooleanOperators>;
+	PermissionsMCGSetupUserPerm?: InputMaybe<BooleanOperators>;
 	PermissionsMCPMetadataApi?: InputMaybe<BooleanOperators>;
 	PermissionsManageAccessPolicies?: InputMaybe<BooleanOperators>;
 	PermissionsManageAgentforceServiceAgent?: InputMaybe<BooleanOperators>;
 	PermissionsManageAnalyticSnapshots?: InputMaybe<BooleanOperators>;
 	PermissionsManageApiNamedQueries?: InputMaybe<BooleanOperators>;
 	PermissionsManageAuthProviders?: InputMaybe<BooleanOperators>;
+	PermissionsManageBriefs?: InputMaybe<BooleanOperators>;
 	PermissionsManageBusinessHourHolidays?: InputMaybe<BooleanOperators>;
+	PermissionsManageBusinessUnit?: InputMaybe<BooleanOperators>;
 	PermissionsManageC360AConnections?: InputMaybe<BooleanOperators>;
 	PermissionsManageCMS?: InputMaybe<BooleanOperators>;
 	PermissionsManageCallCenters?: InputMaybe<BooleanOperators>;
+	PermissionsManageCampaigns?: InputMaybe<BooleanOperators>;
 	PermissionsManageCases?: InputMaybe<BooleanOperators>;
 	PermissionsManageCategories?: InputMaybe<BooleanOperators>;
 	PermissionsManageCdpMlModels?: InputMaybe<BooleanOperators>;
@@ -7746,19 +11206,26 @@ export type PermissionSet_Filter = {
 	PermissionsManageContentProperties?: InputMaybe<BooleanOperators>;
 	PermissionsManageContentTaxonomy?: InputMaybe<BooleanOperators>;
 	PermissionsManageContentTypes?: InputMaybe<BooleanOperators>;
+	PermissionsManageCssUsers?: InputMaybe<BooleanOperators>;
 	PermissionsManageCustomDomains?: InputMaybe<BooleanOperators>;
 	PermissionsManageCustomPermissions?: InputMaybe<BooleanOperators>;
 	PermissionsManageCustomReportTypes?: InputMaybe<BooleanOperators>;
+	PermissionsManageCustomerDataOptOut?: InputMaybe<BooleanOperators>;
 	PermissionsManageDashbdsInPubFolders?: InputMaybe<BooleanOperators>;
+	PermissionsManageDataAnalyticsGroups?: InputMaybe<BooleanOperators>;
 	PermissionsManageDataCategories?: InputMaybe<BooleanOperators>;
 	PermissionsManageDataIntegrations?: InputMaybe<BooleanOperators>;
 	PermissionsManageDataspaceScope?: InputMaybe<BooleanOperators>;
+	PermissionsManageDevSandboxes?: InputMaybe<BooleanOperators>;
 	PermissionsManageDynamicDashboards?: InputMaybe<BooleanOperators>;
 	PermissionsManageEmailClientConfig?: InputMaybe<BooleanOperators>;
+	PermissionsManageEmailContent?: InputMaybe<BooleanOperators>;
+	PermissionsManageEmailMessagingSetup?: InputMaybe<BooleanOperators>;
 	PermissionsManageExchangeConfig?: InputMaybe<BooleanOperators>;
 	PermissionsManageExternalConnections?: InputMaybe<BooleanOperators>;
 	PermissionsManageFilesAndAttachments?: InputMaybe<BooleanOperators>;
 	PermissionsManageForecastingCustomData?: InputMaybe<BooleanOperators>;
+	PermissionsManageGlobalPrivacyCenterVO?: InputMaybe<BooleanOperators>;
 	PermissionsManageHealthCheck?: InputMaybe<BooleanOperators>;
 	PermissionsManageHerokuAppLink?: InputMaybe<BooleanOperators>;
 	PermissionsManageHubConnections?: InputMaybe<BooleanOperators>;
@@ -7771,11 +11238,14 @@ export type PermissionSet_Filter = {
 	PermissionsManageMaliciousFiles?: InputMaybe<BooleanOperators>;
 	PermissionsManageMobile?: InputMaybe<BooleanOperators>;
 	PermissionsManageMobileAppSecurity?: InputMaybe<BooleanOperators>;
+	PermissionsManageMyExternalUsers?: InputMaybe<BooleanOperators>;
 	PermissionsManageNamedCredentials?: InputMaybe<BooleanOperators>;
 	PermissionsManageNetworks?: InputMaybe<BooleanOperators>;
 	PermissionsManageOrchInstsAndWorkItems?: InputMaybe<BooleanOperators>;
 	PermissionsManageOrchestrationRuns?: InputMaybe<BooleanOperators>;
+	PermissionsManagePartners?: InputMaybe<BooleanOperators>;
 	PermissionsManagePasswordPolicies?: InputMaybe<BooleanOperators>;
+	PermissionsManagePreferenceCenter?: InputMaybe<BooleanOperators>;
 	PermissionsManageProfilesPermissionsets?: InputMaybe<BooleanOperators>;
 	PermissionsManagePropositions?: InputMaybe<BooleanOperators>;
 	PermissionsManagePvtRptsAndDashbds?: InputMaybe<BooleanOperators>;
@@ -7785,10 +11255,11 @@ export type PermissionSet_Filter = {
 	PermissionsManageRemoteAccess?: InputMaybe<BooleanOperators>;
 	PermissionsManageReportsInPubFolders?: InputMaybe<BooleanOperators>;
 	PermissionsManageRoles?: InputMaybe<BooleanOperators>;
+	PermissionsManageSMSDomainSetup?: InputMaybe<BooleanOperators>;
+	PermissionsManageSMSMessagingSetup?: InputMaybe<BooleanOperators>;
+	PermissionsManageSandboxes?: InputMaybe<BooleanOperators>;
 	PermissionsManageSessionPermissionSets?: InputMaybe<BooleanOperators>;
-	PermissionsManageSharedListViews?: InputMaybe<BooleanOperators>;
 	PermissionsManageSharing?: InputMaybe<BooleanOperators>;
-	PermissionsManageSocialPosting?: InputMaybe<BooleanOperators>;
 	PermissionsManageSolutions?: InputMaybe<BooleanOperators>;
 	PermissionsManageSubscriptions?: InputMaybe<BooleanOperators>;
 	PermissionsManageSurveys?: InputMaybe<BooleanOperators>;
@@ -7798,8 +11269,7 @@ export type PermissionSet_Filter = {
 	PermissionsManageUnlistedGroups?: InputMaybe<BooleanOperators>;
 	PermissionsManageUsers?: InputMaybe<BooleanOperators>;
 	PermissionsMassInlineEdit?: InputMaybe<BooleanOperators>;
-	PermissionsMeetingEngagementUser?: InputMaybe<BooleanOperators>;
-	PermissionsMemberSelfServiceAgentAccess?: InputMaybe<BooleanOperators>;
+	PermissionsMcScoringRulesConfig?: InputMaybe<BooleanOperators>;
 	PermissionsMergeTopics?: InputMaybe<BooleanOperators>;
 	PermissionsMetadataStudioUser?: InputMaybe<BooleanOperators>;
 	PermissionsMicrobatching?: InputMaybe<BooleanOperators>;
@@ -7819,19 +11289,27 @@ export type PermissionSet_Filter = {
 	PermissionsMonitorLoginHistory?: InputMaybe<BooleanOperators>;
 	PermissionsNativeWebviewScrolling?: InputMaybe<BooleanOperators>;
 	PermissionsNewReportBuilder?: InputMaybe<BooleanOperators>;
+	PermissionsOpportunityInfluence?: InputMaybe<BooleanOperators>;
+	PermissionsOrgPerformanceAccess?: InputMaybe<BooleanOperators>;
 	PermissionsOutboundMigrationToolsUser?: InputMaybe<BooleanOperators>;
 	PermissionsOverrideForecasts?: InputMaybe<BooleanOperators>;
+	PermissionsPRMChannelMgmtConsoleUser?: InputMaybe<BooleanOperators>;
 	PermissionsPackaging2?: InputMaybe<BooleanOperators>;
 	PermissionsPackaging2Delete?: InputMaybe<BooleanOperators>;
 	PermissionsPasswordNeverExpires?: InputMaybe<BooleanOperators>;
+	PermissionsPerformanceAnalysisAccess?: InputMaybe<BooleanOperators>;
 	PermissionsPersonalizationDecisioningUser?: InputMaybe<BooleanOperators>;
 	PermissionsPersonalizationIntelUser?: InputMaybe<BooleanOperators>;
 	PermissionsPersonalizationPlatform?: InputMaybe<BooleanOperators>;
 	PermissionsPersonalizedFinanceUserAccess?: InputMaybe<BooleanOperators>;
+	PermissionsPortalSuperUser?: InputMaybe<BooleanOperators>;
 	PermissionsPreventClassicExperience?: InputMaybe<BooleanOperators>;
+	PermissionsPreviewTestSendEmail?: InputMaybe<BooleanOperators>;
+	PermissionsPreviewTestSendSMS?: InputMaybe<BooleanOperators>;
 	PermissionsPrismBackofficeUser?: InputMaybe<BooleanOperators>;
 	PermissionsPrismPlaygroundUser?: InputMaybe<BooleanOperators>;
 	PermissionsPrivacyDataAccess?: InputMaybe<BooleanOperators>;
+	PermissionsPrmEnhancedPortalUser?: InputMaybe<BooleanOperators>;
 	PermissionsPrmExtIntPrtnrAdminUser?: InputMaybe<BooleanOperators>;
 	PermissionsPublishPackaging?: InputMaybe<BooleanOperators>;
 	PermissionsQrCodeGeneratorMobilePublisherPlayground?: InputMaybe<BooleanOperators>;
@@ -7840,6 +11318,7 @@ export type PermissionSet_Filter = {
 	PermissionsQuipMetricsAccess?: InputMaybe<BooleanOperators>;
 	PermissionsQuipUserEngagementMetrics?: InputMaybe<BooleanOperators>;
 	PermissionsReassignOrchestrationWorkItems?: InputMaybe<BooleanOperators>;
+	PermissionsRecordVisibilityAPI?: InputMaybe<BooleanOperators>;
 	PermissionsRegrelloUser?: InputMaybe<BooleanOperators>;
 	PermissionsRemoveDirectMessageMembers?: InputMaybe<BooleanOperators>;
 	PermissionsResetPasswords?: InputMaybe<BooleanOperators>;
@@ -7853,6 +11332,8 @@ export type PermissionSet_Filter = {
 	PermissionsSelectFilesFromSalesforce?: InputMaybe<BooleanOperators>;
 	PermissionsSendAnnouncementEmails?: InputMaybe<BooleanOperators>;
 	PermissionsSendCustomNotifications?: InputMaybe<BooleanOperators>;
+	PermissionsSendEmail?: InputMaybe<BooleanOperators>;
+	PermissionsSendSMS?: InputMaybe<BooleanOperators>;
 	PermissionsSendSitRequests?: InputMaybe<BooleanOperators>;
 	PermissionsShareFilesWithNetworks?: InputMaybe<BooleanOperators>;
 	PermissionsShowCompanyNameAsUserBadge?: InputMaybe<BooleanOperators>;
@@ -7874,8 +11355,12 @@ export type PermissionSet_Filter = {
 	PermissionsTransferAnyEntity?: InputMaybe<BooleanOperators>;
 	PermissionsTransferAnyLead?: InputMaybe<BooleanOperators>;
 	PermissionsTwoFactorApi?: InputMaybe<BooleanOperators>;
+	PermissionsUMAStandaloneUserPerm?: InputMaybe<BooleanOperators>;
+	PermissionsUMAWebTrackingSetup?: InputMaybe<BooleanOperators>;
+	PermissionsUmaEditConsentSettings?: InputMaybe<BooleanOperators>;
+	PermissionsUmaQueryCMSEmailContent?: InputMaybe<BooleanOperators>;
+	PermissionsUnifiedEHDViewer?: InputMaybe<BooleanOperators>;
 	PermissionsUpdateReportTypeReferences?: InputMaybe<BooleanOperators>;
-	PermissionsUseAnyApiAuth?: InputMaybe<BooleanOperators>;
 	PermissionsUseAssistantDialog?: InputMaybe<BooleanOperators>;
 	PermissionsUseMySearch?: InputMaybe<BooleanOperators>;
 	PermissionsUseQuerySuggestions?: InputMaybe<BooleanOperators>;
@@ -7887,6 +11372,7 @@ export type PermissionSet_Filter = {
 	PermissionsUseTeamsForItSrvcs?: InputMaybe<BooleanOperators>;
 	PermissionsUseWebLink?: InputMaybe<BooleanOperators>;
 	PermissionsUserCanDeployStore?: InputMaybe<BooleanOperators>;
+	PermissionsUserHasSendToListFilterAccess?: InputMaybe<BooleanOperators>;
 	PermissionsUserInteractionInsights?: InputMaybe<BooleanOperators>;
 	PermissionsViewAccessPolicies?: InputMaybe<BooleanOperators>;
 	PermissionsViewAllActivities?: InputMaybe<BooleanOperators>;
@@ -7895,10 +11381,12 @@ export type PermissionSet_Filter = {
 	PermissionsViewAllFieldsGlobal?: InputMaybe<BooleanOperators>;
 	PermissionsViewAllForecasts?: InputMaybe<BooleanOperators>;
 	PermissionsViewAllForeignKeyNames?: InputMaybe<BooleanOperators>;
+	PermissionsViewAllNonSetupFlows?: InputMaybe<BooleanOperators>;
 	PermissionsViewAllPolicyCenterPolicies?: InputMaybe<BooleanOperators>;
 	PermissionsViewAllProfiles?: InputMaybe<BooleanOperators>;
 	PermissionsViewAllUsers?: InputMaybe<BooleanOperators>;
 	PermissionsViewApiNamedQueries?: InputMaybe<BooleanOperators>;
+	PermissionsViewBusinessUnit?: InputMaybe<BooleanOperators>;
 	PermissionsViewClientSecret?: InputMaybe<BooleanOperators>;
 	PermissionsViewContent?: InputMaybe<BooleanOperators>;
 	PermissionsViewContentTaxonomy?: InputMaybe<BooleanOperators>;
@@ -7906,13 +11394,17 @@ export type PermissionSet_Filter = {
 	PermissionsViewDataAssessment?: InputMaybe<BooleanOperators>;
 	PermissionsViewDataCategories?: InputMaybe<BooleanOperators>;
 	PermissionsViewDeveloperName?: InputMaybe<BooleanOperators>;
+	PermissionsViewEmailMessagingSetup?: InputMaybe<BooleanOperators>;
 	PermissionsViewEncryptedData?: InputMaybe<BooleanOperators>;
 	PermissionsViewEventLogFiles?: InputMaybe<BooleanOperators>;
 	PermissionsViewGlobalHeader?: InputMaybe<BooleanOperators>;
 	PermissionsViewHealthCheck?: InputMaybe<BooleanOperators>;
 	PermissionsViewHelpLink?: InputMaybe<BooleanOperators>;
 	PermissionsViewLicenseUtilization?: InputMaybe<BooleanOperators>;
+	PermissionsViewMLModels?: InputMaybe<BooleanOperators>;
 	PermissionsViewMyTeamsDashboards?: InputMaybe<BooleanOperators>;
+	PermissionsViewNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsViewOnlyEmbeddedAppUser?: InputMaybe<BooleanOperators>;
 	PermissionsViewOrchestrationsInAutomApp?: InputMaybe<BooleanOperators>;
 	PermissionsViewPrivateStaticResources?: InputMaybe<BooleanOperators>;
 	PermissionsViewPublicCapstoneFolders?: InputMaybe<BooleanOperators>;
@@ -7921,8 +11413,10 @@ export type PermissionSet_Filter = {
 	PermissionsViewRecommendations?: InputMaybe<BooleanOperators>;
 	PermissionsViewRestrictionAndScopingRules?: InputMaybe<BooleanOperators>;
 	PermissionsViewRoles?: InputMaybe<BooleanOperators>;
+	PermissionsViewSMSMessagingSetup?: InputMaybe<BooleanOperators>;
 	PermissionsViewSetup?: InputMaybe<BooleanOperators>;
 	PermissionsViewTrustMeasures?: InputMaybe<BooleanOperators>;
+	PermissionsViewUMACalendar?: InputMaybe<BooleanOperators>;
 	PermissionsViewUserPII?: InputMaybe<BooleanOperators>;
 	PermissionsYourAccountCDAPublishEvents?: InputMaybe<BooleanOperators>;
 	Profile?: InputMaybe<Profile_Filter>;
@@ -7938,6 +11432,285 @@ export type PermissionSet_Filter = {
 export type PermissionSet_License_Filters = {
 	Name?: InputMaybe<Name_Filter>;
 	PermissionSetLicense?: InputMaybe<PermissionSetLicense_Filter>;
+};
+
+export type PersnlBatchDecision_Filter = {
+	ActivationTriggerType?: InputMaybe<PicklistOperators>;
+	BatchStatus?: InputMaybe<PicklistOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	DeveloperName?: InputMaybe<StringOperators>;
+	ErrorCode?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	InputDataModelObjectId?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsRemote?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastRefresh?: InputMaybe<DateTimeOperators>;
+	LastSuccessfulRefresh?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	LatestRefreshedStatus?: InputMaybe<PicklistOperators>;
+	MarketSegment?: InputMaybe<MarketSegment_Filter>;
+	MarketSegmentId?: InputMaybe<IdOperators>;
+	ModelRevision?: InputMaybe<IntegerOperators>;
+	ModelVersion?: InputMaybe<IntegerOperators>;
+	Name?: InputMaybe<StringOperators>;
+	OutputDataModelObjectId?: InputMaybe<IdOperators>;
+	RefreshMode?: InputMaybe<PicklistOperators>;
+	Status?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<PersnlBatchDecision_Filter>>>;
+	not?: InputMaybe<PersnlBatchDecision_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PersnlBatchDecision_Filter>>>;
+};
+
+export type PersnlContextVariable_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	PersonalizationDataType?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<PersnlContextVariable_Filter>>>;
+	not?: InputMaybe<PersnlContextVariable_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PersnlContextVariable_Filter>>>;
+};
+
+export type PersnlExperience_Filter = {
+	Channel?: InputMaybe<PicklistOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataProvider?: InputMaybe<PersonalizationPoint_Filter>;
+	DataProviderId?: InputMaybe<IdOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	DeveloperName?: InputMaybe<StringOperators>;
+	DisplayLocation?: InputMaybe<StringOperators>;
+	ElementClickPath?: InputMaybe<StringOperators>;
+	ElementClickTag?: InputMaybe<StringOperators>;
+	EngagementDestination?: InputMaybe<StringOperators>;
+	ExitIntentDelay?: InputMaybe<IntegerOperators>;
+	GroupDataRetrievalBy?: InputMaybe<DataGraph_Filter>;
+	GroupDataRetrievalById?: InputMaybe<IdOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsAllowedToRenderIfEmpty?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsEnabled?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	PublishedDate?: InputMaybe<DateTimeOperators>;
+	ScrollPercentValue?: InputMaybe<PercentOperators>;
+	StreamingAppDataConnectorId?: InputMaybe<IdOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	TargetMethodType?: InputMaybe<PicklistOperators>;
+	WhenToTransform?: InputMaybe<PicklistOperators>;
+	and?: InputMaybe<Array<InputMaybe<PersnlExperience_Filter>>>;
+	not?: InputMaybe<PersnlExperience_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PersnlExperience_Filter>>>;
+};
+
+export type PersnlTransformer_Filter = {
+	Category?: InputMaybe<PicklistOperators>;
+	Channel?: InputMaybe<PicklistOperators>;
+	ComponentName?: InputMaybe<StringOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	DeveloperName?: InputMaybe<StringOperators>;
+	Html?: InputMaybe<LongTextAreaOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsAutoEngmntAttrsDisabled?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsEnabled?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	PersonalizationSchema?: InputMaybe<PersonalizationSchema_Filter>;
+	PersonalizationSchemaId?: InputMaybe<IdOperators>;
+	PublishedDate?: InputMaybe<DateTimeOperators>;
+	Script?: InputMaybe<LongTextAreaOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	TransformerType?: InputMaybe<PicklistOperators>;
+	and?: InputMaybe<Array<InputMaybe<PersnlTransformer_Filter>>>;
+	not?: InputMaybe<PersnlTransformer_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PersnlTransformer_Filter>>>;
+};
+
+export type PersonalizationDecision_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	DeveloperName?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	PersonalizationPoint?: InputMaybe<PersonalizationPoint_Filter>;
+	PersonalizationPointId?: InputMaybe<IdOperators>;
+	Personalizer?: InputMaybe<PersonalizationRecommender_Filter>;
+	PersonalizerId?: InputMaybe<IdOperators>;
+	Priority?: InputMaybe<IntegerOperators>;
+	State?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<PersonalizationDecision_Filter>>>;
+	not?: InputMaybe<PersonalizationDecision_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PersonalizationDecision_Filter>>>;
+};
+
+export type PersonalizationObjective_Filter = {
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	DeveloperName?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<PersonalizationObjective_Filter>>>;
+	not?: InputMaybe<PersonalizationObjective_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PersonalizationObjective_Filter>>>;
+};
+
+export type PersonalizationPoint_Filter = {
+	AbnExperiment?: InputMaybe<AbnExperiment_Filter>;
+	AbnExperimentId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	DeveloperName?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsAuthenticationRequired?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	MaxItemsCount?: InputMaybe<IntegerOperators>;
+	Name?: InputMaybe<StringOperators>;
+	PersonalizationSchema?: InputMaybe<PersonalizationSchema_Filter>;
+	PersonalizationSchemaEnum?: InputMaybe<PicklistOperators>;
+	PersonalizationSchemaId?: InputMaybe<IdOperators>;
+	ProfileDataGraph?: InputMaybe<DataGraph_Filter>;
+	ProfileDataGraphId?: InputMaybe<IdOperators>;
+	RootPersonalizationPoint?: InputMaybe<StringOperators>;
+	Source?: InputMaybe<PicklistOperators>;
+	SourceRecord?: InputMaybe<PersonalizationPoint_SourceRecord_Filters>;
+	SourceRecordId?: InputMaybe<IdOperators>;
+	Status?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<PersonalizationPoint_Filter>>>;
+	not?: InputMaybe<PersonalizationPoint_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PersonalizationPoint_Filter>>>;
+};
+
+export type PersonalizationPoint_SourceRecord_Filters = {
+	FlowRecordElement?: InputMaybe<FlowRecordElement_Filter>;
+	ManagedContent?: InputMaybe<ManagedContent_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+};
+
+export type PersonalizationRecommender_Filter = {
+	ContentObjectId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	Goal?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsRemote?: InputMaybe<BooleanOperators>;
+	ItemDataGraph?: InputMaybe<DataGraph_Filter>;
+	ItemDataGraphId?: InputMaybe<IdOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastRefresh?: InputMaybe<DateTimeOperators>;
+	LastSuccessfulRefresh?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	LatestRefreshedStatus?: InputMaybe<PicklistOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Objective?: InputMaybe<PersonalizationObjective_Filter>;
+	ObjectiveId?: InputMaybe<IdOperators>;
+	ProfileDataGraph?: InputMaybe<DataGraph_Filter>;
+	ProfileDataGraphId?: InputMaybe<IdOperators>;
+	Status?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<PersonalizationRecommender_Filter>>>;
+	not?: InputMaybe<PersonalizationRecommender_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PersonalizationRecommender_Filter>>>;
+};
+
+export type PersonalizationSchema_Filter = {
+	ContentObjectId?: InputMaybe<IdOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DataSpace?: InputMaybe<DataSpace_Filter>;
+	DataSpaceId?: InputMaybe<IdOperators>;
+	Description?: InputMaybe<StringOperators>;
+	DeveloperName?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastReferencedDate?: InputMaybe<DateTimeOperators>;
+	LastViewedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	PersonalizationType?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	and?: InputMaybe<Array<InputMaybe<PersonalizationSchema_Filter>>>;
+	not?: InputMaybe<PersonalizationSchema_Filter>;
+	or?: InputMaybe<Array<InputMaybe<PersonalizationSchema_Filter>>>;
 };
 
 export type PhoneNumberOperators = {
@@ -8073,6 +11846,7 @@ export type ProcessDefinition_Filter = {
 export type ProcessException_AttachedTo_Filters = {
 	Agent__c?: InputMaybe<Agent__C_Filter>;
 	Application__c?: InputMaybe<Application__C_Filter>;
+	AsyncOperationTracker?: InputMaybe<AsyncOperationTracker_Filter>;
 	KPI_Snapshot__c?: InputMaybe<Kpi_Snapshot__C_Filter>;
 	Lease__c?: InputMaybe<Lease__C_Filter>;
 	Maintenance_Request__c?: InputMaybe<Maintenance_Request__C_Filter>;
@@ -8106,6 +11880,8 @@ export type ProcessException_Filter = {
 	CreatedDate?: InputMaybe<DateTimeOperators>;
 	Description?: InputMaybe<LongTextAreaOperators>;
 	ExternalReference?: InputMaybe<StringOperators>;
+	GroupBy?: InputMaybe<AsyncOperationTracker_Filter>;
+	GroupById?: InputMaybe<IdOperators>;
 	Id?: InputMaybe<IdOperators>;
 	IsDeleted?: InputMaybe<BooleanOperators>;
 	LastModifiedBy?: InputMaybe<User_Filter>;
@@ -8164,6 +11940,7 @@ export type ProcessInstance_Filter = {
 
 export type ProcessInstance_TargetObject_Filters = {
 	Account?: InputMaybe<Account_Filter>;
+	ActivationTarget?: InputMaybe<ActivationTarget_Filter>;
 	Agent__c?: InputMaybe<Agent__C_Filter>;
 	AnalyticsUserAttrFuncTkn?: InputMaybe<AnalyticsUserAttrFuncTkn_Filter>;
 	Application__c?: InputMaybe<Application__C_Filter>;
@@ -8173,13 +11950,18 @@ export type ProcessInstance_TargetObject_Filters = {
 	Asset?: InputMaybe<Asset_Filter>;
 	AssetRelationship?: InputMaybe<AssetRelationship_Filter>;
 	AssociatedLocation?: InputMaybe<AssociatedLocation_Filter>;
+	AsyncOperationTracker?: InputMaybe<AsyncOperationTracker_Filter>;
 	AuthorizationForm?: InputMaybe<AuthorizationForm_Filter>;
 	AuthorizationFormConsent?: InputMaybe<AuthorizationFormConsent_Filter>;
 	AuthorizationFormDataUse?: InputMaybe<AuthorizationFormDataUse_Filter>;
 	AuthorizationFormText?: InputMaybe<AuthorizationFormText_Filter>;
+	BriefPlanStep?: InputMaybe<BriefPlanStep_Filter>;
 	BusinessBrand?: InputMaybe<BusinessBrand_Filter>;
 	Campaign?: InputMaybe<Campaign_Filter>;
 	Case?: InputMaybe<Case_Filter>;
+	ChannelProgram?: InputMaybe<ChannelProgram_Filter>;
+	ChannelProgramLevel?: InputMaybe<ChannelProgramLevel_Filter>;
+	ChannelProgramMember?: InputMaybe<ChannelProgramMember_Filter>;
 	CommSubscription?: InputMaybe<CommSubscription_Filter>;
 	CommSubscriptionChannelType?: InputMaybe<CommSubscriptionChannelType_Filter>;
 	CommSubscriptionConsent?: InputMaybe<CommSubscriptionConsent_Filter>;
@@ -8192,18 +11974,38 @@ export type ProcessInstance_TargetObject_Filters = {
 	ContactPointTypeConsent?: InputMaybe<ContactPointTypeConsent_Filter>;
 	Contract?: InputMaybe<Contract_Filter>;
 	Customer?: InputMaybe<Customer_Filter>;
+	DataAction?: InputMaybe<DataAction_Filter>;
+	DataActionJobSummary?: InputMaybe<DataActionJobSummary_Filter>;
+	DataActionTarget?: InputMaybe<DataActionTarget_Filter>;
+	DataCommCapActvTarget?: InputMaybe<DataCommCapActvTarget_Filter>;
+	DataCommunicationCap?: InputMaybe<DataCommunicationCap_Filter>;
+	DataGraph?: InputMaybe<DataGraph_Filter>;
+	DataKitDeploymentLog?: InputMaybe<DataKitDeploymentLog_Filter>;
+	DataKnowledgeSpace?: InputMaybe<DataKnowledgeSpace_Filter>;
+	DataKnowledgeSpcJobRun?: InputMaybe<DataKnowledgeSpcJobRun_Filter>;
+	DataKnowledgeSrcFileRef?: InputMaybe<DataKnowledgeSrcFileRef_Filter>;
+	DataLakeObjectInstance?: InputMaybe<DataLakeObjectInstance_Filter>;
+	DataLineageNodeDefSyncLog?: InputMaybe<DataLineageNodeDefSyncLog_Filter>;
+	DataQueryWorkspace?: InputMaybe<DataQueryWorkspace_Filter>;
+	DataQueryWorkspaceTab?: InputMaybe<DataQueryWorkspaceTab_Filter>;
+	DataQuickAttribute?: InputMaybe<DataQuickAttribute_Filter>;
+	DataStream?: InputMaybe<DataStream_Filter>;
 	DataUseLegalBasis?: InputMaybe<DataUseLegalBasis_Filter>;
 	DataUsePurpose?: InputMaybe<DataUsePurpose_Filter>;
 	DelegatedAccount?: InputMaybe<DelegatedAccount_Filter>;
+	DevopsActivityLog?: InputMaybe<DevopsActivityLog_Filter>;
 	DevopsEnvironment?: InputMaybe<DevopsEnvironment_Filter>;
 	DevopsRequestInfo?: InputMaybe<DevopsRequestInfo_Filter>;
 	DuplicateRecordItem?: InputMaybe<DuplicateRecordItem_Filter>;
 	DuplicateRecordSet?: InputMaybe<DuplicateRecordSet_Filter>;
 	EmailMessage?: InputMaybe<EmailMessage_Filter>;
 	EngagementChannelType?: InputMaybe<EngagementChannelType_Filter>;
+	ExtDataShare?: InputMaybe<ExtDataShare_Filter>;
+	ExtDataShareTarget?: InputMaybe<ExtDataShareTarget_Filter>;
 	FlowOrchestrationInstance?: InputMaybe<FlowOrchestrationInstance_Filter>;
 	FlowOrchestrationVersion?: InputMaybe<FlowOrchestrationVersion_Filter>;
 	FlowOrchestrationWorkItem?: InputMaybe<FlowOrchestrationWorkItem_Filter>;
+	IdentityResolution?: InputMaybe<IdentityResolution_Filter>;
 	Image?: InputMaybe<Image_Filter>;
 	KPI_Snapshot__c?: InputMaybe<Kpi_Snapshot__C_Filter>;
 	Lead?: InputMaybe<Lead_Filter>;
@@ -8212,11 +12014,20 @@ export type ProcessInstance_TargetObject_Filters = {
 	LocationTrustMeasure?: InputMaybe<LocationTrustMeasure_Filter>;
 	Maintenance_Request__c?: InputMaybe<Maintenance_Request__C_Filter>;
 	Maintenance_Worker__c?: InputMaybe<Maintenance_Worker__C_Filter>;
+	MarketSegment?: InputMaybe<MarketSegment_Filter>;
+	MarketSegmentActivation?: InputMaybe<MarketSegmentActivation_Filter>;
+	MktCalculatedInsight?: InputMaybe<MktCalculatedInsight_Filter>;
+	MktDataTransform?: InputMaybe<MktDataTransform_Filter>;
+	MktMLModel?: InputMaybe<MktMlModel_Filter>;
 	Name?: InputMaybe<Name_Filter>;
 	Notification__c?: InputMaybe<Notification__C_Filter>;
 	Opportunity?: InputMaybe<Opportunity_Filter>;
 	Order?: InputMaybe<Order_Filter>;
 	OrgMetricScanSummary?: InputMaybe<OrgMetricScanSummary_Filter>;
+	PartnerFundAllocation?: InputMaybe<PartnerFundAllocation_Filter>;
+	PartnerFundClaim?: InputMaybe<PartnerFundClaim_Filter>;
+	PartnerFundRequest?: InputMaybe<PartnerFundRequest_Filter>;
+	PartnerMarketingBudget?: InputMaybe<PartnerMarketingBudget_Filter>;
 	PartyConsent?: InputMaybe<PartyConsent_Filter>;
 	Payment__c?: InputMaybe<Payment__C_Filter>;
 	ProcessException?: InputMaybe<ProcessException_Filter>;
@@ -8232,10 +12043,11 @@ export type ProcessInstance_TargetObject_Filters = {
 	Property_Owner__c?: InputMaybe<Property_Owner__C_Filter>;
 	Property_Sale__c?: InputMaybe<Property_Sale__C_Filter>;
 	Property__c?: InputMaybe<Property__C_Filter>;
-	ReportHierarchyObjectField?: InputMaybe<ReportHierarchyObjectField_Filter>;
+	Prospect?: InputMaybe<Prospect_Filter>;
 	SecurityHealthCheckAlertRecipient?: InputMaybe<SecurityHealthCheckAlertRecipient_Filter>;
 	SecurityHealthCheckResult?: InputMaybe<SecurityHealthCheckResult_Filter>;
 	Seller?: InputMaybe<Seller_Filter>;
+	SenderEmailAddress?: InputMaybe<SenderEmailAddress_Filter>;
 	SocialPost?: InputMaybe<SocialPost_Filter>;
 	StreamingChannel?: InputMaybe<StreamingChannel_Filter>;
 	TableauHostMapping?: InputMaybe<TableauHostMapping_Filter>;
@@ -8433,12 +12245,18 @@ export type Profile_Filter = {
 	LastReferencedDate?: InputMaybe<DateTimeOperators>;
 	LastViewedDate?: InputMaybe<DateTimeOperators>;
 	Name?: InputMaybe<StringOperators>;
-	PermissionsAcceptInboundBundling?: InputMaybe<BooleanOperators>;
+	PermissionsAICreateInsightObjects?: InputMaybe<BooleanOperators>;
+	PermissionsAIViewInsightObjects?: InputMaybe<BooleanOperators>;
 	PermissionsAccessBankingRelationshipAssistance?: InputMaybe<BooleanOperators>;
 	PermissionsAccessBankingServiceAgent?: InputMaybe<BooleanOperators>;
 	PermissionsAccessCMC?: InputMaybe<BooleanOperators>;
+	PermissionsAccessCdpApp?: InputMaybe<BooleanOperators>;
+	PermissionsAccessCdpDataExplorer?: InputMaybe<BooleanOperators>;
+	PermissionsAccessCdpProfileExplorer?: InputMaybe<BooleanOperators>;
 	PermissionsAccessContentBuilder?: InputMaybe<BooleanOperators>;
+	PermissionsAccessCustomerDataCloudSetup?: InputMaybe<BooleanOperators>;
 	PermissionsAccessDisputePrompts?: InputMaybe<BooleanOperators>;
+	PermissionsAccessKnowledgeSpace?: InputMaybe<BooleanOperators>;
 	PermissionsAccessOrchestrationObjects?: InputMaybe<BooleanOperators>;
 	PermissionsAccessPolicyAgent?: InputMaybe<BooleanOperators>;
 	PermissionsAccessServiceEinstein?: InputMaybe<BooleanOperators>;
@@ -8450,10 +12268,23 @@ export type Profile_Filter = {
 	PermissionsAccessWealthAdvisorAgent?: InputMaybe<BooleanOperators>;
 	PermissionsAccountSwitcherUser?: InputMaybe<BooleanOperators>;
 	PermissionsActivateContract?: InputMaybe<BooleanOperators>;
+	PermissionsActivateDeactivateNonSetupFlow?: InputMaybe<BooleanOperators>;
 	PermissionsActivateOrder?: InputMaybe<BooleanOperators>;
 	PermissionsActivateSystemModeFlows?: InputMaybe<BooleanOperators>;
 	PermissionsActivitiesAccess?: InputMaybe<BooleanOperators>;
+	PermissionsAddAsgntElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddCollFltrElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddCollSrtElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddCreaRecElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddDecisionElmntNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddDelRecElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
 	PermissionsAddDirectMessageMembers?: InputMaybe<BooleanOperators>;
+	PermissionsAddGetRecElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddLoopElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddSubflowElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddTrfmElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddUpdtRecElmntToNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsAddWaitToNonSetupFlow?: InputMaybe<BooleanOperators>;
 	PermissionsAdvancedCsvDataImportUser?: InputMaybe<BooleanOperators>;
 	PermissionsAgentforceServiceAgentUser?: InputMaybe<BooleanOperators>;
 	PermissionsAllowEmailIC?: InputMaybe<BooleanOperators>;
@@ -8480,7 +12311,9 @@ export type Profile_Filter = {
 	PermissionsCanApproveUninstalledApps?: InputMaybe<BooleanOperators>;
 	PermissionsCanDoActAsUser?: InputMaybe<BooleanOperators>;
 	PermissionsCanEditPrompts?: InputMaybe<BooleanOperators>;
+	PermissionsCanExitFlowViaAPI?: InputMaybe<BooleanOperators>;
 	PermissionsCanInsertFeedSystemFields?: InputMaybe<BooleanOperators>;
+	PermissionsCanMarketingUserDebugFlow?: InputMaybe<BooleanOperators>;
 	PermissionsCanTranslateScrt2Conversation?: InputMaybe<BooleanOperators>;
 	PermissionsCanUpdateEmailMessage?: InputMaybe<BooleanOperators>;
 	PermissionsCanUseNewDashboardBuilder?: InputMaybe<BooleanOperators>;
@@ -8489,6 +12322,7 @@ export type Profile_Filter = {
 	PermissionsCdcReportingCreateReports?: InputMaybe<BooleanOperators>;
 	PermissionsCdcReportingManageFolders?: InputMaybe<BooleanOperators>;
 	PermissionsCdcReportingViewReports?: InputMaybe<BooleanOperators>;
+	PermissionsCdpConnectionManagementUser?: InputMaybe<BooleanOperators>;
 	PermissionsChangeDashboardColors?: InputMaybe<BooleanOperators>;
 	PermissionsChatterComposeUiCodesnippet?: InputMaybe<BooleanOperators>;
 	PermissionsChatterEditOwnPost?: InputMaybe<BooleanOperators>;
@@ -8499,20 +12333,30 @@ export type Profile_Filter = {
 	PermissionsChatterOwnGroups?: InputMaybe<BooleanOperators>;
 	PermissionsClientSecretRotation?: InputMaybe<BooleanOperators>;
 	PermissionsCloseConversations?: InputMaybe<BooleanOperators>;
+	PermissionsCodeBuilderUser?: InputMaybe<BooleanOperators>;
 	PermissionsConfigCustomRecs?: InputMaybe<BooleanOperators>;
 	PermissionsConfigureDataspaceScope?: InputMaybe<BooleanOperators>;
 	PermissionsConnectOrgToEnvironmentHub?: InputMaybe<BooleanOperators>;
 	PermissionsConsentApiUpdate?: InputMaybe<BooleanOperators>;
+	PermissionsConsentBannerSettingsSetup?: InputMaybe<BooleanOperators>;
 	PermissionsContentAdministrator?: InputMaybe<BooleanOperators>;
 	PermissionsContentHubUser?: InputMaybe<BooleanOperators>;
 	PermissionsContentWorkspaces?: InputMaybe<BooleanOperators>;
 	PermissionsConvertLeads?: InputMaybe<BooleanOperators>;
+	PermissionsCosellAuthSetupUser?: InputMaybe<BooleanOperators>;
+	PermissionsCosellExportUser?: InputMaybe<BooleanOperators>;
 	PermissionsCreateCustomizeDashboards?: InputMaybe<BooleanOperators>;
 	PermissionsCreateCustomizeFilters?: InputMaybe<BooleanOperators>;
 	PermissionsCreateCustomizeReports?: InputMaybe<BooleanOperators>;
 	PermissionsCreateDashboardFolders?: InputMaybe<BooleanOperators>;
+	PermissionsCreateEditNonSetupFlow?: InputMaybe<BooleanOperators>;
 	PermissionsCreateLtngTempFolder?: InputMaybe<BooleanOperators>;
 	PermissionsCreateLtngTempInPub?: InputMaybe<BooleanOperators>;
+	PermissionsCreateModAutEvtNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsCreateModDGTrigNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsCreateModFormTrigNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsCreateModIndRecNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsCreateModOnDemandNonSetupFlow?: InputMaybe<BooleanOperators>;
 	PermissionsCreateMultiforce?: InputMaybe<BooleanOperators>;
 	PermissionsCreateReportFolders?: InputMaybe<BooleanOperators>;
 	PermissionsCreateReportInLightning?: InputMaybe<BooleanOperators>;
@@ -8524,9 +12368,11 @@ export type Profile_Filter = {
 	PermissionsCustomSidebarOnAllPages?: InputMaybe<BooleanOperators>;
 	PermissionsCustomizeApplication?: InputMaybe<BooleanOperators>;
 	PermissionsDataExport?: InputMaybe<BooleanOperators>;
+	PermissionsDelegatedPortalUserAdmin?: InputMaybe<BooleanOperators>;
 	PermissionsDelegatedTwoFactor?: InputMaybe<BooleanOperators>;
 	PermissionsDeleteActivatedContract?: InputMaybe<BooleanOperators>;
 	PermissionsDeleteCrMemoAndInvoice?: InputMaybe<BooleanOperators>;
+	PermissionsDeleteNonSetupFlow?: InputMaybe<BooleanOperators>;
 	PermissionsDeleteSalesforceFiles?: InputMaybe<BooleanOperators>;
 	PermissionsDeleteTopics?: InputMaybe<BooleanOperators>;
 	PermissionsDigitalLendingAdminUser?: InputMaybe<BooleanOperators>;
@@ -8551,6 +12397,7 @@ export type Profile_Filter = {
 	PermissionsEditReadonlyFields?: InputMaybe<BooleanOperators>;
 	PermissionsEditTask?: InputMaybe<BooleanOperators>;
 	PermissionsEditTopics?: InputMaybe<BooleanOperators>;
+	PermissionsEinsteinMetadataUserAccess?: InputMaybe<BooleanOperators>;
 	PermissionsEmailAdministration?: InputMaybe<BooleanOperators>;
 	PermissionsEmailMass?: InputMaybe<BooleanOperators>;
 	PermissionsEmailSingle?: InputMaybe<BooleanOperators>;
@@ -8572,7 +12419,6 @@ export type Profile_Filter = {
 	PermissionsFreezeUsers?: InputMaybe<BooleanOperators>;
 	PermissionsGiveRecognitionBadge?: InputMaybe<BooleanOperators>;
 	PermissionsGovernNetworks?: InputMaybe<BooleanOperators>;
-	PermissionsGrantOutboundBundling?: InputMaybe<BooleanOperators>;
 	PermissionsHasUnlimitedNBAExecutions?: InputMaybe<BooleanOperators>;
 	PermissionsHeadlessCMSAccess?: InputMaybe<BooleanOperators>;
 	PermissionsHeadlessPublishNudges?: InputMaybe<BooleanOperators>;
@@ -8597,16 +12443,20 @@ export type Profile_Filter = {
 	PermissionsListEmailSend?: InputMaybe<BooleanOperators>;
 	PermissionsLobbyManagementUserAccess?: InputMaybe<BooleanOperators>;
 	PermissionsLtngPromoReserved01UserPerm?: InputMaybe<BooleanOperators>;
+	PermissionsMCGSetupUserPerm?: InputMaybe<BooleanOperators>;
 	PermissionsMCPMetadataApi?: InputMaybe<BooleanOperators>;
 	PermissionsManageAccessPolicies?: InputMaybe<BooleanOperators>;
 	PermissionsManageAgentforceServiceAgent?: InputMaybe<BooleanOperators>;
 	PermissionsManageAnalyticSnapshots?: InputMaybe<BooleanOperators>;
 	PermissionsManageApiNamedQueries?: InputMaybe<BooleanOperators>;
 	PermissionsManageAuthProviders?: InputMaybe<BooleanOperators>;
+	PermissionsManageBriefs?: InputMaybe<BooleanOperators>;
 	PermissionsManageBusinessHourHolidays?: InputMaybe<BooleanOperators>;
+	PermissionsManageBusinessUnit?: InputMaybe<BooleanOperators>;
 	PermissionsManageC360AConnections?: InputMaybe<BooleanOperators>;
 	PermissionsManageCMS?: InputMaybe<BooleanOperators>;
 	PermissionsManageCallCenters?: InputMaybe<BooleanOperators>;
+	PermissionsManageCampaigns?: InputMaybe<BooleanOperators>;
 	PermissionsManageCases?: InputMaybe<BooleanOperators>;
 	PermissionsManageCategories?: InputMaybe<BooleanOperators>;
 	PermissionsManageCdpMlModels?: InputMaybe<BooleanOperators>;
@@ -8617,19 +12467,26 @@ export type Profile_Filter = {
 	PermissionsManageContentProperties?: InputMaybe<BooleanOperators>;
 	PermissionsManageContentTaxonomy?: InputMaybe<BooleanOperators>;
 	PermissionsManageContentTypes?: InputMaybe<BooleanOperators>;
+	PermissionsManageCssUsers?: InputMaybe<BooleanOperators>;
 	PermissionsManageCustomDomains?: InputMaybe<BooleanOperators>;
 	PermissionsManageCustomPermissions?: InputMaybe<BooleanOperators>;
 	PermissionsManageCustomReportTypes?: InputMaybe<BooleanOperators>;
+	PermissionsManageCustomerDataOptOut?: InputMaybe<BooleanOperators>;
 	PermissionsManageDashbdsInPubFolders?: InputMaybe<BooleanOperators>;
+	PermissionsManageDataAnalyticsGroups?: InputMaybe<BooleanOperators>;
 	PermissionsManageDataCategories?: InputMaybe<BooleanOperators>;
 	PermissionsManageDataIntegrations?: InputMaybe<BooleanOperators>;
 	PermissionsManageDataspaceScope?: InputMaybe<BooleanOperators>;
+	PermissionsManageDevSandboxes?: InputMaybe<BooleanOperators>;
 	PermissionsManageDynamicDashboards?: InputMaybe<BooleanOperators>;
 	PermissionsManageEmailClientConfig?: InputMaybe<BooleanOperators>;
+	PermissionsManageEmailContent?: InputMaybe<BooleanOperators>;
+	PermissionsManageEmailMessagingSetup?: InputMaybe<BooleanOperators>;
 	PermissionsManageExchangeConfig?: InputMaybe<BooleanOperators>;
 	PermissionsManageExternalConnections?: InputMaybe<BooleanOperators>;
 	PermissionsManageFilesAndAttachments?: InputMaybe<BooleanOperators>;
 	PermissionsManageForecastingCustomData?: InputMaybe<BooleanOperators>;
+	PermissionsManageGlobalPrivacyCenterVO?: InputMaybe<BooleanOperators>;
 	PermissionsManageHealthCheck?: InputMaybe<BooleanOperators>;
 	PermissionsManageHerokuAppLink?: InputMaybe<BooleanOperators>;
 	PermissionsManageHubConnections?: InputMaybe<BooleanOperators>;
@@ -8642,11 +12499,14 @@ export type Profile_Filter = {
 	PermissionsManageMaliciousFiles?: InputMaybe<BooleanOperators>;
 	PermissionsManageMobile?: InputMaybe<BooleanOperators>;
 	PermissionsManageMobileAppSecurity?: InputMaybe<BooleanOperators>;
+	PermissionsManageMyExternalUsers?: InputMaybe<BooleanOperators>;
 	PermissionsManageNamedCredentials?: InputMaybe<BooleanOperators>;
 	PermissionsManageNetworks?: InputMaybe<BooleanOperators>;
 	PermissionsManageOrchInstsAndWorkItems?: InputMaybe<BooleanOperators>;
 	PermissionsManageOrchestrationRuns?: InputMaybe<BooleanOperators>;
+	PermissionsManagePartners?: InputMaybe<BooleanOperators>;
 	PermissionsManagePasswordPolicies?: InputMaybe<BooleanOperators>;
+	PermissionsManagePreferenceCenter?: InputMaybe<BooleanOperators>;
 	PermissionsManageProfilesPermissionsets?: InputMaybe<BooleanOperators>;
 	PermissionsManagePropositions?: InputMaybe<BooleanOperators>;
 	PermissionsManagePvtRptsAndDashbds?: InputMaybe<BooleanOperators>;
@@ -8656,10 +12516,11 @@ export type Profile_Filter = {
 	PermissionsManageRemoteAccess?: InputMaybe<BooleanOperators>;
 	PermissionsManageReportsInPubFolders?: InputMaybe<BooleanOperators>;
 	PermissionsManageRoles?: InputMaybe<BooleanOperators>;
+	PermissionsManageSMSDomainSetup?: InputMaybe<BooleanOperators>;
+	PermissionsManageSMSMessagingSetup?: InputMaybe<BooleanOperators>;
+	PermissionsManageSandboxes?: InputMaybe<BooleanOperators>;
 	PermissionsManageSessionPermissionSets?: InputMaybe<BooleanOperators>;
-	PermissionsManageSharedListViews?: InputMaybe<BooleanOperators>;
 	PermissionsManageSharing?: InputMaybe<BooleanOperators>;
-	PermissionsManageSocialPosting?: InputMaybe<BooleanOperators>;
 	PermissionsManageSolutions?: InputMaybe<BooleanOperators>;
 	PermissionsManageSubscriptions?: InputMaybe<BooleanOperators>;
 	PermissionsManageSurveys?: InputMaybe<BooleanOperators>;
@@ -8669,8 +12530,7 @@ export type Profile_Filter = {
 	PermissionsManageUnlistedGroups?: InputMaybe<BooleanOperators>;
 	PermissionsManageUsers?: InputMaybe<BooleanOperators>;
 	PermissionsMassInlineEdit?: InputMaybe<BooleanOperators>;
-	PermissionsMeetingEngagementUser?: InputMaybe<BooleanOperators>;
-	PermissionsMemberSelfServiceAgentAccess?: InputMaybe<BooleanOperators>;
+	PermissionsMcScoringRulesConfig?: InputMaybe<BooleanOperators>;
 	PermissionsMergeTopics?: InputMaybe<BooleanOperators>;
 	PermissionsMetadataStudioUser?: InputMaybe<BooleanOperators>;
 	PermissionsMicrobatching?: InputMaybe<BooleanOperators>;
@@ -8690,19 +12550,27 @@ export type Profile_Filter = {
 	PermissionsMonitorLoginHistory?: InputMaybe<BooleanOperators>;
 	PermissionsNativeWebviewScrolling?: InputMaybe<BooleanOperators>;
 	PermissionsNewReportBuilder?: InputMaybe<BooleanOperators>;
+	PermissionsOpportunityInfluence?: InputMaybe<BooleanOperators>;
+	PermissionsOrgPerformanceAccess?: InputMaybe<BooleanOperators>;
 	PermissionsOutboundMigrationToolsUser?: InputMaybe<BooleanOperators>;
 	PermissionsOverrideForecasts?: InputMaybe<BooleanOperators>;
+	PermissionsPRMChannelMgmtConsoleUser?: InputMaybe<BooleanOperators>;
 	PermissionsPackaging2?: InputMaybe<BooleanOperators>;
 	PermissionsPackaging2Delete?: InputMaybe<BooleanOperators>;
 	PermissionsPasswordNeverExpires?: InputMaybe<BooleanOperators>;
+	PermissionsPerformanceAnalysisAccess?: InputMaybe<BooleanOperators>;
 	PermissionsPersonalizationDecisioningUser?: InputMaybe<BooleanOperators>;
 	PermissionsPersonalizationIntelUser?: InputMaybe<BooleanOperators>;
 	PermissionsPersonalizationPlatform?: InputMaybe<BooleanOperators>;
 	PermissionsPersonalizedFinanceUserAccess?: InputMaybe<BooleanOperators>;
+	PermissionsPortalSuperUser?: InputMaybe<BooleanOperators>;
 	PermissionsPreventClassicExperience?: InputMaybe<BooleanOperators>;
+	PermissionsPreviewTestSendEmail?: InputMaybe<BooleanOperators>;
+	PermissionsPreviewTestSendSMS?: InputMaybe<BooleanOperators>;
 	PermissionsPrismBackofficeUser?: InputMaybe<BooleanOperators>;
 	PermissionsPrismPlaygroundUser?: InputMaybe<BooleanOperators>;
 	PermissionsPrivacyDataAccess?: InputMaybe<BooleanOperators>;
+	PermissionsPrmEnhancedPortalUser?: InputMaybe<BooleanOperators>;
 	PermissionsPrmExtIntPrtnrAdminUser?: InputMaybe<BooleanOperators>;
 	PermissionsPublishMultiforce?: InputMaybe<BooleanOperators>;
 	PermissionsQrCodeGeneratorMobilePublisherPlayground?: InputMaybe<BooleanOperators>;
@@ -8711,6 +12579,7 @@ export type Profile_Filter = {
 	PermissionsQuipMetricsAccess?: InputMaybe<BooleanOperators>;
 	PermissionsQuipUserEngagementMetrics?: InputMaybe<BooleanOperators>;
 	PermissionsReassignOrchestrationWorkItems?: InputMaybe<BooleanOperators>;
+	PermissionsRecordVisibilityAPI?: InputMaybe<BooleanOperators>;
 	PermissionsRegrelloUser?: InputMaybe<BooleanOperators>;
 	PermissionsRemoveDirectMessageMembers?: InputMaybe<BooleanOperators>;
 	PermissionsResetPasswords?: InputMaybe<BooleanOperators>;
@@ -8724,6 +12593,8 @@ export type Profile_Filter = {
 	PermissionsSelectFilesFromSalesforce?: InputMaybe<BooleanOperators>;
 	PermissionsSendAnnouncementEmails?: InputMaybe<BooleanOperators>;
 	PermissionsSendCustomNotifications?: InputMaybe<BooleanOperators>;
+	PermissionsSendEmail?: InputMaybe<BooleanOperators>;
+	PermissionsSendSMS?: InputMaybe<BooleanOperators>;
 	PermissionsSendSitRequests?: InputMaybe<BooleanOperators>;
 	PermissionsShareFilesWithNetworks?: InputMaybe<BooleanOperators>;
 	PermissionsShowCompanyNameAsUserBadge?: InputMaybe<BooleanOperators>;
@@ -8745,8 +12616,12 @@ export type Profile_Filter = {
 	PermissionsTransferAnyEntity?: InputMaybe<BooleanOperators>;
 	PermissionsTransferAnyLead?: InputMaybe<BooleanOperators>;
 	PermissionsTwoFactorApi?: InputMaybe<BooleanOperators>;
+	PermissionsUMAStandaloneUserPerm?: InputMaybe<BooleanOperators>;
+	PermissionsUMAWebTrackingSetup?: InputMaybe<BooleanOperators>;
+	PermissionsUmaEditConsentSettings?: InputMaybe<BooleanOperators>;
+	PermissionsUmaQueryCMSEmailContent?: InputMaybe<BooleanOperators>;
+	PermissionsUnifiedEHDViewer?: InputMaybe<BooleanOperators>;
 	PermissionsUpdateReportTypeReferences?: InputMaybe<BooleanOperators>;
-	PermissionsUseAnyApiAuth?: InputMaybe<BooleanOperators>;
 	PermissionsUseAssistantDialog?: InputMaybe<BooleanOperators>;
 	PermissionsUseMySearch?: InputMaybe<BooleanOperators>;
 	PermissionsUseQuerySuggestions?: InputMaybe<BooleanOperators>;
@@ -8758,6 +12633,7 @@ export type Profile_Filter = {
 	PermissionsUseTeamsForItSrvcs?: InputMaybe<BooleanOperators>;
 	PermissionsUseWebLink?: InputMaybe<BooleanOperators>;
 	PermissionsUserCanDeployStore?: InputMaybe<BooleanOperators>;
+	PermissionsUserHasSendToListFilterAccess?: InputMaybe<BooleanOperators>;
 	PermissionsUserInteractionInsights?: InputMaybe<BooleanOperators>;
 	PermissionsViewAccessPolicies?: InputMaybe<BooleanOperators>;
 	PermissionsViewAllActivities?: InputMaybe<BooleanOperators>;
@@ -8766,10 +12642,12 @@ export type Profile_Filter = {
 	PermissionsViewAllFieldsGlobal?: InputMaybe<BooleanOperators>;
 	PermissionsViewAllForecasts?: InputMaybe<BooleanOperators>;
 	PermissionsViewAllForeignKeyNames?: InputMaybe<BooleanOperators>;
+	PermissionsViewAllNonSetupFlows?: InputMaybe<BooleanOperators>;
 	PermissionsViewAllPolicyCenterPolicies?: InputMaybe<BooleanOperators>;
 	PermissionsViewAllProfiles?: InputMaybe<BooleanOperators>;
 	PermissionsViewAllUsers?: InputMaybe<BooleanOperators>;
 	PermissionsViewApiNamedQueries?: InputMaybe<BooleanOperators>;
+	PermissionsViewBusinessUnit?: InputMaybe<BooleanOperators>;
 	PermissionsViewClientSecret?: InputMaybe<BooleanOperators>;
 	PermissionsViewContent?: InputMaybe<BooleanOperators>;
 	PermissionsViewContentTaxonomy?: InputMaybe<BooleanOperators>;
@@ -8777,13 +12655,17 @@ export type Profile_Filter = {
 	PermissionsViewDataAssessment?: InputMaybe<BooleanOperators>;
 	PermissionsViewDataCategories?: InputMaybe<BooleanOperators>;
 	PermissionsViewDeveloperName?: InputMaybe<BooleanOperators>;
+	PermissionsViewEmailMessagingSetup?: InputMaybe<BooleanOperators>;
 	PermissionsViewEncryptedData?: InputMaybe<BooleanOperators>;
 	PermissionsViewEventLogFiles?: InputMaybe<BooleanOperators>;
 	PermissionsViewGlobalHeader?: InputMaybe<BooleanOperators>;
 	PermissionsViewHealthCheck?: InputMaybe<BooleanOperators>;
 	PermissionsViewHelpLink?: InputMaybe<BooleanOperators>;
 	PermissionsViewLicenseUtilization?: InputMaybe<BooleanOperators>;
+	PermissionsViewMLModels?: InputMaybe<BooleanOperators>;
 	PermissionsViewMyTeamsDashboards?: InputMaybe<BooleanOperators>;
+	PermissionsViewNonSetupFlow?: InputMaybe<BooleanOperators>;
+	PermissionsViewOnlyEmbeddedAppUser?: InputMaybe<BooleanOperators>;
 	PermissionsViewOrchestrationsInAutomApp?: InputMaybe<BooleanOperators>;
 	PermissionsViewPrivateStaticResources?: InputMaybe<BooleanOperators>;
 	PermissionsViewPublicCapstoneFolders?: InputMaybe<BooleanOperators>;
@@ -8792,8 +12674,10 @@ export type Profile_Filter = {
 	PermissionsViewRecommendations?: InputMaybe<BooleanOperators>;
 	PermissionsViewRestrictionAndScopingRules?: InputMaybe<BooleanOperators>;
 	PermissionsViewRoles?: InputMaybe<BooleanOperators>;
+	PermissionsViewSMSMessagingSetup?: InputMaybe<BooleanOperators>;
 	PermissionsViewSetup?: InputMaybe<BooleanOperators>;
 	PermissionsViewTrustMeasures?: InputMaybe<BooleanOperators>;
+	PermissionsViewUMACalendar?: InputMaybe<BooleanOperators>;
 	PermissionsViewUserPII?: InputMaybe<BooleanOperators>;
 	PermissionsYourAccountCDAPublishEvents?: InputMaybe<BooleanOperators>;
 	SharingType?: InputMaybe<PicklistOperators>;
@@ -8820,12 +12704,18 @@ export type Profile_OrderBy = {
 	LastReferencedDate?: InputMaybe<OrderByClause>;
 	LastViewedDate?: InputMaybe<OrderByClause>;
 	Name?: InputMaybe<OrderByClause>;
-	PermissionsAcceptInboundBundling?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAICreateInsightObjects?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAIViewInsightObjects?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsAccessBankingRelationshipAssistance?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsAccessBankingServiceAgent?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsAccessCMC?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAccessCdpApp?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAccessCdpDataExplorer?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAccessCdpProfileExplorer?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsAccessContentBuilder?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAccessCustomerDataCloudSetup?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsAccessDisputePrompts?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAccessKnowledgeSpace?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsAccessOrchestrationObjects?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsAccessPolicyAgent?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsAccessServiceEinstein?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -8837,10 +12727,23 @@ export type Profile_OrderBy = {
 	PermissionsAccessWealthAdvisorAgent?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsAccountSwitcherUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsActivateContract?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsActivateDeactivateNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsActivateOrder?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsActivateSystemModeFlows?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsActivitiesAccess?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAddAsgntElmntToNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAddCollFltrElmntToNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAddCollSrtElmntToNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAddCreaRecElmntToNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAddDecisionElmntNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAddDelRecElmntToNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsAddDirectMessageMembers?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAddGetRecElmntToNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAddLoopElmntToNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAddSubflowElmntToNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAddTrfmElmntToNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAddUpdtRecElmntToNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsAddWaitToNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsAdvancedCsvDataImportUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsAgentforceServiceAgentUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsAllowEmailIC?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -8867,7 +12770,9 @@ export type Profile_OrderBy = {
 	PermissionsCanApproveUninstalledApps?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCanDoActAsUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCanEditPrompts?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsCanExitFlowViaAPI?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCanInsertFeedSystemFields?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsCanMarketingUserDebugFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCanTranslateScrt2Conversation?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCanUpdateEmailMessage?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCanUseNewDashboardBuilder?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -8876,6 +12781,7 @@ export type Profile_OrderBy = {
 	PermissionsCdcReportingCreateReports?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCdcReportingManageFolders?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCdcReportingViewReports?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsCdpConnectionManagementUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsChangeDashboardColors?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsChatterComposeUiCodesnippet?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsChatterEditOwnPost?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -8886,20 +12792,30 @@ export type Profile_OrderBy = {
 	PermissionsChatterOwnGroups?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsClientSecretRotation?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCloseConversations?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsCodeBuilderUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsConfigCustomRecs?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsConfigureDataspaceScope?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsConnectOrgToEnvironmentHub?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsConsentApiUpdate?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsConsentBannerSettingsSetup?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsContentAdministrator?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsContentHubUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsContentWorkspaces?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsConvertLeads?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsCosellAuthSetupUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsCosellExportUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCreateCustomizeDashboards?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCreateCustomizeFilters?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCreateCustomizeReports?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCreateDashboardFolders?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsCreateEditNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCreateLtngTempFolder?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCreateLtngTempInPub?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsCreateModAutEvtNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsCreateModDGTrigNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsCreateModFormTrigNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsCreateModIndRecNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsCreateModOnDemandNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCreateMultiforce?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCreateReportFolders?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCreateReportInLightning?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -8911,9 +12827,11 @@ export type Profile_OrderBy = {
 	PermissionsCustomSidebarOnAllPages?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsCustomizeApplication?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsDataExport?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsDelegatedPortalUserAdmin?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsDelegatedTwoFactor?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsDeleteActivatedContract?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsDeleteCrMemoAndInvoice?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsDeleteNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsDeleteSalesforceFiles?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsDeleteTopics?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsDigitalLendingAdminUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -8938,6 +12856,7 @@ export type Profile_OrderBy = {
 	PermissionsEditReadonlyFields?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsEditTask?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsEditTopics?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsEinsteinMetadataUserAccess?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsEmailAdministration?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsEmailMass?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsEmailSingle?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -8959,7 +12878,6 @@ export type Profile_OrderBy = {
 	PermissionsFreezeUsers?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsGiveRecognitionBadge?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsGovernNetworks?: InputMaybe<NoFunctionAggregateOrderByClause>;
-	PermissionsGrantOutboundBundling?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsHasUnlimitedNBAExecutions?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsHeadlessCMSAccess?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsHeadlessPublishNudges?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -8984,16 +12902,20 @@ export type Profile_OrderBy = {
 	PermissionsListEmailSend?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsLobbyManagementUserAccess?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsLtngPromoReserved01UserPerm?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsMCGSetupUserPerm?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsMCPMetadataApi?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageAccessPolicies?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageAgentforceServiceAgent?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageAnalyticSnapshots?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageApiNamedQueries?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageAuthProviders?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsManageBriefs?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageBusinessHourHolidays?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsManageBusinessUnit?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageC360AConnections?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageCMS?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageCallCenters?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsManageCampaigns?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageCases?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageCategories?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageCdpMlModels?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -9004,19 +12926,26 @@ export type Profile_OrderBy = {
 	PermissionsManageContentProperties?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageContentTaxonomy?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageContentTypes?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsManageCssUsers?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageCustomDomains?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageCustomPermissions?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageCustomReportTypes?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsManageCustomerDataOptOut?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageDashbdsInPubFolders?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsManageDataAnalyticsGroups?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageDataCategories?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageDataIntegrations?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageDataspaceScope?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsManageDevSandboxes?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageDynamicDashboards?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageEmailClientConfig?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsManageEmailContent?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsManageEmailMessagingSetup?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageExchangeConfig?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageExternalConnections?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageFilesAndAttachments?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageForecastingCustomData?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsManageGlobalPrivacyCenterVO?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageHealthCheck?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageHerokuAppLink?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageHubConnections?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -9029,11 +12958,14 @@ export type Profile_OrderBy = {
 	PermissionsManageMaliciousFiles?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageMobile?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageMobileAppSecurity?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsManageMyExternalUsers?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageNamedCredentials?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageNetworks?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageOrchInstsAndWorkItems?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageOrchestrationRuns?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsManagePartners?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManagePasswordPolicies?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsManagePreferenceCenter?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageProfilesPermissionsets?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManagePropositions?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManagePvtRptsAndDashbds?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -9043,10 +12975,11 @@ export type Profile_OrderBy = {
 	PermissionsManageRemoteAccess?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageReportsInPubFolders?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageRoles?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsManageSMSDomainSetup?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsManageSMSMessagingSetup?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsManageSandboxes?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageSessionPermissionSets?: InputMaybe<NoFunctionAggregateOrderByClause>;
-	PermissionsManageSharedListViews?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageSharing?: InputMaybe<NoFunctionAggregateOrderByClause>;
-	PermissionsManageSocialPosting?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageSolutions?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageSubscriptions?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageSurveys?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -9056,8 +12989,7 @@ export type Profile_OrderBy = {
 	PermissionsManageUnlistedGroups?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsManageUsers?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsMassInlineEdit?: InputMaybe<NoFunctionAggregateOrderByClause>;
-	PermissionsMeetingEngagementUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
-	PermissionsMemberSelfServiceAgentAccess?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsMcScoringRulesConfig?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsMergeTopics?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsMetadataStudioUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsMicrobatching?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -9077,19 +13009,27 @@ export type Profile_OrderBy = {
 	PermissionsMonitorLoginHistory?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsNativeWebviewScrolling?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsNewReportBuilder?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsOpportunityInfluence?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsOrgPerformanceAccess?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsOutboundMigrationToolsUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsOverrideForecasts?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsPRMChannelMgmtConsoleUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsPackaging2?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsPackaging2Delete?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsPasswordNeverExpires?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsPerformanceAnalysisAccess?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsPersonalizationDecisioningUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsPersonalizationIntelUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsPersonalizationPlatform?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsPersonalizedFinanceUserAccess?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsPortalSuperUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsPreventClassicExperience?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsPreviewTestSendEmail?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsPreviewTestSendSMS?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsPrismBackofficeUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsPrismPlaygroundUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsPrivacyDataAccess?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsPrmEnhancedPortalUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsPrmExtIntPrtnrAdminUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsPublishMultiforce?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsQrCodeGeneratorMobilePublisherPlayground?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -9098,6 +13038,7 @@ export type Profile_OrderBy = {
 	PermissionsQuipMetricsAccess?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsQuipUserEngagementMetrics?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsReassignOrchestrationWorkItems?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsRecordVisibilityAPI?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsRegrelloUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsRemoveDirectMessageMembers?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsResetPasswords?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -9111,6 +13052,8 @@ export type Profile_OrderBy = {
 	PermissionsSelectFilesFromSalesforce?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsSendAnnouncementEmails?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsSendCustomNotifications?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsSendEmail?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsSendSMS?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsSendSitRequests?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsShareFilesWithNetworks?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsShowCompanyNameAsUserBadge?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -9132,8 +13075,12 @@ export type Profile_OrderBy = {
 	PermissionsTransferAnyEntity?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsTransferAnyLead?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsTwoFactorApi?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsUMAStandaloneUserPerm?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsUMAWebTrackingSetup?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsUmaEditConsentSettings?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsUmaQueryCMSEmailContent?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsUnifiedEHDViewer?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsUpdateReportTypeReferences?: InputMaybe<NoFunctionAggregateOrderByClause>;
-	PermissionsUseAnyApiAuth?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsUseAssistantDialog?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsUseMySearch?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsUseQuerySuggestions?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -9145,6 +13092,7 @@ export type Profile_OrderBy = {
 	PermissionsUseTeamsForItSrvcs?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsUseWebLink?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsUserCanDeployStore?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsUserHasSendToListFilterAccess?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsUserInteractionInsights?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewAccessPolicies?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewAllActivities?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -9153,10 +13101,12 @@ export type Profile_OrderBy = {
 	PermissionsViewAllFieldsGlobal?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewAllForecasts?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewAllForeignKeyNames?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsViewAllNonSetupFlows?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewAllPolicyCenterPolicies?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewAllProfiles?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewAllUsers?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewApiNamedQueries?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsViewBusinessUnit?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewClientSecret?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewContent?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewContentTaxonomy?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -9164,13 +13114,17 @@ export type Profile_OrderBy = {
 	PermissionsViewDataAssessment?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewDataCategories?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewDeveloperName?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsViewEmailMessagingSetup?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewEncryptedData?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewEventLogFiles?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewGlobalHeader?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewHealthCheck?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewHelpLink?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewLicenseUtilization?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsViewMLModels?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewMyTeamsDashboards?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsViewNonSetupFlow?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsViewOnlyEmbeddedAppUser?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewOrchestrationsInAutomApp?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewPrivateStaticResources?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewPublicCapstoneFolders?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -9179,8 +13133,10 @@ export type Profile_OrderBy = {
 	PermissionsViewRecommendations?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewRestrictionAndScopingRules?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewRoles?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsViewSMSMessagingSetup?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewSetup?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewTrustMeasures?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	PermissionsViewUMACalendar?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsViewUserPII?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	PermissionsYourAccountCDAPublishEvents?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	SharingType?: InputMaybe<OrderByClause>;
@@ -9318,28 +13274,6 @@ export type Property_Listing__C_Filter = {
 	and?: InputMaybe<Array<InputMaybe<Property_Listing__C_Filter>>>;
 	not?: InputMaybe<Property_Listing__C_Filter>;
 	or?: InputMaybe<Array<InputMaybe<Property_Listing__C_Filter>>>;
-};
-
-export type Property_Listing__C_OrderBy = {
-	CreatedBy?: InputMaybe<User_OrderBy>;
-	CreatedById?: InputMaybe<OrderByClause>;
-	CreatedDate?: InputMaybe<OrderByClause>;
-	Display_Order__c?: InputMaybe<OrderByClause>;
-	Featured__c?: InputMaybe<OrderByClause>;
-	Id?: InputMaybe<OrderByClause>;
-	IsDeleted?: InputMaybe<OrderByClause>;
-	LastActivityDate?: InputMaybe<OrderByClause>;
-	LastModifiedBy?: InputMaybe<User_OrderBy>;
-	LastModifiedById?: InputMaybe<OrderByClause>;
-	LastModifiedDate?: InputMaybe<OrderByClause>;
-	Listing_Price__c?: InputMaybe<OrderByClause>;
-	Listing_Status__c?: InputMaybe<OrderByClause>;
-	Marketing_Description__c?: InputMaybe<AggregateOrderByStringClause>;
-	Name?: InputMaybe<OrderByClause>;
-	Property__c?: InputMaybe<OrderByClause>;
-	Property__r?: InputMaybe<Property__C_OrderBy>;
-	Short_Description__c?: InputMaybe<OrderByClause>;
-	SystemModstamp?: InputMaybe<OrderByClause>;
 };
 
 export type Property_Management_Company__History_Filter = {
@@ -9589,6 +13523,55 @@ export type Property__C_Owner_OrderBys = {
 	User?: InputMaybe<User_OrderBy>;
 };
 
+export type Prospect_Filter = {
+	AnnualRevenue?: InputMaybe<CurrencyOperators>;
+	City?: InputMaybe<StringOperators>;
+	Company?: InputMaybe<StringOperators>;
+	ConvertedAccount?: InputMaybe<Account_Filter>;
+	ConvertedAccountId?: InputMaybe<IdOperators>;
+	ConvertedContact?: InputMaybe<Contact_Filter>;
+	ConvertedContactId?: InputMaybe<IdOperators>;
+	ConvertedDate?: InputMaybe<DateOperators>;
+	ConvertedLead?: InputMaybe<Lead_Filter>;
+	ConvertedLeadId?: InputMaybe<IdOperators>;
+	ConvertedOpportunity?: InputMaybe<Opportunity_Filter>;
+	ConvertedOpportunityId?: InputMaybe<IdOperators>;
+	Country?: InputMaybe<StringOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	Description?: InputMaybe<LongTextAreaOperators>;
+	Email?: InputMaybe<EmailOperators>;
+	FirstName?: InputMaybe<StringOperators>;
+	GenderIdentity?: InputMaybe<PicklistOperators>;
+	GeocodeAccuracy?: InputMaybe<PicklistOperators>;
+	Id?: InputMaybe<IdOperators>;
+	Industry?: InputMaybe<PicklistOperators>;
+	IsConverted?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	LastName?: InputMaybe<StringOperators>;
+	Latitude?: InputMaybe<LatitudeOperators>;
+	LeadSource?: InputMaybe<PicklistOperators>;
+	Longitude?: InputMaybe<LongitudeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	NumberOfEmployees?: InputMaybe<IntegerOperators>;
+	Phone?: InputMaybe<PhoneNumberOperators>;
+	PostalCode?: InputMaybe<StringOperators>;
+	ProspectRecordName?: InputMaybe<StringOperators>;
+	ProspectStatus?: InputMaybe<PicklistOperators>;
+	Salutation?: InputMaybe<PicklistOperators>;
+	State?: InputMaybe<StringOperators>;
+	Street?: InputMaybe<TextAreaOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	Title?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<Prospect_Filter>>>;
+	not?: InputMaybe<Prospect_Filter>;
+	or?: InputMaybe<Array<InputMaybe<Prospect_Filter>>>;
+};
+
 export type QuickTextHistory_Filter = {
 	CreatedBy?: InputMaybe<User_Filter>;
 	CreatedById?: InputMaybe<IdOperators>;
@@ -9780,29 +13763,6 @@ export type RecordType_OrderBy = {
 	SystemModstamp?: InputMaybe<OrderByClause>;
 };
 
-export type ReportHierarchyObjectField_Filter = {
-	CreatedBy?: InputMaybe<User_Filter>;
-	CreatedById?: InputMaybe<IdOperators>;
-	CreatedDate?: InputMaybe<DateTimeOperators>;
-	HierarchyApiName?: InputMaybe<StringOperators>;
-	HierarchyField?: InputMaybe<StringOperators>;
-	HierarchyType?: InputMaybe<PicklistOperators>;
-	Id?: InputMaybe<IdOperators>;
-	IsDeleted?: InputMaybe<BooleanOperators>;
-	LastModifiedBy?: InputMaybe<User_Filter>;
-	LastModifiedById?: InputMaybe<IdOperators>;
-	LastModifiedDate?: InputMaybe<DateTimeOperators>;
-	Name?: InputMaybe<StringOperators>;
-	Object?: InputMaybe<StringOperators>;
-	ObjectType?: InputMaybe<PicklistOperators>;
-	Report?: InputMaybe<Report_Filter>;
-	ReportId?: InputMaybe<IdOperators>;
-	SystemModstamp?: InputMaybe<DateTimeOperators>;
-	and?: InputMaybe<Array<InputMaybe<ReportHierarchyObjectField_Filter>>>;
-	not?: InputMaybe<ReportHierarchyObjectField_Filter>;
-	or?: InputMaybe<Array<InputMaybe<ReportHierarchyObjectField_Filter>>>;
-};
-
 export type Report_Filter = {
 	BlockReportId?: InputMaybe<IdOperators>;
 	BooleanFilter?: InputMaybe<StringOperators>;
@@ -9833,7 +13793,6 @@ export type Report_Filter = {
 	OptionsFlagCurrentSnapshotDate?: InputMaybe<BooleanOperators>;
 	OptionsFlagHasStackedSummaries?: InputMaybe<BooleanOperators>;
 	OptionsFlagIsSmartTotalDisabled?: InputMaybe<BooleanOperators>;
-	OptionsFlagShowCommonRowsOnly?: InputMaybe<BooleanOperators>;
 	OptionsFlagShowGrandTotal?: InputMaybe<BooleanOperators>;
 	OptionsFlagShowSubtotals?: InputMaybe<BooleanOperators>;
 	OptionsFlagSideBySide?: InputMaybe<BooleanOperators>;
@@ -9858,17 +13817,15 @@ export type Report_Owner_Filters = {
 	User?: InputMaybe<User_Filter>;
 };
 
-export const ResultOrder = {
-	Asc: "ASC",
-	Desc: "DESC",
-} as const;
-export type ResultOrder = (typeof ResultOrder)[keyof typeof ResultOrder];
+export enum ResultOrder {
+	Asc = "ASC",
+	Desc = "DESC",
+}
 
-export const ResultsOrder = {
-	Asc: "ASC",
-	Desc: "DESC",
-} as const;
-export type ResultsOrder = (typeof ResultsOrder)[keyof typeof ResultsOrder];
+export enum ResultsOrder {
+	Asc = "ASC",
+	Desc = "DESC",
+}
 
 export type ScorecardAssociation_Filter = {
 	CreatedBy?: InputMaybe<User_Filter>;
@@ -9885,11 +13842,18 @@ export type ScorecardAssociation_Filter = {
 	Scorecard?: InputMaybe<Scorecard_Filter>;
 	ScorecardId?: InputMaybe<IdOperators>;
 	SystemModstamp?: InputMaybe<DateTimeOperators>;
-	TargetEntity?: InputMaybe<Account_Filter>;
+	TargetEntity?: InputMaybe<ScorecardAssociation_TargetEntity_Filters>;
 	TargetEntityId?: InputMaybe<IdOperators>;
 	and?: InputMaybe<Array<InputMaybe<ScorecardAssociation_Filter>>>;
 	not?: InputMaybe<ScorecardAssociation_Filter>;
 	or?: InputMaybe<Array<InputMaybe<ScorecardAssociation_Filter>>>;
+};
+
+export type ScorecardAssociation_TargetEntity_Filters = {
+	Account?: InputMaybe<Account_Filter>;
+	ChannelProgram?: InputMaybe<ChannelProgram_Filter>;
+	ChannelProgramLevel?: InputMaybe<ChannelProgramLevel_Filter>;
+	Name?: InputMaybe<Name_Filter>;
 };
 
 export type ScorecardMetric_Filter = {
@@ -9982,33 +13946,6 @@ export type SecurityHealthCheckResult_Filter = {
 	or?: InputMaybe<Array<InputMaybe<SecurityHealthCheckResult_Filter>>>;
 };
 
-export type SelfSvcPortalTopic_Filter = {
-	CreatedBy?: InputMaybe<User_Filter>;
-	CreatedById?: InputMaybe<IdOperators>;
-	CreatedDate?: InputMaybe<DateTimeOperators>;
-	Description?: InputMaybe<LongTextAreaOperators>;
-	DeveloperName?: InputMaybe<StringOperators>;
-	DisplayOrder?: InputMaybe<IntegerOperators>;
-	IconResource?: InputMaybe<StaticResource_Filter>;
-	IconResourceId?: InputMaybe<IdOperators>;
-	Id?: InputMaybe<IdOperators>;
-	IsActive?: InputMaybe<BooleanOperators>;
-	IsDeleted?: InputMaybe<BooleanOperators>;
-	IsHomePage?: InputMaybe<BooleanOperators>;
-	IsLeftNav?: InputMaybe<BooleanOperators>;
-	Language?: InputMaybe<PicklistOperators>;
-	LastModifiedBy?: InputMaybe<User_Filter>;
-	LastModifiedById?: InputMaybe<IdOperators>;
-	LastModifiedDate?: InputMaybe<DateTimeOperators>;
-	MasterLabel?: InputMaybe<StringOperators>;
-	Network?: InputMaybe<Network_Filter>;
-	NetworkId?: InputMaybe<IdOperators>;
-	SystemModstamp?: InputMaybe<DateTimeOperators>;
-	and?: InputMaybe<Array<InputMaybe<SelfSvcPortalTopic_Filter>>>;
-	not?: InputMaybe<SelfSvcPortalTopic_Filter>;
-	or?: InputMaybe<Array<InputMaybe<SelfSvcPortalTopic_Filter>>>;
-};
-
 export type SellerHistory_Filter = {
 	CreatedBy?: InputMaybe<User_Filter>;
 	CreatedById?: InputMaybe<IdOperators>;
@@ -10056,6 +13993,42 @@ export type Seller_Filter = {
 };
 
 export type Seller_Owner_Filters = {
+	Group?: InputMaybe<Group_Filter>;
+	Name?: InputMaybe<Name_Filter>;
+	User?: InputMaybe<User_Filter>;
+};
+
+export type SenderEmailAddress_Filter = {
+	AutoReplyMessage?: InputMaybe<LongTextAreaOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	DisplayName?: InputMaybe<StringOperators>;
+	EmailDomainKeyId?: InputMaybe<IdOperators>;
+	FwdEmailAddress?: InputMaybe<StringOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IncomingMessagingSettingCode?: InputMaybe<IntegerOperators>;
+	IsAgentConversationalActive?: InputMaybe<BooleanOperators>;
+	IsAutoReplyEnabled?: InputMaybe<BooleanOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	IsOutboundMessagingActive?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	MessagingChannel?: InputMaybe<MessagingChannel_Filter>;
+	MessagingChannelId?: InputMaybe<IdOperators>;
+	Name?: InputMaybe<StringOperators>;
+	Owner?: InputMaybe<SenderEmailAddress_Owner_Filters>;
+	OwnerId?: InputMaybe<IdOperators>;
+	SendDefinitionKey?: InputMaybe<StringOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	Username?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<SenderEmailAddress_Filter>>>;
+	not?: InputMaybe<SenderEmailAddress_Filter>;
+	or?: InputMaybe<Array<InputMaybe<SenderEmailAddress_Filter>>>;
+};
+
+export type SenderEmailAddress_Owner_Filters = {
 	Group?: InputMaybe<Group_Filter>;
 	Name?: InputMaybe<Name_Filter>;
 	User?: InputMaybe<User_Filter>;
@@ -10360,11 +14333,10 @@ export type StringOperators = {
 	nin?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
 
-export const TabOrder = {
-	LeftRight: "LEFT_RIGHT",
-	TopDown: "TOP_DOWN",
-} as const;
-export type TabOrder = (typeof TabOrder)[keyof typeof TabOrder];
+export enum TabOrder {
+	LeftRight = "LEFT_RIGHT",
+	TopDown = "TOP_DOWN",
+}
 
 export type TableauHostMapping_Filter = {
 	CreatedBy?: InputMaybe<User_Filter>;
@@ -10462,10 +14434,14 @@ export type Task_What_Filters = {
 	AssetRelationship?: InputMaybe<AssetRelationship_Filter>;
 	Campaign?: InputMaybe<Campaign_Filter>;
 	Case?: InputMaybe<Case_Filter>;
+	ChannelProgram?: InputMaybe<ChannelProgram_Filter>;
+	ChannelProgramLevel?: InputMaybe<ChannelProgramLevel_Filter>;
 	CommSubscriptionConsent?: InputMaybe<CommSubscriptionConsent_Filter>;
 	ContactRequest?: InputMaybe<ContactRequest_Filter>;
 	Contract?: InputMaybe<Contract_Filter>;
+	DataQueryWorkspace?: InputMaybe<DataQueryWorkspace_Filter>;
 	DelegatedAccount?: InputMaybe<DelegatedAccount_Filter>;
+	DevopsActivityLog?: InputMaybe<DevopsActivityLog_Filter>;
 	DevopsEnvironment?: InputMaybe<DevopsEnvironment_Filter>;
 	DevopsRequestInfo?: InputMaybe<DevopsRequestInfo_Filter>;
 	Image?: InputMaybe<Image_Filter>;
@@ -10477,6 +14453,10 @@ export type Task_What_Filters = {
 	Name?: InputMaybe<Name_Filter>;
 	Opportunity?: InputMaybe<Opportunity_Filter>;
 	Order?: InputMaybe<Order_Filter>;
+	PartnerFundAllocation?: InputMaybe<PartnerFundAllocation_Filter>;
+	PartnerFundClaim?: InputMaybe<PartnerFundClaim_Filter>;
+	PartnerFundRequest?: InputMaybe<PartnerFundRequest_Filter>;
+	PartnerMarketingBudget?: InputMaybe<PartnerMarketingBudget_Filter>;
 	PartyConsent?: InputMaybe<PartyConsent_Filter>;
 	Payment__c?: InputMaybe<Payment__C_Filter>;
 	ProcessException?: InputMaybe<ProcessException_Filter>;
@@ -10544,10 +14524,40 @@ export type Tenant__C_Filter = {
 	or?: InputMaybe<Array<InputMaybe<Tenant__C_Filter>>>;
 };
 
+export type Tenant__C_OrderBy = {
+	CreatedBy?: InputMaybe<User_OrderBy>;
+	CreatedById?: InputMaybe<OrderByClause>;
+	CreatedDate?: InputMaybe<OrderByClause>;
+	End_Date__c?: InputMaybe<OrderByClause>;
+	Id?: InputMaybe<OrderByClause>;
+	IsDeleted?: InputMaybe<OrderByClause>;
+	LastActivityDate?: InputMaybe<OrderByClause>;
+	LastModifiedBy?: InputMaybe<User_OrderBy>;
+	LastModifiedById?: InputMaybe<OrderByClause>;
+	LastModifiedDate?: InputMaybe<OrderByClause>;
+	Name?: InputMaybe<OrderByClause>;
+	Owner?: InputMaybe<Tenant__C_Owner_OrderBys>;
+	OwnerId?: InputMaybe<OrderByClause>;
+	Property__c?: InputMaybe<OrderByClause>;
+	Property__r?: InputMaybe<Property__C_OrderBy>;
+	Start_Date__c?: InputMaybe<OrderByClause>;
+	Status__c?: InputMaybe<OrderByClause>;
+	SystemModstamp?: InputMaybe<OrderByClause>;
+	User_Status__c?: InputMaybe<OrderByClause>;
+	User__c?: InputMaybe<OrderByClause>;
+	User__r?: InputMaybe<User_OrderBy>;
+};
+
 export type Tenant__C_Owner_Filters = {
 	Group?: InputMaybe<Group_Filter>;
 	Name?: InputMaybe<Name_Filter>;
 	User?: InputMaybe<User_Filter>;
+};
+
+export type Tenant__C_Owner_OrderBys = {
+	Group?: InputMaybe<Group_OrderBy>;
+	Name?: InputMaybe<Name_OrderBy>;
+	User?: InputMaybe<User_OrderBy>;
 };
 
 export type TextAreaOperators = {
@@ -10580,6 +14590,8 @@ export type TopicAssignment_Entity_Filters = {
 	Asset?: InputMaybe<Asset_Filter>;
 	Campaign?: InputMaybe<Campaign_Filter>;
 	Case?: InputMaybe<Case_Filter>;
+	ChannelProgram?: InputMaybe<ChannelProgram_Filter>;
+	ChannelProgramLevel?: InputMaybe<ChannelProgramLevel_Filter>;
 	Contact?: InputMaybe<Contact_Filter>;
 	ContentDocument?: InputMaybe<ContentDocument_Filter>;
 	Contract?: InputMaybe<Contract_Filter>;
@@ -10594,6 +14606,10 @@ export type TopicAssignment_Entity_Filters = {
 	Notification__c?: InputMaybe<Notification__C_Filter>;
 	Opportunity?: InputMaybe<Opportunity_Filter>;
 	Order?: InputMaybe<Order_Filter>;
+	PartnerFundAllocation?: InputMaybe<PartnerFundAllocation_Filter>;
+	PartnerFundClaim?: InputMaybe<PartnerFundClaim_Filter>;
+	PartnerFundRequest?: InputMaybe<PartnerFundRequest_Filter>;
+	PartnerMarketingBudget?: InputMaybe<PartnerMarketingBudget_Filter>;
 	Payment__c?: InputMaybe<Payment__C_Filter>;
 	Property_Cost__c?: InputMaybe<Property_Cost__C_Filter>;
 	Property_Feature__c?: InputMaybe<Property_Feature__C_Filter>;
@@ -10673,18 +14689,16 @@ export type UrlOperators = {
 	nin?: InputMaybe<Array<InputMaybe<Scalars["Url"]["input"]>>>;
 };
 
-export const UiBehavior = {
-	Edit: "EDIT",
-	Readonly: "READONLY",
-	Required: "REQUIRED",
-} as const;
-export type UiBehavior = (typeof UiBehavior)[keyof typeof UiBehavior];
+export enum UiBehavior {
+	Edit = "EDIT",
+	Readonly = "READONLY",
+	Required = "REQUIRED",
+}
 
-export const Unit = {
-	Km: "KM",
-	Mi: "MI",
-} as const;
-export type Unit = (typeof Unit)[keyof typeof Unit];
+export enum Unit {
+	Km = "KM",
+	Mi = "MI",
+}
 
 export type UnstructuredStorageSpace_Filter = {
 	ApplicationName?: InputMaybe<StringOperators>;
@@ -10901,6 +14915,7 @@ export type UserRole_Filter = {
 	ParentRoleId?: InputMaybe<IdOperators>;
 	PortalAccountId?: InputMaybe<IdOperators>;
 	PortalAccountOwnerId?: InputMaybe<IdOperators>;
+	PortalRole?: InputMaybe<PicklistOperators>;
 	PortalType?: InputMaybe<PicklistOperators>;
 	RollupDescription?: InputMaybe<StringOperators>;
 	SystemModstamp?: InputMaybe<DateTimeOperators>;
@@ -10925,6 +14940,7 @@ export type UserRole_OrderBy = {
 	ParentRoleId?: InputMaybe<OrderByClause>;
 	PortalAccountId?: InputMaybe<OrderByClause>;
 	PortalAccountOwnerId?: InputMaybe<OrderByClause>;
+	PortalRole?: InputMaybe<OrderByClause>;
 	PortalType?: InputMaybe<OrderByClause>;
 	RollupDescription?: InputMaybe<OrderByClause>;
 	SystemModstamp?: InputMaybe<OrderByClause>;
@@ -10984,6 +15000,8 @@ export type User_Filter = {
 	IndividualId?: InputMaybe<IdOperators>;
 	IsActive?: InputMaybe<BooleanOperators>;
 	IsExtIndicatorVisible?: InputMaybe<BooleanOperators>;
+	IsPartner?: InputMaybe<BooleanOperators>;
+	IsPortalEnabled?: InputMaybe<BooleanOperators>;
 	IsProfilePhotoActive?: InputMaybe<BooleanOperators>;
 	LanguageLocaleKey?: InputMaybe<PicklistOperators>;
 	LastLoginDate?: InputMaybe<DateTimeOperators>;
@@ -11009,6 +15027,7 @@ export type User_Filter = {
 	OutOfOfficeMessage?: InputMaybe<StringOperators>;
 	PasswordExpirationDate?: InputMaybe<DateTimeOperators>;
 	Phone?: InputMaybe<PhoneNumberOperators>;
+	PortalRole?: InputMaybe<PicklistOperators>;
 	PostalCode?: InputMaybe<StringOperators>;
 	Profile?: InputMaybe<Profile_Filter>;
 	ProfileId?: InputMaybe<IdOperators>;
@@ -11085,6 +15104,7 @@ export type User_Filter = {
 	UserPreferencesHideEndUserOnboardingAssistantModal?: InputMaybe<BooleanOperators>;
 	UserPreferencesHideEventCalendar?: InputMaybe<BooleanOperators>;
 	UserPreferencesHideFLSNotification?: InputMaybe<BooleanOperators>;
+	UserPreferencesHideFlowTypeChangeConfirmationModal?: InputMaybe<BooleanOperators>;
 	UserPreferencesHideLearningPathModal?: InputMaybe<BooleanOperators>;
 	UserPreferencesHideLightningMigrationModal?: InputMaybe<BooleanOperators>;
 	UserPreferencesHideMailAppEAPUserGuidance?: InputMaybe<BooleanOperators>;
@@ -11092,6 +15112,7 @@ export type User_Filter = {
 	UserPreferencesHideManagedEcaMobilePubModal?: InputMaybe<BooleanOperators>;
 	UserPreferencesHideOnlineSalesAppTabVisibilityRequirementsModal?: InputMaybe<BooleanOperators>;
 	UserPreferencesHideOnlineSalesAppWelcomeMat?: InputMaybe<BooleanOperators>;
+	UserPreferencesHideRemoteConnectInstruction?: InputMaybe<BooleanOperators>;
 	UserPreferencesHideS1BrowserUI?: InputMaybe<BooleanOperators>;
 	UserPreferencesHideSecondChatterOnboardingSplash?: InputMaybe<BooleanOperators>;
 	UserPreferencesHideSfxWelcomeMat?: InputMaybe<BooleanOperators>;
@@ -11207,6 +15228,8 @@ export type User_OrderBy = {
 	IndividualId?: InputMaybe<OrderByClause>;
 	IsActive?: InputMaybe<OrderByClause>;
 	IsExtIndicatorVisible?: InputMaybe<OrderByClause>;
+	IsPartner?: InputMaybe<OrderByClause>;
+	IsPortalEnabled?: InputMaybe<OrderByClause>;
 	IsProfilePhotoActive?: InputMaybe<OrderByClause>;
 	LanguageLocaleKey?: InputMaybe<OrderByClause>;
 	LastLoginDate?: InputMaybe<OrderByClause>;
@@ -11232,6 +15255,7 @@ export type User_OrderBy = {
 	OutOfOfficeMessage?: InputMaybe<OrderByClause>;
 	PasswordExpirationDate?: InputMaybe<OrderByClause>;
 	Phone?: InputMaybe<OrderByClause>;
+	PortalRole?: InputMaybe<OrderByClause>;
 	PostalCode?: InputMaybe<OrderByClause>;
 	Profile?: InputMaybe<Profile_OrderBy>;
 	ProfileId?: InputMaybe<OrderByClause>;
@@ -11308,6 +15332,7 @@ export type User_OrderBy = {
 	UserPreferencesHideEndUserOnboardingAssistantModal?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	UserPreferencesHideEventCalendar?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	UserPreferencesHideFLSNotification?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	UserPreferencesHideFlowTypeChangeConfirmationModal?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	UserPreferencesHideLearningPathModal?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	UserPreferencesHideLightningMigrationModal?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	UserPreferencesHideMailAppEAPUserGuidance?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -11315,6 +15340,7 @@ export type User_OrderBy = {
 	UserPreferencesHideManagedEcaMobilePubModal?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	UserPreferencesHideOnlineSalesAppTabVisibilityRequirementsModal?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	UserPreferencesHideOnlineSalesAppWelcomeMat?: InputMaybe<NoFunctionAggregateOrderByClause>;
+	UserPreferencesHideRemoteConnectInstruction?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	UserPreferencesHideS1BrowserUI?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	UserPreferencesHideSecondChatterOnboardingSplash?: InputMaybe<NoFunctionAggregateOrderByClause>;
 	UserPreferencesHideSfxWelcomeMat?: InputMaybe<NoFunctionAggregateOrderByClause>;
@@ -11381,6 +15407,30 @@ export type User_OrderBy = {
 	UserRoleId?: InputMaybe<OrderByClause>;
 	UserType?: InputMaybe<OrderByClause>;
 	Username?: InputMaybe<OrderByClause>;
+};
+
+export type WaveAutoInstallRequest_Filter = {
+	Configuration?: InputMaybe<LongTextAreaOperators>;
+	CreatedBy?: InputMaybe<User_Filter>;
+	CreatedById?: InputMaybe<IdOperators>;
+	CreatedDate?: InputMaybe<DateTimeOperators>;
+	FailedReason?: InputMaybe<PicklistOperators>;
+	FolderId?: InputMaybe<IdOperators>;
+	Id?: InputMaybe<IdOperators>;
+	IsDeleted?: InputMaybe<BooleanOperators>;
+	LastModifiedBy?: InputMaybe<User_Filter>;
+	LastModifiedById?: InputMaybe<IdOperators>;
+	LastModifiedDate?: InputMaybe<DateTimeOperators>;
+	Name?: InputMaybe<StringOperators>;
+	RequestLog?: InputMaybe<LongTextAreaOperators>;
+	RequestStatus?: InputMaybe<PicklistOperators>;
+	RequestType?: InputMaybe<PicklistOperators>;
+	SystemModstamp?: InputMaybe<DateTimeOperators>;
+	TemplateApiName?: InputMaybe<StringOperators>;
+	TemplateVersion?: InputMaybe<StringOperators>;
+	and?: InputMaybe<Array<InputMaybe<WaveAutoInstallRequest_Filter>>>;
+	not?: InputMaybe<WaveAutoInstallRequest_Filter>;
+	or?: InputMaybe<Array<InputMaybe<WaveAutoInstallRequest_Filter>>>;
 };
 
 export type WorkBadgeDefinitionHistory_Filter = {
@@ -11570,8 +15620,10 @@ export type WorkOrder_Owner_Filters = {
 };
 
 export type MaintenanceRequestsQueryVariables = Exact<{
-	first: Scalars["Int"]["input"];
+	first?: InputMaybe<Scalars["Int"]["input"]>;
 	after?: InputMaybe<Scalars["String"]["input"]>;
+	where?: InputMaybe<Maintenance_Request__C_Filter>;
+	orderBy?: InputMaybe<Maintenance_Request__C_OrderBy>;
 }>;
 
 export type MaintenanceRequestsQuery = {
@@ -11603,6 +15655,50 @@ export type MaintenanceRequestsQuery = {
 	};
 };
 
+export type DistinctPropertyStatusQueryVariables = Exact<{ [key: string]: never }>;
+
+export type DistinctPropertyStatusQuery = {
+	uiapi: {
+		aggregate: {
+			Property__c?: {
+				edges?: Array<{
+					node?: {
+						aggregate?: {
+							Status__c?: {
+								value?: string | null;
+								displayValue?: string | null;
+								label?: string | null;
+							} | null;
+						} | null;
+					} | null;
+				} | null> | null;
+			} | null;
+		};
+	};
+};
+
+export type DistinctPropertyTypeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type DistinctPropertyTypeQuery = {
+	uiapi: {
+		aggregate: {
+			Property__c?: {
+				edges?: Array<{
+					node?: {
+						aggregate?: {
+							Type__c?: {
+								value?: string | null;
+								displayValue?: string | null;
+								label?: string | null;
+							} | null;
+						} | null;
+					} | null;
+				} | null> | null;
+			} | null;
+		};
+	};
+};
+
 export type ListingByIdQueryVariables = Exact<{
 	listingId: Scalars["ID"]["input"];
 }>;
@@ -11625,11 +15721,30 @@ export type ListingByIdQuery = {
 	};
 };
 
-export type PropertyByIdQueryVariables = Exact<{
+export type PropertyAddressesByIdsQueryVariables = Exact<{
+	propertyIds?: InputMaybe<Array<Scalars["ID"]["input"]> | Scalars["ID"]["input"]>;
+}>;
+
+export type PropertyAddressesByIdsQuery = {
+	uiapi: {
+		query: {
+			Property__c?: {
+				edges?: Array<{
+					node?: {
+						Id: string;
+						Address__c?: { value?: string | null; displayValue?: string | null } | null;
+					} | null;
+				} | null> | null;
+			} | null;
+		};
+	};
+};
+
+export type PropertyDetailByIdQueryVariables = Exact<{
 	propertyId: Scalars["ID"]["input"];
 }>;
 
-export type PropertyByIdQuery = {
+export type PropertyDetailByIdQuery = {
 	uiapi: {
 		query: {
 			Property__c?: {
@@ -11638,20 +15753,57 @@ export type PropertyByIdQuery = {
 						Id: string;
 						Name?: { value?: string | null; displayValue?: string | null } | null;
 						Address__c?: { value?: string | null; displayValue?: string | null } | null;
-						Coordinates__Latitude__s?: {
-							value?: number | null;
-							displayValue?: string | null;
-						} | null;
-						Coordinates__Longitude__s?: {
-							value?: number | null;
-							displayValue?: string | null;
-						} | null;
+						Coordinates__Latitude__s?: { value?: number | null } | null;
+						Coordinates__Longitude__s?: { value?: number | null } | null;
 						Type__c?: { value?: string | null; displayValue?: string | null } | null;
 						Monthly_Rent__c?: { value?: number | null; displayValue?: string | null } | null;
 						Bedrooms__c?: { value?: number | null; displayValue?: string | null } | null;
 						Bathrooms__c?: { value?: number | null; displayValue?: string | null } | null;
 						Sq_Ft__c?: { value?: number | null; displayValue?: string | null } | null;
 						Description__c?: { value?: string | null; displayValue?: string | null } | null;
+						Property_Images__r?: {
+							edges?: Array<{
+								node?: {
+									Id: string;
+									Name?: { value?: string | null } | null;
+									Image_URL__c?: { value?: string | null } | null;
+									Image_Type__c?: { value?: string | null } | null;
+									Display_Order__c?: { value?: number | null } | null;
+									Alt_Text__c?: { value?: string | null } | null;
+								} | null;
+							} | null> | null;
+						} | null;
+						Property_Features__r?: {
+							edges?: Array<{
+								node?: {
+									Id: string;
+									Name?: { value?: string | null } | null;
+									Feature_Category__c?: { value?: string | null } | null;
+									Description__c?: { value?: string | null } | null;
+								} | null;
+							} | null> | null;
+						} | null;
+						Property_Costs__r?: {
+							edges?: Array<{
+								node?: {
+									Id: string;
+									Cost_Category__c?: { value?: string | null } | null;
+									Cost_Amount__c?: { value?: number | null } | null;
+									Cost_Date__c?: { value?: string | null } | null;
+									Description__c?: { value?: string | null } | null;
+								} | null;
+							} | null> | null;
+						} | null;
+						Property_Listings__r?: {
+							edges?: Array<{
+								node?: {
+									Id: string;
+									Name?: { value?: string | null } | null;
+									Listing_Price__c?: { value?: number | null } | null;
+									Listing_Status__c?: { value?: string | null } | null;
+								} | null;
+							} | null> | null;
+						} | null;
 					} | null;
 				} | null> | null;
 			} | null;
@@ -11659,117 +15811,65 @@ export type PropertyByIdQuery = {
 	};
 };
 
-export type PropertyImagesQueryVariables = Exact<{
-	propertyId: Scalars["ID"]["input"];
-}>;
-
-export type PropertyImagesQuery = {
-	uiapi: {
-		query: {
-			Property_Image__c?: {
-				edges?: Array<{
-					node?: {
-						Id: string;
-						Name?: { value?: string | null; displayValue?: string | null } | null;
-						Image_URL__c?: { value?: string | null; displayValue?: string | null } | null;
-						Image_Type__c?: { value?: string | null; displayValue?: string | null } | null;
-						Display_Order__c?: { value?: number | null; displayValue?: string | null } | null;
-						Alt_Text__c?: { value?: string | null; displayValue?: string | null } | null;
-					} | null;
-				} | null> | null;
-			} | null;
-		};
-	};
-};
-
-export type PropertyCostsQueryVariables = Exact<{
-	propertyId: Scalars["ID"]["input"];
-}>;
-
-export type PropertyCostsQuery = {
-	uiapi: {
-		query: {
-			Property_Cost__c?: {
-				edges?: Array<{
-					node?: {
-						Id: string;
-						Cost_Category__c?: { value?: string | null; displayValue?: string | null } | null;
-						Cost_Amount__c?: { value?: number | null; displayValue?: string | null } | null;
-						Cost_Date__c?: { value?: string | null; displayValue?: string | null } | null;
-						Description__c?: { value?: string | null; displayValue?: string | null } | null;
-						Vendor__c?: { value?: string | null; displayValue?: string | null } | null;
-					} | null;
-				} | null> | null;
-			} | null;
-		};
-	};
-};
-
-export type PropertyFeaturesQueryVariables = Exact<{
-	propertyId: Scalars["ID"]["input"];
-}>;
-
-export type PropertyFeaturesQuery = {
-	uiapi: {
-		query: {
-			Property_Feature__c?: {
-				edges?: Array<{
-					node?: {
-						Id: string;
-						Name?: { value?: string | null; displayValue?: string | null } | null;
-						Feature_Category__c?: { value?: string | null; displayValue?: string | null } | null;
-						Description__c?: { value?: string | null; displayValue?: string | null } | null;
-					} | null;
-				} | null> | null;
-			} | null;
-		};
-	};
-};
-
-export type PropertyListingsQueryVariables = Exact<{
-	where?: InputMaybe<Property_Listing__C_Filter>;
-	first: Scalars["Int"]["input"];
+export type SearchPropertiesQueryVariables = Exact<{
+	first?: InputMaybe<Scalars["Int"]["input"]>;
 	after?: InputMaybe<Scalars["String"]["input"]>;
-	orderBy?: InputMaybe<Property_Listing__C_OrderBy>;
+	where?: InputMaybe<Property__C_Filter>;
+	orderBy?: InputMaybe<Property__C_OrderBy>;
 }>;
 
-export type PropertyListingsQuery = {
+export type SearchPropertiesQuery = {
 	uiapi: {
 		query: {
-			Property_Listing__c?: {
+			Property__c?: {
 				totalCount: number;
 				edges?: Array<{
-					cursor: string;
 					node?: {
 						Id: string;
-						ApiName: string;
 						Name?: { value?: string | null; displayValue?: string | null } | null;
-						Listing_Price__c?: { value?: number | null; displayValue?: string | null } | null;
-						Listing_Status__c?: { value?: string | null; displayValue?: string | null } | null;
-						Property__c?: { value?: string | null; displayValue?: string | null } | null;
-						Property__r?: {
-							Name?: { value?: string | null; displayValue?: string | null } | null;
-							Address__c?: { value?: string | null; displayValue?: string | null } | null;
-							Coordinates__Latitude__s?: {
-								value?: number | null;
-								displayValue?: string | null;
-							} | null;
-							Coordinates__Longitude__s?: {
-								value?: number | null;
-								displayValue?: string | null;
-							} | null;
-							Bedrooms__c?: { value?: number | null; displayValue?: string | null } | null;
+						Address__c?: { value?: string | null; displayValue?: string | null } | null;
+						Status__c?: { value?: string | null; displayValue?: string | null } | null;
+						Type__c?: { value?: string | null; displayValue?: string | null } | null;
+						Monthly_Rent__c?: { value?: number | null; displayValue?: string | null } | null;
+						Bedrooms__c?: { value?: number | null; displayValue?: string | null } | null;
+						Coordinates__Latitude__s?: { value?: number | null } | null;
+						Coordinates__Longitude__s?: { value?: number | null } | null;
+						CreatedDate?: { value?: string | null; displayValue?: string | null } | null;
+						Property_Images__r?: {
+							edges?: Array<{
+								node?: {
+									Id: string;
+									Image_URL__c?: { value?: string | null } | null;
+									Image_Type__c?: { value?: string | null } | null;
+									Display_Order__c?: { value?: number | null } | null;
+								} | null;
+							} | null> | null;
+						} | null;
+						Property_Features__r?: {
+							edges?: Array<{
+								node?: { Id: string; Description__c?: { value?: string | null } | null } | null;
+							} | null> | null;
 						} | null;
 					} | null;
 				} | null> | null;
 				pageInfo: {
 					hasNextPage: boolean;
 					hasPreviousPage: boolean;
-					startCursor?: string | null;
 					endCursor?: string | null;
+					startCursor?: string | null;
 				};
 			} | null;
 		};
+	};
+};
+
+export type TenantAccessQueryVariables = Exact<{
+	userId: Scalars["ID"]["input"];
+}>;
+
+export type TenantAccessQuery = {
+	uiapi: {
+		query: { Tenant__c?: { edges?: Array<{ node?: { Id: string } | null } | null> | null } | null };
 	};
 };
 

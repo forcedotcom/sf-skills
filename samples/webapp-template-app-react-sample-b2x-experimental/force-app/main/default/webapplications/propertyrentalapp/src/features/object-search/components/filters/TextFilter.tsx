@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
 import { Input } from "../../../../components/ui/input";
-import { Label } from "../../../../components/ui/label";
 import { cn } from "../../../../lib/utils";
 import { useFilterField } from "../FilterContext";
+import { FilterFieldWrapper } from "./FilterFieldWrapper";
+import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import type { ActiveFilterValue } from "../../utils/filterUtils";
 
 interface TextFilterProps extends Omit<React.ComponentProps<"div">, "onChange"> {
@@ -21,8 +23,13 @@ export function TextFilter({
 }: TextFilterProps) {
 	const { value, onChange } = useFilterField(field);
 	return (
-		<div className={cn("space-y-1.5", className)} {...props}>
-			<Label htmlFor={`filter-${field}`}>{label}</Label>
+		<FilterFieldWrapper
+			label={label}
+			htmlFor={`filter-${field}`}
+			helpText={helpText}
+			className={className}
+			{...props}
+		>
 			<TextFilterInput
 				field={field}
 				label={label}
@@ -30,8 +37,7 @@ export function TextFilter({
 				value={value}
 				onChange={onChange}
 			/>
-			{helpText && <p className="text-xs text-muted-foreground">{helpText}</p>}
-		</div>
+		</FilterFieldWrapper>
 	);
 }
 
@@ -53,19 +59,30 @@ export function TextFilterInput({
 	className,
 	...props
 }: TextFilterInputProps) {
+	const [localValue, setLocalValue] = useState(value?.value ?? "");
+
+	const externalValue = value?.value ?? "";
+	useEffect(() => {
+		setLocalValue(externalValue);
+	}, [externalValue]);
+
+	const debouncedOnChange = useDebouncedCallback((v: string) => {
+		if (v) {
+			onChange({ field, label, type: "text", value: v });
+		} else {
+			onChange(undefined);
+		}
+	});
+
 	return (
 		<Input
 			id={`filter-${field}`}
 			type="text"
 			placeholder={props.placeholder ?? `Filter by ${label.toLowerCase()}...`}
-			value={value?.value ?? ""}
+			value={localValue}
 			onChange={(e) => {
-				const v = e.target.value;
-				if (v) {
-					onChange({ field, label, type: "text", value: v });
-				} else {
-					onChange(undefined);
-				}
+				setLocalValue(e.target.value);
+				debouncedOnChange(e.target.value);
 			}}
 			className={cn(className)}
 			{...props}

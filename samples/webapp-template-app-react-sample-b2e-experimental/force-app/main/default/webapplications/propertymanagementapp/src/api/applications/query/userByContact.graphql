@@ -1,0 +1,13 @@
+query UserByContact($contactId: ID!) {
+	uiapi {
+		query {
+			User(where: { ContactId: { eq: $contactId } }, first: 1) {
+				edges {
+					node {
+						Id
+					}
+				}
+			}
+		}
+	}
+}

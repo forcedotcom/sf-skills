@@ -57,6 +57,7 @@ export function AgentforceConversationClient({
 	agentId,
 	inline: inlineProp,
 	headerEnabled,
+	showHeaderIcon,
 	width,
 	height,
 	styleTokens,
@@ -68,6 +69,8 @@ export function AgentforceConversationClient({
 		const renderingConfig: NonNullable<AgentforceClientConfig["renderingConfig"]> = {
 			mode: inlineProp ? "inline" : "floating",
 			...(headerEnabled !== undefined && { headerEnabled }),
+			...(showHeaderIcon !== undefined && { showHeaderIcon }),
+			...{ showAvatar: false },
 			...(width !== undefined && { width }),
 			...(height !== undefined && { height }),
 		};
@@ -77,7 +80,7 @@ export function AgentforceConversationClient({
 			...(styleTokens !== undefined && { styleTokens }),
 			renderingConfig,
 		};
-	}, [agentId, inlineProp, headerEnabled, width, height, styleTokens]);
+	}, [agentId, inlineProp, headerEnabled, showHeaderIcon, width, height, styleTokens]);
 
 	const inline = normalizedAgentforceClientConfig?.renderingConfig?.mode === "inline";
 
@@ -85,7 +88,7 @@ export function AgentforceConversationClient({
 		if (!normalizedAgentforceClientConfig?.agentId) {
 			throw new Error(
 				"AgentforceConversationClient requires agentId. " +
-					"Pass flat props only (agentId, inline, headerEnabled, width, height, styleTokens).",
+					"Pass flat props only (agentId, inline, headerEnabled, showHeaderIcon, width, height, styleTokens).",
 			);
 		}
 

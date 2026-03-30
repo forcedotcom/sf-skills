@@ -12,7 +12,7 @@ export function FilterRow({
 }: FilterRowProps) {
 	return (
 		<div
-			className={cn("bg-white rounded-lg shadow-sm border border-gray-200 p-4", className)}
+			className={cn("bg-white rounded-lg shadow-sm border border-gray-200 p-4 pb-2", className)}
 			role="region"
 			aria-label={ariaLabel}
 			{...props}

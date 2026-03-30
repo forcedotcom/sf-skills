@@ -63,9 +63,10 @@ interface PropertyMapProps {
 
 function MapCenterUpdater({ center, zoom = 13 }: { center: [number, number]; zoom?: number }) {
 	const map = useMap() as { setView: (center: [number, number], zoom: number) => void };
+	const [lat, lng] = center;
 	useEffect(() => {
 		map.setView(center, zoom);
-	}, [map, center[0], center[1], zoom]);
+	}, [map, center, lat, lng, zoom]);
 	return null;
 }
 

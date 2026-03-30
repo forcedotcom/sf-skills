@@ -1,14 +1,15 @@
 import { useState } from "react";
-import type { MaintenanceRequestSummary } from "@/api/maintenanceRequests/maintenanceRequestApi";
+import type { MaintenanceRequestNode } from "@/api/maintenanceRequests/maintenanceRequestApi";
 import MaintenanceRequestListItem from "@/components/maintenanceRequests/MaintenanceRequestListItem";
 import MaintenanceSummaryDetailsModal from "@/components/maintenanceRequests/MaintenanceSummaryDetailsModal";
 import { SkeletonListRows } from "@/components/SkeletonPrimitives";
 
 interface MaintenanceRequestListProps {
-	requests: MaintenanceRequestSummary[];
+	requests: MaintenanceRequestNode[];
 	loading: boolean;
 	error: string | null;
 	emptyMessage?: string;
+	skeletonCount?: number;
 }
 
 export default function MaintenanceRequestList({
@@ -16,8 +17,9 @@ export default function MaintenanceRequestList({
 	loading,
 	error,
 	emptyMessage = "No maintenance requests",
+	skeletonCount = 3,
 }: MaintenanceRequestListProps) {
-	const [selectedRequest, setSelectedRequest] = useState<MaintenanceRequestSummary | null>(null);
+	const [selectedRequest, setSelectedRequest] = useState<MaintenanceRequestNode | null>(null);
 
 	return (
 		<>
@@ -27,7 +29,7 @@ export default function MaintenanceRequestList({
 					onClose={() => setSelectedRequest(null)}
 				/>
 			)}
-			{loading && <SkeletonListRows count={3} />}
+			{loading && <SkeletonListRows count={skeletonCount} />}
 			{error && (
 				<p className="py-4 text-sm text-destructive" role="alert">
 					{error}
@@ -40,7 +42,7 @@ export default function MaintenanceRequestList({
 				!error &&
 				requests.map((request) => (
 					<MaintenanceRequestListItem
-						key={request.id}
+						key={request.Id}
 						request={request}
 						onClick={setSelectedRequest}
 					/>

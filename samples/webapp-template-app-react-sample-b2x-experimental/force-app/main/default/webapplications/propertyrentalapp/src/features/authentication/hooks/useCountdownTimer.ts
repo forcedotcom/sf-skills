@@ -107,7 +107,7 @@ function formatAccessibilityAnnouncement(seconds: number): string {
 			// @ts-expect-error - DurationFormat is not yet in TypeScript lib
 			const formatter = new Intl.DurationFormat(navigator.language, { style: "long" });
 			return formatter.format({ minutes, seconds: secs });
-		} catch (e) {
+		} catch {
 			// Fallback to manual formatting
 		}
 	}

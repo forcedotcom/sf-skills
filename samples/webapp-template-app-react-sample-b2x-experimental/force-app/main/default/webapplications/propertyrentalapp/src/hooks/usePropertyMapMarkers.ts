@@ -1,21 +1,17 @@
 /**
- * Fetches property addresses for the current page of results only, geocodes them in parallel,
- * and returns map markers (one pin per property in the current window).
+ * Builds map markers from search result nodes. Uses coordinates when available,
+ * falls back to geocoding addresses for properties missing coordinates.
  */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { fetchPropertyAddresses } from "@/api/properties/propertyDetailGraphQL";
 import { geocodeAddress, getStateZipFromAddress } from "@/utils/geocode";
-import { getPropertyIdFromRecord } from "@/hooks/usePropertyPrimaryImages";
-import type { SearchResultRecord } from "@/types/searchResults.js";
+import type { PropertySearchNode } from "@/api/properties/propertySearchService";
 import type { MapMarker } from "@/components/properties/PropertyMap";
 
-function getListingName(record: {
-	fields?: Record<string, { value?: unknown; displayValue?: string | null }>;
-}): string {
-	const f = record.fields?.Name;
-	if (!f || typeof f !== "object") return "Property";
-	if (f.displayValue != null && f.displayValue !== "") return String(f.displayValue);
-	if (f.value != null && typeof f.value === "string") return f.value;
+function getListingName(node: PropertySearchNode): string {
+	if (node.Name?.displayValue != null && node.Name.displayValue !== "")
+		return node.Name.displayValue;
+	if (node.Name?.value != null && node.Name.value !== "") return node.Name.value;
 	return "Property";
 }
 
@@ -28,13 +24,9 @@ function toFiniteNumber(value: unknown): number | null {
 	return null;
 }
 
-function getCoordinatesFromRecord(record: {
-	fields?: Record<string, { value?: unknown }>;
-}): { lat: number; lng: number } | null {
-	const latRaw = record.fields?.["Property__r.Coordinates__Latitude__s"]?.value;
-	const lngRaw = record.fields?.["Property__r.Coordinates__Longitude__s"]?.value;
-	const lat = toFiniteNumber(latRaw);
-	const lng = toFiniteNumber(lngRaw);
+function getCoordinatesFromNode(node: PropertySearchNode): { lat: number; lng: number } | null {
+	const lat = toFiniteNumber(node.Coordinates__Latitude__s?.value);
+	const lng = toFiniteNumber(node.Coordinates__Longitude__s?.value);
 	if (lat == null || lng == null) return null;
 	return { lat, lng };
 }
@@ -75,48 +67,50 @@ function spreadDuplicateMarkers(markers: MapMarker[]): MapMarker[] {
 	return result;
 }
 
-export function usePropertyMapMarkers(results: SearchResultRecord[]): {
+export function usePropertyMapMarkers(results: PropertySearchNode[]): {
 	markers: MapMarker[];
 	loading: boolean;
 } {
 	const [markers, setMarkers] = useState<MapMarker[]>([]);
 	const [loading, setLoading] = useState(false);
 
-	// Only the current page / current window of results
-	const propertyIds = results
-		.map((r) => r?.record && getPropertyIdFromRecord(r.record))
-		.filter((id): id is string => Boolean(id));
+	const propertyIds = results.map((r) => r.Id).filter(Boolean);
 	const propertyIdToLabel = new Map<string, string>();
-	for (const r of results) {
-		if (!r?.record) continue;
-		const id = getPropertyIdFromRecord(r.record);
-		if (id && !propertyIdToLabel.has(id)) {
-			propertyIdToLabel.set(id, getListingName(r.record));
+	for (const node of results) {
+		if (!propertyIdToLabel.has(node.Id)) {
+			propertyIdToLabel.set(node.Id, getListingName(node));
 		}
 	}
+	const idsKey = [...new Set(propertyIds)].join(",");
+
+	const resultsRef = useRef(results);
+	const labelMapRef = useRef(propertyIdToLabel);
+	useEffect(() => {
+		resultsRef.current = results;
+		labelMapRef.current = propertyIdToLabel;
+	});
 
 	useEffect(() => {
-		if (propertyIds.length === 0) {
+		const uniqIds = idsKey === "" ? [] : idsKey.split(",");
+		if (uniqIds.length === 0) {
 			setMarkers([]);
 			setLoading(false);
 			return;
 		}
 		let cancelled = false;
 		setLoading(true);
-		const uniqIds = [...new Set(propertyIds)];
+		const currentLabels = labelMapRef.current;
 		const directMarkers: MapMarker[] = [];
 		const missingIds: string[] = [];
-		for (const r of results) {
-			if (!r?.record) continue;
-			const id = getPropertyIdFromRecord(r.record);
-			if (!id || !uniqIds.includes(id)) continue;
-			const coords = getCoordinatesFromRecord(r.record);
+		for (const node of results) {
+			if (!uniqIds.includes(node.Id)) continue;
+			const coords = getCoordinatesFromNode(node);
 			if (coords) {
 				directMarkers.push({
 					lat: coords.lat,
 					lng: coords.lng,
-					label: propertyIdToLabel.get(id) ?? "Property",
-					propertyId: id,
+					label: propertyIdToLabel.get(node.Id) ?? "Property",
+					propertyId: node.Id,
 				});
 			}
 		}
@@ -140,7 +134,6 @@ export function usePropertyMapMarkers(results: SearchResultRecord[]): {
 					setLoading(false);
 					return;
 				}
-				// Geocode all addresses in parallel; fallback to City, State Zip if full address fails
 				Promise.all(
 					toGeocode.map(async ([id, address]) => {
 						const normalized = address.replace(/\n/g, ", ").trim();
@@ -161,7 +154,7 @@ export function usePropertyMapMarkers(results: SearchResultRecord[]): {
 							.map(({ id, coords }) => ({
 								lat: coords.lat,
 								lng: coords.lng,
-								label: propertyIdToLabel.get(id) ?? "Property",
+								label: currentLabels.get(id) ?? "Property",
 								propertyId: id,
 							}));
 						setMarkers(spreadDuplicateMarkers([...directMarkers, ...geocoded]));
@@ -182,7 +175,7 @@ export function usePropertyMapMarkers(results: SearchResultRecord[]): {
 		return () => {
 			cancelled = true;
 		};
-	}, [propertyIds.join(",")]);
+	}, [idsKey]);
 
 	return { markers, loading };
 }

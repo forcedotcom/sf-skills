@@ -27,7 +27,14 @@ export function FilterProvider({
 	children,
 }: FilterProviderProps) {
 	return (
-		<FilterContext.Provider value={{ filters, onFilterChange, onFilterRemove, onReset }}>
+		<FilterContext.Provider
+			value={{
+				filters,
+				onFilterChange,
+				onFilterRemove,
+				onReset,
+			}}
+		>
 			{children}
 		</FilterContext.Provider>
 	);
@@ -57,10 +64,13 @@ export function useFilterField(field: string) {
 
 export function useFilterPanel() {
 	const { filters, onReset } = useFilterContext();
-	return { hasActiveFilters: filters.length > 0, resetAll: onReset };
+	return {
+		hasActiveFilters: filters.length > 0,
+		resetAll: onReset,
+	};
 }
 
-interface FilterResetButtonProps extends Omit<React.ComponentProps<typeof Button>, "onClick"> {}
+type FilterResetButtonProps = Omit<React.ComponentProps<typeof Button>, "onClick">;
 
 export function FilterResetButton({ children, ...props }: FilterResetButtonProps) {
 	const { hasActiveFilters, resetAll } = useFilterPanel();
