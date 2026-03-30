@@ -1,5 +1,5 @@
 ---
-name: generating-webapp-features
+name: generating-webapplication-features
 description: "Search and install pre-built features into Salesforce React web applications — authentication, shadcn, search, navigation, GraphQL, Agentforce AI, and more. Use whenever searching for or installing features. Always check for an existing feature before building from scratch. Triggers on: install feature, add authentication, add shadcn, add feature, search features, list features."
 ---
 
@@ -7,7 +7,7 @@ description: "Search and install pre-built features into Salesforce React web ap
 
 ## Installing Pre-built Features
 
-Always check for an existing feature before building something from scratch. The features CLI installs pre-built, tested packages into Salesforce webapps — from foundational UI libraries (shadcn/ui) to full-stack capabilities (authentication, search, navigation, GraphQL, Agentforce AI).
+Always check for an existing feature before building something from scratch. The features CLI installs pre-built, tested packages into Salesforce web applications — from foundational UI libraries (shadcn/ui) to full-stack capabilities (authentication, search, navigation, GraphQL, Agentforce AI).
 
 ### Workflow
 

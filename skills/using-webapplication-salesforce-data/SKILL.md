@@ -1,5 +1,5 @@
 ---
-name: using-webapp-salesforce-data
+name: using-webapplication-salesforce-data
 description: "Salesforce data access for reading, writing, and querying records via REST, GraphQL, Apex, or Platform SDK. Use when the user wants to fetch, search, filter, sort, display, create, update, delete, or attach files to Salesforce records (standard objects like Accounts, Contacts, Opportunities, Cases, Quotes, or any custom object) in a web app or UI component (React, Angular, Vue, etc.); call Chatter, Connect, or Apex REST APIs; or invoke AuraEnabled Apex methods from an external app. Does not apply to authentication/OAuth setup, schema changes (adding fields, relationships), Bulk/Tooling/Metadata API usage, declarative automation (Flows, Process Builder), general LWC/Apex coding guidance without a specific data operation, or Salesforce admin/configuration tasks."
 ---
 
@@ -48,7 +48,7 @@ const res = await sdk.fetch?.("/services/apexrest/my-resource");
 **Not supported:**
 
 - **Enterprise REST query endpoint** (`/services/data/v*/query` with SOQL) — blocked at the proxy level. Use GraphQL for record reads; use Apex REST if server-side SOQL aggregates are required.
-- **Aura-enabled Apex** (`@AuraEnabled`) — an LWC/Aura pattern with no invocation path from React webapps.
+- **Aura-enabled Apex** (`@AuraEnabled`) — an LWC/Aura pattern with no invocation path from React web applications.
 - **Chatter API** (`/chatter/users/me`) — use `uiapi { currentUser { ... } }` in a GraphQL query instead.
 - **Any other Salesforce REST endpoint** not listed in the supported table above.
 
@@ -92,8 +92,8 @@ These rules exist because Salesforce GraphQL has platform-specific behaviors tha
 The `schema.graphql` file (265K+ lines) is the source of truth. **Never open or parse it directly.**
 
 1. Check if `schema.graphql` exists at the SFDX project root
-2. If missing, run from the **webapp dir**: `npm run graphql:schema`
-3. Custom objects appear only after metadata is deployed — invoke the `deploying-webapp-to-salesforce` skill if deployment is needed
+2. If missing, run from the **web application dir**: `npm run graphql:schema`
+3. Custom objects appear only after metadata is deployed
 
 ### Step 2: Look Up Entity Schema
 
@@ -233,7 +233,7 @@ const fields = response?.data?.uiapi?.objectInfos?.[0]?.fields ?? [];
 
 ### Step 4: Validate & Test
 
-1. **Lint**: `npx eslint <file>` from webapp dir
+1. **Lint**: `npx eslint <file>` from web application dir
 2. **Test**: Ask user before testing. For mutations, request input values — never fabricate data.
 
 **If ESLint reports a GraphQL error** (e.g. `Cannot query field`, `Unknown type`, `Unknown argument`), the field or type name is wrong. Re-run the schema search script to find the correct name — do not guess:
@@ -247,7 +247,7 @@ Then fix the query using the exact names from the script output. For detailed er
 
 ---
 
-## Webapp Integration (React)
+## Web Application Integration (React)
 
 Two integration patterns are available:
 
@@ -335,16 +335,16 @@ const response = await sdk.graphql?.(GET_CURRENT_USER);
 <project-root>/                              ← SFDX project root
 ├── schema.graphql                           ← grep target (lives here)
 ├── sfdx-project.json
-└── force-app/main/default/webapplications/<app-name>/  ← webapp dir
+└── force-app/main/default/webapplications/<app-name>/  ← web application dir
     ├── package.json                         ← npm scripts
     └── src/
 ```
 
 | Command | Run From | Why |
 |---------|----------|-----|
-| `npm run graphql:schema` | webapp dir | Script in webapp's package.json |
-| `npx eslint <file>` | webapp dir | Reads eslint.config.js |
-| `bash scripts/graphql-search.sh <Entity>` | skill root | Schema lookup |
+| `npm run graphql:schema` | web application dir | Script in web application's package.json |
+| `npx eslint <file>` | web application dir | Reads eslint.config.js |
+| `bash scripts/graphql-search.sh <Entity>` | project root | Schema lookup |
 | `sf api request rest` | project root | Needs sfdx-project.json |
 
 ---
