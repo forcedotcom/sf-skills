@@ -26,6 +26,9 @@
 
 **IMPORTANT**: These guidelines should ONLY be applied when the user explicitly requests creating a new layout for their site. Do not apply these guidelines automatically for other tasks or when editing existing layouts.
 
+### Order of operations
+If the user decides to create a new LWC, create the LWC first THEN the theme layout metadata.
+
 ### _meta.json Structure
 
 The `_meta.json` file must contain:
