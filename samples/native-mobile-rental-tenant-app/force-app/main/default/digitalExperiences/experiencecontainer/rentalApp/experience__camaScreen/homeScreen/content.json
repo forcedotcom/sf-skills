@@ -43,11 +43,11 @@
                                   "name": "components",
                                   "components": [
                                     {
-                                      "definition": "ui/text",
+                                      "definition": "data/label",
                                       "properties": {
-                                        "text": "Good evening, Maria",
                                         "style": "titlesFontScale4Regular",
-                                        "color": "$colors.onSurfaceInverse1"
+                                        "color": "$colors.onSurfaceInverse1",
+                                        "key": "greeting"
                                       },
                                       "regions": {}
                                     }
@@ -140,14 +140,12 @@
                                                           "name": "components",
                                                           "components": [
                                                             {
-                                                              "definition": "ui/image",
+                                                              "definition": "data/image",
                                                               "properties": {
-                                                                "source": {
-                                                                  "url": "https://picsum.photos/seed/community/220/140"
-                                                                },
                                                                 "alternativeText": "Community Park",
                                                                 "width": "220",
-                                                                "height": "140"
+                                                                "height": "140",
+                                                                "key": "newsImage1"
                                                               },
                                                               "regions": {}
                                                             }
@@ -200,14 +198,12 @@
                                                           "name": "components",
                                                           "components": [
                                                             {
-                                                              "definition": "ui/image",
+                                                              "definition": "data/image",
                                                               "properties": {
-                                                                "source": {
-                                                                  "url": "https://picsum.photos/seed/treadmills/220/140"
-                                                                },
                                                                 "alternativeText": "New treadmills",
                                                                 "width": "220",
-                                                                "height": "140"
+                                                                "height": "140",
+                                                                "key": "newsImage2"
                                                               },
                                                               "regions": {}
                                                             }
@@ -260,14 +256,12 @@
                                                           "name": "components",
                                                           "components": [
                                                             {
-                                                              "definition": "ui/image",
+                                                              "definition": "data/image",
                                                               "properties": {
-                                                                "source": {
-                                                                  "url": "https://picsum.photos/seed/pool/220/140"
-                                                                },
                                                                 "alternativeText": "Pool hours extended",
                                                                 "width": "220",
-                                                                "height": "140"
+                                                                "height": "140",
+                                                                "key": "newsImage3"
                                                               },
                                                               "regions": {}
                                                             }
@@ -324,11 +318,11 @@
                                                   "name": "components",
                                                   "components": [
                                                     {
-                                                      "definition": "ui/progressRing",
+                                                      "definition": "data/progressRing",
                                                       "properties": {
-                                                        "value": 85,
                                                         "size": "large",
-                                                        "showProgressText": true
+                                                        "showProgressText": true,
+                                                        "key": "leaseProgress"
                                                       },
                                                       "regions": {}
                                                     },
@@ -736,7 +730,58 @@
     },
     "target": "native__home",
     "apiName": "homeScreen",
-    "id": "home-001"
-  },
-  "urlName": "home-screen"
+    "id": "home-001",
+    "dataProviders": [
+      {
+        "$id": "greeting",
+        "type": "apex",
+        "properties": {
+          "className": "CamaDataService",
+          "methodName": "getGreeting",
+          "namespace": "",
+          "params": {}
+        }
+      },
+      {
+        "$id": "leaseProgress",
+        "type": "apex",
+        "properties": {
+          "className": "CamaDataService",
+          "methodName": "getLeaseProgress",
+          "namespace": "",
+          "params": {}
+        }
+      },
+      {
+        "$id": "newsImage1",
+        "type": "apex",
+        "properties": {
+          "className": "CamaDataService",
+          "methodName": "getNewsImage1",
+          "namespace": "",
+          "params": {}
+        }
+      },
+      {
+        "$id": "newsImage2",
+        "type": "apex",
+        "properties": {
+          "className": "CamaDataService",
+          "methodName": "getNewsImage2",
+          "namespace": "",
+          "params": {}
+        }
+      },
+      {
+        "$id": "newsImage3",
+        "type": "apex",
+        "properties": {
+          "className": "CamaDataService",
+          "methodName": "getNewsImage3",
+          "namespace": "",
+          "params": {}
+        }
+      }
+    ]
+  }
 }
