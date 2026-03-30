@@ -1,5 +1,5 @@
 ---
-name: generating-ui-bundle-ui
+name: building-ui-bundle-frontend
 description: "Build and modify React UI for Salesforce UI bundles — pages, components, layout, navigation, and headers/footers. Use whenever creating or editing TSX/JSX files or making visual/layout changes. Triggers on: add page, add component, header, footer, navigation, layout, styling, Tailwind, shadcn, React component, appLayout."
 ---
 

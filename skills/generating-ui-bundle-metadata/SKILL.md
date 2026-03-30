@@ -14,7 +14,7 @@ Use `sf ui-bundle generate` to create new apps — not create-react-app, Vite, o
 After generation:
 1. Replace all default boilerplate — "React App", "Vite + React", default `<title>`, placeholder text
 2. Populate the home page with real content (landing section, banners, hero, navigation)
-3. Update navigation and placeholders (see the `generating-ui-bundle-ui` skill)
+3. Update navigation and placeholders (see the `building-ui-bundle-frontend` skill)
 
 Always install dependencies before running any scripts in the UI bundle directory.
 
