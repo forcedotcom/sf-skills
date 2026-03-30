@@ -1,0 +1,77 @@
+query GetProperties($first: Int, $after: String) {
+	uiapi {
+		query {
+			Property__c(first: $first, after: $after, orderBy: { CreatedDate: { order: DESC } }) {
+				edges {
+					node {
+						Id
+						Name @optional {
+							value
+						}
+						Address__c @optional {
+							value
+						}
+						Description__c @optional {
+							value
+						}
+						Type__c @optional {
+							value
+						}
+						Status__c @optional {
+							value
+						}
+						Monthly_Rent__c @optional {
+							value
+						}
+						Bedrooms__c @optional {
+							value
+						}
+						Bathrooms__c @optional {
+							value
+						}
+						Sq_Ft__c @optional {
+							value
+						}
+						Year_Built__c @optional {
+							value
+						}
+						Hero_Image__c @optional {
+							value
+						}
+						Deposit__c @optional {
+							value
+						}
+						Parking__c @optional {
+							value
+						}
+						Pet_Friendly__c @optional {
+							value
+						}
+						Available_Date__c @optional {
+							value
+						}
+						Lease_Term__c @optional {
+							value
+						}
+						Features__c @optional {
+							value
+						}
+						Utilities__c @optional {
+							value
+						}
+						Tour_URL__c @optional {
+							value
+						}
+						CreatedDate @optional {
+							value
+						}
+					}
+				}
+				pageInfo {
+					hasNextPage
+					endCursor
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,44 @@
+query GetApplications {
+	uiapi {
+		query {
+			Application__c(orderBy: { Start_Date__c: { order: DESC } }) {
+				edges {
+					node {
+						Id
+						Name @optional {
+							value
+						}
+						User__r @optional {
+							FirstName @optional {
+								value
+							}
+							LastName @optional {
+								value
+							}
+						}
+						Property__r @optional {
+							Name @optional {
+								value
+							}
+							Address__c @optional {
+								value
+							}
+						}
+						Start_Date__c @optional {
+							value
+						}
+						Status__c @optional {
+							value
+						}
+						Employment__c @optional {
+							value
+						}
+						References__c @optional {
+							value
+						}
+					}
+				}
+			}
+		}
+	}
+}
