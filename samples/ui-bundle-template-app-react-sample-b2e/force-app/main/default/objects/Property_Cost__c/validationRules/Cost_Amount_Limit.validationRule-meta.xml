@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cost_Amount_Limit</fullName>
+    <active>true</active>
+    <description>Ensure cost amounts are reasonable</description>
+    <errorConditionFormula
+  >OR(Cost_Amount__c &lt;= 0, Cost_Amount__c &gt; 100000)</errorConditionFormula>
+    <errorDisplayField>Cost_Amount__c</errorDisplayField>
+    <errorMessage>Cost Amount must be between $1 and $100,000</errorMessage>
+</ValidationRule>

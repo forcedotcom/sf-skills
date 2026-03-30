@@ -1,0 +1,19 @@
+query DistinctPropertyType {
+	uiapi {
+		aggregate {
+			Property__c(groupBy: { Type__c: { group: true } }) {
+				edges {
+					node {
+						aggregate {
+							Type__c {
+								value
+								displayValue
+								label
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

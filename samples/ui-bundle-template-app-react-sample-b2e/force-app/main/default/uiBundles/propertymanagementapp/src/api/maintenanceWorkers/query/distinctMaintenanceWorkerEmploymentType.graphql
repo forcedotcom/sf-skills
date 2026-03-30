@@ -1,0 +1,19 @@
+query DistinctMaintenanceWorkerEmploymentType {
+	uiapi {
+		aggregate {
+			Maintenance_Worker__c(groupBy: { Employment_Type__c: { group: true } }) {
+				edges {
+					node {
+						aggregate {
+							Employment_Type__c {
+								value
+								displayValue
+								label
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

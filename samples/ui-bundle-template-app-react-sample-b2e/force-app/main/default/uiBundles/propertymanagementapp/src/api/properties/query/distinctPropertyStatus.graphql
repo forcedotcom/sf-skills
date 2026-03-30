@@ -1,0 +1,19 @@
+query DistinctPropertyStatus {
+	uiapi {
+		aggregate {
+			Property__c(groupBy: { Status__c: { group: true } }) {
+				edges {
+					node {
+						aggregate {
+							Status__c {
+								value
+								displayValue
+								label
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

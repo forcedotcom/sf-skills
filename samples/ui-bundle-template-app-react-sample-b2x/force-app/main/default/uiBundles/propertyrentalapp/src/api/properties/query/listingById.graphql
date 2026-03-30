@@ -1,0 +1,29 @@
+query ListingById($listingId: ID!) {
+	uiapi {
+		query {
+			Property_Listing__c(where: { Id: { eq: $listingId } }, first: 1) {
+				edges {
+					node {
+						Id
+						Name @optional {
+							value
+							displayValue
+						}
+						Listing_Price__c @optional {
+							value
+							displayValue
+						}
+						Listing_Status__c @optional {
+							value
+							displayValue
+						}
+						Property__c @optional {
+							value
+							displayValue
+						}
+					}
+				}
+			}
+		}
+	}
+}
