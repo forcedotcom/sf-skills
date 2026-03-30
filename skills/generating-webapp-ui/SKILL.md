@@ -43,6 +43,16 @@ Before finishing, confirm: Did I update `appLayout.tsx` with real nav items and 
 
 Use a single router package. With `createBrowserRouter` / `RouterProvider`, all imports must come from `react-router` (not `react-router-dom`).
 
+If the app uses a client-side router (React Router, Remix Router, Vue Router, etc.), always derive basename / basepath / base from the document's <base href> tag at runtime. Never hardcode the basename:
+
+​```js
+const basename = document.querySelector('base')
+  ? new URL(document.querySelector('base').href).pathname.replace(/\/$/, '')
+  : '/';
+
+const router = createBrowserRouter(routes, { basename });
+​```
+
 ### Component Library and Styling
 
 - **shadcn/ui** for components: `import { Button } from '@/components/ui/button';`
