@@ -17,7 +17,7 @@ Use this skill when the user wants to:
 
 ## Data SDK Requirement
 
-> **All Salesforce data access MUST use the Data SDK** (`@salesforce/sdk-data`). The SDK handles authentication, CSRF, and base URL resolution. Never use `fetch()` or `axios` directly.
+> **All Salesforce data access MUST use the Data SDK** (`@salesforce/sdk-data`). The SDK handles authentication, CSRF, and base URL resolution.
 
 ```typescript
 import { createDataSDK, gql } from "@salesforce/sdk-data";
@@ -67,6 +67,24 @@ const res = await sdk.fetch?.("/services/apexrest/my-resource");
 
 ---
 
+## GraphQL Non-Negotiable Rules
+
+These rules exist because Salesforce GraphQL has platform-specific behaviors that differ from standard GraphQL. Violations cause silent runtime failures.
+
+1. **Schema is the single source of truth** — Every entity name, field name, and type must be confirmed via the schema search script before use in a query. Never guess — Salesforce field names are case-sensitive, relationships may be polymorphic, and custom objects use suffixes (`__c`, `__e`). See [Schema Introspection](references/schema-introspection.md) for entity identification and iterative lookup procedures.
+
+2. **`@optional` on all record fields** (read queries) — Salesforce field-level security (FLS) causes queries to fail entirely if the user lacks access to even one field. The `@optional` directive (v65+) tells the server to omit inaccessible fields instead of failing. Apply it to every scalar field, parent relationship, and child relationship. Consuming code must use optional chaining (`?.`) and nullish coalescing (`??`).
+
+3. **Correct mutation syntax** — Mutations wrap under `uiapi(input: { allOrNone: true/false })`, not bare `uiapi { ... }`. Always set `allOrNone` explicitly. Output fields cannot include child relationships or navigated reference fields. See [Mutation Query Generation](references/mutation-query-generation.md).
+
+4. **Explicit pagination** — Always include `first:` in every query. If omitted, the server silently defaults to 10 records. Include `pageInfo { hasNextPage endCursor }` for any query that may need pagination.
+
+5. **SOQL-derived execution limits** — Max 10 subqueries per request, max 5 levels of child-to-parent traversal, max 1 level of parent-to-child (no grandchildren), max 2,000 records per subquery. If a query would exceed these, split into multiple requests.
+
+6. **HTTP 200 does not mean success** — Salesforce returns HTTP 200 even when operations fail. Always parse the `errors` array in the response body.
+
+---
+
 ## GraphQL Workflow
 
 ### Step 1: Acquire Schema
@@ -75,18 +93,18 @@ The `schema.graphql` file (265K+ lines) is the source of truth. **Never open or 
 
 1. Check if `schema.graphql` exists at the SFDX project root
 2. If missing, run from the **webapp dir**: `npm run graphql:schema`
-3. Custom objects appear only after metadata is deployed
+3. Custom objects appear only after metadata is deployed — invoke the `deploying-webapp-to-salesforce` skill if deployment is needed
 
 ### Step 2: Look Up Entity Schema
 
 Map user intent to PascalCase names ("accounts" → `Account`), then **run the search script from the project root**:
 
 ```bash
-# From project root — look up all relevant schema info for one or more entities
-bash .a4drules/skills/using-salesforce-data/graphql-search.sh Account
+# Look up all relevant schema info for one or more entities
+bash scripts/graphql-search.sh Account
 
 # Multiple entities at once
-bash .a4drules/skills/using-salesforce-data/graphql-search.sh Account Contact Opportunity
+bash scripts/graphql-search.sh Account Contact Opportunity
 ```
 
 The script outputs five sections per entity:
@@ -96,11 +114,11 @@ The script outputs five sections per entity:
 4. **Create input** — fields accepted by create mutations
 5. **Update input** — fields accepted by update mutations
 
-Use this output to determine exact field names before writing any query or mutation. **Maximum 2 script runs.** If the entity still can't be found, ask the user — the object may not be deployed.
+Use this output to determine exact field names before writing any query or mutation. **Maximum 2 script runs.** If the entity still can't be found, ask the user — the object may not be deployed. For entity identification procedures (`_Record` suffix, `__c` conventions) and iterative introspection cycles, see [Schema Introspection](references/schema-introspection.md).
 
 ### Step 3: Generate Query
 
-Use the templates below. Every field name **must** be verified from the script output in Step 2.
+Use the templates below. Every field name **must** be verified from the script output in Step 2. For detailed generation rules, filtering, pagination, ordering, semi-joins, and field value wrappers, see [Read Query Generation](references/read-query-generation.md). For mutation chaining, input/output constraints, and transactional semantics, see [Mutation Query Generation](references/mutation-query-generation.md).
 
 #### Read Query Template
 
@@ -138,7 +156,7 @@ const name = node.Name?.value ?? "";
 
 ```graphql
 mutation CreateAccount($input: AccountCreateInput!) {
-  uiapi {
+  uiapi(input: { allOrNone: true }) {
     AccountCreate(input: $input) {
       Record { Id Name { value } }
     }
@@ -222,14 +240,19 @@ const fields = response?.data?.uiapi?.objectInfos?.[0]?.fields ?? [];
 
 ```bash
 # From project root — re-check the entity that caused the error
-bash .a4drules/skills/using-salesforce-data/graphql-search.sh <EntityName>
+bash scripts/graphql-search.sh <EntityName>
 ```
 
-Then fix the query using the exact names from the script output.
+Then fix the query using the exact names from the script output. For detailed error categories, status handling, and retry strategy, see [Query Testing](references/query-testing.md).
 
 ---
 
 ## Webapp Integration (React)
+
+Two integration patterns are available:
+
+- **Pattern 1 — External `.graphql` file** (recommended for complex queries): Create a `.graphql` file, run `npm run graphql:codegen`, import with `?raw` suffix
+- **Pattern 2 — Inline `gql` tag** (for simple queries): Use the `gql` template tag from `@salesforce/sdk-data`. **Must use `gql`** — plain template strings bypass ESLint schema validation.
 
 ```typescript
 import { createDataSDK, gql } from "@salesforce/sdk-data";
@@ -242,8 +265,9 @@ const GET_ACCOUNTS = gql`
           edges {
             node {
               Id
-              Name @optional { value }
-              Industry @optional { value }
+              Name @optional {
+                value
+              }
             }
           }
         }
@@ -254,13 +278,13 @@ const GET_ACCOUNTS = gql`
 
 const sdk = await createDataSDK();
 const response = await sdk.graphql?.(GET_ACCOUNTS);
-
 if (response?.errors?.length) {
   throw new Error(response.errors.map(e => e.message).join("; "));
 }
-
 const accounts = response?.data?.uiapi?.query?.Account?.edges?.map(e => e.node) ?? [];
 ```
+
+For detailed patterns (external .graphql files, codegen, error handling strategies, quality checklists), see [Webapp Integration](references/webapp-integration.md).
 
 ---
 
@@ -320,7 +344,7 @@ const response = await sdk.graphql?.(GET_CURRENT_USER);
 |---------|----------|-----|
 | `npm run graphql:schema` | webapp dir | Script in webapp's package.json |
 | `npx eslint <file>` | webapp dir | Reads eslint.config.js |
-| `bash .a4drules/skills/using-salesforce-data/graphql-search.sh <Entity>` | project root | Schema lookup |
+| `bash scripts/graphql-search.sh <Entity>` | skill root | Schema lookup |
 | `sf api request rest` | project root | Needs sfdx-project.json |
 
 ---
@@ -332,7 +356,7 @@ const response = await sdk.graphql?.(GET_CURRENT_USER);
 Run the search script to get all relevant schema info in one step:
 
 ```bash
-bash .a4drules/skills/using-salesforce-data/graphql-search.sh <EntityName>
+bash scripts/graphql-search.sh <EntityName>
 ```
 
 | Script Output Section | Used For |
@@ -358,6 +382,9 @@ bash .a4drules/skills/using-salesforce-data/graphql-search.sh <EntityName>
 ### Checklist
 
 - [ ] All field names verified via search script (Step 2)
-- [ ] `@optional` applied to record fields (reads)
+- [ ] `@optional` applied to all record fields (reads)
+- [ ] Mutations use `uiapi(input: { allOrNone: ... })` wrapper
+- [ ] `first:` specified in every query
 - [ ] Optional chaining in consuming code
+- [ ] `errors` array checked in response handling
 - [ ] Lint passes: `npx eslint <file>`
