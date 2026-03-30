@@ -1,6 +1,6 @@
 # Syncs React sample packages from npm into samples/:
-#   - @salesforce/webapp-template-app-react-sample-b2e-experimental
-#   - @salesforce/webapp-template-app-react-sample-b2x-experimental
+#   - @salesforce/ui-bundle-template-app-react-sample-b2e
+#   - @salesforce/ui-bundle-template-app-react-sample-b2x
 #
 # Opens a single PR when either (or both) npm package versions have changed.
 # Same steps as running locally: npm install && npm run sync-react-b2e-sample
@@ -37,7 +37,7 @@ jobs:
       - name: Get latest B2E npm version
         id: npm-version-b2e
         run: |
-          LATEST=$(npm view @salesforce/webapp-template-app-react-sample-b2e-experimental version)
+          LATEST=$(npm view @salesforce/ui-bundle-template-app-react-sample-b2e version)
           if [ -z "$LATEST" ]; then
             echo "ERROR: npm view returned empty version for B2E package" >&2
             exit 1
@@ -47,7 +47,7 @@ jobs:
       - name: Read current synced B2E version
         id: current-version-b2e
         run: |
-          VERSION_FILE="samples/webapp-template-app-react-sample-b2e-experimental/.version"
+          VERSION_FILE="samples/ui-bundle-template-app-react-sample-b2e/.version"
           if [ -f "$VERSION_FILE" ]; then
             CURRENT=$(cat "$VERSION_FILE" | tr -d '[:space:]')
             echo "current=$CURRENT" >> $GITHUB_OUTPUT
@@ -59,7 +59,7 @@ jobs:
       - name: Get latest B2X npm version
         id: npm-version-b2x
         run: |
-          LATEST=$(npm view @salesforce/webapp-template-app-react-sample-b2x-experimental version)
+          LATEST=$(npm view @salesforce/ui-bundle-template-app-react-sample-b2x version)
           if [ -z "$LATEST" ]; then
             echo "ERROR: npm view returned empty version for 2x package" >&2
             exit 1
@@ -69,7 +69,7 @@ jobs:
       - name: Read current synced B2X version
         id: current-version-b2x
         run: |
-          VERSION_FILE="samples/webapp-template-app-react-sample-b2x-experimental/.version"
+          VERSION_FILE="samples/ui-bundle-template-app-react-sample-b2x/.version"
           if [ -f "$VERSION_FILE" ]; then
             CURRENT=$(cat "$VERSION_FILE" | tr -d '[:space:]')
             echo "current=$CURRENT" >> $GITHUB_OUTPUT
@@ -109,11 +109,11 @@ jobs:
 
       - name: Install latest B2E package
         if: steps.skip.outputs.skip != 'true' && steps.skip.outputs.b2e_changed == 'true'
-        run: npm install @salesforce/webapp-template-app-react-sample-b2e-experimental@latest
+        run: npm install @salesforce/ui-bundle-template-app-react-sample-b2e@latest
 
       - name: Install latest B2X package
         if: steps.skip.outputs.skip != 'true' && steps.skip.outputs.b2x_changed == 'true'
-        run: npm install @salesforce/webapp-template-app-react-sample-b2x-experimental@latest
+        run: npm install @salesforce/ui-bundle-template-app-react-sample-b2x@latest
 
       - name: Sync B2E sample
         if: steps.skip.outputs.skip != 'true'
@@ -133,12 +133,12 @@ jobs:
 
           if [ "${{ steps.skip.outputs.b2e_changed }}" = "true" ]; then
             PARTS="${PARTS}b2e-${{ steps.npm-version-b2e.outputs.latest }}"
-            BODY="${BODY}- **B2E** \`@salesforce/webapp-template-app-react-sample-b2e-experimental\`: ${{ steps.current-version-b2e.outputs.current || 'none' }} → ${{ steps.npm-version-b2e.outputs.latest }}"$'\n'
+            BODY="${BODY}- **B2E** \`@salesforce/ui-bundle-template-app-react-sample-b2e\`: ${{ steps.current-version-b2e.outputs.current || 'none' }} → ${{ steps.npm-version-b2e.outputs.latest }}"$'\n'
           fi
           if [ "${{ steps.skip.outputs.b2x_changed }}" = "true" ]; then
             if [ -n "$PARTS" ]; then PARTS="${PARTS}-"; fi
             PARTS="${PARTS}b2x-${{ steps.npm-version-b2x.outputs.latest }}"
-            BODY="${BODY}- **B2X** \`@salesforce/webapp-template-app-react-sample-b2x-experimental\`: ${{ steps.current-version-b2x.outputs.current || 'none' }} → ${{ steps.npm-version-b2x.outputs.latest }}"$'\n'
+            BODY="${BODY}- **B2X** \`@salesforce/ui-bundle-template-app-react-sample-b2x\`: ${{ steps.current-version-b2x.outputs.current || 'none' }} → ${{ steps.npm-version-b2x.outputs.latest }}"$'\n'
           fi
 
           echo "branch=chore/sync-react-samples-${PARTS}" >> $GITHUB_OUTPUT

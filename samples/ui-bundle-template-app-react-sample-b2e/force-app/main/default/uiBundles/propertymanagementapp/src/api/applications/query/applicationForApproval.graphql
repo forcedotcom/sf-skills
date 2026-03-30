@@ -1,0 +1,22 @@
+query ApplicationForApproval($applicationId: ID!) {
+	uiapi {
+		query {
+			Application__c(where: { Id: { eq: $applicationId } }, first: 1) {
+				edges {
+					node {
+						Id
+						User__c @optional {
+							value
+						}
+						Property__c @optional {
+							value
+						}
+						Start_Date__c @optional {
+							value
+						}
+					}
+				}
+			}
+		}
+	}
+}

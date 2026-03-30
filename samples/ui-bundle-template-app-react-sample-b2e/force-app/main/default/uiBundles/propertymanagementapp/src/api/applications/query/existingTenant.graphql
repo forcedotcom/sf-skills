@@ -1,0 +1,16 @@
+query ExistingTenant($userId: ID!, $propertyId: ID!) {
+	uiapi {
+		query {
+			Tenant__c(
+				where: { and: [{ User__c: { eq: $userId } }, { Property__c: { eq: $propertyId } }] }
+				first: 1
+			) {
+				edges {
+					node {
+						Id
+					}
+				}
+			}
+		}
+	}
+}

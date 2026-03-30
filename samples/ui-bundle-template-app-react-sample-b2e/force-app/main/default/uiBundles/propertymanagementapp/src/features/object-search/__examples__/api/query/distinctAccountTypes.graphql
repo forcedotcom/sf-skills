@@ -1,0 +1,19 @@
+query DistinctAccountTypes {
+	uiapi {
+		aggregate {
+			Account(groupBy: { Type: { group: true } }) {
+				edges {
+					node {
+						aggregate @optional {
+							Type @optional {
+								value
+								displayValue
+								label
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
