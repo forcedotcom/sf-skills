@@ -109,7 +109,7 @@ export default function SupportPage() {
 
 ```tsx
 import { Outlet } from "react-router";
-import { AgentforceConversationClient } from "@salesforce/webapp-template-feature-react-agentforce-conversation-client-experimental";
+import { AgentforceConversationClient } from "@salesforce/ui-bundle-template-feature-react-agentforce-conversation-client";
 
 export default function AgentChatHost() {
   return (

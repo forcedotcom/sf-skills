@@ -1,6 +1,6 @@
 ---
-name: using-webapplication-salesforce-data
-description: "Salesforce data access for reading, writing, and querying records via REST, GraphQL, Apex, or Platform SDK. Use when the user wants to fetch, search, filter, sort, display, create, update, delete, or attach files to Salesforce records (standard objects like Accounts, Contacts, Opportunities, Cases, Quotes, or any custom object) in a web app or UI component (React, Angular, Vue, etc.); call Chatter, Connect, or Apex REST APIs; or invoke AuraEnabled Apex methods from an external app. Does not apply to authentication/OAuth setup, schema changes (adding fields, relationships), Bulk/Tooling/Metadata API usage, declarative automation (Flows, Process Builder), general LWC/Apex coding guidance without a specific data operation, or Salesforce admin/configuration tasks."
+name: using-ui-bundle-salesforce-data
+description: "Salesforce data access for reading, writing, and querying records via REST, GraphQL, Apex, or Platform SDK. Use when the user wants to fetch, search, filter, sort, display, create, update, delete, or attach files to Salesforce records (standard objects like Accounts, Contacts, Opportunities, Cases, Quotes, or any custom object) in a UI bundle or UI component (React, Angular, Vue, etc.); call Chatter, Connect, or Apex REST APIs; or invoke AuraEnabled Apex methods from an external app. Does not apply to authentication/OAuth setup, schema changes (adding fields, relationships), Bulk/Tooling/Metadata API usage, declarative automation (Flows, Process Builder), general LWC/Apex coding guidance without a specific data operation, or Salesforce admin/configuration tasks."
 ---
 
 # Salesforce Data Access
@@ -48,7 +48,7 @@ const res = await sdk.fetch?.("/services/apexrest/my-resource");
 **Not supported:**
 
 - **Enterprise REST query endpoint** (`/services/data/v*/query` with SOQL) — blocked at the proxy level. Use GraphQL for record reads; use Apex REST if server-side SOQL aggregates are required.
-- **Aura-enabled Apex** (`@AuraEnabled`) — an LWC/Aura pattern with no invocation path from React web applications.
+- **Aura-enabled Apex** (`@AuraEnabled`) — an LWC/Aura pattern with no invocation path from React UI bundles.
 - **Chatter API** (`/chatter/users/me`) — use `uiapi { currentUser { ... } }` in a GraphQL query instead.
 - **Any other Salesforce REST endpoint** not listed in the supported table above.
 
@@ -92,7 +92,7 @@ These rules exist because Salesforce GraphQL has platform-specific behaviors tha
 The `schema.graphql` file (265K+ lines) is the source of truth. **Never open or parse it directly.**
 
 1. Check if `schema.graphql` exists at the SFDX project root
-2. If missing, run from the **web application dir**: `npm run graphql:schema`
+2. If missing, run from the **UI bundle dir**: `npm run graphql:schema`
 3. Custom objects appear only after metadata is deployed
 
 ### Step 2: Look Up Entity Schema
@@ -233,7 +233,7 @@ const fields = response?.data?.uiapi?.objectInfos?.[0]?.fields ?? [];
 
 ### Step 4: Validate & Test
 
-1. **Lint**: `npx eslint <file>` from web application dir
+1. **Lint**: `npx eslint <file>` from UI bundle dir
 2. **Test**: Ask user before testing. For mutations, request input values — never fabricate data.
 
 **If ESLint reports a GraphQL error** (e.g. `Cannot query field`, `Unknown type`, `Unknown argument`), the field or type name is wrong. Re-run the schema search script to find the correct name — do not guess:
@@ -247,7 +247,7 @@ Then fix the query using the exact names from the script output. For detailed er
 
 ---
 
-## Web Application Integration (React)
+## UI Bundle Integration (React)
 
 Two integration patterns are available:
 
@@ -284,7 +284,7 @@ if (response?.errors?.length) {
 const accounts = response?.data?.uiapi?.query?.Account?.edges?.map(e => e.node) ?? [];
 ```
 
-For detailed patterns (external .graphql files, codegen, error handling strategies, quality checklists), see [Webapp Integration](references/webapp-integration.md).
+For detailed patterns (external .graphql files, codegen, error handling strategies, quality checklists), see [UI Bundle Integration](references/ui-bundle-integration.md).
 
 ---
 
@@ -335,15 +335,15 @@ const response = await sdk.graphql?.(GET_CURRENT_USER);
 <project-root>/                              ← SFDX project root
 ├── schema.graphql                           ← grep target (lives here)
 ├── sfdx-project.json
-└── force-app/main/default/webapplications/<app-name>/  ← web application dir
+└── force-app/main/default/uiBundles/<app-name>/  ← UI bundle dir
     ├── package.json                         ← npm scripts
     └── src/
 ```
 
 | Command | Run From | Why |
 |---------|----------|-----|
-| `npm run graphql:schema` | web application dir | Script in web application's package.json |
-| `npx eslint <file>` | web application dir | Reads eslint.config.js |
+| `npm run graphql:schema` | UI bundle dir | Script in UI bundle's package.json |
+| `npx eslint <file>` | UI bundle dir | Reads eslint.config.js |
 | `bash scripts/graphql-search.sh <Entity>` | project root | Schema lookup |
 | `sf api request rest` | project root | Needs sfdx-project.json |
 

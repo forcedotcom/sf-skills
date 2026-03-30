@@ -1,9 +1,9 @@
 ---
-name: deploying-webapplication
-description: "Deploy a Salesforce web application to an org — the full deployment sequence including org authentication, pre-deploy build, metadata deployment, permission set assignment, data import, GraphQL schema fetch, and codegen. Use whenever the user wants to deploy, push to org, assign permission sets, import data, fetch GraphQL schema, run codegen, or set up an org after development. Triggers on: deploy, push to org, deploy metadata, assign permission set, import data, schema fetch, codegen, org auth, authenticate org, build and deploy, post-deploy, org setup."
+name: deploying-ui-bundle
+description: "Deploy a Salesforce UI bundle to an org — the full deployment sequence including org authentication, pre-deploy build, metadata deployment, permission set assignment, data import, GraphQL schema fetch, and codegen. Use whenever the user wants to deploy, push to org, assign permission sets, import data, fetch GraphQL schema, run codegen, or set up an org after development. Triggers on: deploy, push to org, deploy metadata, assign permission set, import data, schema fetch, codegen, org auth, authenticate org, build and deploy, post-deploy, org setup."
 ---
 
-# Deploying a Web Application
+# Deploying a UI Bundle
 
 The order of operations is critical when deploying to a Salesforce org. This sequence reflects the canonical flow.
 
@@ -11,17 +11,17 @@ The order of operations is critical when deploying to a Salesforce org. This seq
 
 Check if the org is connected. If not, authenticate. All subsequent steps require an authenticated org.
 
-## Step 2: Pre-deploy Web Application Build
+## Step 2: Pre-deploy UI Bundle Build
 
-Install dependencies and build the web application to produce `dist/`. Required before deploying web application entities.
+Install dependencies and build the UI bundle to produce `dist/`. Required before deploying UI bundle entities.
 
-Run when: deploying web applications and `dist/` is missing or source has changed.
+Run when: deploying UI bundles and `dist/` is missing or source has changed.
 
 ## Step 3: Deploy Metadata
 
 Check for a manifest (`manifest/package.xml` or `package.xml`) first. If present, deploy using the manifest. If not, deploy all metadata from the project.
 
-Deploys objects, layouts, permission sets, Apex classes, web applications, and all other metadata. Must complete before schema fetch — the schema reflects org state.
+Deploys objects, layouts, permission sets, Apex classes, UI bundles, and all other metadata. Must complete before schema fetch — the schema reflects org state.
 
 ## Step 4: Post-deploy Configuration
 
@@ -47,19 +47,19 @@ Always ask the user before importing or cleaning data.
 
 Run when: schema missing, or metadata/permissions changed since last fetch.
 
-## Step 7: Final Web Application Build
+## Step 7: Final UI Bundle Build
 
-Build the web application if not already done in Step 2.
+Build the UI bundle if not already done in Step 2.
 
 ## Summary: Interaction Order
 
 1. Check/authenticate org
-2. Build web application (if deploying web applications)
+2. Build UI bundle (if deploying UI bundles)
 3. Deploy metadata
 4. Assign permissions and configure
 5. Import data (if data plan exists, with user confirmation)
 6. Fetch GraphQL schema and run codegen
-7. Build web application (if needed)
+7. Build UI bundle (if needed)
 
 ## Critical Rules
 
@@ -74,4 +74,4 @@ After every successful metadata deploy:
 
 1. Discover and assign permission sets (or ask the user)
 2. If `data/data-plan.json` exists, ask the user about data import
-3. Re-run schema fetch and codegen from the web application directory
+3. Re-run schema fetch and codegen from the UI bundle directory

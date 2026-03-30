@@ -49,5 +49,5 @@ Use a maximum of **3 introspection cycles** to resolve all entities and their de
 
 The schema reflects the **current org state**. Custom objects and fields appear only after metadata is deployed.
 
-- **Before** running `npm run graphql:schema`: Deploy all metadata and assign permission sets. Invoke the `deploying-webapp-to-salesforce` skill for the full sequence.
+- **Before** running `npm run graphql:schema`: Deploy all metadata and assign permission sets. Invoke the `deploying-ui-bundle` skill for the full sequence.
 - **After** any metadata deployment: Re-run `npm run graphql:schema` and `npm run graphql:codegen` so types and queries stay in sync.

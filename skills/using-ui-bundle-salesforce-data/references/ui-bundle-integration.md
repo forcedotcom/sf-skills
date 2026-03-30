@@ -1,8 +1,8 @@
-# Webapp Integration
+# UI Bundle Integration
 
 ## When to Use
 
-This guide applies when integrating GraphQL queries into a React webapp using `createDataSDK` + codegen from `@salesforce/sdk-data`.
+This guide applies when integrating GraphQL queries into a React UI bundle using `createDataSDK` + codegen from `@salesforce/sdk-data`.
 
 ## Core Types & Function Signatures
 
@@ -133,7 +133,7 @@ For dynamic fieldsets with **known** fields, use `@include(if: $condition)` and 
 After writing the query into a source file, validate it against the schema:
 
 ```bash
-# Run from webapp dir (force-app/main/default/webapplications/<app-name>/)
+# Run from UI bundle dir (force-app/main/default/uiBundles/<app-name>/)
 npx eslint <path-to-file-containing-query>
 ```
 
@@ -150,7 +150,7 @@ npx eslint <path-to-file-containing-query>
 Generate TypeScript types from `.graphql` files and inline `gql` queries:
 
 ```bash
-# Run from webapp dir (force-app/main/default/webapplications/<app-name>/)
+# Run from UI bundle dir (force-app/main/default/uiBundles/<app-name>/)
 npm run graphql:codegen
 ```
 
@@ -201,7 +201,7 @@ const QUERY = gql`query { ... }`;
 6. [ ] Use `sdk.graphql?.<ResponseType>()` with proper generic
 7. [ ] Handle `response.errors` and destructure `response.data`
 8. [ ] Use `NodeOfConnection` for cleaner node types when needed
-9. [ ] Run `npx eslint <file>` from webapp dir — fix all GraphQL errors
+9. [ ] Run `npx eslint <file>` from UI bundle dir — fix all GraphQL errors
 
 ### For Pattern 2 (inline with gql):
 
@@ -211,7 +211,7 @@ const QUERY = gql`query { ... }`;
 4. [ ] Import generated types for the query
 5. [ ] Use `sdk.graphql?.<ResponseType>()` with proper generic
 6. [ ] Handle `response.errors` and destructure `response.data`
-7. [ ] Run `npx eslint <file>` from webapp dir — fix all GraphQL errors
+7. [ ] Run `npx eslint <file>` from UI bundle dir — fix all GraphQL errors
 
 ### General:
 

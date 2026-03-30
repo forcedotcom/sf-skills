@@ -1,23 +1,23 @@
 ---
-name: generating-webapplication-features
-description: "Search and install pre-built features into Salesforce React web applications — authentication, shadcn, search, navigation, GraphQL, Agentforce AI, and more. Use whenever searching for or installing features. Always check for an existing feature before building from scratch. Triggers on: install feature, add authentication, add shadcn, add feature, search features, list features."
+name: generating-ui-bundle-features
+description: "Search and install pre-built features into Salesforce React UI bundles — authentication, shadcn, search, navigation, GraphQL, Agentforce AI, and more. Use whenever searching for or installing features. Always check for an existing feature before building from scratch. Triggers on: install feature, add authentication, add shadcn, add feature, search features, list features."
 ---
 
-# Web Application Features
+# UI Bundle Features
 
 ## Installing Pre-built Features
 
-Always check for an existing feature before building something from scratch. The features CLI installs pre-built, tested packages into Salesforce web applications — from foundational UI libraries (shadcn/ui) to full-stack capabilities (authentication, search, navigation, GraphQL, Agentforce AI).
+Always check for an existing feature before building something from scratch. The features CLI installs pre-built, tested packages into Salesforce UI bundles — from foundational UI libraries (shadcn/ui) to full-stack capabilities (authentication, search, navigation, GraphQL, Agentforce AI).
 
 ### Workflow
 
 1. **Search project code first** — check `src/` for existing implementations before installing anything. Scope searches to `src/` to avoid matching `node_modules/` or `dist/`.
 
-2. **Search available features** — use `npx @salesforce/webapps-features-experimental list` with `--search <query>` to filter by keyword. Use `--verbose` for full descriptions.
+2. **Search available features** — use `npx @salesforce/ui-bundle-features list` with `--search <query>` to filter by keyword. Use `--verbose` for full descriptions.
 
-3. **Describe a feature** — use `npx @salesforce/webapps-features-experimental describe <feature>` to see components, dependencies, copy operations, and example files.
+3. **Describe a feature** — use `npx @salesforce/ui-bundle-features describe <feature>` to see components, dependencies, copy operations, and example files.
 
-4. **Install** — use `npx @salesforce/webapps-features-experimental install <feature> --webapp-dir <name>`. Key options:
+4. **Install** — use `npx @salesforce/ui-bundle-features install <feature> --ui-bundle-dir <name>`. Key options:
    - `--dry-run` to preview changes
    - `--yes` for non-interactive mode (skips conflicts)
    - `--on-conflict error` to detect conflicts, then `--conflict-resolution <file>` to resolve them
