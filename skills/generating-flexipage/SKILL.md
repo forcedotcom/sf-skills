@@ -43,10 +43,16 @@ sf template generate flexipage \
   --output-dir force-app/main/default/flexipages
 ```
 
-**Note:** If the `sf template generate flexipage` command fails, recommend users upgrade to the latest version of the Salesforce CLI:
-```bash
-npm install -g @salesforce/cli@latest
-```
+**CRITICAL:** If the `sf template generate flexipage` command fails, **STOP**.
+
+1. Install the templates plugin:
+   ```bash
+   sf plugins install templates
+   ```
+2. Retry the `sf template generate flexipage` command
+3. Verify the FlexiPage XML file was created
+
+Do NOT continue to Step 2 until the template command succeeds. The generated XML is required for the entire workflow.
 
 #### **Template-specific requirements**
 
