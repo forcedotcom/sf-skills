@@ -26,7 +26,7 @@ Assert.isTrue(accounts.size() > 0); // vague — use areEqual with exact count
 ### Good: Descriptive message, tests specific behavior
 
 ```apex
-Assert.areEqual(true, result, 'Service should return true for valid input');
+Assert.isTrue(result, 'Service should return true for valid input');
 Assert.areEqual(200, accounts.size(), 'All 200 accounts should be processed');
 ```
 
