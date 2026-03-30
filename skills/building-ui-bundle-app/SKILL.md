@@ -38,29 +38,6 @@ Build a complete, deployable Salesforce React UI bundle application from a natur
 
 ---
 
-## Skill Registry
-
-| Phase | Skill Name | When to Load |
-|-------|-----------|--------------|
-| 1 — Scaffolding | `generating-ui-bundle-metadata` | **Always** — creates the UI bundle and configures metadata |
-| 2 — Features | `generating-ui-bundle-features` | **Always** — installs pre-built features (auth, shadcn, search, navigation) |
-| 3 — Data Access | `using-ui-bundle-salesforce-data` | **When app needs Salesforce data** — sets up GraphQL/REST data layer |
-| 4 — UI | `generating-ui-bundle-ui` | **Always** — builds pages, components, layout, navigation |
-| 5a — Agentforce Chat | `implementing-ui-bundle-agentforce-conversation-client` | **Only if requested** — adds Agentforce chat widget |
-| 5b — File Upload | `implementing-ui-bundle-file-upload` | **Only if requested** — adds file upload functionality |
-| 6 — Deployment | `deploying-ui-bundle` | **Always** — deploys to Salesforce org |
-| 7 — Experience Site | `generating-experience-react-site` | **Only if requested** — creates Digital Experience site infrastructure |
-
-### Usage Rules
-
-**SKILL RULE**: You **MUST** load each skill by invoking it (e.g., via the Skill tool) before executing its phase. Do NOT generate code or configuration for a phase without loading the skill first.
-
-**ORDER RULE**: Execute phases in the numbered order above. Later phases depend on earlier phases completing successfully.
-
-**OPTIONAL PHASE RULE**: Phases marked "only if requested" are skipped unless the user's requirements indicate them. All other phases are mandatory.
-
----
-
 ## Dependency Graph & Build Order
 
 ### Phase 1: Scaffolding (Foundation)
@@ -73,8 +50,6 @@ Bundle metadata (uibundle-meta.xml, ui-bundle.json)
 CSP Trusted Sites (if external domains needed)
 ```
 
-**Skill to load:** `generating-ui-bundle-metadata`
-
 Creates the UI bundle directory structure, meta XML, and optional routing/headers config. All subsequent phases require the scaffold to exist.
 
 ### Phase 2: Features (Capabilities)
@@ -86,8 +61,6 @@ Search and install features (auth, shadcn, search, navigation, GraphQL)
     ↓
 Integrate example files into target files
 ```
-
-**Skill to load:** `generating-ui-bundle-features`
 
 Installs pre-built, tested feature packages. Always check for an existing feature before building from scratch. Features provide the foundation that UI components build on top of.
 
@@ -103,8 +76,6 @@ Generate queries/mutations
 Integrate with React components
 ```
 
-**Skill to load:** `using-ui-bundle-salesforce-data`
-
 Sets up the data layer using `@salesforce/sdk-data`. GraphQL is preferred for record operations; REST for Connect, Apex, or UI API endpoints.
 
 ### Phase 4: UI (Frontend)
@@ -119,8 +90,6 @@ Components (widgets, forms, tables)
 Headers and footers
 ```
 
-**Skill to load:** `generating-ui-bundle-ui`
-
 Builds the React UI. References the data layer from Phase 3 and the features from Phase 2. Must replace all boilerplate and placeholder content.
 
 ### Phase 5: Integrations (Optional)
@@ -129,10 +98,6 @@ Builds the React UI. References the data layer from Phase 3 and the features fro
 Agentforce chat widget (if requested)
 File upload API (if requested)
 ```
-
-**Skills to load (only if requested):**
-- `implementing-ui-bundle-agentforce-conversation-client` — for chat/agent widgets
-- `implementing-ui-bundle-file-upload` — for file upload functionality
 
 These are independent and can be executed in parallel if both are needed.
 
@@ -150,9 +115,8 @@ Assign permissions
 Import data (if data plan exists)
     ↓
 Fetch GraphQL schema and run codegen
+*(Re-fetches schema from the deployed org — required because the remote schema may differ from the local one used in Phase 3)*
 ```
-
-**Skill to load:** `deploying-ui-bundle`
 
 Follows the canonical 7-step deployment sequence. Must deploy metadata before fetching schema.
 
@@ -165,8 +129,6 @@ Generate site metadata (Network, CustomSite, DigitalExperience)
     ↓
 Deploy site infrastructure
 ```
-
-**Skill to load (only if requested):** `generating-experience-react-site`
 
 Creates the Digital Experience site that hosts the UI bundle. Only needed when the user wants a public-facing or authenticated site URL.
 
@@ -223,10 +185,10 @@ SKILL LOAD ORDER:
 2. generating-ui-bundle-features
 3. using-ui-bundle-salesforce-data (if data access needed)
 4. generating-ui-bundle-ui
-5. implementing-ui-bundle-agentforce-conversation-client (if chat requested)
-6. implementing-ui-bundle-file-upload (if file upload requested)
-7. deploying-ui-bundle
-8. generating-experience-react-site (if site requested)
+5a. implementing-ui-bundle-agentforce-conversation-client (if chat requested)
+5b. implementing-ui-bundle-file-upload (if file upload requested)
+6. deploying-ui-bundle
+7. generating-experience-react-site (if site requested)
 ```
 
 ### STEP 2: Per-Phase Execution
@@ -269,7 +231,7 @@ Execute each phase sequentially. Complete all steps within a phase before moving
 - ④ Checkpoint: UI complete → proceed to Phase 5
 
 **Phase 5 — Integrations** (skip if not requested)
-- ① Load skill(s): Invoke `implementing-ui-bundle-agentforce-conversation-client` and/or `implementing-ui-bundle-file-upload`
+- ① Load skill(s): Invoke `implementing-ui-bundle-agentforce-conversation-client` (5a) and/or `implementing-ui-bundle-file-upload` (5b). If both are needed, they are independent and can be executed in parallel.
 - ② Execute: Follow each skill's workflow to add the integration
 - ③ Verify: Run lint and build
 - ④ Checkpoint: Integrations complete → proceed to Phase 6
@@ -348,18 +310,10 @@ Before presenting the build as complete, verify:
 
 Never build UI before installing features. Never deploy before building. Dependencies are strict.
 
-### 2. Always Load Skills
-
-Even for simple apps, load each skill. Skills contain validated patterns that prevent subtle errors.
-
-### 3. Check for Existing Features First
-
-Before building any capability from scratch (auth, search, navigation), search available features. A tested package is better than custom code.
-
-### 4. Replace All Boilerplate
+### 2. Replace All Boilerplate
 
 Every generated app must feel purpose-built. Replace "React App" titles, "Vite + React" placeholders, and all default content with real app-specific text and branding.
 
-### 5. Design with Intent
+### 3. Design with Intent
 
 Follow the design thinking and frontend aesthetics guidance from `generating-ui-bundle-ui`. Every app should have a clear visual direction — not generic defaults.
