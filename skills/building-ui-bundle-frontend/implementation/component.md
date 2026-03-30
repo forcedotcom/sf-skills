@@ -64,7 +64,7 @@ export default function HomePage() {
 
 ### Useful Patterns — Component
 
-- **Programmatic navigation:** use `useNavigate` from `react-router`; call `navigate(path)` — consistent with GlobalSearchInput, SearchResultCard, MaintenanceTable, and other components in the web application.
+- **Programmatic navigation:** use `useNavigate` from `react-router`; call `navigate(path)` — consistent with GlobalSearchInput, SearchResultCard, MaintenanceTable, and other components in the UI bundle.
 - **Page container:** `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12`
 - **Icons:** `lucide-react`; add `aria-hidden="true"` on decorative icons
 - **Focus styles:** use `focus-visible:` variants

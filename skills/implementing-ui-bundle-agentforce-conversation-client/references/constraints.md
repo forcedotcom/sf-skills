@@ -8,7 +8,7 @@ This document lists all invalid approaches and patterns to avoid when working wi
 
 - ✅ **DO edit**: Any React files that import and use `<AgentforceConversationClient />` (for example, shared shells, route components, or feature pages)
 - ❌ **DO NOT edit**: AgentforceConversationClient.tsx, AgentforceConversationClient.jsx, index.tsx, index.jsx, or any files inside:
-  - `node_modules/@salesforce/webapp-template-feature-react-agentforce-conversation-client-experimental/src/`
+  - `node_modules/@salesforce/ui-bundle-template-feature-react-agentforce-conversation-client/src/`
   - `packages/template/feature/feature-react-agentforce-conversation-client/src/`
   - `src/components/AgentforceConversationClient.tsx` (patched templates)
   - Any path containing `/components/AgentforceConversationClient.`
@@ -127,7 +127,7 @@ import "./agent-styles.css";
 
 ### ❌ Wrong - Editing implementation file
 
-Reading or editing: `node_modules/@salesforce/webapp-template-feature-react-agentforce-conversation-client-experimental/src/AgentforceConversationClient.tsx`
+Reading or editing: `node_modules/@salesforce/ui-bundle-template-feature-react-agentforce-conversation-client/src/AgentforceConversationClient.tsx`
 
 ### ✅ Correct - Editing usage file
 

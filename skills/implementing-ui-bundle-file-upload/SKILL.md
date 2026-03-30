@@ -1,11 +1,11 @@
 ---
-name: implementing-webapplication-file-upload
-description: "Add file upload functionality to React web applications with progress tracking and Salesforce ContentVersion integration. Use when the user wants to upload files, attach documents, handle file input, create file dropzones, track upload progress, or link files to Salesforce records. This feature provides programmatic APIs ONLY — no components or hooks are exported. Build your own custom UI using the upload() API. ALWAYS use this feature instead of building file upload from scratch with FormData or XHR."
+name: implementing-ui-bundle-file-upload
+description: "Add file upload functionality to React UI bundles with progress tracking and Salesforce ContentVersion integration. Use when the user wants to upload files, attach documents, handle file input, create file dropzones, track upload progress, or link files to Salesforce records. This feature provides programmatic APIs ONLY — no components or hooks are exported. Build your own custom UI using the upload() API. ALWAYS use this feature instead of building file upload from scratch with FormData or XHR."
 ---
 
 # File Upload API (workflow)
 
-When the user wants file upload functionality in a React web application, follow this workflow. This feature provides **APIs only** — you must build the UI components yourself using the provided APIs.
+When the user wants file upload functionality in a React UI bundle, follow this workflow. This feature provides **APIs only** — you must build the UI components yourself using the provided APIs.
 
 ## CRITICAL: This is an API-only package
 
@@ -26,12 +26,12 @@ The source code contains reference components for demonstration, but they are **
 ## 1. Install the package
 
 ```bash
-npm install @salesforce/webapp-template-feature-react-file-upload-experimental
+npm install @salesforce/ui-bundle-template-feature-react-file-upload
 ```
 
 Dependencies are automatically installed:
 
-- `@salesforce/webapp-experimental` (API client)
+- `@salesforce/ui-bundle` (API client)
 - `@salesforce/sdk-data` (data SDK)
 
 ## 2. Understand the three upload patterns
@@ -47,7 +47,7 @@ Upload files to Salesforce and get back `contentBodyId` for each file. No Conten
 - Deferred record linking scenarios
 
 ```tsx
-import { upload } from "@salesforce/webapp-template-feature-react-file-upload-experimental";
+import { upload } from "@salesforce/ui-bundle-template-feature-react-file-upload";
 
 const results = await upload({
   files: [file1, file2],
@@ -71,7 +71,7 @@ Upload files and immediately link them to an existing Salesforce record by creat
 - Direct upload-and-attach scenarios
 
 ```tsx
-import { upload } from "@salesforce/webapp-template-feature-react-file-upload-experimental";
+import { upload } from "@salesforce/ui-bundle-template-feature-react-file-upload";
 
 const results = await upload({
   files: [file1, file2],
@@ -99,7 +99,7 @@ Upload files without a record, then link them after the record is created.
 import {
   upload,
   createContentVersion,
-} from "@salesforce/webapp-template-feature-react-file-upload-experimental";
+} from "@salesforce/ui-bundle-template-feature-react-file-upload";
 
 // Step 1: Upload files (no recordId)
 const uploadResults = await upload({
@@ -128,7 +128,7 @@ The package provides the backend — you build the frontend. Here's a minimal ex
 import {
   upload,
   type FileUploadProgress,
-} from "@salesforce/webapp-template-feature-react-file-upload-experimental";
+} from "@salesforce/ui-bundle-template-feature-react-file-upload";
 import { useState } from "react";
 
 function CustomFileUpload({ recordId }: { recordId?: string }) {
@@ -212,7 +212,7 @@ If the user wants to upload files to their own profile or personal library:
 import {
   upload,
   getCurrentUserId,
-} from "@salesforce/webapp-template-feature-react-file-upload-experimental";
+} from "@salesforce/ui-bundle-template-feature-react-file-upload";
 
 const userId = await getCurrentUserId();
 await upload({ files, recordId: userId });
@@ -366,7 +366,7 @@ The package includes a reference implementation in `src/features/fileupload/` wi
 
 **Upload fails with CORS error:**
 
-- Ensure the web application is properly deployed to Salesforce or running on `localhost`
+- Ensure the UI bundle is properly deployed to Salesforce or running on `localhost`
 - Check that the org allows the origin in CORS settings
 
 **No progress updates:**

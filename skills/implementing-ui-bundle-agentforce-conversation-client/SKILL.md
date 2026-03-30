@@ -1,10 +1,10 @@
 ---
-name: implementing-webapplication-agentforce-conversation-client
+name: implementing-ui-bundle-agentforce-conversation-client
 description: "Adds or modifies AgentforceConversationClient in React apps (.tsx or .jsx files). Use when user says \"add chat widget\", \"embed agentforce\", \"add agent\", \"add chatbot\", \"integrate conversational AI\", or asks to change colors, dimensions, styling, or configure agentId, width, height, inline mode, or styleTokens for travel agent, HR agent, employee agent, or any Salesforce agent chat."
 metadata:
   author: ACC Components
   version: 1.0.0
-  package: "@salesforce/webapp-template-feature-react-agentforce-conversation-client-experimental"
+  package: "@salesforce/ui-bundle-template-feature-react-agentforce-conversation-client"
   sdk-package: "@salesforce/agentforce-conversation-client"
   last-updated: 2025-03-18
 ---
@@ -58,13 +58,13 @@ Skip this step if:
 Use this import path by default in app code:
 
 ```tsx
-import { AgentforceConversationClient } from "@salesforce/webapp-template-feature-react-agentforce-conversation-client-experimental";
+import { AgentforceConversationClient } from "@salesforce/ui-bundle-template-feature-react-agentforce-conversation-client";
 ```
 
 If the package is not installed, install it:
 
 ```bash
-npm install @salesforce/webapp-template-feature-react-agentforce-conversation-client-experimental
+npm install @salesforce/ui-bundle-template-feature-react-agentforce-conversation-client
 ```
 
 Only use a local relative import (for example, `./components/AgentforceConversationClient`) when the user explicitly asks to use a patched/local component in that app.
@@ -79,7 +79,7 @@ Add to the target React component file using the canonical package import:
 
 ```tsx
 import { Outlet } from "react-router";
-import { AgentforceConversationClient } from "@salesforce/webapp-template-feature-react-agentforce-conversation-client-experimental";
+import { AgentforceConversationClient } from "@salesforce/ui-bundle-template-feature-react-agentforce-conversation-client";
 
 export default function AgentChatHost() {
   return (

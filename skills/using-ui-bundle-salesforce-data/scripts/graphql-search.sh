@@ -60,8 +60,8 @@ if [ ! -f "$SCHEMA" ]; then
   echo "ERROR: schema.graphql not found at $SCHEMA"
   echo "  Make sure you are running from the SFDX project root, or pass the path explicitly:"
   echo "    bash $0 --schema <path/to/schema.graphql> <EntityName>"
-  echo "  If the file is missing entirely, generate it from the webapp dir:"
-  echo "    cd force-app/main/default/webapplications/<app-name> && npm run graphql:schema"
+  echo "  If the file is missing entirely, generate it from the UI bundle dir:"
+  echo "    cd force-app/main/default/uiBundles/<app-name> && npm run graphql:schema"
   exit 1
 fi
 
@@ -73,8 +73,8 @@ fi
 
 if [ ! -s "$SCHEMA" ]; then
   echo "ERROR: schema.graphql is empty at $SCHEMA"
-  echo "  Regenerate it from the webapp dir:"
-  echo "    cd force-app/main/default/webapplications/<app-name> && npm run graphql:schema"
+  echo "  Regenerate it from the UI bundle dir:"
+  echo "    cd force-app/main/default/uiBundles/<app-name> && npm run graphql:schema"
   exit 1
 fi
 

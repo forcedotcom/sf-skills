@@ -1,30 +1,30 @@
 ---
-name: generating-webapplication-metadata
-description: "Scaffold new Salesforce web applications and configure their metadata — sf webapp generate, WebApplication bundles (meta XML, webapplication.json with routing/headers/outputDir), and CSP Trusted Sites for external domains. Use whenever creating a new web application, setting up web application metadata structure, configuring routing or headers, setting outputDir, adding external domains that need CSP registration, or editing bundle configuration. Triggers on: create web application, create webapp, new app, sf webapp generate, metadata, webapplication.json, CSP, trusted site, bundle configuration, meta XML, routing config, external domain, headers config, outputDir."
+name: generating-ui-bundle-metadata
+description: "Scaffold new Salesforce UI bundles and configure their metadata — sf ui-bundle generate, UIBundle bundles (meta XML, ui-bundle.json with routing/headers/outputDir), and CSP Trusted Sites for external domains. Use whenever creating a new UI bundle, setting up UI bundle metadata structure, configuring routing or headers, setting outputDir, adding external domains that need CSP registration, or editing bundle configuration. Triggers on: create UI bundle, create ui-bundle, new app, sf ui-bundle generate, metadata, ui-bundle.json, CSP, trusted site, bundle configuration, meta XML, routing config, external domain, headers config, outputDir."
 ---
 
-# Web Application Metadata
+# UI Bundle Metadata
 
-## Scaffolding a New Web Application
+## Scaffolding a New UI Bundle
 
-Use `sf webapp generate` to create new apps — not create-react-app, Vite, or other generic scaffolds.
+Use `sf ui-bundle generate` to create new apps — not create-react-app, Vite, or other generic scaffolds.
 
-**Web application name (`-n`):** Alphanumerical only — no spaces, hyphens, underscores, or special characters. Example: `CoffeeBoutique` (not `Coffee Boutique`).
+**UI bundle name (`-n`):** Alphanumerical only — no spaces, hyphens, underscores, or special characters. Example: `CoffeeBoutique` (not `Coffee Boutique`).
 
 After generation:
 1. Replace all default boilerplate — "React App", "Vite + React", default `<title>`, placeholder text
 2. Populate the home page with real content (landing section, banners, hero, navigation)
-3. Update navigation and placeholders (see the `generating-webapplication-ui` skill)
+3. Update navigation and placeholders (see the `building-ui-bundle-frontend` skill)
 
-Always install dependencies before running any scripts in the web application directory.
+Always install dependencies before running any scripts in the UI bundle directory.
 
 ---
 
-## WebApplication Bundle
+## UIBundle Bundle
 
-A WebApplication bundle lives under `webapplications/<AppName>/` and must contain:
+A UIBundle bundle lives under `uiBundles/<AppName>/` and must contain:
 
-- `<AppName>.webapplication-meta.xml` — filename must exactly match the folder name
+- `<AppName>.uibundle-meta.xml` — filename must exactly match the folder name
 - A build output directory (default: `dist/`) with at least one file
 
 ### Meta XML
@@ -32,7 +32,7 @@ A WebApplication bundle lives under `webapplications/<AppName>/` and must contai
 Required fields: `masterLabel`, `version` (max 20 chars), `isActive` (boolean).
 Optional: `description` (max 255 chars).
 
-### webapplication.json
+### ui-bundle.json
 
 Optional file. Allowed top-level keys: `outputDir`, `routing`, `headers`.
 
