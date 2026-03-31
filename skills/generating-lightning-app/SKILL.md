@@ -274,6 +274,56 @@ After all phases complete, consolidate outputs into deployment-ready structure.
 
 ---
 
+### STEP 4: Deploy Generated Project (Mandatory)
+
+After artifact assembly, you MUST deploy the generated metadata to the target org as part of this workflow. Do not stop at file generation.
+
+**Deployment rules:**
+
+- Run deployment automatically once metadata generation is complete.
+- Use a real deployment command (for example Salesforce CLI deployment of `force-app/main/default`) and capture the result.
+- Wait for deployment result and report success/failure.
+- If deployment fails, stop assignment flow and show deployment errors with remediation guidance.
+- If deployment succeeds, continue immediately to STEP 5.
+- Do not end the task immediately after metadata generation.
+
+---
+
+### STEP 5: Post-Deployment Permission Set Assignment (Interactive)
+
+After successful deployment, you MUST ask an interactive follow-up question before any permission set assignment.
+
+**When to run this step:**
+
+- On every successful deployment run
+- Only when at least one permission set was generated in this run
+
+**Required prompt behavior:**
+
+- Ask a direct yes/no style question with selectable options, for example:
+  - `Assign generated permission set(s) to the currently authenticated user now?`
+- Show exactly these two options:
+  - `Yes, assign now`
+  - `No, skip assignment`
+- Always show this prompt once per successful deployment run. Do not auto-assign and do not silently skip.
+- Use an interactive options question tool/mechanism (the same pattern used for initial clarifying questions), not plain narrative text.
+
+**Decision handling:**
+- Execute only the selected option: assign all generated permission set(s) to the authenticated user when `Yes, assign now` is chosen; otherwise skip assignment and record that it was skipped by user choice.
+
+### Completion Gate (Non-Negotiable)
+
+Do not present "build complete" or final completion output until ALL of the following are true:
+
+- Metadata generation is complete.
+- Deployment was attempted and deployment status is recorded.
+- If deployment succeeded and permission set(s) exist: assignment prompt was shown with exactly two options and user selection was recorded.
+- If user selected `Yes, assign now`: assignment attempt result is recorded for each generated permission set.
+
+If any gate is not satisfied, continue execution and do not finalize.
+
+---
+
 ## Output
 
 The completed build produces:
@@ -304,6 +354,15 @@ The completed build produces:
    - File path location
    - Dependency relationships
    - Any warnings or recommendations
+5. **Deployment Report**
+   - Deployment attempted (`yes/no`)
+   - Deployment status (`succeeded/failed`)
+   - If failed: error summary and remediation hints
+6. **Post-Deployment Access Report** (after user selection)
+   - Whether assignment prompt was shown
+   - User selection (`assign now` or `skip`)
+   - If assigned: list permission sets assigned to authenticated user with per-item status
+   - If skipped: explicit confirmation that no assignment was performed
 
 **Example Summary Structure:**
 
