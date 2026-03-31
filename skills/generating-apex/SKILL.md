@@ -142,6 +142,8 @@ Before finalizing, verify: CRUD/FLS enforced (SOQL + DML) · explicit sharing ke
 - Preserve exception cause chains: `new CustomException('message', cause)` (do not replace stack trace with concatenated messages)
 - Provide a custom exception class per service domain when meaningful
 - In `@AuraEnabled` methods, catch exceptions and rethrow as `AuraHandledException`
+- Fallback option: when no meaningful domain exception exists, catch generic `Exception` and either rethrow it or wrap it in a minimal custom exception that preserves the original cause.
+
 
 ### Null Safety
 
