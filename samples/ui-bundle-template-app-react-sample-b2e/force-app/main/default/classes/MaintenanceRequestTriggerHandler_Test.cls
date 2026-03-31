@@ -103,7 +103,7 @@ private class MaintenanceRequestTriggerHandler_Test {
         Maintenance_Request__c request = new Maintenance_Request__c(
             Type__c = 'Electrical',
             Description__c = 'Outlet not working',
-            Priority__c = 'High (Same Day)'
+            Priority__c = 'High'
         );
         insert request;
         Test.stopTest();
@@ -129,7 +129,7 @@ private class MaintenanceRequestTriggerHandler_Test {
         Maintenance_Request__c request = new Maintenance_Request__c(
             Type__c = 'HVAC',
             Description__c = 'AC not cooling',
-            Priority__c = 'High (Same Day)'
+            Priority__c = 'High'
         );
         insert request;
         Test.stopTest();
@@ -203,10 +203,10 @@ private class MaintenanceRequestTriggerHandler_Test {
     static void testBulkRequestAssignment() {
         Test.startTest();
         List<Maintenance_Request__c> requests = new List<Maintenance_Request__c>{
-            new Maintenance_Request__c(Type__c = 'Plumbing', Description__c = 'Leak 1', Priority__c = 'High (Same Day)'),
+            new Maintenance_Request__c(Type__c = 'Plumbing', Description__c = 'Leak 1', Priority__c = 'High'),
             new Maintenance_Request__c(Type__c = 'Electrical', Description__c = 'Issue 1', Priority__c = 'Standard'),
             new Maintenance_Request__c(Type__c = 'Plumbing', Description__c = 'Leak 2', Priority__c = 'Standard'),
-            new Maintenance_Request__c(Type__c = 'HVAC', Description__c = 'AC Issue', Priority__c = 'High (Same Day)'),
+            new Maintenance_Request__c(Type__c = 'HVAC', Description__c = 'AC Issue', Priority__c = 'High'),
             new Maintenance_Request__c(Type__c = 'Appliance', Description__c = 'Fridge Issue', Priority__c = 'Standard')
         };
         insert requests;
@@ -261,7 +261,7 @@ private class MaintenanceRequestTriggerHandler_Test {
         Maintenance_Request__c request = new Maintenance_Request__c(
             Type__c = 'Plumbing',
             Description__c = 'Emergency leak',
-            Priority__c = 'High (Same Day)'
+            Priority__c = 'High'
         );
         insert request;
         Test.stopTest();

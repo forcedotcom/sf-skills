@@ -43,15 +43,18 @@ import type {
 import { ResultOrder } from "../api/graphql-operations-types";
 import { Badge } from "../components/ui/badge";
 import { PAGINATION_CONFIG } from "../lib/constants";
+import { User } from "lucide-react";
 import { cn } from "../lib/utils";
+
+const SEARCH_PLACEHOLDER = "Search by application #, applicant, or address...";
 
 const FILTER_CONFIGS: FilterFieldConfig[] = [
 	{
 		field: "search",
 		label: "Search",
 		type: "search",
-		searchFields: ["Name"],
-		placeholder: "Search by name...",
+		searchFields: ["Name", "User__r.Name", "Property__r.Address__c"],
+		placeholder: SEARCH_PLACEHOLDER,
 	},
 	{ field: "Status__c", label: "Status", type: "picklist" },
 	{ field: "Start_Date__c", label: "Start Date", type: "date" },
@@ -210,8 +213,8 @@ function ApplicationSearchFilters({
 				<SearchFilter
 					field="search"
 					label="Search"
-					placeholder="Search by name..."
-					className="w-full sm:w-50"
+					placeholder={SEARCH_PLACEHOLDER}
+					className="w-full sm:w-80"
 				/>
 				<MultiSelectFilter
 					field="Status__c"
@@ -236,10 +239,13 @@ function ApplicationSearchTableHeader() {
 	return (
 		<TableHeader>
 			<TableRow>
-				<TableHead className="w-5/12 px-6 py-4 bg-gray-50 text-sm font-semibold text-purple-700 uppercase tracking-wide">
-					User
+				<TableHead className="w-1/12 px-6 py-4 bg-gray-50 text-sm font-semibold text-purple-700 uppercase tracking-wide">
+					Application
 				</TableHead>
-				<TableHead className="w-4/12 px-6 py-4 bg-gray-50 text-sm font-semibold text-purple-700 uppercase tracking-wide">
+				<TableHead className="w-5/12 px-6 py-4 bg-gray-50 text-sm font-semibold text-purple-700 uppercase tracking-wide">
+					Applicant
+				</TableHead>
+				<TableHead className="w-3/12 px-6 py-4 bg-gray-50 text-sm font-semibold text-purple-700 uppercase tracking-wide">
 					Start Date
 				</TableHead>
 				<TableHead className="w-3/12 px-6 py-4 bg-gray-50 text-sm font-semibold text-purple-700 uppercase tracking-wide">
@@ -253,7 +259,7 @@ function ApplicationSearchTableHeader() {
 function ApplicationSearchNoResults() {
 	return (
 		<TableRow>
-			<TableCell colSpan={3} className="text-center py-12 text-gray-500">
+			<TableCell colSpan={4} className="text-center py-12 text-gray-500">
 				No applications found
 			</TableCell>
 		</TableRow>
@@ -270,6 +276,7 @@ function ApplicationSearchTable({
 	return (
 		<>
 			{applicationNodes.map((application) => {
+				const applicationName = application.Name?.value || "";
 				const applicantName = application.User__r?.Name?.value || "Unknown";
 				const propertyName = application.Property__r?.Name?.value;
 				const propertyAddress = application.Property__r?.Address__c?.value || "";
@@ -282,11 +289,12 @@ function ApplicationSearchTable({
 						className="hover:bg-gray-50 transition-colors cursor-pointer"
 					>
 						<TableCell className="px-6 py-4">
+							<div className="text-sm font-medium text-gray-900">{applicationName}</div>
+						</TableCell>
+						<TableCell className="px-6 py-4">
 							<div className="flex items-center">
 								<div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-									<span className="text-sm font-medium text-purple-700">
-										{applicantName.charAt(0) || "?"}
-									</span>
+									<User className="w-5 h-5 text-purple-700" />
 								</div>
 								<div className="ml-4">
 									<div className="text-sm font-medium text-gray-900">{applicantName}</div>
@@ -336,6 +344,9 @@ function ApplicationSearchSkeleton({ pageSize }: { pageSize: number }) {
 			{Array.from({ length: pageSize }, (_, i) => (
 				<TableRow key={i}>
 					<TableCell className="px-6 py-4">
+						<Skeleton className="h-4 w-24" />
+					</TableCell>
+					<TableCell className="px-6 py-4">
 						<div className="flex items-center">
 							<Skeleton className="h-10 w-10 rounded-full shrink-0" />
 							<div className="ml-4 space-y-2">
@@ -361,7 +372,7 @@ function ApplicationSearchErrorState() {
 
 	return (
 		<TableRow>
-			<TableCell colSpan={3} className="p-0">
+			<TableCell colSpan={4} className="p-0">
 				<ObjectSearchErrorState
 					message="There was an error loading the applications. Please try again."
 					onGoHome={() => navigate("/")}

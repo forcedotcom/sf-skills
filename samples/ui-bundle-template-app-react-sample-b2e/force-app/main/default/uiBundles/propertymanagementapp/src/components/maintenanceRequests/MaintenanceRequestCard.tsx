@@ -9,11 +9,11 @@ interface MaintenanceRequestCardProps {
 }
 
 const priorityConfig: Record<
-	"Emergency (2hr)" | "High (Same Day)" | "Standard",
+	"Emergency" | "High" | "Standard",
 	{ color: string; label: string; emoji: string }
 > = {
-	"Emergency (2hr)": { color: "text-red-500", label: "EMERGENCY (2HR)", emoji: "🔴" },
-	"High (Same Day)": { color: "text-orange-500", label: "HIGH (SAME DAY)", emoji: "🟠" },
+	Emergency: { color: "text-red-500", label: "EMERGENCY (2HR)", emoji: "🔴" },
+	High: { color: "text-orange-500", label: "HIGH (SAME DAY)", emoji: "🟠" },
 	Standard: { color: "text-blue-500", label: "STANDARD", emoji: "🔵" },
 };
 

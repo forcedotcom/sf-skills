@@ -13,6 +13,37 @@ import type {
 } from "../types/conversation";
 
 const GLOBAL_HOST_ID = "agentforce-conversation-client-global-host";
+
+const DEFAULT_STYLE_TOKENS: NonNullable<AgentforceClientConfig["styleTokens"]> = {
+	containerBackground: "#fafafa",
+
+	headerBlockBackground: "#372949",
+	headerBlockTextColor: "#ffffff",
+	headerBlockIconColor: "#ffffff",
+	headerBlockBorderBottomColor: "#3b0764",
+	headerBlockFocusBorder: "#c4b5fd",
+
+	messageBlockInboundBackgroundColor: "#ffffff",
+	messageBlockInboundTextColor: "#1f2937",
+	messageBlockInboundBorder: "1px solid #e5e7eb",
+
+	messageBlockOutboundBackgroundColor: "#ede9fe",
+	messageBlockOutboundTextColor: "#1f2937",
+	messageBlockOutboundBorder: "1px solid #d8b4fe",
+
+	messageInputTextColor: "#1f2937",
+	messageInputTextBackgroundColor: "#ffffff",
+	messageInputFooterBorderColor: "#d1d5db",
+	messageInputFooterBorderFocusColor: "#9ca3af",
+	messageInputFocusShadow: "0 0 0 3px rgba(156, 163, 175, 0.25)",
+	messageInputFooterPlaceholderText: "#6b7280",
+
+	messageInputFooterSendButton: "#7e22ce",
+	messageInputFooterSendButtonHoverColor: "#6b21a8",
+	messageInputSendButtonIconColor: "#ffffff",
+	messageInputSendButtonDisabledColor: "#e5e7eb",
+	messageInputActionButtonFocusBorder: "#a855f7",
+};
 const SINGLETON_KEY = "__agentforceConversationClientSingleton";
 
 interface AgentforceConversationClientSingleton {
@@ -79,7 +110,7 @@ export function AgentforceConversationClient({
 		return {
 			...(agentId !== undefined && { agentId }),
 			agentLabel: agentLabel ?? "Chat with us",
-			...(styleTokens !== undefined && { styleTokens }),
+			styleTokens: { ...DEFAULT_STYLE_TOKENS, ...styleTokens },
 			renderingConfig,
 		};
 	}, [agentId, agentLabel, inlineProp, headerEnabled, showHeaderIcon, width, height, styleTokens]);
