@@ -17,7 +17,7 @@ export function FilterRow({
 			aria-label={ariaLabel}
 			{...props}
 		>
-			<div className="flex flex-wrap items-end gap-x-8 gap-y-4">{children}</div>
+			<div className="flex flex-wrap items-center gap-x-8 gap-y-4">{children}</div>
 		</div>
 	);
 }

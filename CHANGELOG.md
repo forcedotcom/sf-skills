@@ -1,3 +1,12 @@
+## [1.5.2](https://github.com/forcedotcom/afv-library/compare/1.5.1...1.5.2) (2026-03-31)
+
+
+### Bug Fixes
+
+* adding building-ui-bundle-app orchestration skill @W-21338965@ ([#138](https://github.com/forcedotcom/afv-library/issues/138)) ([54a675c](https://github.com/forcedotcom/afv-library/commit/54a675c8386550a15442cc21fe193624a270159e))
+
+
+
 ## [1.5.1](https://github.com/forcedotcom/afv-library/compare/1.5.0...1.5.1) (2026-03-27)
 
 

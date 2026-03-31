@@ -14,6 +14,8 @@ export type StyleTokens = Record<string, string>;
 export interface AgentforceConversationClientProps {
 	/** Required in practice: id of the agent to load. */
 	agentId: string;
+	/** Display name for the agent shown in the chat header. */
+	agentLabel?: string;
 	/** If true, renders inline. If omitted/false, renders floating. */
 	inline?: boolean;
 	/** Show/hide chat header. Defaults to true for floating; can only be set for inline mode. */

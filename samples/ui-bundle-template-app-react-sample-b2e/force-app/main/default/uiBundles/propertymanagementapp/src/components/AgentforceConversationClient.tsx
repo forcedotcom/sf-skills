@@ -55,6 +55,7 @@ function getDefaultEmbedOptions(): ResolvedEmbedOptions {
  */
 export function AgentforceConversationClient({
 	agentId,
+	agentLabel,
 	inline: inlineProp,
 	headerEnabled,
 	showHeaderIcon,
@@ -77,10 +78,11 @@ export function AgentforceConversationClient({
 
 		return {
 			...(agentId !== undefined && { agentId }),
+			agentLabel: agentLabel ?? "Chat with us",
 			...(styleTokens !== undefined && { styleTokens }),
 			renderingConfig,
 		};
-	}, [agentId, inlineProp, headerEnabled, showHeaderIcon, width, height, styleTokens]);
+	}, [agentId, agentLabel, inlineProp, headerEnabled, showHeaderIcon, width, height, styleTokens]);
 
 	const inline = normalizedAgentforceClientConfig?.renderingConfig?.mode === "inline";
 
@@ -88,7 +90,7 @@ export function AgentforceConversationClient({
 		if (!normalizedAgentforceClientConfig?.agentId) {
 			throw new Error(
 				"AgentforceConversationClient requires agentId. " +
-					"Pass flat props only (agentId, inline, headerEnabled, showHeaderIcon, width, height, styleTokens).",
+					"Pass flat props only (agentId, agentLabel, inline, headerEnabled, showHeaderIcon, width, height, styleTokens).",
 			);
 		}
 
