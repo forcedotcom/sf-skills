@@ -154,6 +154,21 @@ Specify license requirements and record type visibility:
     <default>true</default>
 </recordTypeVisibilities>
 ```
+## Step 8: Set Agent Access (Optional)
+                                              
+Enable access to Agentforce Employee Agents for users assigned to this permission set:
+
+<agentAccesses>
+    <agentName>Sales_Assistant_Agent</agentName>
+    <enabled>true</enabled>
+</agentAccesses>
+
+Field requirements:
+- agentName (Required): The developer name of the employee agent
+- enabled (Required): Set to true to grant access, false to deny
+
+Important:
+- Agent names must match existing Agentforce Employee Agent developer names
 
 ## Validation Checklist
 
