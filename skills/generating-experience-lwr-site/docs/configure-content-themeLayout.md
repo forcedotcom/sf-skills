@@ -26,6 +26,9 @@
 
 **IMPORTANT**: These guidelines should ONLY be applied when the user explicitly requests creating a new layout for their site. Do not apply these guidelines automatically for other tasks or when editing existing layouts.
 
+### Order of operations
+If the user decides to create a new LWC, create the LWC first THEN the theme layout metadata.
+
 ### _meta.json Structure
 
 The `_meta.json` file must contain:
@@ -126,11 +129,11 @@ digitalExperiences/site/[SITE_NAME]/sfdc_cms__theme/[THEME_API_NAME]/content.jso
 
 When generating a new theme layout, ensure:
 
-- [ ] `_meta.json` created with correct `apiName`, `type`, and `path` (III)
-- [ ] `content.json` created with all required fields (IV)
-- [ ] `urlName` uses lowercase with hyphens (V)
-- [ ] `title` is human-readable (V)
-- [ ] `sfdc_cms__theme/[THEME_API_NAME]/content.json` updated by appending a new `contentBody.layouts` mapping (VI)
+- [ ] `_meta.json` created with correct `apiName`, `type`, and `path`
+- [ ] `content.json` created with all required fields
+- [ ] `urlName` uses lowercase with hyphens
+- [ ] `title` is human-readable
+- [ ] `sfdc_cms__theme/[THEME_API_NAME]/content.json` updated by appending a new `contentBody.layouts` mapping
 - [ ] **CRITICAL**: Complete all the UUID generation steps. See [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md)
 
 ## Purpose B: Editing Existing Theme Layouts

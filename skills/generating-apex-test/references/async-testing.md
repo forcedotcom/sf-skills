@@ -140,7 +140,7 @@ static void shouldExecuteFutureMethod() {
     Test.stopTest();
 
     Account updated = [SELECT Id, Processed__c FROM Account WHERE Id = :acc.Id];
-    Assert.areEqual(true, updated.Processed__c, 'Future should process record');
+    Assert.isTrue(updated.Processed__c, 'Future should process record');
 }
 ```
 

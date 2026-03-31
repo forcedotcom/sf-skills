@@ -61,6 +61,9 @@ GitHub will display a **Compare & pull request** button.
 Once your branch is pushed to your fork, you can open a Pull Request
 (PR) to propose merging your changes into this repository.
 
+Unsure that your PR title is prefixed with  `feat:` or `fix:` as those will result in an update to the change log 
+and inclusion in SF tooling. 
+
 ### 6.1 Start the Pull Request
 
 **Option A --- From the GitHub banner (easiest)**\

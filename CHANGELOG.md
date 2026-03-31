@@ -1,3 +1,30 @@
+# [1.6.0](https://github.com/forcedotcom/afv-library/compare/1.5.3...1.6.0) (2026-03-31)
+
+
+### Features
+
+* update theme layout creation instructions ([#122](https://github.com/forcedotcom/afv-library/issues/122)) ([30052ef](https://github.com/forcedotcom/afv-library/commit/30052ef628e80f6dbf29e89ae0c792dcc0fc5f37))
+
+
+
+## [1.5.3](https://github.com/forcedotcom/afv-library/compare/1.5.2...1.5.3) (2026-03-31)
+
+
+### Bug Fixes
+
+* update details for PR title  ([#153](https://github.com/forcedotcom/afv-library/issues/153)) ([dcc1804](https://github.com/forcedotcom/afv-library/commit/dcc18049aa946015ee5482982397273b7b4af277))
+
+
+
+## [1.5.2](https://github.com/forcedotcom/afv-library/compare/1.5.1...1.5.2) (2026-03-31)
+
+
+### Bug Fixes
+
+* adding building-ui-bundle-app orchestration skill @W-21338965@ ([#138](https://github.com/forcedotcom/afv-library/issues/138)) ([54a675c](https://github.com/forcedotcom/afv-library/commit/54a675c8386550a15442cc21fe193624a270159e))
+
+
+
 ## [1.5.1](https://github.com/forcedotcom/afv-library/compare/1.5.0...1.5.1) (2026-03-27)
 
 

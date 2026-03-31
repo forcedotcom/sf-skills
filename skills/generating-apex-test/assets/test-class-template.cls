@@ -1,7 +1,7 @@
 /**
- * @description Test class for {ClassUnderTest}.
- *              Tests bulk operations (251+ records), positive/negative paths,
- *              and exception handling.
+ * Test class for {ClassUnderTest}.
+ * Tests bulk operations (251+ records), positive/negative paths,
+ * and exception handling.
  */
 @isTest
 private class {ClassUnderTest}Test {

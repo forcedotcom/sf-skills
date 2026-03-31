@@ -145,8 +145,7 @@ Before doing anything, you **MUST ALWAYS** load them first if they match user in
 
 **Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
 
-- [ ] Check with user whether this new theme layout reuses an existing theme layout component or requires a new one.
-- [ ] MUST read [handle-ui-components.md](docs/handle-ui-components.md) if creating a new theme layout component.
+- [ ] **CRITICAL**:Before doing anything else, MUST Check with user whether this new theme layout reuses an existing theme layout Lightning web component or requires a new one. If it requires a new one, make sure to read [handle-ui-components.md](docs/handle-ui-components.md) to create the new theme layout component before proceeding. DO NOT skip this step even if doing so would be faster or more efficient.
 - [ ] MUST read [configure-content-themeLayout.md](docs/configure-content-themeLayout.md).
 - [ ] MUST read [configure-content-view.md](docs/configure-content-view.md) if need to apply theme layout to pages
 
