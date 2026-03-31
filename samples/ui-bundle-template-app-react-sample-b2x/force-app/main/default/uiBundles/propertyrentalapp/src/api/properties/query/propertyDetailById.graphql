@@ -1,0 +1,124 @@
+query PropertyDetailById($propertyId: ID!) {
+	uiapi {
+		query {
+			Property__c(where: { Id: { eq: $propertyId } }, first: 1) {
+				edges {
+					node {
+						Id
+						Name @optional {
+							value
+							displayValue
+						}
+						Address__c @optional {
+							value
+							displayValue
+						}
+						Coordinates__Latitude__s @optional {
+							value
+						}
+						Coordinates__Longitude__s @optional {
+							value
+						}
+						Type__c @optional {
+							value
+							displayValue
+						}
+						Monthly_Rent__c @optional {
+							value
+							displayValue
+						}
+						Bedrooms__c @optional {
+							value
+							displayValue
+						}
+						Bathrooms__c @optional {
+							value
+							displayValue
+						}
+						Sq_Ft__c @optional {
+							value
+							displayValue
+						}
+						Description__c @optional {
+							value
+							displayValue
+						}
+						Property_Images__r(first: 50, orderBy: { Display_Order__c: { order: ASC } }) {
+							edges {
+								node {
+									Id
+									Name @optional {
+										value
+									}
+									Image_URL__c @optional {
+										value
+									}
+									Image_Type__c @optional {
+										value
+									}
+									Display_Order__c @optional {
+										value
+									}
+									Alt_Text__c @optional {
+										value
+									}
+								}
+							}
+						}
+						Property_Features__r(first: 100) {
+							edges {
+								node {
+									Id
+									Name @optional {
+										value
+									}
+									Feature_Category__c @optional {
+										value
+									}
+									Description__c @optional {
+										value
+									}
+								}
+							}
+						}
+						Property_Costs__r(first: 100) {
+							edges {
+								node {
+									Id
+									Cost_Category__c @optional {
+										value
+									}
+									Cost_Amount__c @optional {
+										value
+									}
+									Cost_Date__c @optional {
+										value
+									}
+									Description__c @optional {
+										value
+									}
+								}
+							}
+						}
+						Property_Listings__r(first: 10) {
+							edges {
+								node {
+									Id
+									Name @optional {
+										value
+									}
+									Listing_Price__c @optional {
+										value
+									}
+									Listing_Status__c @optional {
+										value
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

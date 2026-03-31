@@ -1,0 +1,36 @@
+query GetOpenApplications($first: Int) {
+	uiapi {
+		query {
+			Application__c(
+				first: $first
+				where: { Status__c: { in: ["Submitted", "Background Check"] } }
+				orderBy: { CreatedDate: { order: ASC } }
+			) {
+				edges {
+					node {
+						Id
+						Name @optional {
+							value
+						}
+						User__r @optional {
+							Name @optional {
+								value
+							}
+						}
+						Property__r @optional {
+							Address__c @optional {
+								value
+							}
+						}
+						Status__c @optional {
+							value
+						}
+						CreatedDate @optional {
+							value
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,71 @@
+query GetAllMaintenanceRequests($first: Int, $after: String) {
+	uiapi {
+		query {
+			Maintenance_Request__c(
+				first: $first
+				after: $after
+				orderBy: { Priority__c: { order: DESC }, Scheduled__c: { order: ASC } }
+			) {
+				edges {
+					node {
+						Id
+						Name @optional {
+							value
+						}
+						Description__c @optional {
+							value
+						}
+						Type__c @optional {
+							value
+						}
+						Priority__c @optional {
+							value
+						}
+						Status__c @optional {
+							value
+						}
+						Scheduled__c @optional {
+							value
+						}
+						Property__r @optional {
+							Address__c @optional {
+								value
+							}
+							Name @optional {
+								value
+							}
+						}
+						User__r @optional {
+							Name @optional {
+								value
+							}
+						}
+						Assigned_Worker__r @optional {
+							Name @optional {
+								value
+							}
+							Employment_Type__c @optional {
+								value
+							}
+						}
+						ContentDocumentLinks(first: 1) @optional {
+							edges {
+								node {
+									ContentDocument @optional {
+										LatestPublishedVersionId @optional {
+											value
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				pageInfo {
+					hasNextPage
+					endCursor
+				}
+			}
+		}
+	}
+}

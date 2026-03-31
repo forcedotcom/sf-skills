@@ -11,8 +11,8 @@ const { execSync } = require('child_process');
 const { copyRecursive } = require('./lib/copy-recursive');
 
 const TEMPLATE_PACKAGES = [
-  '@salesforce/webapp-template-app-react-sample-b2e-experimental',
-  '@salesforce/webapp-template-app-react-sample-b2x-experimental',
+  '@salesforce/ui-bundle-template-app-react-sample-b2e',
+  '@salesforce/ui-bundle-template-app-react-sample-b2x',
 ];
 const PACKAGE_NAME = TEMPLATE_PACKAGES[0]; // used for syncing skills
 const SKILLS_SRC = 'dist/.a4drules/skills';

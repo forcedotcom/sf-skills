@@ -1,0 +1,95 @@
+schema: '../../../../../schema.graphql'
+documents: 'src/**/*.{graphql,ts,tsx}'
+generates:
+  src/api/graphql-operations-types.ts:
+    plugins:
+      - 'graphql-codegen-typescript-operation-types'
+      - 'typescript-operations'
+    config:
+      onlyOperationTypes: true
+      skipTypename: true
+      preResolveTypes: true
+      scalars:
+        # String-serialized scalars
+        JSON:
+          input: 'string'
+          output: 'string'
+        Date:
+          input: 'string'
+          output: 'string'
+        DateTime:
+          input: 'string'
+          output: 'string'
+        Time:
+          input: 'string'
+          output: 'string'
+        Email:
+          input: 'string'
+          output: 'string'
+        Url:
+          input: 'string'
+          output: 'string'
+        PhoneNumber:
+          input: 'string'
+          output: 'string'
+        Picklist:
+          input: 'string'
+          output: 'string'
+        MultiPicklist:
+          input: 'string'
+          output: 'string'
+        TextArea:
+          input: 'string'
+          output: 'string'
+        LongTextArea:
+          input: 'string'
+          output: 'string'
+        RichTextArea:
+          input: 'string'
+          output: 'string'
+        EncryptedString:
+          input: 'string'
+          output: 'string'
+        Base64:
+          input: 'string'
+          output: 'string'
+        IdOrRef:
+          input: 'string'
+          output: 'string'
+        # BigDecimal-serialized scalars (accepts number or string, returns number)
+        Currency:
+          input: 'number | string'
+          output: 'number'
+        BigDecimal:
+          input: 'number | string'
+          output: 'number'
+        Double:
+          input: 'number | string'
+          output: 'number'
+        Percent:
+          input: 'number | string'
+          output: 'number'
+        Longitude:
+          input: 'number | string'
+          output: 'number'
+        Latitude:
+          input: 'number | string'
+          output: 'number'
+        # Integer-like scalars
+        Long:
+          input: 'number'
+          output: 'number'
+        BigInteger:
+          input: 'number'
+          output: 'number'
+        Short:
+          input: 'number'
+          output: 'number'
+        Byte:
+          input: 'number'
+          output: 'number'
+        Char:
+          input: 'number'
+          output: 'number'
+overwrite: true
+ignoreNoDocuments: true
