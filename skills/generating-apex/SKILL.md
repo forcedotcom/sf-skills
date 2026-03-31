@@ -6,7 +6,7 @@ description: Primary Apex authoring skill for class generation, refactoring, and
 # Generating Apex
 
 Use this skill for production-grade Apex: new classes, selectors, services, async jobs,
-invocable methods, and triggers; and for evidence-based review of existing `.cls`.
+invocable methods, and triggers; and for evidence-based review of existing `.cls` OR `.trigger`.
 
 ## Required Inputs
 
@@ -16,7 +16,7 @@ Gather or infer before authoring:
 - Target object(s) and business goal
 - Class name (derive using the naming table below)
 - Net-new vs refactor/fix; any org/API constraints
-- Deployment targets
+- Deployment targets (default to runSpecifiedTests and use generated tests where applicable)
 
 Defaults unless specified:
 - Sharing: `with sharing` (see sharing rules per type below)
@@ -48,9 +48,9 @@ All steps are sequential. Do not skip, merge, or reorder. If blocked, stop and a
 
 4. **Author with guardrails** -- apply every rule in the Rules section below
    - Generate `{ClassName}.cls` with ApexDoc
-   - Generate `{ClassName}.cls-meta.xml`
+   - Generate `{ClassName}.cls-meta.xml`   
 
-5. **Generate test classes** -- delegate to `generating-apex-test` to create `{ClassName}Test.cls` and `{ClassName}Test.cls-meta.xml`. Do not write test code in this skill. If the test skill is unavailable, record `test_skill=unavailable: <reason>` in Step 8.
+5. **Generate test classes** -- Load the skill `generating-apex-test` to create `{ClassName}Test.cls` and `{ClassName}Test.cls-meta.xml`.  Apex tests are always required to be generated to deploy. No test file creation or edits can occur without loading the  `generating-apex-test` skill to generate tests.
 
 ### Phase 2 — Validate (required before reporting)
 
