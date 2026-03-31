@@ -289,19 +289,19 @@ After artifact assembly, you MUST deploy the generated metadata to the target or
 
 ---
 
-### STEP 5: Post-Deployment Permission Set Assignment (Interactive)
+### STEP 5: Post-Deployment Assignment (Interactive)
 
-After successful deployment, you MUST ask an interactive follow-up question before any permission set assignment.
+After successful deployment, you MUST ask an interactive follow-up question before assigning generated access artifacts (for example permission sets).
 
 **When to run this step:**
 
 - On every successful deployment run
-- Only when at least one permission set was generated in this run
+- Only when at least one access artifact was generated in this run
 
 **Required prompt behavior:**
 
 - Ask a direct yes/no style question with selectable options, for example:
-  - `Assign generated permission set(s) to the currently authenticated user now?`
+  - `Assign generated access to the currently authenticated user now?`
 - Show exactly these two options:
   - `Yes, assign now`
   - `No, skip assignment`
@@ -309,7 +309,8 @@ After successful deployment, you MUST ask an interactive follow-up question befo
 - Use an interactive options question tool/mechanism (the same pattern used for initial clarifying questions), not plain narrative text.
 
 **Decision handling:**
-- Execute only the selected option: assign all generated permission set(s) to the authenticated user when `Yes, assign now` is chosen; otherwise skip assignment and record that it was skipped by user choice.
+- Execute only the selected option: assign all generated access artifacts to the authenticated user when `Yes, assign now` is chosen; otherwise skip assignment and record that it was skipped by user choice.
+- If only permission sets were generated, this assignment maps to assigning those permission sets.
 
 ### Completion Gate (Non-Negotiable)
 
@@ -317,8 +318,8 @@ Do not present "build complete" or final completion output until ALL of the foll
 
 - Metadata generation is complete.
 - Deployment was attempted and deployment status is recorded.
-- If deployment succeeded and permission set(s) exist: assignment prompt was shown with exactly two options and user selection was recorded.
-- If user selected `Yes, assign now`: assignment attempt result is recorded for each generated permission set.
+- If deployment succeeded and assignable access artifacts exist: assignment prompt was shown with exactly two options and user selection was recorded.
+- If user selected `Yes, assign now`: assignment attempt result is recorded for each generated access artifact.
 
 If any gate is not satisfied, continue execution and do not finalize.
 
@@ -357,6 +358,7 @@ The completed build produces:
 5. **Deployment Report**
    - Deployment attempted (`yes/no`)
    - Deployment status (`succeeded/failed`)
+   - If succeeded: include a positive readiness note (for example, app is deployed and ready for first use)
    - If failed: error summary and remediation hints
 6. **Post-Deployment Access Report** (after user selection)
    - Whether assignment prompt was shown
