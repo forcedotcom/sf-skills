@@ -1,3 +1,12 @@
+## [1.6.5](https://github.com/forcedotcom/afv-library/compare/1.6.4...1.6.5) (2026-04-01)
+
+
+### Bug Fixes
+
+* updating ui bundles to the latest @W-21814993@ ([#156](https://github.com/forcedotcom/afv-library/issues/156)) ([0d69b91](https://github.com/forcedotcom/afv-library/commit/0d69b918da0c43dc940f19c8c397a5de28042d4f))
+
+
+
 ## [1.6.4](https://github.com/forcedotcom/afv-library/compare/1.6.3...1.6.4) (2026-03-31)
 
 
