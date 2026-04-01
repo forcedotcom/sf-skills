@@ -65,7 +65,7 @@ If image generation fails or is not enabled:
 3. If it does not exist, download it:
 ```bash
 mkdir -p generatedimages
-curl -f -o generatedimages/placeholder.svg "https://cdn.scs.static.lightning.force.com/resources/itsm-msteams-employee-app/ypmv18/1.0/assets/botWelcome-jMr02H0D.png"
+curl -f -o generatedimages/placeholder.svg "https://res.cloudinary.com/dveb6nwve/image/upload/v1775081606/placeholderFinal_l03h2n.svg"
 ```
 
 ## Placeholder Policy
