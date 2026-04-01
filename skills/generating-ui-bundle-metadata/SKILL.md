@@ -1,6 +1,6 @@
 ---
 name: generating-ui-bundle-metadata
-description: "MUST activate when the project contains a uiBundles/*/src/ directory and scaffolding a new UI bundle or React app, or when editing ui-bundle.json, .uibundle-meta.xml, or CSP trusted site files. Scaffold with sf template generate ui-bundle --template reactbasic and configure ui-bundle.json (routing, headers, outputDir) and CSP Trusted Sites. Activate when the task involves files matching *.uibundle-meta.xml, ui-bundle.json, or cspTrustedSites/*.cspTrustedSite-meta.xml."
+description: "MUST activate when the project contains a uiBundles/*/src/ directory and scaffolding a new UI bundle or app, or when editing ui-bundle.json, .uibundle-meta.xml, or CSP trusted site files. Scaffold with sf template generate ui-bundle and configure ui-bundle.json (routing, headers, outputDir) and CSP Trusted Sites. Activate when the task involves files matching *.uibundle-meta.xml, ui-bundle.json, or cspTrustedSites/*.cspTrustedSite-meta.xml."
 ---
 
 # UI Bundle Metadata

@@ -1,6 +1,6 @@
 ---
 name: using-ui-bundle-salesforce-data
-description: "MUST activate when the project contains a uiBundles/ directory and the task involves ANY Salesforce record operation — reading, creating, updating, or deleting. This includes forms that submit to Salesforce, pages that display Salesforce records, and any code that touches Salesforce objects or custom objects. Activate when files under uiBundles/*/src/ import from @salesforce/sdk-data, or when *.graphql files or codegen.yml exist. This skill owns all Salesforce data access patterns in React UI bundles. Does not apply to authentication/OAuth setup, schema changes, Bulk/Tooling/Metadata API, or declarative automation."
+description: "MUST activate when the project contains a uiBundles/ directory and the task involves ANY Salesforce record operation — reading, creating, updating, or deleting. This includes forms that submit to Salesforce, pages that display Salesforce records, and any code that touches Salesforce objects or custom objects. Activate when files under uiBundles/*/src/ import from @salesforce/sdk-data, or when *.graphql files or codegen.yml exist. This skill owns all Salesforce data access patterns in UI bundles. Does not apply to authentication/OAuth setup, schema changes, Bulk/Tooling/Metadata API, or declarative automation."
 ---
 
 # Salesforce Data Access
