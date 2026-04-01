@@ -1,6 +1,6 @@
 ---
 name: generating-ui-bundle-site
-description: "Use this skill when users need to create or configure a Salesforce Digital Experience Site specifically for hosting a React UI bundle. Trigger when users mention creating an Experience site for a React app, setting up a React site on Salesforce, configuring Network/CustomSite/DigitalExperience metadata for a UI bundle, or deploying site infrastructure for a React application. Also trigger when users mention site URL path prefixes, app namespaces, appDevName, guest access configuration, DigitalExperienceConfig, DigitalExperienceBundle, or sfdc_cms__site content types in the context of React apps. Always use this skill for any React UI bundle site creation or site infrastructure configuration work, even if the user just says \"create a site for my React app\" or \"set up the site for my UI bundle.\""
+description: "MUST activate when the project contains a uiBundles/ directory and the task involves creating or configuring site infrastructure. Create or configure a Salesforce Digital Experience Site for hosting a React UI bundle. Activate when files matching digitalExperiences/, networks/, customSite/, or DigitalExperienceBundle exist and need modification, or when the user wants to publish, host, or configure guest access for their React app."
 ---
 
 # Digital Experience Site for React UI Bundles

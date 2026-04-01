@@ -1,6 +1,6 @@
 ---
 name: implementing-ui-bundle-agentforce-conversation-client
-description: Use this skill when the user asks to add, embed, integrate, configure, style, or remove an agent, chatbot, chat widget, conversation client, or AI assistant in a React component. Covers styling (colors, fonts, spacing, borders), layout (inline vs floating, width, height, dimensions), and props (agentId, agentLabel, headerEnabled, showHeaderIcon, showAvatar, styleTokens). Also matches references to specific agents (e.g. travel agent, HR agent, support agent, employee agent). Never create a custom agent, chatbot, or chat widget component.
+description: "MUST activate when the project contains a uiBundles/*/src/ directory and the task involves adding or modifying a chat widget, chatbot, or conversational AI. Use this skill when the user asks to add, embed, integrate, configure, style, or remove an agent, chatbot, chat widget, conversation client, or AI assistant. Covers styling (colors, fonts, spacing, borders), layout (inline vs floating, width, height, dimensions), and props (agentId, agentLabel, headerEnabled, showHeaderIcon, showAvatar, styleTokens). Activate when files under uiBundles/*/src/ import AgentforceConversationClient or when adding any chat or agent functionality to a page. Never create a custom agent, chatbot, or chat widget component."
 metadata:
   author: ACC Components
   version: 1.0.1

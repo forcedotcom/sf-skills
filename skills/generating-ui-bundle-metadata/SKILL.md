@@ -1,6 +1,6 @@
 ---
 name: generating-ui-bundle-metadata
-description: "Scaffold new Salesforce UI bundles with sf template generate ui-bundle and configure ui-bundle.json (routing, headers, outputDir) and CSP Trusted Sites. Use when running sf template generate ui-bundle, editing ui-bundle.json routing/headers/outputDir, creating or modifying .uibundle-meta.xml files, or registering external domains as CSP Trusted Sites. Triggers on: sf template generate ui-bundle, ui-bundle.json, uibundle-meta.xml, outputDir, routing rewrites, routing redirects, routing fallback, trailingSlash, CSP trusted site, cspTrustedSite, external domain CSP."
+description: "MUST activate when scaffolding a new UI bundle or React app, or when editing ui-bundle.json, .uibundle-meta.xml, or CSP trusted site files. Scaffold with sf template generate ui-bundle --template reactbasic and configure ui-bundle.json (routing, headers, outputDir) and CSP Trusted Sites. Activate when the task involves files matching *.uibundle-meta.xml, ui-bundle.json, or cspTrustedSites/*.cspTrustedSite-meta.xml."
 ---
 
 # UI Bundle Metadata

@@ -1,6 +1,6 @@
 ---
 name: using-ui-bundle-salesforce-data
-description: "Salesforce data access for reading, writing, and querying records via REST, GraphQL, Apex, or Platform SDK. Use when the user wants to fetch, search, filter, sort, display, create, update, delete, or attach files to Salesforce records (standard objects like Accounts, Contacts, Opportunities, Cases, Quotes, or any custom object) in a UI bundle or UI component (React, Angular, Vue, etc.); call Chatter, Connect, or Apex REST APIs; or invoke AuraEnabled Apex methods from an external app. Does not apply to authentication/OAuth setup, schema changes (adding fields, relationships), Bulk/Tooling/Metadata API usage, declarative automation (Flows, Process Builder), general LWC/Apex coding guidance without a specific data operation, or Salesforce admin/configuration tasks."
+description: "MUST activate when the project contains a uiBundles/ directory and the task involves ANY Salesforce record operation — reading, creating, updating, or deleting. This includes forms that submit to Salesforce, pages that display Salesforce records, and any code that touches Salesforce objects or custom objects. Activate when files under uiBundles/*/src/ import from @salesforce/sdk-data, or when *.graphql files or codegen.yml exist. This skill owns all Salesforce data access patterns in React UI bundles. Does not apply to authentication/OAuth setup, schema changes, Bulk/Tooling/Metadata API, or declarative automation."
 ---
 
 # Salesforce Data Access
