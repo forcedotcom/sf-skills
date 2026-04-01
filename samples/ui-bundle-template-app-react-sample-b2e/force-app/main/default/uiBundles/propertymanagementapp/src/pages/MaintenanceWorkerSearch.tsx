@@ -222,16 +222,22 @@ function MaintenanceWorkerSearchTableHeader() {
 	return (
 		<TableHeader>
 			<TableRow>
-				<TableHead className="w-4/12 px-6 py-4 bg-gray-50 text-sm font-semibold text-purple-700 uppercase tracking-wide">
+				<TableHead className="w-3/12 px-6 py-4 bg-gray-50 text-sm font-semibold text-purple-700 uppercase tracking-wide">
 					Name
 				</TableHead>
-				<TableHead className="w-3/12 px-6 py-4 bg-gray-50 text-sm font-semibold text-purple-700 uppercase tracking-wide">
-					Organization
-				</TableHead>
-				<TableHead className="w-3/12 px-6 py-4 bg-gray-50 text-sm font-semibold text-purple-700 uppercase tracking-wide">
-					Active Requests
+				<TableHead className="w-2/12 px-6 py-4 bg-gray-50 text-sm font-semibold text-purple-700 uppercase tracking-wide">
+					Phone
 				</TableHead>
 				<TableHead className="w-2/12 px-6 py-4 bg-gray-50 text-sm font-semibold text-purple-700 uppercase tracking-wide">
+					Location
+				</TableHead>
+				<TableHead className="w-2/12 px-6 py-4 bg-gray-50 text-sm font-semibold text-purple-700 uppercase tracking-wide">
+					Organization
+				</TableHead>
+				<TableHead className="w-2/12 px-6 py-4 bg-gray-50 text-sm font-semibold text-purple-700 uppercase tracking-wide">
+					Active Requests
+				</TableHead>
+				<TableHead className="w-1/12 px-6 py-4 bg-gray-50 text-sm font-semibold text-purple-700 uppercase tracking-wide">
 					Status
 				</TableHead>
 			</TableRow>
@@ -242,7 +248,7 @@ function MaintenanceWorkerSearchTableHeader() {
 function MaintenanceWorkerSearchNoResults() {
 	return (
 		<TableRow>
-			<TableCell colSpan={4} className="text-center py-12 text-gray-500">
+			<TableCell colSpan={6} className="text-center py-12 text-gray-500">
 				No maintenance workers found
 			</TableCell>
 		</TableRow>
@@ -269,6 +275,12 @@ function MaintenanceWorkerSearchTable({
 					>
 						<TableCell className="px-6 py-4 font-medium text-gray-900">{name}</TableCell>
 						<TableCell className="px-6 py-4 text-gray-600">
+							{worker.Phone__c?.value ?? "\u2014"}
+						</TableCell>
+						<TableCell className="px-6 py-4 text-gray-600">
+							{worker.Location__c?.value ?? "\u2014"}
+						</TableCell>
+						<TableCell className="px-6 py-4 text-gray-600">
 							{worker.Employment_Type__c?.value ?? worker.Type__c?.value ?? "\u2014"}
 						</TableCell>
 						<TableCell className="px-6 py-4 text-gray-600">
@@ -289,16 +301,22 @@ function MaintenanceWorkerSearchSkeleton({ pageSize }: { pageSize: number }) {
 		<>
 			{Array.from({ length: pageSize }, (_, i) => (
 				<TableRow key={i}>
-					<TableCell className="w-4/12 px-6 py-4">
+					<TableCell className="w-3/12 px-6 py-4">
 						<Skeleton className="h-5 w-3/4" />
 					</TableCell>
-					<TableCell className="w-3/12 px-6 py-4">
+					<TableCell className="w-2/12 px-6 py-4">
 						<Skeleton className="h-5 w-2/3" />
 					</TableCell>
-					<TableCell className="w-3/12 px-6 py-4">
-						<Skeleton className="h-5 w-1/4" />
+					<TableCell className="w-2/12 px-6 py-4">
+						<Skeleton className="h-5 w-2/3" />
 					</TableCell>
 					<TableCell className="w-2/12 px-6 py-4">
+						<Skeleton className="h-5 w-2/3" />
+					</TableCell>
+					<TableCell className="w-2/12 px-6 py-4">
+						<Skeleton className="h-5 w-1/4" />
+					</TableCell>
+					<TableCell className="w-1/12 px-6 py-4">
 						<Skeleton className="h-5 w-1/2" />
 					</TableCell>
 				</TableRow>
@@ -312,7 +330,7 @@ function MaintenanceWorkerSearchErrorState() {
 
 	return (
 		<TableRow>
-			<TableCell colSpan={4} className="p-0">
+			<TableCell colSpan={6} className="p-0">
 				<ObjectSearchErrorState
 					message="There was an error loading the maintenance workers. Please try again."
 					onGoHome={() => navigate("/")}

@@ -4,11 +4,11 @@
  * Use this script to make setup easier for each app generated from this template.
  *
  * Usage:
- *   node scripts/setup-cli.mjs --target-org <alias>           # interactive step picker (all selected)
- *   node scripts/setup-cli.mjs --target-org <alias> --yes     # skip picker, run all steps
- *   node scripts/setup-cli.mjs --target-org afv5 --skip-login
- *   node scripts/setup-cli.mjs --target-org afv5 --skip-data --skip-ui-bundle-build
- *   node scripts/setup-cli.mjs --target-org myorg --ui-bundle-name my-app
+ *   node scripts/org-setup.mjs --target-org <alias>           # interactive step picker (all selected)
+ *   node scripts/org-setup.mjs --target-org <alias> --yes     # skip picker, run all steps
+ *   node scripts/org-setup.mjs --target-org afv5 --skip-login
+ *   node scripts/org-setup.mjs --target-org afv5 --skip-data --skip-ui-bundle-build
+ *   node scripts/org-setup.mjs --target-org myorg --ui-bundle-name my-app
  *
  * Steps (in order):
  *   1. login     — sf org login web only if org not already connected (skip with --skip-login)
@@ -27,6 +27,32 @@ import { readdirSync, existsSync, readFileSync, writeFileSync, unlinkSync } from
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
+
+/**
+ * npm strips .gitignore from published packages — generate them on first run.
+ * Templates are stored in scripts/gitignore-templates.json (generated at build
+ * time from the actual .gitignore files) so the content lives in one place.
+ * The JSON may not exist in git-cloned distributions where .gitignore is
+ * already present, so loading is best-effort.
+ */
+function loadGitignoreTemplates() {
+  const templatesPath = resolve(__dirname, 'gitignore-templates.json');
+  if (!existsSync(templatesPath)) return null;
+  try {
+    return JSON.parse(readFileSync(templatesPath, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+function ensureGitignore(dir, content) {
+  if (!content) return;
+  const gitignorePath = resolve(dir, '.gitignore');
+  if (!existsSync(gitignorePath)) {
+    writeFileSync(gitignorePath, content, 'utf8');
+    console.log(`Created .gitignore in ${dir}`);
+  }
+}
 
 function resolveSfdxSource() {
   const sfdxPath = resolve(ROOT, 'sfdx-project.json');
@@ -84,7 +110,7 @@ function parseArgs() {
 Setup CLI — one-command setup for apps in this project
 
 Usage:
-  node scripts/setup-cli.mjs --target-org <alias> [options]
+  node scripts/org-setup.mjs --target-org <alias> [options]
 
 Required:
   --target-org <alias>   Target Salesforce org alias (e.g. myorg)
@@ -292,6 +318,19 @@ function run(name, cmd, args, opts = {}) {
 }
 
 async function main() {
+  // Ensure .gitignore files exist (npm strips them from published packages).
+  const gitignoreTemplates = loadGitignoreTemplates();
+  if (gitignoreTemplates) {
+    ensureGitignore(ROOT, gitignoreTemplates.sfdx);
+    if (existsSync(UIBUNDLES_DIR)) {
+      for (const entry of readdirSync(UIBUNDLES_DIR, { withFileTypes: true })) {
+        if (entry.isDirectory() && !entry.name.startsWith('.')) {
+          ensureGitignore(resolve(UIBUNDLES_DIR, entry.name), gitignoreTemplates.webapp);
+        }
+      }
+    }
+  }
+
   const {
     targetOrg,
     uiBundleName,

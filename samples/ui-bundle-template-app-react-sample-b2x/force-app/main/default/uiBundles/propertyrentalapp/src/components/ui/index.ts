@@ -13,6 +13,14 @@
  */
 
 export { Alert, AlertTitle, AlertDescription, AlertAction } from './alert';
+export {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+  AvatarBadge,
+  AvatarGroup,
+  AvatarGroupCount,
+} from './avatar';
 export { Button, buttonVariants } from './button';
 export {
   Card,
@@ -35,6 +43,23 @@ export {
   DialogTitle,
   DialogTrigger,
 } from './dialog';
+export {
+  DropdownMenu,
+  DropdownMenuPortal,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+} from './dropdown-menu';
 export {
   Field,
   FieldDescription,

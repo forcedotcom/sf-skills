@@ -2,45 +2,151 @@
 
 A property management sample React UI Bundle for the Salesforce platform. Demonstrates property management, maintenance requests, tenant applications, a dashboard, and an Agentforce conversation client. Built with React, Vite, TypeScript, and Tailwind/shadcn.
 
-## What's included
+## Table of Contents
+
+1. [What's Included](#whats-included)
+2. [Prerequisites](#prerequisites)
+3. [Quick Start (Automated)](#quick-start-automated)
+4. [Step-by-Step Setup](#step-by-step-setup)
+   - [1. Install Dependencies](#1-install-dependencies)
+   - [2. Authenticate Your Org](#2-authenticate-your-org)
+   - [3. Deploy Metadata](#3-deploy-metadata)
+   - [4. Assign Permission Set](#4-assign-permission-set)
+   - [5. Import Sample Data](#5-import-sample-data)
+   - [6. Generate GraphQL Types](#6-generate-graphql-types)
+   - [7. Rebuild the UI Bundle](#7-rebuild-the-ui-bundle)
+   - [8. Deploy the UI Bundle](#8-deploy-the-ui-bundle)
+5. [Local Development](#local-development)
+6. [Resources](#resources)
+
+---
+
+## What's Included
 
 | Path                                                      | Description                                                                                                                                                                                                                                                                                                                                                       |
 | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `force-app/main/default/uiBundles/propertymanagementapp/` | React UI Bundle (source, config, tests)                                                                                                                                                                                                                                                                                                                           |
-| `force-app/main/default/objects/`                         | 17 custom objects — Agent\_\_c, Application\_\_c, KPI_Snapshot\_\_c, Lease\_\_c, Maintenance_Request\_\_c, Maintenance_Worker\_\_c, Notification\_\_c, Payment\_\_c, Property\_\_c, Property_Cost\_\_c, Property_Feature\_\_c, Property_Image\_\_c, Property_Listing\_\_c, Property_Management_Company\_\_c, Property_Owner\_\_c, Property_Sale\_\_c, Tenant\_\_c |
+| `force-app/main/default/objects/`                         | 17 custom objects — `Agent__c`, `Application__c`, `KPI_Snapshot__c`, `Lease__c`, `Maintenance_Request__c`, `Maintenance_Worker__c`, `Notification__c`, `Payment__c`, `Property__c`, `Property_Cost__c`, `Property_Feature__c`, `Property_Image__c`, `Property_Listing__c`, `Property_Management_Company__c`, `Property_Owner__c`, `Property_Sale__c`, `Tenant__c` |
 | `force-app/main/default/layouts/`                         | Page layouts for each custom object                                                                                                                                                                                                                                                                                                                               |
-| `force-app/main/default/permissionsets/`                  | `Property_Management_Access` permission set                                                                                                                                                                                                                                                                                                                       |
+| `force-app/main/default/permissionsets/`                  | `Property_Management_Access` permission set — full CRUD access to all custom objects                                                                                                                                                                                                                                                                              |
 | `force-app/main/default/data/`                            | Sample data (JSON) for all objects, importable via `sf data import tree`                                                                                                                                                                                                                                                                                          |
 
-## Getting started
+---
 
-Navigate to the UI Bundle and install dependencies:
+## Prerequisites
+
+Before you begin, ensure the following are in place.
+
+| Tool                                                                          | Minimum Version    | Install                             |
+| ----------------------------------------------------------------------------- | ------------------ | ----------------------------------- |
+| [Salesforce CLI (`sf`)](https://developer.salesforce.com/tools/salesforcecli) | v2+                | `npm install -g @salesforce/cli`    |
+| [Node.js](https://nodejs.org/)                                                | v22+               | [nodejs.org](https://nodejs.org/)   |
+| [Git](https://git-scm.com/)                                                   | Any recent version | [git-scm.com](https://git-scm.com/) |
+
+Verify your Salesforce CLI version with:
+
+```bash
+sf --version
+```
+
+---
+
+## Quick Start (Automated)
+
+Two npm scripts at the project root streamline getting started and deployment.
+
+**`npm run sf-project-setup`** — installs the UI Bundle dependencies, builds the app, and starts the dev server (see [Local Development](#local-development)).
+
+**`npm run setup`** — automates the full setup: login, deploy metadata, assign permission sets, import sample data, fetch the GraphQL schema, run codegen, build the UI Bundle, and optionally launch the dev server:
+
+```bash
+npm run setup -- --target-org <alias>
+```
+
+Replace `<alias>` with your target org alias or username. Running without flags presents an interactive step picker. Pass `--yes` to skip it and run all steps immediately:
+
+```bash
+npm run setup -- --target-org <alias> --yes
+```
+
+### Common Options
+
+| Option                    | Description                                                                          |
+| ------------------------- | ------------------------------------------------------------------------------------ |
+| `--skip-login`            | Skip browser login (auto-skipped if org is already connected)                        |
+| `--skip-deploy`           | Skip the metadata deploy step                                                        |
+| `--skip-permset`          | Skip permission set assignment                                                       |
+| `--skip-data`             | Skip data preparation and import                                                     |
+| `--skip-graphql`          | Skip GraphQL schema fetch and codegen                                                |
+| `--skip-ui-bundle-build`  | Skip `npm install` and UI Bundle build                                               |
+| `--skip-dev`              | Do not launch the dev server at the end                                              |
+| `--permset-name <name>`   | Assign only a specific permission set (repeatable). Default: all sets in the project |
+| `--ui-bundle-name <name>` | UI Bundle folder name under `uiBundles/` (default: auto-detected)                    |
+| `-y, --yes`               | Skip interactive step picker and run all enabled steps immediately                   |
+
+For a full list of options:
+
+```bash
+npm run setup -- --help
+```
+
+---
+
+## Step-by-Step Setup
+
+Use this section if you prefer to run each step manually, or if the automated script is not available.
+
+### 1. Install Dependencies
+
+Install root-level project dependencies:
+
+```bash
+npm install
+```
+
+Install the UI Bundle dependencies and build it:
 
 ```bash
 cd force-app/main/default/uiBundles/propertymanagementapp
 npm install
-npm run dev
+npm run build
+cd -
 ```
 
-Opens at http://localhost:5173 by default. For build and test instructions, see the [UI Bundle README](force-app/main/default/uiBundles/propertymanagementapp/README.md).
+This produces the static bundle artifacts that are packaged into the Salesforce metadata. Having them built now means any deploy option in [Step 3](#3-deploy-metadata) is ready to run without an additional build step.
 
-## Deploy
+### 2. Authenticate Your Org
 
-### Deploy everything (metadata + UI Bundle)
+Log in to your target org using the Salesforce CLI. This opens a browser window for OAuth authentication:
 
 ```bash
-cd force-app/main/default/uiBundles/propertymanagementapp && npm install && npm run build && cd -
+sf org login web --alias <alias>
+```
+
+To verify the login was successful:
+
+```bash
+sf org display --target-org <alias>
+```
+
+If you are working with a sandbox, use:
+
+```bash
+sf org login web --alias <alias> --instance-url https://test.salesforce.com
+```
+
+### 3. Deploy Metadata
+
+#### Option A: Deploy Everything (metadata + UI Bundle)
+
+Build the UI Bundle first, then deploy all source in a single command:
+
+```bash
+cd force-app/main/default/uiBundles/propertymanagementapp && npm run build && cd -
 sf project deploy start --source-dir force-app --target-org <alias>
 ```
 
-### Deploy the UI Bundle only
-
-```bash
-cd force-app/main/default/uiBundles/propertymanagementapp && npm install && npm run build && cd -
-sf project deploy start --source-dir force-app/main/default/ui-bundles --target-org <alias>
-```
-
-### Deploy metadata only (objects, layouts, permission sets)
+#### Option B: Deploy Metadata Only (objects, layouts, permission sets)
 
 ```bash
 sf project deploy start \
@@ -50,55 +156,93 @@ sf project deploy start \
   --target-org <alias>
 ```
 
-Replace `<alias>` with your target org alias.
-
-## Assign permset
-
-After deploying the metadata, assign the `Property_Management_Access` permission set to your user to grant access to the custom objects and fields:
+#### Option C: Deploy the UI Bundle Only
 
 ```bash
-sf org assign permset -n Property_Management_Access --target-org <alias>
+cd force-app/main/default/uiBundles/propertymanagementapp && npm run build && cd -
+sf project deploy start --source-dir force-app/main/default/uiBundles --target-org <alias>
 ```
 
 Replace `<alias>` with your target org alias.
 
-## Import sample data
+### 4. Assign Permission Set
+
+After deploying the metadata, assign the `Property_Management_Access` permission set to grant access to the custom objects and fields:
+
+```bash
+sf org assign permset --name Property_Management_Access --target-org <alias>
+```
+
+To assign to a specific user:
+
+```bash
+sf org assign permset --name Property_Management_Access --on-behalf-of <username> --target-org <alias>
+```
+
+Replace `<alias>` with your target org alias.
+
+### 5. Import Sample Data
+
+Once the metadata has been successfully deployed:
 
 ```bash
 sf data import tree --plan force-app/main/default/data/data-plan.json --target-org <alias>
 ```
 
-## Using setup-cli.mjs
+The data plan imports records in dependency order: Contacts, Agents, Maintenance Workers, Properties, Tenants, Applications, Maintenance Requests, Notifications, Property Management Companies, Property Owners, Leases, Property Sales, Property Costs, Payments, KPI Snapshots, Property Listings, Property Images, and Property Features.
 
-When this app is built (e.g. from the monorepo or from a published package), a `setup-cli.mjs` script is included at the project root. It runs the full setup in one go: login (if needed), deploy metadata, assign the `Property_Management_Access` permission set, prepare and import sample data, fetch GraphQL schema and run codegen, build the UI Bundle, and optionally start the dev server.
+> **Note:** If you re-run the import, duplicate records will be created. Wipe existing records first or use the `--upsert` flag if your plan supports it.
 
-Run from the **project root** (the directory that contains `force-app/`, `sfdx-project.json`, and `setup-cli.mjs`):
+### 6. Generate GraphQL Types
+
+After metadata is deployed, generate the GraphQL schema and TypeScript types for the UI Bundle. These are used to provide type-safe queries against the Salesforce GraphQL API.
 
 ```bash
-node setup-cli.mjs --target-org <alias>
+cd force-app/main/default/uiBundles/propertymanagementapp
+npm run graphql:schema   # Fetches schema from org → outputs schema.graphql
+npm run graphql:codegen  # Generates TypeScript types → updates src/api/graphql-operations-types.ts
+cd -
 ```
 
-Common options:
+> **Prerequisite:** The org must be authenticated and metadata must already be deployed before running these commands, as the schema is generated from the org's live metadata.
 
-| Option                   | Description                                                      |
-| ------------------------ | ---------------------------------------------------------------- |
-| `--skip-login`           | Skip browser login (org already authenticated)                   |
-| `--skip-data`            | Skip data preparation and import                                 |
-| `--skip-graphql`         | Skip GraphQL schema fetch and codegen                            |
-| `--skip-ui-bundle-build` | Skip `npm install` and UI Bundle build                           |
-| `--skip-dev`             | Do not start the dev server at the end                           |
-| `--permset <name>`       | Permission set to assign (default: `Property_Management_Access`) |
-| `--app <name>`           | Web app folder name when multiple exist                          |
+### 7. Rebuild the UI Bundle
 
-For all options: `node setup-cli.mjs --help`.
+Step 6 updates the generated GraphQL types in the UI Bundle source. Rebuild the app to compile those changes into the bundle before deploying:
 
-## Configure Your Salesforce DX Project
+```bash
+cd force-app/main/default/uiBundles/propertymanagementapp
+npm run build
+cd -
+```
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+### 8. Deploy the UI Bundle
 
-## Read All About It
+Once the build is complete, deploy the UI Bundle to your org:
+
+```bash
+sf project deploy start --source-dir force-app/main/default/uiBundles --target-org <alias>
+```
+
+---
+
+## Local Development
+
+Install project dependencies and start the dev server:
+
+```bash
+npm install
+npm run sf-project-setup
+```
+
+This installs the UI Bundle dependencies, builds the app, and opens the dev server at `http://localhost:5173`. For manual build and test instructions, see the [UI Bundle README](force-app/main/default/uiBundles/propertymanagementapp/README.md).
+
+---
+
+## Resources
 
 - [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
 - [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
 - [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
 - [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+- [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm)

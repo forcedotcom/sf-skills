@@ -10,10 +10,35 @@
 import { spawnSync } from 'node:child_process';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { readdirSync, existsSync, readFileSync } from 'node:fs';
+import { readdirSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
+
+/**
+ * npm strips .gitignore from published packages — generate them on first run.
+ * Templates are stored in scripts/gitignore-templates.json (generated at build
+ * time from the actual .gitignore files). The JSON may not exist in git-cloned
+ * distributions where .gitignore is already present, so loading is best-effort.
+ */
+function loadGitignoreTemplates() {
+  const templatesPath = resolve(__dirname, 'gitignore-templates.json');
+  if (!existsSync(templatesPath)) return null;
+  try {
+    return JSON.parse(readFileSync(templatesPath, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+function ensureGitignore(dir, content) {
+  if (!content) return;
+  const gitignorePath = resolve(dir, '.gitignore');
+  if (!existsSync(gitignorePath)) {
+    writeFileSync(gitignorePath, content, 'utf8');
+    console.log(`Created .gitignore in ${dir}`);
+  }
+}
 
 function resolveUIBundlesDir() {
   const sfdxPath = resolve(ROOT, 'sfdx-project.json');
@@ -53,6 +78,20 @@ function run(label, cmd, args, opts) {
   const result = spawnSync(cmd, args, { stdio: 'inherit', ...opts });
   if (result.status !== 0) {
     process.exit(result.status ?? 1);
+  }
+}
+
+// Ensure .gitignore files exist (npm strips them from published packages).
+const gitignoreTemplates = loadGitignoreTemplates();
+if (gitignoreTemplates) {
+  ensureGitignore(ROOT, gitignoreTemplates.sfdx);
+  const bundlesDir = resolveUIBundlesDir();
+  if (existsSync(bundlesDir)) {
+    for (const entry of readdirSync(bundlesDir, { withFileTypes: true })) {
+      if (entry.isDirectory() && !entry.name.startsWith('.')) {
+        ensureGitignore(resolve(bundlesDir, entry.name), gitignoreTemplates.webapp);
+      }
+    }
   }
 }
 

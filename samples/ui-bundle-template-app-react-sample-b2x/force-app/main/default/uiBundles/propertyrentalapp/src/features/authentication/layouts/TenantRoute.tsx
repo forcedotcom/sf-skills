@@ -1,12 +1,12 @@
 import { Navigate, Outlet, useLocation } from "react-router";
 import { useAuth } from "@/features/authentication/context/AuthContext";
 import { ROUTES } from "@/features/authentication/authenticationConfig";
-import { useTenantAccess } from "@/hooks/useTenantAccess";
+import { useTenantAccess } from "@/context/TenantAccessContext";
 
 export default function TenantRoute() {
 	const location = useLocation();
-	const { isAuthenticated, loading, user } = useAuth();
-	const { hasTenantRecord, loading: tenantLoading } = useTenantAccess(user?.id);
+	const { isAuthenticated, loading } = useAuth();
+	const { hasTenantRecord, loading: tenantLoading } = useTenantAccess();
 
 	if (loading || tenantLoading) return null;
 
