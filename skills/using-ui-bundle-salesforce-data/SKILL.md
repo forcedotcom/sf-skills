@@ -24,6 +24,16 @@ const res = await sdk.fetch?.("/services/apexrest/my-resource");
 
 **Always use optional chaining** (`sdk.graphql?.()`, `sdk.fetch?.()`) — these methods may be undefined in some surfaces.
 
+## Preconditions — verify before starting
+
+| # | Requirement | How to verify | If missing |
+|---|-------------|---------------|------------|
+| 1 | `@salesforce/sdk-data` installed | Check `package.json` in the UI bundle dir | Cannot proceed — tell user to install it |
+| 2 | `schema.graphql` at project root | Check if file exists | Run `npm run graphql:schema` from UI bundle dir |
+| 3 | Custom objects/fields deployed | Run `graphql-search.sh <Entity>` — no output means not deployed | Ask user to deploy metadata and assign permission sets |
+
+**If preconditions are not met**, you may scaffold components, routes, layout, and UI logic, but use empty arrays / `null` for data and mark query locations with `// TODO: add query after schema verification` and include in the plan to go back, resolve requirements and write the GraphQL. Do not write GraphQL query strings until the schema workflow is complete.
+
 ## Supported APIs
 
 **Only the following APIs are permitted.** Any endpoint not listed here must not be used.
@@ -86,9 +96,7 @@ These rules exist because Salesforce GraphQL has platform-specific behaviors tha
 
 The `schema.graphql` file (265K+ lines) is the source of truth. **Never open or parse it directly** — no cat, less, head, tail, editors, or programmatic parsers.
 
-1. Check if `schema.graphql` exists at the SFDX project root
-2. If the file is missing entirely, generate it from the **UI bundle dir** (only in that case): `cd force-app/main/default/uiBundles/<app-name> && npm run graphql:schema`
-3. Custom objects appear only after metadata is deployed.
+Verify preconditions 1–3 (see [Preconditions](#preconditions--verify-before-starting)), then proceed to Step 2.
 
 ### Step 2: Look Up Entity Schema
 
@@ -476,6 +484,8 @@ Run from SFDX project root. Use v66.0+ for mutations, v65.0+ for `@optional`.
 Two integration patterns:
 
 ### Pattern 1 — External `.graphql` file (complex queries)
+
+**One operation per `.graphql` file.** Each file contains exactly one `query` or `mutation` (plus its fragments). Do not combine multiple operations in a single file.
 
 ```typescript
 import { createDataSDK, type NodeOfConnection } from "@salesforce/sdk-data";
