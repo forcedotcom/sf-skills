@@ -102,6 +102,7 @@ Before doing anything, you **MUST ALWAYS** load them first if they match user in
 - [handle-component-and-region-ids.md](docs/handle-component-and-region-ids.md) - **UUID generation (CRITICAL)** for component and region ids used in views and themeLayout.
 - [handle-ui-components.md](docs/handle-ui-components.md) - Component discovery, schemas, insertion, configuration
 - [configure-guest-sharing-rules.md](docs/configure-guest-sharing-rules.md) - **Guest sharing rules** (`sharingGuestRules`) for public sites — use for any request involving "guest sharing rule", "Site Guest User", or sharing object records with unauthenticated visitors
+- [update-site-urls.md](docs/update-site-urls.md) - **Updating site URLs** - URL architecture, workflow for updating `urlPathPrefix` in DigitalExperienceConfig, Network, and CustomSite
 
 ## Common Workflows
 
@@ -210,6 +211,15 @@ Use the `execute_metadata_action` MCP tool to get the preview and builder URLs:
 The site developer name can be found in the CustomSite filename (e.g., `sites/MySite.site-meta.xml` → developer name is `MySite`).
 
 If the site is not found, an error message will be returned indicating that the site may not be deployed. Ensure the site has been successfully deployed before calling this action.
+
+### Updating Experience Site URLs
+
+**Use when** user wants to update or change site URLs (urlPathPrefix).
+
+**Steps** (Follow the steps sequentially. Do not skip any step before proceeding):
+
+- [ ] MUST read [update-site-urls.md](docs/update-site-urls.md) to understand the three-component architecture and URL update workflow
+- [ ] Follow the step-by-step workflow in the doc to update URLs consistently across all three components (DigitalExperienceConfig, Network, CustomSite)
 
 ### Validation & Deployment
 
