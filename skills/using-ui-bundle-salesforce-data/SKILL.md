@@ -92,6 +92,14 @@ These rules exist because Salesforce GraphQL has platform-specific behaviors tha
 
 ## GraphQL Workflow
 
+| Step | Action | Key output |
+|------|--------|------------|
+| 1 | Acquire schema | `schema.graphql` exists |
+| 2 | Look up entities | Field names, types, relationships confirmed |
+| 3 | Generate query | `.graphql` file or inline `gql` tag |
+| 4 | Generate types | `graphql-operations-types.ts` |
+| 5 | Validate | Lint + codegen pass |
+
 ### Step 1: Acquire Schema
 
 The `schema.graphql` file (265K+ lines) is the source of truth. **Never open or parse it directly** — no cat, less, head, tail, editors, or programmatic parsers.
