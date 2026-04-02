@@ -51,6 +51,8 @@ Use the default templates in the docs below. Values in `{braces}` are resolved p
 | DigitalExperienceBundle | [configure-metadata-digital-experience-bundle.md](docs/configure-metadata-digital-experience-bundle.md) |
 | DigitalExperience (sfdc_cms__site) | [configure-metadata-digital-experience.md](docs/configure-metadata-digital-experience.md) |
 
+For URL updates, see [update-site-urls.md](docs/update-site-urls.md).
+
 ### Execution Note for Step 3: Load and use the docs
 - Agents MUST read the full contents of each docs/*.md file referenced in Step 3 before attempting to populate metadata fields.
 - Use your platform's file-read tool (for example, `read_file`) to load these files in full, then perform placeholder substitution for values in `{braces}` using the resolved properties from Step 1.
@@ -63,7 +65,7 @@ Use the default templates in the docs below. Values in `{braces}` are resolved p
 - Read entire file contents, replace placeholders (e.g. `{siteName}`) with the resolved values, then use the expanded templates to populate the metadata XML/JSON content.
   
 ### Step 4: Resolve Additional Configurations
-Address any extra configurations the user requests. Use the metadata sections and field context identified in Step 2 to understand each field’s purpose and constraints, then update only the minimum necessary fields.
+Address any extra configurations the user requests. Use the metadata sections and field context identified in Step 2 to understand each field's purpose and constraints, then update only the minimum necessary fields.
 
 ## Verification Checklist
 Before deploying, confirm:
@@ -76,3 +78,13 @@ Before deploying, confirm:
 ```bash
 sf project deploy validate --metadata Network CustomSite DigitalExperienceConfig DigitalExperienceBundle DigitalExperience --target-org ${usernameOrAlias}
 ```
+
+## Common Workflows
+
+### Updating Experience Site URLs
+
+**Use when** user wants to update or change site URLs (urlPathPrefix).
+
+**Steps**:
+- [ ] Read [update-site-urls.md](docs/update-site-urls.md) to understand the three-component architecture and URL update workflow
+- [ ] Follow the step-by-step workflow in the doc to update URLs consistently across all three components (DigitalExperienceConfig, Network, CustomSite)
