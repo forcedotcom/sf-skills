@@ -43,6 +43,7 @@ const DEFAULT_STYLE_TOKENS: NonNullable<AgentforceClientConfig["styleTokens"]> =
 	messageInputSendButtonIconColor: "#ffffff",
 	messageInputSendButtonDisabledColor: "#e5e7eb",
 	messageInputActionButtonFocusBorder: "#a855f7",
+	errorBlockBackground: "#fafafa",
 };
 const SINGLETON_KEY = "__agentforceConversationClientSingleton";
 
@@ -109,7 +110,7 @@ export function AgentforceConversationClient({
 
 		return {
 			...(agentId !== undefined && { agentId }),
-			agentLabel: agentLabel ?? "Chat with us",
+			...(agentLabel !== undefined && { agentLabel }),
 			styleTokens: { ...DEFAULT_STYLE_TOKENS, ...styleTokens },
 			renderingConfig,
 		};
