@@ -192,8 +192,8 @@ The expression inside `{! ... }` is evaluated by the runtime during deterministi
 - `@topic.<name>` — reference a topic by name
 - `@variables.<name>` — reference a variable (use in logic)
 - `{!@variables.<name>}` — reference a variable in prompt text (template injection)
-- `@outputs.<name>` — reference an action output (only in post-action context)
-- `@inputs.<name>` — reference an action input (in action definition)
+- `@outputs.<name>` — action output (only in `set`/`if` immediately after the action — unavailable elsewhere)
+- `@inputs.<name>` — action input (only in `with` during invocation — NOT in `set` or post-execution)
 - `@utils.<function>` — reference a utility (escalate, transition to, setVariables)
 
 **Do NOT use `<>` as inequality operator.** Use `!=` instead.
@@ -243,6 +243,26 @@ config:
     - `default_agent_user`
     - MessagingSession linked variables (`EndUserId`, `RoutableId`, `ContactId`, `EndUserLanguage`)
     - Escalation topic with `@utils.escalate`
+    - `connection messaging:` block
+
+  **Common mistake — service-agent constructs on employee agent:**
+
+  ```agentscript
+  # WRONG — employee agent with service-agent constructs
+  config:
+      agent_type: "AgentforceEmployeeAgent"
+      default_agent_user: "agent@org.ext"    # PROHIBITED — causes "Internal Error"
+  variables:
+      EndUserId: linked string               # SERVICE ONLY — no messaging session
+          source: @MessagingSession.MessagingEndUserId
+  connection messaging:                       # SERVICE ONLY — no messaging channel
+      escalation_message: "Transferring..."
+
+  # RIGHT — clean employee agent config
+  config:
+      agent_type: "AgentforceEmployeeAgent"
+      # No default_agent_user, no MessagingSession vars, no connection block
+  ```
 
 **Conditionally required fields:**
 - `default_agent_user` — **required for `AgentforceServiceAgent`, prohibited for `AgentforceEmployeeAgent`**. This is the Salesforce username of the Einstein Agent User that runs agent actions on behalf of the customer. The user must exist in the target org, be active, and have the Einstein Agent license assigned.
@@ -527,6 +547,23 @@ run @actions.process_order
 ```
 
 After an action completes, you can check outputs and transition.
+
+**Scope lifecycle — `@inputs` and `@outputs` are ephemeral:**
+- `@inputs`: only in `with` directives during invocation. NOT in `set`/`if` after execution.
+- `@outputs`: only in `set`/`if` immediately after invocation. NOT in instructions or later actions.
+- To reuse an input value post-execution, capture it in `@variables` BEFORE the action call.
+
+```agentscript
+# WRONG — silent failure, @inputs out of scope in set
+run @actions.get_station_status
+    with station_name = ...
+    set @variables.station = @inputs.station_name   # FAILS SILENTLY
+
+# RIGHT — use @outputs (if action echoes value) or capture input beforehand
+run @actions.get_station_status
+    with station_name = ...
+    set @variables.station = @outputs.station_name
+```
 
 **How pipe sections become the LLM prompt**:
 
@@ -852,7 +889,7 @@ reasoning:
 
 Transition discards the current topic's prompt and starts fresh with the target topic.
 
-**`@utils.escalate`** — route to a human agent:
+**`@utils.escalate`** — route to a human agent (**service agents only** — requires a `connection messaging:` block, which is only valid for `AgentforceServiceAgent`; do not use in employee agents):
 
 ```agentscript
 reasoning:

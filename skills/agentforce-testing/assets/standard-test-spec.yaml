@@ -1,0 +1,123 @@
+# Standard Agent Test Specification Template
+# Compatible with: sf agent test create --spec <file> --api-name <name>
+#
+# Usage:
+#   1. Replace <placeholders> with actual values
+#   2. Create: sf agent test create --spec this-file.yaml --api-name <Test_Name> --target-org <alias>
+#   3. Run:    sf agent test run --api-name <Test_Name> --wait 10 --result-format json --target-org <alias>
+#
+# IMPORTANT: This YAML is parsed by @salesforce/agents — NOT a generic AiEvaluationDefinition format.
+# Only use the fields documented below.
+
+# Required: Display name for the test (MasterLabel)
+name: "<Agent_Name> Standard Tests"
+
+# Required: Must be AGENT
+subjectType: AGENT
+
+# Required: Agent BotDefinition DeveloperName (API name)
+subjectName: <Agent_Name>
+
+testCases:
+  # ═══════════════════════════════════════════════════════════════════
+  # TOPIC ROUTING TESTS
+  # Verify utterances route to the correct topic
+  # ═══════════════════════════════════════════════════════════════════
+
+  - utterance: "User message that should trigger topic 1"
+    expectedTopic: <topic_name>
+
+  - utterance: "Alternative phrasing for topic 1"
+    expectedTopic: <topic_name>
+
+  - utterance: "User message that should trigger topic 2"
+    expectedTopic: <another_topic>
+
+  # ═══════════════════════════════════════════════════════════════════
+  # ACTION INVOCATION TESTS
+  # Verify actions are invoked (flat list of action name strings)
+  # ═══════════════════════════════════════════════════════════════════
+
+  - utterance: "Message that should trigger an action"
+    expectedTopic: <topic_name>
+    expectedActions:
+      - <action_name>
+
+  - utterance: "Message for a second action"
+    expectedTopic: <topic_name>
+    expectedActions:
+      - <action_name_2>
+    expectedOutcome: "Agent confirms the action and provides relevant details"
+
+  # ═══════════════════════════════════════════════════════════════════
+  # CONTEXT VARIABLE TESTS
+  # Pass runtime context to simulate authenticated sessions
+  # ═══════════════════════════════════════════════════════════════════
+
+  - utterance: "Show me my account details"
+    expectedTopic: <topic_name>
+    contextVariables:
+      - name: RoutableId
+        value: "<MessagingSession_ID>"
+      - name: CaseId
+        value: "<Case_ID>"
+
+  # ═══════════════════════════════════════════════════════════════════
+  # CONVERSATION HISTORY TESTS
+  # Simulate multi-turn conversations (roles: user and agent)
+  # ═══════════════════════════════════════════════════════════════════
+
+  - utterance: "Now process the return"
+    expectedTopic: <topic_name>
+    conversationHistory:
+      - role: user
+        message: "I need help with order #12345"
+      - role: agent
+        topic: <previous_topic>
+        message: "I found your order. It was delivered on March 1st. How can I help?"
+    expectedActions:
+      - <return_action_name>
+
+  # ═══════════════════════════════════════════════════════════════════
+  # ESCALATION TESTS
+  # ═══════════════════════════════════════════════════════════════════
+
+  - utterance: "I want to talk to a real person"
+    expectedTopic: Escalation
+
+# ═══════════════════════════════════════════════════════════════════════
+# NOTES — AGENT SCRIPT ACTION TYPES
+#
+# Agent Script agents (.agent files / AiAuthoringBundle) have TWO types
+# of actions that appear in CLI test results:
+#
+# 1. TRANSITION ACTIONS (from start_agent reasoning.actions):
+#    - Named: go_<topic_name>
+#    - Target: @utils.transition to @topic.<name>
+#    - Captured by single-utterance tests
+#
+# 2. BUSINESS ACTIONS (from topic.actions + reasoning.actions):
+#    - Named: <action_definition_name> (Level 1 from topic.actions block)
+#    - Target: apex://ClassName or flow://FlowName
+#    - May require conversationHistory to reach in multi-topic agents
+#
+# Use expectedActions with the DEFINITION name (Level 1), not the
+# invocation name (Level 2). E.g., use get_order_status, not check_status.
+# ═══════════════════════════════════════════════════════════════════════
+
+# ═══════════════════════════════════════════════════════════════════════
+# NOTES — TOPIC NAME RESOLUTION
+#
+# The expectedTopic value depends on the topic type:
+#
+# Standard topics (Escalation, Off_Topic, etc.):
+#   Use localDeveloperName: "Escalation"
+#
+# Promoted topics (created in Setup UI, prefixed with p_16j...):
+#   MUST use the full runtime developerName with hash suffix
+#
+# To discover actual topic names:
+#   1. Run one test with a guess
+#   2. Check results JSON: .testCases[].generatedData.topic
+#   3. Update expectedTopic with the actual value
+# ═══════════════════════════════════════════════════════════════════════

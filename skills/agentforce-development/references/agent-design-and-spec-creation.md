@@ -565,7 +565,7 @@ Second, find the default package directory by reading `sfdx-project.json` at the
 Third, generate an empty Apex class using the following command:
 
 ```bash
-sf template generate apex class --name InvoiceFetcher --output-dir <PACKAGE_DIR>/main/default/classes
+sf template generate apex class --json --name InvoiceFetcher --output-dir <PACKAGE_DIR>/main/default/classes
 ```
 
 This creates both the `.cls` and `.cls-meta.xml` files. Do not create test classes for stubs.

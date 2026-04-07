@@ -18,7 +18,7 @@ PID_DigitalAgent (typically included with Agentforce licenses)
 | **`default_agent_user` in config** | Required | Omit entirely |
 | **Respects Sharing Rules** | No (consistent permissions) | Yes (user's data access) |
 
-**How to check agent type**: Look at the `agent_type` field in the `config:` block of your `.agent` file, or query: `sf data query --query "SELECT DeveloperName, Type FROM BotDefinition WHERE DeveloperName = 'AgentName'" -o TARGET_ORG --json`
+**How to check agent type**: Look at the `agent_type` field in the `config:` block of your `.agent` file, or query: `sf data query --json --query "SELECT DeveloperName, Type FROM BotDefinition WHERE DeveloperName = 'AgentName'" -o TARGET_ORG`
 
 ---
 
@@ -28,18 +28,19 @@ For CLI-first workflow (tested: ~8 minutes total):
 
 ```bash
 # Step 1: Query existing Einstein Agent Users (30 seconds)
-sf data query \
+sf data query --json \
   --query "SELECT Id, Username, IsActive FROM User WHERE Profile.Name = 'Einstein Agent User' AND IsActive = true" \
-  -o TARGET_ORG --json
+  -o TARGET_ORG
 
 # Step 2: Create Einstein Agent User (2 minutes)
-# Get Profile ID
-PROFILE_ID=$(sf data query \
+# Get Profile ID (read result.records[0].Id from JSON response)
+sf data query --json \
   --query "SELECT Id FROM Profile WHERE Name = 'Einstein Agent User'" \
-  -o TARGET_ORG --json | jq -r '.result.records[0].Id')
+  -o TARGET_ORG
 
 # For Production/Sandbox (non-scratch org):
-sf data create record --sobject User --values \
+# Use the ProfileId from the query above
+sf data create record --json --sobject User --values \
   "Username=<agent_name>_user@<orgId>.ext \
    LastName=<AgentName> \
    Email=admin@example.com \
@@ -47,55 +48,55 @@ sf data create record --sobject User --values \
    TimeZoneSidKey=America/Los_Angeles \
    LocaleSidKey=en_US \
    EmailEncodingKey=UTF-8 \
-   ProfileId=${PROFILE_ID} \
+   ProfileId=<PROFILE_ID> \
    LanguageLocaleKey=en_US" \
-  -o TARGET_ORG --json
+  -o TARGET_ORG
 
 # For Scratch Orgs (use user definition file):
 # sf org create user --definition-file config/einstein-agent-user.json -o TARGET_ORG
 
 # Step 3: Assign System Permission Set (1 minute)
-sf org assign permset \
+sf org assign permset --json \
   --name AgentforceServiceAgentUser \
   --on-behalf-of <agent_name>_user@<orgId>.ext \
-  -o TARGET_ORG --json
+  -o TARGET_ORG
 
 # Step 4: Deploy Custom Permission Set (3 minutes)
 # (Create the .permissionset-meta.xml file first - see Section 3.2 template)
-sf project deploy start \
+sf project deploy start --json \
   --metadata PermissionSet:<AgentName>_Access \
-  -o TARGET_ORG --json
+  -o TARGET_ORG
 
 # Assign custom PS
-sf org assign permset \
+sf org assign permset --json \
   --name <AgentName>_Access \
   --on-behalf-of <agent_name>_user@<orgId>.ext \
-  -o TARGET_ORG --json
+  -o TARGET_ORG
 
 # Step 5: Verify All Permissions (1 minute)
-sf data query \
+sf data query --json \
   --query "SELECT PermissionSet.Name, PermissionSet.Label FROM PermissionSetAssignment WHERE Assignee.Username = '<agent_name>_user@<orgId>.ext' ORDER BY PermissionSet.Name" \
-  -o TARGET_ORG --json
+  -o TARGET_ORG
 
 # Expected: AgentforceServiceAgentUser + <AgentName>_Access
 
 # Step 6: Deploy Agent Bundle (unpublished metadata)
-sf project deploy start \
+sf project deploy start --json \
   --source-dir force-app/main/default/aiAuthoringBundles/<AgentName> \
-  -o TARGET_ORG --json
+  -o TARGET_ORG
 
 # Step 7: Test BEFORE Publishing (recommended)
-sf agent preview start \
+sf agent preview start --json \
   --api-name <AgentName> \
-  -o TARGET_ORG --json
+  -o TARGET_ORG
 # Test all topics and actions to verify permissions
 
 # Step 8: Publish & Activate (only after testing passes)
-sf agent publish authoring-bundle \
+sf agent publish authoring-bundle --json \
   --api-name <AgentName> \
-  -o TARGET_ORG --json
+  -o TARGET_ORG
 
-sf agent activate \
+sf agent activate --json \
   --api-name <AgentName> \
   -o TARGET_ORG
 ```
@@ -118,19 +119,20 @@ Service agents need a dedicated service account with consistent permissions.
 
 **Get Org ID first** (needed for username format):
 ```bash
-sf org display -o TARGET_ORG --json | jq -r '.result.id'
+sf org display --json -o TARGET_ORG
+# Read result.id from the JSON response
 ```
 
 **Query existing Einstein Agent Users** (skip creation if one exists):
 ```bash
-sf data query --query "SELECT Id, Username, IsActive FROM User WHERE Profile.Name = 'Einstein Agent User' AND IsActive = true" -o TARGET_ORG --json
+sf data query --json --query "SELECT Id, Username, IsActive FROM User WHERE Profile.Name = 'Einstein Agent User' AND IsActive = true" -o TARGET_ORG
 ```
 
 **Create the user** (if none exists):
 
 1. Get the Einstein Agent User profile ID:
    ```bash
-   sf data query --query "SELECT Id FROM Profile WHERE Name = 'Einstein Agent User'" -o TARGET_ORG --json
+   sf data query --json --query "SELECT Id FROM Profile WHERE Name = 'Einstein Agent User'" -o TARGET_ORG
    ```
 
 2. Create a user definition file (`config/einstein-agent-user.json`):
@@ -153,7 +155,7 @@ sf data query --query "SELECT Id, Username, IsActive FROM User WHERE Profile.Nam
 
    **Option A: Scratch Org (Definition File)**
    ```bash
-   sf org create user \
+   sf org create user --json \
      --definition-file config/einstein-agent-user.json \
      -o TARGET_ORG
    ```
@@ -161,21 +163,22 @@ sf data query --query "SELECT Id, Username, IsActive FROM User WHERE Profile.Nam
    **Option B: Production/Sandbox (Direct Record Creation)**
    ```bash
    # Get Profile ID first
-   PROFILE_ID=$(sf data query \
+   # Get Profile ID (read result.records[0].Id from JSON response)
+   sf data query --json \
      --query "SELECT Id FROM Profile WHERE Name = 'Einstein Agent User'" \
-     -o TARGET_ORG --json | jq -r '.result.records[0].Id')
+     -o TARGET_ORG
 
-   # Create user directly
-   sf data create record --sobject User --values \
-     "Username='{agent_name}_agent@{orgId}.ext' LastName='{AgentName} Agent' Email='placeholder@example.com' Alias='agntuser' ProfileId='${PROFILE_ID}' TimeZoneSidKey='America/Los_Angeles' LocaleSidKey='en_US' EmailEncodingKey='UTF-8' LanguageLocaleKey='en_US'" \
-     -o TARGET_ORG --json
+   # Create user directly (use ProfileId from query above)
+   sf data create record --json --sobject User --values \
+     "Username='{agent_name}_agent@{orgId}.ext' LastName='{AgentName} Agent' Email='placeholder@example.com' Alias='agntuser' ProfileId='<PROFILE_ID>' TimeZoneSidKey='America/Los_Angeles' LocaleSidKey='en_US' EmailEncodingKey='UTF-8' LanguageLocaleKey='en_US'" \
+     -o TARGET_ORG
    ```
 
    **Note**: `sf org create user` only works in scratch orgs. For production/sandbox, use `sf data create record`. Attempting `sf org create user` in a non-scratch org fails with an authorization error.
 
 4. Verify creation:
    ```bash
-   sf data query --query "SELECT Id, Username, IsActive FROM User WHERE Username = '{agent_name}_agent@{orgId}.ext'" -o TARGET_ORG --json
+   sf data query --json --query "SELECT Id, Username, IsActive FROM User WHERE Username = '{agent_name}_agent@{orgId}.ext'" -o TARGET_ORG
    ```
 
 **Username format**: `{agent_name}_agent@{orgId}.ext` (production) or `{agent_name}.{suffix}@{orgfarm}.salesforce.com` (dev/scratch). Always query the target org to confirm the exact format.
@@ -192,12 +195,12 @@ Via Setup UI:
 
 Via CLI:
 ```bash
-sf org assign permset --name AgentforceServiceAgentUser --on-behalf-of "{agent_name}_agent@{orgId}.ext" -o TARGET_ORG --json
+sf org assign permset --json --name AgentforceServiceAgentUser --on-behalf-of "{agent_name}_agent@{orgId}.ext" -o TARGET_ORG
 ```
 
 Verify assignment:
 ```bash
-sf data query --query "SELECT Id, PermissionSet.Name FROM PermissionSetAssignment WHERE Assignee.Username = '{agent_name}_agent@{orgId}.ext' AND PermissionSet.Name = 'AgentforceServiceAgentUser'" -o TARGET_ORG --json
+sf data query --json --query "SELECT Id, PermissionSet.Name FROM PermissionSetAssignment WHERE Assignee.Username = '{agent_name}_agent@{orgId}.ext' AND PermissionSet.Name = 'AgentforceServiceAgentUser'" -o TARGET_ORG
 ```
 
 ---
@@ -230,7 +233,7 @@ Key rule: Include EVERY Apex class referenced via `apex://` in your agent script
 
 Deploy the permission set:
 ```bash
-sf project deploy start --source-dir force-app/main/default/permissionsets/{AgentName}_Access.permissionset-meta.xml -o TARGET_ORG --json
+sf project deploy start --json --source-dir force-app/main/default/permissionsets/{AgentName}_Access.permissionset-meta.xml -o TARGET_ORG
 ```
 
 ---
@@ -239,12 +242,12 @@ sf project deploy start --source-dir force-app/main/default/permissionsets/{Agen
 
 Via CLI:
 ```bash
-sf org assign permset --name {AgentName}_Access --on-behalf-of "{agent_name}_agent@{orgId}.ext" -o TARGET_ORG --json
+sf org assign permset --json --name {AgentName}_Access --on-behalf-of "{agent_name}_agent@{orgId}.ext" -o TARGET_ORG
 ```
 
 Verify both permission sets are assigned:
 ```bash
-sf data query --query "SELECT PermissionSet.Name FROM PermissionSetAssignment WHERE Assignee.Username = '{agent_name}_agent@{orgId}.ext'" -o TARGET_ORG --json
+sf data query --json --query "SELECT PermissionSet.Name FROM PermissionSetAssignment WHERE Assignee.Username = '{agent_name}_agent@{orgId}.ext'" -o TARGET_ORG
 ```
 
 Expected output includes both:
@@ -273,9 +276,9 @@ config:
 #### 6.1: Deploy Agent Bundle (Unpublished)
 
 ```bash
-sf project deploy start \
+sf project deploy start --json \
   --source-dir force-app/main/default/aiAuthoringBundles/<AgentName> \
-  -o TARGET_ORG --json
+  -o TARGET_ORG
 ```
 
 This deploys the agent as **unpublished metadata** — you can edit freely without version management.
@@ -283,9 +286,9 @@ This deploys the agent as **unpublished metadata** — you can edit freely witho
 #### 6.2: Test with Preview (Before Publishing)
 
 ```bash
-sf agent preview start \
+sf agent preview start --json \
   --api-name <AgentName> \
-  -o TARGET_ORG --json
+  -o TARGET_ORG
 ```
 
 What to test:
@@ -312,9 +315,9 @@ See [preview-test-loop.md](preview-test-loop.md) for the complete smoke test wor
 Only publish after all tests pass.
 
 ```bash
-sf agent publish authoring-bundle \
+sf agent publish authoring-bundle --json \
   --api-name <AgentName> \
-  -o TARGET_ORG --json
+  -o TARGET_ORG
 ```
 
 **Publishing does NOT activate.** The new BotVersion is created as `Inactive`. You must explicitly activate.
@@ -322,19 +325,19 @@ sf agent publish authoring-bundle \
 #### 6.4: Activate Agent
 
 ```bash
-sf agent activate \
+sf agent activate --json \
   --api-name <AgentName> \
   -o TARGET_ORG
 ```
 
-`sf agent activate` does NOT support `--json`. It prints a plain-text confirmation.
+Note: `sf agent activate` may not support `--json` in all CLI versions. It prints a plain-text confirmation.
 
 #### 6.5: Verify Activation
 
 ```bash
-sf data query \
+sf data query --json \
   --query "SELECT Id, DeveloperName, Status FROM BotVersion WHERE BotDefinition.DeveloperName = '<AgentName>' ORDER BY CreatedDate DESC LIMIT 1" \
-  -o TARGET_ORG --json
+  -o TARGET_ORG
 ```
 
 Expected: `Status = 'Active'`
@@ -366,7 +369,7 @@ Same XML template as Step 3 above. Include `<classAccesses>` for all Apex classe
 Assign the custom PS to employees (not to a service account):
 
 ```bash
-sf org assign permset --name {AgentName}_Access --on-behalf-of "employee@company.com" -o TARGET_ORG --json
+sf org assign permset --json --name {AgentName}_Access --on-behalf-of "employee@company.com" -o TARGET_ORG
 ```
 
 Or use Permission Set Groups for role-based access.
@@ -384,7 +387,7 @@ config:
 ### Step 4: Publish
 
 ```bash
-sf agent publish authoring-bundle --api-name Employee_Agent -o TARGET_ORG --json
+sf agent publish authoring-bundle --json --api-name Employee_Agent -o TARGET_ORG
 ```
 
 ---
@@ -409,22 +412,22 @@ Run this combined query to verify all setup steps for a Service Agent:
 
 ```bash
 # 1. Einstein Agent User exists and is active
-sf data query --query "SELECT Id, Username, IsActive, Profile.Name FROM User WHERE Username = '{agent_name}_agent@{orgId}.ext'" -o TARGET_ORG --json
+sf data query --json --query "SELECT Id, Username, IsActive, Profile.Name FROM User WHERE Username = '{agent_name}_agent@{orgId}.ext'" -o TARGET_ORG
 
 # 2. System PS assigned
-sf data query --query "SELECT PermissionSet.Name FROM PermissionSetAssignment WHERE Assignee.Username = '{agent_name}_agent@{orgId}.ext' AND PermissionSet.Name = 'AgentforceServiceAgentUser'" -o TARGET_ORG --json
+sf data query --json --query "SELECT PermissionSet.Name FROM PermissionSetAssignment WHERE Assignee.Username = '{agent_name}_agent@{orgId}.ext' AND PermissionSet.Name = 'AgentforceServiceAgentUser'" -o TARGET_ORG
 
 # 3. Custom PS assigned
-sf data query --query "SELECT PermissionSet.Name FROM PermissionSetAssignment WHERE Assignee.Username = '{agent_name}_agent@{orgId}.ext' AND PermissionSet.Name = '{AgentName}_Access'" -o TARGET_ORG --json
+sf data query --json --query "SELECT PermissionSet.Name FROM PermissionSetAssignment WHERE Assignee.Username = '{agent_name}_agent@{orgId}.ext' AND PermissionSet.Name = '{AgentName}_Access'" -o TARGET_ORG
 
 # 4. All permission sets for user (combined view)
-sf data query --query "SELECT PermissionSet.Name, PermissionSet.Label FROM PermissionSetAssignment WHERE Assignee.Username = '{agent_name}_agent@{orgId}.ext'" -o TARGET_ORG --json
+sf data query --json --query "SELECT PermissionSet.Name, PermissionSet.Label FROM PermissionSetAssignment WHERE Assignee.Username = '{agent_name}_agent@{orgId}.ext'" -o TARGET_ORG
 
 # 5. Agent config has default_agent_user
 # Check your .agent file's config: block
 
 # 6. Agent publishes successfully
-sf agent publish authoring-bundle --api-name AgentName -o TARGET_ORG --json
+sf agent publish authoring-bundle --json --api-name AgentName -o TARGET_ORG
 ```
 
 Checklist:

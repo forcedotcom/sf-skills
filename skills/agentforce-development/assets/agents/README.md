@@ -22,8 +22,8 @@ Templates for building complete, deployable agents.
 
 2. Validate and deploy:
    ```bash
-   sf agent validate authoring-bundle --api-name My_Agent --target-org your-org
-   sf agent publish authoring-bundle --api-name My_Agent --target-org your-org
+   sf agent validate authoring-bundle --json --api-name My_Agent --target-org your-org
+   sf agent publish authoring-bundle --json --api-name My_Agent --target-org your-org
    ```
 
 ## Required Blocks

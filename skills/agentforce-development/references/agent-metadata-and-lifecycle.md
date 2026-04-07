@@ -58,7 +58,7 @@ Authoring bundles are stored in `<packageDirectory>/main/default/aiAuthoringBund
 
 Publishing creates the runtime entities that make an agent usable in the org.
 
-**Bot** — Top-level container (one per agent). Links to all published versions.
+**Bot** — Top-level container (one per agent). Links to all published versions. Query `BotDefinition` when the ID of a published agent is required. See [CLI for Agents](salesforce-cli-for-agents.md) for query syntax.
 
 **BotVersion** — One per published version (e.g., `v1`, `v2`, `v3`). Only one version can be active at a time.
 
@@ -524,7 +524,7 @@ Copy the test spec template from the **agentforce-testing** skill to `specs/<Age
 Do NOT use `sf agent generate test-spec` to create a new test spec. This command requires interactive input and cannot be used programmatically. It can reverse-engineer a test spec from an existing `AiEvaluationDefinition` when supplied with the `--from-definition` flag:
 
 ```bash
-sf agent generate test-spec --from-definition force-app/main/default/aiEvaluationDefinitions/Local_Info_Agent_Test.aiEvaluationDefinition-meta.xml --output-file specs/Local_Info_Agent-testSpec.yaml
+sf agent generate test-spec --json --from-definition force-app/main/default/aiEvaluationDefinitions/Local_Info_Agent_Test.aiEvaluationDefinition-meta.xml --output-file specs/Local_Info_Agent-testSpec.yaml
 ```
 
 **Create the test in the org:**

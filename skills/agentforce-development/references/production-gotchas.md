@@ -185,7 +185,7 @@ process_order: @actions.create_order
 
 KNOWN BUG: Chained actions with Prompt Templates don't properly map inputs using `Input:Query` format.
 
-For prompt template action definitions, input binding syntax, and grounded data patterns, see [references/action-prompt-templates.md](../references/action-prompt-templates.md).
+For prompt template action definitions, input binding syntax, and grounded data patterns, see [Action Prompt Templates](action-prompt-templates.md).
 
 ## Latch Variable Pattern for Topic Re-entry
 
@@ -250,9 +250,30 @@ Failed to retrieve components using source tracking:
 [SfError [UnsupportedBundleTypeError]: Unsupported Bundle Type: AiAuthoringBundle
 
 # ✅ WORKAROUND - Use CLI directly:
-sf project retrieve start -m AiAuthoringBundle:MyAgent
-sf agent publish authoring-bundle --api-name MyAgent -o TARGET_ORG
+sf project retrieve start --json -m AiAuthoringBundle:MyAgent
+sf agent publish authoring-bundle --json --api-name MyAgent -o TARGET_ORG
 ```
+
+## `@inputs` Scope Lifecycle (Silent Failure)
+
+`@inputs` is only available in `with` directives during action invocation. Using `@inputs` in a post-action `set` causes **silent runtime failure** — the action executes but the `set` silently drops, leaving the variable unchanged. No trace error; the FunctionStep shows no output capture.
+
+```agentscript
+# WRONG — silent failure, @inputs out of scope after action executes
+run @actions.get_station_status
+    with station_name = ...
+    set @variables.station = @inputs.station_name   # FAILS SILENTLY
+
+# RIGHT — use @outputs (if action echoes the value) or capture input before the call
+set @variables.station = @variables.selected_station  # capture before
+run @actions.get_station_status
+    with station_name = @variables.station
+    set @variables.status = @outputs.status           # @outputs is valid here
+```
+
+**Diagnosis:** A FunctionStep that completes with no output capture (set directives dropped) indicates an `@inputs` scope violation. The action succeeds — only the assignment fails.
+
+Similarly, `@outputs` is only available in `set` and `if` directives immediately following the action invocation — not in instructions, pipe lines, or later actions.
 
 ## Reserved `@InvocableVariable` Keywords
 

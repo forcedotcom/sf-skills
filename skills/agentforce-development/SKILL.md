@@ -1,11 +1,11 @@
 ---
 name: agentforce-development
-description: "Use this skill when working with Salesforce Agent Script — the scripting language for authoring Agentforce agents using the Atlas Reasoning Engine. Triggers include: creating, modifying, or comprehending Agent Script agents; working with AiAuthoringBundle files or .agent files; designing topic graphs or flow control; producing or updating an Agent Spec; validating Agent Script or diagnosing compilation errors; previewing agents or debugging behavioral issues; deploying, publishing, activating, or deactivating agents; deleting or renaming agents; authoring AiEvaluationDefinition test specs or running agent tests. This skill teaches Agent Script from scratch — AI models have zero prior training data on this language. Do NOT use for Apex development, Flow building, Prompt Template authoring, Experience Cloud configuration, or general Salesforce CLI tasks unrelated to Agent Script."
+description: "Build, modify, debug, and deploy agents with Agentforce Agent Script. TRIGGER when: user creates, modifies, or asks about .agent files or aiAuthoringBundle metadata; changes agent behavior, responses, or conversation logic; designs agent topics, actions, tools, sub-agents, or flow control; writes or reviews an Agent Spec; previews, debugs, deploys, publishes, or tests agents; uses Agent Script CLI commands (sf agent generate/preview/publish/test). DO NOT TRIGGER when: Apex development, Flow building, Prompt Template authoring, Experience Cloud configuration, or general Salesforce CLI tasks unrelated to Agent Script."
 license: Apache-2.0
 compatibility: "Requires Agentforce license, API v66.0+, Einstein Agent User"
 metadata:
-  version: "0.4.8"
-  last_updated: "2026-03-17"
+  version: "0.5.0"
+  last_updated: "2026-04-07"
 ---
 
 # Agent Script Skill
@@ -32,9 +32,11 @@ Identify user intent from task descriptions. ALWAYS read indicated reference fil
 
 ## Rules That Always Apply
 
-1. **Always `--json`.** ALWAYS include `--json` on EVERY `sf` CLI command.
+1. **Always `--json`.** ALWAYS include `--json` on EVERY `sf` CLI command. Do NOT pipe CLI output through `jq` or `2>/dev/null`. Read the full JSON response directly — LLMs parse JSON natively.
 
-2. **Diagnose before you fix.** When validating/debugging agent behavior,
+2. **Verify target org.** Before any org interaction, run `sf config get target-org --json` to confirm a target org is set. If none configured, ask the user to set one with `sf config set target-org <alias>`.
+
+3. **Diagnose before you fix.** When validating/debugging agent behavior,
    ALWAYS `--use-live-actions` to preview authoring bundles. Send utterances
    then read resulting session traces to ground your understanding of the
    agent's behavior. Trace files reveal topic selection, action I/O, and
@@ -42,7 +44,7 @@ Identify user intent from task descriptions. ALWAYS read indicated reference fil
    this grounding. See [Validation & Debugging](references/agent-validation-and-debugging.md)
    for trace file locations and diagnostic patterns.
 
-3. **Spec approval is a hard gate.** Never proceed past Agent Spec
+4. **Spec approval is a hard gate.** Never proceed past Agent Spec
    creation without explicit user approval.
 
 ## Task Domains
@@ -57,10 +59,10 @@ User wants to build new agent from scratch. ALWAYS use Agent Script. Work with U
 
 Read [CLI for Agents](references/salesforce-cli-for-agents.md) for exact command syntax.
 
-1. **Design** — Read [Design & Agent Spec](references/agent-design-and-spec-creation.md) to draft an Agent Spec. Always ask if you should scan for existing backing logic. Unless instructed otherwise, scan by reading `sfdx-project.json` to identify package directories, then search each for `@InvocableMethod` in `classes/`, `AutoLaunchedFlow` in `flows/`, and template metadata in `promptTemplates/`. Mark matches `EXISTS`; unmatched actions `NEEDS STUB`. **Always save Agent Spec as file.**
+1. **Design** — Read [Design & Agent Spec](references/agent-design-and-spec-creation.md) to draft an Agent Spec. Always ask if you should scan for existing backing logic. Unless instructed otherwise, scan by reading `sfdx-project.json` to identify package directories, then search each for `@InvocableMethod` in `classes/`, `AutoLaunchedFlow` in `flows/`, and template metadata in `promptTemplates/`. Mark matches `EXISTS`; unmatched actions `NEEDS STUB`. Also scan `objects/` for `.object-meta.xml` to discover custom objects — related objects often contain data the agent should expose even when not mentioned in the prompt. **Always save Agent Spec as file.**
 2. **STOP for user approval of Agent Spec.** Present to user. Ask for approval or feedback. **Do not proceed** without approval. Once approved, proceed without stopping unless a step fails.
 3. **Validate environment prerequisites** — Read [Design & Agent Spec](references/agent-design-and-spec-creation.md), Section 3 (Environment Prerequisites). Based on agent type from design, validate org environment:
-   - **Employee agent**: Confirm config block does NOT include `default_agent_user`. Remove if present.
+   - **Employee agent**: Confirm config block does NOT include `default_agent_user`, `connection messaging:`, or MessagingSession linked variables. Remove if present. See [Examples](references/examples.md) for a complete employee agent example.
    - **Service agent**: Query org for Einstein Agent User. If one exists, confirm username with user. If none, guide user through creation. See [CLI for Agents](references/salesforce-cli-for-agents.md), Section 12 for creation steps and [Agent User Setup](references/agent-user-setup.md) for required permissions.
    **Do not proceed to code generation until environment is validated.**
 4. **Generate authoring bundle** —
@@ -81,7 +83,12 @@ Read [CLI for Agents](references/salesforce-cli-for-agents.md) for exact command
    Send test utterances with:
    `sf agent preview send --json --authoring-bundle <Developer_Name> --session-id <ID> -u "<message>"`
    Confirm topic routing, gating, and action invocations match Agent Spec. If behavior diverges, switch to **Diagnose Behavioral Issues** workflow. Return AFTER correcting issues.
-9. **Publish** — **DO NOT proceed until step 8 passes.** Publish validates metadata structure, not agent behavior. ALWAYS validate behavior before publishing. Every publish creates permanent version number.
+   **CHECKPOINT — Do NOT proceed to Publish unless ALL are true:**
+   - `validate authoring-bundle` passes with zero errors
+   - Live preview (`--use-live-actions`) tested with representative utterances per topic
+   - Traces confirm correct topic routing and action invocation
+   - User explicitly approves deployment
+9. **Publish** — Publish validates metadata structure, not agent behavior. Every publish creates permanent version number.
    `sf agent publish authoring-bundle --json --api-name <Developer_Name>`
    If publish fails, follow troubleshooting checklist in [Metadata & Lifecycle](references/agent-metadata-and-lifecycle.md), Section 5 before retrying.
 10. **Activate** — Makes new version available to users.
@@ -113,6 +120,12 @@ Read [CLI for Agents](references/salesforce-cli-for-agents.md) for exact command
    access permissions, visibility troubleshooting
 9. [Known Issues](references/known-issues.md) — only load when errors
    persist after code fixes
+10. [Architecture Patterns](references/architecture-patterns.md) — hub-and-spoke, verification gate, post-action loop
+11. [Complex Data Types](references/complex-data-types.md) — type mapping decision tree
+12. [Safety Review](references/safety-review-reference.md) — 7-category safety review
+13. [Discover Reference](references/discover-reference.md) — target discovery CLI
+14. [Scaffold Reference](references/scaffold-reference.md) — stub generation CLI
+15. [Deploy Reference](references/deploy-reference.md) — deployment lifecycle, error recovery
 
 ### Comprehend an Existing Agent
 
@@ -168,7 +181,12 @@ Read [CLI for Agents](references/salesforce-cli-for-agents.md) for exact command
    Send test utterances with:
    `sf agent preview send --json --authoring-bundle <Developer_Name> --session-id <ID> -u "<message>"`
    Test changed paths first, then adjacent paths to catch regressions in existing behavior.
-8. **Publish** — **DO NOT proceed until step 7 passes.** Publish validates metadata structure, not agent behavior. ALWAYS validate behavior before publishing. Every publish creates permanent version number.
+   **CHECKPOINT — Do NOT proceed to Publish unless ALL are true:**
+   - `validate authoring-bundle` passes with zero errors
+   - Live preview (`--use-live-actions`) tested with representative utterances per topic
+   - Traces confirm correct topic routing and action invocation
+   - User explicitly approves deployment
+8. **Publish** — Publish validates metadata structure, not agent behavior. Every publish creates permanent version number.
    `sf agent publish authoring-bundle --json --api-name <Developer_Name>`
    If publish fails, follow troubleshooting checklist in [Metadata & Lifecycle](references/agent-metadata-and-lifecycle.md), Section 5 before retrying.
 9. **Activate** — Makes new version available to users.
@@ -270,8 +288,13 @@ Read [CLI for Agents](references/salesforce-cli-for-agents.md) for exact command
    `sf agent preview start --json --use-live-actions --authoring-bundle <Developer_Name>`
    then send test utterances with:
    `sf agent preview send --json --authoring-bundle <Developer_Name> --session-id <ID> -u "<message>"`
-   Test key conversation paths to validate agent behavior when backed by live actions. **Do not proceed to Publish until preview passes.**
-4. **Publish** — **Publish validates metadata structure, not agent behavior.** ALWAYS validate behavior with live preview BEFORE publishing. DO NOT publish as part of a dev/test inner loop. ONLY publish as the FINAL step prior to activating the agent and surfacing it to end users.
+   Test key conversation paths to validate agent behavior when backed by live actions.
+   **CHECKPOINT — Do NOT proceed to Publish unless ALL are true:**
+   - `validate authoring-bundle` passes with zero errors
+   - Live preview (`--use-live-actions`) tested with representative utterances per topic
+   - Traces confirm correct topic routing and action invocation
+   - User explicitly approves deployment
+4. **Publish** — Publish validates metadata structure, not agent behavior. DO NOT publish as part of a dev/test inner loop. ONLY publish as the FINAL step prior to activating the agent and surfacing it to end users.
    `sf agent publish authoring-bundle --json --api-name <Developer_Name>`
    If publish fails, follow *Troubleshooting Publish Failures* in [Metadata & Lifecycle](references/agent-metadata-and-lifecycle.md) before retrying.
 5. **Activate** — Makes new version available to users.
@@ -425,3 +448,73 @@ Planner validates ALL actions across ALL topics at startup. One missing permissi
 
 **Apex action returns empty results in live preview but works in simulated:**
 `WITH USER_MODE` + missing object permissions = silent failure (0 rows, no error). See [Agent User Setup & Permissions](references/agent-user-setup.md), Section 6.2.
+
+## Syntax Quick Reference
+
+- Block order: `system:` → `config:` → `variables:` → `connection:` → `knowledge:` → `language:` → `start_agent topic_selector:` → `topic:` blocks
+- Indentation: **4 spaces** per indent level. Never use tabs. Mixing spaces and tabs breaks the parser.
+- Booleans: `True`/`False` (capitalized)
+- Strings: always double-quoted
+- Numeric action I/O: bare `number` works for variables but **fails at publish** in action I/O. Use `object` + `complex_data_type_name` for numeric action parameters. See [Complex Data Types](references/complex-data-types.md) for the full decision tree.
+- `after_reasoning:` has NO `instructions:` wrapper
+- No `else if` — use compound `if x and y:` or sequential flat ifs
+- Reserved `@InvocableVariable` names: `model`, `description`, `label` — cannot be used as Apex parameter names
+- `@inputs` and `@outputs` are ephemeral: `@inputs` only in `with`; `@outputs` only in `set`/`if` immediately after the action. `@inputs` in `set` = silent failure.
+
+See [Complex Data Types](references/complex-data-types.md) for the full Lightning type mapping decision tree. See [Instruction Resolution](references/instruction-resolution.md) for the 3-phase runtime model.
+
+## Architecture Patterns
+
+Three primary FSM patterns. Full details with code in [Architecture Patterns](references/architecture-patterns.md).
+
+- **Hub-and-Spoke** (most common): `start_agent` routes to specialized topics. Each topic has "back to hub" transition. Do NOT create a separate routing topic.
+- **Verification Gate**: Identity verification before protected topics. `available when` guards on protected transitions.
+- **Post-Action Loop**: Post-action checks at TOP of `instructions: ->` trigger on re-resolution after action completes.
+
+## Scoring Rubric
+
+Score every generated agent on 100 points across 7 categories: Structure (15), Safety (15), Deterministic Logic (20), Instruction Resolution (20), FSM Architecture (10), Action Configuration (10), Deployment Readiness (10).
+
+See [Scoring Rubric](references/scoring-rubric.md) for the complete rubric.
+
+## Review Mode
+
+When user provides an existing `.agent` file (e.g., `review path/to/file.agent`):
+
+1. Read the file
+2. Score against the 100-point rubric
+3. List every issue grouped by category
+4. Provide corrected code snippets
+5. Offer to apply fixes
+
+## Safety Review
+
+7-category LLM-driven safety review for `.agent` files. Integrated into Phase 0 of authoring and deployment. Categories: Identity & Transparency, User Safety, Data Handling, Content Safety, Fairness, Deception, Scope & Boundaries.
+
+See [Safety Review](references/safety-review-reference.md) for the complete framework, severity levels, false positive guidance, and adversarial test prompts.
+
+## Discover & Scaffold
+
+Validate action targets exist in org and generate stubs for missing ones.
+
+See [Discover Reference](references/discover-reference.md) and [Scaffold Reference](references/scaffold-reference.md).
+
+**CRITICAL:** Stubs must return realistic data, not `'TODO'`. Placeholder responses cause SMALL_TALK grounding because the LLM falls back to training data.
+
+## Deploy Lifecycle
+
+Validate → deploy metadata → publish bundle → activate. See [Deploy Reference](references/deploy-reference.md) for phases, error recovery, CI/CD, and rollback.
+
+## Template Assets
+
+Ready-to-use `.agent` templates in `assets/agents/` (hello-world, simple-qa, multi-topic, production-faq, order-service, verification-gate). See also `assets/patterns/` for 11+ reusable design patterns and [Examples](references/examples.md) for inline walkthroughs.
+
+## Additional References
+
+| Topic | File |
+|-------|------|
+| Architecture patterns | [architecture-patterns.md](references/architecture-patterns.md) |
+| Type mapping decision tree | [complex-data-types.md](references/complex-data-types.md) |
+| Feature validity by context | [feature-validity.md](references/feature-validity.md) |
+| Instruction resolution model | [instruction-resolution.md](references/instruction-resolution.md) |
+| Complete agent examples | [examples.md](references/examples.md) |

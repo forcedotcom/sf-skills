@@ -1,0 +1,59 @@
+# Basic Test Specification Template
+# Compatible with: sf agent test create --spec <file> --api-name <name>
+#
+# Usage:
+#   1. Replace <placeholders> with actual values
+#   2. Create: sf agent test create --spec basic-test-spec.yaml --api-name <Test_Name> --target-org <alias>
+#   3. Run:    sf agent test run --api-name <Test_Name> --wait 10 --result-format json --target-org <alias>
+#
+# IMPORTANT: This YAML is parsed by @salesforce/agents — NOT a generic AiEvaluationDefinition format.
+# Only the fields below are recognized. Do NOT add apiVersion, kind, metadata, or settings.
+
+# Required: Display name for the test (MasterLabel) — deploy FAILS without this
+name: "<Agent_Name> Basic Tests"
+
+# Required: Must be AGENT
+subjectType: AGENT
+
+# Required: Agent BotDefinition DeveloperName (API name)
+subjectName: <Agent_Name>
+
+testCases:
+  # ═══════════════════════════════════════════════════════════════
+  # TOPIC ROUTING TESTS
+  # Test that user messages route to the correct topic
+  # ═══════════════════════════════════════════════════════════════
+
+  - utterance: "<User message that should trigger primary topic>"
+    expectedTopic: <topic_name>
+
+  - utterance: "<User message that should trigger secondary topic>"
+    expectedTopic: <another_topic_name>
+
+  # ═══════════════════════════════════════════════════════════════
+  # ACTION INVOCATION TESTS
+  # expectedActions is a FLAT list of action name strings
+  # ═══════════════════════════════════════════════════════════════
+
+  - utterance: "<User message that should trigger action>"
+    expectedTopic: <topic_name>
+    expectedActions:
+      - <action_name>
+
+  # ═══════════════════════════════════════════════════════════════
+  # OUTCOME VALIDATION TESTS
+  # expectedOutcome is optional — omitting causes harmless ERROR
+  # in output_validation (test still passes topic/action checks)
+  # ═══════════════════════════════════════════════════════════════
+
+  - utterance: "<User message with expected outcome>"
+    expectedTopic: <topic_name>
+    expectedOutcome: "Agent should provide a helpful response about <topic>"
+
+  # ═══════════════════════════════════════════════════════════════
+  # ESCALATION TEST
+  # Standard topics like Escalation use localDeveloperName
+  # ═══════════════════════════════════════════════════════════════
+
+  - utterance: "I want to talk to a real person"
+    expectedTopic: Escalation

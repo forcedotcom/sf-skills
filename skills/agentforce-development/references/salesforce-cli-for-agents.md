@@ -162,16 +162,18 @@ sf project retrieve start --json --metadata Agent:Agent_API_Name
 
 The `Agent:` pseudo-type retrieves the runtime entities (Bot, BotVersion, GenAiPlannerBundle) created by publish. This does NOT include AiAuthoringBundle — use `AiAuthoringBundle:` for that.
 
-#### Caution! Metadata types are NOT sObjects
+#### Not all agent metadata supports SOQL
 
-`GenAiPlannerBundle`, `AiAuthoringBundle`, and `GenAiFunction` are **metadata types**. SOQL queries against them return `INVALID_TYPE`. Always use `sf project retrieve start --metadata` instead.
+`BotDefinition` and `BotVersion` support SOQL — use `sf data query` to get agent record IDs, version status, or activation state.
+
+`GenAiPlannerBundle`, `AiAuthoringBundle`, and `GenAiFunction` do NOT support SOQL — queries return `INVALID_TYPE`. Use `sf project retrieve start --metadata` instead.
 
 ```bash
-# WRONG — these are not sObjects
-sf data query --json -q "SELECT Id FROM GenAiPlannerBundle"
-sf data query --json -q "SELECT Id FROM AiAuthoringBundle"
+# SOQL-queryable — use sf data query
+sf data query --json -q "SELECT Id, DeveloperName FROM BotDefinition WHERE DeveloperName = 'Agent_API_Name'"
+sf data query --json -q "SELECT Id, VersionNumber, Status FROM BotVersion WHERE BotDefinition.DeveloperName = 'Agent_API_Name'"
 
-# CORRECT — use the Metadata API
+# NOT SOQL-queryable — use Metadata API
 sf project retrieve start --json --metadata "GenAiPlannerBundle:AgentName"
 sf project retrieve start --json --metadata "AiAuthoringBundle:AgentName"
 ```
@@ -276,7 +278,7 @@ Only needed if `--wait` was not used or timed out.
 ### Generate a test spec from existing metadata
 
 ```bash
-sf agent generate test-spec --from-definition path/to/AiEvaluationDefinition-meta.xml --output-file specs/Agent_API_Name-testSpec.yaml
+sf agent generate test-spec --json --from-definition path/to/AiEvaluationDefinition-meta.xml --output-file specs/Agent_API_Name-testSpec.yaml
 ```
 
 Reverse-engineers a YAML test spec from an existing AiEvaluationDefinition. Do NOT use `sf agent generate test-spec` without `--from-definition` — the bare command is interactive and cannot be used programmatically.

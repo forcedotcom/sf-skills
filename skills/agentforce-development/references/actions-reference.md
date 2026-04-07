@@ -43,6 +43,24 @@ All actions in Agent Script support these properties:
 | `filter_from_agent` | Boolean | `True` = exclude output from agent context; defaults to `False` |
 | `is_used_by_planner` | Boolean | `True` = LLM can reason about this value for routing decisions; defaults to `False` |
 | `complex_data_type_name` | String | Lightning data type mapping (required for complex types) |
+| `is_displayable` | Boolean | `False` = hide from user display (compile-valid alias for `filter_from_agent: True`) |
+
+> **Note**: `filter_from_agent: True` is the GA standard. `is_displayable: False` is a compile-valid alias with the same effect.
+
+> **Safety**: For service agents (customer-facing), internal business metrics (risk scores, retention tiers, churn probability, internal classification codes) should be `filter_from_agent: True` so the LLM can use them for reasoning but they don't appear in customer-facing responses.
+
+### Zero-Hallucination Intent Classification Pattern
+
+Use `filter_from_agent: True` + `is_used_by_planner: True` to let the LLM route based on action outputs without being able to show them to the user:
+
+```agentscript
+outputs:
+   intent_classification: string
+      filter_from_agent: True     # LLM cannot show this to user
+      is_used_by_planner: True    # LLM can use for routing decisions
+```
+
+This prevents the LLM from fabricating classification results — it must invoke the action to get the value, then can only use it for routing decisions.
 
 ### Example with All Properties
 
@@ -475,6 +493,8 @@ public class WrappedAction {
 ## Connection Block (Escalation Routing)
 
 The `connection` block enables escalation to human agents via Omni-Channel. Always use `connection messaging:` (singular).
+
+> **Service agents only.** The `connection messaging:` block and `@utils.escalate` are only valid for `AgentforceServiceAgent`. Employee agents (`AgentforceEmployeeAgent`) MUST NOT include a `connection` block or `@utils.escalate` actions — including them causes silent failures or "unknown error" at publish time. For employee agents, use `@utils.transition` to a help topic or an action that creates a support case instead.
 
 ### Basic Syntax
 

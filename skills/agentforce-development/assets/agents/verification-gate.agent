@@ -1,0 +1,280 @@
+# Verification Gate Architecture Template
+# ========================================
+#
+# Users must pass identity verification before accessing protected topics.
+#
+# Pattern: Security gate before protected functionality.
+# Use when: Handling sensitive data, payments, PII access.
+#
+# Key features:
+# - Deterministic verification (code-enforced, not LLM suggestions)
+# - available when guards make actions invisible until verified
+# - Post-action checks at TOP of instructions: ->
+# - Automatic escalation after 3 failed attempts
+
+config:
+	developer_name: "SecureAgent"
+	agent_label: "Secure Customer Agent"
+	description: "Agent with verification gate for sensitive operations"
+	default_agent_user: "einsteinagent@00dxx000001234.ext"
+
+variables:
+	EndUserId: linked string
+		source: @MessagingSession.MessagingEndUserId
+		description: "Messaging End User ID"
+		visibility: "External"
+	RoutableId: linked string
+		source: @MessagingSession.Id
+		description: "Messaging Session ID"
+		visibility: "External"
+	ContactId: linked string
+		source: @MessagingEndUser.ContactId
+		description: "Contact ID"
+		visibility: "External"
+	customer_verified: mutable boolean = False
+		description: "Has customer passed identity verification"
+	failed_attempts: mutable number = 0
+		description: "Number of failed verification attempts"
+	customer_email: mutable string = ""
+		description: "Customer email for verification"
+	refund_status: mutable string = ""
+		description: "Status of refund operation"
+	refund_amount: mutable number = 0
+		description: "Refund amount to process"
+	churn_risk_score: mutable number = 0
+		description: "Customer churn risk from Data Cloud"
+
+system:
+	instructions: |
+		You are an AI secure customer service agent.
+		Always verify identity before sensitive operations.
+		Do not fabricate data — always use action results.
+	messages:
+		welcome: "Welcome! I'll need to verify your identity before we proceed."
+		error: "I apologize, something went wrong. Let me try again."
+
+language:
+	default_locale: "en_US"
+	additional_locales: ""
+	all_additional_locales: False
+
+start_agent topic_selector:
+	description: "Route through identity verification"
+	reasoning:
+		instructions: |
+			You are a router only. Do NOT answer questions or provide help directly.
+			Route all users to identity verification first.
+			If already verified, route to the appropriate topic:
+			- Account questions -> use to_account
+			- Refund requests -> use to_refund
+		actions:
+			to_verify: @utils.transition to @topic.identity_verification
+				description: "Begin identity verification"
+			to_account: @utils.transition to @topic.account_management
+				description: "Access account settings"
+				available when @variables.customer_verified == True
+			to_refund: @utils.transition to @topic.refund_processor
+				description: "Process a refund request"
+				available when @variables.customer_verified == True
+
+topic identity_verification:
+	label: "Identity Verification"
+	description: "Verify customer identity before proceeding"
+
+	actions:
+		verify_email:
+			description: "Verify customer email against records"
+			target: "flow://Verify_Customer_Email"
+			inputs:
+				email: string
+					description: "Customer email to verify"
+			outputs:
+				verified: boolean
+					description: "Whether verification succeeded"
+
+	reasoning:
+		instructions: ->
+			if @variables.failed_attempts >= 3:
+				| Too many failed attempts. Transferring to a human agent.
+				transition to @topic.escalation
+
+			if @variables.customer_verified == True:
+				| Identity verified! How can I help you today?
+
+			if @variables.customer_verified == False:
+				| Please verify your identity by confirming your email address.
+
+		actions:
+			check_email: @actions.verify_email
+				description: "Verify customer email"
+				with email = ...
+				set @variables.customer_verified = @outputs.verified
+
+			go_to_account: @utils.transition to @topic.account_management
+				description: "Access account settings"
+				available when @variables.customer_verified == True
+
+			go_to_refund: @utils.transition to @topic.refund_processor
+				description: "Process a refund request"
+				available when @variables.customer_verified == True
+
+			escalate_now: @utils.escalate
+				description: "Transfer to human agent"
+
+topic account_management:
+	label: "Account Management"
+	description: "Manage customer account settings (requires verification)"
+
+	actions:
+		update_email:
+			description: "Update customer email address"
+			target: "apex://UpdateCustomerEmail"
+			inputs:
+				new_email: string
+					description: "New email address"
+			outputs:
+				success: boolean
+					description: "Whether update succeeded"
+
+		update_preferences:
+			description: "Update communication preferences"
+			target: "apex://UpdatePreferences"
+			inputs:
+				pref_type: string
+					description: "Preference type to update"
+				pref_value: string
+					description: "New preference value"
+			outputs:
+				success: boolean
+					description: "Whether update succeeded"
+
+	reasoning:
+		instructions: ->
+			if @variables.customer_verified == False:
+				transition to @topic.identity_verification
+
+			| Welcome to account management.
+			| What would you like to do with your account?
+			| Use the update actions to make changes.
+
+		actions:
+			change_email: @actions.update_email
+				description: "Update email address"
+				with new_email = ...
+				available when @variables.customer_verified == True
+
+			change_prefs: @actions.update_preferences
+				description: "Update communication preferences"
+				with pref_type = ...
+				with pref_value = ...
+				available when @variables.customer_verified == True
+
+			back: @utils.transition to @topic.topic_selector
+				description: "Return to main menu"
+
+topic refund_processor:
+	label: "Refund Processor"
+	description: "Process refund requests (requires verification)"
+
+	actions:
+		check_churn_risk:
+			description: "Check customer churn risk score"
+			target: "apex://CheckChurnRisk"
+			inputs:
+				customer_id: string
+					description: "Customer ID"
+			outputs:
+				score: object
+					description: "Churn risk score 0-100"
+					complex_data_type_name: "lightning__numberType"
+
+		process_refund:
+			description: "Process a full cash refund"
+			target: "flow://Process_Refund"
+			inputs:
+				refund_type: string
+					description: "Type of refund (full or partial)"
+			outputs:
+				status: string
+					description: "Refund status"
+
+		issue_credit:
+			description: "Issue store credit"
+			target: "flow://Issue_Store_Credit"
+			inputs:
+				amount: object
+					description: "Credit amount"
+					complex_data_type_name: "lightning__numberType"
+			outputs:
+				status: string
+					description: "Credit status"
+
+		create_crm_case:
+			description: "Create a CRM case for the refund"
+			target: "flow://Create_CRM_Case"
+			inputs:
+				customer_id: string
+					description: "Customer ID"
+				refund_amount: object
+					description: "Refund amount"
+					complex_data_type_name: "lightning__numberType"
+			outputs:
+				case_id: string
+					description: "Created case ID"
+
+	reasoning:
+		instructions: ->
+			if @variables.customer_verified == False:
+				transition to @topic.identity_verification
+
+			if @variables.refund_status == "Approved":
+				run @actions.create_crm_case
+					with customer_id = @variables.ContactId
+					with refund_amount = @variables.refund_amount
+				transition to @topic.success_confirmation
+
+			run @actions.check_churn_risk
+				with customer_id = @variables.ContactId
+				set @variables.churn_risk_score = @outputs.score
+
+			| Customer risk score: {!@variables.churn_risk_score}
+
+			if @variables.churn_risk_score >= 80:
+				| HIGH RISK - Offer a full cash refund to retain this customer.
+			else:
+				| STANDARD - Offer a $10 store credit as goodwill.
+
+		actions:
+			approve_full_refund: @actions.process_refund
+				description: "Approve full cash refund"
+				available when @variables.churn_risk_score >= 80
+				with refund_type = "full"
+				set @variables.refund_status = @outputs.status
+
+			offer_credit: @actions.issue_credit
+				description: "Offer store credit"
+				available when @variables.churn_risk_score < 80
+				with amount = 10
+				set @variables.refund_status = @outputs.status
+
+topic success_confirmation:
+	label: "Success Confirmation"
+	description: "Confirm successful operation"
+	reasoning:
+		instructions: |
+			Great news! Your request has been processed successfully.
+			Is there anything else I can help you with?
+		actions:
+			new_request: @utils.transition to @topic.topic_selector
+				description: "Start a new request"
+
+topic escalation:
+	label: "Escalation"
+	description: "Escalate to human agent"
+	reasoning:
+		instructions: |
+			I'm transferring you to a human agent who can better assist you.
+			Please hold while I connect you.
+		actions:
+			handoff: @utils.escalate
+				description: "Transfer to human agent"
