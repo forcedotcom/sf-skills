@@ -1,0 +1,140 @@
+name: "Carousel"
+description: "A slideshow component that displays a series of content panels with navigation controls, allowing users to browse through multiple items in a contained space."
+category: "Layout"
+slds_classes:
+  root: "slds-carousel"
+  elements:
+    - class: "slds-carousel__stage"
+      description: "Main container for carousel content"
+      purpose: "Holds the carousel panels and manages overflow"
+    - class: "slds-carousel__panels"
+      description: "Container for all carousel panels"
+      purpose: "Groups all slideable content panels"
+    - class: "slds-carousel__panel"
+      description: "Individual carousel content panel"
+      purpose: "Contains a single slide of content"
+    - class: "slds-carousel__panel-action"
+      description: "Interactive element within panel"
+      purpose: "Clickable area for panel interaction"
+    - class: "slds-carousel__indicators"
+      description: "Navigation indicator container"
+      purpose: "Holds dot indicators for carousel position"
+    - class: "slds-carousel__indicator"
+      description: "Individual position indicator"
+      purpose: "Shows and controls current carousel position"
+  modifiers: []
+  states:
+    - class: "slds-is-active"
+      description: "Active panel/indicator state"
+      trigger: "Currently visible carousel panel"
+variants:
+  - name: "Base"
+    description: "Standard carousel with navigation controls"
+    classes:
+      - "slds-carousel"
+    usage_context: "Default carousel for multiple content panels"
+    differences: "Slideshow with navigation dots and arrow controls"
+lightning_component:
+  name: "lightning-carousel"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-carousel"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS carousel blueprint"
+accessibility:
+  keyboard_support:
+    - "Tab to focus carousel navigation controls"
+    - "Enter/Space to activate navigation"
+    - "Arrow keys to navigate between panels"
+    - "Tab to move through panel content"
+  screen_reader:
+    - "Carousel structure and current position announced"
+    - "Panel content changes communicated"
+    - "Navigation controls clearly identified"
+    - "Total panel count and current position provided"
+  aria_attributes:
+    - "role='region' for carousel container"
+    - "aria-label describing carousel purpose"
+    - "aria-live='polite' for panel changes"
+    - "aria-current for active panel indicator"
+    - "role='tablist' for indicator navigation"
+    - "role='tab' for individual indicators"
+usage_guidelines:
+  when_to_use:
+    - "To display multiple related content items in limited space"
+    - "For showcasing featured content or images"
+    - "When users should browse through a collection"
+    - "For onboarding or tutorial sequences"
+  when_not_to_use:
+    - "For critical information that must be seen"
+    - "When all content should be immediately visible"
+    - "For single items (use cards or other layouts)"
+    - "When navigation between items is not meaningful"
+  best_practices:
+    - "Provide clear navigation controls"
+    - "Include position indicators for context"
+    - "Ensure content is meaningful in sequence"
+    - "Handle auto-play responsibly (provide pause control)"
+    - "Make panels keyboard accessible"
+  common_mistakes:
+    - "Auto-playing without user control"
+    - "Poor navigation control visibility"
+    - "Not indicating current position"
+    - "Making panels too dense with information"
+code_examples:
+  - title: "Basic Carousel"
+    code: |
+      <div class="slds-carousel">
+            <div class="slds-carousel__stage">
+              <div class="slds-carousel__panels">
+                <div id="panel-01" class="slds-carousel__panel slds-is-active" role="tabpanel" aria-labelledby="indicator-01">
+                  <a href="#" class="slds-carousel__panel-action slds-text-link_reset">
+                    <div class="slds-align_absolute-center">
+                      <h2 class="slds-text-heading_large">Panel 1 Content</h2>
+                    </div>
+                  </a>
+                </div>
+                <div id="panel-02" class="slds-carousel__panel" role="tabpanel" aria-labelledby="indicator-02">
+                  <a href="#" class="slds-carousel__panel-action slds-text-link_reset">
+                    <div class="slds-align_absolute-center">
+                      <h2 class="slds-text-heading_large">Panel 2 Content</h2>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <ul class="slds-carousel__indicators" role="tablist">
+              <li class="slds-carousel__indicator" role="presentation">
+                <a id="indicator-01" class="slds-carousel__indicator-action slds-is-active" href="#panel-01" role="tab" aria-controls="panel-01" aria-selected="true" tabindex="0">
+                  <span class="slds-assistive-text">Panel 1</span>
+                </a>
+              </li>
+              <li class="slds-carousel__indicator" role="presentation">
+                <a id="indicator-02" class="slds-carousel__indicator-action" href="#panel-02" role="tab" aria-controls="panel-02" aria-selected="false" tabindex="-1">
+                  <span class="slds-assistive-text">Panel 2</span>
+                </a>
+              </li>
+            </ul>
+            </div>
+styling_hooks: []
+dependencies:
+  css_files:
+    - "carousel.css"
+  javascript:
+    - "carousel.js"
+  icons: []
+  other_components: []
+related_components:
+  - name: "Tabs"
+    relationship: "similar"
+    description: "Similar panel switching concept"
+  - name: "Cards"
+    relationship: "depends-on"
+    description: "Often used as content within carousel panels"
+  - name: "Images"
+    relationship: "depends-on"
+    description: "Commonly used content type in carousels"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/carousel/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

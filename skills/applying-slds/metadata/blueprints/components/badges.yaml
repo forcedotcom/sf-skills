@@ -1,0 +1,102 @@
+name: "Badges"
+
+description: "Small status descriptors for UI elements that indicate metadata, state, or other contextual information about an item."
+
+category: "Display"
+
+slds_classes:
+  root: "slds-badge"
+  elements: []
+  modifiers:
+    - class: "slds-badge_lightest"
+      description: "Lightest badge variant"
+      usage: "Subtle, low-emphasis status indication"
+    - class: "slds-badge_inverse"
+      description: "Inverse badge for dark backgrounds"
+      usage: "Use on dark or colored backgrounds"
+  states: []
+
+variants:
+  - name: "Base"
+    description: "Standard badge with default styling"
+    classes: ["slds-badge"]
+    usage_context: "Default status or metadata indicator"
+    differences: "Standard gray badge with medium contrast"
+
+styling_hooks:
+  - name: "--slds-c-badge-color-background"
+    description: "Background color for badges"
+    category: "color"
+  - name: "--slds-c-badge-text-color"
+    description: "Text color for badges"
+    category: "color"
+
+lightning_component:
+  name: "lightning-badge"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-badge"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS badge blueprint"
+
+accessibility:
+  keyboard_support:
+    - "No specific keyboard interactions (display-only component)"
+  screen_reader:
+    - "Badge text content announced"
+    - "Context conveyed through proper labeling"
+  aria_attributes:
+    - "aria-label when badge content needs clarification"
+    - "role='status' for dynamic badge updates"
+
+usage_guidelines:
+  when_to_use:
+    - "To indicate status or state of an item"
+    - "For showing counts or quantities"
+    - "To display metadata or categories"
+    - "When you need compact status indicators"
+  when_not_to_use:
+    - "For actionable elements (use buttons instead)"
+    - "For primary content (use regular text instead)"
+    - "When the information is critical (use alerts instead)"
+  best_practices:
+    - "Keep badge text short and descriptive"
+    - "Use consistent badge styling within the same context"
+    - "Choose appropriate variant for the background"
+    - "Provide clear context for what the badge represents"
+  common_mistakes:
+    - "Using badges for interactive elements"
+    - "Making badge text too long or verbose"
+    - "Using too many different badge styles in one interface"
+
+code_examples:
+  - title: "Basic Badge"
+    description: "Basic badge with default styling"
+    code: |
+      <span class="slds-badge">Badge Label</span>
+  - title: "Lightest Badge"
+    description: "Subtle badge for counts or low-emphasis status"
+    code: |
+      <span class="slds-badge slds-badge_lightest">99+</span>
+  - title: "Inverse Badge"
+    description: "Badge for use on dark backgrounds"
+    code: |
+      <span class="slds-badge slds-badge_inverse">Active</span>
+dependencies:
+  css_files: ["badge.css"]
+  javascript: []
+  icons: []
+  other_components: []
+
+related_components:
+  - name: "Pills"
+    relationship: "similar"
+    description: "Similar visual treatment but for removable items"
+  - name: "Icons"
+    relationship: "depends-on"
+    description: "Often used together to enhance meaning"
+
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/badges/"
+
+metadata:
+  version: "1.0.0"
+  last_updated: "2024-12-19"
+  review_status: "complete"

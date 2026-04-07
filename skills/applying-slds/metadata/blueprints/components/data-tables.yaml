@@ -1,0 +1,157 @@
+name: "Data Tables"
+description: "A structured display of data in rows and columns with support for sorting, selection, and various data types, optimized for large datasets."
+category: "Data"
+slds_classes:
+  root: "slds-table"
+  elements:
+    - class: "slds-table_bordered"
+      description: "Table with borders"
+      purpose: "Adds borders for visual separation"
+    - class: "slds-table_striped"
+      description: "Table with alternating row colors"
+      purpose: "Improves readability with striped rows"
+    - class: "slds-table_fixed-layout"
+      description: "Table with fixed layout"
+      purpose: "Consistent column widths for better control"
+    - class: "slds-table_resizable-cols"
+      description: "Table with resizable columns"
+      purpose: "Allows users to resize column widths"
+    - class: "slds-table_col-bordered"
+      description: "Table with column borders"
+      purpose: "Adds vertical borders between columns"
+  modifiers:
+    - class: "slds-table_header-fixed"
+      description: "Fixed table header"
+      usage: "Keep headers visible during scrolling"
+  states:
+    - class: "slds-is-selected"
+      description: "Selected row state"
+      trigger: "Indicates row is selected"
+    - class: "slds-is-sorted"
+      description: "Sorted column state"
+      trigger: "Indicates column is currently sorted"
+variants:
+  - name: "Base"
+    description: "Standard data table"
+    classes:
+      - "slds-table"
+    usage_context: "Default table implementation"
+    differences: "Basic table structure with rows and columns"
+  - name: "Striped"
+    description: "Table with alternating row colors"
+    classes:
+      - "slds-table"
+      - "slds-table_striped"
+    usage_context: "Improved readability for large datasets"
+    differences: "Alternating background colors on rows"
+  - name: "Bordered"
+    description: "Table with borders"
+    classes:
+      - "slds-table"
+      - "slds-table_bordered"
+    usage_context: "Clear visual separation between cells"
+    differences: "Visible borders around all cells"
+lightning_component:
+  name: "lightning-datatable"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-datatable"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS data table blueprint with enhanced functionality"
+accessibility:
+  keyboard_support:
+    - "Tab navigation through interactive elements"
+    - "Arrow keys for cell navigation"
+    - "Enter/Space for cell activation"
+    - "Sorting activation through keyboard"
+  screen_reader:
+    - "Table structure announced with row and column counts"
+    - "Column headers associated with data cells"
+    - "Sort states and changes announced"
+    - "Selection states communicated"
+  aria_attributes:
+    - "role='table' for table container"
+    - "role='columnheader' for header cells"
+    - "role='gridcell' or 'cell' for data cells"
+    - "aria-sort for sortable columns"
+    - "aria-selected for selected rows"
+    - "aria-labelledby for column associations"
+usage_guidelines:
+  when_to_use:
+    - "For displaying structured data with multiple attributes"
+    - "When users need to compare data across rows and columns"
+    - "For large datasets that benefit from sorting and filtering"
+    - "When precise data layout is important"
+  when_not_to_use:
+    - "For simple lists (use list components instead)"
+    - "For unstructured content (use cards or other layouts)"
+    - "When data doesn't fit tabular format well"
+  best_practices:
+    - "Use clear, descriptive column headers"
+    - "Implement sorting for data comparison"
+    - "Provide loading states for async data"
+    - "Support keyboard navigation throughout"
+    - "Consider responsive behavior for mobile"
+    - "Use appropriate data types and formatting"
+  common_mistakes:
+    - "Overloading tables with too many columns"
+    - "Poor mobile responsiveness"
+    - "Inadequate loading and error states"
+    - "Missing keyboard navigation support"
+code_examples:
+  - title: "Basic Data Table"
+    code: |
+      <table class="slds-table slds-table_bordered slds-table_fixed-layout">
+            <thead>
+              <tr class="slds-line-height_reset">
+                <th class="slds-text-title_caps" scope="col">
+                  <div class="slds-truncate" title="Name">Name</div>
+                </th>
+                <th class="slds-text-title_caps" scope="col">
+                  <div class="slds-truncate" title="Account">Account</div>
+                </th>
+                <th class="slds-text-title_caps" scope="col">
+                  <div class="slds-truncate" title="Close Date">Close Date</div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="slds-hint-parent">
+                <td data-label="Name">
+                  <div class="slds-truncate" title="Acme Corp Deal">Acme Corp Deal</div>
+                </td>
+                <td data-label="Account">
+                  <div class="slds-truncate" title="Acme Corporation">Acme Corporation</div>
+                </td>
+                <td data-label="Close Date">
+                  <div class="slds-truncate" title="12/31/2024">12/31/2024</div>
+                </td>
+              </tr>
+            </tbody>
+            </table>
+styling_hooks: []
+dependencies:
+  css_files:
+    - "table.css"
+    - "truncate.css"
+  javascript:
+    - "table.js (for sorting, selection)"
+  icons:
+    - "utility-sprite.svg"
+  other_components:
+    - "truncate"
+    - "icons"
+related_components:
+  - name: "Tree Grid"
+    relationship: "similar"
+    description: "Hierarchical data table variant"
+  - name: "List"
+    relationship: "alternative"
+    description: "Alternative for simpler data display"
+  - name: "Cards"
+    relationship: "alternative"
+    description: "Alternative layout for complex data items"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/data-tables/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

@@ -1,0 +1,136 @@
+name: Combobox
+description: A composite input control that combines a text input with a dropdown list, allowing users to either type or select
+  from predefined options.
+category: Input
+slds_classes:
+  root: slds-combobox_container
+  elements:
+  - class: slds-combobox
+    description: Main combobox wrapper
+    purpose: Contains the input and dropdown components
+  - class: slds-combobox__form-element
+    description: Form element wrapper for the input
+    purpose: Provides form styling and structure
+  - class: slds-combobox__input
+    description: Text input element
+    purpose: Allows typing and displays selected value
+  - class: slds-combobox__input-entity-icon
+    description: Icon for the selected entity
+    purpose: Visual indicator for selected item type
+  - class: slds-listbox
+    description: Dropdown list container
+    purpose: Contains the selectable options
+  - class: slds-listbox__option
+    description: Individual option in the dropdown
+    purpose: Represents a selectable item
+  - class: slds-listbox__option-meta
+    description: Additional metadata for an option
+    purpose: Contains supplementary option information
+  modifiers:
+  - class: slds-is-open
+    description: Open state for the dropdown
+    usage: When the dropdown list is visible
+  - class: slds-has-focus
+    description: Focus state styling
+    usage: When the combobox has keyboard focus
+  states:
+  - class: slds-has-error
+    description: Error state styling
+    trigger: When combobox validation fails
+variants:
+- name: Base
+  description: Standard combobox with dropdown options
+  classes:
+  - slds-combobox_container
+  usage_context: Default combobox implementation
+  differences: Text input with dropdown list of options
+lightning_component:
+  name: lightning-combobox
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-combobox
+  mapping_notes: Direct mapping - Lightning component implements SLDS combobox blueprint
+accessibility:
+  keyboard_support:
+  - Tab to focus the combobox
+  - Arrow keys to navigate dropdown options
+  - Enter to select highlighted option
+  - Escape to close dropdown
+  - Type to filter options
+  screen_reader:
+  - Combobox role and state announced
+  - Option count and current selection announced
+  - Filtered results communicated
+  aria_attributes:
+  - role='combobox' on input element
+  - aria-expanded to indicate dropdown state
+  - aria-activedescendant for current option
+  - aria-autocomplete for input behavior
+  - role='listbox' for dropdown container
+  - role='option' for individual items
+usage_guidelines:
+  when_to_use:
+  - When users need to select from a large list of options
+  - For autocomplete or search functionality
+  - When typing to filter is beneficial
+  - For lookups and entity selection
+  when_not_to_use:
+  - For small, fixed lists (use select instead)
+  - When only pre-defined options are allowed (use select)
+  - For binary choices (use checkbox or radio)
+  best_practices:
+  - Provide helpful placeholder text
+  - Show option count when filtering
+  - Include clear visual feedback for selection
+  - Handle empty states gracefully
+  - Support keyboard navigation completely
+  common_mistakes:
+  - Not providing keyboard navigation
+  - Unclear filtering behavior
+  - Poor empty state handling
+  - Inadequate loading states
+code_examples:
+- title: Basic Combobox
+  code: "<div class=\"slds-combobox_container\">\n      <div class=\"slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click\"\
+    \ role=\"combobox\" aria-expanded=\"false\" aria-haspopup=\"listbox\">\n        <div class=\"slds-combobox__form-element\
+    \ slds-input-has-icon slds-input-has-icon_right\">\n          <input type=\"text\" class=\"slds-input slds-combobox__input\"\
+    \ role=\"textbox\" placeholder=\"Select an option...\" readonly />\n          <span class=\"slds-icon_container slds-icon-utility-down\
+    \ slds-input__icon slds-input__icon_right\">\n            <svg class=\"slds-icon slds-icon slds-icon_x-small\" aria-hidden=\"\
+    true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#down\"></use>\n            </svg>\n\
+    \          </span>\n        </div>\n        <div class=\"slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid\" role=\"\
+    listbox\">\n          <ul class=\"slds-listbox slds-listbox_vertical\">\n            <li role=\"presentation\" class=\"\
+    \">\n              <div class=\"slds-media slds-listbox__option slds-listbox__option_plain\" role=\"option\">\n      \
+    \          <span class=\"slds-media__body\">\n                  <span class=\"slds-listbox__option-text_entity\">Option\
+    \ One</span>\n                </span>\n              </div>\n            </li>\n          </ul>\n        </div>\n    \
+    \  </div>\n      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - combobox.css
+  - listbox.css
+  - dropdown.css
+  - input.css
+  javascript:
+  - combobox.js
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - input
+  - listbox
+  - dropdown
+  - icons
+related_components:
+- name: Select
+  relationship: alternative
+  description: For smaller, fixed option lists
+- name: Lookup
+  relationship: similar
+  description: Similar search and select pattern
+- name: Picklist
+  relationship: alternative
+  description: Alternative selection control
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/combobox/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

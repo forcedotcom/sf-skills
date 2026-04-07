@@ -1,0 +1,111 @@
+name: Timepicker
+description: Input controls that allow users to select time values through a dropdown interface with hours, minutes, and optional
+  AM/PM selection.
+category: Input
+slds_classes:
+  root: ''
+  elements: []
+  modifiers: []
+  states:
+  - class: slds-is-selected
+    description: Selected time state
+    trigger: Currently selected time option
+variants:
+- name: Base
+  description: Standard time selection dropdown
+  classes: []
+  usage_context: Default timepicker for time value selection
+  differences: Dropdown list with predefined time options
+lightning_component:
+  name: lightning-input (type='time')
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-input
+  mapping_notes: Mapped through lightning-input with type='time' which provides native time picker
+accessibility:
+  keyboard_support:
+  - Tab to focus timepicker input
+  - Arrow keys to navigate time options
+  - Enter/Space to select time
+  - Type to filter time options
+  screen_reader:
+  - Current time value announced
+  - Time options list communicated
+  - Selection changes announced
+  - Time format clearly communicated
+  aria_attributes:
+  - role='listbox' for time options container
+  - role='option' for individual time slots
+  - aria-selected for chosen time
+  - aria-label for time selection purpose
+  - aria-expanded for dropdown state
+usage_guidelines:
+  when_to_use:
+  - For time selection in forms
+  - When specific time precision is needed
+  - For scheduling or appointment interfaces
+  - When time constraints or ranges apply
+  when_not_to_use:
+  - For approximate times (use text input)
+  - When time precision is not important
+  - For duration selection (use different controls)
+  best_practices:
+  - Use appropriate time increments (15min, 30min, etc.)
+  - Provide clear time format indication
+  - Support both keyboard and mouse interaction
+  - Handle time zone considerations appropriately
+  - Show current selection clearly
+  common_mistakes:
+  - Using inappropriate time increments
+  - Poor time format handling
+  - Not considering time zone implications
+  - Unclear selection feedback
+code_examples:
+- title: Basic Timepicker
+  code: "<div class=\"slds-form-element\">\n      <label class=\"slds-form-element__label\" for=\"timepicker-id\">\n     \
+    \   Time\n      </label>\n      <div class=\"slds-form-element__control\">\n        <div class=\"slds-combobox_container\"\
+    >\n          <div class=\"slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click\" role=\"combobox\" aria-expanded=\"\
+    false\" aria-haspopup=\"listbox\">\n            <div class=\"slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right\"\
+    >\n              <input type=\"text\" class=\"slds-input slds-combobox__input\" value=\"9:00 AM\" readonly />\n      \
+    \        <span class=\"slds-icon_container slds-icon-utility-clock slds-input__icon slds-input__icon_right\">\n      \
+    \          <svg class=\"slds-icon slds-icon_x-small\" aria-hidden=\"true\">\n                  <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#clock\"\
+    ></use>\n                </svg>\n              </span>\n            </div>\n            <div class=\"slds-dropdown slds-dropdown_length-5\
+    \ slds-dropdown_fluid\" role=\"listbox\">\n              <ul class=\"slds-listbox slds-listbox_vertical\">\n         \
+    \       <li role=\"presentation\" class=\"\">\n                  <div class=\"slds-media slds-listbox__option slds-listbox__option_plain\"\
+    \ role=\"option\" aria-selected=\"true\">\n                    <span class=\"slds-media__body\">9:00 AM</span>\n     \
+    \             </div>\n                </li>\n                <li role=\"presentation\" class=\"\">\n                 \
+    \ <div class=\"slds-media slds-listbox__option slds-listbox__option_plain\" role=\"option\">\n                    <span\
+    \ class=\"slds-media__body\">9:15 AM</span>\n                  </div>\n                </li>\n                <li role=\"\
+    presentation\" class=\"\">\n                  <div class=\"slds-media slds-listbox__option slds-listbox__option_plain\"\
+    \ role=\"option\">\n                    <span class=\"slds-media__body\">9:30 AM</span>\n                  </div>\n  \
+    \              </li>\n              </ul>\n            </div>\n          </div>\n        </div>\n      </div>\n      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - timepicker.css
+  - combobox.css
+  - listbox.css
+  javascript:
+  - timepicker.js
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - combobox
+  - listbox
+  - input
+  - icons
+related_components:
+- name: Datepickers
+  relationship: similar
+  description: Complementary component for date selection
+- name: Datetime Picker
+  relationship: parent
+  description: Combined date and time selection component
+- name: Input
+  relationship: alternative
+  description: Alternative for manual time entry
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/timepicker/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

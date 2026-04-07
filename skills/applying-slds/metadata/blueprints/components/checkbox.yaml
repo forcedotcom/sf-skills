@@ -1,0 +1,108 @@
+name: Checkbox
+description: An input control that allows users to select one or more options from a set, providing binary choice selection
+  with clear visual feedback.
+category: Input
+slds_classes:
+  root: slds-checkbox
+  elements:
+  - class: slds-checkbox__label
+    description: Label element for the checkbox
+    purpose: Provides clickable area and describes the option
+  modifiers: []
+  states:
+  - class: slds-has-error
+    description: Error state styling
+    trigger: When checkbox validation fails
+  - class: slds-is-disabled
+    description: Disabled state styling
+    trigger: When checkbox is not interactive
+variants:
+- name: Base
+  description: Standard checkbox input
+  classes:
+  - slds-checkbox
+  usage_context: Default checkbox implementation
+  differences: Standard checkbox with label and custom styling
+lightning_component:
+  name: lightning-input (type='checkbox')
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-input
+  mapping_notes: Mapped through lightning-input with type='checkbox'
+accessibility:
+  keyboard_support:
+  - Tab to focus the checkbox
+  - Space to toggle checkbox state
+  - Enter may toggle in some contexts
+  screen_reader:
+  - Checkbox state announced (checked/unchecked)
+  - Label text read with the checkbox
+  - Error messages associated and announced
+  aria_attributes:
+  - aria-describedby for error messages
+  - aria-invalid when validation fails
+  - aria-required for required checkboxes
+usage_guidelines:
+  when_to_use:
+  - For binary choices (yes/no, true/false)
+  - When users can select multiple options
+  - For toggling features or settings
+  - In forms where multiple selections are allowed
+  when_not_to_use:
+  - For mutually exclusive options (use radio buttons)
+  - When only one option can be selected
+  - For actions (use buttons instead)
+  best_practices:
+  - Use clear, descriptive labels
+  - Group related checkboxes logically
+  - Provide immediate feedback for state changes
+  - Use consistent checkbox styling throughout the interface
+  - Ensure adequate touch target size
+  common_mistakes:
+  - Using checkboxes for mutually exclusive options
+  - Making labels too long or unclear
+  - Not providing feedback for state changes
+  - Using checkboxes for actions instead of selections
+code_examples:
+- title: Basic Checkbox
+  code: "<div class=\"slds-form-element\">\n      <div class=\"slds-form-element__control\">\n        <div class=\"slds-checkbox\"\
+    >\n          <input type=\"checkbox\" name=\"options\" id=\"checkbox-1\" value=\"option1\" />\n          <label class=\"\
+    slds-checkbox__label\" for=\"checkbox-1\">\n            <span class=\"\"></span>\n            <span class=\"slds-form-element__label\"\
+    >Accept terms and conditions</span>\n          </label>\n        </div>\n      </div>\n      </div>\n"
+- title: Checkbox with Error
+  code: "<div class=\"slds-form-element slds-has-error\">\n      <div class=\"slds-form-element__control\">\n        <div\
+    \ class=\"slds-checkbox\">\n          <input type=\"checkbox\" name=\"options\" id=\"checkbox-error\" value=\"option1\"\
+    \ aria-describedby=\"checkbox-error-message\" />\n          <label class=\"slds-checkbox__label\" for=\"checkbox-error\"\
+    >\n            <span class=\"\"></span>\n            <span class=\"slds-form-element__label\">Required checkbox</span>\n\
+    \          </label>\n        </div>\n      </div>\n      <div id=\"checkbox-error-message\" class=\"slds-form-element__help\"\
+    >This field is required</div>\n      </div>\n"
+styling_hooks:
+- name: --slds-c-checkbox-color-background
+  description: Background color for checkbox
+  category: color
+- name: --slds-c-checkbox-color-border
+  description: Border color for checkbox
+  category: color
+dependencies:
+  css_files:
+  - checkbox.css
+  - form-element.css
+  javascript: []
+  icons: []
+  other_components:
+  - form-element
+related_components:
+- name: Radio Group
+  relationship: alternative
+  description: For mutually exclusive options
+- name: Checkbox Group
+  relationship: container
+  description: Multiple checkboxes grouped together
+- name: Toggle
+  relationship: similar
+  description: Alternative binary input control
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/checkbox/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

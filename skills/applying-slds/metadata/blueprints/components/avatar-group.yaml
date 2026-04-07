@@ -1,0 +1,81 @@
+name: Avatar Group
+description: A collection of avatars displayed together, typically used to show multiple users or entities associated with
+  a record or activity.
+category: Display
+slds_classes:
+  root: slds-avatar-group
+  elements: []
+  modifiers:
+  - class: slds-avatar-group_small
+    description: Small avatar group variant
+    usage: Use when space is limited
+  - class: slds-avatar-group_medium
+    description: Medium avatar group variant (default)
+    usage: Default size for most use cases
+  - class: slds-avatar-group_large
+    description: Large avatar group variant
+    usage: Use for prominence or when space allows
+  states: []
+variants:
+- name: Base
+  description: Standard avatar group with overlapping avatars
+  classes:
+  - slds-avatar-group
+  usage_context: Default implementation for multiple user representation
+  differences: Overlapping circular avatars with proper spacing
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component equivalent - typically built using multiple lightning-avatar components
+accessibility:
+  keyboard_support:
+  - Tab navigation through interactive avatars if clickable
+  screen_reader:
+  - List structure conveyed through proper markup
+  - Individual avatar labels announced
+  aria_attributes:
+  - role='list' for the avatar group container
+  - role='listitem' for individual avatar items
+usage_guidelines:
+  when_to_use:
+  - To show multiple users associated with a record
+  - For team or collaboration indicators
+  - When displaying attendees or participants
+  when_not_to_use:
+  - For single users (use individual avatar instead)
+  - When space doesn't allow for proper overlap visualization
+  best_practices:
+  - Limit to 3-5 visible avatars for optimal readability
+  - Show additional count for larger groups
+  - Maintain consistent avatar sizes within the group
+  common_mistakes:
+  - Showing too many avatars without grouping or count
+  - Inconsistent avatar sizes within the group
+code_examples:
+- title: Basic Avatar Group
+  description: Basic avatar group with two users
+  code: "<div class=\"slds-avatar-group slds-avatar-group_medium\">\n      <ul class=\"\">\n        <li class=\"\">\n    \
+    \      <span class=\"slds-avatar slds-avatar_medium\">\n            <img alt=\"John Doe\" src=\"/assets/images/avatar1.jpg\"\
+    \ class=\"\" />\n          </span>\n        </li>\n        <li class=\"\">\n          <span class=\"slds-avatar slds-avatar_medium\"\
+    >\n            <img alt=\"Jane Smith\" src=\"/assets/images/avatar2.jpg\" class=\"\" />\n          </span>\n        </li>\n\
+    \      </ul>\n      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - avatar-group.css
+  - avatar.css
+  javascript: []
+  icons: []
+  other_components:
+  - avatar
+related_components:
+- name: Avatar
+  relationship: depends-on
+  description: Individual avatars that make up the group
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/avatar-group/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

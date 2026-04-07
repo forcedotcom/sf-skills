@@ -1,0 +1,175 @@
+name: Docked Utility Bar
+description: A persistent utility panel that remains docked at the bottom or side of the screen, providing quick access to
+  frequently used tools, actions, and information without interrupting the primary workflow.
+category: Actions
+slds_classes:
+  root: slds-utility-bar_container
+  elements:
+  - class: slds-utility-bar
+    description: Fixed bar at the bottom of viewport that contains items
+    purpose: Main utility bar element with fixed positioning and background
+  - class: slds-utility-bar__item
+    description: Individual utility item that invokes specific utility bar panel
+    purpose: Represents a single utility tool or action
+  - class: slds-utility-bar__action
+    description: Action button within utility bar
+    purpose: Interactive element for utility functions
+  - class: slds-utility-bar__text
+    description: Text content within utility bar actions
+    purpose: Contains label text for utility actions
+  modifiers:
+  - class: slds-utility-bar__item_pop-out
+    description: Modifier for utility item with panel popped out in new window
+    usage: When utility panel is opened in a separate window
+  states:
+  - class: slds-is-active
+    description: Active utility action state
+    trigger: Applied to currently active utility action
+  - class: slds-indicator_unread
+    description: Unread notification indicator
+    trigger: Applied when utility has unread notifications
+variants:
+- name: Base
+  description: Standard docked utility bar fixed at bottom of viewport
+  classes:
+  - slds-utility-bar_container
+  - slds-utility-bar
+  usage_context: Default implementation for utility access
+  differences: Fixed horizontal utility bar at bottom of screen
+- name: With Pop-out
+  description: Utility bar item with panel popped out in new window
+  classes:
+  - slds-utility-bar__item
+  - slds-utility-bar__item_pop-out
+  usage_context: When utility panel is opened in a separate window
+  differences: Visual indicator showing panel is popped out
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component equivalent - typically implemented using custom components with lightning-button-group
+    patterns
+accessibility:
+  keyboard_support:
+  - Tab navigation through utility items
+  - Enter/Space to activate utility actions
+  - Arrow keys for utility bar navigation
+  - Escape to close expanded panels
+  screen_reader:
+  - Utility bar purpose and items announced
+  - Panel expansion state communicated
+  - Utility actions clearly described
+  aria_attributes:
+  - role='toolbar' for utility bar container
+  - role='button' for utility actions
+  - aria-expanded for expandable utilities
+  - aria-label for utility descriptions
+  - aria-controls for panel relationships
+usage_guidelines:
+  when_to_use:
+  - For frequently accessed tools and utilities
+  - When users need persistent access to functions
+  - For secondary tools that support primary workflows
+  - To provide quick actions without navigation
+  when_not_to_use:
+  - For primary navigation (use main navigation)
+  - For infrequently used features
+  - When screen space is severely limited
+  best_practices:
+  - Include only essential utilities
+  - Provide clear icons and labels
+  - Allow customization of utility order
+  - Handle responsive behavior gracefully
+  - Maintain consistent interaction patterns
+  common_mistakes:
+  - Overcrowding with too many utilities
+  - Unclear or ambiguous utility icons
+  - Poor responsive behavior on small screens
+  - Inconsistent interaction patterns
+code_examples:
+- title: Basic Docked Utility Bar
+  description: Standard utility bar with common tools and actions
+  code: "<div class=\"\" role=\"toolbar\" aria-label=\"Utility tools\">\n      <div class=\"\">\n        <div class=\"\">\n\
+    \          <button class=\"slds-button slds-button_icon\" aria-expanded=\"false\" aria-controls=\"utility-panel-1\" title=\"\
+    Notes\">\n            <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#note\"\
+    ></use>\n            </svg>\n            <span class=\"slds-assistive-text\">Open notes utility</span>\n          </button>\n\
+    \        </div>\n        <div class=\"\">\n          <button class=\"slds-button slds-button_icon slds-is-active\" aria-expanded=\"\
+    true\" aria-controls=\"utility-panel-2\" title=\"Calculator\">\n            <svg class=\"slds-button__icon\" aria-hidden=\"\
+    true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#calculator\"></use>\n          \
+    \  </svg>\n            <span class=\"slds-assistive-text\">Open calculator utility</span>\n          </button>\n     \
+    \   </div>\n        <div class=\"\">\n          <button class=\"slds-button slds-button_icon\" aria-expanded=\"false\"\
+    \ aria-controls=\"utility-panel-3\" title=\"Timer\">\n            <svg class=\"slds-button__icon\" aria-hidden=\"true\"\
+    >\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#clock\"></use>\n            </svg>\n \
+    \           <span class=\"slds-assistive-text\">Open timer utility</span>\n          </button>\n        </div>\n     \
+    \   <div class=\"\">\n          <button class=\"slds-button slds-button_icon\" title=\"Help\">\n            <svg class=\"\
+    slds-button__icon\" aria-hidden=\"true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#help\"\
+    ></use>\n            </svg>\n            <span class=\"slds-assistive-text\">Open help</span>\n          </button>\n \
+    \       </div>\n      </div>\n      </div>\n"
+- title: Utility Bar with Expanded Panel
+  description: Utility bar with an expanded utility panel showing detailed content
+  code: "<div class=\"slds-is-open\" role=\"toolbar\" aria-label=\"Utility tools\">\n      <div class=\"\" id=\"utility-panel-calculator\"\
+    \ role=\"dialog\" aria-labelledby=\"panel-title\">\n        <header class=\"\">\n          <h2 id=\"panel-title\" class=\"\
+    slds-text-heading_small\">Calculator</h2>\n          <button class=\"slds-button slds-button_icon slds-button_icon-border\"\
+    \ title=\"Close\">\n            <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n              <use xlink:href=\"\
+    /assets/icons/utility-sprite/svg/symbols.svg#close\"></use>\n            </svg>\n            <span class=\"slds-assistive-text\"\
+    >Close calculator</span>\n          </button>\n        </header>\n        <div class=\"\">\n          <div class=\"slds-grid\
+    \ slds-grid_vertical\">\n            <div class=\"slds-col\">\n              <input type=\"text\" class=\"slds-input slds-text-align_right\"\
+    \ value=\"0\" readonly aria-label=\"Calculator display\">\n            </div>\n            <div class=\"slds-col slds-m-top_small\"\
+    >\n              <div class=\"slds-grid slds-wrap\">\n                <div class=\"slds-col slds-size_1-of-4 slds-p-around_xx-small\"\
+    >\n                  <button class=\"slds-button slds-button_neutral slds-size_1-of-1\">7</button>\n                </div>\n\
+    \                <div class=\"slds-col slds-size_1-of-4 slds-p-around_xx-small\">\n                  <button class=\"\
+    slds-button slds-button_neutral slds-size_1-of-1\">8</button>\n                </div>\n                <div class=\"slds-col\
+    \ slds-size_1-of-4 slds-p-around_xx-small\">\n                  <button class=\"slds-button slds-button_neutral slds-size_1-of-1\"\
+    >9</button>\n                </div>\n                <div class=\"slds-col slds-size_1-of-4 slds-p-around_xx-small\">\n\
+    \                  <button class=\"slds-button slds-button_brand slds-size_1-of-1\">÷</button>\n                </div>\n\
+    \              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n      <div class=\"\">\n  \
+    \      <div class=\"\">\n          <button class=\"slds-button slds-button_icon\" title=\"Notes\">\n            <svg class=\"\
+    slds-button__icon\" aria-hidden=\"true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#note\"\
+    ></use>\n            </svg>\n            <span class=\"slds-assistive-text\">Notes</span>\n          </button>\n     \
+    \   </div>\n        <div class=\"\">\n          <button class=\"slds-button slds-button_icon slds-is-active\" aria-expanded=\"\
+    true\" title=\"Calculator\">\n            <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n              <use xlink:href=\"\
+    /assets/icons/utility-sprite/svg/symbols.svg#calculator\"></use>\n            </svg>\n            <span class=\"slds-assistive-text\"\
+    >Calculator (Active)</span>\n          </button>\n        </div>\n      </div>\n      </div>\n"
+- title: Vertical Utility Bar
+  description: Vertically oriented utility bar for side placement
+  code: "<div class=\"\" role=\"toolbar\" aria-label=\"Utility tools\">\n      <div class=\"\">\n        <div class=\"\">\n\
+    \          <button class=\"slds-button slds-button_icon\" title=\"Bookmarks\">\n            <svg class=\"slds-button__icon\"\
+    \ aria-hidden=\"true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#bookmark\"></use>\n\
+    \            </svg>\n            <span class=\"slds-assistive-text\">Bookmarks</span>\n          </button>\n        </div>\n\
+    \        <div class=\"\">\n          <button class=\"slds-button slds-button_icon\" title=\"Recent Items\">\n        \
+    \    <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#recent\"\
+    ></use>\n            </svg>\n            <span class=\"slds-assistive-text\">Recent Items</span>\n          </button>\n\
+    \        </div>\n        <div class=\"\">\n          <button class=\"slds-button slds-button_icon\" title=\"Search\">\n\
+    \            <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#search\"\
+    ></use>\n            </svg>\n            <span class=\"slds-assistive-text\">Search</span>\n          </button>\n    \
+    \    </div>\n      </div>\n      </div>\n"
+dependencies:
+  css_files:
+  - docked-utility-bar.css
+  - button.css
+  - grid.css
+  - panel.css
+  javascript:
+  - docked-utility-bar.js
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - button
+  - grid
+  - panel
+related_components:
+- name: Docked Composer
+  relationship: similar
+  description: Similar docked interface concept
+- name: Global Header
+  relationship: alternative
+  description: Alternative location for utility access
+- name: Button Group
+  relationship: depends-on
+  description: Uses button group patterns for utility items
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/docked-utility-bar/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'
