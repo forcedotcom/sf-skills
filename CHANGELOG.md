@@ -1,3 +1,12 @@
+## [1.6.8](https://github.com/forcedotcom/afv-library/compare/1.6.7...1.6.8) (2026-04-07)
+
+
+### Bug Fixes
+
+* trigger ui-bundle skill for React app prompts @W-21916680@ ([#175](https://github.com/forcedotcom/afv-library/issues/175)) ([1806c89](https://github.com/forcedotcom/afv-library/commit/1806c89b28a889de8292be62e751acb75a680d6b))
+
+
+
 ## [1.6.7](https://github.com/forcedotcom/afv-library/compare/1.6.6...1.6.7) (2026-04-03)
 
 
