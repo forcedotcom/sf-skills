@@ -256,10 +256,10 @@ The linter catches hardcoded values, class overrides, and deprecated tokens. **F
 **Step 4 (optional): Run the full quality audit** for a scored report before code review or deployment:
 
 ```bash
-node <auditing-slds-quality>/scripts/analyze-quality.cjs <component-path>
+node <validating-slds>/scripts/analyze-quality.cjs <component-path>
 ```
 
-Or invoke the [auditing-slds-quality](../auditing-slds-quality/) skill. Target a B grade (≥80) or higher before marking work complete.
+Or invoke the [validating-slds](../validating-slds/) skill. Target a B grade (≥80) or higher before marking work complete.
 
 ---
 
@@ -310,7 +310,7 @@ See [examples.md](examples.md) for worked examples demonstrating the full workfl
 
 ## Validation
 
-See [checklists.md](checklists.md) for validation checklists aligned with the [auditing-slds-quality](../auditing-slds-quality/) skill.
+See [checklists.md](checklists.md) for validation checklists aligned with the [validating-slds](../validating-slds/) skill.
 
 ## Resources
 

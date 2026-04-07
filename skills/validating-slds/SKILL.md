@@ -1,5 +1,5 @@
 ---
-name: auditing-slds-quality
+name: validating-slds
 description: >-
   Audit Lightning Web Components for SLDS compliance and produce a scored quality
   report. Runs the SLDS linter, analyzes CSS for theming hook usage and pairing,

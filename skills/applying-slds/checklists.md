@@ -1,6 +1,6 @@
 # Validation Checklists
 
-Run through these checks before finalizing any SLDS-authored component. Check IDs align with the [auditing-slds-quality](../auditing-slds-quality/) skill's quality-checks.md.
+Run through these checks before finalizing any SLDS-authored component. Check IDs align with the [validating-slds](../validating-slds/) skill's quality-checks.md.
 
 ---
 
