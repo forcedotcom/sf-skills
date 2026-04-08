@@ -8,3 +8,28 @@ on:
 jobs:
   pr-title:
     uses: salesforcecli/github-workflows/.github/workflows/validatePR.yml@main
+
+  conventional-commit-title:
+    name: Validate Conventional Commit Title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR title format
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          if ! echo "$PR_TITLE" | grep -qP '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([^)]+\))?(!)?: .+$'; then
+            echo "PR title does not match Conventional Commits format."
+            echo ""
+            echo "Expected: <type>(<scope>): <description>"
+            echo "  Types: build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test"
+            echo "  Breaking change: append '!' before the colon"
+            echo ""
+            echo "Examples:"
+            echo "  feat(auth): add OAuth2 support"
+            echo "  fix: resolve null pointer in parser"
+            echo "  feat!: drop support for Node 14"
+            echo ""
+            echo "Got: $PR_TITLE"
+            exit 1
+          fi
+          echo "PR title matches Conventional Commits format."

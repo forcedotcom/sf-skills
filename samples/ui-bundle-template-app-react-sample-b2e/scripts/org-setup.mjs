@@ -14,10 +14,22 @@
  *   1. login     — sf org login web only if org not already connected (skip with --skip-login)
  *   2. uiBundle  — (all UI bundles) npm install && npm run build so dist exists for deploy (skip with --skip-ui-bundle-build)
  *   3. deploy    — sf project deploy start --target-org <alias> (requires dist for entity deployment)
- *   4. permset   — sf org assign permset for each *.permissionset-meta.xml (skip with --skip-permset; override via --permset-name)
+ *   4. permset   — assign permsets per org-setup.config.json (skip with --skip-permset; override via --permset-name)
  *   5. data      — prepare unique fields + sf data import tree (skipped if no data dir/plan)
  *   6. graphql   — (in UI bundle) npm run graphql:schema then npm run graphql:codegen
  *   7. dev       — (in UI bundle) npm run dev — launch dev server (skip with --skip-dev)
+ *
+ * Permset assignment config (scripts/org-setup.config.json):
+ *   {
+ *     "permsetAssignments": {
+ *       "defaultAssignee": "currentUser",
+ *       "assignments": {
+ *         "Guest_Permset": { "assignee": "guest@mysite.example.com" },
+ *         "Internal_Only": { "assignee": "skip" }
+ *       }
+ *     }
+ *   }
+ *   Assignee values: "currentUser" (default), "skip", or a specific username.
  */
 
 import { spawnSync } from 'node:child_process';
@@ -127,6 +139,20 @@ Options:
   --skip-dev             Do not launch the dev server at the end
   -y, --yes              Skip interactive step picker; run all enabled steps immediately
   -h, --help             Show this help
+
+Permset config (scripts/org-setup.config.json):
+  Control per-permset assignment via a config file. Example:
+    {
+      "permsetAssignments": {
+        "defaultAssignee": "currentUser",
+        "assignments": {
+          "Guest_Permset": { "assignee": "guest@mysite.example.com" },
+          "Internal_Only": { "assignee": "skip" }
+        }
+      }
+    }
+  Assignee values: "currentUser" (default), "skip", or a specific username.
+  Without this file, all discovered permsets are assigned to the current user.
 `);
       process.exit(0);
     }
@@ -179,6 +205,51 @@ function discoverPermissionSetNames() {
     if (m) names.push(m[1]);
   }
   return names.sort();
+}
+
+/**
+ * Load permset assignment configuration from org-setup.config.json.
+ *
+ * Config shape:
+ *   {
+ *     "permsetAssignments": {
+ *       "defaultAssignee": "currentUser",          // "currentUser" (default) or "skip"
+ *       "assignments": {
+ *         "My_Guest_Permset": { "assignee": "guest@mysite.example.com" },
+ *         "Internal_Only":    { "assignee": "skip" }
+ *       }
+ *     }
+ *   }
+ *
+ * Assignee values:
+ *   "currentUser" — assign to the user running the script (default)
+ *   "skip"        — do not assign this permset
+ *   "<username>"  — assign to a specific user via --on-behalf-of
+ *
+ * Returns { defaultAssignee: string, assignments: Record<string, { assignee: string }> }
+ */
+function loadPermsetConfig() {
+  const configPath = resolve(__dirname, 'org-setup.config.json');
+  const defaults = { defaultAssignee: 'currentUser', assignments: {} };
+  if (!existsSync(configPath)) return defaults;
+  try {
+    const raw = JSON.parse(readFileSync(configPath, 'utf8'));
+    const section = raw?.permsetAssignments;
+    if (!section) return defaults;
+    return {
+      defaultAssignee: section.defaultAssignee || 'currentUser',
+      assignments: section.assignments || {},
+    };
+  } catch (err) {
+    console.warn(`Warning: failed to parse org-setup.config.json: ${err.message}; using defaults.`);
+    return defaults;
+  }
+}
+
+/** Resolve the effective assignee for a given permset name. */
+function resolveAssignee(permsetName, permsetConfig) {
+  const override = permsetConfig.assignments[permsetName];
+  return override?.assignee || permsetConfig.defaultAssignee;
 }
 
 function isOrgConnected(targetOrg) {
@@ -422,28 +493,35 @@ async function main() {
   }
 
   if (!skipPermset) {
+    const permsetConfig = loadPermsetConfig();
     if (permsetNames.length === 0) {
       console.log('\n--- Assign permission sets ---');
       console.log('No permission sets found under permissionsets/ and none passed via --permset-name; skipping.');
     } else {
       console.log('\n--- Assign permission sets ---');
       for (const permsetName of permsetNames) {
-        const permsetResult = spawnSync(
-          'sf',
-          ['org', 'assign', 'permset', '--name', permsetName, '--target-org', targetOrg],
-          {
-            cwd: ROOT,
-            stdio: 'pipe',
-            shell: true,
-          }
-        );
+        const assignee = resolveAssignee(permsetName, permsetConfig);
+        if (assignee === 'skip') {
+          console.log(`Permission set "${permsetName}" — skipped (config).`);
+          continue;
+        }
+        const sfArgs = ['org', 'assign', 'permset', '--name', permsetName, '--target-org', targetOrg];
+        if (assignee !== 'currentUser') {
+          sfArgs.push('--on-behalf-of', assignee);
+        }
+        const assigneeLabel = assignee === 'currentUser' ? 'current user' : assignee;
+        const permsetResult = spawnSync('sf', sfArgs, {
+          cwd: ROOT,
+          stdio: 'pipe',
+          shell: true,
+        });
         if (permsetResult.status === 0) {
-          console.log(`Permission set "${permsetName}" assigned.`);
+          console.log(`Permission set "${permsetName}" assigned to ${assigneeLabel}.`);
         } else {
           const out =
             (permsetResult.stderr?.toString() || '') + (permsetResult.stdout?.toString() || '');
           if (out.includes('Duplicate') && out.includes('PermissionSet')) {
-            console.log(`Permission set "${permsetName}" already assigned; skipping.`);
+            console.log(`Permission set "${permsetName}" already assigned to ${assigneeLabel}; skipping.`);
           } else if (out.includes('not found') && out.includes('target org')) {
             console.log(`Permission set "${permsetName}" not in org; skipping.`);
           } else {

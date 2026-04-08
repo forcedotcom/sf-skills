@@ -68,6 +68,61 @@ if (fs.existsSync(licensePath)) {
   fs.copyFileSync(licensePath, path.join(SAMPLE_DIR, 'LICENSE.txt'));
 }
 
+// Write .gitignore for the sample project
+const gitignoreContent = `# This file is used for Git repositories to specify intentionally untracked files that Git should ignore.
+# If you are not using git, you can delete this file. For more information see: https://git-scm.com/docs/gitignore
+# For useful gitignore templates see: https://github.com/github/gitignore
+
+# Salesforce cache
+.sf/
+.sfdx/
+.localdevserver/
+deploy-options.json
+
+# LWC VSCode autocomplete
+**/lwc/jsconfig.json
+
+# LWC Jest coverage reports
+coverage/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+
+# Eslint cache
+.eslintcache
+
+# MacOS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Local environment variables
+.env
+
+# Python Salesforce Functions
+**/__pycache__/
+**/.venv/
+**/venv/
+`;
+fs.writeFileSync(path.join(SAMPLE_DIR, '.gitignore'), gitignoreContent, 'utf8');
+
+// Generate package-lock.json for the uiBundle
+const { execSync } = require('child_process');
+const uiBundleDir = path.join(SAMPLE_DIR, 'force-app', 'main', 'default', 'uiBundles', 'propertyrentalapp');
+console.log(`Generating package-lock.json for uiBundles/propertyrentalapp`);
+execSync('npm install --package-lock-only --ignore-scripts', { cwd: uiBundleDir, stdio: 'inherit' });
+
 // Write .version for version tracking (used by workflow and local)
 fs.writeFileSync(path.join(SAMPLE_DIR, '.version'), version + '\n', 'utf8');
 

@@ -113,6 +113,7 @@ async function ensureTenantForApprovedApplication(applicationId: string): Promis
 		Property__c: propertyId,
 		User_Status__c: "Tenant",
 		Status__c: "Active",
+		OwnerId: userId,
 	};
 	if (startDate) {
 		tenantFields.Start_Date__c = String(startDate);

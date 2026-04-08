@@ -16,6 +16,7 @@ A property management sample React UI Bundle for the Salesforce platform. Demons
    - [6. Generate GraphQL Types](#6-generate-graphql-types)
    - [7. Rebuild the UI Bundle](#7-rebuild-the-ui-bundle)
    - [8. Deploy the UI Bundle](#8-deploy-the-ui-bundle)
+   - [9. Agentforce Conversation Client](#9-agentforce-conversation-client)
 5. [Local Development](#local-development)
 6. [Resources](#resources)
 
@@ -23,13 +24,14 @@ A property management sample React UI Bundle for the Salesforce platform. Demons
 
 ## What's Included
 
-| Path                                                      | Description                                                                                                                                                                                                                                                                                                                                                       |
-| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `force-app/main/default/uiBundles/propertymanagementapp/` | React UI Bundle (source, config, tests)                                                                                                                                                                                                                                                                                                                           |
-| `force-app/main/default/objects/`                         | 17 custom objects — `Agent__c`, `Application__c`, `KPI_Snapshot__c`, `Lease__c`, `Maintenance_Request__c`, `Maintenance_Worker__c`, `Notification__c`, `Payment__c`, `Property__c`, `Property_Cost__c`, `Property_Feature__c`, `Property_Image__c`, `Property_Listing__c`, `Property_Management_Company__c`, `Property_Owner__c`, `Property_Sale__c`, `Tenant__c` |
-| `force-app/main/default/layouts/`                         | Page layouts for each custom object                                                                                                                                                                                                                                                                                                                               |
-| `force-app/main/default/permissionsets/`                  | `Property_Management_Access` permission set — full CRUD access to all custom objects                                                                                                                                                                                                                                                                              |
-| `force-app/main/default/data/`                            | Sample data (JSON) for all objects, importable via `sf data import tree`                                                                                                                                                                                                                                                                                          |
+```
+force-app/main/default/
+├── uiBundles/            # React UI Bundle (source, config, tests)
+├── objects/              # 17 Custom Objects (Property, Tenant, Lease, etc.)
+├── layouts/              # Page layouts for all custom objects
+├── permissionsets/       # Property_Management_Access (Full CRUD)
+└── data/                 # Sample JSON data (use: sf data import tree)
+```
 
 ---
 
@@ -223,6 +225,13 @@ Once the build is complete, deploy the UI Bundle to your org:
 ```bash
 sf project deploy start --source-dir force-app/main/default/uiBundles --target-org <alias>
 ```
+
+### 9. Agentforce Conversation Client
+
+The sample app includes an Agentforce Conversation Client (ACC) placeholder component in `applayout.tsx`. The ACC component requires a valid `agentId` for an agent that exists in the org. The options to create an agent specific to this use-case are:
+
+- **Agentforce Vibes:** Generate agent metadata with the extension, then deploy it to the org.
+- **Agentforce Builder:** Create the agent in the UI. See [Set Up Your Agent](https://help.salesforce.com/s/articleView?id=ai.agent_parent_setup.htm&type=5).
 
 ---
 

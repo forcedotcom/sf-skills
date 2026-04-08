@@ -29,20 +29,25 @@ A property rental sample React UI Bundle for Salesforce Experience Cloud. Demons
 
 ## What's Included
 
-| Path                                                  | Description                                                                                                                                                                                                                                                                                                                                                       |
-| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `force-app/main/default/uiBundles/propertyrentalapp/` | React UI Bundle (source, config, tests)                                                                                                                                                                                                                                                                                                                           |
-| `force-app/main/default/objects/`                     | 17 custom objects — `Agent__c`, `Application__c`, `KPI_Snapshot__c`, `Lease__c`, `Maintenance_Request__c`, `Maintenance_Worker__c`, `Notification__c`, `Payment__c`, `Property__c`, `Property_Cost__c`, `Property_Feature__c`, `Property_Image__c`, `Property_Listing__c`, `Property_Management_Company__c`, `Property_Owner__c`, `Property_Sale__c`, `Tenant__c` |
-| `force-app/main/default/layouts/`                     | Page layouts for each custom object                                                                                                                                                                                                                                                                                                                               |
-| `force-app/main/default/permissionsets/`              | `Property_Management_Access` (full admin access) and `Tenant_Maintenance_Access` (scoped tenant access)                                                                                                                                                                                                                                                           |
-| `force-app/main/default/classes/`                     | Apex classes — `MaintenanceRequestTriggerHandler`, `TenantTriggerHandler`, `UIBundleAuthUtils`, `UIBundleChangePassword`, `UIBundleForgotPassword`, `UIBundleLogin`, `UIBundleAppRegistration`                                                                                                                                                                    |
-| `force-app/main/default/triggers/`                    | Apex triggers — `MaintenanceRequestTrigger`, `TenantTrigger`                                                                                                                                                                                                                                                                                                      |
-| `force-app/main/default/cspTrustedSites/`             | CSP trusted sites for external resources (Google Fonts, Pexels, Unsplash, GitHub Avatars, OpenStreetMap, Open-Meteo)                                                                                                                                                                                                                                              |
-| `force-app/main/default/data/`                        | Sample data (JSON) for all objects, importable via `sf data import tree`                                                                                                                                                                                                                                                                                          |
-| `force-app/main/default/digitalExperienceConfigs/`    | Experience Cloud site configuration                                                                                                                                                                                                                                                                                                                               |
-| `force-app/main/default/digitalExperiences/`          | Experience Cloud site definition                                                                                                                                                                                                                                                                                                                                  |
-| `force-app/main/default/networks/`                    | Experience Cloud network metadata                                                                                                                                                                                                                                                                                                                                 |
-| `force-app/main/default/sites/`                       | Salesforce Sites configuration                                                                                                                                                                                                                                                                                                                                    |
+```
+force-app/main/default/
+├── classes/                # Apex Logic: Triggers, Auth, and Registration
+│   ├── MaintenanceRequestTriggerHandler.cls
+│   ├── TenantTriggerHandler.cls
+│   └── UIBundle (Auth, Login, Registration, etc.)
+├── cspTrustedSites/        # External resource security (Maps, Fonts, Avatars)
+├── data/                   # Sample JSON data for "sf data import tree"
+├── digitalExperienceConfigs/ # Experience Cloud site configurations
+├── digitalExperiences/      # Experience Cloud site definitions
+├── layouts/                # Page layouts for all 17 custom objects
+├── networks/               # Experience Cloud network metadata
+├── objects/                # 17 Custom Objects (Property, Tenant, Lease, etc.)
+├── permissionsets/         # Access: Property_Management (Admin) & Tenant (Scoped)
+├── sites/                  # Salesforce Sites configuration
+├── triggers/               # Apex Triggers: MaintenanceRequest & Tenant
+└── uiBundles/
+    └── propertyrentalapp/  # React UI Bundle (source, config, tests)
+```
 
 ---
 
@@ -462,7 +467,7 @@ By default, Salesforce does not expose any records to guest users. You must crea
 2. Scroll to the **Property Sharing Rules** section and click **New**.
 3. Configure the rule:
    - **Label**: `Available Properties for Guest Users`
-   - **Rule Type**: Select **Based on criteria**
+   - **Rule Type**: Select **Guest user access, based on criteria**
    - **Criteria**: `Status Equals Available` (adjust the field and value to match your data model)
    - **Share with**: Select **Guests of the Property Rental App site** (the guest user group for your Experience Cloud site)
    - **Access Level**: `Read Only`
@@ -473,7 +478,7 @@ By default, Salesforce does not expose any records to guest users. You must crea
 Repeat the same steps in the **Property Listing Sharing Rules** section:
 
 - **Label**: `Available Property Listings for Guest Users`
-- **Rule Type**: `Based on criteria`
+- **Rule Type**: `Guest user access, based on criteria`
 - **Criteria**: Match listings you want to expose (e.g., `Status Equals Active`)
 - **Share with**: `Guests of the Property Rental App site`
 - **Access Level**: `Read Only`
