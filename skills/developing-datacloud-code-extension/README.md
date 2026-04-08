@@ -1,4 +1,4 @@
-# datacloud_code_extension Skill
+# developing-datacloud-code-extension Skill
 
 ## Overview
 
@@ -8,7 +8,7 @@ A Claude Code skill that provides complete workflow for developing, testing, and
 
 The skill is now installed at:
 ```
-/home/codebuilder/dx-project/.a4drules/skills/datacloud_code_extension/
+/home/codebuilder/dx-project/.a4drules/skills/developing-datacloud-code-extension/
 ```
 
 ## What It Does
@@ -337,7 +337,7 @@ Read data, check quality rules, write valid records and flag errors.
 ## Files Created
 
 ```
-datacloud_code_extension/
+developing-datacloud-code-extension/
 ├── SKILL.md              # Complete skill documentation
 ├── README.md             # This file
 └── quick-reference.md    # Command cheat sheet

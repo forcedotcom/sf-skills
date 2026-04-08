@@ -1,4 +1,4 @@
-# datacloud_schema Skill
+# getting-datacloud-schema Skill
 
 ## Overview
 
@@ -8,7 +8,7 @@ A Claude Code skill that retrieves Data Lake Object (DLO) and Data Model Object 
 
 The skill is now installed at:
 ```
-/home/codebuilder/dx-project/.a4drules/skills/datacloud_schema/
+/home/codebuilder/dx-project/.a4drules/skills/getting-datacloud-schema/
 ```
 
 ## Usage
@@ -199,7 +199,7 @@ Fields (8 total):
 ## Files
 
 ```
-datacloud_schema/
+getting-datacloud-schema/
 ├── SKILL.md              # Skill definition and instructions
 ├── docs/
 │   └── README.md         # This file

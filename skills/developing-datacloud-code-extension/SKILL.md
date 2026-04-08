@@ -1,9 +1,9 @@
 ---
-name: datacloud_code_extension
+name: developing-datacloud-code-extension
 description: Develop and deploy Data Cloud Code Extensions using SF CLI plugin. Use this skill when creating custom Python transformations for Data Cloud, deploying code extensions, or testing data transformations. Supports init, run, scan, and deploy operations.
 ---
 
-# datacloud_code_extension Skill
+# developing-datacloud-code-extension Skill
 
 ## Overview
 
@@ -227,18 +227,18 @@ Look for DLOs in the `permissions` section:
 
 #### Step 4b: Validate Each DLO Schema
 
-**Use the `datacloud_schema` skill to verify DLOs exist and check field names.**
+**Use the `getting-datacloud-schema` skill to verify DLOs exist and check field names.**
 
 For each DLO referenced in your code:
 
 1. **Verify DLO exists:**
    ```
-   Ask Claude: "Use datacloud_schema skill to check if Employee__dll exists in afvibe"
+   Ask Claude: "Use getting-datacloud-schema skill to check if Employee__dll exists in afvibe"
    ```
 
    Or manually:
    ```bash
-   python3 ~/.a4drules/skills/datacloud_schema/scripts/get_dlo_schema.py afvibe Employee__dll
+   python3 ~/.a4drules/skills/getting-datacloud-schema/scripts/get_dlo_schema.py afvibe Employee__dll
    ```
 
 2. **Verify field names match:**
@@ -275,7 +275,7 @@ Before proceeding to run, ensure:
 
 | Issue | Check | Fix |
 |-------|-------|-----|
-| DLO doesn't exist | Use datacloud_schema skill | Create DLO first or update code |
+| DLO doesn't exist | Use getting-datacloud-schema skill | Create DLO first or update code |
 | Field name typo | Compare code vs. schema | Fix field name in entrypoint.py |
 | Wrong data type | Check schema data type | Update transformation logic |
 | Missing permissions | Check config.json | Re-run scan |
@@ -287,13 +287,13 @@ Before proceeding to run, ensure:
 cat payload/config.json
 
 # 2. Validate source DLO exists and get schema
-python3 ~/.a4drules/skills/datacloud_schema/scripts/get_dlo_schema.py afvibe Employee__dll
+python3 ~/.a4drules/skills/getting-datacloud-schema/scripts/get_dlo_schema.py afvibe Employee__dll
 
 # 3. Verify field 'position' exists in schema output
 # Look for: name: position__c (or position)
 
 # 4. Check target DLO exists
-python3 ~/.a4drules/skills/datacloud_schema/scripts/get_dlo_schema.py afvibe Employee_Upper__dll
+python3 ~/.a4drules/skills/getting-datacloud-schema/scripts/get_dlo_schema.py afvibe Employee_Upper__dll
 
 # 5. If all checks pass, proceed to run
 ```
@@ -424,9 +424,9 @@ sf data-code-extension script scan --entrypoint ./payload/entrypoint.py
 # Check config.json for DLOs used
 cat payload/config.json
 # Validate Employee__dll exists and has 'position' field
-python3 ~/.a4drules/skills/datacloud_schema/scripts/get_dlo_schema.py afvibe Employee__dll
+python3 ~/.a4drules/skills/getting-datacloud-schema/scripts/get_dlo_schema.py afvibe Employee__dll
 # Validate Employee_Upper__dll exists (target DLO)
-python3 ~/.a4drules/skills/datacloud_schema/scripts/get_dlo_schema.py afvibe Employee_Upper__dll
+python3 ~/.a4drules/skills/getting-datacloud-schema/scripts/get_dlo_schema.py afvibe Employee_Upper__dll
 
 # 6. Test locally (after DLO validation passes)
 sf data-code-extension script run --entrypoint ./payload/entrypoint.py --target-org afvibe
@@ -603,7 +603,7 @@ ls payload/  # Should see entrypoint.py, config.json, requirements.txt
 
 **Use with DLO Schema Skill (CRITICAL for validation):**
 
-The `datacloud_schema` skill is **required** for validating DLOs before testing code extensions.
+The `getting-datacloud-schema` skill is **required** for validating DLOs before testing code extensions.
 
 **Workflow Integration:**
 ```
@@ -626,10 +626,10 @@ The `datacloud_schema` skill is **required** for validating DLOs before testing 
 **Example Integrated Workflow:**
 ```bash
 # Step 1: Check what DLOs exist
-python3 ~/.a4drules/skills/datacloud_schema/scripts/get_dlo_schema.py afvibe
+python3 ~/.a4drules/skills/getting-datacloud-schema/scripts/get_dlo_schema.py afvibe
 
 # Step 2: Get schema for source DLO
-python3 ~/.a4drules/skills/datacloud_schema/scripts/get_dlo_schema.py afvibe Employee__dll
+python3 ~/.a4drules/skills/getting-datacloud-schema/scripts/get_dlo_schema.py afvibe Employee__dll
 
 # Step 3: Design code extension based on schema
 # (Write entrypoint.py using fields from schema)
@@ -639,8 +639,8 @@ sf data-code-extension script scan --entrypoint ./payload/entrypoint.py
 
 # Step 5: Validate all DLOs referenced in config.json
 cat payload/config.json
-python3 ~/.a4drules/skills/datacloud_schema/scripts/get_dlo_schema.py afvibe Employee__dll
-python3 ~/.a4drules/skills/datacloud_schema/scripts/get_dlo_schema.py afvibe Employee_Upper__dll
+python3 ~/.a4drules/skills/getting-datacloud-schema/scripts/get_dlo_schema.py afvibe Employee__dll
+python3 ~/.a4drules/skills/getting-datacloud-schema/scripts/get_dlo_schema.py afvibe Employee_Upper__dll
 
 # Step 6: Test locally (after validation passes)
 sf data-code-extension script run --entrypoint ./payload/entrypoint.py --target-org afvibe
