@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.120.6](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.120.5...v1.120.6) (2026-04-07)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.120.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.120.4...v1.120.5) (2026-04-07)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.120.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.120.3...v1.120.4) (2026-04-07)
+
+
+### Bug Fixes
+
+* make tenant owner of own record ([#414](https://github.com/salesforce-experience-platform-emu/webapps/issues/414)) ([bf1f289](https://github.com/salesforce-experience-platform-emu/webapps/commit/bf1f289a8d56a381adde51e642e67db38099f193))
+
+
+
+
+
 ## [1.120.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.120.2...v1.120.3) (2026-04-02)
 
 **Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
