@@ -64,15 +64,15 @@ For URL updates, see [update-site-urls.md](docs/update-site-urls.md).
   - `docs/configure-metadata-digital-experience.md`
 - Read entire file contents, replace placeholders (e.g. `{siteName}`) with the resolved values, then use the expanded templates to populate the metadata XML/JSON content.
   
-### Step 4: Resolve Additional Configurations
-Address any extra configurations the user requests. Use the metadata sections and field context identified in Step 2 to understand each field's purpose and constraints, then update only the minimum necessary fields.
+### Step 4: Do Not Modify Non-Templated Properties
+Do not modify any default property values for `Network`, `CustomSite`, `DigitalExperience`, `DigitalExperienceConfig`, or `DigitalExperienceBundle` metadata that are not expressed as variables wrapped in `{braces}`.
 
 ## Verification Checklist
 Before deploying, confirm:
 
 - [ ] All five required properties are resolved
 - [ ] All metadata directories and files exist per the project structure
-- [ ] All metadata fields are populated per the templates and user requests
+- [ ] All metadata fields match the Step 3 templates with `{braces}` substituted only; no other default property values were added or changed
 - [ ] `appSpace` in `content.json` matches an existing `UIBundle` metadata record
 - [ ] Deployment validates successfully:
 ```bash
