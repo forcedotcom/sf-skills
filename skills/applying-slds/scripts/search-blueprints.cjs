@@ -12,49 +12,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const yaml = require !== undefined ? null : null; // yaml parsing below
 
 const BLUEPRINTS_DIR = path.join(__dirname, '..', 'metadata', 'blueprints', 'components');
-
-function parseYaml(text) {
-  const lines = text.split('\n');
-  const result = {};
-  let currentKey = null;
-  let currentArray = null;
-  let currentObj = null;
-  let indent = 0;
-
-  for (const line of lines) {
-    const trimmed = line.trimEnd();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-
-    const match = trimmed.match(/^(\s*)([\w_]+):\s*(.*)$/);
-    if (match) {
-      const spaces = match[1].length;
-      const key = match[2];
-      let value = match[3].replace(/^["']|["']$/g, '').trim();
-
-      if (spaces === 0) {
-        currentKey = key;
-        currentArray = null;
-        currentObj = null;
-        if (value) {
-          result[key] = value;
-        } else {
-          result[key] = {};
-        }
-      } else if (currentKey && spaces > 0) {
-        if (typeof result[currentKey] === 'object' && !Array.isArray(result[currentKey])) {
-          if (value) {
-            result[currentKey][key] = value;
-          }
-        }
-      }
-    }
-  }
-
-  return result;
-}
 
 function loadBlueprints() {
   const blueprints = [];

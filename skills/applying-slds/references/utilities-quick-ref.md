@@ -88,8 +88,10 @@ Responsive: `slds-small-size_*`, `slds-medium-size_*`, `slds-large-size_*`
 - `slds-hide` -- hide element (`display: none`)
 - `slds-show` -- show element (`display: block`)
 - `slds-show_inline` -- show inline
-- `slds-hidden` -- visually hidden but accessible
+- `slds-hidden` -- hidden via `visibility: hidden`; occupies space and is not a screen-reader helper
 - `slds-assistive-text` -- screen-reader only text
+
+Use `slds-assistive-text`, not `slds-hidden`, when content should remain available to assistive technology.
 
 ### Truncation
 

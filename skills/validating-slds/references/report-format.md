@@ -14,9 +14,12 @@ Always start with this format. It gives the user the full picture in a glanceabl
 **Path:** `{component-path}` | **Complexity:** {small|medium|large} ({n} files, {n} lines)
 **Generated:** {date}
 
-## Grade: {grade} ({score}/100)
+## Automated Grade: {grade} ({score}/100)
 
 {grade-description}
+
+**Manual Review Gate:** {Pass|Advisory|Blocking}
+**Final Recommendation:** {Ready for production|Ready with follow-ups|Needs work|Failing}
 
 | Category | Score | Grade |
 |----------|-------|-------|
@@ -34,6 +37,8 @@ Always start with this format. It gives the user the full picture in a glanceabl
 2. **{issue}** — `{file}:{line}` — {recommendation}
 3. **{issue}** — `{file}:{line}` — {recommendation}
 
+> Automated score reflects linter + script findings only. Manual review can still block ship.
+>
 > {accessibility-disclaimer-if-scored}
 
 *Ask for the full report to see all findings, code examples, and action items.*
@@ -97,6 +102,21 @@ Suggestions for improvement.
 ---
 
 ## Detailed Findings
+
+### Manual Review Gate
+
+**Gate:** {Pass|Advisory|Blocking}
+
+| Review Area | Outcome | Notes |
+|-------------|---------|-------|
+| Loading states | {Pass|Advisory|Blocking} | {notes} |
+| Error states | {Pass|Advisory|Blocking} | {notes} |
+| Empty states | {Pass|Advisory|Blocking} | {notes} |
+| Disabled states | {Pass|Advisory|Blocking} | {notes} |
+| Semantic HTML | {Pass|Advisory|Blocking} | {notes} |
+| Blueprint compliance | {Pass|Advisory|Blocking} | {notes} |
+
+---
 
 ### Linter Compliance
 
@@ -215,8 +235,8 @@ For programmatic consumption (e.g., CI integration or tracking over time). Produ
     "totalLines": 280
   },
   "scores": {
-    "overall": 85,
-    "grade": "B",
+    "automatedOverall": 85,
+    "automatedGrade": "B",
     "categories": {
       "linter": { "score": 100, "grade": "A" },
       "theming": { "score": 80, "grade": "B" },
@@ -225,6 +245,11 @@ For programmatic consumption (e.g., CI integration or tracking over time). Produ
       "componentUsage": { "score": 85, "grade": "B" }
     }
   },
+  "manualReview": {
+    "gate": "Advisory",
+    "findings": []
+  },
+  "finalRecommendation": "Ready with follow-ups",
   "findings": {
     "critical": [],
     "warnings": [],
@@ -258,19 +283,20 @@ For programmatic consumption (e.g., CI integration or tracking over time). Produ
 
 | Grade | Description |
 |-------|-------------|
-| A | **Excellent** - Component follows SLDS best practices. Minor improvements possible. Ready for production. |
-| B | **Good** - Component is well-structured with minor issues. Address warnings before deployment. |
-| C | **Acceptable** - Component has notable issues that should be addressed. Not recommended for production without fixes. |
-| D | **Needs Work** - Component has significant quality issues. Requires attention before code review. |
-| F | **Critical** - Component has blocking issues that must be resolved. Not suitable for deployment. |
+| A | **Excellent** - Strong automated result. Requires a passing manual review gate before calling it production-ready. |
+| B | **Good** - Solid automated result. Requires manual review before a production recommendation. |
+| C | **Acceptable** - Automated issues should be addressed before production. |
+| D | **Needs Work** - Significant automated issues require attention before code review. |
+| F | **Critical** - Automated checks found blocking issues. Not suitable for deployment. |
 
 ---
 
 ## Report Delivery Guidelines
 
 1. **Always default to compact** — show the scorecard first, expand on request
-2. **Group by severity** — critical issues first, then warnings, then info
-3. **Include actionable recommendations** — every finding should have a clear fix
-4. **Provide code examples** — show before/after for complex fixes in the expanded report
-5. **Note complexity** — a "B" on a large component means something different than a "B" on a small one
-6. **Add accessibility disclaimer** — when the accessibility score is included, note it checks attribute presence only
+2. **Separate automated grade from final recommendation** — manual review can override ship readiness
+3. **Group by severity** — critical issues first, then warnings, then info
+4. **Include actionable recommendations** — every finding should have a clear fix
+5. **Provide code examples** — show before/after for complex fixes in the expanded report
+6. **Note complexity** — a "B" on a large component means something different than a "B" on a small one
+7. **Add accessibility disclaimer** — when the accessibility score is included, note it checks attribute presence only

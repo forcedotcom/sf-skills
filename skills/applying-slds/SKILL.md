@@ -1,5 +1,6 @@
 ---
 name: applying-slds
+version: "1.0.0"
 description: Apply SLDS-compliant UI using the correct blueprints, styling hooks, utility classes, and icons. Use when building any UI that needs SLDS, choosing between Lightning Base Components and SLDS Blueprints, applying styling hooks for theming, using utility classes for layout and spacing, or selecting icons. Triggers include "build a modal", "create a form", "data table", "SLDS styling", "style with hooks", "add an icon".
 ---
 
@@ -8,6 +9,8 @@ description: Apply SLDS-compliant UI using the correct blueprints, styling hooks
 The **Salesforce Lightning Design System (SLDS)** is a CSS framework with thousands of artifacts. This skill teaches agents how to find and correctly use them.
 
 > **Version:** This skill targets **SLDS v2**. Legacy `--lwc-*` tokens and `slds-*--modifier` syntax are deprecated.
+>
+> **Audit scope:** The companion `validating-slds` skill analyzer only scans `.css`, `.html`, and `.js` files. Use it directly for LWC and similar HTML/CSS/JS components; treat it as a partial signal for JSX/TSX or other framework-specific template formats and supplement with manual review.
 
 ## What is SLDS?
 
@@ -30,10 +33,12 @@ The **Salesforce Lightning Design System (SLDS)** is a CSS framework with thousa
 - Which icon to use and from which category
 - SLDS naming conventions, class structure, hook syntax
 
+**This skill includes basic accessibility reminders** (icon alt text, focus outlines, color-not-sole-indicator) in the validation checklists. Full WCAG compliance requires a dedicated accessibility review.
+
 **This skill does NOT cover (use companion skills):**
-- **Design decisions** -- visual hierarchy, composition, interaction patterns (design skill)
-- **LWC mechanics** -- component structure, @wire, @api, lifecycle, events (LWC skill)
-- **Accessibility** -- WCAG, ARIA patterns, keyboard navigation, focus management (a11y skill)
+- **Design decisions** -- visual hierarchy, composition, interaction patterns
+- **LWC mechanics** -- component structure, @wire, @api, lifecycle, events (not yet available)
+- **Full accessibility** -- WCAG conformance, ARIA patterns, keyboard navigation, focus management, contrast ratios (not yet available)
 
 ---
 
@@ -79,7 +84,7 @@ If no LBC exists (or not using LWC), select an SLDS Blueprint. See [references/c
 
 ## Hook Naming Traps
 
-SLDS hook families do NOT all follow the same naming pattern. Agents frequently invent hooks that don't exist by assuming `{prefix}-{number}` works universally. **Always verify a hook exists** via `node scripts/search-hooks.cjs` or `metadata/hooks-index.json` before using it.
+SLDS hook families do NOT all follow the same naming pattern. Agents frequently invent hooks that don't exist by assuming `{prefix}-{number}` works universally. **Always verify a hook exists** via the bundled `search-hooks.cjs` script or `metadata/hooks-index.json` before using it.
 
 ### Trap 1: Font size hooks are NOT numbered
 
@@ -148,7 +153,7 @@ Use a consistent prefix for custom classes to avoid collision with SLDS:
 Custom hook namespacing:
 ```css
 :root {
-  --my-app-primary: var(--slds-g-color-brand-1);
+  --my-app-primary: var(--slds-g-color-accent-1);
   --my-app-card-padding: var(--slds-g-spacing-4);
 }
 ```
@@ -253,13 +258,7 @@ The linter catches hardcoded values, class overrides, and deprecated tokens. **F
 - All icons have accessibility text (A004)
 - Custom classes use `my-*` or `c-*` prefix (Q010)
 
-**Step 4 (optional): Run the full quality audit** for a scored report before code review or deployment:
-
-```bash
-node <validating-slds>/scripts/analyze-quality.cjs <component-path>
-```
-
-Or invoke the [validating-slds](../validating-slds/) skill. Target a B grade (≥80) or higher before marking work complete.
+**Step 4 (optional): Run the full quality audit** using the `validating-slds` skill for a scored report before code review or deployment. Use it directly for LWC / HTML-CSS-JS components; for JSX/TSX outputs, treat the result as partial coverage only. Target a B grade (≥80) or higher before marking work complete.
 
 ---
 
@@ -310,7 +309,7 @@ See [examples.md](examples.md) for worked examples demonstrating the full workfl
 
 ## Validation
 
-See [checklists.md](checklists.md) for validation checklists aligned with the [validating-slds](../validating-slds/) skill.
+See [checklists.md](checklists.md) for validation checklists aligned with the validating-slds skill.
 
 ## Resources
 

@@ -1,42 +1,33 @@
 ---
 name: validating-slds
-description: >-
-  Audit Lightning Web Components for SLDS compliance and produce a scored quality
-  report. Runs the SLDS linter, analyzes CSS for theming hook usage and pairing,
-  checks HTML for accessibility attributes, and scores findings across categories
-  into an overall grade. Use when asked to "score my component", "SLDS scorecard",
-  "quality report", "audit SLDS compliance", "how good is my SLDS", "check
-  component quality", "rate my component", "evaluate my component", "is this
-  component ready to ship?", "look at my LWC for issues", "audit this before I
-  submit", "review my component before code review", or any time a user wants a
-  quality assessment or production-readiness check on an LWC or SLDS component.
-  Not for fixing violations (use slds-uplift) or building new components (use
-  slds-authoring).
+version: "1.0.0"
+description: Audit Lightning Web Components for SLDS compliance and produce a scored quality report. Runs the SLDS linter, analyzes CSS for theming hook usage and pairing, checks HTML for accessibility attributes, and scores findings across categories into an overall grade. Use when asked to "score my component", "SLDS scorecard", "quality report", "audit SLDS compliance", "how good is my SLDS", "check component quality", "rate my component", "evaluate my component", "is this component ready to ship?", "look at my LWC for issues", "audit this before I submit", "review my component before code review", or any time a user wants a quality assessment or production-readiness check on an LWC or SLDS component. Not for fixing violations (use uplifting-components-to-slds2) or building new components (use applying-slds).
 ---
 
 # SLDS Quality Audit
 
-Audit Lightning Web Components for SLDS compliance and produce a scored quality scorecard. Combines SLDS linter output with supplementary static analysis to catch what the linter misses.
+Audit Lightning Web Components for SLDS compliance and produce an automated scorecard plus a required manual review gate. Combines SLDS linter output with supplementary static analysis to catch what the linter misses.
 
 ## Scope
 
 Also valid for: auditing SLDS compliance across a project or component set, and before/after quality comparison after making changes.
 
 Not for:
-- **Fixing** linter violations — use `slds-uplift` instead
-- **Building** new components — use `slds-authoring` instead
+- **Fixing** linter violations — use `uplifting-components-to-slds2` instead
+- **Building** new components — use `applying-slds` instead
 - **Just running the linter** — run `npx @salesforce-ux/slds-linter@latest lint .` directly
 - **Full WCAG accessibility audit** — this skill checks attribute presence only (labels, alt text, focus indicators), not contrast ratios, keyboard flows, or screen reader behavior
+- **Framework-specific template auditing** beyond `.css`, `.html`, and `.js` files — JSX/TSX/Vue/Svelte outputs need additional manual review
 
 ---
 
 ## Quality Validation Process
 
 ```
-1. Run SLDS Linter    → Collect violation counts (linter's job)
+1. Run SLDS Linter     → Collect violation counts (linter's job)
 2. Run Analyze Script  → Check what linter doesn't cover (supplementary)
-3. Agent Review        → Manual review prompts (not automatable)
-4. Score & Grade       → Combine linter + script + review findings
+3. Agent Review        → Required manual review gate
+4. Score & Grade       → Compute automated score + final recommendation
 5. Generate Report     → Produce formatted scorecard
 ```
 
@@ -67,7 +58,7 @@ Overall (linter unavailable) = (Theming × 0.29) + (Accessibility × 0.29)
 
 ## Step 2: Run Supplementary Analysis
 
-Run the analyze script to catch issues the linter doesn't cover:
+Run the analyze script to catch issues the linter doesn't cover. The bundled analyzer scans `.css`, `.html`, and `.js` files only:
 
 ```bash
 node scripts/analyze-quality.cjs <component-path>
@@ -80,10 +71,10 @@ The script outputs JSON with findings organized by severity. It checks:
 | Check | What It Catches | Severity |
 |-------|----------------|----------|
 | Missing fallbacks | `var(--slds-g-*)` without a fallback value | Critical |
-| Invented hooks (T051) | `--slds-g-*` tokens not found in `hooks-index.json` | Critical |
+| Invented hooks (T051) | `--slds-g-*` tokens not found in `hooks-index.json` (requires `--hooks-index`) | Critical |
 | Hook pairing | Background hooks without matching foreground hooks | Warning |
 | `!important` | Specificity overrides | Warning |
-| Magic pixel values | Hardcoded `px` not using spacing hooks | Info |
+| Magic pixel values | Hardcoded `px` not using spacing hooks | Warning |
 | High z-index | z-index values > 99 | Warning |
 | Outline removal | `outline: none` without alternative focus style | Warning |
 
@@ -92,7 +83,7 @@ The script outputs JSON with findings organized by severity. It checks:
 | Check | What It Catches | Severity |
 |-------|----------------|----------|
 | Inline style assignment | `.style.*=` direct property assignment | Warning |
-| SLDS class manipulation | Dynamic `.classList.add('slds-*')` manipulation | Info |
+| SLDS class manipulation | Dynamic `.classList.add('slds-*')` manipulation | Warning |
 
 ### HTML Checks
 
@@ -105,7 +96,7 @@ The script outputs JSON with findings organized by severity. It checks:
 | Positive tabindex | `tabindex` values other than 0 or -1 | Warning |
 | Clickable divs | `<div onclick>` instead of `<button>` | Warning |
 | Inline styles | `style="..."` attributes | Warning |
-| Native elements | `<input>`, `<button>`, `<select>` where LBC alternatives exist | Info |
+| Native elements | `<input>`, `<button>`, `<select>` where LBC alternatives exist | Warning |
 
 ### Hook Pairing Validation
 
@@ -115,7 +106,7 @@ The script checks that background/foreground hooks are semantically paired:
 surface-* backgrounds     → on-surface-* text
 surface-container-* bg    → on-surface-* text
 accent-* backgrounds      → on-accent-* text
-accent-container-* bg     → on-accent-container-* text
+accent-container-* bg     → on-accent-* text
 ```
 
 > **Limitation:** Hook pairing is checked at the file level, not per-selector. A file with `surface-1` in `.classA` and `on-accent-1` in `.classB` would pass because both surface and accent families are present. Review pairing correctness per-selector during manual review (Step 3).
@@ -126,7 +117,10 @@ The script cross-references every `--slds-g-*` token in CSS against `hooks-index
 
 ## Step 3: Agent Manual Review
 
-These checks require understanding the component's purpose and cannot be automated reliably. Review each and note findings as additional context in the report.
+These checks require understanding the component's purpose and cannot be automated reliably. Review each and classify findings as either:
+
+- **Blocking** — incorrect blueprint structure, missing required states, or semantic/interaction issues that make the component not production-ready
+- **Advisory** — worthwhile improvements that do not block shipping on their own
 
 | Review Area | What to Look For |
 |-------------|-----------------|
@@ -137,9 +131,9 @@ These checks require understanding the component's purpose and cannot be automat
 | Semantic HTML | Are `<nav>`, `<article>`, `<section>` used where appropriate? |
 | SLDS blueprint compliance | Do cards, modals, forms follow SLDS blueprint structure? |
 
-> These are not scored. Note relevant findings in the "Recommendations" section of the report.
+> Manual review findings are not automated, but they do affect the final recommendation. Do not report an automated grade as the only verdict.
 
-## Step 4: Calculate Quality Scores
+## Step 4: Calculate Automated Scores and Final Recommendation
 
 ### Component Complexity
 
@@ -153,7 +147,7 @@ Before scoring, classify the component to give the score context:
 
 Include the complexity classification in the report header. This prevents misreading a "B" on a 1000-line component vs. a "B" on a 20-line component.
 
-### Scoring Formula
+### Automated Scoring Formula
 
 ```
 Category Score = 100 - (critical_issues × 10) - (warnings × 3) - (info × 1)
@@ -168,31 +162,53 @@ Minimum score: 0
 | Theming | 20% | Script: fallbacks, hook pairing (Step 2) |
 | Accessibility | 20% | Script: labels, alt text, focus (Step 2) |
 | Code Quality | 15% | Script: !important, inline styles, z-index (Step 2) |
-| Component Usage | 15% | Script: native elements, semantic HTML (Step 2) |
+| Component Usage | 15% | Script: native elements (Step 2) plus manual semantic/blueprint review (Step 3) |
 
-### Overall Score
+### Automated Overall Score
 
 ```
 Overall = (Linter × 0.30) + (Theming × 0.20) + (Accessibility × 0.20)
         + (CodeQuality × 0.15) + (ComponentUsage × 0.15)
 ```
 
-### Grade Thresholds
+### Automated Grade Thresholds
 
-| Score | Grade | Status |
-|-------|-------|--------|
-| 90-100 | A | Excellent - Ready for production |
-| 80-89 | B | Good - Minor improvements suggested |
-| 70-79 | C | Acceptable - Address issues before deployment |
-| 60-69 | D | Needs Work - Significant issues to resolve |
-| 0-59 | F | Failing - Critical issues blocking deployment |
+| Score | Grade | Meaning |
+|-------|-------|---------|
+| 90-100 | A | Excellent automated score |
+| 80-89 | B | Good automated score |
+| 70-79 | C | Acceptable automated score |
+| 60-69 | D | Weak automated score |
+| 0-59 | F | Failing automated score |
+
+### Manual Review Gate
+
+After computing the automated score, apply the manual review outcome:
+
+| Gate | When to use it | Effect on final recommendation |
+|------|----------------|-------------------------------|
+| Pass | No manual findings | Final recommendation can follow the automated score |
+| Advisory | Only non-blocking manual findings | Final recommendation can be "Ready with follow-ups" at best |
+| Blocking | One or more blocking manual findings | Final recommendation is **not ready for production**, regardless of automated grade |
+
+### Final Recommendation Rules
+
+Use both the automated score and the manual review gate:
+
+| Final Recommendation | Conditions |
+|----------------------|------------|
+| Ready for production | Automated grade A/B, no critical findings, manual gate = Pass |
+| Ready with follow-ups | Automated grade A/B, no critical findings, manual gate = Advisory |
+| Needs work | Any critical findings, automated grade C/D, or manual gate = Blocking |
+| Failing | Automated grade F |
 
 ## Step 5: Generate Quality Report
 
 Use the template in **[report-format.md](references/report-format.md)** to produce the final report. Default to the **compact format** for initial output and expand sections on request.
 
 The report includes:
-- Executive summary with overall grade
+- Executive summary with automated grade and final recommendation
+- Manual review gate outcome (`Pass`, `Advisory`, or `Blocking`)
 - Scores by category with visual indicators
 - Detailed findings organized by severity
 - Specific code locations and recommendations
@@ -216,7 +232,7 @@ Linter Violations:
   • Deprecated Tokens:  3
   • Hardcoded Values:   5
 
-Quick Grade: C (estimated)
+Quick Automated Grade: C (estimated)
 Run full validation for detailed report.
 ```
 
@@ -241,5 +257,5 @@ If a check produces a false positive, note it in the report as "suppressed" with
 - **[Quality Checks](references/quality-checks.md)** - Complete list of all quality checks with detection patterns
 - **[Report Format](references/report-format.md)** - Quality report template and formatting guide
 - **[Analyze Script](scripts/analyze-quality.cjs)** - Automated analysis for linter-complementary checks
-- **[SLDS Uplift Skill](../slds-uplift/SKILL.md)** - How to fix linter violations
-- **[SLDS Applying Skill](../applying-slds/SKILL.md)** - Guide for building new components with correct patterns
+- **uplifting-components-to-slds2 skill** - How to fix linter violations
+- **applying-slds skill** - Guide for building new components with correct patterns

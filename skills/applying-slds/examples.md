@@ -4,7 +4,6 @@ Worked examples showing the SLDS authoring workflow: from intent to artifact sel
 
 Each example follows the 5-phase workflow from SKILL.md and shows which files were consulted and why.
 
----
 
 ## Example 1: Build a Confirmation Dialog
 
@@ -37,7 +36,7 @@ The destructive action button needs error color to signal danger:
 
 ```bash
 node scripts/search-hooks.cjs --prefix "--slds-g-color-error-"
-# Found: --slds-g-color-error-1 (#ea001e), --slds-g-color-on-error (#ffffff)
+# Found: --slds-g-color-error-1 (#ea001e), --slds-g-color-on-error-1 (#ffffff)
 ```
 
 **Result:** Use `variant="destructive"` on `lightning-button` inside the modal footer. The LBC handles the correct SLDS color hooks internally.
@@ -101,23 +100,23 @@ node scripts/search-blueprints.cjs --search "badge"
 
 **Read YAMLs:**
 - `metadata/blueprints/components/cards.yaml` -- classes: `slds-card`, `slds-card__header`, `slds-card__body`, `slds-card__footer`
-- `metadata/blueprints/components/badges.yaml` -- classes: `slds-badge`, modifiers: `slds-badge_success`, `slds-badge_warning`, `slds-badge_error`
+- `metadata/blueprints/components/badges.yaml` -- classes: `slds-badge`, modifiers: `slds-badge_lightest`, `slds-badge_inverse`
 
 ### Phase 3: Apply Styling
 
 **Read:** `references/styling-decision-guide.md`
 
-Card background and text use surface hooks. The status badge uses semantic SLDS modifier classes (no custom color needed).
+Card background and text use surface hooks. The status is conveyed by badge text plus a custom status accent on the card, rather than invented badge modifiers.
 
 ```html
-<article class="slds-card">
+<article class="slds-card my-status-card">
   <div class="slds-card__header slds-grid">
     <header class="slds-media slds-media_center slds-has-flexi-truncate">
       <div class="slds-media__body">
         <h2 class="slds-card__header-title slds-truncate">Account Name</h2>
       </div>
       <div class="slds-no-flex">
-        <span class="slds-badge slds-badge_success">Active</span>
+        <span class="slds-badge slds-badge_lightest">Active</span>
       </div>
     </header>
   </div>
@@ -160,7 +159,7 @@ In React (non-LWC), use the SVG blueprint pattern:
 ### Phase 5: Validate
 
 - Card uses exact blueprint classes (`slds-card`, `slds-card__header`, etc.)
-- Badge uses SLDS modifier (`slds-badge_success`) not custom color
+- Badge uses a real blueprint modifier (`slds-badge_lightest`), not an invented status variant
 - Custom border uses `my-*` prefix and hook with fallback
 - Icon uses `slds-assistive-text` for accessibility
 - No hardcoded colors
@@ -187,6 +186,19 @@ node scripts/search-blueprints.cjs --search "illustration"
 ```
 
 ### Phase 3: Apply Styling
+
+**Verify grid and spacing utilities** before using them:
+
+```bash
+node scripts/search-utilities.cjs --search "slds-grid"
+# Found: slds-grid (category: grid, css: display: flex)
+
+node scripts/search-utilities.cjs --search "slds-text-heading_large"
+# Found: slds-text-heading_large (category: typography)
+
+node scripts/search-utilities.cjs --search "slds-text-body_small"
+# Found: slds-text-body_small (category: typography)
+```
 
 **Grid layout** uses utility classes (see `references/utilities-quick-ref.md`):
 

@@ -1,8 +1,7 @@
 # Validation Checklists
 
-Run through these checks before finalizing any SLDS-authored component. Check IDs align with the [validating-slds](../validating-slds/) skill's quality-checks.md.
+Run through these checks before finalizing any SLDS-authored component. Check IDs align with the validating-slds skill's quality-checks.md.
 
----
 
 ## Theming & Styling (T-series)
 
@@ -37,7 +36,7 @@ Code produced by this skill should score high on T-series checks.
 | **No !important** | No `!important` declarations | Q001 |
 | **No inline styles** | No `style="..."` in HTML | Q002 |
 | **Custom class prefix** | Custom classes use `my-*`, `c-*`, or namespace prefix | Q010 |
-| **No SLDS naming** | Custom classes don't start with `slds-` | Q012 |
+| **No dynamic SLDS class manipulation** | Avoid `.classList.add/remove/toggle('slds-*')` patterns in JS | Q012 |
 | **No magic numbers** | All numeric values have clear purpose | Q020 |
 
 ---

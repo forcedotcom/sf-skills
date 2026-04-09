@@ -30,12 +30,12 @@ dataTable.css
 **Before:**
 ```css
 .slds-table {
-  border-collapse: separate;
-  border-spacing: 0;
+  border-width: var(--slds-g-sizing-border-1, 1px);
+  border-radius: var(--slds-g-radius-border-2, 0.25rem);
 }
 
 .slds-table .slds-button {
-  padding: 0.5rem 1rem;
+  padding: var(--slds-g-spacing-2, 0.5rem) var(--slds-g-spacing-2, 1rem);
 }
 ```
 
@@ -48,12 +48,12 @@ dataTable.css
 **After:**
 ```css
 .dataTable-table {
-  border-collapse: separate;
-  border-spacing: 0;
+  border-width: var(--slds-g-sizing-border-1, 1px);
+  border-radius: var(--slds-g-radius-border-2, 0.25rem);
 }
 
 .dataTable-table .dataTable-button {
-  padding: 0.5rem 1rem;
+  padding: var(--slds-g-spacing-2, 0.5rem) var(--slds-g-spacing-2, 1rem);
 }
 ```
 

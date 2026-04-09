@@ -5,7 +5,7 @@
  *
  * Analyzes CSS and HTML files for SLDS quality issues beyond what the linter catches.
  *
- * Usage: node analyze-quality.cjs <component-path>
+ * Usage: node analyze-quality.cjs <component-path> [--hooks-index <path>]
  *
  * Output: JSON with findings categorized by severity
  */
@@ -13,9 +13,15 @@
 const fs = require('fs');
 const path = require('path');
 
-// Resolve applying-slds metadata relative to this script's location
-const APPLYING_SLDS_ROOT = path.resolve(__dirname, '../../applying-slds');
-const HOOKS_INDEX_PATH = path.join(APPLYING_SLDS_ROOT, 'metadata/hooks-index.json');
+function resolveHooksIndexPath(args) {
+  const idx = args.indexOf('--hooks-index');
+  if (idx !== -1 && idx + 1 < args.length) {
+    return path.resolve(args[idx + 1]);
+  }
+  return null;
+}
+
+let HOOKS_INDEX_PATH = null;
 
 // Severity levels
 const CRITICAL = 'critical';
@@ -45,8 +51,8 @@ const PATTERNS = {
       recommendation: 'Remove !important, use proper specificity'
     },
     magicPixels: {
-      pattern: /:\s*(\d+)px(?![^;]*var\()/g,
-      severity: INFO,
+      pattern: /\b(?:margin(?:-[a-z-]+)?|padding(?:-[a-z-]+)?|gap|row-gap|column-gap)\s*:\s*(\d+)px\b(?![^;]*var\()/g,
+      severity: WARNING,
       id: 'T021',
       message: 'Magic pixel value not using spacing hook',
       recommendation: 'Use var(--slds-g-spacing-*) or utility class'
@@ -71,13 +77,13 @@ const PATTERNS = {
     inlineStyleJS: {
       pattern: /\.style\.\w+\s*=/g,
       severity: WARNING,
-      id: 'Q002',
+      id: 'Q025',
       message: 'Inline style manipulation in JavaScript',
       recommendation: 'Use CSS classes instead of direct style property assignment'
     },
     classListManipulation: {
       pattern: /\.classList\.(add|remove|toggle)\(\s*['"]slds-/g,
-      severity: INFO,
+      severity: WARNING,
       id: 'Q012',
       message: 'Dynamic SLDS class manipulation in JavaScript',
       recommendation: 'Prefer declarative class bindings; avoid manipulating slds-* classes directly'
@@ -129,21 +135,21 @@ const PATTERNS = {
     },
     nativeInput: {
       pattern: /<input\s/gi,
-      severity: INFO,
+      severity: WARNING,
       id: 'C001',
       message: 'Native input element',
       recommendation: 'Consider <lightning-input> for built-in labeling and validation'
     },
     nativeButton: {
       pattern: /<button\s(?![^>]*class\s*=\s*["'][^"']*slds-button)/gi,
-      severity: INFO,
+      severity: WARNING,
       id: 'C002',
       message: 'Native button element',
       recommendation: 'Consider <lightning-button> for SLDS styling consistency (suppressed if slds-button class present)'
     },
     nativeSelect: {
       pattern: /<select\s/gi,
-      severity: INFO,
+      severity: WARNING,
       id: 'C004',
       message: 'Native select element',
       recommendation: 'Consider <lightning-combobox> for consistency'
@@ -263,10 +269,13 @@ function analyzeHeadings(filePath) {
 let _validHooks = null;
 function loadValidHooks() {
   if (_validHooks) return _validHooks;
+  if (!HOOKS_INDEX_PATH) return null;
   try {
     const data = JSON.parse(fs.readFileSync(HOOKS_INDEX_PATH, 'utf-8'));
     _validHooks = new Set(data.hooks.map(h => h.token));
   } catch {
+    console.error(`WARNING: Could not load hooks-index.json at ${HOOKS_INDEX_PATH}`);
+    console.error('Invented-hook detection (T051) will be skipped.');
     _validHooks = null;
   }
   return _validHooks;
@@ -366,7 +375,7 @@ function calculateScores(findings) {
   const categories = {
     theming: { issues: 0, ids: ['T002', 'T010', 'T011', 'T021', 'T051'] },
     accessibility: { issues: 0, ids: ['A001', 'A004', 'A005', 'A010', 'A020', 'A021', 'A022'] },
-    codeQuality: { issues: 0, ids: ['Q001', 'Q002', 'Q012', 'Q021'] },
+    codeQuality: { issues: 0, ids: ['Q001', 'Q002', 'Q012', 'Q021', 'Q025'] },
     componentUsage: { issues: 0, ids: ['C001', 'C002', 'C004'] }
   };
 
@@ -465,7 +474,7 @@ function analyze(componentPath) {
       totalFiles,
       totalLines
     },
-    note: "These are category scores only. Combine with SLDS linter results using the formula in SKILL.md Step 4 to compute the final overall grade.",
+    note: "These are automated category scores only. Combine them with SLDS linter results and the required Step 3 manual review gate in SKILL.md before making a final ship recommendation.",
     scores: {
       theming: { score: scores.theming, grade: getGrade(scores.theming) },
       accessibility: { score: scores.accessibility, grade: getGrade(scores.accessibility) },
@@ -491,16 +500,21 @@ function analyze(componentPath) {
 // CLI entry point
 if (require.main === module) {
   const args = process.argv.slice(2);
+  const positionalArgs = args.filter((a, i) => !a.startsWith('--') && (i === 0 || !args[i - 1].startsWith('--')));
 
-  if (args.length === 0) {
+  if (positionalArgs.length === 0) {
     console.log('SLDS Quality Analyzer');
-    console.log('Usage: node analyze-quality.cjs <component-path>');
+    console.log('Usage: node analyze-quality.cjs <component-path> [--hooks-index <path>]');
+    console.log('');
+    console.log('Options:');
+    console.log('  --hooks-index <path>  Path to hooks-index.json (optional; enables T051 invented-hook detection)');
     console.log('');
     console.log('Output: JSON analysis of SLDS quality issues');
     process.exit(0);
   }
 
-  const result = analyze(args[0]);
+  HOOKS_INDEX_PATH = resolveHooksIndexPath(args);
+  const result = analyze(positionalArgs[0]);
   console.log(JSON.stringify(result, null, 2));
 }
 

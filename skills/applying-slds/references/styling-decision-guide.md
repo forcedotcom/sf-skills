@@ -70,10 +70,11 @@ Before picking a hook, classify what the color is for:
 
 | Role | Hook prefix | Examples |
 |------|-------------|----------|
-| Surface (backgrounds) | `--slds-g-color-surface-*` | Page bg, card bg, modal bg |
+| Surface (backgrounds) | `--slds-g-color-surface-*` | Page bg, modal bg, top-level panels |
+| Surface container (nested surfaces) | `--slds-g-color-surface-container-*` | Card bg, embedded panels, list items |
 | On-surface (text on surfaces) | `--slds-g-color-on-surface-*` | Body text, headings, icons |
-| Container (interactive bg) | `--slds-g-color-container-*` | Button bg, input bg, tab bg |
-| Accent (emphasis) | `--slds-g-color-accent-*` | Primary button, selected tab |
+| Accent (emphasis) | `--slds-g-color-accent-*` | Primary emphasis, selected state text/icons |
+| Accent container (accent backgrounds) | `--slds-g-color-accent-container-*` | Buttons, selected tabs, emphasized controls |
 | Border | `--slds-g-color-border-*` | Dividers, card borders |
 | Error | `--slds-g-color-error-*` | Validation errors |
 | Success | `--slds-g-color-success-*` | Confirmation states |
