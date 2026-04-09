@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.120.7](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.120.6...v1.120.7) (2026-04-08)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
 ## [1.120.6](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.120.5...v1.120.6) (2026-04-07)
 
 **Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
