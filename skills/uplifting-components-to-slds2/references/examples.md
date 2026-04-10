@@ -137,6 +137,24 @@ tile.css
 }
 ```
 
+### Modal Background
+
+**Before:**
+```css
+.modal-overlay {
+  background-color: #ffffff;
+}
+```
+
+**Context:** Modal creates a new stacking context (overlay) → choose `surface-1`, NOT `surface-container-1`.
+
+**After:**
+```css
+.modal-overlay {
+  background-color: var(--slds-g-color-surface-1, #ffffff);
+}
+```
+
 ### Link Colors
 
 **Before:**
