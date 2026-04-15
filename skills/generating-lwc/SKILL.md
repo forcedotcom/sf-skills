@@ -38,7 +38,6 @@ Before any LWC code is produced, the agent MUST call one or more of these MCP to
    - Testing and quality:
      - orchestrate_lwc_component_testing (for end-to-end Jest test generation/validation)
      - review_lwc_jest_tests (feedback-only)
-     - run_lwc_accessibility_jest_tests (Sa11y guidance and commands)
      - validate_and_optimize (UI component quality assessment runbook)
 Operational Flow
 - Step 1: Classify scope:
