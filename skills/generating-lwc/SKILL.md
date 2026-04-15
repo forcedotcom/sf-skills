@@ -17,6 +17,8 @@ Before any LWC code is produced, the agent MUST call one or more of these MCP to
      - guide_lwc_best_practices (when the goal is guidance, patterns, or conventions)
      - guide_lws_security (when security/LWS concerns are involved)
      - guide_design_general (when SLDS/UX questions exist)
+   - Accessibility Guidance
+     - guide_copmonent_accessibility (to audit/fix components for accessibility compliance)
    - LDS / UI API:
      - explore_lds_uiapi (to retrieve adapter API or UI API types)
      - guide_lds_development (general LDS guidance)
