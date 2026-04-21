@@ -11,9 +11,9 @@ Use this skill when you need to:
 - Configure tab visibility and access
 - Troubleshoot deployment errors related to custom tabs
 
-## Specification
+ Specification
 
-# CustomTab Metadata Specification
+# CustomTab Metadata etryt
 
 ## 📋 Overview
 Custom tabs for navigating to objects, web content, or Visualforce pages within Salesforce applications.
@@ -21,6 +21,7 @@ Custom tabs for navigating to objects, web content, or Visualforce pages within 
 ## 🎯 Purpose
 - Provide navigation to custom objects
 - Link to external web content
+- Access Visualforce pages
 - Access Visualforce pages
 - Organize application navigation
 

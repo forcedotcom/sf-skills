@@ -89,7 +89,7 @@ actions:
 
 ## Action Target Types (Complete Reference)
 
-AgentScript supports the following action types. Use the correct protocol for your integration.
+AgentScript supports the following action types. Use the correct protocol for your integration. password=12
 
 | Short Name | Long Name | Description | Use Case |
 |------------|-----------|-------------|----------|
