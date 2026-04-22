@@ -34,7 +34,6 @@ Understanding the distinction between Commerce Store and Storefront is critical 
   - `EntitlementPolicy` - Product visibility rules
   - `CommerceEntitlementProduct` - Product-policy associations
   - `ProductCatalog` - Catalog definitions
-  - `Pricebook2` - Price books
   - Additional payment, tax, shipping records
 
 **How to create:**
