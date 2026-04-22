@@ -8,7 +8,7 @@ Templates for building complete, deployable agents.
 |----------|------------|-------------|
 | `hello-world.agent` | Beginner | Minimal viable agent - start here |
 | `simple-qa.agent` | Beginner | Single-topic Q&A agent |
-| `multi-topic.agent` | Intermediate | Multi-topic routing agent |
+| `multi-subagent.agent` | Intermediate | Multi-topic routing agent |
 | `production-faq.agent` | Advanced | Production-ready FAQ with escalation |
 
 ## Quick Start

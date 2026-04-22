@@ -25,7 +25,7 @@ What do you need?
 │   └─► agents/hello-world.agent
 │
 ├─► "Complete agent with topics"
-│   └─► agents/multi-topic.agent
+│   └─► agents/multi-subagent.agent
 │
 ├─► "Add actions to my agent"
 │   ├─► components/flow-action.agent
@@ -48,7 +48,7 @@ What do you need?
 |----------|------------|-------------|
 | `hello-world.agent` | Beginner | Minimal viable agent |
 | `simple-qa.agent` | Beginner | Single-topic Q&A |
-| `multi-topic.agent` | Intermediate | Multi-topic routing |
+| `multi-subagent.agent` | Intermediate | Multi-topic routing |
 | `production-faq.agent` | Advanced | Production-ready with escalation |
 
 ### components/ - Reusable Parts
@@ -57,7 +57,7 @@ What do you need?
 |----------|---------|
 | `flow-action.agent` | Flow action integration |
 | `apex-action.agent` | Apex action integration |
-| `topic-with-actions.agent` | Topic with actions |
+| `subagent-with-actions.agent` | Topic with actions |
 | `error-handling.agent` | Input validation |
 | `escalation-setup.agent` | Human handoff |
 

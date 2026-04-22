@@ -35,7 +35,7 @@ developing-agentforce/
 │   ├── agent-user-setup.md
 │   ├── actions-reference.md
 │   ├── action-prompt-templates.md
-│   ├── agent-topic-map-diagrams.md
+│   ├── agent-subagent-map-diagrams.md
 │   ├── minimal-examples.md
 │   ├── known-issues.md
 │   ├── production-gotchas.md

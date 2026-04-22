@@ -1,11 +1,11 @@
-# Agent Topic Map Diagrams Reference
+# Agent Subagent Map Diagrams Reference
 
 ## Table of Contents
 
 - [Purpose and Context](#purpose-and-context)
 - [Fundamental Structure Rules](#fundamental-structure-rules)
 - [Node Types and Agent Script Elements](#node-types-and-agent-script-elements)
-- [Topic Map Patterns](#topic-map-patterns)
+- [Subagent Map Patterns](#topic-map-patterns)
 - [Complete Example: Local_Info_Agent](#complete-example-local_info_agent)
 - [Validation Checklist](#validation-checklist)
 - [Anti-patterns](#anti-patterns)
@@ -14,7 +14,7 @@
 
 ## Purpose and Context
 
-A Topic Map diagram is a Mermaid flowchart that visualizes an agent's topic graph structure. It shows the architecture of an agent before implementation, displaying:
+A Subagent Map diagram is a Mermaid flowchart that visualizes an agent's topic graph structure. It shows the architecture of an agent before implementation, displaying:
 
 - The start_agent agent_router entry point
 - All topics in the agent
@@ -25,7 +25,7 @@ A Topic Map diagram is a Mermaid flowchart that visualizes an agent's topic grap
 - Escalation and off-topic handling
 - Conditional instructions based on variable values
 
-Topic Map diagrams are the primary visual deliverable in an Agent Spec (design document) and serve both specification and comprehension purposes.
+Subagent Map diagrams are the primary visual deliverable in an Agent Spec (design document) and serve both specification and comprehension purposes.
 
 ---
 
@@ -138,7 +138,7 @@ graph TD
 
 ---
 
-## Topic Map Patterns
+## Subagent Map Patterns
 
 ### Basic Topic with Single Action
 
@@ -212,7 +212,7 @@ graph TD
 
 ## Complete Example: Local_Info_Agent
 
-This example demonstrates a complete Topic Map for a guest information agent with multiple topics, gating conditions, variable state, and escalation handling.
+This example demonstrates a complete Subagent Map for a guest information agent with multiple topics, gating conditions, variable state, and escalation handling.
 
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
@@ -275,7 +275,7 @@ graph TD
 
 ## Validation Checklist
 
-Before finalizing a Topic Map diagram:
+Before finalizing a Subagent Map diagram:
 
 - [ ] Uses `graph TD` syntax
 - [ ] Starts with `%%{init: {'theme':'neutral'}}%%`

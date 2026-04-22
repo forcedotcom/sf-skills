@@ -22,7 +22,7 @@ An **Agent Spec** is a structured design document describing an agent's purpose,
 
 - **Purpose & Scope** — what the agent does, in plain language
 - **Behavioral Intent** — what the agent is supposed to achieve (requirements and constraints), not just what the code does
-- **Topic Map** — a Mermaid flowchart showing all topics, transitions (with type labels: handoff or delegation), and when transitions occur
+- **Subagent Map** — a Mermaid flowchart showing all topics, transitions (with type labels: handoff or delegation), and when transitions occur
 - **Actions & Backing Logic** — each action's name, its backing implementation (Apex class, Flow, Prompt Template), inputs/outputs with visibility decisions, and whether the backing logic exists or needs creation
 - **Variables** — declarations, types, default values, which topics set/read them, and what gates they control
 - **Gating Logic** — conditions that govern action visibility or instruction evaluation, with rationale for each. Always include this section; if no gating applies, state "No gating required" so reviewers know it was considered, not overlooked.
@@ -69,7 +69,7 @@ These five question categories drive the content of your Agent Spec. When creati
 - What personality should the agent have? (professional, friendly, formal, casual)
 - What error message should the agent show if something breaks?
 
-### Topics & Conversation Flow *(feeds Topic Map)*
+### Topics & Conversation Flow *(feeds Subagent Map)*
 
 - What distinct conversation areas (topics) does the agent need?
 - Which topic is the entry point? (where conversations start)
@@ -187,12 +187,12 @@ subagent escalation:
 
 Decide this before choosing an architecture pattern.
 
-Use **single-topic** if:
+Use **single-subagent** if:
 - The agent handles one domain only (FAQ, weather checker, status lookup)
 - All interactions naturally stay in the same context
 - No complex state transitions needed
 
-Use **multi-topic** if:
+Use **multi-subagent** if:
 - The agent handles multiple distinct domains (customer service: orders + billing + account)
 - Different topics have different instructions or action sets
 - Users may need to switch contexts mid-conversation
@@ -626,7 +626,7 @@ ALWAYS fix deploy errors BEFORE generating and deploying the next stub.
 
 ## 6. Transition Patterns
 
-When creating a new agent, label every transition in your Agent Spec's Topic Map as either **handoff** or **delegation**. When analyzing an existing agent, classify each transition to determine whether context flow matches the design intent.
+When creating a new agent, label every transition in your Agent Spec's Subagent Map as either **handoff** or **delegation**. When analyzing an existing agent, classify each transition to determine whether context flow matches the design intent.
 
 ### Handoff: Permanent Transition
 

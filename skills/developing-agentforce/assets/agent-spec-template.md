@@ -13,7 +13,7 @@ Describe the key behavioral rules that govern the agent:
 - What guardrails apply (off-topic handling, escalation)?
 - What information persists across topic switches?
 
-## Topic Map
+## Subagent Map
 
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
@@ -27,7 +27,7 @@ graph TD
 ```
 
 Expand the diagram to show actions, gating logic, and variable state changes
-within each topic. See the Topic Map Diagrams reference for conventions.
+within each topic. See the Subagent Map Diagrams reference for conventions.
 
 ## Variables
 

@@ -108,7 +108,7 @@ Read [CLI for Agents](references/salesforce-cli-for-agents.md) for exact command
 3. [Design & Agent Spec](references/agent-design-and-spec-creation.md) —
    topic graph design, flow control patterns, Agent Spec production,
    backing logic analysis; Section 3 for environment prerequisites
-4. [Topic Map Diagrams](references/agent-topic-map-diagrams.md) —
+4. [Subagent Map Diagrams](references/agent-subagent-map-diagrams.md) —
    Mermaid diagram conventions for visualizing the agent's topic graph
 5. [Agent User Setup & Permissions](references/agent-user-setup.md) —
    permission set assignment, object permissions, cross-topic validation
@@ -137,9 +137,9 @@ User wants to understand Agent Script agent they didn't write or need to revisit
 2. **Read code** — Read [Core Language](references/agent-script-core-language.md) for syntax and execution model BEFORE parsing `.agent` file.
 3. **Map backing logic** — For each action with `target`, locate backing implementation (Apex class, Flow, Prompt Template) in project. Note input/output contracts.
 4. **Reverse-engineer Agent Spec** — Read [Design & Agent Spec](references/agent-design-and-spec-creation.md) for Agent Spec structure. Produce Agent Spec from code and save as file.
-5. **Produce Topic Map diagram** — Read [Topic Map Diagrams](references/agent-topic-map-diagrams.md) for Mermaid conventions. Generate flowchart of topic graph showing transitions, gates, and action associations.
+5. **Produce Subagent Map diagram** — Read [Subagent Map Diagrams](references/agent-subagent-map-diagrams.md) for Mermaid conventions. Generate flowchart of topic graph showing transitions, gates, and action associations.
 6. **Annotate source** — Ask if user wants Agent Script source annotated with explanations. If requested, add inline comments to `.agent` file explaining flow control decisions, gating rationale, and topic relationships.
-7. **Present to user** — Share Agent Spec, Topic Map, and annotated source if produced. Check Anti-Patterns section in Core Language reference and flag any matches found in code.
+7. **Present to user** — Share Agent Spec, Subagent Map, and annotated source if produced. Check Anti-Patterns section in Core Language reference and flag any matches found in code.
 
 #### Reference Files
 
@@ -147,7 +147,7 @@ User wants to understand Agent Script agent they didn't write or need to revisit
    execution model, anti-patterns
 2. [Design & Agent Spec](references/agent-design-and-spec-creation.md) —
    Agent Spec structure, flow control pattern recognition
-3. [Topic Map Diagrams](references/agent-topic-map-diagrams.md) —
+3. [Subagent Map Diagrams](references/agent-subagent-map-diagrams.md) —
    Mermaid conventions for topic graph visualization
 4. [Metadata & Lifecycle](references/agent-metadata-and-lifecycle.md) —
    directory conventions, bundle metadata
@@ -413,13 +413,13 @@ Read [Design & Agent Spec](references/agent-design-and-spec-creation.md) for Age
 
 The `assets/` directory contains templates and examples. Read when you need a starting point or a concrete reference for artifacts and source files.
 
-- **`assets/agent-spec-template.md`** — Agent Spec template with all sections and placeholder content. Copy to `<AgentName>-AgentSpec.md` in project directory, then fill in during design. Save Agent Spec as file — significant design artifact that benefits from proper rendering, especially Mermaid Topic Map diagram.
+- **`assets/agent-spec-template.md`** — Agent Spec template with all sections and placeholder content. Copy to `<AgentName>-AgentSpec.md` in project directory, then fill in during design. Save Agent Spec as file — significant design artifact that benefits from proper rendering, especially Mermaid Subagent Map diagram.
 
 - **`assets/local-info-agent-annotated.agent`** — Complete annotated example based on Local Info Agent, showing all major Agent Script constructs in context with inline comments explaining why each construct is used. Read when you need concrete reference for how concepts compose into working agent, or as fallback when focused examples in reference files aren't sufficient.
 
-- **`assets/template-single-topic.agent`** — Minimal agent with one topic. Copy and modify for simple agents.
+- **`assets/template-single-subagent.agent`** — Minimal agent with one topic. Copy and modify for simple agents.
 
-- **`assets/template-multi-topic.agent`** — Minimal agent with multiple topics and transitions. Copy and modify for complex agents.
+- **`assets/template-multi-subagent.agent`** — Minimal agent with multiple topics and transitions. Copy and modify for complex agents.
 
 - **`assets/invocable-apex-template.cls`** — Reference for invocable Apex
   classes. Copy and modify when complex Apex backing logic is desired.
@@ -507,7 +507,7 @@ Validate → deploy metadata → publish bundle → activate. See [Deploy Refere
 
 ## Template Assets
 
-Ready-to-use `.agent` templates in `assets/agents/` (hello-world, simple-qa, multi-topic, production-faq, order-service, verification-gate). See also `assets/patterns/` for 11+ reusable design patterns and [Examples](references/examples.md) for inline walkthroughs.
+Ready-to-use `.agent` templates in `assets/agents/` (hello-world, simple-qa, multi-subagent, production-faq, order-service, verification-gate). See also `assets/patterns/` for 11+ reusable design patterns and [Examples](references/examples.md) for inline walkthroughs.
 
 ## Additional References
 
