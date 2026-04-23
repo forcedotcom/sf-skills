@@ -33,11 +33,12 @@ Universal routing skill for searching and retrieving existing images and media.
 
 When a user requests to find an image:
 
-**Your first response MUST be plain text only — zero tool calls.** You MUST follow this sequence:
+**Your first action MUST use the ask_followup_question tool to present search sources.**
 
-1. **First response MUST be text only:** A numbered list of search sources for the user. No tool calls of any kind.
-2. **Wait for user to reply** with their selected option number
-3. **Only then** call the appropriate search tool (this is the FIRST tool call in the entire interaction)
+1. **Use ask_followup_question** to present available search sources as options
+2. **Receive the user's selection** from the tool response
+3. **Then** call the appropriate search tool based on their choice
+
 
 **Example of what NOT to do:**
 - ❌ Calling ANY tool before the user picks a source (MCP tools, file reads, descriptor checks, etc.)
@@ -279,7 +280,11 @@ Ask the user to provide:
 
 ## Presenting Search Results
 
-Parse the tool response and present **ALL** results as numbered options. Show the image title only — do not display the URL. When the user selects an option, use the URL internally to apply the image.
+**Your action MUST use the `ask_followup_question` tool to present search results as options.**
+1. **Parse the tool response** — Extract all image results (title and source)
+2. **Use `ask_followup_question`** to present ALL results as selectable options. Show the image title only — do not display the URL.
+3. **Receive the user's selection** from the tool response
+4. **Then** apply the selected image
 
 ```
 I found 4 images. Which one would you like to use?
@@ -300,6 +305,7 @@ I found 4 images. Which one would you like to use?
 **Never auto-select an image.** Always wait for user choice.
 
 ## Applying the Selected Image
+
 
 After the user chooses:
 
