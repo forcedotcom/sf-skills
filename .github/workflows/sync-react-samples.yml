@@ -128,20 +128,16 @@ jobs:
         if: steps.skip.outputs.skip != 'true'
         id: pr-meta
         run: |
-          PARTS=""
           BODY=""
 
           if [ "${{ steps.skip.outputs.b2e_changed }}" = "true" ]; then
-            PARTS="${PARTS}b2e-${{ steps.npm-version-b2e.outputs.latest }}"
             BODY="${BODY}- **B2E** \`@salesforce/ui-bundle-template-app-react-sample-b2e\`: ${{ steps.current-version-b2e.outputs.current || 'none' }} → ${{ steps.npm-version-b2e.outputs.latest }}"$'\n'
           fi
           if [ "${{ steps.skip.outputs.b2x_changed }}" = "true" ]; then
-            if [ -n "$PARTS" ]; then PARTS="${PARTS}-"; fi
-            PARTS="${PARTS}b2x-${{ steps.npm-version-b2x.outputs.latest }}"
             BODY="${BODY}- **B2X** \`@salesforce/ui-bundle-template-app-react-sample-b2x\`: ${{ steps.current-version-b2x.outputs.current || 'none' }} → ${{ steps.npm-version-b2x.outputs.latest }}"$'\n'
           fi
 
-          echo "branch=chore/sync-react-samples-${PARTS}" >> $GITHUB_OUTPUT
+          echo "branch=chore/sync-react-samples" >> $GITHUB_OUTPUT
 
           # Multi-line body via heredoc
           {
@@ -155,15 +151,7 @@ jobs:
             echo "EOFBODY"
           } >> $GITHUB_OUTPUT
 
-          TITLE="chore: sync React samples from npm"
-          if [ "${{ steps.skip.outputs.b2e_changed }}" = "true" ] && [ "${{ steps.skip.outputs.b2x_changed }}" = "true" ]; then
-            TITLE="chore: sync React B2E (${{ steps.npm-version-b2e.outputs.latest }}) & B2X (${{ steps.npm-version-b2x.outputs.latest }}) samples from npm"
-          elif [ "${{ steps.skip.outputs.b2e_changed }}" = "true" ]; then
-            TITLE="chore: sync React B2E sample from npm @ ${{ steps.npm-version-b2e.outputs.latest }}"
-          else
-            TITLE="chore: sync React B2X sample from npm @ ${{ steps.npm-version-b2x.outputs.latest }}"
-          fi
-          echo "title=${TITLE}" >> $GITHUB_OUTPUT
+          echo "title=chore: sync React samples from npm" >> $GITHUB_OUTPUT
 
       - name: Create PR on version change
         if: steps.skip.outputs.skip != 'true'
