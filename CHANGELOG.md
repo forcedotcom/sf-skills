@@ -1,3 +1,12 @@
+## [1.7.3](https://github.com/forcedotcom/afv-library/compare/1.7.2...1.7.3) (2026-04-23)
+
+
+### Bug Fixes
+
+* @W-21829588 : Custom Lightning Type Skills Fixes ([#191](https://github.com/forcedotcom/afv-library/issues/191)) ([6f39dd4](https://github.com/forcedotcom/afv-library/commit/6f39dd4047fe59ad635dfe66acae52fdae2a4dbc))
+
+
+
 ## [1.7.2](https://github.com/forcedotcom/afv-library/compare/1.7.1...1.7.2) (2026-04-22)
 
 
