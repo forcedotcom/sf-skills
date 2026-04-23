@@ -101,5 +101,3 @@ console.log('UI bundle directory:', uiBundleDir);
 
 run('npm install', 'npm', ['install', '--registry', 'https://registry.npmjs.org/'], { cwd: uiBundleDir });
 run('npm run build', 'npm', ['run', 'build'], { cwd: uiBundleDir });
-console.log('\n--- Launching dev server (Ctrl+C to stop) ---\n');
-run('npm run dev', 'npm', ['run', 'dev'], { cwd: uiBundleDir });

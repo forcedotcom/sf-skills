@@ -113,7 +113,9 @@ export function useObjectSearchParams<TFilter, TOrderBy>(
 	// Snapshot ref — lets callbacks read the latest state without being
 	// recreated on every render (avoids infinite useCallback chains).
 	const stateRef = useRef({ filters, sort, pageSize, pageIndex });
-	stateRef.current = { filters, sort, pageSize, pageIndex };
+	useEffect(() => {
+		stateRef.current = { filters, sort, pageSize, pageIndex };
+	});
 
 	// Any filter/sort change resets pagination to the first page.
 	const resetPagination = useCallback(() => {

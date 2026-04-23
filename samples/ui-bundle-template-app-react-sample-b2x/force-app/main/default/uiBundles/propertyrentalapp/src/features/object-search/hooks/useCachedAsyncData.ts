@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface UseAsyncDataResult<T> {
 	data: T | null;
@@ -139,8 +139,10 @@ export function useCachedAsyncData<T>(
 	const [loading, setLoading] = useState(!cached);
 	const [error, setError] = useState<string | null>(null);
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps --- deps are explicitly managed by the caller
-	const memoizedFetcher = useCallback(fetcher, deps);
+	const fetcherRef = useRef(fetcher);
+	useEffect(() => {
+		fetcherRef.current = fetcher;
+	});
 
 	useEffect(() => {
 		// Re-check the cache inside the effect because deps may have changed
@@ -158,7 +160,8 @@ export function useCachedAsyncData<T>(
 		setLoading(true);
 		setError(null);
 
-		memoizedFetcher()
+		fetcherRef
+			.current()
 			.then((result) => {
 				if (!cancelled) {
 					setEntry(cacheKey, result, maxSize);
@@ -178,7 +181,8 @@ export function useCachedAsyncData<T>(
 		return () => {
 			cancelled = true;
 		};
-	}, [memoizedFetcher, cacheKey, ttl, maxSize]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps --- deps are explicitly managed by the caller
+	}, [...deps, cacheKey, ttl, maxSize]);
 
 	return { data, loading, error };
 }

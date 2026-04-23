@@ -1,5 +1,5 @@
 import { useSearchParams, Link } from "react-router";
-import { useCallback, useState, type ChangeEvent, type SubmitEvent } from "react";
+import { useState, type ChangeEvent, type SubmitEvent } from "react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -87,29 +87,26 @@ export default function Application() {
 	const [submitError, setSubmitError] = useState<string | null>(null);
 	const [submittedId, setSubmittedId] = useState<string | null>(null);
 
-	const handleSubmit = useCallback(
-		async (e: SubmitEvent<HTMLFormElement>) => {
-			e.preventDefault();
-			setSubmitError(null);
-			setSubmitting(true);
-			try {
-				const id = await createApplicationRecord({
-					Property__c: propertyId || null,
-					Status__c: "Submitted",
-					User__c: contactId || user?.id || "",
-					Start_Date__c: moveInDate.trim() || null,
-					Employment__c: employment.trim() || null,
-					References__c: references.trim() || null,
-				});
-				setSubmittedId(id.id);
-			} catch (err) {
-				setSubmitError(err instanceof Error ? err.message : "Failed to submit application.");
-			} finally {
-				setSubmitting(false);
-			}
-		},
-		[propertyId, contactId, moveInDate, employment, references, user?.id],
-	);
+	const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		setSubmitError(null);
+		setSubmitting(true);
+		try {
+			const id = await createApplicationRecord({
+				Property__c: propertyId || null,
+				Status__c: "Submitted",
+				User__c: contactId || user?.id || "",
+				Start_Date__c: moveInDate.trim() || null,
+				Employment__c: employment.trim() || null,
+				References__c: references.trim() || null,
+			});
+			setSubmittedId(id.id);
+		} catch (err) {
+			setSubmitError(err instanceof Error ? err.message : "Failed to submit application.");
+		} finally {
+			setSubmitting(false);
+		}
+	};
 
 	if (loading) {
 		return <ApplicationSkeleton />;
