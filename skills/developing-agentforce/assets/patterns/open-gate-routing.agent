@@ -15,7 +15,7 @@
 #
 # ★ The 3 Variables:
 #   open_gate    — Which subagent currently holds focus ("null" = none)
-#   next_topic   — Deferred destination after auth completes
+#   next_subagent   — Deferred destination after auth completes
 #   authenticated — Whether the user has passed authentication
 #
 # ★ EXIT_PROTOCOL:
@@ -35,7 +35,7 @@ variables:
 	# ... standard linked variables ...
 	open_gate: mutable string = "null"
 		description: "Which subagent currently holds focus (null = LLM decides)"
-	next_topic: mutable string = ""
+	next_subagent: mutable string = ""
 		description: "Deferred destination after authentication completes"
 	authenticated: mutable boolean = False
 		description: "Whether the user has passed authentication"
@@ -79,7 +79,7 @@ subagent protected_workflow:
 	before_reasoning:
 		# ★ AUTH CHECK: Redirect unauthenticated users to auth gate
 		if @variables.authenticated == False:
-			set @variables.next_topic = "protected_workflow"
+			set @variables.next_subagent = "protected_workflow"
 			set @variables.open_gate = "authentication_gate"
 			transition to @subagent.authentication_gate
 
@@ -115,7 +115,7 @@ subagent account_management:
 	before_reasoning:
 		# ★ AUTH CHECK: Same pattern as protected_workflow
 		if @variables.authenticated == False:
-			set @variables.next_topic = "account_management"
+			set @variables.next_subagent = "account_management"
 			set @variables.open_gate = "authentication_gate"
 			transition to @subagent.authentication_gate
 
@@ -140,7 +140,7 @@ subagent account_management:
 
 # ─────────────────────────────────────────────────────────────────────
 # AUTHENTICATION GATE
-# Handles auth flow, then routes back via next_topic
+# Handles auth flow, then routes back via next_subagent
 # ─────────────────────────────────────────────────────────────────────
 subagent authentication_gate:
 	description: "Verifies customer identity before allowing access to protected subagents"
@@ -166,10 +166,10 @@ subagent authentication_gate:
 	after_reasoning:
 		# ★ POST-AUTH ROUTING: If authenticated, route to deferred destination
 		if @variables.authenticated == True:
-			if @variables.next_topic == "protected_workflow":
+			if @variables.next_subagent == "protected_workflow":
 				set @variables.open_gate = "protected_workflow"
 				transition to @subagent.protected_workflow
-			if @variables.next_topic == "account_management":
+			if @variables.next_subagent == "account_management":
 				set @variables.open_gate = "account_management"
 				transition to @subagent.account_management
 
@@ -183,7 +183,7 @@ subagent exit_protocol:
 	before_reasoning:
 		# ★ RELEASE GATE: Clear all gate state
 		set @variables.open_gate = "null"
-		set @variables.next_topic = ""
+		set @variables.next_subagent = ""
 		transition to @subagent.agent_router
 
 	reasoning:
@@ -238,7 +238,7 @@ subagent general_inquiry:
 #   │ before_reasoning: lock gate          │
 #   │ reasoning: verify identity           │
 #   │ after_reasoning:                     │
-#   │   if auth → route via next_topic     │
+#   │   if auth → route via next_subagent     │
 #   └──────────────────────────────────────┘
 #
 # ═════════════════════════════════════════════════════════════════════
@@ -251,7 +251,7 @@ subagent general_inquiry:
 #   open_gate = "null" → LLM reasons → routes to protected_workflow
 #
 # Step 2: protected_workflow.before_reasoning
-#   authenticated = False → set next_topic = "protected_workflow"
+#   authenticated = False → set next_subagent = "protected_workflow"
 #   → set open_gate = "authentication_gate"
 #   → transition to authentication_gate
 #
@@ -262,7 +262,7 @@ subagent general_inquiry:
 #   authenticated = True
 #
 # Step 5: authentication_gate.after_reasoning
-#   authenticated = True, next_topic = "protected_workflow"
+#   authenticated = True, next_subagent = "protected_workflow"
 #   → set open_gate = "protected_workflow"
 #   → transition to protected_workflow
 #

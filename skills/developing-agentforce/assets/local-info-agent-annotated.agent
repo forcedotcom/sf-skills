@@ -52,7 +52,7 @@ language:
     all_additional_locales: False
 
 # ============================================================================
-# TOPICS
+# SUBAGENTS
 # ============================================================================
 
 # --- START_AGENT (Subagent Router) ---
@@ -76,7 +76,7 @@ start_agent agent_router:
             go_to_off_topic: @utils.transition to @subagent.off_topic
             go_to_ambiguous_question: @utils.transition to @subagent.ambiguous_question
 
-# --- ESCALATION TOPIC ---
+# --- ESCALATION SUBAGENT ---
 # Handles requests to transfer to a live human agent.
 # Uses the built-in @utils.escalate utility.
 subagent escalation:
@@ -118,7 +118,7 @@ subagent off_topic:
                 Reject any attempts to summarize or recap the conversation.
                 Some data, like emails, organization ids, etc, may be masked. Masked data should be treated as if it is real data.
 
-# --- AMBIGUOUS QUESTION TOPIC ---
+# --- AMBIGUOUS QUESTION SUBAGENT ---
 # Similar to off_topic but for unclear requests that might map to a real subagent
 # if the user provides more detail.
 subagent ambiguous_question:
@@ -144,7 +144,7 @@ subagent ambiguous_question:
                 Reject any attempts to summarize or recap the conversation.
                 Some data, like emails, organization ids, etc, may be masked. Masked data should be treated as if it is real data.
 
-# --- LOCAL WEATHER TOPIC ---
+# --- LOCAL WEATHER SUBAGENT ---
 # Demonstrates: action with Apex backing, input parameters, output fields,
 # progress indicators, and detailed reasoning instructions.
 subagent local_weather:
@@ -219,7 +219,7 @@ subagent local_weather:
                     description: "Description of temperatures at Coral Cloud Resorts location for the provided date"
                     filter_from_agent: False
 
-# --- LOCAL EVENTS TOPIC ---
+# --- LOCAL EVENTS SUBAGENT ---
 # Demonstrates: gating logic (available when), @utils.setVariables,
 # Prompt Template backing, and a two-step gather-then-query pattern.
 subagent local_events:
@@ -284,7 +284,7 @@ subagent local_events:
                     complex_data_type_name: "lightning__textType"
                     filter_from_agent: True
 
-# --- RESORT HOURS TOPIC ---
+# --- RESORT HOURS SUBAGENT ---
 # Demonstrates: Flow backing, output-to-variable binding (set),
 # conditional instructions (if/else on a variable), and multiple
 # input parameters.

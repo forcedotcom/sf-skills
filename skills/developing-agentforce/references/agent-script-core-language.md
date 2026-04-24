@@ -83,7 +83,7 @@ language:
 start_agent agent_router:
     ...
 
-subagent my_topic:
+subagent my_subagent:
     ...
 ```
 
@@ -612,7 +612,7 @@ Expose the transition as a reasoning action when the LLM should judge the right 
 ```agentscript
 reasoning:
     actions:
-        go_next: @utils.transition to @subagent.next_topic
+        go_next: @utils.transition to @subagent.next_subagent
             description: "Move to the next subagent"
             available when @variables.ready == True
 ```
@@ -919,7 +919,7 @@ The LLM extracts values from the conversation and populates the specified variab
 ```agentscript
 reasoning:
     actions:
-        consult_expert: @subagent.expert_topic
+        consult_expert: @subagent.expert_subagent
             description: "Get expert guidance"
             available when @variables.needs_expert_help == True
 ```
@@ -1138,7 +1138,7 @@ reasoning:
 ```agentscript
 # If you need to record state, set before transitioning
 before_reasoning:
-    set @variables.last_topic = "current_topic"
+    set @variables.last_subagent = "current_subagent"
     transition to @subagent.next
 ```
 

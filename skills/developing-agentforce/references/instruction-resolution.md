@@ -454,7 +454,7 @@ set @variables.counter = @variables.counter + 1
 ### Deterministic Transition
 
 ```
-transition to @subagent.next_topic
+transition to @subagent.next_subagent
 ```
 
 ### Conditional Transition

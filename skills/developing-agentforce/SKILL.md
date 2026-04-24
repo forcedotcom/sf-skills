@@ -1,6 +1,6 @@
 ---
 name: developing-agentforce
-description: "Build, modify, debug, and deploy agents with Agentforce Agent Script. TRIGGER when: user creates, modifies, or asks about .agent files or aiAuthoringBundle metadata; changes agent behavior, responses, or conversation logic; designs agent topics, actions, tools, sub-agents, or flow control; writes or reviews an Agent Spec; previews, debugs, deploys, publishes, or tests agents; uses Agent Script CLI commands (sf agent generate/preview/publish/test). DO NOT TRIGGER when: Apex development, Flow building, Prompt Template authoring, Experience Cloud configuration, or general Salesforce CLI tasks unrelated to Agent Script."
+description: "Build, modify, debug, and deploy agents with Agentforce Agent Script. TRIGGER when: user creates, modifies, or asks about .agent files or aiAuthoringBundle metadata; changes agent behavior, responses, or conversation logic; designs agent actions, tools, subagents, or flow control; writes or reviews an Agent Spec; previews, debugs, deploys, publishes, or tests agents; uses Agent Script CLI commands (sf agent generate/preview/publish/test). DO NOT TRIGGER when: Apex development, Flow building, Prompt Template authoring, Experience Cloud configuration, or general Salesforce CLI tasks unrelated to Agent Script."
 license: Apache-2.0
 compatibility: "Requires Agentforce license, API v66.0+, Einstein Agent User"
 metadata:
@@ -18,7 +18,7 @@ Agent Script is Salesforce's scripting language for authoring next-generation AI
 language. Do NOT confuse Agent Script syntax or semantics with any other
 language you have been trained on.
 
-Agent Script agents are defined by `AiAuthoringBundle` metadata — a directory with a `.agent` file containing Agent Script source that describes topics, actions, instructions, flow control, and configuration; and a `bundle-meta.xml` file containing bundle metadata. Agents process utterances by routing through topics, each with instructions and actions backed by Apex, Flows, Prompt Templates, and other types of backing logic.
+Agent Script agents are defined by `AiAuthoringBundle` metadata — a directory with a `.agent` file containing Agent Script source that describes actions, instructions, subagents, flow control, and configuration; and a `bundle-meta.xml` file containing bundle metadata. Agents process utterances by routing through subagents, each with instructions and actions backed by Apex, Flows, Prompt Templates, and other types of backing logic.
 
 This skill covers the full Agent Script lifecycle: designing agents,
 writing Agent Script code, validating and debugging, deploying and
@@ -53,7 +53,7 @@ Every task domain below has **Required Steps**. Follow verbatim, in order. Do no
 
 ### Create an Agent
 
-User wants to build new agent from scratch. ALWAYS use Agent Script. Work with User to understand the agent's purpose, topics, and actions using plain language without Salesforce-specific terminology.
+User wants to build new agent from scratch. ALWAYS use Agent Script. Work with User to understand the agent's purpose, subagents, and actions using plain language without Salesforce-specific terminology.
 
 #### Required Steps
 

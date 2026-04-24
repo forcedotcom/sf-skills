@@ -103,7 +103,7 @@ consult_pricing: @utils.transition to @subagent.pricing_specialist
 
 # In specialist subagent
 before_reasoning:
-   set @variables.return_topic = "main_hub"
+   set @variables.return_subagent = "main_hub"
 
 # ... do specialist work ...
 
@@ -168,7 +168,7 @@ reasoning:
 system:
    instructions: "You are a professional agent. Be helpful and courteous."
 
-# Topic reasoning: Dynamic overrides
+# Subagent reasoning: Dynamic overrides
 reasoning:
    instructions: ->
       if @variables.customer_tier == "vip":
@@ -239,7 +239,7 @@ open-gate-routing + lifecycle-events
 | Lifecycle Events | +5 pts | Proper block placement |
 | Bidirectional | +5 pts | Return transitions |
 | Input Bindings | +5 pts | Proper binding patterns |
-| System Overrides | +5 pts | Static system, dynamic topics |
+| System Overrides | +5 pts | Static system, dynamic subagents |
 | Open Gate | +5 pts | 3-variable coordination |
 
 ## Anti-Patterns to Avoid

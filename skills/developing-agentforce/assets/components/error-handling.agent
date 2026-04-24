@@ -5,9 +5,9 @@
 # Usage: Replace {{placeholders}} with your values
 # Note: Includes validation patterns and error handling
 
-subagent {{topic_name}}:
-	label: "{{TopicLabel}}"
-	description: "{{TopicDescription}} - includes validation and error handling"
+subagent {{subagent_name}}:
+	label: "{{SubagentLabel}}"
+	description: "{{SubagentDescription}} - includes validation and error handling"
 
 	actions:
 		{{action_name}}:
@@ -52,7 +52,7 @@ subagent {{topic_name}}:
 				available when @variables.validation_passed == True
 
 			# Handle errors
-			retry_operation: @utils.transition to @subagent.{{topic_name}}
+			retry_operation: @utils.transition to @subagent.{{subagent_name}}
 				available when @variables.operation_success == False
 
 			back_to_menu: @utils.transition to @subagent.agent_router

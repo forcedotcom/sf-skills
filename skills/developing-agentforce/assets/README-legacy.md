@@ -24,7 +24,7 @@ What do you need?
 ├─► "Just starting"
 │   └─► agents/hello-world.agent
 │
-├─► "Complete agent with topics"
+├─► "Complete agent with subagents"
 │   └─► agents/multi-subagent.agent
 │
 ├─► "Add actions to my agent"
@@ -57,7 +57,7 @@ What do you need?
 |----------|---------|
 | `flow-action.agent` | Flow action integration |
 | `apex-action.agent` | Apex action integration |
-| `subagent-with-actions.agent` | Topic with actions |
+| `subagent-with-actions.agent` | Subagent with actions |
 | `error-handling.agent` | Input validation |
 | `escalation-setup.agent` | Human handoff |
 
@@ -67,8 +67,8 @@ What do you need?
 |----------|---------|------------|
 | `lifecycle-events.agent` | before/after reasoning | GenAiPlannerBundle |
 | `action-callbacks.agent` | Deterministic chains | GenAiPlannerBundle |
-| `bidirectional-routing.agent` | Topic routing with return | Both |
-| `system-instruction-overrides.agent` | Topic-level personas | Both |
+| `bidirectional-routing.agent` | Subagent routing with return | Both |
+| `system-instruction-overrides.agent` | Subagent-level personas | Both |
 | *(6 more patterns)* | | |
 
 ### metadata/ - XML Templates

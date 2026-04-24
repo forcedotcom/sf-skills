@@ -67,7 +67,7 @@ subagent conversation:
 			inputs:
 				turn_number: number
 					description: "Which turn this is"
-				topic_name: string
+				subagent_name: string
 					description: "Current subagent"
 			outputs:
 				logged: boolean
@@ -112,7 +112,7 @@ subagent conversation:
 		# Log analytics for each turn
 		run @actions.log_turn
 			with turn_number=@variables.turn_count
-			with topic_name="conversation"
+			with subagent_name="conversation"
 
 		# Update last activity timestamp
 		run @actions.get_timestamp
