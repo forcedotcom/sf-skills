@@ -1,0 +1,127 @@
+name: "Select"
+
+description: "A form control that presents users with a dropdown list of predefined options, allowing selection of one option from the list."
+
+category: "Input"
+
+slds_classes:
+  root: "slds-select"
+  elements:
+    - class: "slds-select_container"
+      description: "Container wrapper for select element"
+      purpose: "Provides styling wrapper for the select control"
+  modifiers: []
+  states:
+    - class: "slds-has-error"
+      description: "Error state styling"
+      trigger: "When select validation fails"
+    - class: "slds-is-disabled"
+      description: "Disabled state styling"
+      trigger: "When select is not interactive"
+
+variants:
+  - name: "Base"
+    description: "Standard select dropdown"
+    classes: ["slds-select"]
+    usage_context: "Default select implementation for option selection"
+    differences: "Standard dropdown with predefined options"
+
+lightning_component:
+  name: "lightning-select"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-select"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS select blueprint"
+
+accessibility:
+  keyboard_support:
+    - "Tab to focus the select"
+    - "Arrow keys to navigate options"
+    - "Enter/Space to open dropdown"
+    - "First letter to jump to matching options"
+  screen_reader:
+    - "Select purpose and current value announced"
+    - "Option list and current selection communicated"
+    - "Required state indicated when applicable"
+  aria_attributes:
+    - "aria-describedby for help text and error messages"
+    - "aria-invalid when validation fails"
+    - "aria-required for required selects"
+    - "aria-label when no visible label present"
+
+usage_guidelines:
+  when_to_use:
+    - "For selecting one option from a predefined list"
+    - "When you have 4-15 options to choose from"
+    - "For standard form inputs requiring selection"
+    - "When options are well-known and don't require search"
+  when_not_to_use:
+    - "For more than 15 options (use combobox instead)"
+    - "When users need to search or filter (use combobox)"
+    - "For multiple selections (use checkbox group)"
+    - "For binary choices (use radio buttons or toggle)"
+  best_practices:
+    - "Use clear, descriptive option labels"
+    - "Order options logically (alphabetical, frequency, importance)"
+    - "Provide a default selection when appropriate"
+    - "Keep option lists manageable in size"
+    - "Use proper form structure and labeling"
+  common_mistakes:
+    - "Too many options making selection difficult"
+    - "Unclear or ambiguous option labels"
+    - "Poor option ordering"
+    - "Missing default selection when needed"
+
+code_examples:
+  - title: "Basic Select"
+    code: |
+      <div class="slds-form-element">
+        <label class="slds-form-element__label" for="select-01">
+          <abbr class="slds-required" title="required">* </abbr>Select Label
+        </label>
+        <div class="slds-form-element__control">
+          <div class="slds-select_container">
+            <select class="slds-select" id="select-01" required>
+              <option value="">Choose one...</option>
+              <option value="option1">Option One</option>
+              <option value="option2">Option Two</option>
+              <option value="option3">Option Three</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    description: "Basic select with label and options"
+
+styling_hooks:
+  - name: "--slds-c-select-color-background"
+    description: "Background color for select"
+    category: "color"
+  - name: "--slds-c-select-color-border"
+    description: "Border color for select"
+    category: "color"
+  - name: "--slds-c-select-color-border-focus"
+    description: "Border color for focused select"
+    category: "color"
+
+dependencies:
+  css_files: ["select.css", "form-element.css"]
+  javascript: []
+  icons: []
+  other_components: ["form-element"]
+
+related_components:
+  - name: "Combobox"
+    relationship: "alternative"
+    description: "Enhanced select with search and filtering"
+  - name: "Picklist"
+    relationship: "similar"
+    description: "Alternative selection control"
+  - name: "Radio Group"
+    relationship: "alternative"
+    description: "Alternative for fewer, mutually exclusive options"
+
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/select/"
+
+metadata:
+  version: "1.0.0"
+  last_updated: "2024-12-19"
+  review_status: "complete"

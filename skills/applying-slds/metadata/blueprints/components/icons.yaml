@@ -1,0 +1,138 @@
+name: "Icons"
+description: "Scalable vector graphics that provide visual meaning and enhance user interface elements with consistent symbolic representation."
+category: "Display"
+slds_classes:
+  root: "slds-icon"
+  elements:
+    - class: "slds-icon_container"
+      description: "Container for icon with background"
+      purpose: "Provides background and spacing for icons"
+  modifiers:
+    - class: "slds-icon_xx-small"
+      description: "Extra extra small icon size"
+      usage: "12px icons for very compact spaces"
+    - class: "slds-icon_x-small"
+      description: "Extra small icon size"
+      usage: "16px icons for compact elements"
+    - class: "slds-icon_small"
+      description: "Small icon size"
+      usage: "20px icons for small components"
+    - class: "slds-icon_large"
+      description: "Large icon size"
+      usage: "32px icons for prominent display"
+    - class: "slds-icon-text-default"
+      description: "Default icon color"
+      usage: "Standard text color for icons"
+    - class: "slds-icon-text-light"
+      description: "Light icon color"
+      usage: "Subdued icon appearance"
+    - class: "slds-icon-text-warning"
+      description: "Warning icon color"
+      usage: "Warning state indication"
+    - class: "slds-icon-text-error"
+      description: "Error icon color"
+      usage: "Error state indication"
+    - class: "slds-icon-text-success"
+      description: "Success icon color"
+      usage: "Success state indication"
+  states: []
+variants:
+  - name: "Base"
+    description: "Standard icon implementation"
+    classes:
+      - "slds-icon"
+    usage_context: "Default icon display"
+    differences: "SVG icon with standard styling"
+  - name: "Container"
+    description: "Icon with background container"
+    classes:
+      - "slds-icon_container"
+    usage_context: "Icons needing background emphasis"
+    differences: "Icon with colored background circle"
+lightning_component:
+  name: "lightning-icon"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-icon"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS icon blueprint"
+accessibility:
+  keyboard_support:
+    - "No keyboard interaction (display-only)"
+    - "Focus handled by parent interactive elements"
+  screen_reader:
+    - "Icon meaning conveyed through aria-label or title"
+    - "Decorative icons hidden with aria-hidden='true'"
+    - "Meaningful icons announced with appropriate labels"
+  aria_attributes:
+    - "aria-hidden='true' for decorative icons"
+    - "aria-label for meaningful icons without text"
+    - "title attribute for hover tooltips"
+usage_guidelines:
+  when_to_use:
+    - "To enhance understanding of UI elements"
+    - "For visual consistency and recognition"
+    - "To indicate status or state"
+    - "As visual cues for actions or content types"
+  when_not_to_use:
+    - "As the only way to convey important information"
+    - "When the icon meaning is unclear or ambiguous"
+    - "For purely decorative purposes without semantic value"
+  best_practices:
+    - "Use icons from the SLDS icon library for consistency"
+    - "Choose appropriate size for context"
+    - "Provide text labels or alt text for meaningful icons"
+    - "Use consistent icon styles throughout the interface"
+    - "Test icon recognition with users"
+  common_mistakes:
+    - "Using unclear or ambiguous icons"
+    - "Relying solely on icons without text backup"
+    - "Inconsistent icon sizing"
+    - "Missing accessibility attributes"
+code_examples:
+  - title: "Basic Icon"
+    code: |
+      <svg class="slds-icon slds-icon_small slds-icon-text-default" aria-hidden="true">
+            <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#user"></use>
+            </svg>
+  - title: "Icon with Container"
+    code: |
+      <span class="slds-icon_container slds-icon-standard-account">
+            <svg class="slds-icon" aria-hidden="true">
+              <use xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#account"></use>
+            </svg>
+            </span>
+  - title: "Large Warning Icon"
+    code: |
+      <svg class="slds-icon slds-icon_large slds-icon-text-warning" aria-hidden="true">
+            <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#warning"></use>
+            </svg>
+styling_hooks:
+  - name: "--slds-c-icon-color-foreground-default"
+    default_value: "#706e6b"
+    description: "Default color for icons"
+    category: "color"
+dependencies:
+  css_files:
+    - "icons.css"
+  javascript: []
+  icons:
+    - "utility-sprite.svg"
+    - "standard-sprite.svg"
+    - "action-sprite.svg"
+    - "custom-sprite.svg"
+  other_components: []
+related_components:
+  - name: "Button Icons"
+    relationship: "similar"
+    description: "Icons used within button components"
+  - name: "Avatar"
+    relationship: "similar"
+    description: "Icons often used with avatar fallbacks"
+  - name: "Illustrations"
+    relationship: "similar"
+    description: "Larger, more complex visual graphics"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/icons/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

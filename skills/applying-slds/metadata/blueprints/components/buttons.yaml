@@ -1,0 +1,230 @@
+name: Buttons
+description: Clickable elements used to perform actions. Buttons communicate action and direct user intent.
+category: Actions
+slds_classes:
+  root: slds-button
+  elements:
+  - class: slds-button__icon
+    description: Icon within button
+    purpose: Contains SVG icons inside buttons
+  - class: slds-button__icon_left
+    description: Icon positioned on the left side of button text
+    purpose: Positions icon to the left of button label
+  - class: slds-button__icon_right
+    description: Icon positioned on the right side of button text
+    purpose: Positions icon to the right of button label
+  modifiers:
+  - class: slds-button_neutral
+    description: Default button style with neutral appearance
+    usage: Use for secondary actions or when multiple buttons are present
+  - class: slds-button_brand
+    description: Primary button style with brand color
+    usage: Use for primary actions, limit to one per page section
+  - class: slds-button_outline-brand
+    description: Button with brand-colored outline
+    usage: Use for secondary actions that need more emphasis than neutral
+  - class: slds-button_destructive
+    description: Button for destructive actions
+    usage: Use for delete, remove, or other potentially harmful actions
+  - class: slds-button_text-destructive
+    description: Text-only destructive button
+    usage: Use for destructive actions that need less visual weight
+  - class: slds-button_success
+    description: Button for successful or positive actions
+    usage: Use for confirm, save, or other positive actions
+  - class: slds-button_inverse
+    description: Button for use on dark backgrounds
+    usage: Use when button appears on dark or colored backgrounds
+  - class: slds-button_icon
+    description: Icon-only button base class
+    usage: Use for buttons containing only icons
+  - class: slds-button_icon-bare
+    description: Icon button with no border or background
+    usage: Use for minimal icon buttons
+  - class: slds-button_icon-container
+    description: Icon button with container styling
+    usage: Use for icon buttons that need visual containment
+  - class: slds-button_icon-border
+    description: Icon button with border
+    usage: Use for icon buttons that need border definition
+  - class: slds-button_icon-border-filled
+    description: Icon button with border and background fill
+    usage: Use for icon buttons that need filled appearance
+  - class: slds-button_icon-more
+    description: Icon button styled for 'more actions' pattern
+    usage: Use specifically for overflow menu triggers
+  sizes:
+  - class: slds-button_small
+    description: Small button size
+    usage: Use when default size is too large
+  states:
+  - class: slds-is-selected
+    description: Selected state for stateful buttons
+    trigger: User selection or programmatic state change
+  - class: slds-not-selected
+    description: Not selected state for stateful buttons
+    trigger: Default or deselected state
+variants:
+- name: Base
+  description: Standard button styles including neutral, brand, and destructive variants
+  classes:
+  - slds-button
+  - slds-button_neutral
+  - slds-button_brand
+  usage_context: Default buttons for actions throughout the interface
+  differences: Different visual emphasis levels for action hierarchy
+- name: Icon
+  description: Icon-only buttons in various styles
+  classes:
+  - slds-button
+  - slds-button_icon
+  - slds-button_icon-border
+  usage_context: When space is constrained or action is universally understood
+  differences: No text labels, rely on iconography for meaning
+- name: Stateful
+  description: Buttons that toggle between states
+  classes:
+  - slds-button
+  - slds-is-selected
+  - slds-not-selected
+  usage_context: For toggle actions like favorites, follow, or selection
+  differences: Visual state changes based on user interaction
+lightning_component:
+  name: lightning-button
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-button
+  mapping_notes: Direct mapping - Lightning component implements SLDS button blueprint with additional functionality
+accessibility:
+  keyboard_support:
+  - Tab to focus on button
+  - Enter or Space to activate button
+  - Focus visible indicators required
+  screen_reader:
+  - Button text or aria-label announced
+  - Button role automatically conveyed
+  - State changes announced for stateful buttons
+  aria_attributes:
+  - aria-label for icon-only buttons
+  - aria-pressed for stateful toggle buttons
+  - aria-describedby for additional context
+  - aria-disabled for disabled state
+usage_guidelines:
+  when_to_use:
+  - To trigger an action or event
+  - To submit forms
+  - To navigate to a new page or section
+  - To open modals or dialogs
+  when_not_to_use:
+  - For navigation use links instead
+  - When the action is not immediately actionable
+  - For decorative purposes
+  best_practices:
+  - Use clear, action-oriented labels
+  - Maintain visual hierarchy with button types
+  - Limit primary buttons to one per section
+  - Group related buttons logically
+  - Ensure sufficient spacing between buttons
+  common_mistakes:
+  - Using multiple primary buttons in the same area
+  - Making button labels too vague
+  - Not providing sufficient color contrast
+  - Overusing destructive button styling
+code_examples:
+- title: Basic Button Variants
+  code: "<button class=\"slds-button slds-button_neutral\">Neutral Button</button>\n      <button class=\"slds-button slds-button_brand\"\
+    >Brand Button</button>\n      <button class=\"slds-button slds-button_destructive\">Destructive Button</button>\n"
+- title: Button with Icons
+  code: "<button class=\"slds-button slds-button_neutral\">\n      <svg class=\"slds-button__icon slds-button__icon_left\"\
+    \ aria-hidden=\"true\">\n        <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#download\"></use>\n  \
+    \    </svg>\n      Download\n      </button>\n"
+- title: Icon Only Button
+  code: "<button class=\"slds-button slds-button_icon slds-button_icon-border\" aria-label=\"Settings\">\n      <svg class=\"\
+    slds-button__icon\" aria-hidden=\"true\">\n        <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#settings\"\
+    ></use>\n      </svg>\n      </button>\n"
+- title: Stateful Button
+  code: "<button class=\"slds-button slds-button_icon slds-button_icon-border slds-is-selected\" aria-pressed=\"true\" aria-label=\"\
+    Like this item\">\n      <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n        <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#like\"\
+    ></use>\n      </svg>\n      </button>\n"
+styling_hooks:
+- name: --slds-c-button-brand-color-background
+  description: Background color for brand buttons
+  category: color
+- name: --slds-c-button-brand-color-background-hover
+  description: Background color for brand buttons on hover
+  category: color
+- name: --slds-c-button-brand-color-background-active
+  description: Background color for brand buttons when active
+  category: color
+- name: --slds-c-button-brand-color-border
+  description: Border color for brand buttons
+  category: color
+- name: --slds-c-button-brand-text-color
+  description: Text color for brand buttons
+  category: color
+- name: --slds-c-button-neutral-color-background
+  description: Background color for neutral buttons
+  category: color
+- name: --slds-c-button-neutral-color-background-hover
+  description: Background color for neutral buttons on hover
+  category: color
+- name: --slds-c-button-neutral-color-background-active
+  description: Background color for neutral buttons when active
+  category: color
+- name: --slds-c-button-neutral-color-border
+  description: Border color for neutral buttons
+  category: color
+- name: --slds-c-button-destructive-color-background
+  description: Background color for destructive buttons
+  category: color
+- name: --slds-c-button-destructive-color-background-hover
+  description: Background color for destructive buttons on hover
+  category: color
+- name: --slds-c-button-destructive-color-border
+  description: Border color for destructive buttons
+  category: color
+- name: --slds-c-button-success-color-background
+  description: Background color for success buttons
+  category: color
+- name: --slds-c-button-success-color-background-hover
+  description: Background color for success buttons on hover
+  category: color
+- name: --slds-c-button-success-color-border
+  description: Border color for success buttons
+  category: color
+- name: --slds-c-button-spacing-inline
+  description: Horizontal padding for buttons
+  category: spacing
+- name: --slds-c-button-font-weight
+  description: Font weight for button text
+  category: typography
+- name: --slds-c-button-radius-border
+  description: Border radius for buttons
+  category: border
+- name: --slds-c-button-sizing-border
+  description: Border width for buttons
+  category: sizing
+dependencies:
+  css_files:
+  - buttons.css
+  javascript: []
+  icons:
+  - utility-sprite.svg (for icon buttons)
+  other_components:
+  - button-groups
+  - button-icons
+related_components:
+- name: Button Groups
+  relationship: container
+  description: Groups multiple buttons together
+- name: Button Icons
+  relationship: variant
+  description: Icon-only button implementations
+- name: Menus
+  relationship: trigger
+  description: Buttons often trigger dropdown menus
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/buttons/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

@@ -1,0 +1,88 @@
+name: Notifications
+description: System-generated messages that inform users about important events, updates, or required actions in a non-intrusive
+  manner.
+category: Feedback
+slds_classes:
+  root: slds-notification
+  elements:
+  - class: slds-notification__target
+    description: Link or action target within notification
+    purpose: Provides actionable element for user interaction
+  modifiers: []
+  states: []
+variants:
+- name: Base
+  description: Standard notification message
+  classes:
+  - slds-notification
+  usage_context: Default notification implementation
+  differences: Basic notification with message content
+lightning_component:
+  name: lightning-toast
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-toast
+  mapping_notes: Primarily mapped through lightning-toast for temporary notifications
+accessibility:
+  keyboard_support:
+  - Tab navigation through interactive elements
+  - Escape to dismiss dismissible notifications
+  - Focus management for embedded actions
+  screen_reader:
+  - Notification content announced when displayed
+  - Importance level conveyed through ARIA
+  - Action elements properly labeled
+  aria_attributes:
+  - role='alert' for important notifications
+  - role='status' for informational updates
+  - aria-live='polite' or 'assertive' based on importance
+  - aria-label for close buttons
+usage_guidelines:
+  when_to_use:
+  - To inform users of system events or status changes
+  - For feedback on user actions
+  - To communicate important updates
+  - For error or success confirmations
+  when_not_to_use:
+  - For critical errors requiring immediate action (use modals)
+  - For instructional content (use help text)
+  - For persistent information (use banners or alerts)
+  best_practices:
+  - Keep notification messages concise and clear
+  - Use appropriate urgency levels
+  - Provide actionable information when possible
+  - Consider auto-dismissal timing carefully
+  - Group related notifications when appropriate
+  common_mistakes:
+  - Overusing notifications for non-essential information
+  - Making notification text too long or complex
+  - Poor timing for auto-dismissal
+  - Not providing adequate contrast or visibility
+code_examples:
+- title: Basic Toast Notification
+  code: "<div class=\"slds-notification\" role=\"alert\">\n      <div class=\"\">\n        <p>Your changes have been saved\
+    \ successfully.</p>\n      </div>\n      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - notification.css
+  - toast.css
+  javascript:
+  - notification.js
+  icons: []
+  other_components: []
+related_components:
+- name: Toast
+  relationship: variant
+  description: Specific type of temporary notification
+- name: Alert
+  relationship: similar
+  description: Similar feedback mechanism for system-wide messages
+- name: Banner
+  relationship: alternative
+  description: Alternative for persistent messaging
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/notifications/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

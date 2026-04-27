@@ -1,0 +1,172 @@
+name: "Radio Button Group"
+
+description: "A group of radio buttons that allows users to select a single option from a set of mutually exclusive choices. Radio button groups are used when only one option can be selected at a time."
+
+category: "Input"
+
+slds_classes:
+  root: "slds-radio_button-group"
+  elements:
+    - class: "slds-radio_button"
+      description: "Individual radio button within the group"
+      purpose: "Container for each radio option in the button group"
+    - class: "slds-radio_faux"
+      description: "Visual radio button replacement styled as a button"
+      purpose: "Custom-styled radio appearance that looks like a button"
+    - class: "slds-radio_button__label"
+      description: "Label element for the radio button"
+      purpose: "Provides clickable area and contains the radio faux element"
+  modifiers: []
+  states:
+    - class: "slds-has-error"
+      description: "Error state styling for the form element"
+      trigger: "When radio button group validation fails"
+    - class: "slds-is-disabled"
+      description: "Disabled state styling"
+      trigger: "When radio button group is not interactive"
+
+variants:
+  - name: "Base"
+    description: "Standard radio button group"
+    classes: ["slds-radio_button-group"]
+    usage_context: "Default radio button group implementation"
+    differences: "Group of radio buttons with shared border and styling, mutually exclusive selection"
+
+lightning_component:
+  name: "lightning-radio-group"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-radio-group"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS radio button group blueprint"
+
+accessibility:
+  keyboard_support:
+    - "Tab to navigate to the radio button group"
+    - "Arrow keys (Up/Down/Left/Right) to navigate between radio options"
+    - "Space to select the focused radio option"
+    - "Tab to move to next form element after selection"
+  screen_reader:
+    - "Fieldset legend announced as group label"
+    - "Radio button state announced (checked/unchecked)"
+    - "Label text read with each radio button"
+    - "Error messages associated and announced"
+  aria_attributes:
+    - "fieldset and legend for group semantics"
+    - "aria-describedby for error messages"
+    - "aria-invalid when validation fails"
+    - "aria-required for required radio groups"
+    - "role='radiogroup' on fieldset (if not using native fieldset)"
+
+usage_guidelines:
+  when_to_use:
+    - "When users need to select exactly one option from a set"
+    - "For mutually exclusive choices"
+    - "When options are closely related and benefit from visual grouping"
+    - "For preference selection, single-choice forms, or settings"
+  when_not_to_use:
+    - "When multiple options can be selected (use checkbox group)"
+    - "For binary choices (use single checkbox or toggle)"
+    - "When only two options exist (consider toggle or checkbox)"
+    - "For actions (use buttons instead)"
+  best_practices:
+    - "Use clear, descriptive legend text for the group"
+    - "Keep option labels short and concise"
+    - "Group related options logically"
+    - "Provide immediate visual feedback for selection"
+    - "Ensure adequate touch target size for mobile"
+    - "Use error states to indicate validation issues"
+    - "Always have one option selected by default when appropriate"
+  common_mistakes:
+    - "Using radio button group for multiple selections"
+    - "Making labels too long or unclear"
+    - "Not providing proper fieldset/legend structure"
+    - "Missing error state handling"
+    - "Inadequate spacing between buttons"
+    - "Not having a default selection when one is expected"
+
+code_examples:
+  - title: "Basic Radio Button Group"
+    code: |
+      <fieldset class="slds-form-element">
+        <legend class="slds-form-element__legend slds-form-element__label">
+          Select an Option
+        </legend>
+        <div class="slds-form-element__control">
+          <div class="slds-radio_button-group">
+            <span class="slds-button slds-radio_button">
+              <input type="radio" name="radio-group" id="radio-1" value="option1" />
+              <label class="slds-radio_button__label" for="radio-1">
+                <span class="slds-radio_faux">Option 1</span>
+              </label>
+            </span>
+            <span class="slds-button slds-radio_button">
+              <input type="radio" name="radio-group" id="radio-2" value="option2" />
+              <label class="slds-radio_button__label" for="radio-2">
+                <span class="slds-radio_faux">Option 2</span>
+              </label>
+            </span>
+            <span class="slds-button slds-radio_button">
+              <input type="radio" name="radio-group" id="radio-3" value="option3" />
+              <label class="slds-radio_button__label" for="radio-3">
+                <span class="slds-radio_faux">Option 3</span>
+              </label>
+            </span>
+          </div>
+        </div>
+      </fieldset>
+    description: "Basic radio button group with three mutually exclusive options"
+  - title: "Radio Button Group with Error State"
+    code: |
+      <fieldset class="slds-form-element slds-has-error">
+        <legend class="slds-form-element__legend slds-form-element__label">
+          <abbr class="slds-required" title="required">*</abbr> Select an Option
+        </legend>
+        <div class="slds-form-element__control">
+          <div class="slds-radio_button-group">
+            <span class="slds-button slds-radio_button">
+              <input type="radio" name="radio-error" id="radio-error-1" value="option1" aria-describedby="radio-error-message" />
+              <label class="slds-radio_button__label" for="radio-error-1">
+                <span class="slds-radio_faux">Option 1</span>
+              </label>
+            </span>
+            <span class="slds-button slds-radio_button">
+              <input type="radio" name="radio-error" id="radio-error-2" value="option2" />
+              <label class="slds-radio_button__label" for="radio-error-2">
+                <span class="slds-radio_faux">Option 2</span>
+              </label>
+            </span>
+          </div>
+        </div>
+        <div id="radio-error-message" class="slds-form-element__help">This field is required</div>
+      </fieldset>
+    description: "Radio button group with error state and validation message"
+
+styling_hooks: []
+
+dependencies:
+  css_files: ["radio-button-group.css", "form-element.css", "radio-button.css"]
+  javascript: []
+  icons: []
+  other_components: ["form-element", "radio-button"]
+
+related_components:
+  - name: "Radio Group"
+    relationship: "similar"
+    description: "Standard radio group with circular radio buttons"
+  - name: "Checkbox Button Group"
+    relationship: "alternative"
+    description: "For multiple selections instead of single selection"
+  - name: "Radio Button"
+    relationship: "similar"
+    description: "Individual radio button component"
+
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/radio-button-group/"
+  design_guidelines: "https://v1.lightningdesignsystem.com/components/radio-button-group/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-01-15"
+  author: "SLDS Documentation Team"
+  slds_version: "2.27.2"
+  review_status: "complete"
+  source: "official-slds"
+  notes: "Created from official SLDS documentation and design-system-internal source code with CSS selector annotations."
+

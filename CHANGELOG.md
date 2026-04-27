@@ -1,3 +1,21 @@
+## [1.7.3](https://github.com/forcedotcom/afv-library/compare/1.7.2...1.7.3) (2026-04-23)
+
+
+### Bug Fixes
+
+* @W-21829588 : Custom Lightning Type Skills Fixes ([#191](https://github.com/forcedotcom/afv-library/issues/191)) ([6f39dd4](https://github.com/forcedotcom/afv-library/commit/6f39dd4047fe59ad635dfe66acae52fdae2a4dbc))
+
+
+
+## [1.7.2](https://github.com/forcedotcom/afv-library/compare/1.7.1...1.7.2) (2026-04-22)
+
+
+### Bug Fixes
+
+* @W-22134404@ delete fragment skill ([#212](https://github.com/forcedotcom/afv-library/issues/212)) ([c818135](https://github.com/forcedotcom/afv-library/commit/c8181350b47fe0b2f512a9d2d01bd11dceed3793))
+
+
+
 ## [1.7.1](https://github.com/forcedotcom/afv-library/compare/1.7.0...1.7.1) (2026-04-21)
 
 

@@ -1,0 +1,154 @@
+name: File Selector
+description: A file upload interface that allows users to select and upload files through drag-and-drop areas, browse buttons,
+  or direct file input, with support for multiple files, file type restrictions, and upload progress indication.
+category: Input
+slds_classes:
+  root: slds-file-selector
+  elements:
+  - class: slds-file-selector__dropzone
+    description: Drag and drop zone for file selection
+    purpose: Provides area for dragging and dropping files
+  - class: slds-file-selector__body
+    description: Main content area of file selector
+    purpose: Contains file selection interface and messaging
+  - class: slds-file-selector__button
+    description: Browse button for file selection
+    purpose: Triggers file browser dialog
+  - class: slds-file-selector__input
+    description: Hidden file input element
+    purpose: Actual file input for form submission
+  - class: slds-file-selector__text
+    description: Instructional text within file selector
+    purpose: Provides guidance and instructions to users
+  modifiers:
+  - class: slds-file-selector_files
+    description: File selector with file list display
+    usage: When showing selected files is important
+  - class: slds-file-selector_images
+    description: Image-specific file selector
+    usage: When selector is specifically for images
+  - class: slds-file-selector_integrated
+    description: Integrated file selector within forms
+    usage: When file selector is part of a larger form
+  states:
+  - class: slds-has-drag-over
+    description: Drag over state for dropzone
+    trigger: Applied when files are being dragged over the dropzone
+  - class: slds-has-error
+    description: Error state for file selection
+    trigger: Applied when file upload or selection fails
+variants:
+- name: Base
+  description: Standard file selector with dropzone
+  classes:
+  - slds-file-selector
+  usage_context: Default implementation for file upload
+  differences: Basic dropzone with browse functionality
+- name: With Files
+  description: File selector displaying selected files
+  classes:
+  - slds-file-selector
+  - slds-file-selector_files
+  usage_context: When showing file list is important
+  differences: Includes file list display below selector
+- name: Images
+  description: Image-specific file selector
+  classes:
+  - slds-file-selector
+  - slds-file-selector_images
+  usage_context: Specifically for image uploads
+  differences: Optimized for image files with previews
+lightning_component:
+  name: lightning-file-upload
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-file-upload
+  mapping_notes: Direct mapping - Lightning component implements SLDS file selector blueprint with upload functionality
+accessibility:
+  keyboard_support:
+  - Tab navigation to file selector elements
+  - Enter/Space to activate browse button
+  - Enter/Space to select files in file list
+  - Delete/Backspace to remove selected files
+  screen_reader:
+  - File selector purpose and instructions announced
+  - Drag and drop capability communicated
+  - Selected files list properly structured
+  - Upload progress and status described
+  aria_attributes:
+  - aria-label for file input elements
+  - aria-describedby for instructions
+  - role='button' for dropzone areas
+  - aria-live for upload status updates
+  - aria-expanded for file lists
+usage_guidelines:
+  when_to_use:
+  - For file upload functionality
+  - When users need to attach documents
+  - For image or media upload scenarios
+  - In forms requiring file attachments
+  when_not_to_use:
+  - For text input (use input fields)
+  - When files aren't actually uploaded
+  - For purely decorative file interfaces
+  best_practices:
+  - Clearly indicate supported file types
+  - Provide file size limitations
+  - Show upload progress for large files
+  - Allow removal of selected files
+  - Validate files before upload
+  common_mistakes:
+  - Not specifying file type restrictions
+  - Poor error handling for invalid files
+  - Missing progress indicators
+  - Unclear instructions for users
+code_examples:
+- title: Basic File Selector
+  description: File selector showing upload progress
+  code: "<div class=\"slds-form-element\">\n      <span class=\"slds-form-element__label\">Upload Files</span>\n      <div\
+    \ class=\"slds-form-element__control\">\n        <div class=\"slds-file-selector slds-file-selector_files\">\n       \
+    \   <div class=\"slds-file-selector__dropzone\">\n            <label class=\"slds-file-selector__body\">\n           \
+    \   <span class=\"slds-spinner slds-spinner_medium slds-spinner_inline\">\n                <span class=\"slds-assistive-text\"\
+    >Uploading...</span>\n                <div class=\"slds-spinner__dot-a\"></div>\n                <div class=\"slds-spinner__dot-b\"\
+    ></div>\n              </span>\n              <span class=\"slds-file-selector__text\">Uploading files...</span>\n   \
+    \         </label>\n          </div>\n        </div>\n        <div class=\"slds-m-top_small\">\n          <div class=\"\
+    \">\n            <div class=\"slds-media slds-media_center\">\n              <span class=\"slds-media__figure\">\n   \
+    \             <span class=\"\">\n                  <svg class=\"slds-icon slds-icon_small\" aria-hidden=\"true\">\n  \
+    \                  <use xlink:href=\"/assets/icons/doctype-sprite/svg/symbols.svg#pdf\"></use>\n                  </svg>\n\
+    \                </span>\n              </span>\n              <span class=\"slds-media__body\">\n                <span\
+    \ class=\"\">\n                  <span class=\"\">annual-report.pdf</span>\n                  <span class=\"\">Uploading...\
+    \ 65%</span>\n                  <div class=\"slds-progress-bar slds-progress-bar_x-small slds-m-top_xx-small\">\n    \
+    \                <span class=\"slds-progress-bar__value\" style=\"width: 65%\"></span>\n                  </div>\n   \
+    \             </span>\n              </span>\n            </div>\n          </div>\n        </div>\n      </div>\n   \
+    \   </div>\n"
+dependencies:
+  css_files:
+  - file-selector.css
+  - button.css
+  - progress-bar.css
+  - spinner.css
+  javascript:
+  - file-selector.js
+  icons:
+  - utility-sprite.svg
+  - doctype-sprite.svg
+  other_components:
+  - button
+  - progress-bar
+  - spinner
+  - form-element
+related_components:
+- name: Form Element
+  relationship: container
+  description: File selector is typically wrapped in form elements
+- name: Button
+  relationship: depends-on
+  description: Uses buttons for browse and remove actions
+- name: Progress Bar
+  relationship: depends-on
+  description: Shows upload progress for files
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/file-selector/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

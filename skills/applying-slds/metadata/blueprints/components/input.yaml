@@ -1,0 +1,151 @@
+name: "Input"
+
+description: "A fundamental form control that allows users to enter text, numbers, or other data with various input types and validation states."
+
+category: "Input"
+
+slds_classes:
+  root: "slds-input"
+  elements: []
+  modifiers:
+    - class: "slds-input_bare"
+      description: "Input without border styling"
+      usage: "Minimal input appearance for specific contexts"
+    - class: "slds-input_counter"
+      description: "Input with character counter"
+      usage: "Shows character count for length-limited inputs"
+  states:
+    - class: "slds-has-error"
+      description: "Error state styling"
+      trigger: "When input validation fails"
+    - class: "slds-is-disabled"
+      description: "Disabled state styling"
+      trigger: "When input is not interactive"
+    - class: "slds-has-focus"
+      description: "Focus state styling"
+      trigger: "When input has keyboard focus"
+
+variants:
+  - name: "Base"
+    description: "Standard text input"
+    classes: ["slds-input"]
+    usage_context: "Default text input implementation"
+    differences: "Standard input field with border and padding"
+  - name: "Bare"
+    description: "Input without border styling"
+    classes: ["slds-input", "slds-input_bare"]
+    usage_context: "Minimal styling for specific design needs"
+    differences: "Input without visible border or background"
+
+lightning_component:
+  name: "lightning-input"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-input"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS input blueprint with various types"
+
+accessibility:
+  keyboard_support:
+    - "Tab to focus the input"
+    - "Standard text input keyboard interactions"
+    - "Arrow keys for number inputs"
+  screen_reader:
+    - "Label text announced with the input"
+    - "Error messages associated and announced"
+    - "Required state communicated"
+    - "Input type and current value announced"
+  aria_attributes:
+    - "aria-describedby for help text and error messages"
+    - "aria-invalid when validation fails"
+    - "aria-required for required inputs"
+    - "aria-label when no visible label is present"
+
+usage_guidelines:
+  when_to_use:
+    - "For single-line text entry"
+    - "When users need to input data"
+    - "For search functionality"
+    - "In forms and data entry contexts"
+  when_not_to_use:
+    - "For multi-line text (use textarea instead)"
+    - "For selecting from options (use select or combobox)"
+    - "For binary choices (use checkbox or toggle)"
+  best_practices:
+    - "Use appropriate input types (email, tel, number, etc.)"
+    - "Provide clear labels and placeholder text"
+    - "Show validation feedback immediately"
+    - "Use proper form structure and organization"
+    - "Ensure adequate touch target size"
+  common_mistakes:
+    - "Using wrong input type for the data"
+    - "Missing or unclear labels"
+    - "Poor validation feedback"
+    - "Inadequate error messaging"
+
+code_examples:
+  - title: "Basic Text Input"
+    code: |
+      <div class="slds-form-element">
+        <label class="slds-form-element__label" for="text-input-id-1">
+          <abbr class="slds-required" title="required">* </abbr>Text Input Label
+        </label>
+        <div class="slds-form-element__control">
+          <input type="text" id="text-input-id-1" class="slds-input" placeholder="Enter text..." required />
+        </div>
+      </div>
+    description: "Basic text input with label"
+  - title: "Input with Error"
+    code: |
+      <div class="slds-form-element slds-has-error">
+        <label class="slds-form-element__label" for="text-input-error">
+          <abbr class="slds-required" title="required">* </abbr>Text Input Label
+        </label>
+        <div class="slds-form-element__control">
+          <input type="text" id="text-input-error" class="slds-input" aria-describedby="text-input-error-message" required />
+        </div>
+        <div id="text-input-error-message" class="slds-form-element__help">This field is required</div>
+      </div>
+    description: "Input with error state and validation message"
+  - title: "Number Input"
+    code: |
+      <div class="slds-form-element">
+        <label class="slds-form-element__label" for="number-input-id">Number Input Label</label>
+        <div class="slds-form-element__control">
+          <input type="number" id="number-input-id" class="slds-input" placeholder="Enter number..." />
+        </div>
+      </div>
+    description: "Number input with appropriate type"
+
+styling_hooks:
+  - name: "--slds-c-input-color-background"
+    description: "Background color for inputs"
+    category: "color"
+  - name: "--slds-c-input-color-border"
+    description: "Border color for inputs"
+    category: "color"
+  - name: "--slds-c-input-color-border-focus"
+    description: "Border color for focused inputs"
+    category: "color"
+
+dependencies:
+  css_files: ["input.css", "form-element.css"]
+  javascript: []
+  icons: []
+  other_components: ["form-element"]
+
+related_components:
+  - name: "Textarea"
+    relationship: "alternative"
+    description: "For multi-line text input"
+  - name: "Select"
+    relationship: "alternative"
+    description: "For selecting from predefined options"
+  - name: "Combobox"
+    relationship: "alternative"
+    description: "Enhanced input with dropdown options"
+
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/input/"
+
+metadata:
+  version: "1.0.0"
+  last_updated: "2024-12-19"
+  review_status: "complete"

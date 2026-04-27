@@ -1,0 +1,82 @@
+name: "Button Groups"
+description: "A collection of related buttons grouped together, maintaining consistent spacing and visual hierarchy while providing clear action choices."
+category: "Actions"
+slds_classes:
+  root: "slds-button-group"
+  elements: []
+  modifiers: []
+  states: []
+variants:
+  - name: "Base"
+    description: "Standard button group with consistent spacing"
+    classes:
+      - "slds-button-group"
+    usage_context: "Default implementation for related action grouping"
+    differences: "Horizontal layout with proper button spacing"
+lightning_component:
+  name: "lightning-button-group"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-button-group"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS button group blueprint"
+accessibility:
+  keyboard_support:
+    - "Tab navigation through individual buttons"
+    - "Enter/Space to activate buttons"
+    - "Arrow keys for group navigation when appropriate"
+  screen_reader:
+    - "Group structure conveyed through list semantics"
+    - "Individual button labels announced"
+    - "Button relationships communicated"
+  aria_attributes:
+    - "role='group' with descriptive aria-label"
+    - "role='list' for button container"
+    - "role='listitem' for individual button wrappers"
+usage_guidelines:
+  when_to_use:
+    - "For related actions that should be grouped together"
+    - "When you need consistent button spacing"
+    - "For toolbar-style interfaces"
+    - "When actions are conceptually related but distinct"
+  when_not_to_use:
+    - "For single actions (use individual buttons)"
+    - "When actions are unrelated"
+    - "For navigation (use navigation components instead)"
+  best_practices:
+    - "Group conceptually related actions together"
+    - "Maintain consistent button styling within groups"
+    - "Order buttons by importance or frequency of use"
+    - "Provide clear, action-oriented button labels"
+  common_mistakes:
+    - "Grouping unrelated actions together"
+    - "Using inconsistent button styles within a group"
+    - "Creating overly large button groups"
+code_examples:
+  - title: "Basic Button Group"
+    description: "Basic button group with cancel and save actions"
+    code: |
+      <div class="slds-button-group" role="group" aria-label="Form actions">
+            <button class="slds-button slds-button_neutral">Cancel</button>
+            <button class="slds-button slds-button_brand">Save</button>
+            </div>
+styling_hooks: []
+dependencies:
+  css_files:
+    - "button-group.css"
+    - "button.css"
+  javascript: []
+  icons: []
+  other_components:
+    - "button"
+related_components:
+  - name: "Button"
+    relationship: "depends-on"
+    description: "Individual buttons that make up the group"
+  - name: "Button Icons"
+    relationship: "depends-on"
+    description: "Icon buttons can be used within groups"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/button-groups/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."
