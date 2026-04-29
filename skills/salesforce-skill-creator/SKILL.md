@@ -2,9 +2,10 @@
 name: salesforce-skill-creator
 description: "AI-assisted skill authoring pipeline for the afv-library. Use when the user wants to create a new skill, update an existing skill, generate a skill spec, scaffold skill files, or add a new capability to the skill catalog. TRIGGER when: user says create skill, new skill, skill creator, author skill, scaffold skill, generate skill, update skill, add a skill, skill pipeline. DO NOT TRIGGER when: user is directly editing an existing SKILL.md without asking for guided authoring."
 when_to_use: "Invoke this skill whenever someone needs to add a new capability to the afv-library skill catalog, or wants to update/improve an existing skill. This includes creating skills for Apex, metadata, LWC, Flow, Agentforce, or any Salesforce domain."
-arguments: [skill-name]
-allowed-tools: "Bash Read Write Edit Glob Grep AskUserQuestion"
-effort: high
+metadata:
+  version: "1.0"
+  stage: Pilot
+  license: LICENSE.txt has complete terms
 ---
 
 # Instructions
@@ -120,11 +121,11 @@ Tell the user: **"Generating Skill..."**
 
 Then do the work. Do not ask any more questions.
 
-1. Read `${CLAUDE_SKILL_DIR}/references/progressive_disclosure.md` — use it to decide what
+1. Read `./references/progressive_disclosure.md` — use it to decide what
    goes in SKILL.md vs `assets/` vs `references/` vs `examples/`.
-2. Read `${CLAUDE_SKILL_DIR}/templates/skill_template.md`.
-3. Read `${CLAUDE_SKILL_DIR}/templates/frontmatter_reference.yaml`.
-4. Read `${CLAUDE_SKILL_DIR}/references/best_practices.md`.
+2. Read `./templates/skill_template.md`.
+3. Read `./templates/frontmatter_reference.yaml`.
+4. Read `./references/best_practices.md`.
 5. Generate all files following the rules below.
 
 ### What goes WHERE — hard rules
@@ -179,7 +180,7 @@ skills/<skill-name>/
             └── gold/
 ```
 
-Read `${CLAUDE_SKILL_DIR}/templates/tests_structure.md` before scaffolding `tests/`.
+Read `./templates/tests_structure.md` before scaffolding `tests/`.
 
 Create `assets/`, `references/`, and `examples/` only if there is content to put in them.
 Do NOT create `tests/unit/` — only create `tests/evals/` with 2-3 datasets.
@@ -234,7 +235,7 @@ Run the validator:
 npx tsx scripts/validate-skills.ts 2>&1
 ```
 
-For the full list of rules, see `${CLAUDE_SKILL_DIR}/references/validation_rules.md`.
+For the full list of rules, see `./references/validation_rules.md`.
 
 **If validation fails**: fix the issues and re-run. Only surface to the user if you cannot
 resolve an issue yourself.
@@ -283,7 +284,7 @@ If changes requested: collect feedback, edit files, re-validate, re-print, retur
 
 ## Step 5 — Generate eval stubs
 
-Read `${CLAUDE_SKILL_DIR}/templates/tests_structure.md` before writing eval files.
+Read `./templates/tests_structure.md` before writing eval files.
 
 For each of 2-3 positive trigger scenarios (derived from the skill description):
 
@@ -348,7 +349,7 @@ Next steps:
 | Description missing "use" | Validator requires it. Always include "Use when..." in generated descriptions. |
 | YAML parse error | Descriptions contain `: ` — always wrap in double quotes. |
 | Gerund naming | First word must end in `-ing`. Suggest names that follow this. |
-| Body over 500 lines | Split into `references/`. See `${CLAUDE_SKILL_DIR}/references/progressive_disclosure.md`. |
+| Body over 500 lines | Split into `references/`. See `./references/progressive_disclosure.md`. |
 | User gives vague input | Don't ask repeatedly — make your best guess, generate, and confirm. |
 | Validation fails | Fix it yourself. Only ask the user if you genuinely can't resolve it. |
 | No reference material provided | Generate representative stubs; mark everything `# STUB`. |

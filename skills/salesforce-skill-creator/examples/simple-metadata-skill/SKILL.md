@@ -1,11 +1,10 @@
 ---
 name: generating-validation-rule
 description: "Create and update Salesforce validation rules for any standard or custom object. Use when the user asks to add a validation rule, enforce field requirements, prevent invalid data entry, or implement record-level business logic constraints. TRIGGER when: user says validation rule, field validation, required field check, data constraint, record validation, prevent invalid data. DO NOT TRIGGER when: user asks about Flow validation or Apex validation logic — delegate to generating-flow or generating-apex."
-license: Apache-2.0
 metadata:
-  version: "1.0.0"
-  last_updated: "2026-04-22"
+  version: "1.0"
   stage: Draft
+  license: LICENSE.txt has complete terms
 ---
 
 # Generating Validation Rules
