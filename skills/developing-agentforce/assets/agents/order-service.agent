@@ -3,7 +3,7 @@
 #
 # A complex real-world agent for e-commerce customer service featuring:
 # - Verification gate before order access
-# - Multiple specialized topics (order status, tracking, returns)
+# - Multiple specialized subagents (order status, tracking, returns)
 # - Two-level action system with Flow targets
 # - after_reasoning for post-action routing
 # - available when guards for conditional action visibility
@@ -59,30 +59,30 @@ language:
 	additional_locales: ""
 	all_additional_locales: False
 
-start_agent topic_selector:
-	description: "Route customers through verification then to the right topic"
+start_agent agent_router:
+	description: "Route customers through verification then to the right subagent"
 	reasoning:
 		instructions: |
 			You are a router only. Do NOT answer questions or provide help directly.
 			Route all users to identity verification first.
-			If already verified, route to the appropriate topic:
+			If already verified, route to the appropriate subagent:
 			- Order questions -> use to_orders
 			- Returns -> use to_returns
 			- Tracking -> use to_tracking
 		actions:
-			to_verify: @utils.transition to @topic.verification
+			to_verify: @utils.transition to @subagent.verification
 				description: "Begin identity verification"
-			to_orders: @utils.transition to @topic.order_status
+			to_orders: @utils.transition to @subagent.order_status
 				description: "Check order status"
 				available when @variables.customer_verified == True
-			to_returns: @utils.transition to @topic.returns
+			to_returns: @utils.transition to @subagent.returns
 				description: "Process a return"
 				available when @variables.customer_verified == True
-			to_tracking: @utils.transition to @topic.shipment_tracking
+			to_tracking: @utils.transition to @subagent.shipment_tracking
 				description: "Track a shipment"
 				available when @variables.customer_verified == True
 
-topic verification:
+subagent verification:
 	label: "Identity Verification"
 	description: "Verify customer identity before accessing order information"
 
@@ -115,14 +115,14 @@ topic verification:
 				set @variables.customer_verified = @outputs.verified
 				set @variables.customer_email = @outputs.customer_name
 
-			proceed_to_orders: @utils.transition to @topic.order_status
+			proceed_to_orders: @utils.transition to @subagent.order_status
 				description: "Move to order lookup"
 				available when @variables.customer_verified == True
 
 			escalate_now: @utils.escalate
 				description: "Transfer to human agent"
 
-topic order_status:
+subagent order_status:
 	label: "Order Status"
 	description: "Look up order details and provide status updates"
 
@@ -164,18 +164,18 @@ topic order_status:
 				set @variables.order_status = @outputs.status
 				set @variables.tracking_number = @outputs.tracking_number
 
-			to_returns: @utils.transition to @topic.returns
+			to_returns: @utils.transition to @subagent.returns
 				description: "Start a return"
 				available when @variables.order_status != ""
 
-			to_tracking: @utils.transition to @topic.shipment_tracking
+			to_tracking: @utils.transition to @subagent.shipment_tracking
 				description: "Track shipment"
 				available when @variables.tracking_number != ""
 
-			back: @utils.transition to @topic.topic_selector
-				description: "Route to a different topic"
+			back: @utils.transition to @subagent.agent_router
+				description: "Route to a different subagent"
 
-topic shipment_tracking:
+subagent shipment_tracking:
 	label: "Shipment Tracking"
 	description: "Track shipment status and estimated delivery"
 
@@ -208,10 +208,10 @@ topic shipment_tracking:
 				description: "Get tracking details"
 				with tracking_number = @variables.tracking_number
 
-			back: @utils.transition to @topic.topic_selector
-				description: "Route to a different topic"
+			back: @utils.transition to @subagent.agent_router
+				description: "Route to a different subagent"
 
-topic returns:
+subagent returns:
 	label: "Returns"
 	description: "Process return requests and generate return labels"
 
@@ -251,14 +251,14 @@ topic returns:
 				set @variables.return_initiated = True
 				set @variables.return_label_url = @outputs.return_label_url
 
-			back: @utils.transition to @topic.topic_selector
-				description: "Route to a different topic"
+			back: @utils.transition to @subagent.agent_router
+				description: "Route to a different subagent"
 
 	after_reasoning: ->
 		if @variables.return_initiated == True:
-			transition to @topic.follow_up
+			transition to @subagent.follow_up
 
-topic follow_up:
+subagent follow_up:
 	label: "Follow Up"
 	description: "Handle follow-up actions and next steps"
 	reasoning:
@@ -266,7 +266,7 @@ topic follow_up:
 			The customer's request has been processed.
 			Ask if there is anything else you can help with.
 		actions:
-			new_order: @utils.transition to @topic.order_status
+			new_order: @utils.transition to @subagent.order_status
 				description: "Look up another order"
-			back: @utils.transition to @topic.topic_selector
+			back: @utils.transition to @subagent.agent_router
 				description: "Start over"

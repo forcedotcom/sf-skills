@@ -28,7 +28,7 @@ RUNTIME DOMAIN (created by publish)
   Bot (top-level container, one per agent)
     └── BotVersion (one per published version)
           └── GenAiPlannerBundle (versioned bundle, contains compiled agent definition)
-                └── local topics and actions (scoped to this version only)
+                └── local subagents and actions (scoped to this version only)
 ```
 
 The authoring domain is where you work. The runtime domain is what the org creates when you publish. These two domains are separate until you publish, which is when they connect.
@@ -36,7 +36,7 @@ The authoring domain is where you work. The runtime domain is what the org creat
 
 An `AiAuthoringBundle` is a Salesforce metadata source component represented as a directory in your local project containing two files:
 
-**1. `.agent` file** —  Agent Script source code. This is the editable text file where you define topics, actions, variables, and flow control. It is human-readable and supports multiple versions.
+**1. `.agent` file** —  Agent Script source code. This is the editable text file where you define subagents, actions, variables, and flow control. It is human-readable and supports multiple versions.
 
 **2. `.bundle-meta.xml` file** — Metadata about the bundle. Contains a `bundleType` element set to `AGENT` and optionally a `<target>` element that controls whether the bundle is DRAFT (editable) or locked to a published version:
 
@@ -62,7 +62,7 @@ Publishing creates the runtime entities that make an agent usable in the org.
 
 **BotVersion** — One per published version (e.g., `v1`, `v2`, `v3`). Only one version can be active at a time.
 
-**GenAiPlannerBundle** — Compiled agent definition for a specific version. Contains topics, actions, and all runtime metadata, scoped to that version only.
+**GenAiPlannerBundle** — Compiled agent definition for a specific version. Contains subagents, actions, and all runtime metadata, scoped to that version only.
 
 Runtime entities are org-generated and never edited directly.
 ### Agent Pseudo Metadata Type
@@ -136,7 +136,7 @@ aiAuthoringBundles/
         └── Local_Info_Agent.bundle-meta.xml (metadata)
 ```
 
-The `.agent` file contains boilerplate with `system`, `config`, `start_agent`, and placeholder topics. You edit this file to define your agent.
+The `.agent` file contains boilerplate with `system`, `config`, `start_agent`, and placeholder subagents. You edit this file to define your agent.
 
 The `.bundle-meta.xml` file is initially minimal (bundleType only, no `<target>`), indicating DRAFT state.
 ### Common Failure Modes with WRONG/RIGHT Pairs
@@ -301,7 +301,7 @@ When you publish, the org creates:
 
 - **Bot** — Top-level container (one per agent)
 - **BotVersion** — Versioned instance (e.g., `v1`, `v2`, `v3`)
-- **GenAiPlannerBundle** — Compiled agent definition for this version of the agent, with a `localActions/` directory containing topic-scoped action definitions.
+- **GenAiPlannerBundle** — Compiled agent definition for this version of the agent, with a `localActions/` directory containing subagent-scoped action definitions.
 
 Example directory structure after publishing:
 

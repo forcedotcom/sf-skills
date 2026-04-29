@@ -1,11 +1,11 @@
-# Agent Topic Map Diagrams Reference
+# Agent Subagent Map Diagrams Reference
 
 ## Table of Contents
 
 - [Purpose and Context](#purpose-and-context)
 - [Fundamental Structure Rules](#fundamental-structure-rules)
 - [Node Types and Agent Script Elements](#node-types-and-agent-script-elements)
-- [Topic Map Patterns](#topic-map-patterns)
+- [Subagent Map Patterns](#subagent-map-patterns)
 - [Complete Example: Local_Info_Agent](#complete-example-local_info_agent)
 - [Validation Checklist](#validation-checklist)
 - [Anti-patterns](#anti-patterns)
@@ -14,18 +14,18 @@
 
 ## Purpose and Context
 
-A Topic Map diagram is a Mermaid flowchart that visualizes an agent's topic graph structure. It shows the architecture of an agent before implementation, displaying:
+A Subagent Map diagram is a Mermaid flowchart that visualizes an agent's subagent graph structure. It shows the architecture of an agent before implementation, displaying:
 
-- The start_agent topic_selector entry point
-- All topics in the agent
-- Topic transitions and routing logic
-- Action calls within topics (with backing type: Apex, Prompt Template, Flow)
+- The start_agent agent_router entry point
+- All subagents in the agent
+- Subagent transitions and routing logic
+- Action calls within subagents (with backing type: Apex, Prompt Template, Flow)
 - Gating conditions (available_when expressions)
 - Variable state changes
 - Escalation and off-topic handling
 - Conditional instructions based on variable values
 
-Topic Map diagrams are the primary visual deliverable in an Agent Spec (design document) and serve both specification and comprehension purposes.
+Subagent Map diagrams are the primary visual deliverable in an Agent Spec (design document) and serve both specification and comprehension purposes.
 
 ---
 
@@ -34,15 +34,15 @@ Topic Map diagrams are the primary visual deliverable in an Agent Spec (design d
 ### Graph Orientation
 
 - ALWAYS use `graph TD` (Top-Down orientation)
-- Start with start_agent topic_selector at the top
-- Topics flow downward from the selector
+- Start with start_agent agent_router at the top
+- Subagents flow downward from the router
 - Never use other orientations
 
 ### Node Identification
 
 - Use sequential capital letters (A, B, C, ...) for node IDs
 - Start with `A` for start_agent
-- Increment sequentially through topics and decisions
+- Increment sequentially through subagents and decisions
 - Use descriptive labels within brackets
 
 ### Flow Direction
@@ -50,36 +50,36 @@ Topic Map diagrams are the primary visual deliverable in an Agent Spec (design d
 - Primary flow moves top-to-bottom
 - Use `-->` for standard transitions
 - Label decision branches with `|Label|` syntax
-- Separate paths for different topics
+- Separate paths for different subagents
 
 ---
 
 ## Node Types and Agent Script Elements
 
-### Start Agent Topic Selector Node
+### Start Agent Subagent Router Node
 
-Format: `[start_agent<br/>topic_selector]`
+Format: `[start_agent<br/>agent_router]`
 
-Represents the entry point where user input is evaluated and routed to appropriate topics.
+Represents the entry point where user input is evaluated and routed to appropriate subagents.
 
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 graph TD
-    A[start_agent<br/>topic_selector]
+    A[start_agent<br/>agent_router]
 ```
 
-### Topic Nodes
+### Subagent Nodes
 
-Format: `[topic_name<br/>Topic]`
+Format: `[subagent_name<br/>Subagent]`
 
-Represents a topic within the agent.
+Represents a subagent within the agent.
 
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 graph TD
-    A[start_agent<br/>topic_selector]
-    B[order_status<br/>Topic]
-    C[billing<br/>Topic]
+    A[start_agent<br/>agent_router]
+    B[order_status<br/>Subagent]
+    C[billing<br/>Subagent]
 ```
 
 ### Action Call Nodes
@@ -93,7 +93,7 @@ Example: `[Call check_weather<br/>backing: Apex]`
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 graph TD
-    A[local_weather<br/>Topic] --> B[Call check_weather<br/>backing: Apex]
+    A[local_weather<br/>Subagent] --> B[Call check_weather<br/>backing: Apex]
 ```
 
 ### Decision/Gating Nodes
@@ -102,12 +102,12 @@ Use curly braces `{}` for conditions. Common formats:
 
 - Variable availability gates: `{Check: variable_name != empty?}`
 - Conditional instructions: `{variable_name == value?}`
-- Topic transition logic: `{user_intent matches?}`
+- Subagent transition logic: `{user_intent matches?}`
 
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 graph TD
-    A[topic<br/>Topic] --> B{Check: guest_interests<br/>!= empty?}
+    A[subagent<br/>Subagent] --> B{Check: guest_interests<br/>!= empty?}
     B -->|Yes| C[Call collect_events<br/>backing: Prompt Template]
     B -->|No| D[Ask for clarification]
 ```
@@ -133,32 +133,32 @@ For escalation and system utilities.
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 graph TD
-    A[escalation<br/>Topic] --> B[Call @utils.escalate]
+    A[escalation<br/>Subagent] --> B[Call @utils.escalate]
 ```
 
 ---
 
-## Topic Map Patterns
+## Subagent Map Patterns
 
-### Basic Topic with Single Action
+### Basic Subagent with Single Action
 
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 graph TD
-    A[start_agent<br/>topic_selector]
-    A -->|route to topic| B[simple_topic<br/>Topic]
+    A[start_agent<br/>agent_router]
+    A -->|route to subagent| B[simple_subagent<br/>Subagent]
     B --> C[Call do_action<br/>backing: Apex]
     C --> D[Continue]
 ```
 
-### Topic with Gating Condition
+### Subagent with Gating Condition
 
 Available_when expressions prevent action execution until conditions are met.
 
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 graph TD
-    A[topic_with_gate<br/>Topic]
+    A[subagent_with_gate<br/>Subagent]
     A --> B{Check: required_var<br/>!= empty?}
     B -->|No| C[Instruction: collect info first]
     B -->|Yes| D[Call action<br/>backing: Prompt Template]
@@ -166,9 +166,9 @@ graph TD
     E --> A
 ```
 
-### Topic with Conditional Instructions
+### Subagent with Conditional Instructions
 
-Variable values control which instructions apply to a topic.
+Variable values control which instructions apply to a subagent.
 
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
@@ -180,18 +180,18 @@ graph TD
     D --> E[Continue]
 ```
 
-### Topic Transitions
+### Subagent Transitions
 
-When logic determines a new topic should be active.
+When logic determines a new subagent should be active.
 
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 graph TD
-    A[current_topic<br/>Topic]
+    A[current_subagent<br/>Subagent]
     A --> B{Transition<br/>condition?}
-    B -->|Yes| C[Transition to<br/>next_topic]
-    C --> D[next_topic<br/>Topic]
-    B -->|No| E[Continue in<br/>current_topic]
+    B -->|Yes| C[Transition to<br/>next_subagent]
+    C --> D[next_subagent<br/>Subagent]
+    B -->|No| E[Continue in<br/>current_subagent]
 ```
 
 ### Off-Topic and Escalation Routing
@@ -201,9 +201,9 @@ How the agent handles out-of-scope requests.
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 graph TD
-    A[start_agent<br/>topic_selector]
-    A -->|out of scope| B[off_topic<br/>Topic]
-    A -->|needs help| C[escalation<br/>Topic]
+    A[start_agent<br/>agent_router]
+    A -->|out of scope| B[off_topic<br/>Subagent]
+    A -->|needs help| C[escalation<br/>Subagent]
     B --> D[Instruction: redirect user]
     C --> E[Call @utils.escalate]
 ```
@@ -212,19 +212,19 @@ graph TD
 
 ## Complete Example: Local_Info_Agent
 
-This example demonstrates a complete Topic Map for a guest information agent with multiple topics, gating conditions, variable state, and escalation handling.
+This example demonstrates a complete Subagent Map for a guest information agent with multiple subagents, gating conditions, variable state, and escalation handling.
 
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 graph TD
-    A[start_agent<br/>topic_selector]
+    A[start_agent<br/>agent_router]
 
-    A -->|weather query| B[local_weather<br/>Topic]
-    A -->|events query| C[local_events<br/>Topic]
-    A -->|hours query| D[resort_hours<br/>Topic]
-    A -->|unclear intent| E[ambiguous_question<br/>Topic]
-    A -->|out of scope| F[off_topic<br/>Topic]
-    A -->|needs escalation| G[escalation<br/>Topic]
+    A -->|weather query| B[local_weather<br/>Subagent]
+    A -->|events query| C[local_events<br/>Subagent]
+    A -->|hours query| D[resort_hours<br/>Subagent]
+    A -->|unclear intent| E[ambiguous_question<br/>Subagent]
+    A -->|out of scope| F[off_topic<br/>Subagent]
+    A -->|needs escalation| G[escalation<br/>Subagent]
 
     B --> B1[Call check_weather<br/>backing: Apex]
     B1 --> B2[Continue]
@@ -248,14 +248,14 @@ graph TD
     E1 --> E2[Await user input]
     E2 --> A
 
-    F --> F1[Instruction: explain available topics]
+    F --> F1[Instruction: explain available subagents]
     F1 --> F2[Continue]
 
     G --> G1[Call @utils.escalate]
     G1 --> G2[Continue]
 ```
 
-### Topic Descriptions
+### Subagent Descriptions
 
 **local_weather**: Provides weather information via Apex-backed action. No preconditions.
 
@@ -265,30 +265,30 @@ graph TD
 
 **ambiguous_question**: No actions. Requests clarification and routes back to start_agent.
 
-**off_topic**: No actions. Explains available topics and continues conversation.
+**off_topic**: No actions. Explains available subagents and continues conversation.
 
 **escalation**: Calls @utils.escalate utility to route to human agent.
 
-**start_agent topic_selector**: Routes incoming user input to appropriate topics based on intent.
+**start_agent agent_router**: Routes incoming user input to appropriate subagents based on intent.
 
 ---
 
 ## Validation Checklist
 
-Before finalizing a Topic Map diagram:
+Before finalizing a Subagent Map diagram:
 
 - [ ] Uses `graph TD` syntax
 - [ ] Starts with `%%{init: {'theme':'neutral'}}%%`
-- [ ] start_agent topic_selector is node A at top
+- [ ] start_agent agent_router is node A at top
 - [ ] Nodes use sequential capital letter IDs
-- [ ] All topics labeled with `[topic_name<br/>Topic]` format
+- [ ] All subagents labeled with `[subagent_name<br/>Subagent]` format
 - [ ] Action calls include backing type (Apex, Prompt Template, Flow)
 - [ ] Gating conditions shown as decision nodes with `{Check: ...?}` format
 - [ ] Variable state changes explicitly labeled with `[Set variable = value]`
 - [ ] Escalation uses `[Call @utils.escalate]` format
 - [ ] All transition branches are labeled
 - [ ] Diagram fits in 20-30 nodes
-- [ ] Topic routing from start_agent is clear
+- [ ] Subagent routing from start_agent is clear
 - [ ] Off-topic and escalation paths are visible
 - [ ] Conditional instruction logic is shown
 
@@ -304,20 +304,20 @@ Before finalizing a Topic Map diagram:
 - Use ambiguous decision node labels (avoid `{Process?}`)
 - Hide gating conditions in node descriptions instead of showing as decisions
 - Omit variable state changes that affect downstream behavior
-- Create topic routing without labels on the decision logic
-- Mix topic nodes with action nodes at same level without clear containment
+- Create subagent routing without labels on the decision logic
+- Mix subagent nodes with action nodes at same level without clear containment
 - Use custom color styling (breaks in dark mode)
 - Leave off-topic and escalation paths out of diagram
 
 ### Do
 
-- Keep start_agent topic_selector at the top
-- Show all topics reachable from start_agent
+- Keep start_agent agent_router at the top
+- Show all subagents reachable from start_agent
 - Include backing type for every action call
 - Make gating conditions explicit as decision nodes
 - Show variable updates as separate nodes when they affect logic flow
 - Label all transition branches
-- Include off-topic and escalation topics
+- Include off-topic and escalation subagents
 - Show conditional instructions with decision nodes
 - Use `%%{init: {'theme':'neutral'}}%%` for light/dark mode compatibility
-- Focus diagram on topic structure, not detailed action logic
+- Focus diagram on subagent structure, not detailed action logic

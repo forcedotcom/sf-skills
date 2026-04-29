@@ -8,6 +8,10 @@
 #
 # IMPORTANT: This YAML is parsed by @salesforce/agents — NOT a generic AiEvaluationDefinition format.
 # Only use the fields documented below.
+#
+# NOTE: The Testing Center API uses "topic" terminology. In Agent Script, topics are called
+# "subagents" (e.g., the `subagent` block). When writing tests, use "topic" to match the API,
+# but understand that each expectedTopic value maps to a subagent in your .agent file.
 
 # Required: Display name for the test (MasterLabel)
 name: "<Agent_Name> Standard Tests"
@@ -93,13 +97,13 @@ testCases:
 #
 # 1. TRANSITION ACTIONS (from start_agent reasoning.actions):
 #    - Named: go_<topic_name>
-#    - Target: @utils.transition to @topic.<name>
+#    - Target: @utils.transition to @subagent.<name>
 #    - Captured by single-utterance tests
 #
-# 2. BUSINESS ACTIONS (from topic.actions + reasoning.actions):
-#    - Named: <action_definition_name> (Level 1 from topic.actions block)
+# 2. BUSINESS ACTIONS (from subagent.actions + reasoning.actions):
+#    - Named: <action_definition_name> (Level 1 from subagent.actions block)
 #    - Target: apex://ClassName or flow://FlowName
-#    - May require conversationHistory to reach in multi-topic agents
+#    - May require conversationHistory to reach in multi-subagent agents
 #
 # Use expectedActions with the DEFINITION name (Level 1), not the
 # invocation name (Level 2). E.g., use get_order_status, not check_status.

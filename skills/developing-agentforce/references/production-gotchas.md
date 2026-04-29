@@ -22,13 +22,13 @@ The `before_reasoning:` and `after_reasoning:` lifecycle hooks are validated. Co
 
 ### Cost Optimization Pattern
 
-Fetch data once in `before_reasoning:`, cache in variables, reuse across topics.
+Fetch data once in `before_reasoning:`, cache in variables, reuse across subagents.
 
 ## Lifecycle Hooks
 
 ```yaml
-topic main:
-   description: "Topic with lifecycle hooks"
+subagent main:
+   description: "Subagent with lifecycle hooks"
 
    # BEFORE: Runs deterministically BEFORE LLM sees instructions
    before_reasoning:
@@ -55,7 +55,7 @@ topic main:
 - Reliable primitives: `set`, `if`/`else`, `transition to`. `run` has inconsistent runtime behavior across bundle types — use it in `reasoning.actions:` or `instructions: ->` instead
 - `before_reasoning:` is FREE (no credit cost) - use for data prep
 - `after_reasoning:` is FREE (no credit cost) - use for logging, cleanup
-- `transition to` works in `after_reasoning:` — but if a topic transitions mid-reasoning, the original topic's `after_reasoning:` does NOT run
+- `transition to` works in `after_reasoning:` — but if a subagent transitions mid-reasoning, the original subagent's `after_reasoning:` does NOT run
 
 **❌ WRONG Syntax (causes compile error):**
 ```yaml
@@ -74,19 +74,19 @@ before_reasoning:
 
 | Term | Syntax | Behavior | Use When |
 |------|--------|----------|----------|
-| **Handoff** | `@utils.transition to @topic.X` | Control transfers completely, child generates final response | Checkout, escalation, terminal states |
-| **Supervision** | `@topic.X` (as action reference) | Parent orchestrates, child returns, parent synthesizes | Expert consultation, sub-tasks |
+| **Handoff** | `@utils.transition to @subagent.X` | Control transfers completely, child generates final response | Checkout, escalation, terminal states |
+| **Supervision** | `@subagent.X` (as action reference) | Parent orchestrates, child returns, parent synthesizes | Expert consultation, sub-tasks |
 
 ```yaml
-# HANDOFF - child topic takes over completely:
-checkout: @utils.transition to @topic.order_checkout
+# HANDOFF - child subagent takes over completely:
+checkout: @utils.transition to @subagent.order_checkout
    description: "Proceed to checkout"
-# → @topic.order_checkout generates the user-facing response
+# → @subagent.order_checkout generates the user-facing response
 
 # SUPERVISION - parent remains in control:
-get_advice: @topic.product_expert
+get_advice: @subagent.product_expert
    description: "Consult product expert"
-# → @topic.product_expert returns, parent topic synthesizes final response
+# → @subagent.product_expert returns, parent subagent synthesizes final response
 ```
 
 **KNOWN BUG**: Adding ANY new action in Canvas view may inadvertently change Supervision references to Handoff transitions.
@@ -111,16 +111,16 @@ outputs:
       is_used_by_planner: True    # LLM can use for routing decisions
 
 # In Agent Script - LLM routes but cannot hallucinate:
-topic intent_router:
+subagent intent_router:
    reasoning:
       instructions: ->
          run @actions.classify_intent
          set @variables.intent = @outputs.intent_classification
 
          if @variables.intent == "refund":
-            transition to @topic.refunds
+            transition to @subagent.refunds
          if @variables.intent == "order_status":
-            transition to @topic.orders
+            transition to @subagent.orders
 ```
 
 ## Action I/O Metadata Properties
@@ -187,26 +187,26 @@ KNOWN BUG: Chained actions with Prompt Templates don't properly map inputs using
 
 For prompt template action definitions, input binding syntax, and grounded data patterns, see [Action Prompt Templates](action-prompt-templates.md).
 
-## Latch Variable Pattern for Topic Re-entry
+## Latch Variable Pattern for Subagent Re-entry
 
-Topic selector doesn't properly re-evaluate after user provides missing input. Use a "latch" variable to force re-entry:
+Subagent router doesn't properly re-evaluate after user provides missing input. Use a "latch" variable to force re-entry:
 
 ```yaml
 variables:
    verification_in_progress: mutable boolean = False
 
-start_agent topic_selector:
+start_agent agent_router:
    reasoning:
       instructions: ->
          if @variables.verification_in_progress == True:
-            transition to @topic.verification
+            transition to @subagent.verification
          | How can I help you today?
       actions:
-         start_verify: @topic.verification
+         start_verify: @subagent.verification
             description: "Start identity verification"
             set @variables.verification_in_progress = True
 
-topic verification:
+subagent verification:
    reasoning:
       instructions: ->
          | Please provide your email to verify your identity.
@@ -219,9 +219,9 @@ topic verification:
 
 ## Loop Protection Guardrail
 
-Agent Scripts have a built-in guardrail that limits iterations to approximately **3-4 loops** before breaking out and returning to the Topic Selector.
+Agent Scripts have a built-in guardrail that limits iterations to approximately **3-4 loops** before breaking out and returning to the Subagent Router.
 
-**Best Practice**: Map out your execution paths and test for unintended circular references between topics.
+**Best Practice**: Map out your execution paths and test for unintended circular references between subagents.
 
 ## Token & Size Limits
 

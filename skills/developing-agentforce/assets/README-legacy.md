@@ -9,7 +9,7 @@ Organized templates for building Agentforce agents.
 ```
 assets/
 ├── agents/       Complete, deployable agent examples
-├── components/   Reusable action and topic snippets
+├── components/   Reusable action and subagent snippets
 ├── patterns/     Advanced patterns (lifecycle, callbacks)
 └── metadata/     XML metadata templates
 ```
@@ -24,8 +24,8 @@ What do you need?
 ├─► "Just starting"
 │   └─► agents/hello-world.agent
 │
-├─► "Complete agent with topics"
-│   └─► agents/multi-topic.agent
+├─► "Complete agent with subagents"
+│   └─► agents/multi-subagent.agent
 │
 ├─► "Add actions to my agent"
 │   ├─► components/flow-action.agent
@@ -47,8 +47,8 @@ What do you need?
 | Template | Complexity | Description |
 |----------|------------|-------------|
 | `hello-world.agent` | Beginner | Minimal viable agent |
-| `simple-qa.agent` | Beginner | Single-topic Q&A |
-| `multi-topic.agent` | Intermediate | Multi-topic routing |
+| `simple-qa.agent` | Beginner | Single-subagent Q&A |
+| `multi-subagent.agent` | Intermediate | Multi-subagent routing |
 | `production-faq.agent` | Advanced | Production-ready with escalation |
 
 ### components/ - Reusable Parts
@@ -57,7 +57,7 @@ What do you need?
 |----------|---------|
 | `flow-action.agent` | Flow action integration |
 | `apex-action.agent` | Apex action integration |
-| `topic-with-actions.agent` | Topic with actions |
+| `subagent-with-actions.agent` | Subagent with actions |
 | `error-handling.agent` | Input validation |
 | `escalation-setup.agent` | Human handoff |
 
@@ -67,8 +67,8 @@ What do you need?
 |----------|---------|------------|
 | `lifecycle-events.agent` | before/after reasoning | GenAiPlannerBundle |
 | `action-callbacks.agent` | Deterministic chains | GenAiPlannerBundle |
-| `bidirectional-routing.agent` | Topic routing with return | Both |
-| `system-instruction-overrides.agent` | Topic-level personas | Both |
+| `bidirectional-routing.agent` | Subagent routing with return | Both |
+| `system-instruction-overrides.agent` | Subagent-level personas | Both |
 | *(6 more patterns)* | | |
 
 ### metadata/ - XML Templates

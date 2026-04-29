@@ -6,10 +6,10 @@
 
 If no utterances file is provided, derive test cases from the `.agent` file:
 
-1. **Topic-based utterances** - One per non-start topic based on description keywords
+1. **Subagent-based utterances** - One per non-start subagent based on description keywords
 2. **Action-based utterances** - Target each key action's functionality
 3. **Guardrail test** - Off-topic utterance to test boundaries
-4. **Multi-turn scenarios** - Test topic transitions if defined
+4. **Multi-turn scenarios** - Test subagent transitions if defined
 5. **Safety probes** - Adversarial utterances to test safety boundaries (see below)
 
 **Step 2: Present the derived tests and ask the user to review.**
@@ -17,7 +17,7 @@ If no utterances file is provided, derive test cases from the `.agent` file:
 ```
 Auto-generated test plan (8 utterances):
 
-  Topic tests:
+  Subagent tests:
     1. "I need to check my order status" -> order_support
     2. "I want to return an item" -> return_support
     3. "What are your store hours?" -> general_support
@@ -111,22 +111,22 @@ Compromised probes:
 ### Example Derivation from Agent Structure
 
 ```yaml
-# Agent topics:
-topic order_management:
+# Agent subagents:
+subagent order_management:
   description: "Handle order status, tracking, shipping"
   actions:
     - get_order_status
     - track_shipment
 
-topic returns:
+subagent returns:
   description: "Process returns, refunds, exchanges"
   actions:
     - initiate_return
     - check_refund_status
 
 # Derived utterances:
-1. "Where is my order?" -> should route to order_management
-2. "I want to return this item" -> should route to returns
+1. "Where is my order?" -> should route to order_management subagent
+2. "I want to return this item" -> should route to returns subagent
 3. "Track my shipment" -> should invoke track_shipment action
 4. "What's my refund status?" -> should invoke check_refund_status
 5. "Tell me a joke" -> should trigger guardrail
@@ -196,21 +196,21 @@ Each trace is a `PlanSuccessResponse` JSON with this root structure:
 - `type` — always `"PlanSuccessResponse"`
 - `planId` — unique plan ID for this turn
 - `sessionId` — the preview session ID
-- `topic` — which topic handled this turn
+- `subagent` — which subagent handled this turn
 - `plan[]` — array of step objects (the execution trace)
 
 ## Phase 3: Trace Analysis
 
 Analyze execution traces for 8 key aspects:
 
-### 1. Topic Routing Verification
+### 1. Subagent Routing Verification
 ```bash
-# Which topic handled this turn (root-level field)
+# Which subagent handled this turn (root-level field)
 jq -r '.topic' "$TRACE"
-# Detailed: which agent/topic was entered
+# Detailed: which agent/subagent was entered
 jq -r '.plan[] | select(.type == "NodeEntryStateStep") | .data.agent_name' "$TRACE"
 ```
-Expected: Correct topic name matches the expected topic for the utterance.
+Expected: Correct subagent name matches the expected subagent for the utterance.
 
 ### 2. Action Invocation Check
 ```bash
@@ -301,38 +301,38 @@ If issues are detected, the system enters an automated fix loop (max 3 iteration
 ### Iteration Process
 
 1. **Identify failure category**:
-   - `TOPIC_NOT_MATCHED` - Topic description too vague
+   - `TOPIC_NOT_MATCHED` - Subagent description too vague
    - `ACTION_NOT_INVOKED` - Action guard too restrictive
    - `WRONG_ACTION_SELECTED` - Action descriptions overlap
    - `UNGROUNDED_RESPONSE` - Missing data references
    - `LOW_SAFETY_SCORE` - Inadequate safety instructions
    - `TOOL_NOT_VISIBLE` - Available when conditions not met
-   - `DEFAULT_TOPIC` - Trace shows `topic: "DefaultTopic"` — no real topic matched the utterance
-   - `NO_ACTIONS_IN_TOPIC` - `EnabledToolsStep` shows only guardrail tools; `BeforeReasoningIterationStep.data.action_names[]` shows only `__state_update_action__` entries — topic has no `reasoning: actions:` block
+   - `DEFAULT_TOPIC` - Trace shows `topic: "DefaultTopic"` — no real subagent matched the utterance
+   - `NO_ACTIONS_IN_TOPIC` - `EnabledToolsStep` shows only guardrail tools; `BeforeReasoningIterationStep.data.action_names[]` shows only `__state_update_action__` entries — subagent has no `reasoning: actions:` block
 
 2. **Diagnose from trace** (when using `--authoring-bundle` with local traces):
 
 | Failure | Trace step to inspect | What to look for |
 |---------|----------------------|------------------|
-| TOPIC_NOT_MATCHED | `NodeEntryStateStep` | `.data.agent_name` shows wrong topic |
+| TOPIC_NOT_MATCHED | `NodeEntryStateStep` | `.data.agent_name` shows wrong subagent |
 | ACTION_NOT_INVOKED | `EnabledToolsStep` | Action missing from `.data.enabled_tools[]` |
 | UNGROUNDED_RESPONSE | `ReasoningStep` | `.category == "UNGROUNDED"`, read `.reason` |
 | Variable not set | `VariableUpdateStep` | No update for expected variable |
 | Wrong LLM behavior | `LLMStep` | Read `.data.messages_sent[0].content` to see what prompt was sent |
-| DEFAULT_TOPIC | Root `.topic` field | Value is `"DefaultTopic"` instead of a real topic name — no topic matched |
-| NO_ACTIONS_IN_TOPIC | `BeforeReasoningIterationStep` | `.data.action_names[]` shows only `__state_update_action__` — topic has no `reasoning: actions:` block |
+| DEFAULT_TOPIC | Root `.topic` field | Value is `"DefaultTopic"` instead of a real subagent name — no subagent matched |
+| NO_ACTIONS_IN_TOPIC | `BeforeReasoningIterationStep` | `.data.action_names[]` shows only `__state_update_action__` — subagent has no `reasoning: actions:` block |
 
 3. **Apply targeted fix**:
 
 | Failure Type | Fix Location | Fix Strategy |
 |--------------|--------------|--------------|
-| TOPIC_NOT_MATCHED | `topic: description:` | Add keywords from utterance |
+| TOPIC_NOT_MATCHED | `subagent: description:` | Add keywords from utterance |
 | ACTION_NOT_INVOKED | `available when:` | Relax guard conditions |
 | WRONG_ACTION | Action descriptions | Add exclusion language |
 | UNGROUNDED | `instructions: ->` | Add `{!@variables.x}` references |
 | LOW_SAFETY | `system: instructions:` | Add safety guidelines |
-| DEFAULT_TOPIC | `topic: description:` or `start_agent: actions:` | No topic matched — add keywords to topic descriptions or add transition actions to `start_agent` |
-| NO_ACTIONS_IN_TOPIC | `topic: reasoning: actions:` | Topic has zero actions — add `reasoning: actions:` block with transition and/or invocation actions |
+| DEFAULT_TOPIC | `subagent: description:` or `start_agent: actions:` | No subagent matched — add keywords to subagent descriptions or add transition actions to `start_agent` |
+| NO_ACTIONS_IN_TOPIC | `subagent: reasoning: actions:` | Subagent has zero actions — add `reasoning: actions:` block with transition and/or invocation actions |
 
 4. **Validate fix** - LSP auto-validates on save
 
@@ -343,11 +343,11 @@ If issues are detected, the system enters an automated fix loop (max 3 iteration
 ### Example Fix
 
 ```yaml
-# Before (topic not matched)
-topic order_mgmt:
+# Before (subagent not matched)
+subagent order_mgmt:
   description: "Orders"
 
 # After (expanded description)
-topic order_mgmt:
+subagent order_mgmt:
   description: "Handle order queries, order status, tracking, shipping, delivery"
 ```

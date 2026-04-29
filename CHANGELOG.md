@@ -1,3 +1,13 @@
+## [1.7.4](https://github.com/forcedotcom/afv-library/compare/1.7.3...1.7.4) (2026-04-27)
+
+
+### Bug Fixes
+
+* make sync-react-samples manual-only ([#228](https://github.com/forcedotcom/afv-library/issues/228)) ([d10f607](https://github.com/forcedotcom/afv-library/commit/d10f607da7cac6d036dc585e05b6b010b1c0f5a8))
+* use static branch for sync-react-samples PR ([#221](https://github.com/forcedotcom/afv-library/issues/221)) ([c80fbb5](https://github.com/forcedotcom/afv-library/commit/c80fbb51158a96d7d7b515c9f99636b650a92fa7))
+
+
+
 ## [1.7.3](https://github.com/forcedotcom/afv-library/compare/1.7.2...1.7.3) (2026-04-23)
 
 

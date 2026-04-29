@@ -2,7 +2,7 @@
 # ====================================
 #
 # This template demonstrates the Hub-and-Spoke pattern where a central
-# topic_selector (hub) routes conversations to specialized topics (spokes).
+# agent_router (hub) routes conversations to specialized subagents (spokes).
 #
 # Pattern: Multi-purpose agents handling distinct request types
 # Use when: Users may have different intents (orders, support, returns)
@@ -32,27 +32,27 @@ variables:
 # HUB: Central Router
 # ============================================================
 
-start_agent topic_selector:
-   description: "Route to appropriate topic based on user intent"
+start_agent agent_router:
+   description: "Route to appropriate subagent based on user intent"
    reasoning:
       instructions: |
          Determine what the customer needs and route accordingly:
-         - Order questions → orders topic
-         - Return/refund requests → returns topic
-         - General questions → support topic
+         - Order questions → orders subagent
+         - Return/refund requests → returns subagent
+         - General questions → support subagent
       actions:
-         check_order: @utils.transition to @topic.orders
+         check_order: @utils.transition to @subagent.orders
             description: "Customer wants to check order status"
-         process_return: @utils.transition to @topic.returns
+         process_return: @utils.transition to @subagent.returns
             description: "Customer wants to return or refund"
-         general_help: @utils.transition to @topic.support
+         general_help: @utils.transition to @subagent.support
             description: "General support questions"
 
 # ============================================================
-# SPOKE: Orders Topic
+# SPOKE: Orders Subagent
 # ============================================================
 
-topic orders:
+subagent orders:
    description: "Handle order status and tracking inquiries"
    reasoning:
       instructions: ->
@@ -65,14 +65,14 @@ topic orders:
          lookup_order: @actions.get_order_status
             description: "Look up order details"
             with order_id = @variables.order_id
-         back_to_hub: @utils.transition to @topic.topic_selector
+         back_to_hub: @utils.transition to @subagent.agent_router
             description: "Return to main menu"
 
 # ============================================================
-# SPOKE: Returns Topic
+# SPOKE: Returns Subagent
 # ============================================================
 
-topic returns:
+subagent returns:
    description: "Handle return and refund requests"
    reasoning:
       instructions: ->
@@ -84,14 +84,14 @@ topic returns:
             description: "Start a return process"
          process_refund: @actions.process_refund
             description: "Process a refund"
-         back_to_hub: @utils.transition to @topic.topic_selector
+         back_to_hub: @utils.transition to @subagent.agent_router
             description: "Return to main menu"
 
 # ============================================================
-# SPOKE: Support Topic
+# SPOKE: Support Subagent
 # ============================================================
 
-topic support:
+subagent support:
    description: "Handle general support questions"
    reasoning:
       instructions: |
@@ -100,5 +100,5 @@ topic support:
       actions:
          escalate: @utils.escalate
             description: "Transfer to human agent"
-         back_to_hub: @utils.transition to @topic.topic_selector
+         back_to_hub: @utils.transition to @subagent.agent_router
             description: "Return to main menu"

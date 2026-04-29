@@ -11,14 +11,14 @@ The skill covers the full Agent Script lifecycle:
 | Domain | What It Handles |
 |--------|----------------|
 | Create an Agent | Agent Spec design, environment validation, bundle generation, code authoring |
-| Modify an Agent | Topic/action changes, instruction refinement, flow control updates |
+| Modify an Agent | Subagent/action changes, instruction refinement, flow control updates |
 | Create or Modify Backing Logic | Invocable Apex stubs, Flow wrappers, Prompt Templates |
 | Deploy and Publish | Source deploy, agent activation, publishing to channels |
 | Diagnose Compilation Errors | Compiler error interpretation, syntax fixes, metadata resolution |
-| Diagnose Behavioral Issues | Trace-based debugging, topic routing, action I/O analysis |
+| Diagnose Behavioral Issues | Trace-based debugging, subagent routing, action I/O analysis |
 | Diagnose Production Issues | Runtime failures, reserved keyword conflicts, deployment gotchas |
 | Test an Agent | Utterance-based validation, preview with live actions, trace analysis |
-| Generate Diagrams | Topic map visualizations, agent architecture diagrams |
+| Generate Diagrams | Subagent map visualizations, agent architecture diagrams |
 
 ## Skill Structure
 
@@ -35,7 +35,7 @@ developing-agentforce/
 │   ├── agent-user-setup.md
 │   ├── actions-reference.md
 │   ├── action-prompt-templates.md
-│   ├── agent-topic-map-diagrams.md
+│   ├── agent-subagent-map-diagrams.md
 │   ├── minimal-examples.md
 │   ├── known-issues.md
 │   ├── production-gotchas.md

@@ -64,7 +64,7 @@ Publishing creates an **inactive** version. Without activation, preview fails wi
 |-------|-------|-----|
 | `Required fields missing: [BundleType]` | Extra fields in bundle-meta.xml | Use minimal: only `<bundleType>AGENT</bundleType>` |
 | `Internal Error, try again later` | Invalid default_agent_user or new agent platform bug | Query Einstein Agent Users; for new agents, create shell in Setup UI first |
-| `Duplicate value found: GenAiPluginDefinition` | `start_agent` and `topic` share name | Use different names |
+| `Duplicate value found: GenAiPluginDefinition` | `start_agent` and `subagent` share name | Use different names |
 | `Flow not found` | Metadata not deployed | Deploy flows before publishing |
 | `SetupEntityType is not supported for DML` | PermissionSet via Apex DML | Use Metadata API (`sf project deploy start`) |
 

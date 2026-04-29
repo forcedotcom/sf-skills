@@ -5,7 +5,7 @@
 1. Agent Spec: Structure and Lifecycle
 2. Discovery Questions
 3. Environment Prerequisites
-4. Topic Architecture
+4. Subagent Architecture
 5. Mapping Logic to Actions
 6. Transition Patterns
 7. Deterministic vs. Subjective Flow Control
@@ -16,15 +16,15 @@
 
 ## 1. Agent Spec: Structure and Lifecycle
 
-An **Agent Spec** is a structured design document describing an agent's purpose, topics, actions, state, control flow, and behavioral intent. When creating a new agent, produce the Agent Spec before writing Agent Script code. When comprehending or diagnosing an existing agent, reverse-engineer an Agent Spec from the `.agent` file to make the agent's design explicit.
+An **Agent Spec** is a structured design document describing an agent's purpose, subagents, actions, state, control flow, and behavioral intent. When creating a new agent, produce the Agent Spec before writing Agent Script code. When comprehending or diagnosing an existing agent, reverse-engineer an Agent Spec from the `.agent` file to make the agent's design explicit.
 
 ### What an Agent Spec Contains
 
 - **Purpose & Scope** — what the agent does, in plain language
 - **Behavioral Intent** — what the agent is supposed to achieve (requirements and constraints), not just what the code does
-- **Topic Map** — a Mermaid flowchart showing all topics, transitions (with type labels: handoff or delegation), and when transitions occur
+- **Subagent Map** — a Mermaid flowchart showing all subagents, transitions (with type labels: handoff or delegation), and when transitions occur
 - **Actions & Backing Logic** — each action's name, its backing implementation (Apex class, Flow, Prompt Template), inputs/outputs with visibility decisions, and whether the backing logic exists or needs creation
-- **Variables** — declarations, types, default values, which topics set/read them, and what gates they control
+- **Variables** — declarations, types, default values, which subagents set/read them, and what gates they control
 - **Gating Logic** — conditions that govern action visibility or instruction evaluation, with rationale for each. Always include this section; if no gating applies, state "No gating required" so reviewers know it was considered, not overlooked.
 
 ### Directional vs. Observational Entries
@@ -41,11 +41,11 @@ Both go in the same Agent Spec section.
 
 The Agent Spec evolves across the agent's lifecycle:
 
-**Creation (sparse).** Purpose, topic names, rough descriptions, directional notes about backing logic ("this action needs an Apex class that accepts X, returns Y"). No flowchart yet. Entries are mostly placeholders.
+**Creation (sparse).** Purpose, subagent names, rough descriptions, directional notes about backing logic ("this action needs an Apex class that accepts X, returns Y"). No flowchart yet. Entries are mostly placeholders.
 
 **Build (filled).** Flowchart added with transition types labeled. Backing logic mapped (existing implementations identified with filenames, missing implementations stubbed with protocols and I/O specs). Variables documented with their usage and gating impact. Gating rationale explained.
 
-**Comprehension (reverse-engineered).** Starting from an existing `.agent` file, produce a complete Agent Spec by parsing topics, tracing transitions, analyzing actions, and documenting state. This is the "what does this agent do?" output.
+**Comprehension (reverse-engineered).** Starting from an existing `.agent` file, produce a complete Agent Spec by parsing subagents, tracing transitions, analyzing actions, and documenting state. This is the "what does this agent do?" output.
 
 **Diagnosis (reference).** Compare actual runtime behavior against the Agent Spec to find where intent and implementation diverge.
 
@@ -69,19 +69,19 @@ These five question categories drive the content of your Agent Spec. When creati
 - What personality should the agent have? (professional, friendly, formal, casual)
 - What error message should the agent show if something breaks?
 
-### Topics & Conversation Flow *(feeds Topic Map)*
+### Subagents & Conversation Flow *(feeds Subagent Map)*
 
-- What distinct conversation areas (topics) does the agent need?
-- Which topic is the entry point? (where conversations start)
-- What are the possible transitions between topics?
-- Are there topics that delegate to others and need to return?
-- Are there guardrail topics (off-topic redirection, ambiguity handling, security gates)?
+- What distinct conversation areas (subagents) does the agent need?
+- Which subagent is the entry point? (where conversations start)
+- What are the possible transitions between subagents?
+- Are there subagents that delegate to others and need to return?
+- Are there guardrail subagents (off-topic redirection, ambiguity handling, security gates)?
 
 ### Reasoning & Instructions *(feeds Behavioral Intent)*
 
-- What should the agent do in each topic?
+- What should the agent do in each subagent?
 - What conditions change the instructions? (if guest is premium, if step 1 is complete)
-- Should the agent do anything before or after reasoning in a given topic? (e.g., security checks, data fetches, automatic transitions)
+- Should the agent do anything before or after reasoning in a given subagent? (e.g., security checks, data fetches, automatic transitions)
 - What data transformations (if any) does the LLM need to do?
 
 ### Actions & External Systems *(feeds Actions & Backing Logic)*
@@ -98,17 +98,17 @@ These five question categories drive the content of your Agent Spec. When creati
 
 - What information must persist across the conversation? (customer name, preferences, process state)
 - What external context is needed? (session ID, user record, linked fields)
-- What conditions should trigger different behavior in the same topic? (is_premium, role, completed_steps)
+- What conditions should trigger different behavior in the same subagent? (is_premium, role, completed_steps)
 
 ---
 
 ## 3. Environment Prerequisites
 
-**⚠️ MANDATORY: Run these checks immediately after determining the agent type during discovery.** Do not proceed to topic architecture or code generation until the environment is validated.
+**⚠️ MANDATORY: Run these checks immediately after determining the agent type during discovery.** Do not proceed to subagent architecture or code generation until the environment is validated.
 
 ### `AgentforceEmployeeAgent`
 
-1. Confirm the config block does NOT include `default_agent_user`. If the generated boilerplate includes it, remove it along with any MessagingSession linked variables and escalation topic.
+1. Confirm the config block does NOT include `default_agent_user`. If the generated boilerplate includes it, remove it along with any MessagingSession linked variables and escalation subagent.
 
 **⚠️ Setting `default_agent_user` on an employee agent causes publish and preview to fail with an unhelpful "unknown error."**
 
@@ -144,20 +144,20 @@ Add a "Configuration" section to the Agent Spec:
 
 ---
 
-## 4. Topic Architecture
+## 4. Subagent Architecture
 
-Topics are states in a finite state machine. When designing a new agent, plan your topic structure before writing code. When comprehending an existing agent, identify which topic strategies and architecture pattern it uses.
+Subagents are states in a finite state machine. When designing a new agent, plan your subagent structure before writing code. When comprehending an existing agent, identify which subagent strategies and architecture pattern it uses.
 
-### Topic Strategies
+### Subagent Strategies
 
-Every topic in an agent serves one of three roles: domain, guardrail, or escalation.
+Every subagent in an agent serves one of three roles: domain, guardrail, or escalation.
 
-**Domain Topics.** The core conversation areas where the agent does its work. Each domain topic handles a specific area (orders, billing, weather, events) with its own instructions, actions, and state. Most agents have 1-5 domain topics.
+**Domain Subagents.** The core conversation areas where the agent does its work. Each domain subagent handles a specific area (orders, billing, weather, events) with its own instructions, actions, and state. Most agents have 1-5 domain subagents.
 
-**Guardrail Topics.** Specialized topics that enforce agent boundaries. The standard Agentforce template includes two guardrail topics by default: `off_topic` (redirects users back to the agent's scope) and `ambiguous_question` (asks for clarification instead of guessing). Preserve these when modifying existing agents.
+**Guardrail Subagents.** Specialized subagents that enforce agent boundaries. The standard Agentforce template includes two guardrail subagents by default: `off_topic` (redirects users back to the agent's scope) and `ambiguous_question` (asks for clarification instead of guessing). Preserve these when modifying existing agents.
 
 ```agentscript
-topic off_topic:
+subagent off_topic:
     description: "Handle off-topic requests"
     reasoning:
         instructions: ->
@@ -165,7 +165,7 @@ topic off_topic:
               I can only help with [list your capabilities].
               What can I help you with today?
 
-topic ambiguous_question:
+subagent ambiguous_question:
     description: "Ask for clarification"
     reasoning:
         instructions: ->
@@ -173,89 +173,89 @@ topic ambiguous_question:
               Can you provide more details about what you need?
 ```
 
-**Escalation Topics.** Hand off to a human via `@utils.escalate`. This is a permanent exit — the user leaves the agent for a support channel (phone, email, chat with a human). Once triggered, the agent session ends. The escalation action does NOT return.
+**Escalation Subagents.** Hand off to a human via `@utils.escalate`. This is a permanent exit — the user leaves the agent for a support channel (phone, email, chat with a human). Once triggered, the agent session ends. The escalation action does NOT return.
 
 ```agentscript
-topic escalation:
+subagent escalation:
     reasoning:
         actions:
             escalate: @utils.escalate
                 description: "Connect with a human agent"
 ```
 
-### Single-Topic vs. Multi-Topic
+### Single-Subagent vs. Multi-Subagent
 
 Decide this before choosing an architecture pattern.
 
-Use **single-topic** if:
+Use **single-subagent** if:
 - The agent handles one domain only (FAQ, weather checker, status lookup)
 - All interactions naturally stay in the same context
 - No complex state transitions needed
 
-Use **multi-topic** if:
+Use **multi-subagent** if:
 - The agent handles multiple distinct domains (customer service: orders + billing + account)
-- Different topics have different instructions or action sets
+- Different subagents have different instructions or action sets
 - Users may need to switch contexts mid-conversation
 - You need different entry points or security gates
 
 ### Architecture Patterns
 
-**Hub-and-Spoke.** One central topic (the router) transitions to specialized domain topics. The router is typically the `start_agent` topic. Each spoke handles a specific domain and may transition back to the router or to other spokes. Use when the agent handles multiple distinct domains that don't naturally flow together.
+**Hub-and-Spoke.** One central subagent (the router) transitions to specialized domain subagents. The router is typically the `start_agent` subagent. Each spoke handles a specific domain and may transition back to the router or to other spokes. Use when the agent handles multiple distinct domains that don't naturally flow together.
 
-Example: The Local Info Agent. The `topic_selector` topic (hub) routes to domain and guardrail topics (spokes).
+Example: The Local Info Agent. The `agent_router` subagent (hub) routes to domain and guardrail subagents (spokes).
 
 ```agentscript
-start_agent topic_selector:
+start_agent agent_router:
     reasoning:
         actions:
-            go_to_weather: @utils.transition to @topic.local_weather
-            go_to_events: @utils.transition to @topic.local_events
-            go_to_hours: @utils.transition to @topic.resort_hours
-            go_to_off_topic: @utils.transition to @topic.off_topic
-            go_to_ambiguous_question: @utils.transition to @topic.ambiguous_question
+            go_to_weather: @utils.transition to @subagent.local_weather
+            go_to_events: @utils.transition to @subagent.local_events
+            go_to_hours: @utils.transition to @subagent.resort_hours
+            go_to_off_topic: @utils.transition to @subagent.off_topic
+            go_to_ambiguous_question: @utils.transition to @subagent.ambiguous_question
 
-# Domain topics — each has its own instructions and actions
-topic local_weather:
+# Domain subagents — each has its own instructions and actions
+subagent local_weather:
     reasoning:
         instructions: | Handle weather questions.
 
-topic local_events:
+subagent local_events:
     reasoning:
         instructions: | Handle event questions.
 
 # resort_hours, off_topic, ambiguous_question defined further down the file
 ```
 
-**Linear Flow.** Topics form a pipeline: start → step 1 → step 2 → step 3 → end. Users progress through stages without backtracking. Use for multi-step workflows with mandatory ordering (application forms, onboarding, troubleshooting trees).
+**Linear Flow.** Subagents form a pipeline: start → step 1 → step 2 → step 3 → end. Users progress through stages without backtracking. Use for multi-step workflows with mandatory ordering (application forms, onboarding, troubleshooting trees).
 
 ```agentscript
 start_agent intake:
     reasoning:
         actions:
-            go_next: @utils.transition to @topic.verification
+            go_next: @utils.transition to @subagent.verification
 
-topic verification:
+subagent verification:
     reasoning:
         actions:
-            go_next: @utils.transition to @topic.details_gathering
+            go_next: @utils.transition to @subagent.details_gathering
 
-topic details_gathering:
+subagent details_gathering:
     reasoning:
         actions:
-            go_next: @utils.transition to @topic.confirmation
+            go_next: @utils.transition to @subagent.confirmation
 ```
 
 **Escalation Chain.** Tiered support where each level has increasing capabilities. First-level resolves common issues with basic actions; second-level has access to more powerful actions or broader authority; final level escalates to a human. Use when support difficulty varies and you want to resolve simple issues quickly without involving higher tiers.
 
 ```agentscript
-topic level_1_support:
+subagent level_1_support:
     reasoning:
         instructions: | Try to resolve the issue using the FAQ and basic troubleshooting.
         actions:
             check_faq: @actions.search_faq
-            escalate: @utils.transition to @topic.level_2_support
+            escalate: @utils.transition to @subagent.level_2_support
 
-topic level_2_support:
+subagent level_2_support:
     reasoning:
         instructions: | You have access to account tools. Try to resolve before escalating.
         actions:
@@ -264,23 +264,23 @@ topic level_2_support:
             escalate_to_human: @utils.escalate
 ```
 
-**Verification Gate.** A security or permission check before allowing access to protected topics. The gate validates the user, then transitions to the protected topic or denies access.
+**Verification Gate.** A security or permission check before allowing access to protected subagents. The gate validates the user, then transitions to the protected subagent or denies access.
 
 ```agentscript
 start_agent security_gate:
     reasoning:
         actions:
-            go_admin: @utils.transition to @topic.admin_panel
+            go_admin: @utils.transition to @subagent.admin_panel
                 available when @variables.user_role == "admin"
-            go_denied: @utils.transition to @topic.access_denied
+            go_denied: @utils.transition to @subagent.access_denied
                 available when @variables.user_role != "admin"
 
-topic access_denied:
+subagent access_denied:
     reasoning:
         instructions: | You don't have permission to access this.
 ```
 
-**Single-Topic.** The entire agent is one topic — no transitions. Use for focused QA agents where all interactions stay in the same domain.
+**Single-Subagent.** The entire agent is one subagent — no transitions. Use for focused QA agents where all interactions stay in the same domain.
 
 ```agentscript
 start_agent faq:
@@ -293,7 +293,7 @@ start_agent faq:
 
 ### Composing Patterns
 
-Real agents often combine patterns. A hub-and-spoke agent may use a verification gate before protected spokes. A linear flow may include escalation exits at each stage. When composing, each topic still serves exactly one role (domain, guardrail, or escalation) — the architecture pattern determines how they connect.
+Real agents often combine patterns. A hub-and-spoke agent may use a verification gate before protected spokes. A linear flow may include escalation exits at each stage. When composing, each subagent still serves exactly one role (domain, guardrail, or escalation) — the architecture pattern determines how they connect.
 
 ---
 
@@ -415,7 +415,7 @@ Each `@InvocableVariable` on the request class becomes an action input; each on 
 
 ```agentscript
 # WRONG — snake_case doesn't match the Apex field names
-topic orders:
+subagent orders:
     actions:
         check_order: @actions.check_order
             target: "apex://OrderLookup"
@@ -425,7 +425,7 @@ topic orders:
                 order_date: date     # Apex field is orderDate, NOT order_date
 
 # RIGHT — names match Apex @InvocableVariable field names exactly
-topic orders:
+subagent orders:
     actions:
         check_order: @actions.check_order
             target: "apex://OrderLookup"
@@ -626,67 +626,67 @@ ALWAYS fix deploy errors BEFORE generating and deploying the next stub.
 
 ## 6. Transition Patterns
 
-When creating a new agent, label every transition in your Agent Spec's Topic Map as either **handoff** or **delegation**. When analyzing an existing agent, classify each transition to determine whether context flow matches the design intent.
+When creating a new agent, label every transition in your Agent Spec's Subagent Map as either **handoff** or **delegation**. When analyzing an existing agent, classify each transition to determine whether context flow matches the design intent.
 
 ### Handoff: Permanent Transition
 
-A handoff is a one-way transition. The user moves to a new topic and control never returns to the original topic. Handoffs use `@utils.transition to` in `reasoning.actions`.
+A handoff is a one-way transition. The user moves to a new subagent and control never returns to the original subagent. Handoffs use `@utils.transition to` in `reasoning.actions`.
 
 Use handoff when:
 - Switching modes (preview → confirm → complete)
-- Entry point routing (topic_selector → domain topics)
+- Entry point routing (agent_router → domain subagents)
 - One-way workflows (checkout → order_confirmation → end)
 
 ```agentscript
-topic topic_selector:
+subagent agent_router:
     reasoning:
         actions:
-            go_to_checkout: @utils.transition to @topic.checkout
+            go_to_checkout: @utils.transition to @subagent.checkout
                 description: "Start checkout"
 
-topic checkout:
+subagent checkout:
     reasoning:
         actions:
-            go_to_confirm: @utils.transition to @topic.order_confirmation
+            go_to_confirm: @utils.transition to @subagent.order_confirmation
                 description: "Proceed to confirmation"
 ```
 
-After `go_to_confirm` executes, the user is in `order_confirmation`. If they later say "go back," the agent routes them back through `topic_selector` (the entry point), not to `checkout`. Handoffs don't stack; they reset the conversation state.
+After `go_to_confirm` executes, the user is in `order_confirmation`. If they later say "go back," the agent routes them back through `agent_router` (the entry point), not to `checkout`. Handoffs don't stack; they reset the conversation state.
 
 ### Delegation: Handoff with Explicit Return
 
-Delegation hands control to another topic using `@topic.X` in `reasoning.actions`. It signals *intent* to return, but the return does not happen automatically — the delegated topic must explicitly transition back to the caller.
+Delegation hands control to another subagent using `@subagent.X` in `reasoning.actions`. It signals *intent* to return, but the return does not happen automatically — the delegated subagent must explicitly transition back to the caller.
 
 Use delegation when:
-- One topic needs advice from a specialist and should continue after
-- Reusable sub-workflows (e.g., identity verification called from multiple topics)
-- A topic needs to temporarily visit another topic, then resume
+- One subagent needs advice from a specialist and should continue after
+- Reusable sub-workflows (e.g., identity verification called from multiple subagents)
+- A subagent needs to temporarily visit another subagent, then resume
 
-**Critical Rule:** `@topic.X` delegates control. It does NOT implement call-return semantics. If you want the user to return to the calling topic, code an explicit `transition to @topic.<caller>` in the delegated topic. Without it, the next user utterance falls through to `topic_selector`.
+**Critical Rule:** `@subagent.X` delegates control. It does NOT implement call-return semantics. If you want the user to return to the calling subagent, code an explicit `transition to @subagent.<caller>` in the delegated subagent. Without it, the next user utterance falls through to `agent_router`.
 
-WRONG: Assuming `@topic.specialist` returns automatically
+WRONG: Assuming `@subagent.specialist` returns automatically
 ```agentscript
-topic main:
+subagent main:
     reasoning:
         actions:
-            consult_specialist: @topic.specialist  # WRONG — assumes return
+            consult_specialist: @subagent.specialist  # WRONG — assumes return
 
 # After specialist runs, control does NOT return to main.
-# The next user utterance routes through topic_selector.
+# The next user utterance routes through agent_router.
 ```
 
-RIGHT: Delegated topic defines explicit return transition
+RIGHT: Delegated subagent defines explicit return transition
 ```agentscript
-topic main:
+subagent main:
     reasoning:
         actions:
-            consult_specialist: @topic.specialist
+            consult_specialist: @subagent.specialist
                 description: "Consult specialist"
 
-topic specialist:
+subagent specialist:
     reasoning:
         actions:
-            go_to_main: @utils.transition to @topic.main
+            go_to_main: @utils.transition to @subagent.main
                 description: "Return to main"
 ```
 
@@ -713,7 +713,7 @@ Instructions are suggestions the LLM *may* follow. Gates and guards are enforced
 
 WRONG: Security rule as an instruction (LLM can ignore it)
 ```agentscript
-topic admin_panel:
+subagent admin_panel:
     reasoning:
         instructions: ->
             | Only respond if the user is an admin.
@@ -730,7 +730,7 @@ Two factors govern subjective control effectiveness: instruction ordering and gr
 
 RIGHT: Post-action check at the top (LLM sees it first)
 ```agentscript
-topic checkout:
+subagent checkout:
     reasoning:
         instructions: ->
             # Post-action check — LLM sees this first
@@ -752,7 +752,7 @@ topic checkout:
 
 WRONG: Post-action check at the bottom (LLM may respond before seeing it)
 ```agentscript
-topic checkout:
+subagent checkout:
     reasoning:
         instructions: ->
             | Your current cart total is {!@variables.cart_total}.
@@ -775,7 +775,7 @@ Grounding validation requires **live mode preview** (`sf agent preview --use-liv
 
 ### Post-Action Behavior
 
-When an action completes without triggering a transition, the topic stays active. The runtime re-evaluates the entire topic — resolving instructions top-to-bottom again with updated variables, then passing the new prompt to the LLM. The LLM may call the same action again. To prevent unwanted loops, see Section 9 (Action Loop Prevention).
+When an action completes without triggering a transition, the subagent stays active. The runtime re-evaluates the entire subagent — resolving instructions top-to-bottom again with updated variables, then passing the new prompt to the LLM. The LLM may call the same action again. To prevent unwanted loops, see Section 9 (Action Loop Prevention).
 
 ---
 
@@ -787,7 +787,7 @@ An action marked `available when <condition>` is hidden from the LLM when the co
 
 **WRONG: Relying on instructions to prevent action calls**
 ```agentscript
-topic booking:
+subagent booking:
     reasoning:
         instructions: ->
             | if @variables.booking_pending:
@@ -801,7 +801,7 @@ The action is visible; instructions tell the LLM not to call it. The LLM may ign
 
 **RIGHT: Using `available when` to hide the action**
 ```agentscript
-topic booking:
+subagent booking:
     reasoning:
         actions:
             confirm: @actions.confirm_booking
@@ -815,7 +815,7 @@ If `booking_pending` is False, the LLM sees no `confirm` action.
 Use `if/else` in instructions to show/hide text based on state. This doesn't hide actions; it changes what the LLM is told to do.
 
 ```agentscript
-topic support:
+subagent support:
     reasoning:
         instructions: ->
             | You're helping a customer with their order.
@@ -833,19 +833,19 @@ Use conditional instructions when you want to steer the LLM's reasoning without 
 
 ### `before_reasoning` Guards — Early Exit
 
-The `before_reasoning` block runs before the LLM is invoked. Code here executes every time the topic is entered. The LLM never sees it, cannot override it, and cannot skip it.
+The `before_reasoning` block runs before the LLM is invoked. Code here executes every time the subagent is entered. The LLM never sees it, cannot override it, and cannot skip it.
 
 ```agentscript
-topic admin_panel:
+subagent admin_panel:
     before_reasoning:
         if @variables.user_role != "admin":
-            transition to @topic.access_denied
+            transition to @subagent.access_denied
 
     reasoning:
         instructions: | You are in the admin panel.
 ```
 
-If the user is not an admin, they transition out before the LLM is invoked. The admin topic's reasoning instructions never execute.
+If the user is not an admin, they transition out before the LLM is invoked. The admin subagent's reasoning instructions never execute.
 
 ### Multi-Condition Gating
 
@@ -854,10 +854,10 @@ Combine `available when`, conditional instructions, and guards to enforce comple
 Example: "Show the payment action only if the user is authenticated AND the cart is not empty AND we're not in a preview/demo mode"
 
 ```agentscript
-topic checkout:
+subagent checkout:
     before_reasoning:
         if @variables.is_demo_mode:
-            transition to @topic.demo_complete
+            transition to @subagent.demo_complete
 
     reasoning:
         instructions: ->
@@ -882,7 +882,7 @@ variables:
     step2_verified: mutable boolean = False
     step3_verified: mutable boolean = False
 
-topic verification:
+subagent verification:
     reasoning:
         actions:
             verify_step1: @actions.run_check_1
@@ -890,7 +890,7 @@ topic verification:
                 available when @variables.step1_verified == True
             verify_step3: @actions.run_check_3
                 available when @variables.step2_verified == True
-            proceed: @utils.transition to @topic.confirmed
+            proceed: @utils.transition to @subagent.confirmed
                 available when @variables.step3_verified == True
 ```
 
@@ -898,9 +898,9 @@ Each step becomes visible only after the previous step completes (updates its va
 
 ### Same-Turn Behavior After Gate Transitions
 
-When a gate topic (e.g., username collection) uses `after_reasoning` to transition into a routing topic, both topics process in the **same user turn**. The router receives the user's original message — the one that satisfied the gate — not a fresh utterance.
+When a gate subagent (e.g., username collection) uses `after_reasoning` to transition into a routing subagent, both subagents process in the **same user turn**. The router receives the user's original message — the one that satisfied the gate — not a fresh utterance.
 
-This means if the user said "My username is alex" and the gate transitions to a topic selector, the selector's reasoning fires against "My username is alex." Since that message doesn't match any domain topic, the router may misclassify it (e.g., routing to `off_topic`).
+This means if the user said "My username is alex" and the gate transitions to a subagent router, the router's reasoning fires against "My username is alex." Since that message doesn't match any domain subagent, the router may misclassify it (e.g., routing to `off_topic`).
 
 **Mitigation:** Write the router's reasoning instructions defensively. Tell the LLM that if the user just arrived from the gate, it should greet them and ask how it can help instead of routing the triggering message. See the Anti-Patterns section in the Core Language reference for a full WRONG/RIGHT example.
 
@@ -916,7 +916,7 @@ An action loop occurs when the LLM calls the same action repeatedly without new 
 
 **WRONG: All three loop conditions present**
 ```agentscript
-topic events:
+subagent events:
     reasoning:
         instructions: ->
             | Use the {!@actions.check_events} action to find events.
@@ -935,7 +935,7 @@ No gate, variable-bound input, no post-action guidance. The LLM can call `check_
 Tell the LLM to stop calling the action after receiving results. Name the specific output fields the LLM should include in its text response — vague instructions like "present the results" let platform tools hijack the response (see Section 7, Grounding).
 
 ```agentscript
-topic events:
+subagent events:
     reasoning:
         instructions: ->
             | Use {!@actions.check_events} to find events matching the guest's interest.
@@ -952,10 +952,10 @@ topic events:
 
 **2. Post-Action Transitions (state-based).**
 
-Move the agent out of the topic after the action completes, breaking the cycle.
+Move the agent out of the subagent after the action completes, breaking the cycle.
 
 ```agentscript
-topic events:
+subagent events:
     reasoning:
         instructions: ->
             | Use {!@actions.check_events} to find events.
@@ -966,17 +966,17 @@ topic events:
 
     after_reasoning:
         if @outputs.events_found:
-            transition to @topic.results_displayed
+            transition to @subagent.results_displayed
 ```
 
-After `check_events` runs, the `after_reasoning` block transitions to a new topic. The agent never cycles back to `events`, so the action can't be called again.
+After `check_events` runs, the `after_reasoning` block transitions to a new subagent. The agent never cycles back to `events`, so the action can't be called again.
 
 **3. LLM Slot-Filling Over Variable Binding (friction-based).**
 
 Use `...` (LLM slot-fill) instead of variable binding. This forces the LLM to extract values from the conversation each cycle, adding natural decision friction.
 
 ```agentscript
-topic search:
+subagent search:
     reasoning:
         instructions: ->
             | Help the user search for products.
@@ -992,7 +992,7 @@ With `...`, the LLM must actively decide "do I have a new search query?" on ever
 **Combine mitigations for reinforcement:**
 
 ```agentscript
-topic lookup:
+subagent lookup:
     reasoning:
         instructions: ->
             | Once you have the result, present it. Do NOT call the action again.
@@ -1003,7 +1003,7 @@ topic lookup:
 
     after_reasoning:
         if @outputs.data_found:
-            transition to @topic.done  # Exit the topic
+            transition to @subagent.done  # Exit the subagent
 ```
 
 Combine mitigations for reinforcement.

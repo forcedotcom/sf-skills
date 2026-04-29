@@ -330,11 +330,11 @@ For targeted RAG/retriever quality analysis, use the `@InvocableMethod` entry po
 
 | `queryType` | What it returns |
 |---|---|
-| `KnowledgeGap` | Avg context precision + answer relevancy by topic/agent (lowest first) |
-| `Hallucination` | Topics with avg faithfulness < 0.8 |
-| `RetrievalQuality` | Avg context precision by retriever/topic/agent |
-| `AnswerRelevancy` | Topics with avg answer relevancy < 0.7 |
-| `Leaderboard` | Combined precision, relevancy, and faithfulness by topic/agent |
+| `KnowledgeGap` | Avg context precision + answer relevancy by subagent/agent (lowest first) |
+| `Hallucination` | Subagents with avg faithfulness < 0.8 |
+| `RetrievalQuality` | Avg context precision by retriever/subagent/agent |
+| `AnswerRelevancy` | Subagents with avg answer relevancy < 0.7 |
+| `Leaderboard` | Combined precision, relevancy, and faithfulness by subagent/agent |
 
 **From anonymous Apex:**
 
@@ -360,7 +360,7 @@ sf apex run --json --file /tmp/observability_query.apex -o <org>
 **When to use observability queries vs `getAggregatedMetrics()`:**
 
 - Use `getAggregatedMetrics()` for a broad health dashboard (session rates, top intents, overall RAG averages)
-- Use `runObservabilityQuery()` for targeted RAG deep-dives when knowledge gaps or hallucination issues are detected -- it provides per-topic and per-retriever breakdowns
+- Use `runObservabilityQuery()` for targeted RAG deep-dives when knowledge gaps or hallucination issues are detected -- it provides per-subagent and per-retriever breakdowns
 
 ---
 
@@ -371,7 +371,7 @@ For each session, render the turn-by-turn timeline from the `ConversationData` J
 ```
 Session <session_id>  [<channel>]  <duration_ms>ms total  <turn_count> turns
 ------------------------------------------------------------
-Turn 1  [Topic: <topic>]  <duration_ms>ms
+Turn 1  [Subagent: <subagent>]  <duration_ms>ms
   User:  <messages[type=Input].text>
   Agent: <messages[type=Output].text>
   Steps:

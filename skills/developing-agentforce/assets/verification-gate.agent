@@ -2,7 +2,7 @@
 # ========================================
 #
 # This template demonstrates the Verification Gate pattern where users
-# must pass through identity verification before accessing sensitive topics.
+# must pass through identity verification before accessing sensitive subagents.
 #
 # Pattern: Security gate before protected functionality
 # Use when: Handling sensitive data, payments, PII access
@@ -56,23 +56,23 @@ start_agent entry:
       instructions: |
          Welcome the customer and route to identity verification.
       actions:
-         start_verification: @utils.transition to @topic.identity_verification
+         start_verification: @utils.transition to @subagent.identity_verification
             description: "Begin identity verification process"
 
 # ============================================================
 # VERIFICATION GATE (Security Check)
 # ============================================================
 
-topic identity_verification:
+subagent identity_verification:
    description: "Verify customer identity before proceeding"
    reasoning:
       instructions: ->
          # SECURITY: Check for lockout FIRST (deterministic)
          if @variables.failed_attempts >= 3:
             | Too many failed attempts. Transferring to a human agent.
-            transition to @topic.escalation
+            transition to @subagent.escalation
 
-         # Already verified? Proceed to protected topics
+         # Already verified? Proceed to protected subagents
          if @variables.customer_verified == True:
             | Identity verified! How can I help you today?
 
@@ -88,11 +88,11 @@ topic identity_verification:
             set @variables.customer_verified = @outputs.verified
 
          # GUARDED: Only visible when verified
-         go_to_account: @utils.transition to @topic.account_management
+         go_to_account: @utils.transition to @subagent.account_management
             description: "Access account settings"
             available when @variables.customer_verified == True
 
-         go_to_refund: @utils.transition to @topic.refund_processor
+         go_to_refund: @utils.transition to @subagent.refund_processor
             description: "Process a refund request"
             available when @variables.customer_verified == True
 
@@ -104,13 +104,13 @@ topic identity_verification:
 # PROTECTED: Account Management
 # ============================================================
 
-topic account_management:
+subagent account_management:
    description: "Manage customer account (requires verification)"
    reasoning:
       instructions: ->
          # SECURITY GATE: Re-check verification
          if @variables.customer_verified == False:
-            transition to @topic.identity_verification
+            transition to @subagent.identity_verification
 
          | Welcome to account management.
          | What would you like to do with your account?
@@ -122,20 +122,20 @@ topic account_management:
          update_preferences: @actions.update_preferences
             description: "Update communication preferences"
             available when @variables.customer_verified == True
-         back: @utils.transition to @topic.identity_verification
+         back: @utils.transition to @subagent.identity_verification
             description: "Return to main menu"
 
 # ============================================================
 # PROTECTED: Refund Processor (with Post-Action Pattern)
 # ============================================================
 
-topic refund_processor:
+subagent refund_processor:
    description: "Process refund requests (requires verification)"
    reasoning:
       instructions: ->
          # SECURITY GATE: Re-check verification
          if @variables.customer_verified == False:
-            transition to @topic.identity_verification
+            transition to @subagent.identity_verification
 
          # ====================================================
          # POST-ACTION CHECK (at TOP - triggers on loop)
@@ -145,7 +145,7 @@ topic refund_processor:
             run @actions.create_crm_case
                with customer_id = @variables.customer_id
                with refund_amount = @variables.refund_amount
-            transition to @topic.success_confirmation
+            transition to @subagent.success_confirmation
 
          # ====================================================
          # PRE-LLM: Load churn risk data
@@ -181,14 +181,14 @@ topic refund_processor:
 # SUCCESS CONFIRMATION
 # ============================================================
 
-topic success_confirmation:
+subagent success_confirmation:
    description: "Confirm successful operation"
    reasoning:
       instructions: |
          Great news! Your request has been processed successfully.
          Is there anything else I can help you with?
       actions:
-         new_request: @utils.transition to @topic.identity_verification
+         new_request: @utils.transition to @subagent.identity_verification
             description: "Start a new request"
          end_conversation: @actions.end_session
             description: "End the conversation"
@@ -197,7 +197,7 @@ topic success_confirmation:
 # ESCALATION (Handoff to Human)
 # ============================================================
 
-topic escalation:
+subagent escalation:
    description: "Escalate to human agent"
    reasoning:
       instructions: |

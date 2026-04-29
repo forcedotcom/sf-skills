@@ -39,7 +39,7 @@ AiRetrieverQualityMetric (N)            -- RAG quality scores, linked via gatewa
 - `ssot__ParticipantId__c` -- GenAiPlannerDefinition ID (key prefix `16j`) for agents, `005...` for users. May be 15-char or 18-char.
 
 ### AiAgentInteraction (`ssot__AiAgentInteraction__dlm`)
-- `ssot__TopicApiName__c` -- Topic/skill that handled this turn -> `turn.topic`
+- `ssot__TopicApiName__c` -- Subagent/skill that handled this turn (API field name `TopicApiName` maps to Agent Script subagent) -> `turn.topic`
 - `ssot__StartTimestamp__c` / `ssot__EndTimestamp__c` -- Turn timing -> `turn.duration_ms`
 - `ssot__TelemetryTraceId__c` -- Distributed tracing ID -> `turn.telemetry_trace_id`
 
@@ -182,7 +182,7 @@ The only Salesforce metadata object that should be queried directly is `GenAiPla
 | `DataKnowledgeSpace` | Knowledge base container | Phase 1.5b Step 5 only -- if knowledge gaps are detected |
 
 **Do NOT query these objects directly** -- use the `.agent` file instead:
-- `GenAiPluginDefinition` (topics) -- read from `.agent` file `topic:` blocks
+- `GenAiPluginDefinition` (subagents) -- read from `.agent` file `subagent:` blocks
 - `GenAiPluginInstructionDef` (instructions) -- read from `.agent` file `reasoning: instructions:` blocks
 - `GenAiFunction` (actions) -- read from `.agent` file `reasoning: actions:` blocks
 

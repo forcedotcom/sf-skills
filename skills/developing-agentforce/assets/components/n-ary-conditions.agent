@@ -23,15 +23,15 @@
 # ═══════════════════════════════════════════════════════════════
 
 # Example: Require multiple authentication checks
-topic secure_action:
+subagent secure_action:
 	label: "Secure Action"
 	description: "Performs security-sensitive operations"
 
 	before_reasoning:
 		# All three conditions must be true
 		if @variables.is_authenticated and @variables.has_permission and @variables.session_valid:
-			transition to @topic.authorized_action
-		# Otherwise stay in this topic
+			transition to @subagent.authorized_action
+		# Otherwise stay in this subagent
 
 	reasoning:
 		instructions: ->
@@ -42,22 +42,22 @@ topic secure_action:
 # ═══════════════════════════════════════════════════════════════
 
 # Example: Any elevated role gets access
-topic admin_panel:
+subagent admin_panel:
 	label: "Admin Panel"
 	description: "Administrative features"
 
 	before_reasoning:
 		# Any one of these roles grants access
 		if @variables.is_admin or @variables.is_moderator or @variables.is_superuser:
-			transition to @topic.admin_features
+			transition to @subagent.admin_features
 		# Non-admins redirected
-		transition to @topic.access_denied
+		transition to @subagent.access_denied
 
 # ═══════════════════════════════════════════════════════════════
 # PATTERN 3: N-ary conditions in available when
 # ═══════════════════════════════════════════════════════════════
 
-topic order_management:
+subagent order_management:
 	label: "Order Management"
 	description: "Handles order operations"
 
@@ -84,14 +84,14 @@ topic order_management:
 # PATTERN 4: Complex grouped conditions
 # ═══════════════════════════════════════════════════════════════
 
-topic smart_routing:
+subagent smart_routing:
 	label: "Smart Routing"
 	description: "Routes based on complex criteria"
 
 	before_reasoning:
 		# Premium with any product type OR standard with warranty
 		if (@variables.tier == "premium" and @variables.product_type != None) or (@variables.tier == "standard" and @variables.has_warranty == True):
-			transition to @topic.priority_support
+			transition to @subagent.priority_support
 
 # ═══════════════════════════════════════════════════════════════
 # ANTI-PATTERNS - DO NOT USE
@@ -102,9 +102,9 @@ topic smart_routing:
 #    if @variables.a == True:
 #       if @variables.b == True:
 #          if @variables.c == True:
-#             transition to @topic.x
+#             transition to @subagent.x
 
 # ✅ CORRECT - Flat N-ary condition
 # before_reasoning:
 #    if @variables.a == True and @variables.b == True and @variables.c == True:
-#       transition to @topic.x
+#       transition to @subagent.x
