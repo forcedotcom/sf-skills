@@ -78,8 +78,8 @@ For each finding, assign severity: **BLOCK** (stops pipeline), **WARN** (flags f
 | Check | Severity | What to Look For |
 |-------|----------|------------------|
 | Missing scope definition | WARN | No "do not" or "only handle" clause |
-| Overly broad scope | WARN | No topic boundaries, no escalation path |
-| Missing escalation | WARN | Complex/sensitive topics without human transfer |
+| Overly broad scope | WARN | No subagent boundaries, no escalation path |
+| Missing escalation | WARN | Complex/sensitive subagents without human transfer |
 | Missing error handling | INFO | No instructions for when agent can't help |
 
 ## Output Format

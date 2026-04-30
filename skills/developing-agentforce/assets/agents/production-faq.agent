@@ -29,7 +29,7 @@ variables:
 	user_question: mutable string
 		description: "The user's current question"
 	conversation_topic: mutable string
-		description: "The current topic being discussed"
+		description: "The current subject being discussed"
 	question_count: mutable number
 		description: "Number of questions answered in this session"
 
@@ -38,20 +38,20 @@ language:
 	additional_locales: ""
 	all_additional_locales: False
 
-start_agent topic_selector:
-	label: "Topic Selector"
+start_agent agent_router:
+	label: "Subagent Router"
 	description: "Routes incoming questions to the FAQ handler"
 
 	reasoning:
 		instructions: ->
 			| Listen to the user's question and determine how to help.
-			| If the question is about a specific topic, note it.
+			| If the question is about a specific subject, note it.
 			| Route to the FAQ handler for processing.
 		actions:
-			handle_faq: @utils.transition to @topic.faq_handler
-			end_conversation: @utils.transition to @topic.farewell
+			handle_faq: @utils.transition to @subagent.faq_handler
+			end_conversation: @utils.transition to @subagent.farewell
 
-topic faq_handler:
+subagent faq_handler:
 	label: "FAQ Handler"
 	description: "Handles frequently asked questions and provides helpful answers"
 
@@ -74,11 +74,11 @@ topic faq_handler:
 			| - Suggest contacting customer support
 			| - Offer to help with something else
 		actions:
-			new_question: @utils.transition to @topic.topic_selector
-			end_conversation: @utils.transition to @topic.farewell
-			escalate: @utils.transition to @topic.escalation
+			new_question: @utils.transition to @subagent.agent_router
+			end_conversation: @utils.transition to @subagent.farewell
+			escalate: @utils.transition to @subagent.escalation
 
-topic farewell:
+subagent farewell:
 	label: "Farewell"
 	description: "Ends the conversation politely"
 
@@ -88,7 +88,7 @@ topic farewell:
 			| Wish them a great day.
 			| Let them know they can return anytime for more help.
 
-topic escalation:
+subagent escalation:
 	label: "Escalation"
 	description: "Handles requests to speak with a human agent"
 

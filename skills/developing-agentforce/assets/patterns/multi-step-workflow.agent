@@ -22,10 +22,10 @@
 # This is a COMPLETE template - customize for your use case
 #
 # ★ Step Guard Pattern (Feb 2026 Community Best Practice):
-#   - The topic selector re-evaluates on EVERY user utterance
+#   - The subagent router re-evaluates on EVERY user utterance
 #   - Without a step guard, follow-up messages ("my email is X") get re-routed
 #   - The `if @variables.current_step > 1:` guard in start_agent forces
-#     re-entry to the current workflow, bypassing LLM topic selection
+#     re-entry to the current workflow, bypassing LLM subagent selection
 #   - Reset current_step to 1 when the workflow completes
 
 system:
@@ -168,7 +168,7 @@ start_agent onboarding:
 	reasoning:
 		instructions: ->
 			# ★ STEP GUARD — Force re-entry if workflow in progress
-			# This prevents the topic selector from re-routing the user
+			# This prevents the subagent router from re-routing the user
 			# mid-workflow when they provide follow-up information
 			if @variables.current_step > 1:
 				| Continuing your account setup...

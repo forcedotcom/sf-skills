@@ -38,10 +38,10 @@ language:
 	additional_locales: ""
 	all_additional_locales: False
 
-start_agent topic_selector:
+start_agent agent_router:
 	description: "Begin the onboarding flow"
 
-topic greeting:
+subagent greeting:
 	label: "Greeting"
 	description: "Greet users and provide help"
 	reasoning:
@@ -62,7 +62,7 @@ Companion `bundle-meta.xml` (MUST be this exact content -- no extra fields):
 
 ## Minimal Employee Agent
 
-Employee agents differ from service agents in their config, variables, and connection blocks. This example shows a 2-topic IT Knowledge agent deployed to internal employees.
+Employee agents differ from service agents in their config, variables, and connection blocks. This example shows a 2-subagent IT Knowledge agent deployed to internal employees.
 
 ```
 system:
@@ -95,8 +95,8 @@ language:
 	additional_locales: ""
 	all_additional_locales: False
 
-start_agent topic_selector:
-	description: "Route employees to the right IT support topic"
+start_agent agent_router:
+	description: "Route employees to the right IT support subagent"
 	reasoning:
 		instructions: |
 			You are a router only. Do NOT answer questions directly.
@@ -104,12 +104,12 @@ start_agent topic_selector:
 			- IT questions, troubleshooting, how-to -> use to_knowledge
 			- Password reset, account access -> use to_account
 		actions:
-			to_knowledge: @utils.transition to @topic.knowledge_search
+			to_knowledge: @utils.transition to @subagent.knowledge_search
 				description: "Search IT knowledge base"
-			to_account: @utils.transition to @topic.account_support
+			to_account: @utils.transition to @subagent.account_support
 				description: "Account and password help"
 
-topic knowledge_search:
+subagent knowledge_search:
 	label: "Knowledge Search"
 	description: "Search and retrieve IT knowledge articles"
 
@@ -139,10 +139,10 @@ topic knowledge_search:
 				with query = ...
 				set @variables.search_query = @outputs.articles
 
-			back: @utils.transition to @topic.topic_selector
-				description: "Route to a different topic"
+			back: @utils.transition to @subagent.agent_router
+				description: "Route to a different subagent"
 
-topic account_support:
+subagent account_support:
 	label: "Account Support"
 	description: "Help with password resets and account access"
 
@@ -171,8 +171,8 @@ topic account_support:
 			# NOTE: No @utils.escalate — employee agents cannot escalate to
 			# human agents via messaging. Use a transition or case-creation
 			# action instead.
-			back: @utils.transition to @topic.topic_selector
-				description: "Route to a different topic"
+			back: @utils.transition to @subagent.agent_router
+				description: "Route to a different subagent"
 ```
 
 **What's deliberately absent (vs. service agents):**
@@ -183,7 +183,7 @@ topic account_support:
 
 ---
 
-## Multi-Topic Agent with Actions
+## Multi-Subagent Agent with Actions
 
 ```
 system:
@@ -228,25 +228,25 @@ language:
 	additional_locales: ""
 	all_additional_locales: False
 
-start_agent topic_selector:
-	description: "Route customers to the right support topic"
+start_agent agent_router:
+	description: "Route customers to the right support subagent"
 	reasoning:
 		instructions: |
 			You are a router only. Do NOT answer questions or provide help directly.
-			Always use a transition action to route to the correct topic immediately.
+			Always use a transition action to route to the correct subagent immediately.
 			- Order status or tracking -> use to_orders
 			- Returns or refunds -> use to_returns
 			- General questions -> use to_general
 			Never attempt to help the customer yourself. Always route.
 		actions:
-			to_orders: @utils.transition to @topic.order_support
+			to_orders: @utils.transition to @subagent.order_support
 				description: "Check order status or tracking"
-			to_returns: @utils.transition to @topic.return_support
+			to_returns: @utils.transition to @subagent.return_support
 				description: "Process a return or refund"
-			to_general: @utils.transition to @topic.general_support
+			to_general: @utils.transition to @subagent.general_support
 				description: "General questions and support"
 
-topic order_support:
+subagent order_support:
 	label: "Order Support"
 	description: "Handle order status and tracking inquiries"
 
@@ -281,10 +281,10 @@ topic order_support:
 				set @variables.order_id = @outputs.order_id
 				set @variables.order_status = @outputs.status
 
-			back: @utils.transition to @topic.topic_selector
-				description: "Route to a different topic"
+			back: @utils.transition to @subagent.agent_router
+				description: "Route to a different subagent"
 
-topic return_support:
+subagent return_support:
 	label: "Return Support"
 	description: "Handle returns and refund requests"
 
@@ -315,14 +315,14 @@ topic return_support:
 				with reason = ...
 				set @variables.case_id = @outputs.return_id
 
-			back: @utils.transition to @topic.topic_selector
-				description: "Route to a different topic"
+			back: @utils.transition to @subagent.agent_router
+				description: "Route to a different subagent"
 
 	after_reasoning:
 		if @variables.case_id != "":
-			transition to @topic.confirmation
+			transition to @subagent.confirmation
 
-topic general_support:
+subagent general_support:
 	label: "General Support"
 	description: "Handle general support questions"
 	reasoning:
@@ -332,10 +332,10 @@ topic general_support:
 		actions:
 			escalate_now: @utils.escalate
 				description: "Transfer to human agent"
-			back: @utils.transition to @topic.topic_selector
-				description: "Route to a different topic"
+			back: @utils.transition to @subagent.agent_router
+				description: "Route to a different subagent"
 
-topic confirmation:
+subagent confirmation:
 	label: "Confirmation"
 	description: "Confirm the completed action"
 	reasoning:
@@ -343,7 +343,7 @@ topic confirmation:
 			| Your request has been processed. Reference: {!@variables.case_id}
 			| Is there anything else I can help with?
 		actions:
-			new_request: @utils.transition to @topic.topic_selector
+			new_request: @utils.transition to @subagent.agent_router
 				description: "Start a new request"
 			end_chat: @actions.end_conversation
 				description: "End the conversation"

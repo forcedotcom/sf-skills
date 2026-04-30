@@ -50,7 +50,7 @@ actions:
 Reference the action definition in your `.agent` file:
 
 ```agentscript
-topic schedule_generation:
+subagent schedule_generation:
   reasoning:
     actions:
       generate_schedule: @actions.Generate_Personalized_Schedule

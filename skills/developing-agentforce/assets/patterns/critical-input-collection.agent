@@ -23,7 +23,7 @@
 #   - Workflows that REQUIRE a specific ID (account, order, case, etc.)
 #   - When slot filling has been unreliable
 #   - When invalid input causes downstream failures
-#   - Multi-topic agents where input must persist across transitions
+#   - Multi-subagent agents where input must persist across transitions
 #
 # This is a COMPLETE template - customize for your use case
 
@@ -74,8 +74,8 @@ language:
 	additional_locales: ""
 	all_additional_locales: False
 
-# ★ ENTRY POINT: Input Collection Topic
-# This topic's ONLY job is to collect and validate the critical input
+# ★ ENTRY POINT: Input Collection Subagent
+# This subagent's ONLY job is to collect and validate the critical input
 start_agent input_collector:
 	label: "Input Collector"
 	description: "Collects and validates the account ID before allowing research"
@@ -127,7 +127,7 @@ start_agent input_collector:
 				| ✅ Account ID validated: {!@variables.account_id}
 				| Account Name: {!@variables.account_name}
 				|
-				| Transition to research topic to begin analysis.
+				| Transition to research subagent to begin analysis.
 
 			if @variables.collection_attempts > 2 and @variables.account_id_validated == False:
 				| ❌ Multiple validation failures.
@@ -148,11 +148,11 @@ start_agent input_collector:
 
 			# ★ PATTERN 4: Null Guard Pattern
 			# Transition ONLY available when input is validated
-			go_research: @utils.transition to @topic.research
+			go_research: @utils.transition to @subagent.research
 				available when @variables.account_id_validated == True
 
-# ★ RESEARCH TOPIC: Only accessible after input is validated
-topic research:
+# ★ RESEARCH SUBAGENT: Only accessible after input is validated
+subagent research:
 	label: "Account Research"
 	description: "Performs research on the validated account"
 
@@ -194,7 +194,7 @@ topic research:
 				available when @variables.research_summary == ""
 
 			# Return to collector for new account
-			new_account: @utils.transition to @topic.input_collector
+			new_account: @utils.transition to @subagent.input_collector
 				available when @variables.research_summary != ""
 
 # ═══════════════════════════════════════════════════════════════════════════

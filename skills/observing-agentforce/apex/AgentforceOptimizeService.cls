@@ -80,7 +80,7 @@ public with sharing class AgentforceOptimizeService {
      */
     public class TurnData {
         public String interaction_id;
-        /** Topic API name — null/mismatch signals a misroute (P1) */
+        /** Subagent API name (stored as `topic` in STDM) — null/mismatch signals a misroute (P1) */
         public String topic;
         public String start_time;
         public String end_time;
@@ -1142,7 +1142,7 @@ public with sharing class AgentforceOptimizeService {
         @InvocableVariable(label='Agent API Name' required=false)
         public String agentApiName;
 
-        @InvocableVariable(label='Topic API Name' required=false)
+        @InvocableVariable(label='Subagent API Name' required=false)
         public String topicApiName;
 
         @InvocableVariable(label='Lookback Days' required=false)

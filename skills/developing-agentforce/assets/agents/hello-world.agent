@@ -9,13 +9,13 @@
 #   - config: Required metadata for deployment (agent_name must be unique)
 #   - variables: Linked variables connect to Messaging context (required for deployment)
 #   - language: Locale settings (required for deployment)
-#   - start_agent: Entry point topic (exactly one required)
+#   - start_agent: Entry point subagent (exactly one required)
 #
 # ★ Key Validation Points (from 100-point scoring):
 #   - [10 pts] config block with all 4 required fields
 #   - [10 pts] 3 linked variables (EndUserId, RoutableId, ContactId)
 #   - [5 pts] language block present
-#   - [10 pts] At least one start_agent topic
+#   - [10 pts] At least one start_agent subagent
 #
 # Deploy with: sf agent publish authoring-bundle --api-name Hello_World_Agent --target-org [alias]
 
@@ -48,7 +48,7 @@ language:
 	additional_locales: ""
 	all_additional_locales: False
 
-# Entry point topic - this is where every conversation starts
+# Entry point subagent - this is where every conversation starts
 start_agent main:
 	label: "Main"
 	description: "Greets users and provides help"

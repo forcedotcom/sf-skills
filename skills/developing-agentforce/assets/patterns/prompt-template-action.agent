@@ -60,7 +60,7 @@ variables:
 language:
 	default_locale: "en_US"
 
-start_agent topic_selector:
+start_agent agent_router:
 	label: "Content Generator"
 	description: "Routes to content generation options"
 
@@ -70,12 +70,12 @@ start_agent topic_selector:
 			| 1. Personalized daily schedule
 			| 2. Professional email
 			|
-			| Route to the appropriate topic.
+			| Route to the appropriate subagent.
 		actions:
-			go_schedule: @utils.transition to @topic.schedule_generation
-			go_email: @utils.transition to @topic.email_generation
+			go_schedule: @utils.transition to @subagent.schedule_generation
+			go_email: @utils.transition to @subagent.email_generation
 
-topic schedule_generation:
+subagent schedule_generation:
 	label: "Schedule Generation"
 	description: "Generate personalized daily schedules"
 
@@ -123,9 +123,9 @@ topic schedule_generation:
 				with "Input:timezone"=@variables.user_timezone
 				set @variables.generated_schedule = @outputs.promptResponse
 
-			back: @utils.transition to @topic.topic_selector
+			back: @utils.transition to @subagent.agent_router
 
-topic email_generation:
+subagent email_generation:
 	label: "Email Generation"
 	description: "Generate professional emails"
 
@@ -168,7 +168,7 @@ topic email_generation:
 				with "Input:tone"=...
 				set @variables.generated_email = @outputs.promptResponse
 
-			back: @utils.transition to @topic.topic_selector
+			back: @utils.transition to @subagent.agent_router
 
 # ★ Insight: Prompt Template Integration Checklist
 #

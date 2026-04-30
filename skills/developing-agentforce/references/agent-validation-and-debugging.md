@@ -55,11 +55,11 @@ Do not attempt to preview or deploy until validation passes.
 
 Before running the validation command, mentally check these 14 items. This checklist prevents the most common errors and speeds up the feedback loop:
 
-- Block ordering is correct: `system` → `config` → `variables` → `connections` → `knowledge` → `language` → `start_agent` → `topic` blocks
+- Block ordering is correct: `system` → `config` → `variables` → `connections` → `knowledge` → `language` → `start_agent` → `subagent` blocks
 - `config` block has `developer_name` (required for service agents: also needs `default_agent_user`)
 - `system` block has `messages.welcome`, `messages.error`, and `instructions`
 - `start_agent` block exists with description and at least one transition action
-- Each `topic` has a `description` and `reasoning` block
+- Each `subagent` has a `description` and `reasoning` block
 - All `mutable` variables have default values (required)
 - All `linked` variables have `source` specified and NO default value
 - Action `target` uses valid format (`flow://`, `apex://`, `prompt://`, etc.)
@@ -82,14 +82,14 @@ Validation errors fall into several categories: block ordering, indentation, syn
 
 ```agentscript
 # WRONG — bare transition in reasoning.actions
-go_next: transition to @topic.next
+go_next: transition to @subagent.next
 
 # CORRECT — use @utils.transition to in reasoning.actions
-go_next: @utils.transition to @topic.next
+go_next: @utils.transition to @subagent.next
 
 # CORRECT — use bare transition in directive blocks
 after_reasoning:
-    transition to @topic.next
+    transition to @subagent.next
 ```
 
 In reasoning actions (where the LLM decides what to do), use `@utils.transition to`. In directive blocks (`before_reasoning`, `after_reasoning`), use bare `transition to`. These are two different syntaxes for two different contexts.
@@ -160,7 +160,7 @@ Linked variables are populated from their `source` at runtime. Do not assign a d
 
 ```agentscript
 # WRONG — utilities don't support post-action directives
-go_next: @utils.transition to @topic.next
+go_next: @utils.transition to @subagent.next
     set @variables.navigated = True
 
 # CORRECT — only @actions support post-action directives
@@ -168,7 +168,7 @@ process: @actions.process_order
     set @variables.result = @outputs.result
 ```
 
-Post-action directives (`set`, `run`, `if`, `transition`) only work after `@actions.*` invocations. Utility actions (`@utils.*`) and topic delegates (`@topic.*`) do not produce outputs, so post-action directives are not applicable.
+Post-action directives (`set`, `run`, `if`, `transition`) only work after `@actions.*` invocations. Utility actions (`@utils.*`) and subagent delegates (`@subagent.*`) do not produce outputs, so post-action directives are not applicable.
 
 ---
 
@@ -336,7 +336,7 @@ If multiple agents have concurrent sessions against the same agent, omitting the
 
 ### Context Variable Limitations in Preview
 
-Agent behavior requiring `@context` or `@session` variables for routing or guards CAN NOT be tested via `sf agent preview`. Commands in the `preview` topic DO NOT support context or session variable injection. Flags like `--context`, `--session-var`, or `--variables` DO NOT EXIST.
+Agent behavior requiring `@context` or `@session` variables for routing or guards CAN NOT be tested via `sf agent preview`. Commands in the `preview` command DO NOT support context or session variable injection. Flags like `--context`, `--session-var`, or `--variables` DO NOT EXIST.
 
 - `@session.sessionID`, `@context.customerId`, `@context.RoutableId` — do NOT work in preview.
 - Mutable variables with default values — work normally in preview.
@@ -346,16 +346,16 @@ Agent behavior requiring `@context` or `@session` variables for routing or guard
 
 Utterances provided to `sf agent preview send` must be derived from the `.agent` file using these guidelines:
 
-1. **One per non-start topic** — based on `description:` keywords. Pick the most natural user phrasing.
+1. **One per non-start subagent** — based on `description:` keywords. Pick the most natural user phrasing.
 2. **One that should trigger each key action** — match the action's `description:` to a realistic user request.
 3. **One off-topic utterance** — tests guardrails (e.g., "Tell me a joke", "What's the weather?").
-4. **One multi-turn pair** — if agent has topic transitions, send two related utterances to test handoff (e.g., "Check my order" → "Actually I want to return it").
+4. **One multi-turn pair** — if agent has subagent transitions, send two related utterances to test handoff (e.g., "Check my order" → "Actually I want to return it").
 
 ---
 
 ## 4. Session Traces
 
-After each utterance in a preview session, the runtime writes trace files. Traces show the complete execution path: what topic was selected, what variables were set, what the LLM saw in its prompt, what it decided to do, and whether the response passed grounding.
+After each utterance in a preview session, the runtime writes trace files. Traces show the complete execution path: what subagent was selected, what variables were set, what the LLM saw in its prompt, what it decided to do, and whether the response passed grounding.
 
 ### Trace File Location
 
@@ -386,7 +386,7 @@ Traces are available immediately after each `send` — you do NOT need to end th
 
 To connect a failed turn to its trace, find the agent response in the transcript and read the `planId` from its `raw` array. That `planId` is the filename under `traces/`.
 
-**traces/<PLAN_ID>.json** is the detailed execution log for a single turn. It contains top-level fields (`type`, `planId`, `sessionId`, `intent`, `topic`) and a `plan` array with execution steps in chronological order.
+**traces/<PLAN_ID>.json** is the detailed execution log for a single turn. It contains top-level fields (`type`, `planId`, `sessionId`, `intent`, `subagent`) and a `plan` array with execution steps in chronological order.
 
 ### Step Types (Reference Table)
 
@@ -394,14 +394,14 @@ Each trace step type reveals specific execution information:
 
 - **`UserInputStep`** — The user's utterance that triggered this turn.
 - **`SessionInitialStateStep`** — Variable values and directive context at turn start.
-- **`NodeEntryStateStep`** — Which agent/topic is executing and its full state snapshot.
+- **`NodeEntryStateStep`** — Which agent/subagent is executing and its full state snapshot.
 - **`VariableUpdateStep`** — A variable was changed — shows old/new value and reason.
 - **`BeforeReasoningIterationStep`** — `before_reasoning` block ran — lists actions executed.
 - **`EnabledToolsStep`** — Which tools/actions are available to the LLM for this reasoning cycle.
 - **`LLMStep`** — The LLM call — full prompt, response, available tools, latency.
 - **`FunctionStep`** — An action executed — shows input, output, and latency.
 - **`ReasoningStep`** — Grounding check result — `GROUNDED` or `UNGROUNDED` with reason.
-- **`TransitionStep`** — Topic transition — shows from/to topics and transition type.
+- **`TransitionStep`** — Subagent transition — shows from/to subagents and transition type.
 - **`PlannerResponseStep`** — Final response delivered to user — includes safety scores.
 
 
@@ -410,19 +410,19 @@ Each trace step type reveals specific execution information:
 Read steps in chronological order:
 
 1. Locate `UserInputStep` — the trigger for this turn
-2. Check `NodeEntryStateStep` — which topic is running and what is the current variable state?
+2. Check `NodeEntryStateStep` — which subagent is running and what is the current variable state?
 3. Look for `EnabledToolsStep` — what actions are available to the LLM?
 4. Find `LLMStep` — examine `messages_sent` (the full prompt), `tools_sent` (available actions), and `response_messages` (what the LLM chose to do)
 5. If an action was called, find the corresponding `FunctionStep` — compare inputs sent and outputs received
 6. Check `ReasoningStep` — did the response pass grounding?
-7. Look for `TransitionStep` — did the agent move to another topic?
+7. Look for `TransitionStep` — did the agent move to another subagent?
 8. Check `PlannerResponseStep` — what did the user receive?
 
 ### The LLMStep in Detail
 
 The `LLMStep` is the most diagnostic step type. It contains:
 
-- `agent_name` — which topic or selector is running
+- `agent_name` — which subagent or router is running
 - `messages_sent` — the FULL prompt sent to the LLM (system message, conversation history, and injected instructions)
 - `tools_sent` — action names available to the LLM
 - `response_messages` — the LLM's response (text or tool invocation)
@@ -437,10 +437,10 @@ The `messages_sent` array shows you exactly what the LLM saw. This is invaluable
 
 ### When to Use Traces vs. Transcript
 
-Use the **transcript** to quickly identify WHICH turn failed (unexpected response, wrong topic, agent crash).
+Use the **transcript** to quickly identify WHICH turn failed (unexpected response, wrong subagent, agent crash).
 
 Use the **trace files** when:
-- The agent routes to the wrong topic
+- The agent routes to the wrong subagent
 - An action isn't firing
 - The response is unexpectedly worded
 - Grounding is failing
@@ -453,13 +453,13 @@ The transcript is sufficient for conversation-level understanding. Traces provid
 
 Use these `jq` commands against trace files (`traces/<PLAN_ID>.json`) to quickly extract diagnostic information.
 
-#### Check 1: Topic Routing
+#### Check 1: Subagent Routing
 
 ```bash
 jq '[.steps[] | select(.stepType == "TransitionStep") | .data.to]' "$TRACE"
 ```
 
-**Expected**: Array contains the target topic name (e.g., `["order_mgmt"]`). Empty array means the agent stayed in Topic Selector — topic descriptions are too vague. Wrong topic name means keyword overlap between topics.
+**Expected**: Array contains the target subagent name (e.g., `["order_mgmt"]`). Empty array means the agent stayed in Subagent Router — subagent descriptions are too vague. Wrong subagent name means keyword overlap between subagents.
 
 #### Check 2: Action Invocation
 
@@ -467,7 +467,7 @@ jq '[.steps[] | select(.stepType == "TransitionStep") | .data.to]' "$TRACE"
 jq '[.steps[] | select(.stepType == "FunctionStep") | .data.function]' "$TRACE"
 ```
 
-**Expected**: Array contains the target action name. If missing: `available when:` guards too restrictive, action `description:` doesn't match user request, or action not listed in `reasoning.actions:` for this topic.
+**Expected**: Array contains the target action name. If missing: `available when:` guards too restrictive, action `description:` doesn't match user request, or action not listed in `reasoning.actions:` for this subagent.
 
 #### Check 3: Wrong Action Selected
 
@@ -495,7 +495,7 @@ jq '.steps[] | select(.stepType == "PlannerResponseStep") | .data.safetyScore' "
 jq '[.steps[] | select(.stepType == "EnabledToolsStep") | .data.enabled_tools]' "$TRACE"
 ```
 
-**Expected**: Array includes the action names defined in the topic's `reasoning.actions:`. If missing: `available when:` conditions not met, action defined in wrong topic, or action `target:` protocol invalid (flow not deployed, apex class not found).
+**Expected**: Array includes the action names defined in the subagent's `reasoning.actions:`. If missing: `available when:` conditions not met, action defined in wrong subagent, or action `target:` protocol invalid (flow not deployed, apex class not found).
 
 ---
 
@@ -503,46 +503,46 @@ jq '[.steps[] | select(.stepType == "EnabledToolsStep") | .data.enabled_tools]' 
 
 These patterns map symptoms to trace analysis techniques. Each pattern follows the same structure: symptom → which trace steps to examine → root cause → fix (with code example).
 
-### Pattern: Wrong Topic Routing
+### Pattern: Wrong Subagent Routing
 
-**Symptom:** The agent enters the wrong topic. For example, asking about weather sends the agent to the events topic instead.
+**Symptom:** The agent enters the wrong subagent. For example, asking about weather sends the agent to the events subagent instead.
 
 **Trace Analysis:**
 
-1. Find the `LLMStep` where `agent_name` is `topic_selector` (the entry point that routes to topics)
-2. Examine `tools_sent` — are the transition actions for all expected topics listed? (e.g., `go_to_local_weather`, `go_to_local_events`, `go_to_resort_hours`)
+1. Find the `LLMStep` where `agent_name` is `agent_router` (the entry point that routes to subagents)
+2. Examine `tools_sent` — are the transition actions for all expected subagents listed? (e.g., `go_to_local_weather`, `go_to_local_events`, `go_to_resort_hours`)
 3. Examine `response_messages` — which action tool did the LLM select?
-4. Examine `messages_sent` — does the system prompt (what topic selector instructions were compiled to) give the LLM enough context to route correctly?
+4. Examine `messages_sent` — does the system prompt (what subagent router instructions were compiled to) give the LLM enough context to route correctly?
 
-**Root Cause:** Topic selector instructions are ambiguous, missing context, or don't map user requests to the correct topics.
+**Root Cause:** Subagent router instructions are ambiguous, missing context, or don't map user requests to the correct subagents.
 
-**Fix:** A minimal topic selector with well-named actions often routes correctly. When it doesn't, add routing instructions and action descriptions to give the LLM more context:
+**Fix:** A minimal subagent router with well-named actions often routes correctly. When it doesn't, add routing instructions and action descriptions to give the LLM more context:
 
 ```agentscript
 # BEFORE — relies on action names alone for routing
-start_agent topic_selector:
-    description: "Route to appropriate topics"
+start_agent agent_router:
+    description: "Route to appropriate subagents"
     reasoning:
         actions:
-            go_to_weather: @utils.transition to @topic.local_weather
-            go_to_events: @utils.transition to @topic.local_events
+            go_to_weather: @utils.transition to @subagent.local_weather
+            go_to_events: @utils.transition to @subagent.local_events
 
 # AFTER — explicit instructions and descriptions improve routing accuracy
-start_agent topic_selector:
-    description: "Route to appropriate topics"
+start_agent agent_router:
+    description: "Route to appropriate subagents"
     reasoning:
         instructions: ->
-            | If the user asks about weather conditions, temperature, or forecasts, go to the weather topic.
-              If the user asks about local events, activities, or entertainment, go to the events topic.
-              If the user asks about facility hours, reservations, or amenities, go to the hours topic.
+            | If the user asks about weather conditions, temperature, or forecasts, go to the weather subagent.
+              If the user asks about local events, activities, or entertainment, go to the events subagent.
+              If the user asks about facility hours, reservations, or amenities, go to the hours subagent.
 
         actions:
-            go_to_weather: @utils.transition to @topic.local_weather
-                description: "Route to weather topic for weather questions"
-            go_to_events: @utils.transition to @topic.local_events
-                description: "Route to events topic for local event questions"
-            go_to_hours: @utils.transition to @topic.resort_hours
-                description: "Route to hours topic for facility hours questions"
+            go_to_weather: @utils.transition to @subagent.local_weather
+                description: "Route to weather subagent for weather questions"
+            go_to_events: @utils.transition to @subagent.local_events
+                description: "Route to events subagent for local event questions"
+            go_to_hours: @utils.transition to @subagent.resort_hours
+                description: "Route to hours subagent for facility hours questions"
 ```
 
 
@@ -552,7 +552,7 @@ start_agent topic_selector:
 
 **Trace Analysis:**
 
-1. Find the `EnabledToolsStep` for the topic — is the expected action listed?
+1. Find the `EnabledToolsStep` for the subagent — is the expected action listed?
 2. If missing:
    - Check the action definition's `available when` condition (e.g., `available when @variables.guest_interests != ""`)
    - Look at the `NodeEntryStateStep` to see if the gating variable has the expected value
@@ -595,12 +595,12 @@ reasoning:
 
 **Symptom:** The agent keeps asking the same question or repeating the same response across multiple turns, even though the user already provided the requested information.
 
-**Diagnosis:** Observe the conversation output first — the behavioral symptom is often obvious (e.g., the agent asking the same question repeatedly). A common cause is instructions that collect information and act on it within the same topic — when the topic is re-entered, the collection logic runs again even though the data was already gathered.
+**Diagnosis:** Observe the conversation output first — the behavioral symptom is often obvious (e.g., the agent asking the same question repeatedly). A common cause is instructions that collect information and act on it within the same subagent — when the subagent is re-entered, the collection logic runs again even though the data was already gathered.
 
-**Fix Example:** In this real scenario, the `local_events` topic asks about interests and then looks up events. But each time the topic is re-entered, the agent asks about interests again instead of checking whether it already knows them:
+**Fix Example:** In this real scenario, the `local_events` subagent asks about interests and then looks up events. But each time the subagent is re-entered, the agent asks about interests again instead of checking whether it already knows them:
 
 ```agentscript
-# BEFORE — agent asks about interests every time the topic is entered
+# BEFORE — agent asks about interests every time the subagent is entered
 reasoning:
     instructions: ->
         | If you do not already know the guest's interests, ask them about their
@@ -648,11 +648,11 @@ Note: repeated `LLMStep` → `ReasoningStep` pairs in a trace may indicate groun
 1. Find the `PlannerResponseStep` — is the message the system error message?
 2. Look backward through the trace for consecutive `ReasoningStep` entries with `category: "UNGROUNDED"` — two consecutive UNGROUNDED results cause this error
 3. If no grounding failures, look for `FunctionStep` entries with error outputs (action execution failed)
-4. Check if a topic transition failed (the target topic doesn't exist or has a circular reference)
+4. Check if a subagent transition failed (the target subagent doesn't exist or has a circular reference)
 
-**Root Cause:** Grounding failed twice in a row, OR an action returned an error, OR a topic transition is misconfigured.
+**Root Cause:** Grounding failed twice in a row, OR an action returned an error, OR a subagent transition is misconfigured.
 
-**Fix:** See Diagnostic Workflow: Grounding subsection for grounding failures. For action errors, verify the backing Apex/Flow/Prompt Template is deployed and handles edge cases correctly. For transition errors, verify all referenced topics exist and are spelled correctly.
+**Fix:** See Diagnostic Workflow: Grounding subsection for grounding failures. For action errors, verify the backing Apex/Flow/Prompt Template is deployed and handles edge cases correctly. For transition errors, verify all referenced subagents exist and are spelled correctly.
 
 ### Pattern: Agent Responds with Generic Message but No Data After Successful Action
 
@@ -669,7 +669,7 @@ Note: repeated `LLMStep` → `ReasoningStep` pairs in a trace may indicate groun
 
 | Failure | Target Block | Edit Strategy | Example |
 |---------|-------------|---------------|---------|
-| Topic not matched | `topic X: description:` | Add keywords from test utterance | `"Handle orders"` → `"Handle order queries, order status, package tracking, shipping updates"` |
+| Subagent not matched | `subagent X: description:` | Add keywords from test utterance | `"Handle orders"` → `"Handle order queries, order status, package tracking, shipping updates"` |
 | Action not invoked | `reasoning.actions: X description:` | Make description more trigger-specific | `"Get order"` → `"Look up order status when user asks about their order, package, or delivery"` |
 | Action not invoked | `available when:` | Relax guard condition | Remove overly restrictive `@variables.X == True` if variable isn't set yet |
 | Wrong action selected | Both competing `description:` fields | Differentiate with exclusion language | Add `"NOT for returns"` to order action, `"ONLY for returns"` to refund action |
@@ -690,7 +690,7 @@ Use this systematic 8-step approach when diagnosing any agent behavior issue.
 3. **Read the Trace** — Open `traces/<PLAN_ID>.json` for the failing turn. Read the plan array in order.
 
 4. **Follow Execution** — As you read each step, note:
-   - Which topic was selected? (Look at `NodeEntryStateStep`)
+   - Which subagent was selected? (Look at `NodeEntryStateStep`)
    - What state were variables in? (Look at `SessionInitialStateStep` and `VariableUpdateStep`)
    - What actions were available vs. invoked? (Look at `EnabledToolsStep` and `LLMStep` response)
    - What did the LLM see in its prompt? (Look at `LLMStep.messages_sent`)
@@ -723,7 +723,7 @@ When the platform's grounding checker flags a response as UNGROUNDED:
    ```
 2. The LLM is given another chance to respond
 3. If the second attempt is also UNGROUNDED, the agent returns the system error message ("I apologize, but I encountered an unexpected error") and gives up
-4. This retry is visible in traces as repeated `LLMStep` → `ReasoningStep` pairs for the same topic
+4. This retry is visible in traces as repeated `LLMStep` → `ReasoningStep` pairs for the same subagent
 5. When this happens, the actual action output is still in the trace's `FunctionStep.function.output`. The LLM's failed response attempts are in the `LLMStep.response_messages`. Use these to understand what the agent tried to say versus what the action actually returned.
 
 

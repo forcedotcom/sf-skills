@@ -4,7 +4,7 @@
 # This template provides the minimum required structure for an Agent Script.
 # Use this as a starting point for simple, single-purpose agents.
 #
-# Required blocks: system, config, topic, start_agent
+# Required blocks: system, config, subagent, start_agent
 # File extension: .agent
 
 system:
@@ -25,7 +25,7 @@ config:
 #    session_id: linked string
 #       source: @session.sessionID
 
-topic main:
+subagent main:
    description: "Main conversation handler"
    reasoning:
       instructions: |
@@ -36,7 +36,7 @@ start_agent entry:
    description: "Entry point for all conversations"
    reasoning:
       instructions: |
-         Greet the user and route to the main topic.
+         Greet the user and route to the main subagent.
       actions:
-         begin: @utils.transition to @topic.main
+         begin: @utils.transition to @subagent.main
             description: "Start the main conversation"

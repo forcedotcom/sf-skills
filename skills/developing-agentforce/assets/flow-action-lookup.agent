@@ -50,14 +50,14 @@ start_agent entry:
       instructions: |
          Welcome the customer and offer to help with order lookups.
       actions:
-         go_lookup: @utils.transition to @topic.order_lookup
+         go_lookup: @utils.transition to @subagent.order_lookup
             description: "Start order lookup"
 
 # ============================================================
-# ORDER LOOKUP TOPIC (Flow Action Pattern)
+# ORDER LOOKUP SUBAGENT (Flow Action Pattern)
 # ============================================================
 
-topic order_lookup:
+subagent order_lookup:
    description: "Look up order details using Flow action"
    reasoning:
       instructions: ->

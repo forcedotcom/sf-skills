@@ -7,8 +7,8 @@ Templates for building complete, deployable agents.
 | Template | Complexity | Description |
 |----------|------------|-------------|
 | `hello-world.agent` | Beginner | Minimal viable agent - start here |
-| `simple-qa.agent` | Beginner | Single-topic Q&A agent |
-| `multi-topic.agent` | Intermediate | Multi-topic routing agent |
+| `simple-qa.agent` | Beginner | Single-subagent Q&A agent |
+| `multi-subagent.agent` | Intermediate | Multi-subagent routing agent |
 | `production-faq.agent` | Advanced | Production-ready FAQ with escalation |
 
 ## Quick Start
@@ -36,10 +36,10 @@ Every agent must have these blocks **in this order**:
 | `config:` | Deployment metadata (agent_name, label, etc.) |
 | `variables:` | Data connections and state storage |
 | `language:` | Locale configuration |
-| `start_agent` | Entry point topic (exactly one required) |
+| `start_agent` | Entry point subagent (exactly one required) |
 
 ## Next Steps
 
-- [components/](../components/) - Reusable action and topic templates
+- [components/](../components/) - Reusable action and subagent templates
 - [patterns/](../patterns/) - Advanced patterns for complex behaviors
 - [metadata/](../metadata/) - XML metadata templates

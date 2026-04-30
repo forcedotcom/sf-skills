@@ -17,7 +17,7 @@
 #
 # This is a PARTIAL template - integrate into a complete agent file
 
-topic order_processing:
+subagent order_processing:
 	label: "Order Processing"
 	description: "Processes orders with guaranteed confirmation and logging"
 
@@ -84,7 +84,7 @@ topic order_processing:
 					with event_type="ORDER_CREATED"
 					with details=@variables.order_id
 
-			back_to_menu: @utils.transition to @topic.topic_selector
+			back_to_menu: @utils.transition to @subagent.agent_router
 
 # ★ Anti-Pattern: Nested run (DO NOT DO THIS)
 #
@@ -111,7 +111,7 @@ topic order_processing:
 #
 # Example: Create case and track count (works in BOTH bundle types)
 
-topic case_management:
+subagent case_management:
 	label: "Case Management"
 	description: "Creates cases and tracks statistics"
 
@@ -143,7 +143,7 @@ topic case_management:
 				set @variables.case_id = @outputs.out_CaseId
 				set @variables.cases_created = @variables.cases_created + 1  # Direct increment!
 
-			back_to_menu: @utils.transition to @topic.topic_selector
+			back_to_menu: @utils.transition to @subagent.agent_router
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # ⛔ INVALID KEYWORDS - NEVER USE THESE
