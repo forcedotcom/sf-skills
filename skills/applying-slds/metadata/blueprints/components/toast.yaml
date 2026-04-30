@@ -1,0 +1,154 @@
+name: Toast
+description: Temporary notification messages that appear briefly to provide feedback about user actions or system events,
+  then automatically dismiss.
+category: Feedback
+slds_classes:
+  root: ''
+  elements:
+  - class: slds-notify_container
+    description: Container for toast notifications
+    purpose: Wraps and positions toast messages
+  - class: slds-notify__content
+    description: Content area of the toast
+    purpose: Contains the toast message and actions
+  - class: slds-notify__close
+    description: Close button for dismissible toasts
+    purpose: Allows manual dismissal of the toast
+  modifiers:
+  - class: slds-notify_toast
+    description: Toast notification styling
+    usage: Standard toast appearance
+  - class: slds-theme_success
+    description: Success toast variant
+    usage: For successful actions or positive feedback
+  - class: slds-theme_warning
+    description: Warning toast variant
+    usage: For warnings or caution messages
+  - class: slds-theme_error
+    description: Error toast variant
+    usage: For error messages or failed actions
+  - class: slds-theme_info
+    description: Info toast variant
+    usage: For informational messages
+  states: []
+variants:
+- name: Base
+  description: Standard toast notification
+  classes:
+  - slds-notify_toast
+  usage_context: Default toast implementation for temporary feedback
+  differences: Basic toast with message content and optional close button
+- name: Success
+  description: Success feedback toast
+  classes:
+  - slds-notify_toast
+  - slds-theme_success
+  usage_context: Positive feedback for successful actions
+  differences: Green styling indicating successful completion
+- name: Warning
+  description: Warning toast notification
+  classes:
+  - slds-notify_toast
+  - slds-theme_warning
+  usage_context: Caution or warning messages
+  differences: Yellow/orange styling for warnings
+- name: Error
+  description: Error toast notification
+  classes:
+  - slds-notify_toast
+  - slds-theme_error
+  usage_context: Error feedback for failed actions
+  differences: Red styling indicating errors or failures
+lightning_component:
+  name: lightning-toast
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-toast
+  mapping_notes: Direct mapping - Lightning component implements SLDS toast blueprint
+accessibility:
+  keyboard_support:
+  - Tab to focus close button if present
+  - Escape to dismiss toast when focused
+  - No additional keyboard interactions required
+  screen_reader:
+  - Toast content announced immediately when displayed
+  - Importance level conveyed through appropriate ARIA roles
+  - Close action clearly identified when available
+  aria_attributes:
+  - role='alert' for error toasts
+  - role='status' for informational toasts
+  - aria-live='assertive' for urgent messages
+  - aria-live='polite' for non-urgent updates
+  - aria-label for close buttons
+usage_guidelines:
+  when_to_use:
+  - For feedback on user actions (save, delete, etc.)
+  - To confirm successful operations
+  - For non-critical error messages
+  - To provide brief status updates
+  when_not_to_use:
+  - For critical errors requiring immediate action
+  - For complex information that needs user study
+  - For permanent status information
+  - When users need to interact with the message extensively
+  best_practices:
+  - Keep messages concise and actionable
+  - Use appropriate toast type for the message context
+  - Set reasonable auto-dismiss timing
+  - Position toasts consistently
+  - Avoid showing multiple toasts simultaneously
+  common_mistakes:
+  - Making toast messages too long or complex
+  - Using wrong toast type for the message severity
+  - Poor timing for auto-dismissal
+  - Overwhelming users with too many toasts
+code_examples:
+- title: Success Toast
+  code: "<div class=\"slds-notify_container slds-is-relative\">\n      <div class=\"slds-notify_toast slds-theme_success\"\
+    \ role=\"alert\">\n        <span class=\"slds-assistive-text\">Success</span>\n        <span class=\"slds-icon_container\
+    \ slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top\">\n          <svg class=\"slds-icon slds-icon_small\"\
+    \ aria-hidden=\"true\">\n            <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#success\"></use>\n\
+    \          </svg>\n        </span>\n        <div class=\"slds-notify__content\">\n          <h2 class=\"slds-text-heading_small\"\
+    >Account created successfully!</h2>\n        </div>\n        <div class=\"slds-notify__close\">\n          <button class=\"\
+    slds-button slds-button_icon slds-button_icon-inverse\" title=\"Close\">\n            <svg class=\"slds-button__icon slds-button__icon_x-small\"\
+    \ aria-hidden=\"true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#close\"></use>\n\
+    \            </svg>\n            <span class=\"slds-assistive-text\">Close</span>\n          </button>\n        </div>\n\
+    \      </div>\n      </div>\n"
+- title: Error Toast
+  code: "<div class=\"slds-notify_container slds-is-relative\">\n      <div class=\"slds-notify_toast slds-theme_error\" role=\"\
+    alert\">\n        <span class=\"slds-assistive-text\">Error</span>\n        <span class=\"slds-icon_container slds-icon-utility-error\
+    \ slds-m-right_small slds-no-flex slds-align-top\">\n          <svg class=\"slds-icon slds-icon_small\" aria-hidden=\"\
+    true\">\n            <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#error\"></use>\n          </svg>\n\
+    \        </span>\n        <div class=\"slds-notify__content\">\n          <h2 class=\"slds-text-heading_small\">Unable\
+    \ to save changes. Please try again.</h2>\n        </div>\n      </div>\n      </div>\n"
+styling_hooks:
+- name: --slds-c-toast-color-background
+  description: Background color for default toasts
+  category: color
+dependencies:
+  css_files:
+  - toast.css
+  - notify.css
+  - themes.css
+  javascript:
+  - toast.js
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - button-icon
+  - icons
+related_components:
+- name: Alert
+  relationship: alternative
+  description: Alternative for persistent system-wide messages
+- name: Notifications
+  relationship: similar
+  description: Similar feedback mechanism with different positioning
+- name: Prompt
+  relationship: alternative
+  description: Modal dialogs for critical messages requiring action
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/toast/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

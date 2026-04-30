@@ -1,0 +1,124 @@
+name: "Cards"
+description: "A foundational component that provides a structured container for related content with optional header, body, and footer sections."
+category: "Layout"
+slds_classes:
+  root: "slds-card"
+  elements:
+    - class: "slds-card__header"
+      description: "Header section of the card"
+      purpose: "Contains title, actions, and header content"
+    - class: "slds-card__header-title"
+      description: "Title container within card header"
+      purpose: "Holds the main heading for the card"
+    - class: "slds-card__body"
+      description: "Main content area of the card"
+      purpose: "Contains the primary card content"
+    - class: "slds-card__footer"
+      description: "Footer section of the card"
+      purpose: "Contains actions, links, or supplementary information"
+  modifiers:
+    - class: "slds-card_boundary"
+      description: "Card with border styling"
+      usage: "Adds visible border to define card boundaries"
+  states: []
+variants:
+  - name: "Base"
+    description: "Standard card with header, body, and optional footer"
+    classes:
+      - "slds-card"
+    usage_context: "Default card implementation for content grouping"
+    differences: "Clean card structure with defined sections"
+lightning_component:
+  name: "lightning-card"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-card"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS card blueprint"
+accessibility:
+  keyboard_support:
+    - "Tab navigation through interactive elements within card"
+    - "Focus management for embedded components"
+  screen_reader:
+    - "Card structure conveyed through semantic markup"
+    - "Header, body, footer sections properly identified"
+    - "Content hierarchy communicated clearly"
+  aria_attributes:
+    - "aria-labelledby for card titles"
+    - "role='region' when card represents distinct content area"
+    - "aria-describedby for additional card context"
+usage_guidelines:
+  when_to_use:
+    - "To group related content together"
+    - "For displaying data records or entities"
+    - "When you need a structured content container"
+    - "To create visual separation between content sections"
+  when_not_to_use:
+    - "For simple text content (use regular layout instead)"
+    - "When content doesn't benefit from grouping"
+    - "For navigation elements (use navigation components)"
+  best_practices:
+    - "Use descriptive titles in card headers"
+    - "Group related content logically"
+    - "Keep card content focused and concise"
+    - "Use footer for actions related to the card content"
+    - "Maintain consistent card sizing within collections"
+  common_mistakes:
+    - "Overloading cards with too much content"
+    - "Using cards for single pieces of information"
+    - "Inconsistent card styling within the same interface"
+    - "Missing or unclear card titles"
+code_examples:
+  - title: "Complete Card"
+    code: |
+      <article class="slds-card">
+            <div class="slds-card__header slds-grid">
+              <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                  <h2 class="slds-card__header-title">
+                    <a href="#" class="slds-card__header-link slds-truncate" title="Accounts">
+                      <span>Accounts (1)</span>
+                    </a>
+                  </h2>
+                </div>
+              </header>
+            </div>
+            <div class="slds-card__body slds-card__body_inner">
+              <p>Card body content goes here...</p>
+            </div>
+            <footer class="slds-card__footer">
+              <a href="#">View All</a>
+            </footer>
+            </article>
+styling_hooks:
+  - name: "--slds-c-card-color-background"
+    description: "Background color for cards"
+    category: "color"
+  - name: "--slds-c-card-color-border"
+    description: "Border color for cards"
+    category: "color"
+dependencies:
+  css_files:
+    - "card.css"
+    - "media-objects.css"
+    - "grid.css"
+  javascript: []
+  icons: []
+  other_components:
+    - "media-objects"
+    - "grid"
+    - "truncate"
+related_components:
+  - name: "Tiles"
+    relationship: "similar"
+    description: "Alternative layout component for content grouping"
+  - name: "Panels"
+    relationship: "similar"
+    description: "Alternative container component"
+  - name: "Media Objects"
+    relationship: "depends-on"
+    description: "Often used within card headers"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/cards/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

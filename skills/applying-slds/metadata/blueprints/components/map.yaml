@@ -1,0 +1,118 @@
+name: Map
+description: A component for displaying interactive maps with coordinates and location information. Provides a container for
+  third-party map libraries with a coordinates panel for displaying location details.
+category: Complex Components
+slds_classes:
+  root: slds-map
+  elements:
+  - class: slds-map_container
+    description: Container for the map component
+    purpose: Wraps the map and coordinates panel
+  - class: slds-coordinates
+    description: Coordinates panel element
+    purpose: Displays location coordinates and details
+  - class: slds-coordinates__header
+    description: Header of coordinates panel
+    purpose: Contains title for coordinates panel
+  modifiers:
+  - class: slds-has-coordinates
+    description: Modifier indicating coordinates panel is active
+    purpose: Applied to parent container when panel is visible
+  states: []
+variants:
+- name: Base
+  description: Standard map with optional coordinates panel
+  classes:
+  - slds-map_container
+  usage_context: Default map implementation
+  differences: Container for third-party map with SLDS styling
+lightning_component:
+  name: lightning-map
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-map
+  mapping_notes: lightning-map provides interactive map with markers and location display
+accessibility:
+  keyboard_support:
+  - Tab to focus on map controls
+  - Arrow keys to pan map (when supported by map library)
+  - Enter to activate map markers
+  - +/- keys to zoom (when supported)
+  screen_reader:
+  - Map region announced
+  - Location information announced
+  - Marker details announced when focused
+  - Coordinates read when displayed
+  aria_attributes:
+  - role='application' or 'region' on map container
+  - aria-label describing map purpose
+  - aria-live for coordinate updates
+  - Accessible labels for map controls
+usage_guidelines:
+  when_to_use:
+  - For displaying geographic locations
+  - When showing multiple locations on a map
+  - For route or area visualization
+  - In location-based applications
+  when_not_to_use:
+  - For simple address display (use text)
+  - When location context isn't important
+  - For very small screens with limited space
+  - When map interaction adds unnecessary complexity
+  best_practices:
+  - Use reputable map library (Google Maps, Mapbox, Leaflet)
+  - Provide zoom and pan controls
+  - Show location coordinates when relevant
+  - Support keyboard navigation
+  - Handle loading states gracefully
+  - Respect user location privacy
+  common_mistakes:
+  - Missing keyboard support
+  - Poor performance with many markers
+  - Not handling map library load failures
+  - Inadequate mobile/touch support
+  - Missing accessible labels
+code_examples:
+- title: Basic Map Container
+  code: "<div class=\"slds-map_container\">\n  <div class=\"slds-map\" aria-label=\"Map showing office location\">\n    <!--\
+    \ Third-party map library rendered here -->\n    <div id=\"map-canvas\"></div>\n  </div>\n</div>\n"
+  description: Basic map container for third-party map library
+- title: Map with Coordinates Panel
+  code: "<div class=\"slds-grid slds-map_container slds-has-coordinates\">\n  <div class=\"slds-col slds-size_2-of-3\">\n\
+    \    <div class=\"slds-map\" aria-label=\"Interactive map\">\n      <!-- Third-party map library rendered here -->\n \
+    \     <div id=\"map-canvas\"></div>\n    </div>\n  </div>\n  <div class=\"slds-col slds-size_1-of-3\">\n    <div class=\"\
+    slds-coordinates\">\n      <div class=\"slds-coordinates__header\">\n        <h2 class=\"slds-text-heading_medium\">Location\
+    \ Details</h2>\n      </div>\n      <div class=\"\">\n        <dl class=\"slds-list_horizontal slds-wrap\">\n        \
+    \  <dt class=\"slds-item_label slds-text-color_weak slds-truncate\">Latitude:</dt>\n          <dd class=\"slds-item_detail\
+    \ slds-truncate\">37.7749</dd>\n          <dt class=\"slds-item_label slds-text-color_weak slds-truncate\">Longitude:</dt>\n\
+    \          <dd class=\"slds-item_detail slds-truncate\">-122.4194</dd>\n          <dt class=\"slds-item_label slds-text-color_weak\
+    \ slds-truncate\">Address:</dt>\n          <dd class=\"slds-item_detail\">San Francisco, CA</dd>\n        </dl>\n    \
+    \  </div>\n    </div>\n  </div>\n</div>\n"
+  description: Map with coordinates panel showing location details
+styling_hooks: []
+dependencies:
+  css_files:
+  - map.css
+  javascript:
+  - Third-party map library integration
+  - Map initialization
+  - Marker management
+  - Coordinates panel updates
+  icons: []
+  other_components:
+  - grid
+related_components:
+- name: Formatted Address
+  relationship: complementary
+  description: Displays formatted address alongside map
+- name: Formatted Location
+  relationship: complementary
+  description: Displays location information
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/map/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-11'
+  author: SLDS Documentation Team
+  slds_version: 2.27.2
+  review_status: complete
+  source: official-slds
+  notes: Created from official SLDS documentation and design-system-internal source code

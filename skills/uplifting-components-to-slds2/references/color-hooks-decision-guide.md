@@ -74,6 +74,15 @@ Is this element a page foundation, an overlay (modal/popover/dropdown), or does 
 | Exists within page's content flow | No | Yes |
 | Sits on top of an existing surface | No | Yes |
 
+### Linter Lists Both? Use Context
+
+The linter lists hooks with similar color values in no particular order. When it suggests both `surface-N` and `surface-container-N`, check the element's DOM role:
+
+| Question | Answer | Hook |
+|---|---|---|
+| Does it sit on top of another visible surface? | Yes | `surface-container-*` |
+| Is it the page/modal/overlay/component root? | Yes | `surface-*` |
+
 ### Hook Types
 
 | Hook Type | Pattern | Use For |
@@ -116,6 +125,8 @@ All three `on-surface` variants can appear on the same surface background. Choos
 | Sub-panel inside a card | `surface-container-2` | Nested container |
 | Modal / popover / dropdown | `surface-1` | Creates NEW stacking context — resets depth |
 
+**Exception:** If a card/panel IS the component's entire visual footprint (notification bar, banner, standalone section with no visible parent surface), treat it as a surface, not a container.
+
 ### State Progression
 
 The starting variant depends on which one matches the original default color — don't assume `-1`:
@@ -143,7 +154,7 @@ Use when hardcoded dark-blue backgrounds (`#032d60`, `#03234d`) appear on light 
 
 An element named `.card-container` might use `surface-*` if it's the page-level background, or `surface-container-*` if it's a card. **Always base the decision on structural DOM position, not naming conventions.**
 
-Surface variants (1-2-3) are a light-to-dark aesthetic progression, NOT functional states.
+Surface variants (1-2-3) are a light-to-dark aesthetic progression, NOT functional states. The linter's suggestion list is NOT ranked -- use element context, not list position.
 
 ---
 
@@ -160,6 +171,24 @@ Is this element interactive or expressing brand identity?
 | Container | `accent-container-1` / `-2` / `-3` | Brand button backgrounds |
 | Border | `border-accent-1` / `-2` / `-3` | High-emphasis brand borders |
 | On Accent | `on-accent-1` / `-2` / `-3` | Text on brand backgrounds |
+
+### Context Determines Hook Type
+
+| Element Context | Hook | Example |
+|---|---|---|
+| Interactive container/button background | `accent-container-*` | Brand button `background-color` |
+| Link text, icon fill (NOT on accent bg) | `accent-*` | Link `color`, icon `fill` |
+| Text/icon ON an accent-container background | `on-accent-*` | Button label `color` |
+| Border of an accent element | `border-accent-*` | Button `border-color` |
+
+`accent-*` is for **foreground** (text, icons). `accent-container-*` is for **background fills** of interactive containers. Determine what the element IS first, then the CSS property follows naturally.
+
+### Accent Container State Progression
+
+| Default | Hover/Active |
+|---|---|
+| `accent-container-1` | `accent-container-2` |
+| `accent-container-2` | `accent-container-3` |
 
 ### Why accent-2 is the default for links (not accent-1)
 
@@ -413,14 +442,6 @@ border: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-1, #d
 .product-card {
   background-color: var(--slds-g-color-surface-container-1, #ffffff);
   color: var(--slds-g-color-on-surface-1, #2e2e2e);
-}
-```
-
-**Brand button:**
-```css
-.primary-action {
-  background: var(--slds-g-color-accent-container-1, #066afe);
-  color: var(--slds-g-color-on-accent-1, #ffffff);
 }
 ```
 

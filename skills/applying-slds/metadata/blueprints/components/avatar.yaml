@@ -1,0 +1,97 @@
+name: Avatar
+description: A visual representation of an object, typically used to represent a user, account, or entity with customizable
+  sizing, shape, and fallback options.
+category: Display
+slds_classes:
+  root: slds-avatar
+  elements:
+  - class: slds-avatar__initials
+    description: Text initials when no image is available
+    purpose: Displays initials as fallback when image is not available
+  modifiers:
+  - class: slds-avatar_circle
+    description: Circular avatar shape
+    usage: Default circular appearance for avatars
+  - class: slds-avatar_x-small
+    description: Extra small avatar size
+    usage: Use in constrained spaces like dense lists
+  - class: slds-avatar_small
+    description: Small avatar size
+    usage: Use in compact layouts
+  - class: slds-avatar_medium
+    description: Medium avatar size (default)
+    usage: Default size for most use cases
+  - class: slds-avatar_large
+    description: Large avatar size
+    usage: Use for profile pages or prominent display
+  states: []
+variants:
+- name: Base
+  description: Avatar with image
+  classes:
+  - slds-avatar
+  usage_context: Default avatar with user or entity image
+  differences: Shows actual image of the person or entity
+- name: Initials
+  description: Avatar with initials fallback
+  classes:
+  - slds-avatar
+  usage_context: When no image is available, shows initials
+  differences: Displays text initials instead of image
+lightning_component:
+  name: lightning-avatar
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-avatar
+  mapping_notes: Direct mapping - Lightning component implements SLDS avatar blueprint
+accessibility:
+  keyboard_support:
+  - No specific keyboard interactions (display-only component)
+  screen_reader:
+  - Alt text announced for images
+  - Initials announced when used as fallback
+  aria_attributes:
+  - alt attribute for image avatars
+  - aria-label for initials avatars
+usage_guidelines:
+  when_to_use:
+  - To represent users, accounts, or entities visually
+  - In lists, cards, or headers where identification is needed
+  - When you need consistent visual representation
+  when_not_to_use:
+  - For decorative images
+  - When the representation doesn't relate to a person or entity
+  - For actionable content
+  best_practices:
+  - Use appropriate size for the context
+  - Provide meaningful alt text for images
+  - Use initials as fallback when images aren't available
+  common_mistakes:
+  - Using avatars for non-person/entity content
+  - Not providing fallback options
+  - Inconsistent sizing within the same interface
+code_examples:
+- title: Basic Avatar
+  code: "<span class=\"slds-avatar slds-avatar_medium\">\n      <img alt=\"Person name\" src=\"/assets/images/avatar1.jpg\"\
+    \ class=\"\" />\n      </span>\n"
+- title: Initials Avatar
+  code: "<span class=\"slds-avatar slds-avatar_medium\">\n      <abbr class=\"slds-avatar__initials\" title=\"John Doe\">JD</abbr>\n\
+    \      </span>\n"
+dependencies:
+  css_files:
+  - avatar.css
+  javascript: []
+  icons: []
+  other_components: []
+related_components:
+- name: Avatar Group
+  relationship: container
+  description: Groups multiple avatars together
+- name: Media Objects
+  relationship: depends-on
+  description: Often used within media object patterns
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/avatar/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

@@ -1,0 +1,112 @@
+name: Trial Bar
+description: A persistent notification banner that informs users about trial status, subscription expiration, or upgrade opportunities,
+  typically displayed at the top of the interface.
+category: Feedback
+slds_classes:
+  root: slds-trial-header
+  elements: []
+  modifiers: []
+  states:
+  - class: slds-is-open
+    description: Visible trial bar state
+    trigger: Applied when trial bar is displayed
+  - class: slds-is-closed
+    description: Hidden trial bar state
+    trigger: Applied when trial bar is dismissed
+variants:
+- name: Base
+  description: Standard trial notification bar
+  classes:
+  - slds-trial-header
+  usage_context: Default implementation for trial notifications
+  differences: Basic informational styling for trial status
+- name: Warning
+  description: Warning trial bar for expiring trials
+  classes:
+  - slds-trial-header
+  usage_context: When trial is expiring soon
+  differences: Warning styling with urgency indicators
+- name: Expired
+  description: Expired trial notification
+  classes:
+  - slds-trial-header
+  usage_context: When trial has expired
+  differences: Error styling for expired trial state
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component equivalent - typically implemented using custom components or lightning-notification
+accessibility:
+  keyboard_support:
+  - Tab navigation to action buttons
+  - Enter/Space to activate actions
+  - Escape to dismiss if dismissible
+  screen_reader:
+  - Trial status and urgency announced
+  - Action options clearly described
+  - Dismissal capability communicated
+  aria_attributes:
+  - role='banner' for trial notification
+  - aria-label describing trial status
+  - aria-live for dynamic updates
+  - aria-hidden when dismissed
+usage_guidelines:
+  when_to_use:
+  - For trial period notifications
+  - When subscription status needs attention
+  - For upgrade or renewal prompts
+  - To communicate time-sensitive offers
+  when_not_to_use:
+  - For general system notifications (use toast)
+  - For error messages (use alert)
+  - For one-time announcements
+  best_practices:
+  - Keep message concise and actionable
+  - Use appropriate urgency styling
+  - Provide clear call-to-action
+  - Allow dismissal when appropriate
+  - Update content based on trial status
+  common_mistakes:
+  - Overly aggressive or persistent notifications
+  - Unclear trial status or next steps
+  - Missing dismissal options
+  - Poor visual hierarchy
+code_examples:
+- title: Basic Trial Bar
+  description: Expired trial notification with limited access message
+  code: "<div class=\"slds-trial-header slds-is-open\" role=\"banner\" aria-label=\"Trial expired notification\">\n      <div\
+    \ class=\"\">\n        <div class=\"\">\n          <span class=\"\">\n            <svg class=\"slds-icon slds-icon_x-small\"\
+    \ aria-hidden=\"true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#error\"></use>\n\
+    \            </svg>\n          </span>\n          <span class=\"slds-text-body_regular\">\n            <strong>Your trial\
+    \ has expired.</strong>\\ \n            You now have limited access. Subscribe to restore full functionality.\n      \
+    \    </span>\n        </div>\n        <div class=\"\">\n          <button class=\"slds-button slds-button_brand slds-button_small\"\
+    >\n            Subscribe Now\n          </button>\n        </div>\n      </div>\n      </div>\n"
+dependencies:
+  css_files:
+  - trial-header.css
+  - button.css
+  - notification.css
+  javascript:
+  - trial-header.js
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - button
+  - notification
+related_components:
+- name: Toast
+  relationship: alternative
+  description: Alternative for temporary notifications
+- name: Alert
+  relationship: similar
+  description: Similar notification concept
+- name: Global Header
+  relationship: container
+  description: Often positioned near global header
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/trial-bar/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

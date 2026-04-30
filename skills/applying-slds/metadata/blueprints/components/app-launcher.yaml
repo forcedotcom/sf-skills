@@ -1,0 +1,94 @@
+name: App Launcher
+description: A grid-based interface that allows users to discover and navigate to different applications, typically accessed
+  through a waffle menu or launcher button.
+category: Navigation
+slds_classes:
+  root: slds-app-launcher
+  elements:
+  - class: slds-app-launcher__content
+    description: Main content area of the app launcher
+    purpose: Contains the application grid and navigation sections
+  - class: slds-app-launcher__tile
+    description: Individual application tile
+    purpose: Represents a single application with icon and label
+  - class: slds-app-launcher__tile-figure
+    description: Icon container within application tile
+    purpose: Holds the application icon or image
+  - class: slds-app-launcher__tile-body
+    description: Content area within application tile
+    purpose: Contains application name and description
+  modifiers: []
+  states: []
+variants:
+- name: Base
+  description: Standard app launcher with application grid
+  classes:
+  - slds-app-launcher
+  usage_context: Default implementation for application navigation
+  differences: Grid-based layout with application tiles and sections
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component equivalent - typically implemented as custom component
+accessibility:
+  keyboard_support:
+  - Tab navigation through application tiles
+  - Enter/Space to activate application tiles
+  - Arrow keys for grid navigation
+  screen_reader:
+  - Application names and descriptions announced
+  - Grid layout conveyed to assistive technologies
+  aria_attributes:
+  - role='grid' for the application layout
+  - role='gridcell' for individual application tiles
+  - aria-label for application tiles
+usage_guidelines:
+  when_to_use:
+  - To provide access to multiple applications or modules
+  - When users need to switch between different tools
+  - For discovery of available applications
+  when_not_to_use:
+  - For small numbers of applications
+  - When applications are contextually related
+  - For single-application interfaces
+  best_practices:
+  - Use meaningful icons for applications
+  - Keep application names concise
+  - Group related applications logically
+  - Provide search for large numbers of apps
+  common_mistakes:
+  - Using unclear icons
+  - Making tiles too small to interact with
+  - Not providing adequate spacing
+code_examples:
+- title: Basic App Launcher
+  description: Basic app launcher with single application tile
+  code: "<div class=\"slds-app-launcher\">\n      <div class=\"\">\n        <h2>App Launcher</h2>\n      </div>\n      <div\
+    \ class=\"slds-app-launcher__content\">\n        <div class=\"slds-app-launcher__tile\">\n          <div class=\"slds-app-launcher__tile-figure\"\
+    >\n            <svg class=\"slds-icon slds-icon_large\">\n              <use xlink:href=\"/assets/icons/standard-sprite/svg/symbols.svg#opportunity\"\
+    ></use>\n            </svg>\n          </div>\n          <div class=\"slds-app-launcher__tile-body\">\n            <h4>Sales\
+    \ Cloud</h4>\n          </div>\n        </div>\n      </div>\n      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - app-launcher.css
+  javascript: []
+  icons:
+  - standard-sprite.svg
+  other_components:
+  - icons
+  - grid
+related_components:
+- name: Global Navigation
+  relationship: container
+  description: Often contains the app launcher
+- name: Navigation
+  relationship: alternative
+  description: Alternative navigation patterns
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/app-launcher/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

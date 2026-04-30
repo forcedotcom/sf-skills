@@ -1,0 +1,128 @@
+name: Dynamic Icons
+description: Interactive icon components that change appearance, state, or behavior based on user interaction or data conditions,
+  providing visual feedback and enhanced user experience through animated or contextual icon transformations.
+category: Display
+slds_classes:
+  root: slds-icon-waffle
+  elements:
+  - class: slds-icon-waffle_container
+    description: Container for dynamic waffle/grid icon
+    purpose: Holds the dynamic waffle icon structure
+  - class: slds-icon-ellie
+    description: Animated Ellie (assistance) icon
+    purpose: Provides animated feedback for assistance features
+  - class: slds-icon-eq
+    description: Animated equalizer icon
+    purpose: Shows dynamic audio or data visualization
+  - class: slds-icon-score
+    description: Dynamic score indicator icon
+    purpose: Displays changing scores or ratings
+  - class: slds-icon-trend
+    description: Trend indicator icon
+    purpose: Shows directional trends with dynamic arrows
+  - class: slds-icon-typing
+    description: Typing indicator icon
+    purpose: Shows active typing or loading states
+  modifiers: []
+  states:
+  - class: slds-is-animated
+    description: Animated state for dynamic icons
+    trigger: Applied when icon should show animation
+variants:
+- name: Waffle
+  description: Grid/waffle icon with interactive states
+  classes:
+  - slds-icon-waffle
+  usage_context: For app launcher or grid menu functionality
+  differences: Interactive grid pattern that responds to user interaction
+- name: Ellie
+  description: Animated assistance icon
+  classes:
+  - slds-icon-ellie
+  usage_context: For AI assistance or help features
+  differences: Animated character providing contextual assistance
+- name: Equalizer
+  description: Dynamic equalizer visualization
+  classes:
+  - slds-icon-eq
+  usage_context: For audio controls or data visualization
+  differences: Animated bars showing activity or levels
+lightning_component:
+  name: lightning-dynamic-icon
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-dynamic-icon
+  mapping_notes: Direct mapping - Lightning component implements SLDS dynamic icon blueprint with animation support
+accessibility:
+  keyboard_support:
+  - Tab navigation to interactive dynamic icons
+  - Enter/Space to activate icon functions
+  - Focus indicators for interactive states
+  screen_reader:
+  - Icon purpose and state announced
+  - Animation status communicated
+  - Dynamic changes described appropriately
+  aria_attributes:
+  - aria-label for icon description
+  - aria-live for dynamic state changes
+  - role='img' for decorative icons
+  - role='button' for interactive icons
+  - aria-hidden for purely decorative elements
+usage_guidelines:
+  when_to_use:
+  - For interactive feedback and state indication
+  - When icons need to convey changing information
+  - For engaging user interface animations
+  - To show progress or activity states
+  when_not_to_use:
+  - For static decorative purposes (use regular icons)
+  - When animation might distract or confuse users
+  - In accessibility-sensitive contexts where motion should be reduced
+  best_practices:
+  - Use animations purposefully to convey meaning
+  - Provide reduced-motion alternatives
+  - Keep animations smooth and performant
+  - Ensure icons remain recognizable during animation
+  - Consider accessibility and motion sensitivity
+  common_mistakes:
+  - Overusing animation causing distraction
+  - Animations that are too fast or jarring
+  - Not providing static alternatives
+  - Poor performance with multiple animated icons
+code_examples:
+- title: Waffle Dynamic Icon
+  description: Dynamic score indicator with changing values
+  code: "<div class=\"slds-icon-score\" role=\"img\" aria-label=\"Current score: 85\">\n      <svg class=\"slds-icon slds-icon_large\"\
+    \ viewBox=\"0 0 100 100\">\n        <circle class=\"\" cx=\"50\" cy=\"50\" r=\"45\" stroke=\"#e0e5ee\" stroke-width=\"\
+    10\" fill=\"none\"/>\n        <circle class=\"slds-is-animated\" cx=\"50\" cy=\"50\" r=\"45\" stroke=\"#0176d3\" stroke-width=\"\
+    10\" fill=\"none\"\\ \n                stroke-dasharray=\"283\" stroke-dashoffset=\"42\" transform=\"rotate(-90 50 50)\"\
+    />\n        <text class=\"\" x=\"50\" y=\"50\" text-anchor=\"middle\" dy=\"0.3em\" font-size=\"20\" font-weight=\"bold\"\
+    >85</text>\n      </svg>\n      </div>\n"
+dependencies:
+  css_files:
+  - dynamic-icons.css
+  - icons.css
+  - animations.css
+  javascript:
+  - dynamic-icons.js
+  icons:
+  - dynamic-sprite.svg
+  - utility-sprite.svg
+  other_components:
+  - button
+  - icon
+related_components:
+- name: Icon
+  relationship: parent
+  description: Dynamic icons extend basic icon functionality
+- name: Button
+  relationship: container
+  description: Often used within button components
+- name: Spinner
+  relationship: similar
+  description: Similar animated feedback concept
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/dynamic-icons/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

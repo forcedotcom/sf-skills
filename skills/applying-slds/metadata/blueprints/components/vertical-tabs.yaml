@@ -1,0 +1,140 @@
+name: Vertical Tabs
+description: Vertical tabs provide a navigation pattern where tab items are arranged vertically, typically on the left side
+  of the content area. They allow users to switch between different views or sections of content.
+category: Navigation
+slds_classes:
+  root: slds-vertical-tabs
+  elements:
+  - class: slds-vertical-tabs__nav
+    description: Navigation container for vertical tabs
+    purpose: Contains the list of tab items
+  - class: slds-vertical-tabs__nav-item
+    description: Individual tab navigation item
+    purpose: Container for each tab button/link
+  - class: slds-vertical-tabs__link
+    description: Tab link or button element
+    purpose: Clickable element that activates a tab panel
+  - class: slds-vertical-tabs__content
+    description: Container for tab panel content
+    purpose: Holds the content associated with each tab
+  modifiers: []
+  states:
+  - class: slds-is-active
+    description: Active state for the current tab
+    trigger: When a tab is selected and its panel is visible
+  - class: slds-is-disabled
+    description: Disabled state for a tab
+    trigger: When a tab is not interactive
+variants:
+- name: Base
+  description: Standard vertical tabs navigation
+  classes:
+  - slds-vertical-tabs
+  usage_context: Default vertical tabs implementation
+  differences: Vertical navigation with tab panels
+lightning_component:
+  name: lightning-tabset
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-tabset
+  mapping_notes: Lightning tabset can be configured for vertical orientation
+accessibility:
+  keyboard_support:
+  - Tab to navigate to tab list
+  - Arrow keys (Up/Down) to navigate between tabs
+  - Enter or Space to activate a tab
+  - Home/End to jump to first/last tab
+  screen_reader:
+  - Tab list role announced
+  - Active tab state announced
+  - Tab panel content associated and announced
+  - Disabled tab state announced
+  aria_attributes:
+  - role='tablist' on navigation container
+  - role='tab' on tab links
+  - role='tabpanel' on content panels
+  - aria-selected on active tab (true/false)
+  - aria-controls linking tab to panel
+  - aria-labelledby linking panel to tab
+  - aria-disabled on disabled tabs
+  - tabindex='0' on active tab, '-1' on others
+usage_guidelines:
+  when_to_use:
+  - When you have multiple content sections to organize
+  - For settings pages or configuration interfaces
+  - When horizontal space is limited but vertical space is available
+  - For side navigation patterns
+  - When content sections are related but distinct
+  when_not_to_use:
+  - When horizontal tabs work better for the layout
+  - For primary navigation (use global navigation)
+  - When only 2-3 sections exist (consider accordion)
+  - In very narrow viewports
+  best_practices:
+  - Keep tab labels short and descriptive
+  - Provide clear visual indication of active tab
+  - Ensure adequate spacing between tabs
+  - Support keyboard navigation fully
+  - Maintain tab state during navigation
+  - Use icons to enhance tab meaning when helpful
+  common_mistakes:
+  - Not implementing proper ARIA tab patterns
+  - Missing keyboard navigation
+  - Inadequate visual feedback for active state
+  - Too many tabs making navigation difficult
+  - Not maintaining tab state
+code_examples:
+- title: Basic Vertical Tabs
+  code: "<div class=\"slds-vertical-tabs\">\n      <ul class=\"slds-vertical-tabs__nav\" role=\"tablist\">\n        <li class=\"\
+    slds-vertical-tabs__nav-item\" role=\"presentation\">\n          <a class=\"slds-vertical-tabs__link\" href=\"#\" role=\"\
+    tab\" aria-selected=\"true\" aria-controls=\"tab-panel-1\" tabindex=\"0\">\n            Tab One\n          </a>\n    \
+    \    </li>\n        <li class=\"slds-vertical-tabs__nav-item\" role=\"presentation\">\n          <a class=\"slds-vertical-tabs__link\"\
+    \ href=\"#\" role=\"tab\" aria-selected=\"false\" aria-controls=\"tab-panel-2\" tabindex=\"-1\">\n            Tab Two\n\
+    \          </a>\n        </li>\n        <li class=\"slds-vertical-tabs__nav-item\" role=\"presentation\">\n          <a\
+    \ class=\"slds-vertical-tabs__link\" href=\"#\" role=\"tab\" aria-selected=\"false\" aria-controls=\"tab-panel-3\" tabindex=\"\
+    -1\">\n            Tab Three\n          </a>\n        </li>\n      </ul>\n      <div class=\"slds-vertical-tabs__content\"\
+    >\n        <div id=\"tab-panel-1\" class=\"\" role=\"tabpanel\" aria-labelledby=\"tab-1\">\n          <p>Content for Tab\
+    \ One</p>\n        </div>\n        <div id=\"tab-panel-2\" class=\"\" role=\"tabpanel\" aria-labelledby=\"tab-2\" hidden>\n\
+    \          <p>Content for Tab Two</p>\n        </div>\n        <div id=\"tab-panel-3\" class=\"\" role=\"tabpanel\" aria-labelledby=\"\
+    tab-3\" hidden>\n          <p>Content for Tab Three</p>\n        </div>\n      </div>\n      </div>\n"
+- title: Vertical Tabs with Active State
+  code: "<div class=\"slds-vertical-tabs\">\n      <ul class=\"slds-vertical-tabs__nav\" role=\"tablist\">\n        <li class=\"\
+    slds-vertical-tabs__nav-item\" role=\"presentation\">\n          <a class=\"slds-vertical-tabs__link slds-is-active\"\
+    \ href=\"#\" role=\"tab\" aria-selected=\"true\" aria-controls=\"active-panel\" tabindex=\"0\">\n            Active Tab\n\
+    \          </a>\n        </li>\n        <li class=\"slds-vertical-tabs__nav-item\" role=\"presentation\">\n          <a\
+    \ class=\"slds-vertical-tabs__link\" href=\"#\" role=\"tab\" aria-selected=\"false\" aria-controls=\"inactive-panel\"\
+    \ tabindex=\"-1\">\n            Inactive Tab\n          </a>\n        </li>\n      </ul>\n      <div class=\"slds-vertical-tabs__content\"\
+    >\n        <div id=\"active-panel\" class=\"\" role=\"tabpanel\" aria-labelledby=\"active-tab\">\n          <p>This is\
+    \ the active tab content</p>\n        </div>\n        <div id=\"inactive-panel\" class=\"\" role=\"tabpanel\" aria-labelledby=\"\
+    inactive-tab\" hidden>\n          <p>This tab is inactive</p>\n        </div>\n      </div>\n      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - vertical-tabs.css
+  javascript:
+  - Tab activation and panel switching
+  - Keyboard navigation
+  - ARIA state management
+  - Focus management
+  icons: []
+  other_components: []
+related_components:
+- name: Tabs
+  relationship: alternative
+  description: Horizontal tabs navigation
+- name: Scoped Tabs
+  relationship: similar
+  description: Scoped horizontal tabs
+- name: Vertical Navigation
+  relationship: similar
+  description: Vertical navigation menu
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/vertical-tabs/
+  design_guidelines: https://v1.lightningdesignsystem.com/components/vertical-tabs/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  author: SLDS Documentation Team
+  slds_version: 2.27.2
+  review_status: complete
+  source: official-slds
+  notes: Created from official SLDS documentation and design-system-internal source code with CSS selector annotations. Cleaned
+    invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.

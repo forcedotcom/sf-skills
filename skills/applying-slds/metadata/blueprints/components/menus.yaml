@@ -1,0 +1,134 @@
+name: Menus
+description: Contextual navigation components that present a list of actions or options, typically triggered by user interaction
+  with a button or other control.
+category: Navigation
+slds_classes:
+  root: slds-dropdown
+  elements:
+  - class: slds-dropdown__item
+    description: Individual menu item wrapper
+    purpose: Contains a single menu option
+  - class: slds-dropdown__header
+    description: Menu section header
+    purpose: Groups related menu items with a heading
+  modifiers:
+  - class: slds-dropdown_left
+    description: Left-aligned dropdown menu
+    usage: Menu aligned to the left edge of trigger
+  - class: slds-dropdown_right
+    description: Right-aligned dropdown menu
+    usage: Menu aligned to the right edge of trigger
+  - class: slds-dropdown_bottom
+    description: Bottom-positioned dropdown menu
+    usage: Menu appears below the trigger element
+  - class: slds-dropdown_length-5
+    description: Menu height for 5 items
+    usage: Constrains menu height for scrolling
+  - class: slds-dropdown_length-7
+    description: Menu height for 7 items
+    usage: Constrains menu height for scrolling
+  - class: slds-dropdown_length-10
+    description: Menu height for 10 items
+    usage: Constrains menu height for scrolling
+  states:
+  - class: slds-is-open
+    description: Open menu state
+    trigger: When menu is visible
+  - class: slds-is-selected
+    description: Selected menu item state
+    trigger: Currently selected menu option
+variants:
+- name: Base
+  description: Standard dropdown menu
+  classes:
+  - slds-dropdown
+  usage_context: Default menu implementation for actions and options
+  differences: Basic dropdown menu with list of actionable items
+lightning_component:
+  name: lightning-menu-item
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-menu-item
+  mapping_notes: Mapped through lightning-menu-item and lightning-button-menu components
+accessibility:
+  keyboard_support:
+  - Tab to focus menu trigger
+  - Enter/Space to open menu
+  - Arrow keys to navigate menu items
+  - Enter/Space to select menu items
+  - Escape to close menu
+  screen_reader:
+  - Menu structure and purpose announced
+  - Menu items and their actions described
+  - Current selection communicated
+  - Menu state changes announced
+  aria_attributes:
+  - role='menu' for menu container
+  - role='menuitem' for menu options
+  - aria-expanded on menu trigger
+  - aria-haspopup on menu trigger
+  - aria-labelledby for menu identification
+usage_guidelines:
+  when_to_use:
+  - For contextual actions related to specific content
+  - To group related actions in a compact interface
+  - For overflow actions when space is limited
+  - To provide secondary or advanced options
+  when_not_to_use:
+  - For primary navigation (use navigation components)
+  - For form inputs (use select or combobox)
+  - When all actions should be immediately visible
+  best_practices:
+  - Use clear, action-oriented menu item labels
+  - Group related actions with headers and dividers
+  - Order items by frequency of use or importance
+  - Limit menu length to avoid overwhelming users
+  - Provide keyboard navigation support
+  common_mistakes:
+  - Too many menu items without organization
+  - Unclear or vague menu item labels
+  - Poor menu positioning that gets cut off
+  - Missing keyboard navigation support
+code_examples:
+- title: Basic Dropdown Menu
+  code: "<div class=\"slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open\">\n      <button class=\"slds-button\
+    \ slds-button_neutral\" aria-haspopup=\"true\" aria-expanded=\"true\">\n        Show Menu\n        <svg class=\"slds-button__icon\
+    \ slds-button__icon_right\" aria-hidden=\"true\">\n          <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#down\"\
+    ></use>\n        </svg>\n      </button>\n      <div class=\"slds-dropdown slds-dropdown_right\">\n        <ul class=\"\
+    \" role=\"menu\">\n          <li class=\"slds-dropdown__item\" role=\"presentation\">\n            <a href=\"#\" role=\"\
+    menuitem\" tabindex=\"0\">\n              <span class=\"slds-truncate\" title=\"Menu Item One\">Menu Item One</span>\n\
+    \            </a>\n          </li>\n          <li class=\"slds-dropdown__item\" role=\"presentation\">\n            <a\
+    \ href=\"#\" role=\"menuitem\" tabindex=\"-1\">\n              <span class=\"slds-truncate\" title=\"Menu Item Two\">Menu\
+    \ Item Two</span>\n            </a>\n          </li>\n          <li class=\"slds-dropdown__item\" role=\"presentation\"\
+    >\n            <a href=\"#\" role=\"menuitem\" tabindex=\"-1\">\n              <span class=\"slds-truncate\" title=\"\
+    Menu Item Three\">Menu Item Three</span>\n            </a>\n          </li>\n        </ul>\n      </div>\n      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - dropdown.css
+  - menu.css
+  - button.css
+  javascript:
+  - dropdown.js
+  - menu.js
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - button
+  - dropdown
+  - truncate
+related_components:
+- name: Button Menu
+  relationship: container
+  description: Button that triggers menu dropdown
+- name: Popover
+  relationship: similar
+  description: Alternative overlay for contextual content
+- name: Navigation
+  relationship: alternative
+  description: Alternative for primary navigation
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/menus/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

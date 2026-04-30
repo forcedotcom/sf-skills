@@ -1,0 +1,205 @@
+name: "Illustration"
+
+description: "Visual illustrations used for empty states, error states, or informational contexts. Provides scalable SVG graphics with consistent styling and themeable colors for strokes and fills."
+
+category: "Display"
+
+slds_classes:
+  root: "slds-illustration"
+  elements:
+    - class: "slds-illustration__svg"
+      description: "SVG container for the illustration graphic"
+      purpose: "Holds the SVG illustration image"
+    - class: "slds-illustration__header"
+      description: "Header text above the illustration"
+      purpose: "Provides title or main message"
+    - class: "slds-illustration__stroke-primary"
+      description: "Primary stroke color for SVG elements"
+      purpose: "Applied to SVG paths for consistent theming"
+    - class: "slds-illustration__stroke-secondary"
+      description: "Secondary stroke color for SVG elements"
+      purpose: "Applied to SVG paths for accent colors"
+    - class: "slds-illustration__fill-primary"
+      description: "Primary fill color for SVG elements"
+      purpose: "Applied to SVG shapes for consistent theming"
+    - class: "slds-illustration__fill-secondary"
+      description: "Secondary fill color for SVG elements"
+      purpose: "Applied to SVG shapes for accent colors"
+  modifiers:
+    - class: "slds-illustration_small"
+      description: "Small size variant (300x200px max)"
+      purpose: "Compact illustration for smaller spaces"
+    - class: "slds-illustration_large"
+      description: "Large size variant (600x400px max)"
+      purpose: "Full-size illustration for prominent empty states"
+  states: []
+
+variants:
+  - name: "Base"
+    description: "Standard illustration with default sizing"
+    classes: ["slds-illustration"]
+    usage_context: "Default illustration implementation"
+    differences: "Responsive illustration with natural SVG sizing"
+  - name: "Small"
+    description: "Compact illustration for smaller contexts"
+    classes: ["slds-illustration", "slds-illustration_small"]
+    usage_context: "Use in panels, cards, or compact layouts"
+    differences: "Maximum 300x200px with reduced spacing"
+  - name: "Large"
+    description: "Full-size illustration for prominent display"
+    classes: ["slds-illustration", "slds-illustration_large"]
+    usage_context: "Use for main content area empty states"
+    differences: "Maximum 600x400px with increased spacing"
+
+lightning_component:
+  name: ""
+  url: "https://developer.salesforce.com/docs/component-library/overview/components"
+  mapping_notes: "No direct Lightning Base Component - implement with custom SVG and styling"
+
+accessibility:
+  keyboard_support:
+    - "Illustrations are typically non-interactive"
+  screen_reader:
+    - "Provide descriptive alt text or aria-label"
+    - "Use aria-hidden='true' for decorative illustrations"
+    - "Ensure accompanying text is accessible"
+  aria_attributes:
+    - "role='img' on SVG or wrapper"
+    - "aria-label with description for meaningful illustrations"
+    - "aria-hidden='true' for purely decorative images"
+
+usage_guidelines:
+  when_to_use:
+    - "For empty states (no data, no results, no items)"
+    - "For error or success confirmation screens"
+    - "To communicate system status visually"
+    - "For onboarding or informational screens"
+  when_not_to_use:
+    - "As primary content (use as supporting visual)"
+    - "For critical information without text backup"
+    - "In place of icons for actions"
+    - "When space is extremely limited"
+  best_practices:
+    - "Always pair illustration with descriptive text"
+    - "Use appropriate size variant for context"
+    - "Provide clear messaging about user action or state"
+    - "Ensure illustrations support but don't replace text"
+    - "Use consistent illustration style across application"
+    - "Consider color contrast and visibility"
+  common_mistakes:
+    - "Missing descriptive text or heading"
+    - "Illustrations too large for context"
+    - "Poor color contrast making illustration hard to see"
+    - "Relying solely on illustration without text"
+    - "Using wrong size variant for space available"
+
+code_examples:
+  - title: "Basic Illustration with Empty State"
+    code: |
+      <div class="slds-illustration slds-illustration_small">
+        <svg class="slds-illustration__svg" viewBox="0 0 468 194" aria-hidden="true">
+          <g class="slds-illustration__stroke-primary">
+            <path d="M233.9 87.3l14.6 36.9 39.6 5.8-28.6 27.9 6.8 39.3-35.5-18.6-35.4 18.6 6.7-39.3L174 130l39.6-5.8z"/>
+          </g>
+          <g class="slds-illustration__fill-secondary">
+            <path d="M234 180.5l-22.7-11.9 4.3 25.2 18.4-13.3z"/>
+          </g>
+        </svg>
+        <h3 class="slds-illustration__header">No Items Found</h3>
+        <p class="slds-text-body_regular">Start by creating your first item.</p>
+      </div>
+    description: "Small illustration for empty state with header and description"
+  - title: "Large Illustration with Action"
+    code: |
+      <div class="slds-illustration slds-illustration_large">
+        <svg class="slds-illustration__svg" viewBox="0 0 600 400" aria-hidden="true">
+          <g class="slds-illustration__stroke-primary">
+            <rect x="100" y="100" width="400" height="200" rx="8"/>
+          </g>
+          <g class="slds-illustration__fill-secondary">
+            <circle cx="300" cy="200" r="50"/>
+          </g>
+        </svg>
+        <h3 class="slds-illustration__header">Welcome to Your Dashboard</h3>
+        <p class="slds-text-body_regular">Get started by adding your first widget.</p>
+        <button class="slds-button slds-button_brand">Add Widget</button>
+      </div>
+    description: "Large illustration with header, description, and action button"
+  - title: "Illustration with No Data State"
+    code: |
+      <div class="slds-illustration slds-illustration_small">
+        <svg class="slds-illustration__svg" viewBox="0 0 300 200" aria-hidden="true">
+          <g class="slds-illustration__fill-primary">
+            <path d="M150 50 L250 150 L50 150 Z"/>
+          </g>
+          <g class="slds-illustration__stroke-secondary">
+            <line x1="150" y1="70" x2="150" y2="130" stroke-width="3"/>
+            <line x1="130" y1="150" x2="170" y2="150" stroke-width="3"/>
+          </g>
+        </svg>
+        <div class="slds-text-longform">
+          <h3 class="slds-illustration__header slds-text-heading_medium">
+            No Records to Display
+          </h3>
+          <p class="slds-text-body_regular">
+            When you have records, they'll appear here.
+          </p>
+        </div>
+      </div>
+    description: "Illustration communicating no data available"
+  - title: "Error State Illustration"
+    code: |
+      <div class="slds-illustration slds-illustration_small">
+        <svg class="slds-illustration__svg" viewBox="0 0 300 200" role="img" aria-labelledby="error-title">
+          <title id="error-title">Error occurred</title>
+          <g class="slds-illustration__stroke-primary">
+            <circle cx="150" cy="100" r="40" fill="none" stroke-width="3"/>
+            <line x1="130" y1="80" x2="170" y2="120" stroke-width="3"/>
+            <line x1="170" y1="80" x2="130" y2="120" stroke-width="3"/>
+          </g>
+        </svg>
+        <h3 class="slds-illustration__header">Something Went Wrong</h3>
+        <p class="slds-text-body_regular">
+          We couldn't complete your request. Please try again.
+        </p>
+        <button class="slds-button slds-button_neutral">Try Again</button>
+      </div>
+    description: "Error state illustration with retry action"
+
+styling_hooks:
+  - name: "--slds-g-color-palette-cloud-blue-80"
+    description: "Primary color for illustration strokes and fills"
+    css_property: "stroke, fill"
+  - name: "--slds-g-color-palette-cloud-blue-90"
+    description: "Secondary color for illustration strokes and fills"
+    css_property: "stroke, fill"
+
+dependencies:
+  css_files: ["illustration.css"]
+  javascript: []
+  icons: []
+  other_components: ["button", "text"]
+
+related_components:
+  - name: "Empty State"
+    relationship: "pattern"
+    description: "Complete pattern using illustration"
+  - name: "Icon"
+    relationship: "alternative"
+    description: "Simpler graphic alternative for smaller contexts"
+  - name: "Spinner"
+    relationship: "complementary"
+    description: "Loading state while content loads"
+
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/illustration/"
+
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-11"
+  author: "SLDS Documentation Team"
+  slds_version: "2.27.2"
+  review_status: "complete"
+  source: "official-slds"
+  notes: "Created from official SLDS documentation and design-system-internal source code"
+
