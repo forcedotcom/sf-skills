@@ -5,78 +5,70 @@
 ### Initialize Project
 ```bash
 # Create script project
-sf data-code-extension init <directory> --code-type script
+sf data-code-extension script init --package-dir <directory>
 
 # Create function project
-sf data-code-extension init <directory> --code-type function
+sf data-code-extension function init --package-dir <directory>
 
 # Examples
-sf data-code-extension init . --code-type script
-sf data-code-extension init my-transform --code-type script
+sf data-code-extension script init --package-dir .
+sf data-code-extension script init --package-dir my-transform
 ```
 
 ### Scan for Permissions
 ```bash
 # Basic scan
-sf data-code-extension scan ./payload/entrypoint.py
+sf data-code-extension script scan --entrypoint ./payload/entrypoint.py
 
 # Preview without saving
-sf data-code-extension scan ./payload/entrypoint.py --dry-run
+sf data-code-extension script scan --entrypoint ./payload/entrypoint.py --dry-run
 
 # Custom config location
-sf data-code-extension scan ./payload/entrypoint.py --config ./custom-config.json
+sf data-code-extension script scan --entrypoint ./payload/entrypoint.py --config ./custom-config.json
 
 # Skip requirements.txt
-sf data-code-extension scan ./payload/entrypoint.py --no-requirements
+sf data-code-extension script scan --entrypoint ./payload/entrypoint.py --no-requirements
 ```
 
 ### Run Locally
 ```bash
 # Basic run
-sf data-code-extension run ./payload/entrypoint.py --target-org <org_alias>
+sf data-code-extension script run --entrypoint ./payload/entrypoint.py --target-org <org_alias>
 
 # With custom config
-sf data-code-extension run ./payload/entrypoint.py -o <org_alias> -c custom-config.json
+sf data-code-extension script run --entrypoint ./payload/entrypoint.py -o <org_alias> -c custom-config.json
 
 # Examples
-sf data-code-extension run ./payload/entrypoint.py --target-org afvibe
-sf data-code-extension run ./payload/entrypoint.py -o afvibe
+sf data-code-extension script run --entrypoint ./payload/entrypoint.py --target-org afvibe
+sf data-code-extension script run --entrypoint ./payload/entrypoint.py -o afvibe
 ```
 
 ### Deploy
 ```bash
-# Minimal deployment (MUST include --path ./payload)
-sf data-code-extension deploy \
+# Minimal deployment (MUST include --package-dir ./payload)
+sf data-code-extension script deploy \
   --target-org <org_alias> \
   --name <name> \
   --package-version <version> \
   --description "<description>" \
-  --path ./payload
+  --package-dir ./payload
 
 # Full options
-sf data-code-extension deploy \
+sf data-code-extension script deploy \
   --target-org <org_alias> \
   --name <name> \
   --package-version <version> \
   --description "<description>" \
   --cpu-size <CPU_L|CPU_XL|CPU_2XL|CPU_4XL> \
-  --path ./payload
+  --package-dir ./payload
 
-# Examples (CRITICAL: Always include --path ./payload)
-sf data-code-extension deploy \
+# Examples (CRITICAL: Always include --package-dir ./payload)
+sf data-code-extension script deploy \
   --target-org afvibe \
   --name Employee_Upper \
   --package-version 1.0.0 \
   --description "Uppercase employee positions" \
-  --path ./payload
-
-sf data-code-extension deploy \
-  -o afvibe \
-  -n Employee_Upper \
-  --package-version 1.0.0 \
-  --description "Uppercase employee positions" \
-  --cpu-size CPU_4XL \
-  --path ./payload
+  --package-dir ./payload
 ```
 
 ## Common Workflows
@@ -87,43 +79,42 @@ sf data-code-extension deploy \
 mkdir my-transform && cd my-transform
 
 # 2. Initialize
-sf data-code-extension init . --code-type script
+sf data-code-extension script init --package-dir .
 
-# 3. Edit entrypoint.py
-# (Add your transformation code)
+# 3. Edit payload/entrypoint.py with your transformation
 
 # 4. Scan
-sf data-code-extension scan ./payload/entrypoint.py
+sf data-code-extension script scan --entrypoint ./payload/entrypoint.py
 
 # 5. Test
-sf data-code-extension run ./payload/entrypoint.py --target-org afvibe
+sf data-code-extension script run --entrypoint ./payload/entrypoint.py --target-org afvibe
 
-# 6. Deploy (MUST include --path ./payload)
-sf data-code-extension deploy \
+# 6. Deploy (MUST include --package-dir ./payload)
+sf data-code-extension script deploy \
   --target-org afvibe \
   --name MyTransform \
   --package-version 1.0.0 \
-  --description "Uppercase employee positions" \
-  --path ./payload
+  --description "My transformation" \
+  --package-dir ./payload
 ```
 
 ### Update Existing Code Extension
 ```bash
-# 1. Edit entrypoint.py
+# 1. Edit payload/entrypoint.py
 
 # 2. Re-scan
-sf data-code-extension scan ./payload/entrypoint.py
+sf data-code-extension script scan --entrypoint ./payload/entrypoint.py
 
 # 3. Test
-sf data-code-extension run ./payload/entrypoint.py -o afvibe
+sf data-code-extension script run --entrypoint ./payload/entrypoint.py -o afvibe
 
-# 4. Deploy with new version (include --path ./payload)
-sf data-code-extension deploy \
+# 4. Deploy with new version (include --package-dir ./payload)
+sf data-code-extension script deploy \
   -o afvibe \
   -n MyTransform \
   --package-version 1.1.0 \
-  --description "Uppercase employee positions" \
-  --path ./payload
+  --description "Updated transformation" \
+  --package-dir ./payload
 ```
 
 ## Python Code Patterns
@@ -188,10 +179,6 @@ df['grade'] = df['position'].apply(
 
 ## Option Reference
 
-### --code-type
-- `script` - Batch transformation (default)
-- `function` - Real-time function
-
 ### --cpu-size
 - `CPU_L` - Small datasets (< 1M records)
 - `CPU_XL` - Medium datasets (1M-5M)
@@ -220,7 +207,7 @@ python --version
 sf org login web --alias <org_alias>
 
 # Config missing
-sf data-code-extension scan ./payload/entrypoint.py
+sf data-code-extension script scan --entrypoint ./payload/entrypoint.py
 
 # Docker not running (for deploy)
 # Start Docker Desktop
@@ -261,7 +248,7 @@ my-project/
 | Wrong Python version | Use pyenv to install 3.11.0 |
 | Org not connected | `sf org login web --alias <alias>` |
 | Config missing | Run scan command |
-| DLO not found | Check DLO name, use DLO Schema skill |
+| DLO not found | Check DLO name, use getting-datacloud-schema skill |
 | Docker error | Start Docker Desktop |
 
 ## Deployment Checklist
@@ -274,49 +261,6 @@ my-project/
 - [ ] CPU size chosen
 - [ ] Docker running
 - [ ] Org authenticated
-
-## Next Steps After Deploy
-
-1. Go to Data Cloud in Salesforce UI
-2. Navigate to Code Extensions
-3. Find your deployment
-4. Click "Run Now" to test
-5. Schedule for recurring execution
-6. Monitor execution logs
-
-## Quick Examples
-
-### Example 1: Simple Transform
-```python
-from datacustomcode import Client
-client = Client()
-
-df = client.read_dlo('Employee__dll')
-df['upper_pos'] = df['position'].str.upper()
-client.write_to_dlo('Employee_Upper__dll', df, 'overwrite')
-```
-
-### Example 2: Filter and Write
-```python
-from datacustomcode import Client
-client = Client()
-
-df = client.read_dlo('Employee__dll')
-managers = df[df['position'].str.contains('Manager')]
-client.write_to_dlo('Managers__dll', managers, 'overwrite')
-```
-
-### Example 3: Join Two DLOs
-```python
-from datacustomcode import Client
-client = Client()
-
-employees = client.read_dlo('Employee__dll')
-departments = client.read_dlo('Department__dll')
-
-merged = employees.merge(departments, left_on='dept_id', right_on='id')
-client.write_to_dlo('Employee_With_Dept__dll', merged, 'overwrite')
-```
 
 ## Resources
 

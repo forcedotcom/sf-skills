@@ -1,6 +1,6 @@
 ---
 name: getting-datacloud-schema
-description: Retrieve Data Lake Object (DLO) and Data Model Object (DMO) schema information from Salesforce Data Cloud using REST APIs. Use this skill when you need to inspect DLO or DMO field definitions, data types, or metadata. Takes org alias and optional DLO/DMO name as parameters.
+description: "Retrieve Data Lake Object (DLO) and Data Model Object (DMO) schema information from Salesforce Data Cloud using REST APIs. Use this skill when you need to inspect DLO or DMO field definitions, data types, or metadata. Takes org alias and optional DLO/DMO name as parameters."
 ---
 
 # getting-datacloud-schema Skill
