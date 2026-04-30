@@ -153,7 +153,7 @@ const CONTENT_CHECKS: ContentCheck[] = [
             errors: [
               `skills/${dirName}/SKILL.md: frontmatter is not valid YAML.
 ${detail}
-Ensure the description is wrapped in double quotes. If the value itself contains quotes or backslashes, escape them.`,
+Wrap values that contain \`: \` (colon + space), such as long descriptions with parenthetical hints, in single or double quotes.`,
             ],
           }
         }
