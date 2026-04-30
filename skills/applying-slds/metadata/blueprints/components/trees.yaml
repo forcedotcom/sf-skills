@@ -1,0 +1,116 @@
+name: Trees
+description: A hierarchical navigation component that displays data in a tree structure with expandable and collapsible nodes,
+  ideal for representing nested relationships.
+category: Navigation
+slds_classes:
+  root: slds-tree
+  elements:
+  - class: slds-tree__item
+    description: Individual tree node wrapper
+    purpose: Contains a single tree item and its children
+  - class: slds-tree__item-label
+    description: Label content for tree item
+    purpose: Contains the text or content for the tree node
+  modifiers: []
+  states:
+  - class: slds-is-expanded
+    description: Expanded tree node state
+    trigger: When node children are visible
+  - class: slds-is-collapsed
+    description: Collapsed tree node state
+    trigger: When node children are hidden
+  - class: slds-is-selected
+    description: Selected tree node state
+    trigger: When node is currently selected
+variants:
+- name: Base
+  description: Standard tree with expandable nodes
+  classes:
+  - slds-tree
+  usage_context: Default tree implementation for hierarchical data
+  differences: Hierarchical structure with expand/collapse functionality
+lightning_component:
+  name: lightning-tree
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-tree
+  mapping_notes: Direct mapping - Lightning component implements SLDS tree blueprint
+accessibility:
+  keyboard_support:
+  - Tab to focus the tree
+  - Arrow keys to navigate between nodes
+  - Enter/Space to select nodes
+  - Right arrow to expand collapsed nodes
+  - Left arrow to collapse expanded nodes
+  screen_reader:
+  - Tree structure and hierarchy announced
+  - Node states (expanded/collapsed) communicated
+  - Selection changes announced
+  - Node relationships described
+  aria_attributes:
+  - role='tree' for tree container
+  - role='treeitem' for individual nodes
+  - aria-expanded for expandable nodes
+  - aria-selected for selectable nodes
+  - aria-level for node hierarchy depth
+  - aria-setsize and aria-posinset for node position
+usage_guidelines:
+  when_to_use:
+  - For hierarchical data with parent-child relationships
+  - When users need to navigate nested structures
+  - For file system or folder-like interfaces
+  - To show organizational hierarchies
+  when_not_to_use:
+  - For flat lists (use regular lists instead)
+  - When hierarchy is not meaningful to users
+  - For simple navigation (use regular navigation components)
+  best_practices:
+  - Use clear visual indicators for expand/collapse states
+  - Provide meaningful node labels
+  - Show loading states for dynamically loaded children
+  - Allow keyboard navigation throughout the tree
+  - Indicate selection clearly
+  common_mistakes:
+  - Poor visual hierarchy indication
+  - Inconsistent expand/collapse behavior
+  - Missing keyboard navigation support
+  - Unclear node selection feedback
+code_examples:
+- title: Basic Tree Structure
+  code: "<div class=\"slds-tree_container\">\n      <ul role=\"tree\" class=\"slds-tree\">\n        <li role=\"treeitem\"\
+    \ aria-level=\"1\" aria-expanded=\"true\" aria-selected=\"false\" tabindex=\"0\">\n          <div class=\"slds-tree__item\"\
+    >\n            <button class=\"slds-button slds-button_icon slds-button_icon-x-small slds-m-right_x-small\" aria-hidden=\"\
+    true\" tabindex=\"-1\">\n              <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n                <use xlink:href=\"\
+    /assets/icons/utility-sprite/svg/symbols.svg#chevronright\"></use>\n              </svg>\n            </button>\n    \
+    \        <span class=\"slds-tree__item-label\" title=\"Western Sales Director\">Western Sales Director</span>\n      \
+    \    </div>\n          <ul role=\"group\" class=\"\">\n            <li role=\"treeitem\" aria-level=\"2\" aria-selected=\"\
+    false\" tabindex=\"0\">\n              <div class=\"slds-tree__item\">\n                <span class=\"slds-tree__item-label\"\
+    \ title=\"Western Sales Manager\">Western Sales Manager</span>\n              </div>\n            </li>\n          </ul>\n\
+    \        </li>\n      </ul>\n      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - tree.css
+  - button.css
+  javascript:
+  - tree.js
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - button-icon
+  - icons
+related_components:
+- name: Tree Grid
+  relationship: variant
+  description: Tree structure combined with data table functionality
+- name: Vertical Navigation
+  relationship: similar
+  description: Alternative navigation for hierarchical content
+- name: Accordion
+  relationship: similar
+  description: Alternative for collapsible hierarchical content
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/trees/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

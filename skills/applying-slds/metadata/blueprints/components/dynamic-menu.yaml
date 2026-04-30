@@ -1,0 +1,141 @@
+name: Dynamic Menu
+description: A menu component that displays contextual navigation or actions in a popover dialog. It provides a flexible container
+  for menu items with header and footer support, typically triggered by a button or other interaction.
+category: Navigation
+slds_classes:
+  root: slds-dynamic-menu
+  elements:
+  - class: slds-dynamic-menu__header
+    description: Header section of the dynamic menu
+    purpose: Contains the menu title or heading
+  modifiers: []
+  states: []
+variants:
+- name: Base
+  description: Standard dynamic menu in popover
+  classes:
+  - slds-dynamic-menu
+  usage_context: Default menu implementation with header and footer support
+  differences: Displayed in a popover dialog with role='dialog'
+lightning_component:
+  name: lightning-menu
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-menu
+  mapping_notes: lightning-menu provides dynamic menu functionality with menu items
+accessibility:
+  keyboard_support:
+  - Tab to navigate between menu items
+  - Arrow keys to move through menu options
+  - Enter or Space to select menu item
+  - Escape to close menu
+  screen_reader:
+  - Dialog role announced
+  - Menu header announced
+  - Menu items announced as clickable actions
+  - Current selection state communicated
+  aria_attributes:
+  - role='dialog' on menu container
+  - aria-labelledby pointing to menu header
+  - aria-describedby for additional context
+  - Focus management when opening/closing
+usage_guidelines:
+  when_to_use:
+  - For contextual navigation menus
+  - When menu content changes based on context
+  - For action menus triggered by buttons
+  - When you need a menu with header and footer
+  when_not_to_use:
+  - For simple dropdown select (use select or combobox)
+  - For static navigation (use standard menu)
+  - When content doesn't change dynamically
+  - For very simple action lists (use dropdown menu)
+  best_practices:
+  - Provide clear, descriptive header text
+  - Group related menu items logically
+  - Use appropriate icons for menu items
+  - Ensure proper focus management
+  - Close menu on selection or Escape key
+  - Position menu appropriately relative to trigger
+  common_mistakes:
+  - Missing dialog role for accessibility
+  - Poor keyboard navigation support
+  - Not managing focus properly
+  - Unclear menu item labels
+  - Menu not closing on selection
+code_examples:
+- title: Basic Dynamic Menu
+  code: "<section class=\"slds-popover slds-dynamic-menu slds-nubbin_top-left\" role=\"dialog\" aria-labelledby=\"menu-header\"\
+    \ aria-describedby=\"menu-body\">\n  <div class=\"slds-popover__header\">\n    <h3 id=\"menu-header\" class=\"slds-dynamic-menu__header\"\
+    >Menu Options</h3>\n  </div>\n  <div id=\"menu-body\" class=\"slds-popover__body\">\n    <ul class=\"\" role=\"menu\"\
+    >\n      <li class=\"slds-dropdown__item\" role=\"presentation\">\n        <a href=\"#\" role=\"menuitem\" tabindex=\"\
+    0\">\n          <span class=\"slds-truncate\" title=\"Menu Item 1\">Menu Item 1</span>\n        </a>\n      </li>\n  \
+    \    <li class=\"slds-dropdown__item\" role=\"presentation\">\n        <a href=\"#\" role=\"menuitem\" tabindex=\"-1\"\
+    >\n          <span class=\"slds-truncate\" title=\"Menu Item 2\">Menu Item 2</span>\n        </a>\n      </li>\n     \
+    \ <li class=\"slds-dropdown__item\" role=\"presentation\">\n        <a href=\"#\" role=\"menuitem\" tabindex=\"-1\">\n\
+    \          <span class=\"slds-truncate\" title=\"Menu Item 3\">Menu Item 3</span>\n        </a>\n      </li>\n    </ul>\n\
+    \  </div>\n</section>\n"
+  description: Basic dynamic menu with header and menu items
+- title: Dynamic Menu with Footer
+  code: "<section class=\"slds-popover slds-dynamic-menu slds-nubbin_top\" role=\"dialog\" aria-labelledby=\"menu-header-2\"\
+    \ aria-describedby=\"menu-body-2\">\n  <div class=\"slds-popover__header\">\n    <h3 id=\"menu-header-2\" class=\"slds-dynamic-menu__header\"\
+    >Actions</h3>\n  </div>\n  <div id=\"menu-body-2\" class=\"slds-popover__body\">\n    <ul class=\"\" role=\"menu\">\n\
+    \      <li class=\"slds-dropdown__item\" role=\"presentation\">\n        <a href=\"#\" role=\"menuitem\" tabindex=\"0\"\
+    >\n          <span class=\"slds-truncate\" title=\"Action 1\">Action 1</span>\n        </a>\n      </li>\n      <li class=\"\
+    slds-dropdown__item\" role=\"presentation\">\n        <a href=\"#\" role=\"menuitem\" tabindex=\"-1\">\n          <span\
+    \ class=\"slds-truncate\" title=\"Action 2\">Action 2</span>\n        </a>\n      </li>\n    </ul>\n  </div>\n  <div class=\"\
+    slds-popover__footer\">\n    <a href=\"#\" class=\"slds-text-link\">View All</a>\n  </div>\n</section>\n"
+  description: Dynamic menu with header, items, and footer link
+- title: Dynamic Menu with Icons
+  code: "<section class=\"slds-popover slds-dynamic-menu slds-nubbin_top-right\" role=\"dialog\" aria-labelledby=\"menu-header-3\"\
+    >\n  <div class=\"slds-popover__header\">\n    <h3 id=\"menu-header-3\" class=\"slds-dynamic-menu__header\">Document Actions</h3>\n\
+    \  </div>\n  <div class=\"slds-popover__body\">\n    <ul class=\"\" role=\"menu\">\n      <li class=\"slds-dropdown__item\"\
+    \ role=\"presentation\">\n        <a href=\"#\" role=\"menuitem\" tabindex=\"0\">\n          <span class=\"slds-icon_container\
+    \ slds-icon-utility-download slds-m-right_x-small\">\n            <svg class=\"slds-icon slds-icon_x-small\" aria-hidden=\"\
+    true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#download\"></use>\n            </svg>\n\
+    \          </span>\n          <span class=\"slds-truncate\" title=\"Download\">Download</span>\n        </a>\n      </li>\n\
+    \      <li class=\"slds-dropdown__item\" role=\"presentation\">\n        <a href=\"#\" role=\"menuitem\" tabindex=\"-1\"\
+    >\n          <span class=\"slds-icon_container slds-icon-utility-share slds-m-right_x-small\">\n            <svg class=\"\
+    slds-icon slds-icon_x-small\" aria-hidden=\"true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#share\"\
+    ></use>\n            </svg>\n          </span>\n          <span class=\"slds-truncate\" title=\"Share\">Share</span>\n\
+    \        </a>\n      </li>\n      <li class=\"slds-dropdown__item\" role=\"presentation\">\n        <a href=\"#\" role=\"\
+    menuitem\" tabindex=\"-1\">\n          <span class=\"slds-icon_container slds-icon-utility-delete slds-m-right_x-small\"\
+    >\n            <svg class=\"slds-icon slds-icon_x-small\" aria-hidden=\"true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#delete\"\
+    ></use>\n            </svg>\n          </span>\n          <span class=\"slds-truncate\" title=\"Delete\">Delete</span>\n\
+    \        </a>\n      </li>\n    </ul>\n  </div>\n</section>\n"
+  description: Dynamic menu with icons next to menu items
+styling_hooks: []
+dependencies:
+  css_files:
+  - dynamic-menu.css
+  - popover.css
+  - dropdown.css
+  javascript:
+  - Menu open/close management
+  - Keyboard navigation
+  - Focus management
+  - Click outside to close
+  icons:
+  - Various utility icons for menu items
+  other_components:
+  - popover
+  - dropdown
+  - menu
+related_components:
+- name: Menu
+  relationship: parent
+  description: Base menu component
+- name: Dropdown
+  relationship: similar
+  description: Alternative menu pattern for simpler use cases
+- name: Popover
+  relationship: container
+  description: Popover container for the menu
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/dynamic-menu/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-11'
+  author: SLDS Documentation Team
+  slds_version: 2.27.2
+  review_status: complete
+  source: official-slds
+  notes: Created from official SLDS documentation and design-system-internal source code

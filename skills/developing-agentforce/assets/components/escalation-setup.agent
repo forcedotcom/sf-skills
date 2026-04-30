@@ -9,7 +9,7 @@
 # ★ Key Components:
 #   1. connection messaging: block - defines routing destination
 #   2. @utils.escalate action - triggers the transfer
-#   3. escalation topic - handles the handoff flow
+#   3. escalation subagent - handles the handoff flow
 #
 # ★ Prerequisites:
 #   - Omni-Channel configured in Salesforce
@@ -46,7 +46,7 @@ variables:
 	escalation_requested: mutable boolean = False
 		description: "Whether customer requested human agent"
 	escalation_reason: mutable string
-		description: "Reason for escalation"
+		description: "Reason for escalation subagent"
 	# ⚠️ Use 'number' not 'integer' - integer type is NOT supported in AiAuthoringBundle
 	attempts_before_escalation: mutable number = 0
 		description: "Number of attempts before escalating"
@@ -83,9 +83,9 @@ connection messaging:
 #       adaptive_response_allowed: False
 
 # Entry point
-start_agent topic_selector:
-	label: "Topic Selector"
-	description: "Routes users to appropriate topics based on intent"
+start_agent agent_router:
+	label: "Subagent Router"
+	description: "Routes users to appropriate subagents based on intent"
 
 	reasoning:
 		instructions: ->
@@ -93,11 +93,11 @@ start_agent topic_selector:
 			| If they ask for a human or live agent, route to escalation.
 			| Otherwise, try to help them directly.
 		actions:
-			go_help: @utils.transition to @topic.help
-			go_escalation: @utils.transition to @topic.escalation
+			go_help: @utils.transition to @subagent.help
+			go_escalation: @utils.transition to @subagent.escalation
 				available when @variables.escalation_requested == True
 
-topic help:
+subagent help:
 	label: "Help"
 	description: "Provides assistance to customers"
 
@@ -117,11 +117,11 @@ topic help:
 			| Track escalation reason if provided:
 			set @variables.escalation_reason = ...
 		actions:
-			offer_escalation: @utils.transition to @topic.escalation
+			offer_escalation: @utils.transition to @subagent.escalation
 
-			immediate_escalation: @utils.transition to @topic.escalation
+			immediate_escalation: @utils.transition to @subagent.escalation
 
-topic escalation:
+subagent escalation:
 	label: "Escalation"
 	description: "Transfers conversation to human agent"
 

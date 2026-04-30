@@ -1,0 +1,100 @@
+name: Global Navigation
+description: The primary navigation component that provides consistent access to main application areas, typically positioned
+  at the top of the interface.
+category: Navigation
+slds_classes:
+  root: ''
+  elements: []
+  modifiers: []
+  states:
+  - class: slds-is-active
+    description: Active navigation item state
+    trigger: Currently selected navigation section
+variants:
+- name: Base
+  description: Standard horizontal global navigation
+  classes: []
+  usage_context: Default global navigation for application header
+  differences: Horizontal navigation bar with logo, links, and actions
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component equivalent - typically implemented as custom component or app builder
+accessibility:
+  keyboard_support:
+  - Tab navigation through navigation items
+  - Enter/Space to activate navigation links
+  - Arrow keys for navigation between items
+  - Skip links for efficient navigation
+  screen_reader:
+  - Navigation structure and purpose announced
+  - Current location clearly identified
+  - Logo and branding appropriately labeled
+  - Action controls properly described
+  aria_attributes:
+  - role='navigation' for navigation container
+  - aria-label describing navigation purpose
+  - aria-current='page' for current section
+  - aria-expanded for dropdown navigation items
+  - landmark roles for major navigation areas
+usage_guidelines:
+  when_to_use:
+  - For primary application navigation
+  - To provide consistent access to main areas
+  - When navigation should be persistent across pages
+  - For branding and global actions placement
+  when_not_to_use:
+  - For secondary or contextual navigation
+  - When simpler navigation patterns suffice
+  - For single-page applications with minimal navigation
+  best_practices:
+  - Keep navigation items concise and clear
+  - Maintain consistent navigation structure
+  - Indicate current location clearly
+  - Provide logical grouping of navigation items
+  - Ensure responsive behavior across devices
+  common_mistakes:
+  - Overloading with too many navigation items
+  - Unclear or inconsistent labeling
+  - Poor mobile responsiveness
+  - Not indicating current location
+code_examples:
+- title: Global Navigation
+  code: "<nav class=\"\" role=\"navigation\" aria-label=\"Global\">\n      <div class=\"\">\n        <a href=\"#\" class=\"\
+    \">\n          <img src=\"/assets/images/logo.svg\" alt=\"Company Logo\" class=\"\" />\n        </a>\n      </div>\n \
+    \     <ul class=\"\">\n        <li class=\"slds-is-active\">\n          <a href=\"#\" class=\"\" aria-current=\"page\"\
+    >\n            Dashboard\n          </a>\n        </li>\n        <li class=\"\">\n          <a href=\"#\" class=\"\">\n\
+    \            Accounts\n          </a>\n        </li>\n        <li class=\"\">\n          <a href=\"#\" class=\"\">\n \
+    \           Opportunities\n          </a>\n        </li>\n        <li class=\"\">\n          <a href=\"#\" class=\"\"\
+    >\n            Reports\n          </a>\n        </li>\n      </ul>\n      <div class=\"\">\n        <button class=\"slds-button\
+    \ slds-button_icon slds-button_icon-container\" title=\"Notifications\">\n          <svg class=\"slds-button__icon\" aria-hidden=\"\
+    true\">\n            <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#notification\"></use>\n          </svg>\n\
+    \          <span class=\"slds-assistive-text\">Notifications</span>\n        </button>\n      </div>\n      </nav>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - global-navigation.css
+  - button.css
+  javascript: []
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - button-icon
+  - icons
+related_components:
+- name: Vertical Navigation
+  relationship: alternative
+  description: Alternative navigation layout for sidebar placement
+- name: Tabs
+  relationship: similar
+  description: Similar navigation concept for content areas
+- name: Breadcrumbs
+  relationship: similar
+  description: Provides hierarchical navigation context
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/global-navigation/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

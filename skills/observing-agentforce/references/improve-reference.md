@@ -68,17 +68,17 @@ variables:
 
 start_agent: entry_topic
 
-topic entry_topic:
-    label: "Entry Topic"
-    description: "Routes users to specialized topics"
+subagent entry_topic:
+    label: "Entry Subagent"
+    description: "Routes users to specialized subagents"
 
     reasoning:
         instructions: ->
             | Welcome the user warmly.
             | Ask how you can help today.
         actions:
-            go_to_orders: @utils.transition to @topic.orders
-                description: "Route to orders topic"
+            go_to_orders: @utils.transition to @subagent.orders
+                description: "Route to orders subagent"
             check_order: @actions.get_order_status
                 description: "Look up order details"
                 with order_id = @variables.order_id
@@ -86,10 +86,10 @@ topic entry_topic:
 ```
 
 **Critical mapping to Salesforce metadata:**
-- `topic.description` -> `GenAiPluginDefinition.Description` (topic routing signal)
-- `topic.reasoning.instructions` -> `GenAiPluginInstructionDef.Instruction` (verbatim LLM prompt text)
+- `subagent.description` -> `GenAiPluginDefinition.Description` (subagent routing signal)
+- `subagent.reasoning.instructions` -> `GenAiPluginInstructionDef.Instruction` (verbatim LLM prompt text)
 - `system.instructions` -> `GenAiPlannerDefinition.Description` (agent-level system prompt)
-- `reasoning.actions` with `@utils.transition` -> topic transitions
+- `reasoning.actions` with `@utils.transition` -> subagent transitions
 - `reasoning.actions` with `@actions.*` -> action invocations with `with` (input) and `set` (output) bindings
 
 ---
@@ -98,17 +98,17 @@ topic entry_topic:
 
 | Root cause category | STDM signal | Fix target in .agent file | What to change |
 |---|---|---|---|
-| `Agent Configuration Gap` | Topic misroute | `topic <name>: description:` | Tighten description to exclude overlapping intents |
-| `Agent Configuration Gap` | Action not called | `topic <name>: reasoning: actions:` and `reasoning: instructions:` | Add action definition under `actions:` and mention it in `instructions:` |
+| `Agent Configuration Gap` | Subagent misroute | `subagent <name>: description:` | Tighten description to exclude overlapping intents |
+| `Agent Configuration Gap` | Action not called | `subagent <name>: reasoning: actions:` and `reasoning: instructions:` | Add action definition under `actions:` and mention it in `instructions:` |
 | `Agent Configuration Gap` | Wrong action input / error | `reasoning: actions: <action>: with` | Correct `with` bindings or action `target:` URI |
 | `Agent Configuration Gap` | Variable not captured | `reasoning: actions: <action>: set` | Add `set @variables.myVar = @outputs.field` binding |
-| `Agent Configuration Gap` | No post-action transition | `reasoning: actions:` | Add `@utils.transition to @topic.<next_topic>` action |
-| `Agent Configuration Gap` | LOW adherence / vague instructions | `topic <name>: reasoning: instructions:` | Rewrite using instruction principles below |
-| `Agent Configuration Gap` | Identical instructions across topics | All `topic: reasoning: instructions:` blocks | Give each topic distinct, actionable instructions |
-| `Knowledge Gap -- Infrastructure` | Knowledge question answered generically | Add knowledge action definition to the relevant topic | Define action with `retriever://` target |
+| `Agent Configuration Gap` | No post-action transition | `reasoning: actions:` | Add `@utils.transition to @subagent.<next_subagent>` action |
+| `Agent Configuration Gap` | LOW adherence / vague instructions | `subagent <name>: reasoning: instructions:` | Rewrite using instruction principles below |
+| `Agent Configuration Gap` | Identical instructions across subagents | All `subagent: reasoning: instructions:` blocks | Give each subagent distinct, actionable instructions |
+| `Knowledge Gap -- Infrastructure` | Knowledge question answered generically | Add knowledge action definition to the relevant subagent | Define action with `retriever://` target |
 | `Knowledge Gap -- Content` | Knowledge question -- wrong/missing answer | N/A (org data issue) | Add missing articles to knowledge space |
 | `Platform / Runtime Issue` | Action timeout / latency > 10s | Flow or Apex class (not .agent) | Optimize query/processing logic |
-| `Agent Configuration Gap` | Dead hub anti-pattern | Entire intermediate topic block | Move transitions to `start_agent > reasoning > actions:`, delete dead hub topic |
+| `Agent Configuration Gap` | Dead hub anti-pattern | Entire intermediate subagent block | Move transitions to `start_agent > reasoning > actions:`, delete dead hub subagent |
 
 **Target resolution checklist:**
 
@@ -121,20 +121,20 @@ topic entry_topic:
 
 ---
 
-## Principles for Effective Topic Instructions
+## Principles for Effective Subagent Instructions
 
-Good instructions are specific, imperative, and action-named. Poor instructions are persona descriptions or generic guidance reused across topics.
+Good instructions are specific, imperative, and action-named. Poor instructions are persona descriptions or generic guidance reused across subagents.
 
 1. **Name the action explicitly** -- "Use `@actions.schedule_test_drive` to book the appointment" not "help the user book"
 2. **State the pre-condition** -- "Only handle scheduling after the customer's name and email have been collected"
 3. **State what to do after** -- "After scheduling completes, confirm the date/time and transition to follow_up"
-4. **Scope tightly** -- "This topic handles test drive scheduling only. For vehicle specs or pricing, do not answer -- the user should be routed to general_support"
-5. **Keep persona out of instructions** -- persona belongs in `system: instructions:` (agent-level), not per-topic reasoning instructions
-6. **One responsibility per topic** -- if the instruction covers 3 distinct tasks, split into 3 topics
+4. **Scope tightly** -- "This subagent handles test drive scheduling only. For vehicle specs or pricing, do not answer -- the user should be routed to general_support"
+5. **Keep persona out of instructions** -- persona belongs in `system: instructions:` (agent-level), not per-subagent reasoning instructions
+6. **One responsibility per subagent** -- if the instruction covers 3 distinct tasks, split into 3 subagents
 
 **Before / after example** (identical instructions -> distinct instructions):
 
-*Before (generic persona text, same across all topics):*
+*Before (generic persona text, same across all subagents):*
 ```
 reasoning:
     instructions: |
@@ -142,7 +142,7 @@ reasoning:
         help them with their needs, and guide them toward scheduling a test drive.
 ```
 
-*After (for `identity_collection` topic specifically):*
+*After (for `identity_collection` subagent specifically):*
 ```
 reasoning:
     instructions: ->
@@ -154,7 +154,7 @@ reasoning:
             description: "Capture customer contact details"
             set @variables.customer_name = @outputs.name
             set @variables.customer_email = @outputs.email
-        proceed: @utils.transition to @topic.schedule_test_drive
+        proceed: @utils.transition to @subagent.schedule_test_drive
             description: "Move to test drive scheduling after info collected"
             available when @variables.customer_name != ""
 ```
@@ -163,7 +163,7 @@ reasoning:
 
 ## Regression Prevention
 
-When editing topic instructions, follow these principles:
+When editing subagent instructions, follow these principles:
 
 1. **Establish a baseline BEFORE editing** -- Run the test utterance 3 times before making changes. Record the pass rate.
 
@@ -172,35 +172,35 @@ When editing topic instructions, follow these principles:
 3. **Avoid instruction expansion** -- Adding more text to instructions does NOT always help. Prefer:
    - Adding a single action reference: "Use `@actions.X` to look up..."
    - Adding a single constraint: "Do not proceed until the customer provides..."
-   - Adding a single routing directive: "After completing, transition to @topic.Y"
+   - Adding a single routing directive: "After completing, transition to @subagent.Y"
 
 4. **Test immediately after each edit** -- Run the same test utterances. If pass rate drops, revert the change immediately.
 
 5. **One fix per publish cycle** -- Do not batch multiple instruction changes into a single publish.
 
-6. **Check cross-topic dependencies before editing** -- Before changing Topic A, identify variable dependencies, transition chains, and shared variable mutations:
+6. **Check cross-subagent dependencies before editing** -- Before changing Subagent A, identify variable dependencies, transition chains, and shared variable mutations:
    ```bash
    grep -n 'set @variables\.' "$AGENT_FILE"
    grep -n 'with .* = @variables\.' "$AGENT_FILE"
-   grep -n '@utils.transition to @topic\.' "$AGENT_FILE"
+   grep -n '@utils.transition to @subagent\.' "$AGENT_FILE"
    ```
 
-7. **Test adjacent topics after each fix** -- Include at least one cross-topic test to confirm the fix didn't cause spillover routing.
+7. **Test adjacent subagents after each fix** -- Include at least one cross-subagent test to confirm the fix didn't cause spillover routing.
 
-8. **Verify start_agent routing after topic removal** -- If removing a dead hub or merging topics, verify `start_agent > reasoning > actions:` still has transition actions to all remaining topics.
+8. **Verify start_agent routing after subagent removal** -- If removing a dead hub or merging subagents, verify `start_agent > reasoning > actions:` still has transition actions to all remaining subagents.
 
 ---
 
 ## Apply Fixes
 
-**Step 1 -- Read the current .agent file** using the Read tool. Locate the specific `topic` block that needs changes.
+**Step 1 -- Read the current .agent file** using the Read tool. Locate the specific `subagent` block that needs changes.
 
 **Step 2 -- Edit the .agent file directly** using the Edit tool. Edit only the specific lines that need to change. Common edit patterns:
 
-- **Topic description** (for misroute fixes): Change `description:` text
-- **Topic instructions** (for LOW adherence): Replace `reasoning: instructions:` block
+- **Subagent description** (for misroute fixes): Change `description:` text
+- **Subagent instructions** (for LOW adherence): Replace `reasoning: instructions:` block
 - **Adding an action**: Add definition under `reasoning: actions:`
-- **Adding a transition**: Add `@utils.transition to @topic.<name>` action
+- **Adding a transition**: Add `@utils.transition to @subagent.<name>` action
 - **Adding an `available when` guard**: Add guard condition to action definition
 
 IMPORTANT: Agent Script uses **tabs** for indentation, not spaces.
@@ -238,7 +238,7 @@ sf project deploy start --json --metadata "AiAuthoringBundle:<AGENT_API_NAME>" -
 sf agent activate --json --api-name <AGENT_API_NAME> -o <org>
 ```
 
-> **Warning: deploy + activate is an incomplete fallback.** `sf project deploy start` stores the bundle metadata but does **NOT** propagate topic-level `reasoning: actions:` blocks to live `GenAiPluginDefinition` records. Always verify with `--authoring-bundle` preview.
+> **Warning: deploy + activate is an incomplete fallback.** `sf project deploy start` stores the bundle metadata but does **NOT** propagate subagent-level `reasoning: actions:` blocks to live `GenAiPluginDefinition` records. Always verify with `--authoring-bundle` preview.
 
 **Never use the Tooling API to patch `GenAiPluginInstructionDef` or other BPO objects directly.**
 
@@ -266,7 +266,7 @@ sf agent preview end --json --session-id "$SESSION_ID" --authoring-bundle <Bundl
 
 **Trace-based verification checklist:**
 ```bash
-# 1. Correct topic routing
+# 1. Correct subagent routing
 jq -r '.topic' "$TRACE"
 # 2. Grounding passed (no UNGROUNDED)
 jq -r '.plan[] | select(.type == "ReasoningStep") | .category' "$TRACE"
@@ -282,7 +282,7 @@ jq -r '.plan[] | select(.type == "VariableUpdateStep") | .data.variable_updates[
 
 | Metric | What to look for after fix |
 |---|---|
-| Topics seen in STDM | Dead topics should now appear in session data |
+| Subagents seen in STDM | Dead subagents should now appear in session data |
 | `TRUST_GUARDRAILS_STEP` value | `LOW` occurrences should drop or disappear |
 | Action invocation per turn | Actions should now fire for the intents they cover |
 | `action_error_count` | Should not increase (regression check) |
@@ -295,7 +295,7 @@ jq -r '.plan[] | select(.type == "VariableUpdateStep") | .data.variable_updates[
 After applying fixes, re-run safety review on the modified `.agent` file. Optimization fixes can inadvertently introduce safety regressions:
 
 - Relaxing `available when` guards may expose actions that should be gated
-- Expanding topic descriptions may cause the agent to handle out-of-scope requests
+- Expanding subagent descriptions may cause the agent to handle out-of-scope requests
 - Changing instructions to be more permissive may weaken guardrails
 - Adding literal instructions with tool names may bypass safety boundaries
 
@@ -304,7 +304,7 @@ After applying fixes, re-run safety review on the modified `.agent` file. Optimi
 1. **Scope boundaries** -- Did the fix widen the agent's scope beyond what's appropriate?
 2. **Guard conditions** -- Did relaxing `available when` expose sensitive actions?
 3. **Instruction safety** -- Do new/modified instructions maintain appropriate guardrails?
-4. **Escalation paths** -- Are escalation paths still intact after topic restructuring?
+4. **Escalation paths** -- Are escalation paths still intact after subagent restructuring?
 
 **If any new BLOCK finding is introduced by the fix:** revert and find an alternative fix. Do NOT deploy an agent with new safety violations.
 
@@ -322,12 +322,12 @@ subjectName: <AgentApiName>
 
 testCases:
   - utterance: "<exact utterance from Phase 2 scenario>"
-    expectedTopic: <topic_that_should_handle_this>
+    expectedTopic: <subagent_that_should_handle_this>
     expectedActions:
       - <action_that_should_fire>
 
   - utterance: "<another failing utterance>"
-    expectedTopic: <expected_topic>
+    expectedTopic: <expected_subagent>
     expectedOutcome: "Agent should <expected behavior description>"
 ```
 

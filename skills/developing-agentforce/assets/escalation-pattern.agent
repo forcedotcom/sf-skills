@@ -72,20 +72,20 @@ start_agent entry:
          Greet the customer and understand their needs.
          Try to help directly, escalate if needed.
       actions:
-         go_support: @utils.transition to @topic.support
+         go_support: @utils.transition to @subagent.support
             description: "Help with support issue"
 
 # ============================================================
-# SUPPORT TOPIC (With Escalation Triggers)
+# SUPPORT SUBAGENT (With Escalation Triggers)
 # ============================================================
 
-topic support:
+subagent support:
    description: "Attempt to resolve issue, escalate if unable"
    reasoning:
       instructions: ->
          # POST-ACTION: Check if escalation was triggered
          if @variables.ready_to_escalate == True:
-            transition to @topic.pre_escalation
+            transition to @subagent.pre_escalation
 
          # Track attempts
          | I'm here to help you with your issue.
@@ -117,10 +117,10 @@ topic support:
             with ready_to_escalate = True
 
 # ============================================================
-# PRE-ESCALATION TOPIC (Gather Context)
+# PRE-ESCALATION SUBAGENT (Gather Context)
 # ============================================================
 
-topic pre_escalation:
+subagent pre_escalation:
    description: "Gather information before escalating"
    reasoning:
       instructions: ->
@@ -138,7 +138,7 @@ topic pre_escalation:
             | - Reason for transfer: {!@variables.escalation_reason}
             |
             | Ready to connect you now.
-            transition to @topic.escalation
+            transition to @subagent.escalation
 
       actions:
          # Capture customer name
@@ -148,7 +148,7 @@ topic pre_escalation:
             with customer_name = ...  # LLM extracts name from response
 
          # Proceed to escalation
-         proceed: @utils.transition to @topic.escalation
+         proceed: @utils.transition to @subagent.escalation
             description: "Proceed with transfer"
             available when @variables.customer_name != ""
 
@@ -157,13 +157,13 @@ topic pre_escalation:
             description: "Actually, let me try again with the bot"
             with ready_to_escalate = False
             with escalation_reason = ""
-            run @utils.transition to @topic.support
+            run @utils.transition to @subagent.support
 
 # ============================================================
-# ESCALATION TOPIC (Handoff)
+# ESCALATION SUBAGENT (Handoff)
 # ============================================================
 
-topic escalation:
+subagent escalation:
    description: "Execute escalation to human agent"
    reasoning:
       instructions: ->
@@ -186,7 +186,7 @@ topic escalation:
 # OPTIONAL: SPECIALIZED ESCALATION QUEUES
 # ============================================================
 
-topic escalate_billing:
+subagent escalate_billing:
    description: "Escalate specifically to billing team"
    reasoning:
       instructions: |
@@ -198,7 +198,7 @@ topic escalate_billing:
          billing_handoff: @utils.escalate
             description: "Transfer to billing team"
 
-topic escalate_technical:
+subagent escalate_technical:
    description: "Escalate specifically to technical support"
    reasoning:
       instructions: |

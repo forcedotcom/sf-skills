@@ -20,6 +20,7 @@ Use this skill when you need to:
 Custom Lightning Types (CLTs) are JSON Schema-based type definitions used by the Lightning Platform (including Einstein Agent actions) to describe structured inputs/outputs and drive editor/renderer experiences.
 
 ## Configuration
+- **Choose referenced CLT pattern for nested objects** - When you need a **reusable** or **separately deployed** nested type, create a CLT for that shape and reference it with `"lightning:type": "c__<CLTName>"`. That string is the referenced type’s **`lightning:type` value / FQN / registered identifier** — not the JSON Schema `title`.
 - **Choose standard Lightning types** when the structure is simple and can be expressed with properties and supported primitive `lightning:type` identifiers.
 - **Choose Apex class types** (`@apexClassType/...`) when the structure already exists server-side and you want the Apex class to define the shape.
 - **Include editor/renderer config** only when you need custom UI behavior (custom LWC input/output components). Otherwise, omit.
@@ -33,7 +34,7 @@ Custom Lightning Types (CLTs) are JSON Schema-based type definitions used by the
 - `"unevaluatedProperties"` is enforced as `false` by the CLT metaschema. Do not set it to `true`.
 - **Root object schemas MUST NOT include** `"examples"` when `"unevaluatedProperties": false` is set.
 - **Nested objects (inside `properties`) MUST NOT set** `"lightning:type": "lightning__objectType"`.
-  - Nested objects should be plain JSON Schema objects (`type`, `properties`, optional `required`, optional `unevaluatedProperties`).
+    - Nested objects can be: references to other CLTs using `c__<CLTName>` syntax.
 - **List/array properties are highly restricted by the CLT metaschema**:
   - **CRITICAL LIMITATION**: the CLT metaschema may reject the `items` keyword entirely. Treat `items` as **disallowed by default**.
   - **Root-level arrays** (direct children of the root `properties`):
@@ -96,8 +97,13 @@ When strict validation is enabled (`unevaluatedProperties: false`), keep each pr
 2. **Draft `schema.json`**
    - Start with the root object structure (required root fields).
    - Add `properties` using valid primitive `lightning:type` identifiers.
-   - For nested objects: omit `lightning:type` and keep keywords minimal.
+   - For nested-object properties, use **CLT Reference pattern**:
+     - `"lightning:type": "c__<CLTName>"` to reference another CLT
+     - The referenced CLT must be deployed to the org before the parent CLT.
+   - For Apex-based nested objects: Use `@apexClassType/...` when structure exists server-side.
+   - If the prompt explicitly requires true nested object output, prefer an **Apex-based CLT** (`@apexClassType/...`) for deploy-safe nested structures.
    - For arrays: follow the strict list rules (avoid `items`; avoid `lightning:type` on nested arrays).
+   - Before deployment, verify exact `lightning:type` spellings (for example, use `lightning__richTextType`, not misspelled variants).
 3. **(Optional) Draft `editor.json`** (only if custom UI is required)
    - **Supported shape:** Top-level `editor` object with `editor.componentOverrides` and `editor.layout`.
      - Top-level `editor` object.
@@ -159,6 +165,7 @@ When strict validation is enabled (`unevaluatedProperties: false`), keep each pr
      </LightningComponentBundle>
      ```
 7. **Deploy and validate**
+   - Run a final schema sanity check before deploy: valid `lightning:type` names, required fields present, and no disallowed keywords.
    - Deploy the bundle using your org's standard metadata deployment flow (e.g. Salesforce CLI or IDE). The MCP client or tooling in use should provide or integrate with the appropriate deploy/retrieve commands for Lightning Type bundles.
    - Validate incrementally: if deployment fails, remove disallowed keywords first (especially `examples`, `items`, nested `lightning:type`).
 
@@ -166,7 +173,9 @@ When strict validation is enabled (`unevaluatedProperties: false`), keep each pr
 | Error / Symptom | Likely Cause | Fix |
 |---|---|---|
 | Schema validation fails due to unknown keyword | `unevaluatedProperties: false` + disallowed keyword (commonly `examples`, `items`) | Remove the offending keyword; keep schema minimal |
-| Nested object validation failure | Nested object includes `lightning:type: lightning__objectType` | Remove `lightning:type` from nested objects |
+| Nested object validation failure | Org/channel validation rejects nested object typing in `LightningTypeBundle` | Use CLT reference (`c__<CLTName>`) or Apex class types |
+| Invalid CLT reference | Referenced CLT doesn't exist in org or incorrect syntax | Deploy the referenced CLT first; `c__<CLTName>` must match the referenced type’s **`lightning:type` value / FQN / registered identifier**, not `title` |
+| Invalid or misspelled `lightning:type` (for example, `lightning__richtextType` instead of `lightning__richTextType`) | Incorrect generated type name | Cross-check all `lightning:type` values against supported type names and correct them before deployment |
 | Array property rejected | Use of `items` (or `lightning:type` in nested arrays) rejected by validator | For nested arrays: keep only `type: "array"`. For root arrays: use minimal structure; remove `items` if rejected |
 | Apex-based CLT rejected | Extra fields added (e.g., `type`, `properties`) | Use only `title`, optional `description`, and `lightning:type` |
 | Editor config rejected | Use of invalid patterns (`es_property_editors/inputList`, `itemSchema`) or unrecognized top-level keys | Use `editor.componentOverrides` and `editor.layout`; keep config minimal |

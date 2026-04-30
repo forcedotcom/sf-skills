@@ -1,0 +1,127 @@
+name: List Builder
+description: A component that allows users to build and manage lists by selecting items from one list and adding them to another.
+  Provides drag-and-drop or click-to-move functionality for managing selections.
+category: Complex Components
+slds_classes:
+  root: ''
+  elements: []
+  modifiers: []
+  states: []
+variants:
+- name: Base
+  description: Standard list builder interface
+  classes: []
+  usage_context: Default list builder for managing selections
+  differences: Two-panel interface for moving items between lists
+lightning_component:
+  name: lightning-dual-listbox
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-dual-listbox
+  mapping_notes: lightning-dual-listbox provides similar two-list selection functionality
+accessibility:
+  keyboard_support:
+  - Tab to navigate between lists and controls
+  - Arrow keys to move through list items
+  - Space to select items
+  - Enter to move selected items
+  - Shift+Arrow for multi-select
+  screen_reader:
+  - List roles announced
+  - Selected item count announced
+  - Move operations confirmed
+  - List labels clearly announced
+  aria_attributes:
+  - role='listbox' on list containers
+  - role='option' on list items
+  - aria-label on lists and buttons
+  - aria-selected on selected items
+  - aria-multiselectable on lists allowing multi-select
+usage_guidelines:
+  when_to_use:
+  - For managing permissions or access lists
+  - When users need to build custom collections
+  - For configuring visible fields or columns
+  - When ordering and selection are both needed
+  when_not_to_use:
+  - For simple multi-select (use checkbox list)
+  - When items don't need reordering
+  - For very long lists (consider search/filter)
+  - When drag-and-drop isn't appropriate
+  best_practices:
+  - Provide clear labels for both lists
+  - Show count of items in each list
+  - Support both drag-and-drop and button moves
+  - Allow reordering within destination list
+  - Provide search/filter for long lists
+  - Show visual feedback during operations
+  common_mistakes:
+  - Missing keyboard support
+  - Unclear which list is source vs destination
+  - No way to move multiple items at once
+  - Poor performance with many items
+  - Missing reordering capability
+code_examples:
+- title: Basic List Builder
+  code: "<div class=\"\">\n  <div class=\"slds-grid slds-grid_vertical-align-center\">\n    <div class=\"slds-col slds-size_5-of-12\"\
+    >\n      <div class=\"slds-form-element\">\n        <label class=\"slds-form-element__label\" for=\"available-list\">Available\
+    \ Items</label>\n        <div class=\"slds-form-element__control\">\n          <div class=\"\" role=\"listbox\" aria-label=\"\
+    Available items\" aria-multiselectable=\"true\" id=\"available-list\">\n            <ul class=\"slds-listbox slds-listbox_vertical\"\
+    >\n              <li role=\"presentation\" class=\"\">\n                <div class=\"slds-listbox__option slds-listbox__option_plain\"\
+    \ role=\"option\" aria-selected=\"false\">\n                  <span class=\"slds-truncate\">Item 1</span>\n          \
+    \      </div>\n              </li>\n              <li role=\"presentation\" class=\"\">\n                <div class=\"\
+    slds-listbox__option slds-listbox__option_plain\" role=\"option\" aria-selected=\"false\">\n                  <span class=\"\
+    slds-truncate\">Item 2</span>\n                </div>\n              </li>\n            </ul>\n          </div>\n    \
+    \    </div>\n      </div>\n    </div>\n    <div class=\"slds-col slds-size_2-of-12\">\n      <div class=\"slds-grid slds-grid_vertical\
+    \ slds-grid_align-center\">\n        <button class=\"slds-button slds-button_icon slds-button_icon-border\" title=\"Move\
+    \ to Selected\">\n          <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n            <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#right\"\
+    ></use>\n          </svg>\n          <span class=\"slds-assistive-text\">Move to Selected</span>\n        </button>\n\
+    \        <button class=\"slds-button slds-button_icon slds-button_icon-border\" title=\"Move to Available\">\n       \
+    \   <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n            <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#left\"\
+    ></use>\n          </svg>\n          <span class=\"slds-assistive-text\">Move to Available</span>\n        </button>\n\
+    \      </div>\n    </div>\n    <div class=\"slds-col slds-size_5-of-12\">\n      <div class=\"slds-form-element\">\n \
+    \       <label class=\"slds-form-element__label\" for=\"selected-list\">Selected Items</label>\n        <div class=\"\
+    slds-form-element__control\">\n          <div class=\"\" role=\"listbox\" aria-label=\"Selected items\" aria-multiselectable=\"\
+    true\" id=\"selected-list\">\n            <ul class=\"slds-listbox slds-listbox_vertical\">\n              <li role=\"\
+    presentation\" class=\"\">\n                <div class=\"slds-listbox__option slds-listbox__option_plain\" role=\"option\"\
+    \ aria-selected=\"false\">\n                  <span class=\"slds-truncate\">Item 3</span>\n                </div>\n  \
+    \            </li>\n            </ul>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+  description: Two-panel list builder with move buttons
+styling_hooks: []
+dependencies:
+  css_files:
+  - list-builder.css
+  - listbox.css
+  - button.css
+  javascript:
+  - Item selection management
+  - Move operations
+  - Drag-and-drop handling
+  - Reordering logic
+  icons:
+  - utility:right
+  - utility:left
+  - utility:up
+  - utility:down
+  other_components:
+  - listbox
+  - button
+  - form-element
+related_components:
+- name: Dual Listbox
+  relationship: alternative
+  description: Lightning component alternative
+- name: Picklist
+  relationship: similar
+  description: Simpler selection pattern
+- name: Dueling Picklist
+  relationship: similar
+  description: SLDS version of dual-listbox pattern
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/list-builder/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-11'
+  author: SLDS Documentation Team
+  slds_version: 2.27.2
+  review_status: complete
+  source: official-slds
+  notes: Created from official SLDS documentation and design-system-internal source code

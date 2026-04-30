@@ -58,7 +58,7 @@ When a target is missing:
 Agentforce ADLC Discovery Report
 
 Agent: OrderManagement
-  Topic: order_inquiry
+  Subagent: order_inquiry
     Action: get_order_status
       Target: flow://Get_Order_Status         Found
     Action: track_shipment

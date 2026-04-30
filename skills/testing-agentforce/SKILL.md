@@ -16,7 +16,7 @@ Automated testing for Agentforce agents with smoke tests, batch execution, and i
 
 ## Overview
 
-This skill provides comprehensive testing capabilities for Agentforce agents, including automated utterance derivation from agent topics, preview-based smoke testing, trace analysis, and an iterative fix loop for identified issues. It bridges the gap between initial development and production deployment.
+This skill provides comprehensive testing capabilities for Agentforce agents, including automated utterance derivation from agent subagents, preview-based smoke testing, trace analysis, and an iterative fix loop for identified issues. It bridges the gap between initial development and production deployment.
 
 ## Platform Notes
 
@@ -83,10 +83,10 @@ This skill supports two testing modes plus direct action execution:
 ### Test Case Planning
 
 If no utterances file is provided, auto-derive test cases from the `.agent` file:
-1. **Topic-based utterances** -- one per non-start topic from description keywords
+1. **Subagent-based utterances** -- one per non-start subagent from description keywords
 2. **Action-based utterances** -- target each key action
 3. **Guardrail test** -- off-topic utterance
-4. **Multi-turn scenarios** -- topic transitions
+4. **Multi-turn scenarios** -- subagent transitions
 5. **Safety probes** -- adversarial utterances (always included)
 
 **Always present the plan first** -- never silently auto-run tests without showing what will be tested. Ask the user to review/modify before executing.
@@ -171,13 +171,13 @@ Max 3 iterations. For each failure, diagnose from trace and apply targeted fix:
 
 | Failure Type | Fix Location | Fix Strategy |
 |--------------|--------------|--------------|
-| TOPIC_NOT_MATCHED | `topic: description:` | Add keywords from utterance |
+| TOPIC_NOT_MATCHED | `subagent: description:` | Add keywords from utterance |
 | ACTION_NOT_INVOKED | `available when:` | Relax guard conditions |
 | WRONG_ACTION | Action descriptions | Add exclusion language |
 | UNGROUNDED | `instructions: ->` | Add `{!@variables.x}` references |
 | LOW_SAFETY | `system: instructions:` | Add safety guidelines |
-| DEFAULT_TOPIC | `topic: description:` or `start_agent: actions:` | Add keywords or transition actions |
-| NO_ACTIONS_IN_TOPIC | `topic: reasoning: actions:` | Add `reasoning: actions:` block |
+| DEFAULT_TOPIC | `subagent: description:` or `start_agent: actions:` | Add keywords or transition actions |
+| NO_ACTIONS_IN_TOPIC | `subagent: reasoning: actions:` | Add `reasoning: actions:` block |
 
 See `references/preview-testing.md` for full diagnosis table mapping trace steps to failures.
 
@@ -209,7 +209,7 @@ testCases:
 ```
 
 **Key rules:**
-- `expectedActions` is a **flat string array** with **Level 2 invocation names** (from `reasoning: actions:`), NOT Level 1 definition names (from `topic: actions:`)
+- `expectedActions` is a **flat string array** with **Level 2 invocation names** (from `reasoning: actions:`), NOT Level 1 definition names (from `subagent: actions:`)
 - Action assertion uses **superset matching** -- test PASSES if actual actions include all expected
 - **Always add `expectedOutcome`** -- most reliable assertion type (LLM-as-judge)
 - For guardrail tests, omit `expectedTopic` and use `expectedOutcome` only. Filter out `topic_assertion` FAILURE for these (false negatives from empty assertion XML).
@@ -246,7 +246,7 @@ for tc in data['result']['testCases']:
 
 ### Topic Name Resolution
 
-Topic names in Testing Center may differ from `.agent` file names. If assertions fail on topic:
+Topic names in Testing Center may differ from `.agent` file names. If assertions fail on subagent routing:
 1. Run test with best-guess names
 2. Check actual: `jq '.result.testCases[].generatedData.topic' /tmp/results.json`
 3. Update YAML with actual runtime names and redeploy with `--force-overwrite`
@@ -295,7 +295,7 @@ See `references/action-execution.md` for integration testing patterns, debugging
 
 > Full reference: `references/test-report-format.md`
 
-Reports include: topic routing %, action invocation %, grounding %, safety %, response quality %, overall score, and status (PASSED / PASSED WITH WARNINGS / FAILED). Safety verdict (SAFE/UNSAFE/NEEDS_REVIEW) is always included.
+Reports include: subagent routing %, action invocation %, grounding %, safety %, response quality %, overall score, and status (PASSED / PASSED WITH WARNINGS / FAILED). Safety verdict (SAFE/UNSAFE/NEEDS_REVIEW) is always included.
 
 ### Test File Location Convention
 

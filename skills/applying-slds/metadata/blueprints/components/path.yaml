@@ -1,0 +1,154 @@
+name: "Path"
+description: "A visual component that guides users through a linear process, showing progress through connected steps with clear visual indicators for completion status."
+category: "Navigation"
+slds_classes:
+  root: "slds-path"
+  elements:
+    - class: "slds-path__nav"
+      description: "Navigation container for path steps"
+      purpose: "Contains the list of process steps"
+    - class: "slds-path__item"
+      description: "Individual path step wrapper"
+      purpose: "Contains a single step in the process"
+    - class: "slds-path__link"
+      description: "Clickable step element"
+      purpose: "Interactive element for step navigation"
+    - class: "slds-path__stage"
+      description: "Step stage indicator"
+      purpose: "Visual indicator of step status"
+    - class: "slds-path__title"
+      description: "Step title text"
+      purpose: "Label describing the step"
+  modifiers:
+    - class: "slds-path_has-coaching"
+      description: "Path with coaching content"
+      usage: "When path includes guidance or coaching information"
+  states:
+    - class: "slds-is-complete"
+      description: "Completed step state"
+      trigger: "Steps that have been finished"
+    - class: "slds-is-current"
+      description: "Current step state"
+      trigger: "The active step being worked on"
+    - class: "slds-is-incomplete"
+      description: "Incomplete step state"
+      trigger: "Steps not yet started"
+    - class: "slds-is-active"
+      description: "Active step state"
+      trigger: "Currently selected or focused step"
+variants:
+  - name: "Base"
+    description: "Standard linear path with connected steps"
+    classes:
+      - "slds-path"
+    usage_context: "Default path implementation for process guidance"
+    differences: "Horizontal connected steps showing process progression"
+lightning_component:
+  name: "No direct component"
+  url: "https://developer.salesforce.com/docs/component-library/overview/components"
+  mapping_notes: "No direct Lightning Base Component equivalent - typically implemented as custom component"
+accessibility:
+  keyboard_support:
+    - "Tab navigation through interactive steps"
+    - "Enter/Space to activate clickable steps"
+    - "Arrow keys for step navigation when appropriate"
+  screen_reader:
+    - "Process structure and current position announced"
+    - "Step completion status communicated"
+    - "Navigation between steps clearly described"
+  aria_attributes:
+    - "role='application' or 'tablist' for path container"
+    - "aria-label describing the process"
+    - "aria-current for the current step"
+    - "aria-describedby for step details"
+usage_guidelines:
+  when_to_use:
+    - "For linear processes with defined steps"
+    - "To show progress through a workflow"
+    - "When users need guidance through a process"
+    - "For sales or approval processes"
+  when_not_to_use:
+    - "For non-linear or flexible processes"
+    - "When steps can be completed in any order"
+    - "For simple binary choices"
+  best_practices:
+    - "Use clear, descriptive step labels"
+    - "Show progress and completion status clearly"
+    - "Allow navigation to previous steps when appropriate"
+    - "Provide guidance or coaching content when helpful"
+    - "Maintain visual connection between steps"
+  common_mistakes:
+    - "Making step labels unclear or too technical"
+    - "Not indicating current position clearly"
+    - "Poor visual connection between steps"
+    - "Allowing navigation to inappropriate steps"
+code_examples:
+  - title: "Basic Path"
+    description: "Sales path showing contacted, open, and unqualified stages"
+    code: |
+      <div class="slds-path">
+            <div class="slds-path__track">
+              <div class="slds-grid slds-path__scroller-container">
+                <div class="slds-path__scroller" role="application">
+                  <div class="slds-path__scroller_inner">
+                    <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+                      <li class="slds-path__item slds-is-complete" role="presentation">
+                        <a aria-selected="false" class="slds-path__link" href="#" role="option" tabindex="-1">
+                          <span class="slds-path__stage">
+                            <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                              <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                            </svg>
+                          </span>
+                          <span class="slds-path__title">Contacted</span>
+                        </a>
+                      </li>
+                      <li class="slds-path__item slds-is-current" role="presentation">
+                        <a aria-selected="true" class="slds-path__link" href="#" role="option" tabindex="0">
+                          <span class="slds-path__stage">
+                            <span class="slds-assistive-text">Current Stage:</span>
+                          </span>
+                          <span class="slds-path__title">Open</span>
+                        </a>
+                      </li>
+                      <li class="slds-path__item slds-is-incomplete" role="presentation">
+                        <a aria-selected="false" class="slds-path__link" href="#" role="option" tabindex="-1">
+                          <span class="slds-path__stage">
+                            <span class="slds-assistive-text">Stage Complete</span>
+                          </span>
+                          <span class="slds-path__title">Unqualified</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+dependencies:
+  css_files:
+    - "path.css"
+    - "grid.css"
+  javascript:
+    - "path.js"
+  icons:
+    - "utility-sprite.svg"
+  other_components:
+    - "grid"
+    - "icons"
+related_components:
+  - name: "Progress Indicator"
+    relationship: "similar"
+    description: "Similar step-based progress visualization"
+  - name: "Breadcrumbs"
+    relationship: "similar"
+    description: "Similar hierarchical navigation concept"
+  - name: "Tabs"
+    relationship: "alternative"
+    description: "Alternative for non-linear content switching"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/path/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

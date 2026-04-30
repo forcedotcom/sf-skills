@@ -1,0 +1,177 @@
+name: "Checkbox Toggle"
+description: "A checkable input that communicates if an option is true, false or indeterminate. A toggle-style checkbox that provides a visual switch interface for binary choices."
+category: "Input"
+slds_classes:
+  root: "slds-checkbox_toggle"
+  elements:
+    - class: "slds-checkbox_faux"
+      description: "Visual toggle switch element"
+      purpose: "Custom-styled toggle switch appearance that replaces the native checkbox"
+    - class: "slds-checkbox_faux_container"
+      description: "Container for the faux checkbox element and text labels"
+      purpose: "Wraps the toggle switch and provides structure for on/off text"
+    - class: "slds-checkbox_off"
+      description: "Container for text shown when toggle is off"
+      purpose: "Displays text when checkbox is unchecked"
+    - class: "slds-checkbox_on"
+      description: "Container for text shown when toggle is on"
+      purpose: "Displays text when checkbox is checked"
+  modifiers: []
+  states:
+    - class: "slds-is-disabled"
+      description: "Disabled state styling"
+      trigger: "When checkbox toggle is not interactive"
+variants:
+  - name: "Base"
+    description: "Standard checkbox toggle"
+    classes:
+      - "slds-checkbox_toggle"
+    usage_context: "Default checkbox toggle implementation"
+    differences: "Toggle switch with optional on/off text labels"
+lightning_component:
+  name: ""
+  url: "https://developer.salesforce.com/docs/component-library/overview/components"
+  mapping_notes: "No direct Lightning Base Component - use custom implementation with SLDS classes"
+accessibility:
+  keyboard_support:
+    - "Tab to focus the checkbox toggle"
+    - "Space to toggle checkbox state"
+    - "Enter may toggle in some contexts"
+  screen_reader:
+    - "Checkbox state announced (checked/unchecked)"
+    - "Label text read with the checkbox"
+    - "Required state announced when applicable"
+    - "Error messages associated and announced"
+  aria_attributes:
+    - "aria-describedby for error messages"
+    - "aria-invalid when validation fails"
+    - "aria-required for required checkboxes"
+    - "aria-checked for state indication"
+    - "fieldset and legend for grouped toggles"
+usage_guidelines:
+  when_to_use:
+    - "For binary choices where toggle switch UI is preferred"
+    - "When you want a more visual, switch-like interface"
+    - "For settings, preferences, or feature toggles"
+    - "When space allows for the toggle switch design"
+  when_not_to_use:
+    - "For mutually exclusive options (use radio buttons)"
+    - "When multiple options can be selected (use checkboxes)"
+    - "In very constrained spaces (use standard checkbox)"
+    - "For actions (use buttons instead)"
+  best_practices:
+    - "Use clear, descriptive labels"
+    - "Provide on/off text labels when helpful"
+    - "Use fieldset and legend for grouped toggles"
+    - "Ensure adequate touch target size for mobile"
+    - "Provide immediate visual feedback for state changes"
+    - "Use consistent toggle styling throughout the interface"
+  common_mistakes:
+    - "Using toggles for mutually exclusive options"
+    - "Making labels too long or unclear"
+    - "Not providing proper fieldset/legend structure for groups"
+    - "Missing required state indicators"
+    - "Inadequate spacing or touch targets"
+code_examples:
+  - title: "Basic Checkbox Toggle"
+    code: |
+      <div class="slds-form-element">
+            <div class="slds-form-element__control">
+              <label class="slds-checkbox_toggle slds-grid">
+                <input type="checkbox" name="checkbox-toggle" id="toggle-1" />
+                <span class="slds-checkbox_faux_container" aria-live="polite">
+                  <span class="slds-checkbox_faux"></span>
+                  <span class="slds-checkbox_off">Off</span>
+                  <span class="slds-checkbox_on">On</span>
+                </span>
+                <span class="slds-form-element__label">Toggle this setting</span>
+              </label>
+            </div>
+            </div>
+  - title: "Checkbox Toggle Checked State"
+    code: |
+      <div class="slds-form-element">
+            <div class="slds-form-element__control">
+              <label class="slds-checkbox_toggle slds-grid">
+                <input type="checkbox" name="checkbox-toggle" id="toggle-2" checked />
+                <span class="slds-checkbox_faux_container" aria-live="polite">
+                  <span class="slds-checkbox_faux"></span>
+                  <span class="slds-checkbox_off">Off</span>
+                  <span class="slds-checkbox_on">On</span>
+                </span>
+                <span class="slds-form-element__label">Toggle enabled</span>
+              </label>
+            </div>
+            </div>
+  - title: "Disabled Checkbox Toggle"
+    code: |
+      <div class="slds-form-element">
+            <div class="slds-form-element__control">
+              <label class="slds-checkbox_toggle slds-grid">
+                <input type="checkbox" name="checkbox-toggle" id="toggle-3" disabled />
+                <span class="slds-checkbox_faux_container" aria-live="polite">
+                  <span class="slds-checkbox_faux"></span>
+                  <span class="slds-checkbox_off">Off</span>
+                  <span class="slds-checkbox_on">On</span>
+                </span>
+                <span class="slds-form-element__label">Disabled toggle</span>
+              </label>
+            </div>
+            </div>
+styling_hooks:
+  - name: "--slds-c-checkbox-toggle-color-border"
+    description: "Border color for the toggle switch"
+    category: "color"
+  - name: "--slds-c-checkbox-toggle-color-border-hover"
+    description: "Border color for the toggle switch on hover"
+    category: "color"
+  - name: "--slds-c-checkbox-toggle-color-background"
+    description: "Background color for the toggle switch"
+    category: "color"
+  - name: "--slds-c-checkbox-toggle-color-background-hover"
+    description: "Hover background color for the toggle switch"
+    category: "color"
+  - name: "--slds-c-checkbox-toggle-color-background-checked-focus"
+    description: "Background color when toggle is checked and focused"
+    category: "color"
+  - name: "--slds-c-checkbox-toggle-switch-color-background"
+    description: "Background color for the toggle switch slider/knob"
+    category: "color"
+  - name: "--slds-c-checkbox-toggle-switch-color-background-checked"
+    description: "Background color for the toggle switch slider/knob when checked"
+    category: "color"
+  - name: "--slds-c-checkbox-toggle-mark-color-foreground"
+    description: "Foreground color for the checkmark when toggle is checked"
+    category: "color"
+  - name: "--slds-c-checkbox-toggle-radius-border"
+    description: "Border radius for the toggle switch (pill shape)"
+    category: "border"
+  - name: "--slds-c-checkbox-toggle-shadow"
+    description: "Box shadow for the toggle switch"
+    category: "shadow"
+dependencies:
+  css_files:
+    - "checkbox-toggle.css"
+    - "form-element.css"
+  javascript: []
+  icons: []
+  other_components:
+    - "form-element"
+related_components:
+  - name: "Checkbox"
+    relationship: "alternative"
+    description: "Standard checkbox for binary choices"
+  - name: "Toggle"
+    relationship: "similar"
+    description: "Alternative toggle-style input control"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/checkbox-toggle/"
+  design_guidelines: "https://v1.lightningdesignsystem.com/components/checkbox-toggle/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  author: "SLDS Documentation Team"
+  slds_version: "2.27.2"
+  review_status: "complete"
+  source: "official-slds"
+  notes: "Created from official SLDS documentation and design-system-internal source code with CSS selector annotations. Includes comprehensive styling hooks from SCSS annotations. Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

@@ -1,3 +1,40 @@
+## [1.7.4](https://github.com/forcedotcom/afv-library/compare/1.7.3...1.7.4) (2026-04-27)
+
+
+### Bug Fixes
+
+* make sync-react-samples manual-only ([#228](https://github.com/forcedotcom/afv-library/issues/228)) ([d10f607](https://github.com/forcedotcom/afv-library/commit/d10f607da7cac6d036dc585e05b6b010b1c0f5a8))
+* use static branch for sync-react-samples PR ([#221](https://github.com/forcedotcom/afv-library/issues/221)) ([c80fbb5](https://github.com/forcedotcom/afv-library/commit/c80fbb51158a96d7d7b515c9f99636b650a92fa7))
+
+
+
+## [1.7.3](https://github.com/forcedotcom/afv-library/compare/1.7.2...1.7.3) (2026-04-23)
+
+
+### Bug Fixes
+
+* @W-21829588 : Custom Lightning Type Skills Fixes ([#191](https://github.com/forcedotcom/afv-library/issues/191)) ([6f39dd4](https://github.com/forcedotcom/afv-library/commit/6f39dd4047fe59ad635dfe66acae52fdae2a4dbc))
+
+
+
+## [1.7.2](https://github.com/forcedotcom/afv-library/compare/1.7.1...1.7.2) (2026-04-22)
+
+
+### Bug Fixes
+
+* @W-22134404@ delete fragment skill ([#212](https://github.com/forcedotcom/afv-library/issues/212)) ([c818135](https://github.com/forcedotcom/afv-library/commit/c8181350b47fe0b2f512a9d2d01bd11dceed3793))
+
+
+
+## [1.7.1](https://github.com/forcedotcom/afv-library/compare/1.7.0...1.7.1) (2026-04-21)
+
+
+### Bug Fixes
+
+* @W-21915952@ Update SKILL.md to allow user to make changes in the generated flow ([#189](https://github.com/forcedotcom/afv-library/issues/189)) ([e089a86](https://github.com/forcedotcom/afv-library/commit/e089a8688ae91b152d7699c448bdc5cd81325512))
+
+
+
 # [1.7.0](https://github.com/forcedotcom/afv-library/compare/1.6.9...1.7.0) (2026-04-09)
 
 

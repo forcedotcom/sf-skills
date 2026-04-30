@@ -1,0 +1,145 @@
+name: Form Element
+description: A foundational wrapper component that provides consistent structure, labeling, and validation messaging for form
+  inputs, ensuring accessibility and visual consistency across form controls.
+category: Input
+slds_classes:
+  root: slds-form-element
+  elements:
+  - class: slds-form-element__label
+    description: Label for the form element
+    purpose: Provides accessible labeling for form controls
+  - class: slds-form-element__control
+    description: Container for the form control
+    purpose: Wraps the actual input element
+  - class: slds-form-element__help
+    description: Help text for the form element
+    purpose: Provides additional guidance or instructions
+  - class: slds-form-element__icon
+    description: Icon associated with the form element
+    purpose: Visual indicator or status icon
+  - class: slds-form-element__addon
+    description: Additional content attached to form element
+    purpose: Supplementary content like buttons or text
+  modifiers:
+  - class: slds-form-element_stacked
+    description: Stacked layout with label above control
+    usage: Default vertical layout for form elements
+  - class: slds-form-element_horizontal
+    description: Horizontal layout with label beside control
+    usage: When horizontal alignment is preferred
+  - class: slds-form-element_compound
+    description: Compound form element with multiple controls
+    usage: For grouped or related form controls
+  states:
+  - class: slds-has-error
+    description: Error state for form element
+    trigger: Applied when validation fails
+variants:
+- name: Base
+  description: Standard form element wrapper
+  classes:
+  - slds-form-element
+  usage_context: Default wrapper for individual form controls
+  differences: Basic structure with label, control, and help text
+- name: Stacked
+  description: Vertical layout form element
+  classes:
+  - slds-form-element
+  - slds-form-element_stacked
+  usage_context: When vertical layout is preferred
+  differences: Label positioned above the form control
+- name: Horizontal
+  description: Horizontal layout form element
+  classes:
+  - slds-form-element
+  - slds-form-element_horizontal
+  usage_context: When horizontal alignment is needed
+  differences: Label positioned beside the form control
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component equivalent - form element structure is built into Lightning input components
+accessibility:
+  keyboard_support:
+  - Tab navigation to form controls
+  - Label association with controls
+  - Error message association
+  screen_reader:
+  - Label text announced with control
+  - Required state communicated
+  - Error messages read when present
+  - Help text associated and announced
+  aria_attributes:
+  - for attribute linking label to control
+  - aria-describedby for help text
+  - aria-required for required fields
+  - aria-invalid for error states
+  - aria-labelledby for complex labeling
+usage_guidelines:
+  when_to_use:
+  - As wrapper for all form input controls
+  - When consistent form structure is needed
+  - For accessible form labeling
+  - When validation messaging is required
+  when_not_to_use:
+  - For non-form content
+  - When custom form structure is needed
+  best_practices:
+  - Always include meaningful labels
+  - Provide clear error messages
+  - Use help text for additional guidance
+  - Maintain consistent form element structure
+  - Ensure proper label-control association
+  common_mistakes:
+  - Missing or unclear labels
+  - Poor error message placement
+  - Inconsistent form element structure
+  - Breaking label-control associations
+code_examples:
+- title: Basic Form Element
+  description: Form element with multiple related controls
+  code: "<fieldset class=\"slds-form-element slds-form-element_compound\">\n      <legend class=\"slds-form-element__label\"\
+    >Address</legend>\n      <div class=\"slds-form-element__control\">\n        <div class=\"\">\n          <div class=\"\
+    \">\n            <div class=\"slds-size_1-of-1\">\n              <div class=\"slds-form-element\">\n                <label\
+    \ class=\"slds-form-element__label\" for=\"street\">Street Address</label>\n                <div class=\"slds-form-element__control\"\
+    >\n                  <input type=\"text\" id=\"street\" class=\"slds-input\">\n                </div>\n              </div>\n\
+    \            </div>\n          </div>\n          <div class=\"\">\n            <div class=\"slds-size_1-of-2\">\n    \
+    \          <div class=\"slds-form-element\">\n                <label class=\"slds-form-element__label\" for=\"city\">City</label>\n\
+    \                <div class=\"slds-form-element__control\">\n                  <input type=\"text\" id=\"city\" class=\"\
+    slds-input\">\n                </div>\n              </div>\n            </div>\n            <div class=\"slds-size_1-of-2\"\
+    >\n              <div class=\"slds-form-element\">\n                <label class=\"slds-form-element__label\" for=\"zip\"\
+    >ZIP Code</label>\n                <div class=\"slds-form-element__control\">\n                  <input type=\"text\"\
+    \ id=\"zip\" class=\"slds-input\">\n                </div>\n              </div>\n            </div>\n          </div>\n\
+    \        </div>\n      </div>\n      </fieldset>\n"
+dependencies:
+  css_files:
+  - form-element.css
+  - input.css
+  javascript: []
+  icons: []
+  other_components:
+  - input
+  - select
+  - textarea
+  - checkbox
+  - radio
+related_components:
+- name: Input
+  relationship: container
+  description: Form element wraps input components
+- name: Select
+  relationship: container
+  description: Form element wraps select components
+- name: Textarea
+  relationship: container
+  description: Form element wraps textarea components
+- name: Checkbox
+  relationship: container
+  description: Form element wraps checkbox components
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/form-element/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

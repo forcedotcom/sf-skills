@@ -73,9 +73,9 @@ variables:
 language:
 	default_locale: "en_US"
 
-start_agent topic_selector:
-	label: "Topic Selector"
-	description: "Routes to topics with procedural data loading"
+start_agent agent_router:
+	label: "Subagent Router"
+	description: "Routes to subagents with procedural data loading"
 
 	actions:
 		# Data loading actions
@@ -147,11 +147,11 @@ start_agent topic_selector:
 			| - Account questions
 
 		actions:
-			go_orders: @utils.transition to @topic.order_status
-			go_cases: @utils.transition to @topic.support_cases
-			go_account: @utils.transition to @topic.account_help
+			go_orders: @utils.transition to @subagent.order_status
+			go_cases: @utils.transition to @subagent.support_cases
+			go_account: @utils.transition to @subagent.account_help
 
-topic order_status:
+subagent order_status:
 	label: "Order Status"
 	description: "Check order status with lazy loading"
 
@@ -172,7 +172,7 @@ topic order_status:
 
 	reasoning:
 		instructions: ->
-			# ★ LAZY LOADING: Only fetch orders when user enters this topic
+			# ★ LAZY LOADING: Only fetch orders when user enters this subagent
 			if @variables.orders_loaded == False:
 				run @actions.load_orders
 					with contact_id=@variables.ContactId
@@ -194,9 +194,9 @@ topic order_status:
 		actions:
 			get_details: @actions.get_tracking_details
 				with order_id=@variables.recent_order_id
-			back: @utils.transition to @topic.topic_selector
+			back: @utils.transition to @subagent.agent_router
 
-topic support_cases:
+subagent support_cases:
 	label: "Support Cases"
 	description: "Review support cases with lazy loading"
 
@@ -225,18 +225,18 @@ topic support_cases:
 				| - Return to the main menu
 
 		actions:
-			back: @utils.transition to @topic.topic_selector
+			back: @utils.transition to @subagent.agent_router
 			escalate: @utils.escalate
 				description: "Transfer to support specialist"
 
-topic account_help:
+subagent account_help:
 	label: "Account Help"
 	description: "Account questions - customer data already loaded"
 
 	reasoning:
 		instructions: ->
 			# ★ DATA ALREADY AVAILABLE - no loading needed
-			# Customer data was loaded in topic_selector
+			# Customer data was loaded in agent_router
 			| Account Information:
 			| Name: {!@variables.customer_name}
 			| Tier: {!@variables.customer_tier}
@@ -245,7 +245,7 @@ topic account_help:
 			| What would you like to know about your account?
 
 		actions:
-			back: @utils.transition to @topic.topic_selector
+			back: @utils.transition to @subagent.agent_router
 
 # ★ Insight: Procedural vs Declarative Actions
 #
@@ -267,7 +267,7 @@ topic account_help:
 #   - Result: Efficient, context-aware agents
 
 # ★ Performance Benefits:
-#   - Fetch only what's needed per topic
+#   - Fetch only what's needed per subagent
 #   - Avoid loading all data upfront
 #   - Reduce API calls for simple conversations
 #   - Better response times

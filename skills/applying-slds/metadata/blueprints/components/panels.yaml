@@ -1,0 +1,149 @@
+name: Panels
+description: A flexible container component that provides structured content areas with headers, bodies, and footers, supporting
+  various layouts and content organization patterns for building complex interfaces.
+category: Layout
+slds_classes:
+  root: slds-panel
+  elements:
+  - class: slds-panel__header
+    description: Panel header section
+    purpose: Contains panel title and header actions
+  - class: slds-panel__body
+    description: Panel content area
+    purpose: Contains the main panel content
+  - class: slds-panel__actions
+    description: Panel action controls
+    purpose: Contains buttons and interactive elements
+  - class: slds-panel__close
+    description: Panel close button
+    purpose: Allows panel dismissal
+  modifiers:
+  - class: slds-panel_docked
+    description: Docked panel layout
+    usage: For panels attached to screen edges
+  - class: slds-panel_filters
+    description: Filter panel style
+    usage: For filter and search interfaces
+  states: []
+variants:
+- name: Base
+  description: Standard panel with header, body, and footer
+  classes:
+  - slds-panel
+  usage_context: Default implementation for panel containers
+  differences: Basic panel structure with flexible content area
+- name: Docked
+  description: Panel docked to screen edge
+  classes:
+  - slds-panel
+  - slds-panel_docked
+  usage_context: When panel should be attached to viewport edge
+  differences: Fixed positioning with edge attachment
+- name: Drawer
+  description: Slide-out drawer panel
+  classes:
+  - slds-panel
+  usage_context: For slide-out navigation or content
+  differences: Slide animation and overlay behavior
+- name: Filter
+  description: Panel optimized for filtering interfaces
+  classes:
+  - slds-panel
+  - slds-panel_filters
+  usage_context: For search and filter controls
+  differences: Optimized layout for form controls and filters
+lightning_component:
+  name: lightning-panel
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: Panel functionality often implemented through modal or overlay components
+accessibility:
+  keyboard_support:
+  - Tab navigation through panel content
+  - Escape to close dismissible panels
+  - Arrow keys for panel navigation when applicable
+  - Focus management for panel open/close
+  screen_reader:
+  - Panel purpose and content announced
+  - Panel state changes communicated
+  - Panel structure properly described
+  aria_attributes:
+  - role='region' for panel containers
+  - aria-label for panel purpose
+  - aria-expanded for collapsible panels
+  - aria-hidden for closed panels
+usage_guidelines:
+  when_to_use:
+  - For organizing related content in structured areas
+  - When creating sidebar or detail views
+  - For filter and configuration interfaces
+  - In dashboard and workspace layouts
+  when_not_to_use:
+  - For simple content grouping (use cards instead)
+  - When modal behavior is needed
+  - For single-purpose content displays
+  best_practices:
+  - Provide clear panel headers with descriptive titles
+  - Ensure panels are keyboard accessible
+  - Use appropriate panel types for content
+  - Handle responsive behavior appropriately
+  - Provide clear close/dismiss mechanisms
+  common_mistakes:
+  - Overusing panels for simple content
+  - Poor responsive panel behavior
+  - Missing accessibility considerations
+  - Inconsistent panel sizing and spacing
+code_examples:
+- title: Basic Panel
+  description: Slide-out drawer panel with overlay
+  code: "<!-- Backdrop -->\n      <div class=\"slds-backdrop slds-backdrop_open\" style=\"z-index: 999;\"></div>\n      <!--\
+    \ Drawer Panel -->\n      <div class=\"slds-panel\" role=\"dialog\" aria-label=\"Navigation drawer\" aria-modal=\"true\"\
+    >\n      <div class=\"\" style=\"position: fixed; left: 0; top: 0; width: 280px; height: 100vh; z-index: 1000; transform:\
+    \ translateX(0);\">\n        <div class=\"slds-panel__header\">\n          <div class=\"slds-media slds-media_center\"\
+    >\n            <div class=\"slds-media__body\">\n              <h2 class=\"slds-text-heading_small\">\n              \
+    \  Navigation\n              </h2>\n            </div>\n            <div class=\"slds-media__figure slds-media__figure_reverse\"\
+    >\n              <button class=\"slds-button slds-button_icon slds-panel__close\" title=\"Close navigation\">\n      \
+    \          <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n                  <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#close\"\
+    ></use>\n                </svg>\n                <span class=\"slds-assistive-text\">Close navigation</span>\n       \
+    \       </button>\n            </div>\n          </div>\n        </div>\n        <div class=\"slds-panel__body\">\n  \
+    \        <nav class=\"slds-nav-vertical\" aria-label=\"Sub page navigation\">\n            <div class=\"slds-nav-vertical__section\"\
+    >\n              <h3 class=\"slds-nav-vertical__title\">Section 1</h3>\n              <ul>\n                <li class=\"\
+    slds-nav-vertical__item slds-is-active\">\n                  <a href=\"#\" class=\"slds-nav-vertical__action\" aria-current=\"\
+    page\">Item 1</a>\n                </li>\n                <li class=\"slds-nav-vertical__item\">\n                  <a\
+    \ href=\"#\" class=\"slds-nav-vertical__action\">Item 2</a>\n                </li>\n                <li class=\"slds-nav-vertical__item\"\
+    >\n                  <a href=\"#\" class=\"slds-nav-vertical__action\">Item 3</a>\n                </li>\n           \
+    \   </ul>\n            </div>\n            <div class=\"slds-nav-vertical__section\">\n              <h3 class=\"slds-nav-vertical__title\"\
+    >Section 2</h3>\n              <ul>\n                <li class=\"slds-nav-vertical__item\">\n                  <a href=\"\
+    #\" class=\"slds-nav-vertical__action\">Item 4</a>\n                </li>\n                <li class=\"slds-nav-vertical__item\"\
+    >\n                  <a href=\"#\" class=\"slds-nav-vertical__action\">Item 5</a>\n                </li>\n           \
+    \   </ul>\n            </div>\n          </nav>\n        </div>\n      </div>\n      </div>\n"
+dependencies:
+  css_files:
+  - panel.css
+  - button.css
+  - form-element.css
+  javascript:
+  - panel.js
+  - panel-drawer.js
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - button
+  - form-element
+  - nav-vertical
+related_components:
+- name: Modal
+  relationship: similar
+  description: Similar overlay behavior for some panel types
+- name: Card
+  relationship: alternative
+  description: Alternative for simpler content grouping
+- name: Drawer
+  relationship: variant
+  description: Specific drawer implementation of panels
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/panels/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

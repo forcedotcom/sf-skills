@@ -1,0 +1,172 @@
+name: Color Picker
+description: A fully featured color selection component that provides both predefined color swatches and a custom color picker
+  with hue, saturation, and brightness controls. Allows users to select colors visually or input hex values.
+category: Complex Components
+slds_classes:
+  root: slds-color-picker
+  elements:
+  - class: slds-color-picker__summary-label
+    description: Label for the color summary input
+    purpose: Provides accessible label for color input
+  - class: slds-color-picker__summary-button
+    description: Button that toggles the color picker selector
+    purpose: Opens/closes the color selection popover
+  - class: slds-color-picker__summary-input
+    description: Input field showing hex color value
+    purpose: Displays and accepts hex color input
+  - class: slds-color-picker__selector
+    description: Selector popover component
+    purpose: Container for swatches and custom picker
+  - class: slds-color-picker__swatches
+    description: Container for color swatches
+    purpose: Holds predefined color options
+  - class: slds-color-picker__swatch
+    description: Individual color swatch
+    purpose: Displays clickable color option
+  - class: slds-color-picker__swatch-trigger
+    description: Trigger button for swatch selection
+    purpose: Interactive element for swatch clicks
+  - class: slds-color-picker__custom
+    description: Custom color picker container
+    purpose: Holds custom color selection controls
+  - class: slds-color-picker__custom-range
+    description: Custom color range selector
+    purpose: 2D selector for saturation and brightness
+  - class: slds-color-picker__range-indicator
+    description: Indicator for range position
+    purpose: Shows selected point in color range
+  - class: slds-color-picker__hue-and-preview
+    description: Container for hue slider and preview
+    purpose: Groups hue control with color preview
+  - class: slds-color-picker__hue-slider
+    description: Slider for hue selection
+    purpose: Controls the color hue value
+  modifiers: []
+  states:
+  - class: slds-is-open
+    description: Open state for color picker popover
+    trigger: When color picker selector is visible
+  - class: slds-is-selected
+    description: Selected state for swatch
+    trigger: When swatch is currently selected color
+variants:
+- name: Base
+  description: Full color picker with swatches and custom selector
+  classes:
+  - slds-color-picker
+  usage_context: Default color picker implementation
+  differences: Complete color selection interface
+lightning_component:
+  name: lightning-input
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-input
+  mapping_notes: lightning-input with type='color' provides basic color picker, but not as fully featured as SLDS color-picker
+accessibility:
+  keyboard_support:
+  - Tab to navigate between swatches and controls
+  - Arrow keys to move through swatch grid
+  - Enter or Space to select swatch
+  - Arrow keys to adjust hue slider
+  - Escape to close picker
+  screen_reader:
+  - Color picker role announced
+  - Selected color value announced
+  - Swatch colors announced
+  - Slider values announced
+  aria_attributes:
+  - role='listbox' on swatches container
+  - role='option' on individual swatches
+  - aria-label with color name/hex value
+  - aria-selected on active swatch
+  - aria-valuemin, aria-valuemax, aria-valuenow on sliders
+usage_guidelines:
+  when_to_use:
+  - For selecting brand or theme colors
+  - When users need to customize colors
+  - For design or customization features
+  - When both preset and custom colors are needed
+  when_not_to_use:
+  - For simple binary color choices (use toggle)
+  - When only preset colors are needed (use swatch selector)
+  - For system-level color settings
+  - When color input is too complex for users
+  best_practices:
+  - Provide common color swatches for quick selection
+  - Allow hex value input for precision
+  - Show color preview clearly
+  - Include accessibility contrast indicators
+  - Group related colors in swatches
+  - Provide named color options when possible
+  common_mistakes:
+  - Too many swatch options overwhelming users
+  - Missing hex input option
+  - Poor contrast in color preview
+  - Not showing selected color clearly
+  - Inadequate keyboard navigation
+code_examples:
+- title: Basic Color Picker
+  code: "<div class=\"slds-color-picker\">\n      <div class=\"\">\n        <label class=\"slds-color-picker__summary-label\"\
+    \ for=\"color-picker-summary-input\">\n          Choose Color\n        </label>\n        <button class=\"slds-button slds-color-picker__summary-button\
+    \ slds-button_icon slds-button_icon-more\" aria-haspopup=\"dialog\">\n          <span class=\"slds-swatch\" style=\"background:\
+    \ rgb(0, 112, 210);\">\n            <span class=\"slds-assistive-text\">Selected color: #0070D2</span>\n          </span>\n\
+    \          <svg class=\"slds-button__icon slds-button__icon_small\" aria-hidden=\"true\">\n            <use xlink:href=\"\
+    /assets/icons/utility-sprite/svg/symbols.svg#down\"></use>\n          </svg>\n          <span class=\"slds-assistive-text\"\
+    >Choose a color</span>\n        </button>\n        <input type=\"text\" id=\"color-picker-summary-input\" class=\"slds-input\
+    \ slds-color-picker__summary-input\" value=\"#0070D2\" />\n      </div>\n      <section class=\"slds-popover slds-color-picker__selector\
+    \ slds-hide\" role=\"dialog\" aria-label=\"Choose a color\">\n        <div class=\"slds-popover__body\">\n          <div\
+    \ class=\"slds-color-picker__swatches\">\n            <fieldset>\n              <legend class=\"slds-assistive-text\"\
+    >Preset colors</legend>\n              <ul class=\"\" role=\"listbox\">\n                <li role=\"presentation\">\n\
+    \                  <button class=\"slds-swatch\" role=\"option\" aria-selected=\"true\" style=\"background: rgb(0, 112,\
+    \ 210);\">\n                    <span class=\"slds-assistive-text\">#0070D2</span>\n                  </button>\n    \
+    \            </li>\n                <li role=\"presentation\">\n                  <button class=\"slds-swatch\" role=\"\
+    option\" style=\"background: rgb(255, 154, 60);\">\n                    <span class=\"slds-assistive-text\">#FF9A3C</span>\n\
+    \                  </button>\n                </li>\n                <li role=\"presentation\">\n                  <button\
+    \ class=\"slds-swatch\" role=\"option\" style=\"background: rgb(4, 132, 75);\">\n                    <span class=\"slds-assistive-text\"\
+    >#04844B</span>\n                  </button>\n                </li>\n              </ul>\n            </fieldset>\n  \
+    \        </div>\n          <div class=\"slds-color-picker__custom\">\n            <p class=\"slds-assistive-text\" id=\"\
+    color-picker-instructions\">\n              Use arrow keys to select saturation and brightness, on an x and y axis.\n\
+    \            </p>\n            <div class=\"slds-color-picker__custom-range\" style=\"background: rgb(0, 112, 210);\"\
+    >\n              <a class=\"slds-color-picker__range-indicator\" href=\"#\" aria-live=\"assertive\" aria-atomic=\"true\"\
+    \ aria-describedby=\"color-picker-instructions\">\n                <span class=\"slds-assistive-text\">Saturation: 100%.\
+    \ Brightness: 50%.</span>\n              </a>\n            </div>\n          </div>\n        </div>\n        <footer class=\"\
+    slds-popover__footer\">\n          <button class=\"slds-button slds-button_neutral\">Cancel</button>\n          <button\
+    \ class=\"slds-button slds-button_brand\">Done</button>\n        </footer>\n      </section>\n      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - color-picker.css
+  - popover.css
+  - swatch.css
+  - button.css
+  javascript:
+  - Color picker open/close
+  - Swatch selection
+  - Custom color range interaction
+  - Hue slider management
+  - Hex value validation
+  icons:
+  - utility:down
+  other_components:
+  - popover
+  - button
+  - input
+related_components:
+- name: Swatch
+  relationship: contains
+  description: Color swatch display element
+- name: Popover
+  relationship: container
+  description: Popover for color selector
+- name: Slider
+  relationship: similar
+  description: Similar range input pattern
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/color-picker/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  author: SLDS Documentation Team
+  slds_version: 2.27.2
+  review_status: complete
+  source: official-slds
+  notes: Created from official SLDS documentation and design-system-internal source code Cleaned invalid classes and CSS variables
+    on 2025-11-12 using slds-plus.css as source of truth.

@@ -9,13 +9,13 @@
 #
 # ★ Key Insight:
 #   - System block defines BASE behavior (always applies)
-#   - Topic instructions can OVERRIDE or EXTEND system behavior
+#   - Subagent instructions can OVERRIDE or EXTEND system behavior
 #   - Use conditionals in reasoning to dynamically adjust tone
 #   - Variables can control instruction branches
 #
 # ★ Important Limitation:
 #   - The system: block itself cannot use conditionals or variables
-#   - Dynamic behavior must be implemented in topic reasoning
+#   - Dynamic behavior must be implemented in subagent reasoning
 #
 # This is a COMPLETE template - customize for your use case
 
@@ -59,9 +59,9 @@ language:
 	additional_locales: ""
 	all_additional_locales: False
 
-start_agent topic_selector:
-	label: "Topic Selector"
-	description: "Routes to appropriate topic based on user tier"
+start_agent agent_router:
+	label: "Subagent Router"
+	description: "Routes to appropriate subagent based on user tier"
 
 	# ★ Use before_reasoning to set up context-based variables
 	before_reasoning:
@@ -108,12 +108,12 @@ start_agent topic_selector:
 			if @variables.agent_mode == "formal":
 				| Use formal language. Address customer as Sir/Madam.
 
-			| Route the customer to the appropriate topic.
+			| Route the customer to the appropriate subagent.
 
 		actions:
-			go_orders: @utils.transition to @topic.orders
-			go_billing: @utils.transition to @topic.billing
-			go_support: @utils.transition to @topic.support
+			go_orders: @utils.transition to @subagent.orders
+			go_billing: @utils.transition to @subagent.billing
+			go_support: @utils.transition to @subagent.support
 				available when @variables.business_hours == True
 
 	actions:
@@ -134,13 +134,13 @@ start_agent topic_selector:
 					description: "True if in business hours"
 			target: "flow://Check_Business_Hours"
 
-topic orders:
+subagent orders:
 	label: "Order Management"
 	description: "Handle order inquiries with tier-appropriate service"
 
 	reasoning:
 		instructions: ->
-			# ★ Tier-specific instructions carry through to subtopics
+			# ★ Tier-specific instructions carry through to subagents
 			if @variables.customer_tier == "vip":
 				| This is a VIP customer. Expedite all order requests.
 				| Offer free shipping upgrades proactively.
@@ -149,9 +149,9 @@ topic orders:
 			| Look up order status, process changes, or handle returns.
 
 		actions:
-			back: @utils.transition to @topic.topic_selector
+			back: @utils.transition to @subagent.agent_router
 
-topic billing:
+subagent billing:
 	label: "Billing Support"
 	description: "Handle billing with appropriate authority levels"
 
@@ -171,12 +171,12 @@ topic billing:
 			| Help the customer understand their bill and resolve issues.
 
 		actions:
-			back: @utils.transition to @topic.topic_selector
+			back: @utils.transition to @subagent.agent_router
 			escalate: @utils.escalate
 				description: "Transfer to billing specialist"
 				available when @variables.customer_tier == "standard"
 
-topic support:
+subagent support:
 	label: "Technical Support"
 	description: "Technical support with business hours awareness"
 
@@ -192,20 +192,20 @@ topic support:
 			| Help resolve the customer's technical issue.
 
 		actions:
-			back: @utils.transition to @topic.topic_selector
+			back: @utils.transition to @subagent.agent_router
 
 # ═══════════════════════════════════════════════════════════════════════════
-# ★ TOPIC-LEVEL SYSTEM OVERRIDES (NEW PATTERN)
-# These topics demonstrate complete persona switching using topic-level
+# ★ SUBAGENT-LEVEL SYSTEM OVERRIDES (NEW PATTERN)
+# These subagents demonstrate complete persona switching using subagent-level
 # system: blocks that OVERRIDE the global system instructions.
 # ═══════════════════════════════════════════════════════════════════════════
 
-topic formal_mode:
+subagent formal_mode:
 	label: "Formal Communication"
 	description: "Professional business communication mode"
 
-	# ★ TOPIC-LEVEL SYSTEM OVERRIDE
-	# This completely replaces global system instructions for this topic
+	# ★ SUBAGENT-LEVEL SYSTEM OVERRIDE
+	# This completely replaces global system instructions for this subagent
 	system:
 		instructions: "You are a formal business professional. Use professional language at all times. Address users as Sir or Madam. Avoid contractions, slang, and casual expressions. Focus on efficiency and clarity. Maintain a respectful, corporate tone."
 
@@ -217,13 +217,13 @@ topic formal_mode:
 			| I am prepared to address your inquiry with the utmost professionalism.
 
 		actions:
-			back: @utils.transition to @topic.topic_selector
+			back: @utils.transition to @subagent.agent_router
 
-topic creative_mode:
+subagent creative_mode:
 	label: "Creative Assistant"
 	description: "Creative and imaginative communication mode"
 
-	# ★ TOPIC-LEVEL SYSTEM OVERRIDE
+	# ★ SUBAGENT-LEVEL SYSTEM OVERRIDE
 	# Different persona entirely
 	system:
 		instructions: "You are a creative and imaginative assistant. Be playful, use metaphors and analogies. Think outside the box. Encourage brainstorming and wild ideas. Use emojis sparingly but effectively. Make conversations engaging and fun while still being helpful."
@@ -238,13 +238,13 @@ topic creative_mode:
 			| What shall we dream up today?
 
 		actions:
-			back: @utils.transition to @topic.topic_selector
+			back: @utils.transition to @subagent.agent_router
 
-topic technical_expert:
+subagent technical_expert:
 	label: "Technical Expert"
 	description: "Deep technical expertise mode"
 
-	# ★ TOPIC-LEVEL SYSTEM OVERRIDE
+	# ★ SUBAGENT-LEVEL SYSTEM OVERRIDE
 	# Specialist persona
 	system:
 		instructions: "You are a technical expert with deep knowledge. Use precise technical terminology. Provide detailed explanations with examples. Reference documentation when helpful. Assume the user has technical background. Be thorough but avoid unnecessary verbosity."
@@ -259,35 +259,35 @@ topic technical_expert:
 			| What technical challenge are we solving?
 
 		actions:
-			back: @utils.transition to @topic.topic_selector
+			back: @utils.transition to @subagent.agent_router
 
 # ★ Insight: Three Levels of Instruction Control
 #
 # LEVEL 1: GLOBAL SYSTEM BLOCK
 #   - Static text only (no variables, no conditionals)
-#   - Applies to ALL topics as baseline
+#   - Applies to ALL subagents as baseline
 #   - Good for: Guardrails, base personality, universal rules
 #   - Example: "Never share confidential information"
 #
-# LEVEL 2: TOPIC-LEVEL SYSTEM BLOCK (NEW!)
-#   - Placed inside topic definition
-#   - COMPLETELY OVERRIDES global system for that topic
+# LEVEL 2: SUBAGENT-LEVEL SYSTEM BLOCK (NEW!)
+#   - Placed inside subagent definition
+#   - COMPLETELY OVERRIDES global system for that subagent
 #   - Good for: Persona switching, mode changes, specialist behavior
-#   - Example: topic formal_mode: system: instructions: "Be professional..."
+#   - Example: subagent formal_mode: system: instructions: "Be professional..."
 #
-# LEVEL 3: TOPIC REASONING INSTRUCTIONS
+# LEVEL 3: SUBAGENT REASONING INSTRUCTIONS
 #   - Dynamic (variables, conditionals, template expressions)
-#   - Extends/adjusts behavior within topic
+#   - Extends/adjusts behavior within subagent
 #   - Good for: Context-aware responses, personalization
 #   - Example: if @variables.is_vip: | Provide priority service
 #
 # OVERRIDE HIERARCHY:
-#   Topic system: > Global system: > Default behavior
+#   Subagent system: > Global system: > Default behavior
 #
 # COMBINING APPROACHES:
 #   - Use GLOBAL system for universal guardrails
-#   - Use TOPIC system: for complete persona changes
-#   - Use TOPIC reasoning for dynamic conditional behavior
+#   - Use SUBAGENT system: for complete persona changes
+#   - Use SUBAGENT reasoning for dynamic conditional behavior
 #
-# Best Practice: Put guardrails in global system, personas in topic system,
-# and context-aware personalization in topic reasoning instructions.
+# Best Practice: Put guardrails in global system, personas in subagent system,
+# and context-aware personalization in subagent reasoning instructions.

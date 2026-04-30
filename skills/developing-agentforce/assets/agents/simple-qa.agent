@@ -35,8 +35,8 @@ language:
 	additional_locales: ""
 	all_additional_locales: False
 
-start_agent topic_selector:
-	label: "Topic Selector"
+start_agent agent_router:
+	label: "Subagent Router"
 	description: "Routes incoming requests to the Q&A handler"
 
 	reasoning:
@@ -44,10 +44,10 @@ start_agent topic_selector:
 			| Listen to the user's question.
 			| Route to the Q&A handler for processing.
 		actions:
-			handle_question: @utils.transition to @topic.qa_handler
-			end_conversation: @utils.transition to @topic.farewell
+			handle_question: @utils.transition to @subagent.qa_handler
+			end_conversation: @utils.transition to @subagent.farewell
 
-topic qa_handler:
+subagent qa_handler:
 	label: "Q&A Handler"
 	description: "Handles questions and provides answers"
 
@@ -58,10 +58,10 @@ topic qa_handler:
 			| Keep responses clear and easy to understand.
 			| If you need more information, ask clarifying questions.
 		actions:
-			new_question: @utils.transition to @topic.topic_selector
-			end_conversation: @utils.transition to @topic.farewell
+			new_question: @utils.transition to @subagent.agent_router
+			end_conversation: @utils.transition to @subagent.farewell
 
-topic farewell:
+subagent farewell:
 	label: "Farewell"
 	description: "Ends the conversation gracefully"
 

@@ -10,12 +10,12 @@ Before opening a preview session, define one test scenario per confirmed issue:
 
 | Issue type (Phase 1) | Test message to send | Expected behavior | Failure indicator |
 |---|---|---|---|
-| Dead topic -- never entered | Utterance that *should* route to that topic | `topic` in response = `<dead_topic>` | Topic stays `entry` |
+| Dead subagent -- never entered | Utterance that *should* route to that subagent | `subagent` in response = `<dead_subagent>` | Subagent stays `entry` |
 | Action not called | Ask directly for the action's task | Action fires in the response | Conversational reply with no action invoked |
-| Handoff topic -- no post-collection routing | Enter the handoff topic, then send a follow-up | Session continues in specialized topic | Falls back to `entry` after 1 turn |
-| LOW adherence | Exact utterance from the flagged `TRUST_GUARDRAILS_STEP` | Response follows topic instruction | Generic/off-instruction answer |
+| Handoff subagent -- no post-collection routing | Enter the handoff subagent, then send a follow-up | Session continues in specialized subagent | Falls back to `entry` after 1 turn |
+| LOW adherence | Exact utterance from the flagged `TRUST_GUARDRAILS_STEP` | Response follows subagent instruction | Generic/off-instruction answer |
 | Knowledge miss | Question requiring a specific knowledge article | Agent cites correct information | Hallucinated or generic answer |
-| Topic misroute | Utterance that belongs to topic A | `topic` = A in response | `topic` = B or `entry` |
+| Subagent misroute | Utterance that belongs to subagent A | `subagent` = A in response | `subagent` = B or `entry` |
 
 ---
 
@@ -89,7 +89,7 @@ For each Phase 1 issue type, diagnose from the local trace:
 
 | Phase 1 Issue | Local Trace Command |
 |---|---|
-| Topic misroute | `jq -r '.topic' "$TRACE"` + `jq -r '.plan[] \| select(.type=="NodeEntryStateStep") \| .data.agent_name' "$TRACE"` |
+| Subagent misroute | `jq -r '.topic' "$TRACE"` + `jq -r '.plan[] \| select(.type=="NodeEntryStateStep") \| .data.agent_name' "$TRACE"` |
 | Action not called | `jq -r '.plan[] \| select(.type=="EnabledToolsStep") \| .data.enabled_tools[]' "$TRACE"` |
 | LOW adherence | `jq -r '.plan[] \| select(.type=="ReasoningStep") \| {category, reason}' "$TRACE"` |
 | Variable capture fail | `jq -r '.plan[] \| select(.type=="VariableUpdateStep") \| .data.variable_updates[] \| "\(.variable_name): \(.variable_past_value) -> \(.variable_new_value) (\(.variable_change_reason))"' "$TRACE"` |
@@ -121,8 +121,8 @@ For each scenario, record before proceeding to Phase 3:
 ```
 Scenario: <issue type from Phase 1>
 Test message: "<exact utterance sent>"
-Expected: <topic name / action name / response behavior>
-Actual:   <observed topic / action / verbatim response>
+Expected: <subagent name / action name / response behavior>
+Actual:   <observed subagent / action / verbatim response>
 Verdict:  [CONFIRMED] / [INTERMITTENT] / [NOT REPRODUCED]
 ```
 

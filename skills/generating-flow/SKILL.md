@@ -87,7 +87,7 @@ Generates flow metadata element by element. This step is **mandatory** and must 
 - When `isComplete` is `true`, extract the flow metadata from the `result` field.
 - If errors are returned, stop the loop and surface the error to the user.
 
-**STRICT CONSTRAINTS (CRITICAL):**
+**STRICT CONSTRAINTS (CRITICAL) — These rules apply to the XML returned by the generation pipeline:**
 - DO NOT modify the content, values, or child nodes inside any block.
 - DO NOT add new nodes, tags, attributes, or text (do not add missing labels, X/Y coordinates, etc.).
 - DO NOT remove any existing nodes.
@@ -334,6 +334,7 @@ Call repeatedly with the same `operationId` until `isComplete` is `true` or erro
 ## Mandatory Best Practices
 - **ALWAYS** follow the 3-step pipeline: fetchGroundedObjectMetadata → flowElementSelection → flowElementGeneration. This is the ONLY way to generate flow metadata. There are no alternatives.
 - Do NOT manually create flow metadata XML, JSON, or any other format outside of this pipeline.
+- **When the user explicitly requests fixes to validation or deployment errors** in an already-generated flow XML, you ARE permitted to make targeted manual edits to the XML to resolve those errors. This is the only exception to the "no manual metadata" rule.
 - Do NOT attempt to "optimize" by skipping steps or combining steps. Each step is atomic and required.
 - **NEVER** skip any step in the pipeline. All 3 steps are required.
 - **NEVER** try to generate flow metadata without calling all 3 steps.
@@ -366,3 +367,4 @@ Call repeatedly with the same `operationId` until `isComplete` is `true` or erro
 - [ ] **Multi-flow**: Each flow's full pipeline is completed before starting the next flow's pipeline (no interleaving)
 - [ ] **result** field is used to extract the XML flow metadata only when `isComplete` is `true`
 - [ ] **No additions to XML**: NO elements, attributes, or properties were added that were not present in the original pipeline output. Nothing was inserted (no `<label>`, `<description>`, or any other node). The final XML must be identical to what the pipeline returned.
+- [ ] **Error fix exception**: If the user explicitly requested fixes to validation/deployment errors, targeted manual edits to the XML are permitted and the "No additions to XML" / "No manual metadata" constraints do not apply to those edits.

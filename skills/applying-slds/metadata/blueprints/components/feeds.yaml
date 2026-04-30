@@ -1,0 +1,125 @@
+name: Feeds
+description: Activity feed component that displays a chronological list of updates, posts, or activities. Similar to social
+  media feeds, it shows user-generated content with timestamps and interactions.
+category: Complex Components
+slds_classes:
+  root: slds-feed
+  elements:
+  - class: slds-feed__list
+    description: List container for feed items
+    purpose: Holds the ordered list of feed entries
+  - class: slds-feed__item
+    description: Individual feed item
+    purpose: Wraps each post or update in the feed
+  modifiers: []
+  states: []
+variants:
+- name: Base
+  description: Standard activity feed
+  classes:
+  - slds-feed
+  usage_context: Default feed implementation for activity streams
+  differences: Chronological list of user activities and updates
+lightning_component:
+  name: ''
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component - typically built with custom components or lightning-record-view-form
+accessibility:
+  keyboard_support:
+  - Tab to navigate through feed items
+  - Enter to activate links or actions
+  - Arrow keys to scroll through feed
+  screen_reader:
+  - Feed role announced
+  - Feed items announced in order
+  - Timestamps and authors announced
+  - New items announced when added
+  aria_attributes:
+  - role='feed' on container
+  - role='article' on feed items
+  - aria-label for feed region
+  - aria-posinset and aria-setsize for position
+  - aria-live for new items (polite)
+usage_guidelines:
+  when_to_use:
+  - For social activity streams
+  - To display chronological updates
+  - For user-generated content feeds
+  - In collaboration or communication features
+  when_not_to_use:
+  - For static content lists
+  - When chronology isn't important
+  - For structured data tables
+  - When real-time updates aren't needed
+  best_practices:
+  - Display items in reverse chronological order (newest first)
+  - Include timestamps on all items
+  - Show author/source clearly
+  - Support infinite scroll or pagination
+  - Provide refresh mechanism
+  - Handle real-time updates smoothly
+  common_mistakes:
+  - Poor performance with many items
+  - Missing timestamps
+  - Unclear authorship
+  - Not handling new items gracefully
+  - Inadequate loading states
+code_examples:
+- title: Basic Feed
+  code: "<div class=\"slds-feed\" role=\"feed\" aria-label=\"Activity feed\">\n  <ul class=\"slds-feed__list\">\n    <li class=\"\
+    slds-feed__item\" role=\"article\">\n      <article class=\"slds-post\">\n        <header class=\"slds-post__header\"\
+    >\n          <div class=\"slds-media slds-media_center\">\n            <div class=\"slds-media__figure\">\n          \
+    \    <span class=\"slds-avatar slds-avatar_circle slds-avatar_medium\">\n                <img src=\"/assets/images/avatar1.jpg\"\
+    \ alt=\"John Doe\" />\n              </span>\n            </div>\n            <div class=\"slds-media__body\">\n     \
+    \         <p class=\"\">John Doe</p>\n              <p class=\"slds-text-body_small\">2 hours ago</p>\n            </div>\n\
+    \          </div>\n        </header>\n        <div class=\"slds-post__content\">\n          <p>Just completed the Q4 presentation\
+    \ deck. Ready for review!</p>\n        </div>\n        <footer class=\"slds-post__footer\">\n          <ul class=\"slds-list_horizontal\
+    \ slds-has-dividers_left\">\n            <li class=\"slds-item\">Like</li>\n            <li class=\"slds-item\">Comment</li>\n\
+    \            <li class=\"slds-item\">Share</li>\n          </ul>\n        </footer>\n      </article>\n    </li>\n   \
+    \ <li class=\"slds-feed__item\" role=\"article\">\n      <article class=\"slds-post\">\n        <header class=\"slds-post__header\"\
+    >\n          <div class=\"slds-media slds-media_center\">\n            <div class=\"slds-media__figure\">\n          \
+    \    <span class=\"slds-avatar slds-avatar_circle slds-avatar_medium\">\n                <img src=\"/assets/images/avatar2.jpg\"\
+    \ alt=\"Jane Smith\" />\n              </span>\n            </div>\n            <div class=\"slds-media__body\">\n   \
+    \           <p class=\"\">Jane Smith</p>\n              <p class=\"slds-text-body_small\">5 hours ago</p>\n          \
+    \  </div>\n          </div>\n        </header>\n        <div class=\"slds-post__content\">\n          <p>Great team meeting\
+    \ today! Looking forward to our next sprint.</p>\n        </div>\n        <footer class=\"slds-post__footer\">\n     \
+    \     <ul class=\"slds-list_horizontal slds-has-dividers_left\">\n            <li class=\"slds-item\">Like (3)</li>\n\
+    \            <li class=\"slds-item\">Comment (1)</li>\n            <li class=\"slds-item\">Share</li>\n          </ul>\n\
+    \        </footer>\n      </article>\n    </li>\n  </ul>\n</div>\n"
+  description: Activity feed with posts from multiple users
+styling_hooks: []
+dependencies:
+  css_files:
+  - feeds.css
+  - post.css
+  - avatar.css
+  javascript:
+  - Infinite scroll or pagination
+  - Real-time update handling
+  - Post interaction handlers
+  - Feed refresh mechanism
+  icons: []
+  other_components:
+  - avatar
+  - post
+  - media-object
+related_components:
+- name: Activity Timeline
+  relationship: similar
+  description: Alternative chronological display
+- name: Chat
+  relationship: similar
+  description: Similar messaging pattern
+- name: Publisher
+  relationship: complementary
+  description: Input component for creating feed posts
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/feeds/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-11'
+  author: SLDS Documentation Team
+  slds_version: 2.27.2
+  review_status: complete
+  source: official-slds
+  notes: Created from official SLDS documentation and design-system-internal source code

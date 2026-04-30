@@ -1,10 +1,8 @@
 # Agentforce Vibes Library
 
-AI skills library for Agentforce Vibes development of Salesforce metadata.
+This repository provides a curated collection of Salesforce agent skills for building applications. It includes skills for Agentforce agents, Lightning apps, Flow, Apex, SOQL, Lightning Web Components (LWC), UI bundles, objects and fields, permission sets, and related areas.
 
-## 📚 About
-
-This repository curates Salesforce-focused skills from the wider developer community to accelerate Agentforce Vibes agentic workflows. 
+The skills are contributed by Salesforce and the broader community. It’s optimized for Agentforce Vibes and can be used with any AI tool that supports skills.
 
 ## 🗂️ Structure
 
@@ -23,44 +21,51 @@ afv-library/
 └── README.md
 ```
 
-## Manual Usage
+## 🚀 Usage
 
-Browse the repository and copy/paste any skill directly into Agentforce Vibes or your preferred AI tool.
+| **Tool** | **Usage** |
+|----------|-------------|
+| **Agentforce Vibes** | Skills are auto-installed and auto-updated |
+| **OpenCode, Claude Code, Codex, Cursor, [more](https://agentskills.io/)** | `npx skills add forcedotcom/afv-library` |
 
-## Samples
+## 📦 Samples
 
-The `samples/` folder contains synced sample apps. For example, `samples/ui-bundle-template-app-react-sample-b2e/` is kept in sync with the npm package `@salesforce/ui-bundle-template-app-react-sample-b2e` (nightly and on manual trigger via GitHub Actions). To run the same sync locally from the repo root:
+The `samples/` folder contains synced sample apps. For example, `samples/ui-bundle-template-app-react-sample-b2e/` tracks the npm package `@salesforce/ui-bundle-template-app-react-sample-b2e` (nightly and on manual trigger via GitHub Actions). 
+
+To run the same sync locally from the repository root: 
 
 ```bash
 npm install
 npm run sync-react-b2e-sample
 ```
 
-The GitHub Action runs these same commands and opens a PR only when the npm package version has changed. See [samples/README.md](samples/README.md) for details.
-
+The GitHub Action runs the same commands and opens a pull request when the npm package version changes. For more information, see [samples/README.md](samples/README.md).
 
 ## 🛠️ Agent Skills
 
-Agent Skills are modular capabilities that bundle executable workflows, scripts, and reference materials into self-contained directories. Skills follow the open [Agent Skills specification](https://agentskills.io/) and are portable across many agent tools (Agentforce Vibes, Cursor, Claude Code, etc).
+Agent Skills package executable workflows, scripts, and reference material into self-contained directories. This repository follows the open [Agent Skills specification](https://agentskills.io/) and can be used with OpenCode, Claude Code, Codex, Cursor, and other tools that support skills.
 
 ### Directory Structure
 
-Each skill is a folder containing:
-- `SKILL.md` (required) - instructions + YAML frontmatter
-- `scripts/` (optional) - executable Python/Bash/JS
-- `references/` (optional) - additional documentation
-- `assets/` (optional) - templates, schemas, lookup data
-
+Each skill is a folder that can include:
+- `SKILL.md` (required): Instructions and YAML front matter.
+- `scripts/` (optional): Executable scripts (For example, Python, Bash, or JavaScript).
+- `references/` (optional): Extra reference documentation.
+- `assets/` (optional): Templates, schemas, and lookup data
 
 ## 🤝 Contributing
 
-See [Contributing](./CONTRIBUTING.md) for complete details.
+See [Contributing](./CONTRIBUTING.md).
 
+## 💬 Feedback
 
-## Feedback
+- Open an issue in this repository
+- Open a pull request with suggested changes
+- Use GitHub Discussions or the pull request thread for broader conversation
 
-Found an issue or have a suggestion?
-- Open an issue in GitHub
-- Suggest improvements via pull request
-- Start a discussion in GitHub Discussions or the pull request thread
+## Project Governance & Support
 
+- [License](./LICENSE.txt)
+- [Code of Conduct](./CODE_OF_CONDUCT.md)
+- [Contributing](./CONTRIBUTING.md)
+- [Security](./SECURITY.md)

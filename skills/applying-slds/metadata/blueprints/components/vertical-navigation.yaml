@@ -1,0 +1,130 @@
+name: "Vertical Navigation"
+description: "A navigation component that displays menu items in a vertical list, ideal for sidebar navigation and hierarchical menu structures."
+category: "Navigation"
+slds_classes:
+  root: "slds-nav-vertical"
+  elements:
+    - class: "slds-nav-vertical__section"
+      description: "Section container for grouped navigation items"
+      purpose: "Groups related navigation items with optional header"
+    - class: "slds-nav-vertical__title"
+      description: "Section title for navigation groups"
+      purpose: "Provides heading for navigation sections"
+    - class: "slds-nav-vertical__action"
+      description: "Individual navigation item"
+      purpose: "Clickable navigation link or button"
+    - class: "slds-nav-vertical__item"
+      description: "Navigation item wrapper"
+      purpose: "Contains navigation action and provides structure"
+  modifiers:
+    - class: "slds-nav-vertical_compact"
+      description: "Compact vertical navigation"
+      usage: "Reduced spacing for dense layouts"
+    - class: "slds-nav-vertical_shade"
+      description: "Shaded background navigation"
+      usage: "Enhanced visual separation with background"
+  states:
+    - class: "slds-is-active"
+      description: "Active navigation item state"
+      trigger: "Currently selected navigation item"
+    - class: "slds-has-focus"
+      description: "Focus state for navigation items"
+      trigger: "When navigation item has keyboard focus"
+variants:
+  - name: "Base"
+    description: "Standard vertical navigation list"
+    classes:
+      - "slds-nav-vertical"
+    usage_context: "Default vertical navigation for sidebars and menus"
+    differences: "Vertical list of navigation items with optional grouping"
+lightning_component:
+  name: "lightning-vertical-navigation"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-vertical-navigation"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS vertical navigation blueprint"
+accessibility:
+  keyboard_support:
+    - "Tab to focus navigation items"
+    - "Enter/Space to activate navigation items"
+    - "Arrow keys to navigate between items"
+    - "Home/End to go to first/last items"
+  screen_reader:
+    - "Navigation structure announced as list"
+    - "Section headings provide navigation context"
+    - "Current page or selection clearly identified"
+    - "Navigation purpose communicated"
+  aria_attributes:
+    - "role='navigation' for navigation container"
+    - "aria-label describing navigation purpose"
+    - "aria-current='page' for current page links"
+    - "role='list' for navigation item containers"
+    - "role='listitem' for navigation items"
+usage_guidelines:
+  when_to_use:
+    - "For sidebar navigation in applications"
+    - "To display hierarchical menu structures"
+    - "When vertical space is available"
+    - "For persistent navigation that doesn't change frequently"
+  when_not_to_use:
+    - "For horizontal navigation (use tabs or horizontal nav)"
+    - "When space is extremely limited"
+    - "For temporary or contextual actions (use menus instead)"
+  best_practices:
+    - "Use clear, descriptive navigation labels"
+    - "Group related navigation items logically"
+    - "Indicate current page or section clearly"
+    - "Maintain consistent navigation structure"
+    - "Provide visual hierarchy with appropriate spacing"
+  common_mistakes:
+    - "Poor grouping of navigation items"
+    - "Unclear or inconsistent labeling"
+    - "Not indicating current location"
+    - "Overloading with too many navigation options"
+code_examples:
+  - title: "Basic Vertical Navigation"
+    code: |
+      <nav class="slds-nav-vertical" aria-label="Main navigation">
+            <div class="slds-nav-vertical__section">
+              <h2 class="slds-nav-vertical__title">Section One</h2>
+              <ul>
+                <li class="slds-nav-vertical__item slds-is-active">
+                  <a href="#" class="slds-nav-vertical__action" aria-current="page">
+                    Current Page
+                  </a>
+                </li>
+                <li class="slds-nav-vertical__item">
+                  <a href="#" class="slds-nav-vertical__action">
+                    Navigation Item
+                  </a>
+                </li>
+                <li class="slds-nav-vertical__item">
+                  <a href="#" class="slds-nav-vertical__action">
+                    Another Item
+                  </a>
+                </li>
+              </ul>
+            </div>
+            </nav>
+styling_hooks: []
+dependencies:
+  css_files:
+    - "nav-vertical.css"
+  javascript: []
+  icons: []
+  other_components: []
+related_components:
+  - name: "Tabs"
+    relationship: "alternative"
+    description: "Alternative horizontal navigation for content switching"
+  - name: "Trees"
+    relationship: "similar"
+    description: "Similar hierarchical navigation with nesting"
+  - name: "Global Navigation"
+    relationship: "similar"
+    description: "Works together for complete navigation system"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/vertical-navigation/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

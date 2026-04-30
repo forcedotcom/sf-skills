@@ -11,6 +11,10 @@
 #   1. Replace <placeholders> with actual values
 #   2. Deploy: sf agent test create --spec guardrail-test-spec.yaml --api-name Guardrail_Tests --target-org <alias>
 #   3. Run:    sf agent test run --api-name Guardrail_Tests --wait 10 --result-format json --target-org <alias>
+#
+# NOTE: The Testing Center API uses "topic" terminology. In Agent Script, topics are called
+# "subagents" (e.g., the `subagent` block). When writing tests, use "topic" to match the API,
+# but understand that each expectedTopic value maps to a subagent in your .agent file.
 
 name: "<Agent_Name> Guardrail Tests"
 subjectType: AGENT

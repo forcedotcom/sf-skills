@@ -1,0 +1,103 @@
+name: Alert
+description: A banner component used to communicate a state that affects the entire application or page, not a specific feature
+  or task.
+category: Feedback
+slds_classes:
+  root: ''
+  elements: []
+  modifiers:
+  - class: slds-alert_warning
+    description: Warning alert variant
+    usage: Use for warnings that need user attention
+  - class: slds-alert_error
+    description: Error alert variant
+    usage: Use for error messages that require immediate attention
+  - class: slds-alert_offline
+    description: Offline state alert variant
+    usage: Use specifically for offline connectivity messages
+  states: []
+variants:
+- name: Base
+  description: Standard alert with different severity levels
+  classes:
+  - slds-alert_warning
+  - slds-alert_error
+  usage_context: Page-level or application-level notifications
+  differences: Different colors and icons based on message type
+lightning_component:
+  name: lightning-alert
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-alert
+  mapping_notes: Direct mapping - Lightning component implements SLDS alert blueprint
+accessibility:
+  keyboard_support:
+  - No specific keyboard interactions required
+  - Focus management handled by parent context
+  screen_reader:
+  - Alert role automatically announced by screen readers
+  - Icon meaning conveyed through appropriate aria-label
+  - Alert text read immediately when displayed
+  aria_attributes:
+  - role='alert' for immediate announcements
+  - aria-label on icons to convey meaning
+  - aria-live='polite' or 'assertive' based on severity
+usage_guidelines:
+  when_to_use:
+  - For system-wide messages that affect the entire application
+  - To communicate global state changes
+  - For critical information that users must be aware of
+  - When the message applies to the entire page or workflow
+  when_not_to_use:
+  - For feature-specific messages (use toast instead)
+  - For field-level validation (use field-level help)
+  - For temporary notifications (use toast instead)
+  - For success confirmations of user actions (use toast)
+  best_practices:
+  - Use appropriate severity levels (info, warning, error)
+  - Keep alert messages concise and actionable
+  - Place alerts at the top of the content area
+  - Provide clear next steps when appropriate
+  - Don't stack multiple alerts unless absolutely necessary
+  common_mistakes:
+  - Overusing alerts for non-critical information
+  - Using wrong alert type for the message content
+  - Making alert messages too long or complex
+  - Not providing actionable information in critical alerts
+code_examples:
+- title: Info Alert
+  code: "<div class=\"\" role=\"alert\">\n      <span class=\"\">\n        <svg class=\"slds-icon slds-icon_x-small\" aria-hidden=\"\
+    true\">\n          <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#info\"></use>\n        </svg>\n    \
+    \  </span>\n      <span class=\"\">Base System Alert</span>\n      </div>\n"
+- title: Warning Alert
+  code: "<div class=\"slds-alert_warning\" role=\"alert\">\n      <span class=\"\">\n        <svg class=\"slds-icon slds-icon_x-small\"\
+    \ aria-hidden=\"true\">\n          <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#warning\"></use>\n \
+    \       </svg>\n      </span>\n      <span class=\"\">Your session will expire in 10 minutes.</span>\n      </div>\n"
+- title: Error Alert
+  code: "<div class=\"slds-alert_error\" role=\"alert\">\n      <span class=\"\">\n        <svg class=\"slds-icon slds-icon_x-small\"\
+    \ aria-hidden=\"true\">\n          <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#error\"></use>\n   \
+    \     </svg>\n      </span>\n      <span class=\"\">System maintenance is currently in progress.</span>\n      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - alert.css
+  javascript: []
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - icons
+related_components:
+- name: Toast
+  relationship: alternative
+  description: For temporary, action-specific notifications
+- name: Notifications
+  relationship: similar
+  description: Similar notification patterns for different contexts
+- name: Prompt
+  relationship: alternative
+  description: Modal dialogs for critical alerts requiring action
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/alert/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

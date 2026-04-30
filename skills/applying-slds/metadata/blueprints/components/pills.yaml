@@ -1,0 +1,154 @@
+name: "Pills"
+description: "Compact elements that represent selected items, tags, or filters, typically with the ability to be removed by the user."
+category: "Display"
+slds_classes:
+  root: "slds-pill"
+  elements:
+    - class: "slds-pill__label"
+      description: "Text label within the pill"
+      purpose: "Contains the pill's display text"
+    - class: "slds-pill__icon_container"
+      description: "Container for pill icon"
+      purpose: "Holds icon associated with the pill"
+    - class: "slds-pill__remove"
+      description: "Remove button for dismissible pills"
+      purpose: "Allows user to remove the pill"
+  modifiers:
+    - class: "slds-pill_link"
+      description: "Clickable pill variant"
+      usage: "When pill should be interactive/clickable"
+  states:
+    - class: "slds-is-selected"
+      description: "Selected pill state"
+      trigger: "When pill is currently selected"
+    - class: "slds-has-error"
+      description: "Error state for pill"
+      trigger: "When pill represents an error condition"
+variants:
+  - name: "Base"
+    description: "Standard pill element"
+    classes:
+      - "slds-pill"
+    usage_context: "Default pill implementation for tags or selections"
+    differences: "Basic pill with label and optional remove button"
+  - name: "Link"
+    description: "Clickable pill that acts as a link"
+    classes:
+      - "slds-pill"
+      - "slds-pill_link"
+    usage_context: "Interactive pills that navigate or perform actions"
+    differences: "Clickable pill with hover and focus states"
+lightning_component:
+  name: "lightning-pill"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-pill"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS pill blueprint"
+accessibility:
+  keyboard_support:
+    - "Tab to focus interactive pills"
+    - "Enter/Space to activate pill actions"
+    - "Tab to focus remove button"
+    - "Enter/Space to remove pill"
+  screen_reader:
+    - "Pill label announced clearly"
+    - "Removal action announced when available"
+    - "Selection state communicated"
+    - "Error states announced appropriately"
+  aria_attributes:
+    - "aria-label for pills without visible text"
+    - "aria-describedby for additional pill context"
+    - "role='option' in listbox contexts"
+    - "aria-selected for selectable pills"
+usage_guidelines:
+  when_to_use:
+    - "To represent selected items or filters"
+    - "For tags or categories"
+    - "To show applied search criteria"
+    - "For removable selections in forms"
+  when_not_to_use:
+    - "For permanent labels (use badges instead)"
+    - "For navigation items (use navigation components)"
+    - "For status indicators (use badges or icons)"
+  best_practices:
+    - "Keep pill labels concise and descriptive"
+    - "Provide clear removal action when appropriate"
+    - "Use consistent pill styling throughout interface"
+    - "Group related pills logically"
+    - "Limit number of pills to maintain usability"
+  common_mistakes:
+    - "Making pill labels too long or verbose"
+    - "Using pills for non-removable content"
+    - "Poor contrast or visibility"
+    - "Inconsistent pill behavior within the same context"
+code_examples:
+  - title: "Basic Pill"
+    code: |
+      <span class="slds-pill">
+            <a href="#" class="slds-pill__action" title="Full pill label verbiage mirrored here">
+              <span class="slds-pill__label">Pill Label</span>
+            </a>
+            <button class="slds-button slds-button_icon slds-button_icon-bare slds-pill__remove" title="Remove">
+              <svg class="slds-button__icon" aria-hidden="true">
+                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+              </svg>
+              <span class="slds-assistive-text">Remove</span>
+            </button>
+            </span>
+  - title: "Pill with Icon"
+    code: |
+      <span class="slds-pill">
+            <span class="slds-pill__icon_container">
+              <span class="slds-icon_container slds-icon-standard-account">
+                <svg class="slds-icon" aria-hidden="true">
+                  <use xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#account"></use>
+                </svg>
+              </span>
+            </span>
+            <a href="#" class="slds-pill__action" title="Account: Acme Corporation">
+              <span class="slds-pill__label">Acme Corporation</span>
+            </a>
+            <button class="slds-button slds-button_icon slds-button_icon-bare slds-pill__remove" title="Remove">
+              <svg class="slds-button__icon" aria-hidden="true">
+                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+              </svg>
+              <span class="slds-assistive-text">Remove</span>
+            </button>
+            </span>
+styling_hooks:
+  - name: "--slds-c-pill-color-background"
+    description: "Background color for pills"
+    category: "color"
+  - name: "--slds-c-pill-color-border"
+    description: "Border color for pills"
+    category: "color"
+  - name: "--slds-c-pill-radius-border"
+    description: "Border radius for pills"
+    category: "border"
+dependencies:
+  css_files:
+    - "pill.css"
+    - "button.css"
+    - "icons.css"
+  javascript: []
+  icons:
+    - "utility-sprite.svg"
+    - "standard-sprite.svg"
+  other_components:
+    - "button-icon"
+    - "icons"
+related_components:
+  - name: "Badge"
+    relationship: "similar"
+    description: "Similar visual treatment for non-removable status"
+  - name: "Pill Container"
+    relationship: "container"
+    description: "Container for managing collections of pills"
+  - name: "Combobox"
+    relationship: "depends-on"
+    description: "Often uses pills to show selected items"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/pills/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."
