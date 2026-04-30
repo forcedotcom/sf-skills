@@ -33,32 +33,23 @@ sf data query --json \
   -o TARGET_ORG
 
 # Step 2: Create Einstein Agent User (2 minutes)
-# Get Profile ID (read result.records[0].Id from JSON response)
-sf data query --json \
-  --query "SELECT Id FROM Profile WHERE Name = 'Einstein Agent User'" \
-  -o TARGET_ORG
+# Use the new dedicated command — works in all org types (scratch, sandbox, production)
+# Automatically assigns Einstein Agent User profile + AgentforceServiceAgentBase,
+# AgentforceServiceAgentUser, and EinsteinGPTPromptTemplateUser permission sets
+sf org create agent-user \
+  --target-org TARGET_ORG \
+  --first-name <AgentName> \
+  --last-name Agent
 
-# For Production/Sandbox (non-scratch org):
-# Use the ProfileId from the query above
-sf data create record --json --sobject User --values \
-  "Username=<agent_name>_user@<orgId>.ext \
-   LastName=<AgentName> \
-   Email=admin@example.com \
-   Alias=<alias> \
-   TimeZoneSidKey=America/Los_Angeles \
-   LocaleSidKey=en_US \
-   EmailEncodingKey=UTF-8 \
-   ProfileId=<PROFILE_ID> \
-   LanguageLocaleKey=en_US" \
-  -o TARGET_ORG
-
-# For Scratch Orgs (use user definition file):
-# sf org create user --definition-file config/einstein-agent-user.json -o TARGET_ORG
+# Capture the username from the command output (result.username) — it is generated
+# with a unique GUID suffix, e.g. agent_agent@00Dxx.org.salesforce.com-abc123
 
 # Step 3: Assign System Permission Set (1 minute)
+# NOTE: AgentforceServiceAgentUser is already assigned by sf org create agent-user.
+# This step is only needed if you created the user manually (legacy method).
 sf org assign permset --json \
   --name AgentforceServiceAgentUser \
-  --on-behalf-of <agent_name>_user@<orgId>.ext \
+  --on-behalf-of <agent_name_from_output> \
   -o TARGET_ORG
 
 # Step 4: Deploy Custom Permission Set (3 minutes)
@@ -102,11 +93,11 @@ sf agent activate --json \
 ```
 
 Critical notes:
-- For **scratch orgs**, use `sf org create user --definition-file`
-- For **production/sandbox**, use `sf data create record` as shown above
-- `sf org create user` only works in scratch orgs — it will fail in production/sandbox
+- `sf org create agent-user` works in **all org types** (scratch, sandbox, production) — use it instead of the legacy `sf org create user` or `sf data create record` approach
+- The command auto-assigns `AgentforceServiceAgentUser` — no separate permset assignment needed
+- Capture the generated username from the command output (`result.username`) and use it for `default_agent_user`
 - Always test with preview BEFORE publishing to avoid version management overhead
-- Assign `AgentforceServiceAgentUser` BEFORE publishing to prevent "Internal Error"
+- Assign any custom permission sets (`{AgentName}_Access`) BEFORE publishing to prevent "Internal Error"
 - Publishing does NOT activate — you must run `sf agent activate` separately
 
 ---
@@ -117,12 +108,6 @@ Critical notes:
 
 Service agents need a dedicated service account with consistent permissions.
 
-**Get Org ID first** (needed for username format):
-```bash
-sf org display --json -o TARGET_ORG
-# Read result.id from the JSON response
-```
-
 **Query existing Einstein Agent Users** (skip creation if one exists):
 ```bash
 sf data query --json --query "SELECT Id, Username, IsActive FROM User WHERE Profile.Name = 'Einstein Agent User' AND IsActive = true" -o TARGET_ORG
@@ -130,58 +115,30 @@ sf data query --json --query "SELECT Id, Username, IsActive FROM User WHERE Prof
 
 **Create the user** (if none exists):
 
-1. Get the Einstein Agent User profile ID:
-   ```bash
-   sf data query --json --query "SELECT Id FROM Profile WHERE Name = 'Einstein Agent User'" -o TARGET_ORG
-   ```
+Use the dedicated command — works in all org types (scratch, sandbox, production):
 
-2. Create a user definition file (`config/einstein-agent-user.json`):
-   ```json
-   {
-     "Username": "{agent_name}_agent@{orgId}.ext",
-     "LastName": "{AgentName} Agent",
-     "Email": "placeholder@example.com",
-     "Alias": "agntuser",
-     "ProfileId": "<profile-id-from-step-1>",
-     "TimeZoneSidKey": "America/Los_Angeles",
-     "LocaleSidKey": "en_US",
-     "EmailEncodingKey": "UTF-8",
-     "LanguageLocaleKey": "en_US",
-     "UserPermissionsKnowledgeUser": true
-   }
-   ```
+```bash
+sf org create agent-user \
+  --target-org TARGET_ORG \
+  --first-name <AgentName> \
+  --last-name Agent
+```
 
-3. Create the user:
+This command:
+- Creates a user with the "Einstein Agent User" profile
+- Automatically assigns `AgentforceServiceAgentBase`, `AgentforceServiceAgentUser`, and `EinsteinGPTPromptTemplateUser` permission sets
+- Returns a unique generated username in `result.username` — record this for `default_agent_user`
 
-   **Option A: Scratch Org (Definition File)**
-   ```bash
-   sf org create user --json \
-     --definition-file config/einstein-agent-user.json \
-     -o TARGET_ORG
-   ```
+Optional flags:
+- `--base-username <email>` — sets the base portion of the username (a unique suffix is always appended)
+- `--json` — output as JSON for scripting
 
-   **Option B: Production/Sandbox (Direct Record Creation)**
-   ```bash
-   # Get Profile ID first
-   # Get Profile ID (read result.records[0].Id from JSON response)
-   sf data query --json \
-     --query "SELECT Id FROM Profile WHERE Name = 'Einstein Agent User'" \
-     -o TARGET_ORG
+**Verify creation:**
+```bash
+sf data query --json --query "SELECT Id, Username, IsActive FROM User WHERE Profile.Name = 'Einstein Agent User' AND IsActive = true ORDER BY CreatedDate DESC LIMIT 5" -o TARGET_ORG
+```
 
-   # Create user directly (use ProfileId from query above)
-   sf data create record --json --sobject User --values \
-     "Username='{agent_name}_agent@{orgId}.ext' LastName='{AgentName} Agent' Email='placeholder@example.com' Alias='agntuser' ProfileId='<PROFILE_ID>' TimeZoneSidKey='America/Los_Angeles' LocaleSidKey='en_US' EmailEncodingKey='UTF-8' LanguageLocaleKey='en_US'" \
-     -o TARGET_ORG
-   ```
-
-   **Note**: `sf org create user` only works in scratch orgs. For production/sandbox, use `sf data create record`. Attempting `sf org create user` in a non-scratch org fails with an authorization error.
-
-4. Verify creation:
-   ```bash
-   sf data query --json --query "SELECT Id, Username, IsActive FROM User WHERE Username = '{agent_name}_agent@{orgId}.ext'" -o TARGET_ORG
-   ```
-
-**Username format**: `{agent_name}_agent@{orgId}.ext` (production) or `{agent_name}.{suffix}@{orgfarm}.salesforce.com` (dev/scratch). Always query the target org to confirm the exact format.
+**Note**: The generated username has a GUID suffix for global uniqueness (e.g. `agentname_agent@orgid.salesforce.com-abc123`). Always read the username from command output rather than constructing it manually.
 
 ---
 
@@ -189,18 +146,22 @@ sf data query --json --query "SELECT Id, Username, IsActive FROM User WHERE Prof
 
 Critical: Must be assigned BEFORE publishing the agent. Without it, publish fails with "Internal Error".
 
+**If you used `sf org create agent-user` (recommended):** `AgentforceServiceAgentUser` is assigned automatically — skip to Step 3.
+
+**If you created the user manually (legacy):**
+
 Via Setup UI:
 1. Setup > Permission Sets > search "AgentforceServiceAgentUser"
 2. Manage Assignments > Add Assignments > select the Einstein Agent User > Save
 
 Via CLI:
 ```bash
-sf org assign permset --json --name AgentforceServiceAgentUser --on-behalf-of "{agent_name}_agent@{orgId}.ext" -o TARGET_ORG
+sf org assign permset --json --name AgentforceServiceAgentUser --on-behalf-of "{agent_name_from_output}" -o TARGET_ORG
 ```
 
 Verify assignment:
 ```bash
-sf data query --json --query "SELECT Id, PermissionSet.Name FROM PermissionSetAssignment WHERE Assignee.Username = '{agent_name}_agent@{orgId}.ext' AND PermissionSet.Name = 'AgentforceServiceAgentUser'" -o TARGET_ORG
+sf data query --json --query "SELECT Id, PermissionSet.Name FROM PermissionSetAssignment WHERE Assignee.Username = '{agent_name_from_output}' AND PermissionSet.Name = 'AgentforceServiceAgentUser'" -o TARGET_ORG
 ```
 
 ---
@@ -460,9 +421,9 @@ Checklist:
 - **Prevention:** Deploy → Test → Publish workflow (Step 6.1-6.3)
 - **Result:** No version management overhead during development
 
-### 4. Wrong User Creation Command
-- **Cause:** Using `sf org create user` in non-scratch orgs
-- **Prevention:** Step 1 provides correct commands for each org type (Option A vs B)
+### 4. Wrong User Creation Command (Legacy)
+- **Cause:** Using `sf org create user` in non-scratch orgs, or manually constructing user records with `sf data create record`
+- **Prevention:** Use `sf org create agent-user --target-org TARGET_ORG` — works in all org types and auto-assigns required permission sets
 - **Result:** User created successfully without authorization errors
 
 ### 5. Auto-Generated Permission Set Gaps
@@ -486,7 +447,7 @@ Checklist:
 | "invocable action does not exist" | Apex class not in custom PS (auto-generated PS incomplete) | Create custom `{AgentName}_Access` with all `<classAccesses>` (Step 3) |
 | "Invalid default_agent_user" | Username typo or user not active | Query Einstein Agent Users, verify exact username + `IsActive = true` |
 | Agent runs but returns wrong data | Employee agent using wrong user context | Verify `agent_type` — Service agents use dedicated user, Employee agents use logged-in user |
-| `sf org create user` fails | Used in production/sandbox org | Use `sf data create record` instead (Step 1, Option B) |
+| `sf org create user` fails | Used in production/sandbox org | Use `sf org create agent-user --target-org TARGET_ORG` instead (Step 1) |
 
 ---
 
@@ -526,4 +487,6 @@ Checklist:
 
 ---
 
-*Validated against: ORM1, ORM2, AutomotiveSupport, SalesforceProductAssistant agents. Last validated: 2026-03-07.*
+*Validated against: ORM1, ORM2, AutomotiveSupport, SalesforceProductAssistant agents. Last validated: 2026-03-07. 
+Updated to use `sf org create agent-user` (SF CLI 2.131.7+)
+2026-04-30.*

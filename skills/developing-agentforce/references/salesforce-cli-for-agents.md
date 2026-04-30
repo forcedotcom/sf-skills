@@ -331,53 +331,27 @@ If `TotalLicenses > UsedLicenses`, a license is available and a new Einstein Age
 
 ### Creating an Einstein Agent User
 
-#### Step 1: Query for the Einstein Agent User profile ID
+Use the dedicated command — works in all org types (scratch, sandbox, production). It automatically assigns the Einstein Agent User profile and the required permission sets (`AgentforceServiceAgentBase`, `AgentforceServiceAgentUser`, `EinsteinGPTPromptTemplateUser`).
 
 ```bash
-sf data query --json -q "SELECT Id FROM Profile WHERE Name = 'Einstein Agent User'"
+sf org create agent-user \
+  --target-org <TARGET_ORG> \
+  --first-name <AgentName> \
+  --last-name Agent \
+  --json
 ```
 
-#### Step 2: Create a User import JSON file (e.g., `data-import/User.json`)
+Optional: `--base-username <email>` sets the base portion of the username (a unique suffix is always appended).
 
-```json
-{
-    "records": [
-        {
-            "attributes": {
-                "type": "User",
-                "referenceId": "AgentUserRef1"
-            },
-            "ProfileId": "<PROFILE_ID_FROM_STEP_1>",
-            "Username": "<UNIQUE_USERNAME>",
-            "Alias": "AgntUsr",
-            "CommunityNickname": "Agent User<UNIQUE_STRING>",
-            "Email": "noreply@example.com",
-            "FirstName": "Agent",
-            "LastName": "User",
-            "IsActive": true,
-            "ForecastEnabled": false,
-            "EmailEncodingKey": "UTF-8",
-            "LanguageLocaleKey": "en_US",
-            "LocaleSidKey": "en_US",
-            "TimeZoneSidKey": "America/Los_Angeles"
-        }
-    ]
-}
-```
+**Capture the generated username** from `result.username` in the output — use it as `default_agent_user` in the `.agent` config.
 
-#### Step 3: Import the user record
-
-```bash
-sf data import tree --json --files data-import/User.json
-```
-
-#### Step 4: Verify the user was created
+#### Verify the user was created
 
 ```bash
 sf data query --json -q "SELECT Username FROM User WHERE Profile.UserLicense.Name = 'Einstein Agent' AND IsActive = true LIMIT 5"
 ```
 
-After creating the user, continue with permission setup in [Agent User Setup & Permissions](agent-user-setup.md).
+After creating the user, continue with custom permission set setup in [Agent User Setup & Permissions](agent-user-setup.md).
 
 ---
 
