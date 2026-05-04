@@ -1,3 +1,12 @@
+## [1.7.5](https://github.com/forcedotcom/afv-library/compare/1.7.4...1.7.5) (2026-05-04)
+
+
+### Bug Fixes
+
+* remove unused skill @W-22336514@ ([#235](https://github.com/forcedotcom/afv-library/issues/235)) ([0af0eae](https://github.com/forcedotcom/afv-library/commit/0af0eaecf615c469b154d5608aedd3eed43d588f))
+
+
+
 ## [1.7.4](https://github.com/forcedotcom/afv-library/compare/1.7.3...1.7.4) (2026-04-27)
 
 
