@@ -174,11 +174,11 @@ export const MaintenanceDetailsModal: React.FC<MaintenanceDetailsModalProps> = (
 	);
 };
 
-type Priority = "Emergency (2hr)" | "High (Same Day)" | "Standard";
+type Priority = "Emergency" | "High" | "Standard";
 
 const priorityStyles: Record<Priority, string> = {
-	"Emergency (2hr)": "bg-red-100 text-red-700 border-red-200 text-sm",
-	"High (Same Day)": "bg-orange-100 text-orange-700 border-orange-200 text-sm",
+	Emergency: "bg-red-100 text-red-700 border-red-200 text-sm",
+	High: "bg-orange-100 text-orange-700 border-orange-200 text-sm",
 	Standard: "bg-blue-100 text-blue-700 border-blue-200 text-sm",
 };
 

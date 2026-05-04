@@ -1,6 +1,6 @@
 ---
 name: searching-media
-description: "Searches for and retrieves existing visual media (images, logos, icons, photos, graphics, banners, thumbnails, hero images, backgrounds) from sources such as Salesforce CMS, Data 360 or any other source. Use this skill ANY TIME a user request involves finding, searching, getting, fetching, retrieving, grabbing, looking up, or locating media. Takes PRIORITY and activates FIRST when ANY media search/retrieval is mentioned, regardless of what else happens with the media afterward. Triggers for requests like \"search for logo\", \"find hero image\", \"get company logo\", \"locate icons\", \"fetch background image\", \"retrieve product photos\". Handles the search and source selection workflow. Does not apply when the request is about brand search, to generate NEW images with AI, design custom graphics from scratch, or edit existing images."
+description: "Searches for and retrieves existing visual media (images, logos, icons, photos, graphics, banners, thumbnails, hero images, backgrounds) from sources such as Salesforce CMS, Data 360 or any other source. Use this skill ANY TIME a user request involves finding, searching, getting, fetching, retrieving, grab, looking up, locating media. NEVER call search_media_cms_channels, search_electronic_media tools directly — always go through this skill first. This skill must be activated before any tool is used for media search or retrieval, without exception.  Takes PRIORITY and activates FIRST when ANY media search/retrieval is mentioned, regardless of what else happens with the media afterward. Triggers for requests like \"search for logo\", \"find hero image\", \"get company logo\", \"locate icons\", \"fetch background image\", \"retrieve product photos\". Handles the search and source selection workflow. Does not apply when the request is about brand search, to generate NEW images with AI, or edit existing images."
 compatibility: "Requires search_media_cms_channels and/or search_electronic_media MCP tools"
 metadata:
   version: "1.0"
@@ -33,11 +33,12 @@ Universal routing skill for searching and retrieving existing images and media.
 
 When a user requests to find an image:
 
-**Your first response MUST be plain text only — zero tool calls.** You MUST follow this sequence:
+**Your first action MUST use the ask_followup_question tool to present search sources.**
 
-1. **First response MUST be text only:** A numbered list of search sources for the user. No tool calls of any kind.
-2. **Wait for user to reply** with their selected option number
-3. **Only then** call the appropriate search tool (this is the FIRST tool call in the entire interaction)
+1. **Use ask_followup_question** to present available search sources as options
+2. **Receive the user's selection** from the tool response
+3. **Then** call the appropriate search tool based on their choice
+
 
 **Example of what NOT to do:**
 - ❌ Calling ANY tool before the user picks a source (MCP tools, file reads, descriptor checks, etc.)
@@ -279,7 +280,11 @@ Ask the user to provide:
 
 ## Presenting Search Results
 
-Parse the tool response and present **ALL** results as numbered options. Show the image title only — do not display the URL. When the user selects an option, use the URL internally to apply the image.
+**Your action MUST use the `ask_followup_question` tool to present search results as options.**
+1. **Parse the tool response** — Extract all image results (title and source)
+2. **Use `ask_followup_question`** to present ALL results as selectable options. Show the image title only — do not display the URL.
+3. **Receive the user's selection** from the tool response
+4. **Then** apply the selected image
 
 ```
 I found 4 images. Which one would you like to use?
@@ -300,6 +305,7 @@ I found 4 images. Which one would you like to use?
 **Never auto-select an image.** Always wait for user choice.
 
 ## Applying the Selected Image
+
 
 After the user chooses:
 

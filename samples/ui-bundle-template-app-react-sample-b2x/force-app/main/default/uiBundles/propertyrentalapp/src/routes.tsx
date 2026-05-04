@@ -49,7 +49,7 @@ export const routes: RouteObject[] = [
           {
             path: ROUTES.LOGIN.PATH,
             element: <Login />,
-            handle: { showInNavigation: true, label: "Login", title: ROUTES.LOGIN.TITLE }
+            handle: { showInNavigation: false, label: "Login", title: ROUTES.LOGIN.TITLE }
           },
           {
             path: ROUTES.REGISTER.PATH,
@@ -74,7 +74,7 @@ export const routes: RouteObject[] = [
           {
             path: ROUTES.PROFILE.PATH,
             element: <Profile />,
-            handle: { showInNavigation: true, label: "Profile", title: ROUTES.PROFILE.TITLE }
+            handle: { showInNavigation: false, label: "Profile", title: ROUTES.PROFILE.TITLE }
           },
           {
             path: ROUTES.CHANGE_PASSWORD.PATH,

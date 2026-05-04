@@ -385,7 +385,16 @@ function buildSingleFilter<TFilter>(
 			if (!value) return null;
 			const searchFields = config?.searchFields ?? [];
 			if (searchFields.length === 0) return null;
-			const clauses = searchFields.map((f) => ({ [f]: { like: `%${value}%` } }) as TFilter);
+			// Supports dot-notation for relationship fields (e.g. "User__r.Name")
+			// by building nested filter objects: { User__r: { Name: { like: "%x%" } } }
+			const clauses = searchFields.map((f) => {
+				const parts = f.split(".");
+				let clause: Record<string, unknown> = { like: `%${value}%` };
+				for (let i = parts.length - 1; i >= 0; i--) {
+					clause = { [parts[i]]: clause };
+				}
+				return clause as TFilter;
+			});
 			if (clauses.length === 1) return clauses[0];
 			return { or: clauses } as TFilter;
 		}

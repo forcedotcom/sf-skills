@@ -39,7 +39,6 @@ const FILTER_CONFIGS: FilterFieldConfig[] = [
 		searchFields: ["Name", "Address__c"],
 		placeholder: "Search by name or address...",
 	},
-	{ field: "Name", label: "Property Name", type: "text", placeholder: "Search by name..." },
 	{ field: "Status__c", label: "Status", type: "picklist" },
 	{ field: "Type__c", label: "Type", type: "picklist" },
 	{ field: "Monthly_Rent__c", label: "Monthly Rent", type: "numeric" },
@@ -169,7 +168,7 @@ function PropertySearchFilters({
 					field="search"
 					label="Search"
 					placeholder="Search by name or address..."
-					className="w-full sm:w-50"
+					className="w-full sm:w-80"
 				/>
 				<MultiSelectFilter
 					field="Status__c"

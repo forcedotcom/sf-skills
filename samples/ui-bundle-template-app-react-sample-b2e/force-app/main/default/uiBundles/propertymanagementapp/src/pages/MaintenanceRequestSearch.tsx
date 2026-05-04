@@ -67,8 +67,8 @@ const FILTER_CONFIGS: FilterFieldConfig[] = [
 		field: "search",
 		label: "Search",
 		type: "search",
-		searchFields: ["Name"],
-		placeholder: "Search by name...",
+		searchFields: ["Name", "User__r.Name", "Property__r.Address__c", "Assigned_Worker__r.Name"],
+		placeholder: "Search by request #, tenant, address, or worker...",
 	},
 	{ field: "Status__c", label: "Status", type: "picklist" },
 	{ field: "Type__c", label: "Type", type: "picklist" },
@@ -249,8 +249,8 @@ function MaintenanceRequestSearchFilters({
 				<SearchFilter
 					field="search"
 					label="Search"
-					placeholder="Search by name..."
-					className="w-full sm:w-50"
+					placeholder="Search by request #, tenant, address, or worker..."
+					className="w-full sm:w-80"
 				/>
 				<MultiSelectFilter
 					field="Status__c"
@@ -323,6 +323,7 @@ function MaintenanceRequestSearchTable({
 	return (
 		<>
 			{requestNodes.map((request) => {
+				const requestName = request.Name?.value ?? "";
 				const issueType = request.Type__c?.value ?? "";
 				const description = request.Description__c?.value ?? "";
 				const tenantName = request.User__r?.Name?.value || "Unknown";
@@ -355,7 +356,7 @@ function MaintenanceRequestSearchTable({
 								</div>
 								<div className="flex-1 min-w-0">
 									<h3 className="font-semibold text-gray-900 truncate mb-1">{description}</h3>
-									<p className="text-sm text-gray-500">By Tenant</p>
+									<p className="text-sm text-gray-500">{requestName}</p>
 								</div>
 							</div>
 						</TableCell>
@@ -363,8 +364,8 @@ function MaintenanceRequestSearchTable({
 							<div className="flex items-center gap-3 min-w-0">
 								<UserAvatar name={tenantName} size="md" />
 								<div className="min-w-0 flex-1">
-									<p className="font-medium text-gray-900 truncate">{tenantName}</p>
-									<p className="text-gray-500 truncate">{tenantUnit}</p>
+									<p className="font-medium text-gray-900 truncate">{tenantUnit}</p>
+									<p className="text-gray-500 truncate">{tenantName}</p>
 								</div>
 							</div>
 						</TableCell>

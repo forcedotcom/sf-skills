@@ -1,15 +1,22 @@
 ---
 name: generating-ui-bundle-metadata
-description: "Scaffold new Salesforce UI bundles and configure their metadata — sf ui-bundle generate, UIBundle bundles (meta XML, ui-bundle.json with routing/headers/outputDir), and CSP Trusted Sites for external domains. Use whenever creating a new UI bundle, setting up UI bundle metadata structure, configuring routing or headers, setting outputDir, adding external domains that need CSP registration, or editing bundle configuration. Triggers on: create UI bundle, create ui-bundle, new app, sf ui-bundle generate, metadata, ui-bundle.json, CSP, trusted site, bundle configuration, meta XML, routing config, external domain, headers config, outputDir."
+description: "MUST activate when the project contains a uiBundles/*/src/ directory and scaffolding a new UI bundle or app, or when editing ui-bundle.json, .uibundle-meta.xml, or CSP trusted site files. Use this skill when scaffolding with sf template generate ui-bundle, configuring ui-bundle.json (routing, headers, outputDir), or registering CSP Trusted Sites. Activate when the task involves files matching *.uibundle-meta.xml, ui-bundle.json, or cspTrustedSites/*.cspTrustedSite-meta.xml."
 ---
 
 # UI Bundle Metadata
 
 ## Scaffolding a New UI Bundle
 
-Use `sf ui-bundle generate` to create new apps — not create-react-app, Vite, or other generic scaffolds.
+Use `sf template generate ui-bundle` to create new apps — not create-react-app, Vite, or other generic scaffolds.
 
-**UI bundle name (`-n`):** Alphanumerical only — no spaces, hyphens, underscores, or special characters. Example: `CoffeeBoutique` (not `Coffee Boutique`).
+**Always pass `--template reactbasic`** to scaffold a React-based bundle.
+
+**UI bundle name (`-n`):** Alphanumerical only — no spaces, hyphens, underscores, or special characters.
+
+**Example:**
+```bash
+sf template generate ui-bundle -n CoffeeBoutique --template reactbasic
+```
 
 After generation:
 1. Replace all default boilerplate — "React App", "Vite + React", default `<title>`, placeholder text

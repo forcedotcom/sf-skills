@@ -1,0 +1,105 @@
+# Multi-Subagent Agent Template
+# An agent with multiple conversation subagents (hub-and-spoke pattern)
+# Users are routed to specialized subagents based on their needs
+#
+# Usage: Replace {{placeholders}} with your values
+# Required: agent_name, default_agent_user, agent_label, description
+# Required: At least 2 subagents with label and description
+
+system:
+	instructions: "{{SystemInstructions}}"
+	messages:
+		welcome: "{{WelcomeMessage}}"
+		error: "I'm sorry, I encountered an issue. Please try again."
+
+config:
+	agent_name: "{{AgentApiName}}"
+	default_agent_user: "{{AgentUser}}"
+	agent_label: "{{AgentLabel}}"
+	description: "{{AgentDescription}}"
+
+variables:
+	EndUserId: linked string
+		source: @MessagingSession.MessagingEndUserId
+		description: "Messaging End User ID"
+	RoutableId: linked string
+		source: @MessagingSession.Id
+		description: "Messaging Session ID"
+	ContactId: linked string
+		source: @MessagingEndUser.ContactId
+		description: "Contact ID"
+	user_intent: mutable string
+		description: "What the user is trying to accomplish"
+
+language:
+	default_locale: "en_US"
+	additional_locales: ""
+	all_additional_locales: False
+
+start_agent agent_router:
+	label: "Subagent Router"
+	description: "Routes users to the appropriate subagent based on their needs"
+
+	reasoning:
+		instructions: ->
+			| Determine what the user needs help with.
+			| Route them to the most appropriate subagent.
+			| If unclear, ask clarifying questions.
+		actions:
+			go_to_subagent_one: @utils.transition to @subagent.{{subagent_one_name}}
+			go_to_subagent_two: @utils.transition to @subagent.{{subagent_two_name}}
+			go_to_subagent_three: @utils.transition to @subagent.{{subagent_three_name}}
+			go_to_farewell: @utils.transition to @subagent.farewell
+			go_to_escalation: @utils.transition to @subagent.escalation
+
+subagent {{subagent_one_name}}:
+	label: "{{SubagentOneLabel}}"
+	description: "{{SubagentOneDescription}}"
+
+	reasoning:
+		instructions: ->
+			| {{SubagentOneInstructions}}
+		actions:
+			back_to_menu: @utils.transition to @subagent.agent_router
+
+subagent {{subagent_two_name}}:
+	label: "{{SubagentTwoLabel}}"
+	description: "{{SubagentTwoDescription}}"
+
+	reasoning:
+		instructions: ->
+			| {{SubagentTwoInstructions}}
+		actions:
+			back_to_menu: @utils.transition to @subagent.agent_router
+
+subagent {{subagent_three_name}}:
+	label: "{{SubagentThreeLabel}}"
+	description: "{{SubagentThreeDescription}}"
+
+	reasoning:
+		instructions: ->
+			| {{SubagentThreeInstructions}}
+		actions:
+			back_to_menu: @utils.transition to @subagent.agent_router
+
+subagent farewell:
+	label: "Farewell"
+	description: "Ends the conversation gracefully"
+
+	reasoning:
+		instructions: ->
+			| Thank the user for reaching out.
+			| Wish them a great day.
+			| Let them know they can return anytime.
+
+subagent escalation:
+	label: "Escalation"
+	description: "Handles requests to transfer to a live human agent"
+
+	reasoning:
+		instructions: ->
+			| If the user explicitly asks to speak with a human, escalate.
+			| Acknowledge the request and transfer gracefully.
+		actions:
+			escalate_to_human: @utils.escalate
+				description: "Escalate to a human agent"

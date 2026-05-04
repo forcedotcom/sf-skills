@@ -1,17 +1,17 @@
 import { Link, useLocation } from "react-router";
 import { Home, Search, BarChart3, Wrench, Phone, type LucideIcon } from "lucide-react";
 import { useAuth } from "@/features/authentication/context/AuthContext";
-import { useTenantAccess } from "@/hooks/useTenantAccess";
+import { useTenantAccess } from "@/context/TenantAccessContext";
 import { useMemo } from "react";
 
-interface NavItem {
+interface VerticalNavItem {
 	path: string;
 	icon: LucideIcon;
 	label: string;
 	authRequired?: boolean;
 }
 
-const navItems: NavItem[] = [
+const navItems: VerticalNavItem[] = [
 	{ path: "/", icon: Home, label: "Home" },
 	{ path: "/dashboard", icon: BarChart3, label: "Dashboard", authRequired: true },
 	{ path: "/properties", icon: Search, label: "Property Search" },
@@ -19,15 +19,15 @@ const navItems: NavItem[] = [
 	{ path: "/contact", icon: Phone, label: "Contact Us" },
 ];
 
-interface NavMenuProps {
+interface VerticalNavProps {
 	isOpen?: boolean;
 	onClose?: () => void;
 }
 
-export function NavMenu({ isOpen = false, onClose }: NavMenuProps) {
+export function VerticalNav({ isOpen = false, onClose }: VerticalNavProps) {
 	const location = useLocation();
-	const { isAuthenticated, user } = useAuth();
-	const { hasTenantRecord } = useTenantAccess(user?.id);
+	const { isAuthenticated } = useAuth();
+	const { hasTenantRecord } = useTenantAccess();
 
 	const visibleItems = useMemo(
 		() =>

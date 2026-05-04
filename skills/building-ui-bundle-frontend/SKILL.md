@@ -1,6 +1,6 @@
 ---
 name: building-ui-bundle-frontend
-description: "Build and modify React UI for Salesforce UI bundles — pages, components, layout, navigation, and headers/footers. Use whenever creating or editing TSX/JSX files or making visual/layout changes. Triggers on: add page, add component, header, footer, navigation, layout, styling, Tailwind, shadcn, React component, appLayout."
+description: "MUST activate before editing ANY file under uiBundles/*/src/ for visual or UI changes to an EXISTING app — pages, components, sections, layout, styling, colors, fonts, navigation, animations, or any look-and-feel change. Use this skill when modifying pages, components, layout, styling, or navigation in an existing UI bundle app. Activate when the project contains appLayout.tsx, routes.tsx, src/pages/, src/components/, or global.css. This skill contains critical project-specific conventions (appLayout.tsx shell, shadcn/ui components, Tailwind CSS, Salesforce base-path routing, module restrictions) that override general knowledge. Without this skill, generated code will use wrong imports, break routing, or ignore project structure. Do NOT use when creating a new app from scratch (use building-ui-bundle-app instead)."
 ---
 
 # UI Bundle UI
@@ -43,6 +43,15 @@ Before finishing, confirm: Did I update `appLayout.tsx` with real nav items and 
 
 Use a single router package. With `createBrowserRouter` / `RouterProvider`, all imports must come from `react-router` (not `react-router-dom`).
 
+If the app uses a client-side router (React Router, Remix Router, Vue Router, etc.), always derive basename / basepath / base from the document's `<base href>` tag at runtime. Never hardcode the basename:
+
+```js
+const basename = document.querySelector('base')
+  ? new URL(document.querySelector('base').href).pathname.replace(/\/$/, '')
+  : '/';
+const router = createBrowserRouter(routes, { basename });
+```
+
 ### Component Library and Styling
 
 - **shadcn/ui** for components: `import { Button } from '@/components/ui/button';`
@@ -84,6 +93,8 @@ Choose a clear conceptual direction and execute it with precision. Bold maximali
 - **Motion:** Focus on high-impact moments — one well-orchestrated page load with staggered reveals (`animation-delay`) creates more delight than scattered micro-interactions. Use scroll-triggering and hover states that surprise. Prefer CSS-only solutions; use Motion library for React when available.
 - **Spatial Composition:** Unexpected layouts — asymmetry, overlap, diagonal flow, grid-breaking elements. Generous negative space OR controlled density.
 - **Backgrounds & Depth:** Create atmosphere rather than defaulting to solid colors. Gradient meshes, noise textures, geometric patterns, layered transparencies, dramatic shadows, decorative borders, grain overlays.
+
+- **Mobile Responsiveness:** All generated UI MUST be mobile-responsive. Use Tailwind responsive prefixes (`sm:`, `md:`, `lg:`) to adapt layouts across breakpoints. Stack columns on small screens, use flexible grids, and ensure touch targets are at least 44px. Test that navigation, typography, and spacing work on mobile viewports.
 
 Match implementation complexity to the aesthetic vision. Maximalist designs need elaborate animations and effects. Minimalist designs need restraint, precision, and careful spacing/typography. No two designs should look the same — vary themes, fonts, and aesthetics across generations.
 

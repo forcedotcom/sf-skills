@@ -3,6 +3,151 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.120.6](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.120.5...v1.120.6) (2026-04-07)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.120.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.120.4...v1.120.5) (2026-04-07)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.120.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.120.3...v1.120.4) (2026-04-07)
+
+
+### Bug Fixes
+
+* make tenant owner of own record ([#414](https://github.com/salesforce-experience-platform-emu/webapps/issues/414)) ([bf1f289](https://github.com/salesforce-experience-platform-emu/webapps/commit/bf1f289a8d56a381adde51e642e67db38099f193))
+
+
+
+
+
+## [1.120.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.120.2...v1.120.3) (2026-04-02)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.120.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.120.1...v1.120.2) (2026-04-01)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.120.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.120.0...v1.120.1) (2026-04-01)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+# [1.120.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.119.6...v1.120.0) (2026-04-01)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.119.6](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.119.5...v1.119.6) (2026-04-01)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.119.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.119.4...v1.119.5) (2026-03-31)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.119.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.119.3...v1.119.4) (2026-03-31)
+
+
+### Bug Fixes
+
+* replace undefined WEBAPPLICATIONS_DIR with UIBUNDLES_DIR in org-setup ([#398](https://github.com/salesforce-experience-platform-emu/webapps/issues/398)) ([615d499](https://github.com/salesforce-experience-platform-emu/webapps/commit/615d49976fd4b92a840d25db79591e2818938a92))
+
+
+
+
+
+## [1.119.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.119.2...v1.119.3) (2026-03-31)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.119.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.119.1...v1.119.2) (2026-03-31)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.119.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.119.0...v1.119.1) (2026-03-31)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+# [1.119.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.118.4...v1.119.0) (2026-03-31)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.118.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.118.3...v1.118.4) (2026-03-31)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.118.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.118.2...v1.118.3) (2026-03-31)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [1.118.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.118.1...v1.118.2) (2026-03-31)
+
+
+### Bug Fixes
+
+* (@W-21734559) addresses missing .gitignore within template apps for vibes welcome experience ([#383](https://github.com/salesforce-experience-platform-emu/webapps/issues/383)) ([b8a35cf](https://github.com/salesforce-experience-platform-emu/webapps/commit/b8a35cf5352c231ccaa0797df88e64ee1c20a02a))
+
+
+
+
+
 ## [1.118.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v1.118.0...v1.118.1) (2026-03-31)
 
 **Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project

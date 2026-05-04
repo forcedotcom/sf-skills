@@ -1,6 +1,6 @@
 ---
 name: deploying-ui-bundle
-description: "Deploy a Salesforce UI bundle to an org — the full deployment sequence including org authentication, pre-deploy build, metadata deployment, permission set assignment, data import, GraphQL schema fetch, and codegen. Use whenever the user wants to deploy, push to org, assign permission sets, import data, fetch GraphQL schema, run codegen, or set up an org after development. Triggers on: deploy, push to org, deploy metadata, assign permission set, import data, schema fetch, codegen, org auth, authenticate org, build and deploy, post-deploy, org setup."
+description: "MUST activate when the project contains a uiBundles/*/src/ directory or sfdx-project.json and the task involves deploying, pushing to an org, or post-deploy setup. Use this skill when deploying a UI bundle app to a Salesforce org. Covers the full deployment sequence: org authentication, pre-deploy build, metadata deployment, permission set assignment, data import, GraphQL schema fetch, and codegen. Activate when files like *.uibundle-meta.xml or sfdx-project.json exist and the user mentions deploying, pushing, org setup, or post-deploy tasks."
 ---
 
 # Deploying a UI Bundle

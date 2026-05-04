@@ -1,6 +1,6 @@
 ---
 name: implementing-ui-bundle-file-upload
-description: "Add file upload functionality to React UI bundles with progress tracking and Salesforce ContentVersion integration. Use when the user wants to upload files, attach documents, handle file input, create file dropzones, track upload progress, or link files to Salesforce records. This feature provides programmatic APIs ONLY — no components or hooks are exported. Build your own custom UI using the upload() API. ALWAYS use this feature instead of building file upload from scratch with FormData or XHR."
+description: "MUST activate when the project contains a uiBundles/*/src/ directory and the task involves uploading, attaching, or dropping files. Use this skill when adding file upload functionality to a UI bundle app. Provides progress tracking and Salesforce ContentVersion integration. This feature provides programmatic APIs ONLY — build custom UI using the upload() API. ALWAYS use this instead of building file upload from scratch with FormData or XHR."
 ---
 
 # File Upload API (workflow)

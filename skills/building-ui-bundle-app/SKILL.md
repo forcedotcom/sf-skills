@@ -1,9 +1,9 @@
 ---
 name: building-ui-bundle-app
-description: "Build complete Salesforce React UI bundle applications from natural language descriptions. Use this skill when a user requests a full React app, UI bundle app, web app on Salesforce, or describes a scenario requiring scaffolding, features, data access, UI pages, and deployment of a React application hosted on Salesforce. Orchestrates all UI bundle skills in proper dependency order to produce a deployable application. Triggers on: build a React app, create a UI bundle, build me an app, full-stack Salesforce React app, create a web app on Salesforce."
+description: "MUST activate when the user wants to build, create, or generate a React application, React app, web application, single-page application (SPA), or frontend application — even if no project files exist yet. MUST also activate when the project contains a uiBundles/*/src/ directory or sfdx-project.json and the prompt says create, build, construct, or generate a new app, site, or page from scratch — even if the prompt also describes visual styling. MUST also activate when the task spans more than one ui-bundle skill. Use this skill when building a complete app end-to-end. This is the orchestrator that coordinates scaffolding, features, data access, frontend UI, integrations, and deployment in the correct dependency order. Without it, phases execute out of order and the app breaks. Do NOT use for Lightning Experience apps with custom objects (use generating-lightning-app). Do NOT use for single-concern edits to an existing page (use building-ui-bundle-frontend)."
 metadata:
   version: "1.0"
-  related-skills: generating-ui-bundle-metadata, generating-ui-bundle-features, using-ui-bundle-salesforce-data, building-ui-bundle-frontend, implementing-ui-bundle-agentforce-conversation-client, implementing-ui-bundle-file-upload, deploying-ui-bundle, generating-experience-react-site
+  related-skills: generating-ui-bundle-metadata, generating-ui-bundle-features, using-ui-bundle-salesforce-data, building-ui-bundle-frontend, implementing-ui-bundle-agentforce-conversation-client, implementing-ui-bundle-file-upload, deploying-ui-bundle, generating-ui-bundle-site
 ---
 
 # Building a UI Bundle App
@@ -43,7 +43,7 @@ Build a complete, deployable Salesforce React UI bundle application from a natur
 ### Phase 1: Scaffolding (Foundation)
 
 ```
-UI Bundle scaffold (sf ui-bundle generate)
+UI Bundle scaffold (sf template generate ui-bundle)
     v
 Install dependencies (npm install)
     v
@@ -214,7 +214,7 @@ Execute each phase sequentially. Complete all steps within a phase before moving
 
 **Phase 1 -- Scaffolding**
 - 1. Load skill: Invoke `generating-ui-bundle-metadata`
-- 2. Execute: Run `sf ui-bundle generate`, install dependencies (`npm install`), configure meta XML, ui-bundle.json, and CSP trusted sites
+- 2. Execute: Run `sf template generate ui-bundle`, install dependencies (`npm install`), configure meta XML, ui-bundle.json, and CSP trusted sites
 - 3. Verify: Confirm directory structure and metadata files exist
 - 4. Checkpoint: UI bundle scaffold is ready -- proceed to Phase 2
 

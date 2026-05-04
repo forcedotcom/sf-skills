@@ -1,3 +1,143 @@
+## [1.7.4](https://github.com/forcedotcom/afv-library/compare/1.7.3...1.7.4) (2026-04-27)
+
+
+### Bug Fixes
+
+* make sync-react-samples manual-only ([#228](https://github.com/forcedotcom/afv-library/issues/228)) ([d10f607](https://github.com/forcedotcom/afv-library/commit/d10f607da7cac6d036dc585e05b6b010b1c0f5a8))
+* use static branch for sync-react-samples PR ([#221](https://github.com/forcedotcom/afv-library/issues/221)) ([c80fbb5](https://github.com/forcedotcom/afv-library/commit/c80fbb51158a96d7d7b515c9f99636b650a92fa7))
+
+
+
+## [1.7.3](https://github.com/forcedotcom/afv-library/compare/1.7.2...1.7.3) (2026-04-23)
+
+
+### Bug Fixes
+
+* @W-21829588 : Custom Lightning Type Skills Fixes ([#191](https://github.com/forcedotcom/afv-library/issues/191)) ([6f39dd4](https://github.com/forcedotcom/afv-library/commit/6f39dd4047fe59ad635dfe66acae52fdae2a4dbc))
+
+
+
+## [1.7.2](https://github.com/forcedotcom/afv-library/compare/1.7.1...1.7.2) (2026-04-22)
+
+
+### Bug Fixes
+
+* @W-22134404@ delete fragment skill ([#212](https://github.com/forcedotcom/afv-library/issues/212)) ([c818135](https://github.com/forcedotcom/afv-library/commit/c8181350b47fe0b2f512a9d2d01bd11dceed3793))
+
+
+
+## [1.7.1](https://github.com/forcedotcom/afv-library/compare/1.7.0...1.7.1) (2026-04-21)
+
+
+### Bug Fixes
+
+* @W-21915952@ Update SKILL.md to allow user to make changes in the generated flow ([#189](https://github.com/forcedotcom/afv-library/issues/189)) ([e089a86](https://github.com/forcedotcom/afv-library/commit/e089a8688ae91b152d7699c448bdc5cd81325512))
+
+
+
+# [1.7.0](https://github.com/forcedotcom/afv-library/compare/1.6.9...1.7.0) (2026-04-09)
+
+
+### Features
+
+* replace agentforce-development skill with three specialized skills @W-21937872@ ([#184](https://github.com/forcedotcom/afv-library/issues/184)) ([fb4bac9](https://github.com/forcedotcom/afv-library/commit/fb4bac9cf08964945a3dee07e0ed2d9dbc9250a8))
+
+
+
+## [1.6.9](https://github.com/forcedotcom/afv-library/compare/1.6.8...1.6.9) (2026-04-08)
+
+
+### Bug Fixes
+
+* @W-21889983@ Disallow Modifying React Site Metadata Except for Templated Properties ([#185](https://github.com/forcedotcom/afv-library/issues/185)) ([b0d71df](https://github.com/forcedotcom/afv-library/commit/b0d71df45229363cccb02c4bbffac272b1e63d50))
+
+
+
+## [1.6.8](https://github.com/forcedotcom/afv-library/compare/1.6.7...1.6.8) (2026-04-07)
+
+
+### Bug Fixes
+
+* trigger ui-bundle skill for React app prompts @W-21916680@ ([#175](https://github.com/forcedotcom/afv-library/issues/175)) ([1806c89](https://github.com/forcedotcom/afv-library/commit/1806c89b28a889de8292be62e751acb75a680d6b))
+
+
+
+## [1.6.7](https://github.com/forcedotcom/afv-library/compare/1.6.6...1.6.7) (2026-04-03)
+
+
+### Bug Fixes
+
+* tighten ui-bundle skill descriptions to reduce false triggers @W-21800526@ ([#162](https://github.com/forcedotcom/afv-library/issues/162)) ([77108ba](https://github.com/forcedotcom/afv-library/commit/77108bae20bc67c92acefa019b6e11a7192d26d0))
+
+
+
+## [1.6.6](https://github.com/forcedotcom/afv-library/compare/1.6.5...1.6.6) (2026-04-02)
+
+
+### Bug Fixes
+
+* condense using-ui-bundle-salesforce-data reference into skill.md @W-21685788 ([#161](https://github.com/forcedotcom/afv-library/issues/161)) ([4ad7963](https://github.com/forcedotcom/afv-library/commit/4ad796346ec366379cc7de840c3c38e3c4521bb2))
+
+
+
+## [1.6.5](https://github.com/forcedotcom/afv-library/compare/1.6.4...1.6.5) (2026-04-01)
+
+
+### Bug Fixes
+
+* updating ui bundles to the latest @W-21814993@ ([#156](https://github.com/forcedotcom/afv-library/issues/156)) ([0d69b91](https://github.com/forcedotcom/afv-library/commit/0d69b918da0c43dc940f19c8c397a5de28042d4f))
+
+
+
+## [1.6.4](https://github.com/forcedotcom/afv-library/compare/1.6.3...1.6.4) (2026-03-31)
+
+
+### Bug Fixes
+
+* replace deprecated sf ui-bundle generate CLI command @W-21338965@ ([#155](https://github.com/forcedotcom/afv-library/issues/155)) ([2d9a093](https://github.com/forcedotcom/afv-library/commit/2d9a093f9cd83a12b69c0c1ab1227d32cfd7c206))
+
+
+
+## [1.6.3](https://github.com/forcedotcom/afv-library/compare/1.6.2...1.6.3) (2026-03-31)
+
+
+### Bug Fixes
+
+* derive router basename from base href at runtime @W-21338965@ ([#154](https://github.com/forcedotcom/afv-library/issues/154)) ([3024591](https://github.com/forcedotcom/afv-library/commit/30245915c2954cd2a828e5828e6324394ab9b6cf))
+
+
+
+## [1.6.2](https://github.com/forcedotcom/afv-library/compare/1.6.1...1.6.2) (2026-03-31)
+
+
+### Bug Fixes
+
+* ensure skill load for guest sharing rule ([#127](https://github.com/forcedotcom/afv-library/issues/127)) ([878ee49](https://github.com/forcedotcom/afv-library/commit/878ee497c4ea5756186db2b4ce0cb9349f1558ac))
+
+
+
+## [1.6.1](https://github.com/forcedotcom/afv-library/compare/1.6.0...1.6.1) (2026-03-31)
+
+
+
+# [1.6.0](https://github.com/forcedotcom/afv-library/compare/1.5.3...1.6.0) (2026-03-31)
+
+
+### Features
+
+* update theme layout creation instructions ([#122](https://github.com/forcedotcom/afv-library/issues/122)) ([30052ef](https://github.com/forcedotcom/afv-library/commit/30052ef628e80f6dbf29e89ae0c792dcc0fc5f37))
+
+
+
+## [1.5.3](https://github.com/forcedotcom/afv-library/compare/1.5.2...1.5.3) (2026-03-31)
+
+
+### Bug Fixes
+
+* update details for PR title  ([#153](https://github.com/forcedotcom/afv-library/issues/153)) ([dcc1804](https://github.com/forcedotcom/afv-library/commit/dcc18049aa946015ee5482982397273b7b4af277))
+
+
+
 ## [1.5.2](https://github.com/forcedotcom/afv-library/compare/1.5.1...1.5.2) (2026-03-31)
 
 

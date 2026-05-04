@@ -44,8 +44,8 @@ const TYPE_OPTIONS = [
 
 const PRIORITY_OPTIONS = [
 	{ value: "Standard", label: "Standard" },
-	{ value: "High (Same Day)", label: "High (Same Day)" },
-	{ value: "Emergency (2hr)", label: "Emergency (2hr)" },
+	{ value: "High", label: "High (Same Day)" },
+	{ value: "Emergency", label: "Emergency (2hr)" },
 ] as const;
 
 const FILTER_CONFIGS: FilterFieldConfig[] = [];

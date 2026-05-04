@@ -1,6 +1,6 @@
 ---
 name: generating-ui-bundle-features
-description: "Search and install pre-built features into Salesforce React UI bundles — authentication, shadcn, search, navigation, GraphQL, Agentforce AI, and more. Use whenever searching for or installing features. Always check for an existing feature before building from scratch. Triggers on: install feature, add authentication, add shadcn, add feature, search features, list features."
+description: "MUST activate when the project contains a uiBundles/*/src/ directory and the user wants to add authentication or search to their app. Use this skill when adding authentication or search to a UI bundle app. Only covers two features: authentication (login, logout, protected routes, session management) and search (global search across pages and content). Always use this skill for these two features instead of building from scratch."
 ---
 
 # UI Bundle Features
