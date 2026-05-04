@@ -1,0 +1,92 @@
+# AFV-Library Skill Frontmatter — Complete Field Reference
+#
+# All skills in skills/<name>/SKILL.md must include YAML frontmatter
+# between --- delimiters. This file documents every supported field.
+#
+# Validation: scripts/validate-skills.ts
+
+# ============================================================
+# REQUIRED FIELDS
+# ============================================================
+
+name:
+  type: string
+  required: true
+  description: "Unique skill identifier. Must match the directory name exactly."
+  validation:
+    pattern: "^[a-z0-9]+(-[a-z0-9]+)*$"
+    max_length: 64
+  example: "generating-apex"
+
+description:
+  type: string
+  required: true
+  description: >
+    What the skill does and when it should activate. This is the primary
+    signal used for skill routing — it must be rich and specific.
+  validation:
+    min_words: 20
+    max_chars: 1024
+    must_contain: "use"
+  tips:
+    - "Include TRIGGER when and DO NOT TRIGGER when clauses"
+    - "Front-load the most important use case"
+    - "Include specific keywords users would say"
+    - "Must be wrapped in double quotes if it contains ': '"
+  example: >
+    "Primary Apex authoring skill for class generation, refactoring, and review.
+    ALWAYS ACTIVATE when the user mentions Apex, .cls, triggers, or asks to
+    create/refactor a class. Use this skill for requests involving SObject CRUD,
+    mapping collections, or code review of existing Apex."
+
+# ============================================================
+# OPTIONAL FIELDS
+# ============================================================
+
+license:
+  type: string
+  required: false
+  description: "License for the skill. Top-level frontmatter field — NOT nested under metadata."
+  default: "LICENSE.txt has complete terms"
+  example: "LICENSE.txt"
+
+metadata:
+  type: object
+  required: false
+  fields:
+    version:
+      type: string
+      description: "Version. New skills use \"1.0\"."
+      example: "1.0"
+    stage:
+      type: enum
+      values: ["Draft", "Under Review", "Published"]
+      description: "Current lifecycle stage."
+    argument-hint:
+      type: string
+      description: "CLI usage hint shown in autocomplete."
+      example: "<class-name> [--type service|selector|batch]"
+
+# ============================================================
+# COMMON MISTAKES
+# ============================================================
+#
+# 1. Unquoted description with ": " — causes YAML parse error
+#    BAD:  description: Primary skill: generates Apex
+#    GOOD: description: "Primary skill: generates Apex"
+#
+# 2. Name doesn't match directory
+#    Directory: skills/generating-apex/
+#    Frontmatter name must be: generating-apex
+#
+# 3. Description too short
+#    Must be at least 20 words. Include trigger context.
+#
+# 4. Missing "use" in description
+#    Validator checks for the word "use" (case-insensitive)
+#    Include: "Use when...", "Use this skill for...", etc.
+#
+# 5. license nested under metadata
+#    BAD:  metadata:
+#            license: ...
+#    GOOD: license: Apache-2.0   # top-level field
