@@ -6,7 +6,7 @@
 
 | Feature | On `@utils.transition` | On action definitions with `target:` | Notes |
 |---------|------------------------|---------------------------------------|-------|
-| `label:` on topics | ❌ | ✅ | Valid on topic blocks |
+| `label:` on subagents | ❌ | ✅ | Valid on subagent blocks |
 | `label:` on actions | ❌ | ✅ | Valid on Level 1 action definitions |
 | `label:` on I/O fields | ❌ | ✅ | Valid on inputs/outputs |
 | `require_user_confirmation:` | ❌ | ✅ | Compiles; runtime no-op |
@@ -18,8 +18,8 @@
 **What works on `@utils.transition` actions:**
 ```yaml
 actions:
-   go_next: @utils.transition to @topic.next
-      description: "Navigate to next topic"   # ✅ ONLY description works
+   go_next: @utils.transition to @subagent.next
+      description: "Navigate to next subagent"   # ✅ ONLY description works
 ```
 
 **What works on action definitions with `target:`:**

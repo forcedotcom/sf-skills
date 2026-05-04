@@ -146,7 +146,7 @@ Agent Script provides two ways to invoke actions:
 The LLM automatically selects appropriate actions from those defined in the `reasoning.actions` block:
 
 ```agentscript
-topic order_management:
+subagent order_management:
    description: "Handles order inquiries"
 
    reasoning:
@@ -355,7 +355,7 @@ public with sharing class CalculateDiscountAction {
 #### Step 2: Reference DIRECTLY in Agent Script via `apex://`
 
 ```yaml
-topic discount_calculator:
+subagent discount_calculator:
    description: "Calculates discount for customer order"
 
    # Level 1: Action DEFINITION with target
@@ -494,7 +494,7 @@ public class WrappedAction {
 
 The `connection` block enables escalation to human agents via Omni-Channel. Always use `connection messaging:` (singular).
 
-> **Service agents only.** The `connection messaging:` block and `@utils.escalate` are only valid for `AgentforceServiceAgent`. Employee agents (`AgentforceEmployeeAgent`) MUST NOT include a `connection` block or `@utils.escalate` actions — including them causes silent failures or "unknown error" at publish time. For employee agents, use `@utils.transition` to a help topic or an action that creates a support case instead.
+> **Service agents only.** The `connection messaging:` block and `@utils.escalate` are only valid for `AgentforceServiceAgent`. Employee agents (`AgentforceEmployeeAgent`) MUST NOT include a `connection` block or `@utils.escalate` actions — including them causes silent failures or "unknown error" at publish time. For employee agents, use `@utils.transition` to a help subagent or an action that creates a support case instead.
 
 ### Basic Syntax
 
@@ -588,7 +588,7 @@ When building agents with external API integrations, follow this order:
 
 | Issue | Cause | Solution |
 |-------|-------|----------|
-| `Tool target 'X' is not an action definition` | Action not defined in topic `actions:` block, or target doesn't exist in org | Define action with `target:` in topic-level `actions:` block; ensure Apex class/Flow is deployed |
+| `Tool target 'X' is not an action definition` | Action not defined in subagent `actions:` block, or target doesn't exist in org | Define action with `target:` in subagent-level `actions:` block; ensure Apex class/Flow is deployed |
 | `invalid input 'X'` or `invalid output 'X'` | I/O name doesn't match `@InvocableVariable` field name in Apex | Use exact field names from the Apex wrapper class (case-sensitive) |
 | `Internal Error` with inputs-only action | Action has `inputs:` but no `outputs:` block | Add `outputs:` block — the server-side compiler requires it (see known-issues.md Issue 15) |
 | `Internal Error` with bare @InvocableMethod | Apex uses `List<String>` without `@InvocableVariable` wrappers | Refactor Apex to use wrapper classes with `@InvocableVariable` annotations |

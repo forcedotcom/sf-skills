@@ -1,6 +1,6 @@
 ---
 name: generating-lightning-app
-description: Build complete Salesforce Lightning Experience applications from natural language descriptions. Use this skill when a user requests a "complete app", "Lightning app", "business solution", "management system", or describes a scenario requiring multiple interconnected Salesforce components (objects, fields, pages, tabs, security). Orchestrates all required metadata types in proper dependency order to produce a deployable application.
+description: "Build complete Salesforce Lightning Experience applications from natural language descriptions. Use this skill when a user requests a \"complete app\", \"Lightning app\", \"business solution\", \"management system\", or describes a scenario requiring multiple interconnected Salesforce components (objects, fields, pages, tabs, security). Orchestrates all required metadata types in proper dependency order to produce a deployable application."
 metadata:
   version: "1.0"
   related-skills: generating-custom-object, generating-custom-field, generating-custom-tab, generating-flexipage, generating-custom-application, generating-flow, generating-validation-rule, generating-list-view, generating-permission-set

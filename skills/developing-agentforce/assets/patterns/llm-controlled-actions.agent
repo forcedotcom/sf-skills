@@ -27,7 +27,7 @@ variables:
 	action_taken: mutable string
 		description: "Last action taken by agent"
 
-topic order_assistance:
+subagent order_assistance:
 	label: "Order Assistance"
 	description: "Helps customers with order-related questions"
 
@@ -122,9 +122,9 @@ topic order_assistance:
 				available when @variables.has_order_id == True
 				available when @variables.order_status != "shipped"
 
-			# Topic transitions
-			go_help: @utils.transition to @topic.general_help
-			go_escalation: @utils.transition to @topic.escalation
+			# Subagent transitions
+			go_help: @utils.transition to @subagent.general_help
+			go_escalation: @utils.transition to @subagent.escalation
 				available when @variables.needs_human == True
 
 # ★ Insight: When to Use Each Method
@@ -150,7 +150,7 @@ topic order_assistance:
 # ★ Example: Action Callback Pattern (Deterministic Chaining)
 # Use "run" for guaranteed follow-up actions after a primary action
 
-topic checkout:
+subagent checkout:
 	label: "Checkout"
 	description: "Handles order checkout"
 

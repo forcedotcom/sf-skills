@@ -15,7 +15,7 @@
 # ★ CRITICAL SYNTAX RULES for Lifecycle Blocks:
 #   1. Use "transition to" NOT "@utils.transition to" for transitions
 #   2. The pipe (|) command is NOT supported in lifecycle blocks
-#   3. after_reasoning may NOT run if a transition occurs mid-topic
+#   3. after_reasoning may NOT run if a transition occurs mid-subagent
 #   4. `run` has inconsistent runtime behavior in lifecycle blocks —
 #      reliable primitives are `set`, `if`/`else`, `transition to`
 #
@@ -40,9 +40,9 @@ variables:
 	current_context: mutable string = ""
 		description: "Refreshed context for current turn"
 
-topic conversation:
+subagent conversation:
 	label: "Conversation"
-	description: "Main conversation topic with lifecycle tracking"
+	description: "Main conversation subagent with lifecycle tracking"
 
 	actions:
 		get_timestamp:
@@ -67,8 +67,8 @@ topic conversation:
 			inputs:
 				turn_number: number
 					description: "Which turn this is"
-				topic_name: string
-					description: "Current topic"
+				subagent_name: string
+					description: "Current subagent"
 			outputs:
 				logged: boolean
 					description: "Whether log succeeded"
@@ -87,7 +87,7 @@ topic conversation:
 		# ★ CORRECT: Use "transition to" (not @utils.transition to) in lifecycle blocks
 		# Example: Route away if session expired
 		# if @variables.session_expired == True:
-		#    transition to @topic.session_expired
+		#    transition to @subagent.session_expired
 
 		# Refresh context before every turn
 		run @actions.refresh_context
@@ -105,14 +105,14 @@ topic conversation:
 			|
 			| Respond helpfully using the refreshed context above.
 		actions:
-			end_conversation: @utils.transition to @topic.farewell
+			end_conversation: @utils.transition to @subagent.farewell
 
 	# ★ after_reasoning: Runs AFTER each reasoning step
 	after_reasoning:
 		# Log analytics for each turn
 		run @actions.log_turn
 			with turn_number=@variables.turn_count
-			with topic_name="conversation"
+			with subagent_name="conversation"
 
 		# Update last activity timestamp
 		run @actions.get_timestamp

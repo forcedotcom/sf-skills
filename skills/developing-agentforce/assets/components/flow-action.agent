@@ -1,19 +1,19 @@
 # Flow-Based Action Template
 # Define an action that calls a Salesforce Flow
-# This is a PARTIAL template - define actions inside a topic block
+# This is a PARTIAL template - define actions inside a subagent block
 #
 # ⚠️ NOTE ON DEPLOYMENT METHODS:
 #    - AiAuthoringBundle: `with`/`set` clauses ARE supported (TDD validated v1.7.0+)
 #    - GenAiPlannerBundle: Full syntax including `with`/`set` also supported
 #
 # Both deployment methods support the Two-Level Action System:
-#   Level 1: Action definition in topic `actions:` block (with target/inputs/outputs)
+#   Level 1: Action definition in subagent `actions:` block (with target/inputs/outputs)
 #   Level 2: Action invocation in `reasoning.actions:` block (with `with`/`set` clauses)
 #
 # Usage: Replace {{placeholders}} with your values
-# Place this inside a topic's actions: block
+# Place this inside a subagent's actions: block
 
-# Action Definition (place inside topic's actions: block)
+# Action Definition (place inside subagent's actions: block)
 {{action_name}}:
 	description: "{{ActionDescription}}"
 	inputs:
@@ -54,7 +54,7 @@
 #       | Help the user with their request.
 #       | Use the available actions when needed.
 #    actions:
-#       back_to_menu: @utils.transition to @topic.topic_selector
+#       back_to_menu: @utils.transition to @subagent.agent_router
 
 # Common Flow Target Patterns:
 # - flow://Get_Account_Details

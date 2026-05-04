@@ -99,8 +99,8 @@ fi
 Read the `.agent` file and verify it has proper Agent Script structure:
 - `system:` block with `instructions:`
 - `config:` block with `developer_name:`
-- `start_agent` or `topic` blocks with `reasoning: instructions:`
-- Each topic should have distinct `instructions:` content (not identical across topics)
+- `start_agent` or `subagent` blocks with `reasoning: instructions:`
+- Each subagent should have distinct `instructions:` content (not identical across subagents)
 
 Store the resolved path as `AGENT_FILE` for Phase 3.
 
@@ -187,7 +187,7 @@ sf agent test results --json --job-id "$JOB_ID" --result-format json -o <org>
 
 ### 1-ALT.2 Derive test utterances from .agent file (if no test suite)
 
-If no test suite exists, derive utterances: one per non-entry topic (from `description:` keywords), one per key action, one guardrail test, one multi-turn test.
+If no test suite exists, derive utterances: one per non-entry subagent (from `description:` keywords), one per key action, one guardrail test, one multi-turn test.
 
 ### 1-ALT.3 Preview with `--authoring-bundle` (local traces)
 
@@ -209,13 +209,13 @@ sf agent preview end --json --session-id "$SESSION_ID" --authoring-bundle <Bundl
 
 | Issue type | Trace command |
 |---|---|
-| Topic misroute | `jq -r '.plan[] \| select(.type=="NodeEntryStateStep") \| .data.agent_name' "$TRACE"` |
+| Subagent misroute | `jq -r '.plan[] \| select(.type=="NodeEntryStateStep") \| .data.agent_name' "$TRACE"` |
 | Action not called | `jq -r '.plan[] \| select(.type=="EnabledToolsStep") \| .data.enabled_tools[]' "$TRACE"` |
 | LOW adherence | `jq -r '.plan[] \| select(.type=="ReasoningStep") \| {category, reason}' "$TRACE"` |
 | Variable capture fail | `jq -r '.plan[] \| select(.type=="VariableUpdateStep") \| .data.variable_updates[]' "$TRACE"` |
 | Vague instructions | `jq -r '.plan[] \| select(.type=="LLMStep") \| .data.messages_sent[0].content' "$TRACE"` |
 
-**DefaultTopic trace quirk:** With `--authoring-bundle`, the root `.topic` field often shows `"DefaultTopic"` even when routing works. Always use `NodeEntryStateStep.data.agent_name` for the real topic chain.
+**DefaultTopic trace quirk:** With `--authoring-bundle`, the root `.topic` field often shows `"DefaultTopic"` even when routing works. Always use `NodeEntryStateStep.data.agent_name` for the real subagent chain.
 
 **Entry answering directly (SMALL_TALK pattern):** If `start_agent` trace shows `SMALL_TALK` grounding and transition tools visible but none invoked, add "You are a router only. Do NOT answer questions directly." to `start_agent` instructions.
 
@@ -271,7 +271,7 @@ Render turn-by-turn timeline from `ConversationData` JSON for each session.
 
 > Full issue pattern table and classification categories: see `references/issue-classification.md`
 
-Check each session for: action errors, topic misroutes, missing actions, wrong inputs, variable capture failures, no transitions, slow actions, LOW adherence, abandoned sessions, dead topics, publish drift, dead hub anti-pattern, entry answering directly, and safety issues.
+Check each session for: action errors, subagent misroutes, missing actions, wrong inputs, variable capture failures, no transitions, slow actions, LOW adherence, abandoned sessions, dead subagents, publish drift, dead hub anti-pattern, entry answering directly, and safety issues.
 
 Priority: P1 = action errors, misroutes, LOW adherence; P2 = missing actions, variable bugs, knowledge gaps; P3 = performance, abandoned sessions.
 
@@ -281,7 +281,7 @@ Present sessions analyzed, issues grouped by root cause category, and uplift est
 
 > Full structural analysis checks, cross-reference procedures, and publish drift detection: see `references/issue-classification.md`
 
-Retrieve the `.agent` file from the org, run automated checks (topic count vs action blocks, dead hub detection, orphan actions, cross-topic variable dependencies), and cross-reference STDM symptoms against the file structure.
+Retrieve the `.agent` file from the org, run automated checks (subagent count vs action blocks, dead hub detection, orphan actions, cross-subagent variable dependencies), and cross-reference STDM symptoms against the file structure.
 
 ---
 
@@ -325,7 +325,7 @@ Map each confirmed issue to a fix location in the `.agent` file (description, in
 
 ### 3.4 Regression prevention
 
-Establish baseline before editing. Make minimal edits. Test immediately after each edit. One fix per publish cycle. Check cross-topic dependencies. Test adjacent topics.
+Establish baseline before editing. Make minimal edits. Test immediately after each edit. One fix per publish cycle. Check cross-subagent dependencies. Test adjacent subagents.
 
 ### 3.5 Apply fixes
 

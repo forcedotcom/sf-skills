@@ -15,9 +15,9 @@ What do you need?
 │   └─► Use: lifecycle-events.agent
 │       (before_reasoning / after_reasoning blocks)
 │
-├─► Navigate to specialist and return with results?
+├─► Navigate to specialist subagent and return with results?
 │   └─► Use: bidirectional-routing.agent
-│       (store return address, specialist transitions back)
+│       (store return address, specialist subagent transitions back)
 │
 ├─► Complex parameter passing to actions?
 │   └─► Use: advanced-input-bindings.agent
@@ -71,7 +71,7 @@ process_order: @actions.create_order
 
 **Key syntax**:
 ```agentscript
-topic conversation:
+subagent conversation:
    before_reasoning:
       set @variables.turn_count = @variables.turn_count + 1
       run @actions.refresh_context
@@ -88,26 +88,26 @@ topic conversation:
 
 ### 3. [bidirectional-routing.agent](bidirectional-routing.agent)
 
-**Purpose**: Navigate to specialist topic and return with results.
+**Purpose**: Navigate to specialist subagent and return with results.
 
 **Use when**:
-- Complex workflows spanning multiple topics
+- Complex workflows spanning multiple subagents
 - "Consult an expert" pattern
 - Need to bring results back to coordinator
 - Want separation of concerns
 
 **Key syntax**:
 ```agentscript
-# In main topic
-consult_pricing: @utils.transition to @topic.pricing_specialist
+# In main subagent
+consult_pricing: @utils.transition to @subagent.pricing_specialist
 
-# In specialist topic
+# In specialist subagent
 before_reasoning:
-   set @variables.return_topic = "main_hub"
+   set @variables.return_subagent = "main_hub"
 
 # ... do specialist work ...
 
-return_with_results: @utils.transition to @topic.main_hub
+return_with_results: @utils.transition to @subagent.main_hub
 ```
 
 ---
@@ -168,7 +168,7 @@ reasoning:
 system:
    instructions: "You are a professional agent. Be helpful and courteous."
 
-# Topic reasoning: Dynamic overrides
+# Subagent reasoning: Dynamic overrides
 reasoning:
    instructions: ->
       if @variables.customer_tier == "vip":
@@ -192,22 +192,22 @@ reasoning:
 
 ### 6. [open-gate-routing.agent](open-gate-routing.agent)
 
-**Purpose**: Auth-gated topic routing with LLM bypass using a 3-variable state machine.
+**Purpose**: Auth-gated subagent routing with LLM bypass using a 3-variable state machine.
 
 **Use when**:
-- Multiple protected topics require authentication before access
-- You want zero-credit LLM bypass while a gate topic holds focus
-- Users should be redirected to auth, then automatically returned to their intended topic
+- Multiple protected subagents require authentication before access
+- You want zero-credit LLM bypass while a gate subagent holds focus
+- Users should be redirected to auth, then automatically returned to their intended subagent
 - You need an EXIT_PROTOCOL to release gate state when users change intent
 
 **Key syntax**:
 ```agentscript
-# topic_selector bypasses LLM when open_gate is set
+# agent_router bypasses LLM when open_gate is set
 before_reasoning:
    if @variables.open_gate == "protected_workflow":
-      transition to @topic.protected_workflow
+      transition to @subagent.protected_workflow
    if @variables.open_gate == "authentication_gate":
-      transition to @topic.authentication_gate
+      transition to @subagent.authentication_gate
 ```
 
 **Credit**: Hua Xu (Salesforce APAC FDE team) — production pattern from Kogan agent deployment.
@@ -239,7 +239,7 @@ open-gate-routing + lifecycle-events
 | Lifecycle Events | +5 pts | Proper block placement |
 | Bidirectional | +5 pts | Return transitions |
 | Input Bindings | +5 pts | Proper binding patterns |
-| System Overrides | +5 pts | Static system, dynamic topics |
+| System Overrides | +5 pts | Static system, dynamic subagents |
 | Open Gate | +5 pts | 3-variable coordination |
 
 ## Anti-Patterns to Avoid
@@ -250,5 +250,5 @@ open-gate-routing + lifecycle-events
 | Lifecycle in wrong order | before_reasoning, reasoning, after_reasoning |
 | Forget return transition | Always include return action in specialists |
 | Use lifecycle for one-time setup | Use if @variables.turn_count == 1 |
-| Missing EXIT_PROTOCOL in gate pattern | Always include gate reset topic |
-| Hardcoding gate topic name in open_gate | Use variable-driven routing |
+| Missing EXIT_PROTOCOL in gate pattern | Always include gate reset subagent |
+| Hardcoding gate subagent name in open_gate | Use variable-driven routing |

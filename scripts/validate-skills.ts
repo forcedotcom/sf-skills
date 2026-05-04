@@ -190,6 +190,52 @@ Wrap values that contain \`: \` (colon + space), such as long descriptions with 
     },
   },
   {
+    description: 'Frontmatter "description" value must be wrapped in double quotes',
+    run({ dirName, rawFrontmatter }) {
+      if (rawFrontmatter === null) return { errors: [] }
+      const descLine = rawFrontmatter.split(/\r?\n/).find((l) => l.startsWith("description:"))
+      if (!descLine) return { errors: [] }
+      const rawValue = descLine.slice(descLine.indexOf(":") + 1).trim()
+      if (!rawValue.startsWith('"') || !rawValue.endsWith('"')) {
+        return {
+          errors: [
+            `skills/${dirName}/SKILL.md: description value must be wrapped in double quotes — got: ${rawValue.slice(0, 60)}${rawValue.length > 60 ? "…" : ""}`,
+          ],
+        }
+      }
+      return { errors: [] }
+    },
+  },
+  {
+    description:
+      'Special characters in description must be escaped (\\\\ and \\")',
+    run({ dirName, rawFrontmatter }) {
+      if (rawFrontmatter === null) return { errors: [] }
+      const descLine = rawFrontmatter.split(/\r?\n/).find((l) => l.startsWith("description:"))
+      if (!descLine) return { errors: [] }
+      const rawValue = descLine.slice(descLine.indexOf(":") + 1).trim()
+      if (!rawValue.startsWith('"') || !rawValue.endsWith('"')) return { errors: [] }
+      const inner = rawValue.slice(1, -1)
+      const issues: string[] = []
+      // Strip valid escape sequences (\\, \") then check for remaining backslashes or unescaped quotes
+      const stripped = inner.replace(/\\\\|\\"/g, "")
+      if (stripped.includes('"')) {
+        issues.push('unescaped " (use \\")')
+      }
+      if (stripped.includes("\\")) {
+        issues.push("unescaped \\ (use \\\\)")
+      }
+      if (issues.length > 0) {
+        return {
+          errors: [
+            `skills/${dirName}/SKILL.md: description contains ${issues.join(", ")}`,
+          ],
+        }
+      }
+      return { errors: [] }
+    },
+  },
+  {
     description: "SKILL.md must have a non-empty body (instructions after the frontmatter block)",
     run({ dirName, body }) {
       if (!body.trim()) {
@@ -237,6 +283,88 @@ Wrap values that contain \`: \` (colon + space), such as long descriptions with 
     },
   },
   {
+    description: "Metadata field must be a key-value map (not scalar or array)",
+    run({ dirName, rawFrontmatter }) {
+      if (rawFrontmatter === null) return { errors: [] }
+      const meta = parseMetadataBlock(rawFrontmatter)
+      if (meta === null) return { errors: [] }
+      if (meta === "scalar") {
+        return {
+          errors: [
+            `skills/${dirName}/SKILL.md: "metadata" must be a key-value map, not an inline scalar — use indented sub-keys (e.g. metadata:\\n  version: "1.0")`,
+          ],
+        }
+      }
+      if (meta === "list") {
+        return {
+          errors: [
+            `skills/${dirName}/SKILL.md: "metadata" must be a key-value map, not a YAML list — use indented key-value pairs instead of "- " list items`,
+          ],
+        }
+      }
+      return { errors: [] }
+    },
+  },
+  {
+    description: 'Metadata must include a "version" field',
+    run({ dirName, rawFrontmatter }) {
+      if (rawFrontmatter === null) return { errors: [] }
+      const meta = parseMetadataBlock(rawFrontmatter)
+      if (meta === null || typeof meta === "string") return { errors: [] }
+      if (!meta.version) {
+        return {
+          errors: [
+            `skills/${dirName}/SKILL.md: metadata is missing required "version" field (e.g. version: "1.0")`,
+          ],
+        }
+      }
+      return { errors: [] }
+    },
+  },
+  {
+    description: "Compatibility field (if present) must be at most 500 characters",
+    run({ dirName, frontmatter }) {
+      if (!frontmatter) return { errors: [] }
+      if (!("compatibility" in frontmatter)) return { errors: [] }
+      const len = frontmatter.compatibility?.length ?? 0
+      if (len > 500) {
+        return {
+          errors: [`skills/${dirName}/SKILL.md: compatibility is ${len} characters (maximum 500)`],
+        }
+      }
+      return { errors: [] }
+    },
+  },
+  {
+    description: "Allowed-tools field (if present) must be a string (not array or object)",
+    run({ dirName, rawFrontmatter }) {
+      if (rawFrontmatter === null) return { errors: [] }
+      const line = rawFrontmatter.split(/\r?\n/).find((l) => l.startsWith("allowed-tools:"))
+      if (!line) return { errors: [] }
+      const rawValue = line.slice(line.indexOf(":") + 1).trim()
+      if (rawValue.startsWith("[") || rawValue.startsWith("{")) {
+        return {
+          errors: [
+            `skills/${dirName}/SKILL.md: "allowed-tools" must be a plain string (space-separated tool names), not a YAML array or object — got: ${rawValue.slice(0, 60)}`,
+          ],
+        }
+      }
+      const nextLineIdx = rawFrontmatter.split(/\r?\n/).indexOf(line) + 1
+      const lines = rawFrontmatter.split(/\r?\n/)
+      if (nextLineIdx < lines.length) {
+        const nextLine = lines[nextLineIdx]
+        if (nextLine.match(/^\s+- /)) {
+          return {
+            errors: [
+              `skills/${dirName}/SKILL.md: "allowed-tools" must be a plain string, not a YAML list — use space-separated tool names (e.g. "Bash Read Write")`,
+            ],
+          }
+        }
+      }
+      return { errors: [] }
+    },
+  },
+  {
     description: "Skill body should be under 500 lines for context efficiency",
     run({ dirName, body }) {
       const lines = body.split("\n").length
@@ -250,6 +378,35 @@ Wrap values that contain \`: \` (colon + space), such as long descriptions with 
     },
   },
 ]
+
+/**
+ * Extracts nested key-value pairs from the `metadata:` block in raw frontmatter.
+ * Returns `null` if no metadata block, `"scalar"` if metadata has an inline value,
+ * `"list"` if it contains YAML list items, or a `Record` of sub-keys.
+ */
+function parseMetadataBlock(rawFrontmatter: string): Record<string, string> | "scalar" | "list" | null {
+  const lines = rawFrontmatter.split(/\r?\n/)
+  const metaIdx = lines.findIndex((l) => /^metadata\s*:/.test(l))
+  if (metaIdx === -1) return null
+
+  const metaLine = lines[metaIdx]
+  const inlineValue = metaLine.slice(metaLine.indexOf(":") + 1).trim()
+  if (inlineValue && !inlineValue.startsWith("#")) return "scalar"
+
+  const result: Record<string, string> = {}
+  for (let i = metaIdx + 1; i < lines.length; i++) {
+    const line = lines[i]
+    if (!line.startsWith(" ") && !line.startsWith("\t")) break
+    const trimmed = line.trim()
+    if (trimmed.startsWith("- ")) return "list"
+    const colonIdx = trimmed.indexOf(":")
+    if (colonIdx === -1) continue
+    const key = trimmed.slice(0, colonIdx).trim()
+    const raw = trimmed.slice(colonIdx + 1).trim()
+    result[key] = raw.replace(/^(['"])([\s\S]*)\1$/, "$2")
+  }
+  return result
+}
 
 /**
  * Returns the deduplicated list of top-level skill directory names that have

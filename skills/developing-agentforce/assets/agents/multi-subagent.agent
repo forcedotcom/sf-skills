@@ -1,10 +1,10 @@
-# Multi-Topic Agent Template
-# An agent with multiple conversation topics (hub-and-spoke pattern)
-# Users are routed to specialized topics based on their needs
+# Multi-Subagent Agent Template
+# An agent with multiple conversation subagents (hub-and-spoke pattern)
+# Users are routed to specialized subagents based on their needs
 #
 # Usage: Replace {{placeholders}} with your values
 # Required: agent_name, default_agent_user, agent_label, description
-# Required: At least 2 topics with label and description
+# Required: At least 2 subagents with label and description
 
 system:
 	instructions: "{{SystemInstructions}}"
@@ -36,53 +36,53 @@ language:
 	additional_locales: ""
 	all_additional_locales: False
 
-start_agent topic_selector:
-	label: "Topic Selector"
-	description: "Routes users to the appropriate topic based on their needs"
+start_agent agent_router:
+	label: "Subagent Router"
+	description: "Routes users to the appropriate subagent based on their needs"
 
 	reasoning:
 		instructions: ->
 			| Determine what the user needs help with.
-			| Route them to the most appropriate topic.
+			| Route them to the most appropriate subagent.
 			| If unclear, ask clarifying questions.
 		actions:
-			go_to_topic_one: @utils.transition to @topic.{{topic_one_name}}
-			go_to_topic_two: @utils.transition to @topic.{{topic_two_name}}
-			go_to_topic_three: @utils.transition to @topic.{{topic_three_name}}
-			go_to_farewell: @utils.transition to @topic.farewell
-			go_to_escalation: @utils.transition to @topic.escalation
+			go_to_subagent_one: @utils.transition to @subagent.{{subagent_one_name}}
+			go_to_subagent_two: @utils.transition to @subagent.{{subagent_two_name}}
+			go_to_subagent_three: @utils.transition to @subagent.{{subagent_three_name}}
+			go_to_farewell: @utils.transition to @subagent.farewell
+			go_to_escalation: @utils.transition to @subagent.escalation
 
-topic {{topic_one_name}}:
-	label: "{{TopicOneLabel}}"
-	description: "{{TopicOneDescription}}"
-
-	reasoning:
-		instructions: ->
-			| {{TopicOneInstructions}}
-		actions:
-			back_to_menu: @utils.transition to @topic.topic_selector
-
-topic {{topic_two_name}}:
-	label: "{{TopicTwoLabel}}"
-	description: "{{TopicTwoDescription}}"
+subagent {{subagent_one_name}}:
+	label: "{{SubagentOneLabel}}"
+	description: "{{SubagentOneDescription}}"
 
 	reasoning:
 		instructions: ->
-			| {{TopicTwoInstructions}}
+			| {{SubagentOneInstructions}}
 		actions:
-			back_to_menu: @utils.transition to @topic.topic_selector
+			back_to_menu: @utils.transition to @subagent.agent_router
 
-topic {{topic_three_name}}:
-	label: "{{TopicThreeLabel}}"
-	description: "{{TopicThreeDescription}}"
+subagent {{subagent_two_name}}:
+	label: "{{SubagentTwoLabel}}"
+	description: "{{SubagentTwoDescription}}"
 
 	reasoning:
 		instructions: ->
-			| {{TopicThreeInstructions}}
+			| {{SubagentTwoInstructions}}
 		actions:
-			back_to_menu: @utils.transition to @topic.topic_selector
+			back_to_menu: @utils.transition to @subagent.agent_router
 
-topic farewell:
+subagent {{subagent_three_name}}:
+	label: "{{SubagentThreeLabel}}"
+	description: "{{SubagentThreeDescription}}"
+
+	reasoning:
+		instructions: ->
+			| {{SubagentThreeInstructions}}
+		actions:
+			back_to_menu: @utils.transition to @subagent.agent_router
+
+subagent farewell:
 	label: "Farewell"
 	description: "Ends the conversation gracefully"
 
@@ -92,7 +92,7 @@ topic farewell:
 			| Wish them a great day.
 			| Let them know they can return anytime.
 
-topic escalation:
+subagent escalation:
 	label: "Escalation"
 	description: "Handles requests to transfer to a live human agent"
 

@@ -1,34 +1,34 @@
 # Bidirectional Routing Pattern
-# Navigate to a specialist topic and return with results
+# Navigate to a specialist subagent and return with results
 #
 # ★ When To Use This Pattern:
-#   - Main topic needs specialized processing then returns
+#   - Main subagent needs specialized processing then returns
 #   - "Consult a specialist" pattern (like asking an expert)
 #   - Complex workflows where you leave, do work, then come back
-#   - Alternative to cramming everything into one topic
+#   - Alternative to cramming everything into one subagent
 #
 # ★ Key Insight:
 #   Standard transitions (@utils.transition) are one-way.
 #   For round-trip routing, store the "return address" in a variable.
-#   The specialist topic transitions back when done.
+#   The specialist subagent transitions back when done.
 #
 # ★ Architecture Decision:
 #   Use this when you want separation of concerns:
-#   - Main topic: Orchestration and user interaction
-#   - Specialist topic: Focused, complex processing
+#   - Main subagent: Orchestration and user interaction
+#   - Specialist subagent: Focused, complex processing
 #
 # This is a PARTIAL template - integrate into a complete agent file
 
 variables:
 	# ... standard linked variables ...
-	return_topic: mutable string = ""
-		description: "Topic to return to after specialist consultation"
+	return_subagent: mutable string = ""
+		description: "Subagent to return to after specialist consultation"
 	specialist_result: mutable string = ""
-		description: "Result from specialist topic"
+		description: "Result from specialist subagent"
 	consultation_status: mutable string = ""
 		description: "Status of specialist consultation"
 
-# Main orchestration topic
+# Main orchestration subagent
 start_agent main_hub:
 	label: "Main Hub"
 	description: "Central hub that routes to specialists and handles results"
@@ -46,17 +46,17 @@ start_agent main_hub:
 			| Consultation status: {!@variables.consultation_status}
 		actions:
 			# Route to pricing specialist (store return address first)
-			consult_pricing: @utils.transition to @topic.pricing_specialist
+			consult_pricing: @utils.transition to @subagent.pricing_specialist
 				available when @variables.consultation_status != "in_progress"
 
 			# Route to technical specialist
-			consult_technical: @utils.transition to @topic.technical_specialist
+			consult_technical: @utils.transition to @subagent.technical_specialist
 				available when @variables.consultation_status != "in_progress"
 
-			end_conversation: @utils.transition to @topic.farewell
+			end_conversation: @utils.transition to @subagent.farewell
 
-# Pricing specialist topic
-topic pricing_specialist:
+# Pricing specialist subagent
+subagent pricing_specialist:
 	label: "Pricing Specialist"
 	description: "Handles complex pricing calculations and returns results"
 
@@ -78,7 +78,7 @@ topic pricing_specialist:
 	# Mark consultation as in progress when entering
 	before_reasoning:
 		set @variables.consultation_status = "in_progress"
-		set @variables.return_topic = "main_hub"
+		set @variables.return_subagent = "main_hub"
 
 	reasoning:
 		instructions: ->
@@ -93,14 +93,14 @@ topic pricing_specialist:
 				set @variables.specialist_result = @outputs.final_price
 
 			# Return to main hub with results
-			return_with_results: @utils.transition to @topic.main_hub
+			return_with_results: @utils.transition to @subagent.main_hub
 
 	# Mark consultation complete when leaving
 	after_reasoning:
 		set @variables.consultation_status = "completed"
 
-# Technical specialist topic
-topic technical_specialist:
+# Technical specialist subagent
+subagent technical_specialist:
 	label: "Technical Specialist"
 	description: "Handles technical troubleshooting and returns results"
 
@@ -119,7 +119,7 @@ topic technical_specialist:
 
 	before_reasoning:
 		set @variables.consultation_status = "in_progress"
-		set @variables.return_topic = "main_hub"
+		set @variables.return_subagent = "main_hub"
 
 	reasoning:
 		instructions: ->
@@ -132,12 +132,12 @@ topic technical_specialist:
 				with symptoms=...
 				set @variables.specialist_result = @outputs.diagnosis
 
-			return_with_results: @utils.transition to @topic.main_hub
+			return_with_results: @utils.transition to @subagent.main_hub
 
 	after_reasoning:
 		set @variables.consultation_status = "completed"
 
-topic farewell:
+subagent farewell:
 	label: "Farewell"
 	description: "Ends the conversation"
 
@@ -148,9 +148,9 @@ topic farewell:
 # ★ Alternative: Simple one-way transitions (when you don't need to return)
 #
 # If the specialist doesn't need to return results to a coordinator,
-# use simple transitions without the return_topic pattern:
+# use simple transitions without the return_subagent pattern:
 #
-# go_orders: @utils.transition to @topic.orders
-# go_billing: @utils.transition to @topic.billing
+# go_orders: @utils.transition to @subagent.orders
+# go_billing: @utils.transition to @subagent.billing
 #
 # The bidirectional pattern adds complexity - only use when needed.

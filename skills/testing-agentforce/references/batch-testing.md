@@ -13,13 +13,13 @@ subjectType: AGENT
 subjectName: OrderService          # BotDefinition DeveloperName (API name)
 
 testCases:
-  # Topic routing test
+  # Subagent routing test
   - utterance: "Where is my order #12345?"
     expectedTopic: order_status
 
   # Action invocation test (FLAT string list -- NOT objects)
   # CRITICAL: Use Level 2 INVOCATION names from reasoning: actions: (e.g. "lookup_order")
-  #           NOT Level 1 DEFINITION names from topic: actions: (e.g. "get_order_status")
+  #           NOT Level 1 DEFINITION names from subagent: actions: (e.g. "get_order_status")
   - utterance: "I want to return my order from last week"
     expectedTopic: returns
     expectedActions:
@@ -62,7 +62,7 @@ testCases:
 | `subjectName` | Yes | Agent BotDefinition DeveloperName (API name, e.g. `OrderService`) |
 | `testCases` | Yes | Array of test case objects |
 | `testCases[].utterance` | Yes | User input message to test |
-| `testCases[].expectedTopic` | No | Expected topic name |
+| `testCases[].expectedTopic` | No | Expected subagent name |
 | `testCases[].expectedActions` | No | Flat list of action name strings |
 | `testCases[].expectedOutcome` | No | Natural language description (LLM-as-judge) |
 | `testCases[].conversationHistory` | No | Prior conversation turns for multi-turn tests |
@@ -81,7 +81,7 @@ testCases:
 
 - Single-turn tests only capture the first response. If an action requires info collection first (e.g. identity verification asks for email before calling `verify_customer`), the action won't fire in one turn.
 - For multi-turn workflows, either: (1) omit `expectedActions` and rely on `expectedOutcome`, or (2) use `conversationHistory` to simulate prior turns.
-- For guardrail tests (off-topic), omit `expectedTopic` and use `expectedOutcome` only -- the agent correctly stays in `entry` which has no matching topic assertion. NOTE: The generated XML still includes an empty `topic_assertion` expectation, which will return `FAILURE` with score=0. This is expected and harmless -- only check the `output_validation` result for guardrail tests.
+- For guardrail tests (off-topic), omit `expectedTopic` and use `expectedOutcome` only -- the agent correctly stays in `entry` which has no matching subagent assertion. NOTE: The generated XML still includes an empty `topic_assertion` expectation, which will return `FAILURE` with score=0. This is expected and harmless -- only check the `output_validation` result for guardrail tests.
 
 ### Parsing Results for Guardrail/Safety Tests
 
@@ -187,15 +187,15 @@ For each failed test case:
 
 1. **Topic assertion failed** -- compare `expectedValue` vs `actualValue`
    - If actual is a hash-suffixed name (e.g. `p_16j...`), see Topic Name Resolution below
-   - If actual is wrong topic, fix the `.agent` file topic description
+   - If actual is wrong subagent, fix the `.agent` file subagent description
 
 2. **Action assertion failed** -- check `generatedData.actionsSequence`
-   - If action not invoked: fix topic instructions or action `available when` guard
+   - If action not invoked: fix subagent instructions or action `available when` guard
    - If wrong action: fix action descriptions to disambiguate
 
 3. **Outcome validation failed** -- check `generatedData.outcome`
    - Review the agent's actual response against `expectedOutcome`
-   - Tighten topic instructions to guide the response
+   - Tighten subagent instructions to guide the response
 
 After fixing the `.agent` file, redeploy and re-run:
 
@@ -211,16 +211,16 @@ sf agent test run --json --api-name <TestSuiteName> --wait 10 --result-format js
 
 Topic names in Testing Center may differ from what you see in the `.agent` file:
 
-| Topic type | Name to use in YAML | Example |
+| Subagent type | Name to use in YAML | Example |
 |---|---|---|
 | Standard topics | `localDeveloperName` (short name) | `Escalation`, `Off_Topic` |
-| Custom topics | Short name from `.agent` file | `home_search`, `warranty_service` |
+| Custom subagents | Short name from `.agent` file | `home_search`, `warranty_service` |
 | Promoted topics | Full runtime `developerName` with hash suffix | `p_16jPl000000GwEX_Topic_16j8eeef13560aa` |
 
-**Discovery workflow** (when topic names don't match):
+**Discovery workflow** (when subagent names don't match):
 
-1. Run the test with best-guess topic names
-2. Check actual topics in results: `jq '.result.testCases[].generatedData.topic' /tmp/test_results.json`
+1. Run the test with best-guess subagent names
+2. Check actual subagents in results: `jq '.result.testCases[].generatedData.topic' /tmp/test_results.json`
 3. Update YAML with actual runtime names
 4. Redeploy with `--force-overwrite` and re-run
 
@@ -230,23 +230,23 @@ Topic names in Testing Center may differ from what you see in the `.agent` file:
 
 Derive a Testing Center spec from the `.agent` file:
 
-1. **One test case per non-entry topic** -- utterance from topic description keywords
+1. **One test case per non-entry subagent** -- utterance from subagent description keywords
 2. **One test case per key action** -- utterance that triggers the action's primary use case
 3. **One guardrail test** -- off-topic utterance
-4. **`expectedTopic`** from topic name in `.agent` file
+4. **`expectedTopic`** from subagent name in `.agent` file
 5. **`expectedActions`** from action names under `reasoning: actions:` (only `@actions.*`, not `@utils.transition`)
 
 ### Level 1 vs Level 2 Action Names (CRITICAL)
 
 The `.agent` file has two levels of action definitions:
-- **Level 1** (definition): under `topic > actions:` — defines target, inputs, outputs (e.g. `get_order_status:`)
-- **Level 2** (invocation): under `topic > reasoning > actions:` — wires actions to the LLM (e.g. `check_order: @actions.get_order_status`)
+- **Level 1** (definition): under `subagent > actions:` — defines target, inputs, outputs (e.g. `get_order_status:`)
+- **Level 2** (invocation): under `subagent > reasoning > actions:` — wires actions to the LLM (e.g. `check_order: @actions.get_order_status`)
 
 Testing Center reports **Level 2 invocation names** (e.g. `check_order`), NOT Level 1 definition names (e.g. `get_order_status`). Using Level 1 names in `expectedActions` causes action assertions to FAIL even when the agent correctly invokes the action. Always use the Level 2 name from `reasoning: actions:`.
 
 ```
 # .agent file
-topic order_support:
+subagent order_support:
    actions:
       get_order_status:           # <-- Level 1 (DON'T use this in expectedActions)
          target: "flow://Get_Order_Status"

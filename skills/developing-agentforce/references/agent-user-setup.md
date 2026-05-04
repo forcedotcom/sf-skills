@@ -89,7 +89,7 @@ sf project deploy start --json \
 sf agent preview start --json \
   --api-name <AgentName> \
   -o TARGET_ORG
-# Test all topics and actions to verify permissions
+# Test all subagents and actions to verify permissions
 
 # Step 8: Publish & Activate (only after testing passes)
 sf agent publish authoring-bundle --json \
@@ -292,7 +292,7 @@ sf agent preview start --json \
 ```
 
 What to test:
-1. All topics trigger correctly
+1. All subagents trigger correctly
 2. All Apex actions execute without "Insufficient Privileges" errors
 3. Agent responds with expected data
 4. No compilation errors

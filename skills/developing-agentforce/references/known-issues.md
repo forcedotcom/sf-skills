@@ -163,9 +163,9 @@ Unresolved platform bugs, limitations, and edge cases that affect Agent Script d
 - **Status**: OPEN
 - **Date Discovered**: 2026-02-14
 - **Affects**: Agents with actions targeting secured resources
-- **Symptom**: If the running user (Einstein Agent User or session user) lacks permission to execute ANY action defined in the agent — even actions in other topics — the entire agent may fail with a permission error rather than gracefully skipping the unauthorized action.
-- **Root Cause**: The planner appears to validate permissions for all registered actions at startup, not lazily per-topic.
-- **Workaround**: For **Service Agents**: Ensure the Einstein Agent User has both the `AgentforceServiceAgentUser` system PS AND a custom `{AgentName}_Access` PS with `<classAccesses>` for ALL Apex classes across all topics. Do NOT rely on the auto-generated `NextGen_{AgentName}_Permissions` — it is often incomplete (ORM1 testing: 3/4 classes, missing `ShipmentTracker`). For **Employee Agents**: Ensure each employee user has the custom PS assigned. See [agent-user-setup.md](agent-user-setup.md) for the full provisioning workflow and permission set XML template. Alternatively, split agents by permission boundary.
+- **Symptom**: If the running user (Einstein Agent User or session user) lacks permission to execute ANY action defined in the agent — even actions in other subagents — the entire agent may fail with a permission error rather than gracefully skipping the unauthorized action.
+- **Root Cause**: The planner appears to validate permissions for all registered actions at startup, not lazily per-subagent.
+- **Workaround**: For **Service Agents**: Ensure the Einstein Agent User has both the `AgentforceServiceAgentUser` system PS AND a custom `{AgentName}_Access` PS with `<classAccesses>` for ALL Apex classes across all subagents. Do NOT rely on the auto-generated `NextGen_{AgentName}_Permissions` — it is often incomplete (ORM1 testing: 3/4 classes, missing `ShipmentTracker`). For **Employee Agents**: Ensure each employee user has the custom PS assigned. See [agent-user-setup.md](agent-user-setup.md) for the full provisioning workflow and permission set XML template. Alternatively, split agents by permission boundary.
 - **Open Questions**: Will the planner support lazy permission checking in a future release?
 
 ---
@@ -176,7 +176,7 @@ Unresolved platform bugs, limitations, and edge cases that affect Agent Script d
 - **Affects**: `system.messages.welcome` with variable interpolation
 - **Symptom**: Variable references like `{!@variables.customer_name}` or `{!userName}` in the welcome message display as literal text instead of resolved values.
 - **Root Cause**: Welcome messages are rendered before the agent runtime initializes variables. Mutable variables have not been set yet, and linked variables may not be resolved at welcome-message time.
-- **Workaround**: Use static welcome messages. Personalize greetings in the first topic's instructions instead.
+- **Workaround**: Use static welcome messages. Personalize greetings in the first subagent's instructions instead.
 - **Open Questions**: Will welcome message variable resolution be supported in a future release?
 
 ---
@@ -187,7 +187,7 @@ Unresolved platform bugs, limitations, and edge cases that affect Agent Script d
 - **Affects**: `system.messages.welcome` with multi-line content
 - **Symptom**: Line breaks (`\n`) in welcome messages are stripped, causing multi-line messages to render as a single line.
 - **Root Cause**: The welcome message renderer does not preserve newline characters from the Agent Script source.
-- **Workaround**: Keep welcome messages as a single line. Use the first topic's instructions with pipe syntax (`|`) for multi-line greetings.
+- **Workaround**: Keep welcome messages as a single line. Use the first subagent's instructions with pipe syntax (`|`) for multi-line greetings.
 - **Open Questions**: Is this by design or a bug?
 
 ---
@@ -196,9 +196,9 @@ Unresolved platform bugs, limitations, and edge cases that affect Agent Script d
 - **Status**: OPEN
 - **Date Discovered**: 2026-02-14
 - **Affects**: Multi-agent configurations using `related_agent` references
-- **Symptom**: SOMA (Same Org Multi-Agent) configurations that reference related agents via node declarations fail with "Node does not have corresponding topic" error at runtime.
-- **Root Cause**: The planner resolves agent references at compile time but may not correctly map cross-agent topic references when agents are deployed independently.
-- **Workaround**: Use `@topic.X` delegation within the same agent instead of cross-agent references. For true multi-agent scenarios, use the `@utils.escalate` or connection-based handoff patterns.
+- **Symptom**: SOMA (Same Org Multi-Agent) configurations that reference related agents via node declarations fail with "Node does not have corresponding subagent" error at runtime.
+- **Root Cause**: The planner resolves agent references at compile time but may not correctly map cross-agent subagent references when agents are deployed independently.
+- **Workaround**: Use `@subagent.X` delegation within the same agent instead of cross-agent references. For true multi-agent scenarios, use the `@utils.escalate` or connection-based handoff patterns.
 - **Open Questions**: Will SOMA node resolution be fixed in a future planner update?
 
 ---
@@ -218,8 +218,8 @@ Unresolved platform bugs, limitations, and edge cases that affect Agent Script d
 - **Status**: WORKAROUND
 - **Date Discovered**: 2026-02-16
 - **Date Updated**: 2026-02-17 (TDD v2.1.0 — clarified outputs specifically required)
-- **Affects**: `sf agent publish authoring-bundle` with topic-level action definitions
-- **Symptom**: `sf agent publish` returns "Internal Error, try again later" when topic-level action definitions have `target:` but no `outputs:` block. Also triggered when using `inputs:` without `outputs:`. LSP + CLI validation both PASS — error is server-side compilation only.
+- **Affects**: `sf agent publish authoring-bundle` with subagent-level action definitions
+- **Symptom**: `sf agent publish` returns "Internal Error, try again later" when subagent-level action definitions have `target:` but no `outputs:` block. Also triggered when using `inputs:` without `outputs:`. LSP + CLI validation both PASS — error is server-side compilation only.
 - **Root Cause**: The server-side compiler needs output type contracts to resolve `flow://` and `apex://` action targets. Without an `outputs:` block, the compiler cannot generate return bindings. The `inputs:` block alone is NOT sufficient — `outputs:` is specifically required.
 - **Workaround**: Always include an `outputs:` block in action definitions. The `inputs:` block can be omitted if the target has no required inputs (the LLM will still slot-fill via `with param=...`), but `outputs:` must always be present.
 - **TDD Validation**: `Val_No_Outputs` (v2.1.0) confirms inputs-only action definition → "Internal Error". `Val_Partial_Output` confirms declaring a subset of outputs IS valid. `Val_Apex_Bare_Output` confirms bare `@InvocableMethod` without wrapper classes also triggers this error.

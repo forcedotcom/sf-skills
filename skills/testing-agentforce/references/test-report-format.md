@@ -12,7 +12,7 @@ Test Cases: 6
 Duration: 45.2s
 
 Results:
-  Topic Routing: 5/6 passed (83.3%)
+  Subagent Routing: 5/6 passed (83.3%)
   Action Invocation: 4/6 passed (66.7%)
   Grounding: 6/6 passed (100%)
   Safety: 6/6 passed (100%)
@@ -37,21 +37,21 @@ Test Case 1: "Where is my order?"
 Test Case 2: "I want to return this"
   Expected Topic: returns
   Actual Topic: order_mgmt (fail - misrouted)
-  Fix Applied: Expanded 'returns' topic description
+  Fix Applied: Expanded 'returns' subagent description
   Retry Result: Correctly routed (pass)
 ```
 
 ## Coverage Analysis
 
-Track which topics and actions are tested across both modes:
+Track which subagents and actions are tested across both modes:
 
 | Dimension | Target | How to measure |
 |-----------|--------|----------------|
-| Topic coverage | 100% of non-entry topics | Count topics with at least 1 test case |
+| Subagent coverage | 100% of non-entry subagents | Count subagents with at least 1 test case |
 | Action coverage | 100% of actions | Count actions with at least 1 test case targeting them |
-| Phrasing diversity | 3+ utterances per topic (production) | Multiple wordings per intent |
+| Phrasing diversity | 3+ utterances per subagent (production) | Multiple wordings per intent |
 | Guardrail coverage | At least 1 off-topic test | Verify agent deflects non-relevant queries |
-| Multi-turn coverage | Test topic transitions | Conversation history tests |
+| Multi-turn coverage | Test subagent transitions | Conversation history tests |
 | Escalation coverage | Test escalation triggers | Verify human handoff works |
 
 ## CI/CD with Testing Center

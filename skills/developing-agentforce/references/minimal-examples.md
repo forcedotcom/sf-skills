@@ -1,12 +1,12 @@
 # Minimal Working Examples
 
-Complete, deployable agent examples with single topics, actions, and conditional logic.
+Complete, deployable agent examples with single subagents, actions, and conditional logic.
 
 ---
 
 ## Hello-World Agent Script
 
-A complete, deployable agent with one topic, one action, and conditional logic:
+A complete, deployable agent with one subagent, one action, and conditional logic:
 
 ```agentscript
 system:
@@ -28,12 +28,12 @@ start_agent entry:
     description: "Entry point for all conversations"
     reasoning:
         instructions: |
-            Greet the customer and route to the main topic.
+            Greet the customer and route to the main subagent.
         actions:
-            go_main: @utils.transition to @topic.main
+            go_main: @utils.transition to @subagent.main
                 description: "Navigate to main conversation"
 
-topic main:
+subagent main:
     description: "Main conversation handler"
     reasoning:
         instructions: ->
@@ -64,4 +64,4 @@ topic main:
 - **`instructions: ->`**: Procedural mode enables `if`/`else` and `run` directives
 - **`instructions: |`**: Literal mode for static text passed to the LLM
 - **`set @variables.X = @outputs.Y`**: Captures action output into mutable state
-- **`@utils.transition`**: Permanent handoff (does not return to calling topic)
+- **`@utils.transition`**: Permanent handoff (does not return to calling subagent)

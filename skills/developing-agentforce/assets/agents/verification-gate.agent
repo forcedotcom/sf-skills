@@ -1,7 +1,7 @@
 # Verification Gate Architecture Template
 # ========================================
 #
-# Users must pass identity verification before accessing protected topics.
+# Users must pass identity verification before accessing protected subagents.
 #
 # Pattern: Security gate before protected functionality.
 # Use when: Handling sensitive data, payments, PII access.
@@ -58,26 +58,26 @@ language:
 	additional_locales: ""
 	all_additional_locales: False
 
-start_agent topic_selector:
+start_agent agent_router:
 	description: "Route through identity verification"
 	reasoning:
 		instructions: |
 			You are a router only. Do NOT answer questions or provide help directly.
 			Route all users to identity verification first.
-			If already verified, route to the appropriate topic:
+			If already verified, route to the appropriate subagent:
 			- Account questions -> use to_account
 			- Refund requests -> use to_refund
 		actions:
-			to_verify: @utils.transition to @topic.identity_verification
+			to_verify: @utils.transition to @subagent.identity_verification
 				description: "Begin identity verification"
-			to_account: @utils.transition to @topic.account_management
+			to_account: @utils.transition to @subagent.account_management
 				description: "Access account settings"
 				available when @variables.customer_verified == True
-			to_refund: @utils.transition to @topic.refund_processor
+			to_refund: @utils.transition to @subagent.refund_processor
 				description: "Process a refund request"
 				available when @variables.customer_verified == True
 
-topic identity_verification:
+subagent identity_verification:
 	label: "Identity Verification"
 	description: "Verify customer identity before proceeding"
 
@@ -96,7 +96,7 @@ topic identity_verification:
 		instructions: ->
 			if @variables.failed_attempts >= 3:
 				| Too many failed attempts. Transferring to a human agent.
-				transition to @topic.escalation
+				transition to @subagent.escalation
 
 			if @variables.customer_verified == True:
 				| Identity verified! How can I help you today?
@@ -110,18 +110,18 @@ topic identity_verification:
 				with email = ...
 				set @variables.customer_verified = @outputs.verified
 
-			go_to_account: @utils.transition to @topic.account_management
+			go_to_account: @utils.transition to @subagent.account_management
 				description: "Access account settings"
 				available when @variables.customer_verified == True
 
-			go_to_refund: @utils.transition to @topic.refund_processor
+			go_to_refund: @utils.transition to @subagent.refund_processor
 				description: "Process a refund request"
 				available when @variables.customer_verified == True
 
 			escalate_now: @utils.escalate
 				description: "Transfer to human agent"
 
-topic account_management:
+subagent account_management:
 	label: "Account Management"
 	description: "Manage customer account settings (requires verification)"
 
@@ -151,7 +151,7 @@ topic account_management:
 	reasoning:
 		instructions: ->
 			if @variables.customer_verified == False:
-				transition to @topic.identity_verification
+				transition to @subagent.identity_verification
 
 			| Welcome to account management.
 			| What would you like to do with your account?
@@ -169,10 +169,10 @@ topic account_management:
 				with pref_value = ...
 				available when @variables.customer_verified == True
 
-			back: @utils.transition to @topic.topic_selector
+			back: @utils.transition to @subagent.agent_router
 				description: "Return to main menu"
 
-topic refund_processor:
+subagent refund_processor:
 	label: "Refund Processor"
 	description: "Process refund requests (requires verification)"
 
@@ -225,13 +225,13 @@ topic refund_processor:
 	reasoning:
 		instructions: ->
 			if @variables.customer_verified == False:
-				transition to @topic.identity_verification
+				transition to @subagent.identity_verification
 
 			if @variables.refund_status == "Approved":
 				run @actions.create_crm_case
 					with customer_id = @variables.ContactId
 					with refund_amount = @variables.refund_amount
-				transition to @topic.success_confirmation
+				transition to @subagent.success_confirmation
 
 			run @actions.check_churn_risk
 				with customer_id = @variables.ContactId
@@ -257,7 +257,7 @@ topic refund_processor:
 				with amount = 10
 				set @variables.refund_status = @outputs.status
 
-topic success_confirmation:
+subagent success_confirmation:
 	label: "Success Confirmation"
 	description: "Confirm successful operation"
 	reasoning:
@@ -265,10 +265,10 @@ topic success_confirmation:
 			Great news! Your request has been processed successfully.
 			Is there anything else I can help you with?
 		actions:
-			new_request: @utils.transition to @topic.topic_selector
+			new_request: @utils.transition to @subagent.agent_router
 				description: "Start a new request"
 
-topic escalation:
+subagent escalation:
 	label: "Escalation"
 	description: "Escalate to human agent"
 	reasoning:

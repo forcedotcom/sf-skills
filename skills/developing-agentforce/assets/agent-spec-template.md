@@ -11,23 +11,23 @@ Describe the key behavioral rules that govern the agent:
 - What must the agent know before taking action?
 - What backing logic types are used (Apex, Flow, Prompt Template)?
 - What guardrails apply (off-topic handling, escalation)?
-- What information persists across topic switches?
+- What information persists across subagent switches?
 
-## Topic Map
+## Subagent Map
 
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 graph TD
-    A[start_agent<br/>topic_selector]
+    A[start_agent<br/>agent_router]
 
-    A -->|description of routing condition| B[topic_name<br/>Topic]
-    A -->|unclear intent| C[ambiguous_question<br/>Topic]
-    A -->|out of scope| D[off_topic<br/>Topic]
-    A -->|needs escalation| E[escalation<br/>Topic]
+    A -->|description of routing condition| B[subagent_name<br/>Subagent]
+    A -->|unclear intent| C[ambiguous_question<br/>Subagent]
+    A -->|out of scope| D[off_topic<br/>Subagent]
+    A -->|needs escalation| E[escalation<br/>Subagent]
 ```
 
 Expand the diagram to show actions, gating logic, and variable state changes
-within each topic. See the Topic Map Diagrams reference for conventions.
+within each subagent. See the Subagent Map Diagrams reference for conventions.
 
 ## Variables
 
@@ -37,7 +37,7 @@ within each topic. See the Topic Map Diagrams reference for conventions.
 
 ## Actions & Backing Logic
 
-### action_name (topic_name topic)
+### action_name (subagent_name subagent)
 
 - **Target:** `apex://ClassName` or `flow://FlowName` or `prompt://PromptTemplateName`
 - **Backing Status:** EXISTS / NEEDS STUB / NEEDS IMPLEMENTATION
