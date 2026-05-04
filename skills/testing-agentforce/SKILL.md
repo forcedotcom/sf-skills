@@ -4,7 +4,7 @@ description: "Write, run, and analyze structured test suites for Agentforce agen
 allowed-tools: Bash Read Write Edit Glob Grep
 license: Apache-2.0
 metadata:
-  version: "0.5.1"
+  version: "1.0"
   last_updated: "2026-04-08"
   argument-hint: "<org-alias> --authoring-bundle <AgentName> [--utterances <file>] | run <org> --target <flow://Name>"
   compatibility: claude-code

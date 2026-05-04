@@ -306,15 +306,53 @@ Wrap values that contain \`: \` (colon + space), such as long descriptions with 
     },
   },
   {
-    description: 'Metadata must include a "version" field',
+    description: 'Frontmatter must include a metadata block with a "version" field',
     run({ dirName, rawFrontmatter }) {
       if (rawFrontmatter === null) return { errors: [] }
       const meta = parseMetadataBlock(rawFrontmatter)
-      if (meta === null || typeof meta === "string") return { errors: [] }
+
+      // Fail if no metadata block exists
+      if (meta === null) {
+        return {
+          errors: [
+            `skills/${dirName}/SKILL.md: frontmatter must include a "metadata:" block with a "version" field (e.g. metadata:\\n  version: "1.0")`,
+          ],
+        }
+      }
+
+      // Fail if metadata is a scalar (inline value)
+      if (typeof meta === "string") {
+        return {
+          errors: [
+            `skills/${dirName}/SKILL.md: metadata must be a key-value block, not an inline scalar — use indented sub-keys (e.g. metadata:\\n  version: "1.0")`,
+          ],
+        }
+      }
+
+      // Fail if version is missing inside metadata
       if (!meta.version) {
         return {
           errors: [
             `skills/${dirName}/SKILL.md: metadata is missing required "version" field (e.g. version: "1.0")`,
+          ],
+        }
+      }
+
+      return { errors: [] }
+    },
+  },
+  {
+    description: 'Version must follow x.y format (e.g. "1.0", "2.5")',
+    run({ dirName, rawFrontmatter }) {
+      if (rawFrontmatter === null) return { errors: [] }
+      const meta = parseMetadataBlock(rawFrontmatter)
+      if (meta === null || typeof meta === "string") return { errors: [] }
+      if (!meta.version) return { errors: [] }
+      const versionPattern = /^\d+\.\d+$/
+      if (!versionPattern.test(meta.version)) {
+        return {
+          errors: [
+            `skills/${dirName}/SKILL.md: version must follow x.y format (e.g. "1.0", "2.5") — got: "${meta.version}"`,
           ],
         }
       }
