@@ -1,0 +1,1 @@
+Generate seed-data for an Apex dataset where the gold file is an OrderProcessor class that extends BaseProcessor and implements Queueable. The dataset path is skills/generating-apex/tests/evals/generating-apex-order-processor/. My target org is myDevOrg.

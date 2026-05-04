@@ -1,0 +1,1 @@
+Generate seed-data for the dataset at skills/generating-validation-rule/tests/evals/generating-validation-rule-formula-deps/. The gold file is a validation rule on Contract that uses a formula referencing Payment_Due_Date__c and ISPICKVAL(Payment_Status__c, "UNPAID"). My target org is myDevOrg.
