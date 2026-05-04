@@ -5,7 +5,6 @@ license: LICENSE.txt has complete terms
 metadata:
   version: "1.0"
   stage: Draft
-  related-skills: "creating-sf-skill, generating-custom-field, generating-custom-object, generating-apex"
 allowed-tools: Bash(sf project generate, sf project deploy start, cp, rm, mkdir, find, ls) Read Write
 ---
 
