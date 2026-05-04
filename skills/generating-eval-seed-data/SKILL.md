@@ -5,7 +5,7 @@ license: LICENSE.txt has complete terms
 metadata:
   version: "1.0"
   stage: Draft
-allowed-tools: Bash(sf project generate --name --template empty, sf project deploy start --dry-run --target-org --test-level NoTestRun --wait --json, cp -r, rm -rf, mkdir -p, find, ls, cat sfdx-project.json) Read Write
+allowed-tools: Bash(sf project deploy start) Read Write
 ---
 
 # Generating Eval Seed Data
