@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Payment_Overdue__c</fullName>
+    <label>Payment Overdue</label>
+    <type>Text</type>
+    <formula><![CDATA[IF(
+  AND(
+    Payment_Due_Date__c < TODAY(),
+    ISPICKVAL(Payment_Status__c, "UNPAID")
+  ),
+  "PAYMENT OVERDUE",
+  null
+)]]></formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <description>Returns 'PAYMENT OVERDUE' when Payment_Due_Date__c is before today and Payment_Status__c is UNPAID; otherwise null.</description>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <required>false</required>
+    <externalId>false</externalId>
+    <unique>false</unique>
+</CustomField>

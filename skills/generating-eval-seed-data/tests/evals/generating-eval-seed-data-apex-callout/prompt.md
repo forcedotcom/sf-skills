@@ -1,0 +1,1 @@
+Generate seed-data for an Apex dataset. The gold file is a QueueableWithCalloutRecipes class that implements Queueable and Database.AllowsCallouts. It references RestClient.makeApiCall() and TestFactory.invalidateSObjectList(). The dataset path is domains/apex/datasets/QueueableWithCalloutRecipes/. My target org is myDevOrg.

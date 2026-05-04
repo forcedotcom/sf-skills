@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AssetFedExValidation</fullName>
+    <active>true</active>
+    <description>Block insert/update if AssetProvided Name contains 'FedEx', AssetServicedBy Owner CompanyName contains 'FedEx', and Asset LastModified is not more than last 3 months</description>
+    <errorConditionFormula>
+<![CDATA[AND(
+            /* Ensure lookups exist */
+            NOT(ISBLANK(AssetProvided__c)),
+            NOT(ISBLANK(AssetServicedBy__c)),
+            /* Name of AssetProvided contains FedEx (case-insensitive) */
+            CONTAINS( UPPER( AssetProvided__r.Name ), "FEDEX" ),
+            /* Owner CompanyName of AssetServicedBy contains FedEx (case-insensitive) */
+            CONTAINS( UPPER( AssetServicedBy__r.Owner.CompanyName ), "FEDEX" ),
+            /* Asset LastModified is within last 3 months (inclusive) */
+            DATEVALUE(LastModifiedDate) >= ADDMONTHS(TODAY(), -3)
+        )]]>
+    </errorConditionFormula>
+    <errorMessage>Cannot insert/update: Asset conditions not met.</errorMessage>
+</ValidationRule>

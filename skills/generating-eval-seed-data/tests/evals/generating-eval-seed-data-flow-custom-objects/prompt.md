@@ -1,1 +1,0 @@
-I need seed-data stubs for a Flow dataset. The gold file is a record-triggered Flow on Adoption__c that creates a related record on Animal__c via a Lookup field. Target org is myDevOrg. The dataset is at skills/generating-flow/tests/evals/generating-flow-adoption-trigger/.
