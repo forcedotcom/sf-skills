@@ -4,7 +4,7 @@ description: "AI-assisted skill authoring pipeline for the afv-library. Use when
 license: LICENSE.txt has complete terms
 metadata:
   version: "1.0"
-  stage: Published
+  stage: Pilot
 allowed-tools: Bash(npx tsx scripts/validate-skills.ts) Read Write AskUserQuestion
 ---
 
