@@ -3,28 +3,6 @@
 Principles for writing high-quality skills. Based on patterns observed across 30+
 production skills in the afv-library and the Agent Skills best practices guide.
 
-## What Is a Metadata Skill?
-
-Agent Skills are standardized, lightweight packages that allow AI agents to load domain
-expertise on demand without polluting their finite context windows. They rely on a
-**Progressive Disclosure** architecture:
-
-- **Phase 1 (Discovery)**: Only the skill's metadata (~100 tokens) is loaded into the
-  system prompt at startup.
-- **Phase 2 (Load)**: The full SKILL.md instructions are loaded only when the user's
-  intent matches the skill.
-- **Phase 3 (References/Scripts/Assets)**: Instructions in SKILL.md can then ask the
-  agent to run scripts or load references on demand.
-
-A metadata skill is a structured SKILL.md file (with optional references and assets) that
-lives in the afv-library and teaches an AI agent to generate valid Salesforce metadata XML
-for a specific metadata type (CustomObject, CustomField, FlexiPage, ValidationRule, etc.).
-
-The skill serves as the agent's domain expert — it contains the constraints, decision logic,
-naming conventions, and correct/incorrect examples that prevent deployment failures.
-
-Where skills live: `afv-library/skills/generating-{metadata-type}/`
-
 ## Core Principles
 
 ### 1. The Extraction Method
