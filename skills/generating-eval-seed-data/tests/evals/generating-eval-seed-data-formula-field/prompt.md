@@ -1,0 +1,1 @@
+Generate seed-data for a CustomFormulaField dataset. The gold file is a formula field on Contract that checks if a payment is overdue — it references Payment_Due_Date__c and ISPICKVAL(Payment_Status__c, "UNPAID"). The dataset path is domains/CustomFormulaField/datasets/payment_overdue/. My target org is myDevOrg.

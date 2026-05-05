@@ -1,6 +1,8 @@
 ---
 name: generating-ui-bundle-site
 description: "MUST activate when the project contains a uiBundles/*/src/ directory and the task involves creating or configuring site infrastructure. Use this skill when creating or configuring a Salesforce Digital Experience Site for hosting a UI bundle. Activate when files matching digitalExperiences/, networks/, customSite/, or DigitalExperienceBundle exist and need modification, or when the user wants to publish, host, or configure guest access for their app."
+metadata:
+  version: "1.0"
 ---
 
 # Digital Experience Site for React UI Bundles
