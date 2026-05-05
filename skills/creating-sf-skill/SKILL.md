@@ -1,10 +1,11 @@
 ---
 name: creating-sf-skill
-description: "AI-assisted skill authoring pipeline for the afv-library. Use when the user wants to create a new skill, update an existing skill, generate a skill spec, scaffold skill files, or add a new capability to the skill catalog. TRIGGER when: user says create skill, new skill, skill creator, author skill, scaffold skill, generate skill, update skill, add a skill, skill pipeline. DO NOT TRIGGER when: user is directly editing an existing SKILL.md without asking for guided authoring.Invoke this skill whenever someone needs to add a new capability to the afv-library skill catalog, or wants to update/improve an existing skill. This includes creating skills for Apex, metadata, LWC, Flow, Agentforce, or any Salesforce domain."
+description: "AI-assisted skill authoring pipeline for the afv-library. Use when the user wants to create a new skill, update an existing skill, generate a skill spec, scaffold skill files, or add a new capability to the skill catalog. TRIGGER when: user says create skill, new skill, skill creator, author skill, scaffold skill, generate skill, update skill, add a skill, skill pipeline, write a skill, build a skill, skill template, skill spec. Also triggers when user wants to add a capability for Apex, metadata, LWC, Flow, Agentforce, or any Salesforce domain to the skill catalog. DO NOT TRIGGER when: user is directly editing an existing SKILL.md without asking for guided authoring, or when user is running evals against an existing skill."
 license: LICENSE.txt has complete terms
 metadata:
   version: "1.0"
-  stage: Pilot
+  stage: Published
+allowed-tools: Bash(npx tsx scripts/validate-skills.ts) Read Write AskUserQuestion
 ---
 
 # Instructions
