@@ -1,6 +1,8 @@
 ---
 name: generating-custom-lightning-type
-description: "Use this skill when users need to create Custom Lightning Types (CLTs) for Einstein Agent actions or structured input/output schemas. Trigger when users mention CLT, Custom Lightning Types, JSON schemas for agents, type definitions, lightning__objectType, or editor/renderer configurations. This is complex - always use this skill for CLT work."
+description: "Use this skill when users need to create Custom Lightning Types (CLTs) for Einstein Agent actions or structured input/output schemas. Trigger when users mention CLT, Custom Lightning Types, Custom Lightning Types (CLTs) with widget/mosaic/fragment rendition/renderer, JSON schemas for agents, type definitions, lightning__objectType, or editor/renderer configurations. When widget renditions are requested, you MUST first read the widget-rendition.md reference file in this skill's references/ directory and follow its complete workflow. This is complex - always use this skill for CLT work."
+metadata:
+  version: "1.0"
 ---
 
 ## When to Use This Skill
@@ -10,6 +12,7 @@ Use this skill when you need to:
 - Generate JSON Schema-based type definitions for Lightning Platform
 - Configure CLTs for Einstein Agent actions
 - Set up editor and renderer configurations for custom UI
+- Create CLTs with widget/mosaic/fragment rendition
 - Troubleshoot deployment errors related to Custom Lightning Types
 
 ## Specification
@@ -24,6 +27,7 @@ Custom Lightning Types (CLTs) are JSON Schema-based type definitions used by the
 - **Choose standard Lightning types** when the structure is simple and can be expressed with properties and supported primitive `lightning:type` identifiers.
 - **Choose Apex class types** (`@apexClassType/...`) when the structure already exists server-side and you want the Apex class to define the shape.
 - **Include editor/renderer config** only when you need custom UI behavior (custom LWC input/output components). Otherwise, omit.
+- **Widget rendition**: After `schema.json` is drafted, you **must read references/widget-rendition.md and follow the "Widget renderer pattern"** section below for complete guidance. Do NOT attempt widget generation without reading the reference file first.
 
 ## Critical Rules (Read First)
 - **Root object schemas MUST include**:
@@ -125,7 +129,7 @@ When strict validation is enabled (`unevaluatedProperties: false`), keep each pr
    - **Avoid known-invalid patterns**:
      - Do not use `es_property_editors/inputList`.
      - Do not use `itemSchema` attributes.
-4. **(Optional) Draft `renderer.json`** (only if custom UI is required)
+4. **(Optional) Draft `renderer.json`** (only if custom UI or mosaic rendition is required)
    - **Supported shape:** Top-level `renderer` object with `renderer.componentOverrides` and `renderer.layout`.
      - Top-level `renderer` object.
      - Use `renderer.componentOverrides` for component overrides.
@@ -136,6 +140,15 @@ When strict validation is enabled (`unevaluatedProperties: false`), keep each pr
      - Use `{!$attrs.<name>}` in attribute mappings when binding schema data to custom renderer component attributes.
      - **CRITICAL**: Attribute mappings like `{!$attrs.propertyName}` must reference properties that **actually exist** in your type schema. Referencing non-existent properties will fail validation.
      - **Type matching**: Attribute values must match the expected type for the component. For example, if a component expects a string attribute, passing an integer will fail validation.
+   - **Widget renderer pattern** (for widget rendition):
+       - **When to use:** Use this when users request "mosaic", "widget", "fragment", or "cross-platform rendering" for their CLT.
+       - **Structure:** `renderer.componentOverrides["$"] = { "type": "mosaic", "definition": "tile/mosaic", "children": [ /* UEM tree of blocks and regions */ ] }`
+       - **REQUIRED workflow:**
+           - **STOP**: Do NOT attempt to create the widget renderer yourself.
+           - **MANDATORY FIRST STEP**: You MUST fetch the reference file `references/widget-rendition.md` located in this skill's directory before proceeding.
+           - Follow the complete workflow documented in `widget-rendition.md` using the generated CLT schema as the grounding schema.
+           - The `widget-rendition.md` reference contains the full widget generation workflow: discovering UEM blocks via discoverUiComponents, calling getUiComponentSchemas, building the UEM tree, and writing renderer.json.
+           - **Do not** attempt to generate widget rendition without first fetching the `widget-rendition.md` reference file.
    - **Property-level override pattern**:
      - `renderer.componentOverrides["<propertyName>"] = { "definition": "es_property_editors/outputText" | "es_property_editors/outputNumber" | "es_property_editors/outputImage" | ... }`. **Valid renderer components** (examples): `es_property_editors/outputText`, `es_property_editors/outputNumber`, `es_property_editors/outputImage`. Avoid input-style components in the renderer.
    - **Layout pattern for renderer**:

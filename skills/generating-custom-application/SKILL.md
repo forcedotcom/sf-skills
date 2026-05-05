@@ -1,6 +1,8 @@
 ---
 name: generating-custom-application
 description: "Use this skill when users need to create or configure Salesforce Custom Applications. Trigger when users mention custom apps, application metadata, app navigation, or organizing tabs into applications. Use when users want to create app containers for tabs and pages. Always use this skill for custom application work."
+metadata:
+  version: "1.0"
 ---
 
 ## When to Use This Skill

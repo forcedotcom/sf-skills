@@ -1,0 +1,1 @@
+Generate seed-data for a ValidationRule dataset. The gold file is a validation rule on Asset that blocks insert/update when AssetProvided Name contains FedEx, AssetServicedBy Owner CompanyName contains FedEx, and Asset was modified within last 3 months. The dataset path is domains/ValidationRule/datasets/AssetFedexValidationRule/. My target org is myDevOrg.
