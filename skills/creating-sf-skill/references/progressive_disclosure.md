@@ -75,6 +75,55 @@ Check `assets/` for templates.
 | Creating subdirectory but not referencing it | Agent never reads unreferenced files | Add entry to Reference File Index |
 | Using "see references/" without naming a file | Agent doesn't know which file to read | Always name the specific file |
 
+## When to Use `scripts/`
+
+Agents execute scripts as black boxes — they run `--help`, execute, and read output. Create
+scripts for deterministic tasks that should not waste tokens on LLM reasoning:
+
+- Validating generated XML against schema
+- Checking naming conventions (`__c` suffix, API name length limits)
+- Verifying cross-element dependencies (e.g., Master-Detail requires `relationshipOrder`)
+
+**Rules for scripts:**
+- One responsibility per script
+- Support `--help` for discoverability
+- No interactive prompts
+- Use structured output: JSON for results, stderr for errors
+- Idempotent — safe to re-run on failure/retry
+- Support `--dry-run` for critical operations
+
+## When to Use `assets/`
+
+Create template files when the skill produces metadata from a skeleton:
+
+- XML templates with `{PLACEHOLDER}` syntax for variable parts
+- Include XML comments explaining each section
+- Templates must be syntactically valid (minus the placeholders)
+- Match the actual output file extension (`.xml`, `.json`, etc.)
+
+**Example asset** (`assets/object-template.xml`):
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+  <label>{OBJECT_LABEL}</label>
+  <pluralLabel>{OBJECT_PLURAL_LABEL}</pluralLabel>
+  <nameField>
+    <!-- Primary name field for the object -->
+    <label>{NAME_FIELD_LABEL}</label>
+    <type>{NAME_FIELD_TYPE}</type>
+  </nameField>
+  <deploymentStatus>Deployed</deploymentStatus>
+  <sharingModel>{SHARING_MODEL}</sharingModel>
+</CustomObject>
+```
+
+**Not every skill needs assets.** Many metadata generation skills (like `generating-custom-field`
+and `generating-flexipage`) do not use `assets/` at all — they embed XML examples directly in
+SKILL.md. Use assets when you have reusable templates with placeholder syntax; use inline
+examples when showing constraint-specific snippets. Only create `assets/` if there is content
+to put in it.
+
 ## Token Budget
 
 | Component | Target | Maximum |

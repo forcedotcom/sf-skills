@@ -1,11 +1,63 @@
 # Skill Authoring Best Practices
 
-Principles for writing high-quality skills. Based on patterns observed across the
-afv-library and the Agent Skills best practices guide.
+Principles for writing high-quality skills. Based on patterns observed across 30+
+production skills in the afv-library and the Agent Skills best practices guide.
+
+## What Is a Metadata Skill?
+
+Agent Skills are standardized, lightweight packages that allow AI agents to load domain
+expertise on demand without polluting their finite context windows. They rely on a
+**Progressive Disclosure** architecture:
+
+- **Phase 1 (Discovery)**: Only the skill's metadata (~100 tokens) is loaded into the
+  system prompt at startup.
+- **Phase 2 (Load)**: The full SKILL.md instructions are loaded only when the user's
+  intent matches the skill.
+- **Phase 3 (References/Scripts/Assets)**: Instructions in SKILL.md can then ask the
+  agent to run scripts or load references on demand.
+
+A metadata skill is a structured SKILL.md file (with optional references and assets) that
+lives in the afv-library and teaches an AI agent to generate valid Salesforce metadata XML
+for a specific metadata type (CustomObject, CustomField, FlexiPage, ValidationRule, etc.).
+
+The skill serves as the agent's domain expert — it contains the constraints, decision logic,
+naming conventions, and correct/incorrect examples that prevent deployment failures.
+
+Where skills live: `afv-library/skills/generating-{metadata-type}/`
 
 ## Core Principles
 
-### 1. Add What the Agent Lacks, Omit What It Knows
+### 1. The Extraction Method
+
+The best way to build a skill is to **complete the real task hands-on with an agent in
+chat first**. Pay attention to the corrections you make and the context you have to
+provide, then extract that exact sequence into your SKILL.md.
+
+1. Perform the task yourself (or watch someone do it) in an agent conversation.
+2. Note every decision point, correction, tool invocation, and gotcha encountered.
+3. Write the skill as the instructions you wish you had before starting.
+4. Feed real execution traces back into the skill.
+
+The first draft usually needs refinement. Run the skill against 3-5 real prompts, read the
+full execution trace (not just the final output), and identify false positives, false
+negatives, wasted tokens, and vague instructions.
+
+### 2. Explain the Why, Not Just the What
+
+If you find yourself writing ALWAYS or NEVER in all caps, that is a yellow flag. Reframe
+and explain the reasoning so the model understands **why** the constraint matters. A model
+that understands intent handles edge cases better than one following rigid rules.
+
+**Bad**: "NEVER include `<required>` on MasterDetail."
+
+**Good**: "Omit `<required>` on MasterDetail fields because the platform implicitly
+enforces requirement and adding it causes the error: 'Master-Detail Relationship Fields
+Cannot be Optional or Required.'"
+
+Favor procedures over declarations. Instead of listing rules, describe the reasoning
+process an expert would follow.
+
+### 3. Add What the Agent Lacks, Omit What It Knows
 
 The most common mistake is including general knowledge the LLM already has.
 Focus exclusively on:
@@ -14,31 +66,19 @@ Focus exclusively on:
   unique to this project.
 - **Domain-specific procedures** — workflows, API quirks, deployment steps that are
   not publicly documented or are team-specific.
-- **Gotchas** — failure modes, edge cases, known bugs that the agent would not anticipate.
+- **Non-obvious edge cases** — failure modes, known bugs that the agent would not anticipate.
 
 **Omit**: general programming concepts, language syntax, well-known design patterns.
+Use this as a filter for what belongs in each tier of the specification.
 
-### 2. Extract from a Hands-On Task
+### 4. Cross-Model Testing
 
-The best skills are written after doing the task manually:
+Test your skill against the different models your team uses. A skill that works on one
+model may fail on another due to different instruction-following behavior, context window
+handling, or default assumptions. Cross-model testing catches brittle instructions that
+rely on model-specific quirks rather than clear communication.
 
-1. Perform the task yourself (or watch someone do it).
-2. Note every decision point, tool invocation, and gotcha encountered.
-3. Write the skill as the instructions you wish you had before starting.
-4. Feed real execution traces back into the skill.
-
-### 3. Refine with Real Execution
-
-> "The first draft of a skill usually needs refinement. Run the skill against real
-> tasks, then feed the results — all of them, not just failures — back into the
-> creation process."
-
-After generating a skill:
-- Run it against 3-5 real prompts.
-- Read the full execution trace, not just the final output.
-- Identify: false positives, false negatives, wasted tokens, vague instructions.
-
-### 4. Task-Oriented, Not Concept-Oriented
+### 5. Task-Oriented, Not Concept-Oriented
 
 Structure skills around what the agent should **do**, not what **exists**.
 
@@ -47,7 +87,7 @@ Structure skills around what the agent should **do**, not what **exists**.
 **Good**: "1. Identify the class type needed. 2. Read the matching template from assets/.
 3. Generate the class following the template pattern."
 
-### 5. Concise Over Comprehensive
+### 6. Concise Over Comprehensive
 
 Every token in a SKILL.md costs compute and risks confusing the agent with
 irrelevant instructions. Cut ruthlessly:
@@ -56,16 +96,31 @@ irrelevant instructions. Cut ruthlessly:
 - Remove examples that duplicate other examples.
 - Remove caveats about edge cases that never happen.
 
+SKILL.md must be under 500 lines. If your skill needs more detail, move content to
+`references/` files and link from SKILL.md. Reference files load on demand and are a
+good way to avoid diluting critical skill instructions.
+
 ## Description Writing
 
-The description is the most important field — it determines when the skill triggers.
+The description is the most important field — it is the **sole mechanism** by which agents
+decide whether to activate your skill.
+
+### Requirements
+
+- **100-300 words** — use the full budget.
+- Start with what the skill does in imperative form.
+- Include the metadata type name and Salesforce terminology.
+- List 5+ specific trigger phrases users would say.
+- List relevant file extensions (e.g., `.field-meta.xml`).
+- Include negative triggers ("Do NOT trigger when...").
 
 ### Do
 
 - Front-load the primary use case.
 - Include specific keywords users say: "Apex", ".cls", "trigger", "batch job".
 - Add `TRIGGER when:` and `DO NOT TRIGGER when:` clauses.
-- **Be pushy**: list implicit triggers where the user may not use the domain term directly.
+- **Be pushy about triggers**: list implicit triggers where the user may not use the
+  domain term directly.
 - Keep it factual and specific.
 
 ### Don't
@@ -77,15 +132,15 @@ The description is the most important field — it determines when the skill tri
 
 ### Be Pushy About Triggers
 
-Err on the side of listing more implicit triggers, not fewer. A skill that never fires is useless;
-a skill that fires on a near-miss is recoverable. Explicitly call out contexts where the skill
-applies **even if the user doesn't name the domain directly**:
+Err on the side of listing more implicit triggers, not fewer. A skill that never fires is
+useless; a skill that fires on a near-miss is recoverable. Explicitly call out contexts
+where the skill applies **even if the user doesn't name the domain directly**:
 
-> "TRIGGER when: user asks to add a rule, restrict a field, or enforce a policy — even if they
-> don't explicitly say 'validation rule' or 'Apex'."
+> "TRIGGER when: user asks to add a rule, restrict a field, or enforce a policy — even if
+> they don't explicitly say 'validation rule' or 'Apex'."
 
-This is especially important for domain keywords the user may not know (e.g., they say "make this
-field required" not "add a required validation rule").
+This is especially important for domain keywords the user may not know (e.g., they say
+"make this field required" not "add a required validation rule").
 
 ### Template
 

@@ -1,10 +1,19 @@
 ---
 name: <SKILL_NAME>
-description: "<DESCRIPTION — 20+ words, <= 1024 chars, must contain 'use'. Include TRIGGER when and DO NOT TRIGGER when clauses.>"
+description: "<PRIMARY_PURPOSE>. TRIGGER when: <users mention METADATA_TYPE_NAMES,
+  FILE_EXTENSIONS, or ask to ACTION_VERBS — include 5+ specific trigger phrases and
+  implicit contexts where the user may not use the exact domain term>.
+  SKIP when: <EXCLUSION_TRIGGERS with delegation targets>.
+  Always use this skill for any <DOMAIN> metadata work."
 license: LICENSE.txt has complete terms
 metadata:
   version: "1.0"
   stage: Draft
+  related-skills: "<skill1>, <skill2>"
+  author: "<team-name>"
+  last_updated: "<YYYY-MM-DD>"
+  compatibility: "<REQUIRED_TOOLS_AND_ENVIRONMENT>"
+allowed-tools: <Bash Read Write — list only the tools the skill needs>
 ---
 
 # <Skill Title>
@@ -15,6 +24,20 @@ metadata:
 
 - **In scope**: <what this skill handles>
 - **Out of scope**: <what this skill does NOT handle — delegate to other skills>
+
+---
+
+## Clarifying Questions
+
+<!-- Questions the agent should ask before generating. Only include questions
+     where the wrong assumption leads to deployment failure or significant rework. -->
+
+Before generating, confirm with the user if not already clear:
+
+- <Question 1 — most critical information needed>
+- <Question 2 — type or subtype selection>
+- <Question 3 — constraint-affecting detail>
+- <Question 4 — relationship or dependency info>
 
 ---
 

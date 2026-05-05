@@ -138,7 +138,8 @@ Then do the work. Do not ask any more questions.
 2. Read `./templates/skill_template.md`.
 3. Read `./templates/frontmatter_reference.yaml`.
 4. Read `./references/best_practices.md`.
-5. Generate all files following the rules below.
+5. Read `./references/section_guide.md` — use it for section-by-section quality guidance.
+6. Generate all files following the rules below.
 
 ### What goes WHERE — hard rules
 
@@ -365,3 +366,18 @@ Next steps:
 | Validation fails | Fix it yourself. Only ask the user if you genuinely can't resolve it. |
 | No reference material provided | Generate representative stubs; mark everything `# STUB`. |
 | Skill type is clear from user message | Do not ask — infer it, state it, move on. |
+
+---
+
+## Reference File Index
+
+| File | When to read |
+|------|-------------|
+| `references/progressive_disclosure.md` | Step 3 — to decide what goes in SKILL.md vs subdirectories |
+| `references/best_practices.md` | Step 3 — for core authoring principles and description writing |
+| `references/section_guide.md` | Step 3 — for section-by-section quality guidance (frontmatter, tiers, checklist) |
+| `references/validation_rules.md` | Step 3 (Validate) — for the full list of validator rules |
+| `references/pr_checklist.md` | Step 4 (Review) — for PR-quality review of the generated skill |
+| `templates/skill_template.md` | Step 3 — starting structure for generated SKILL.md files |
+| `templates/frontmatter_reference.yaml` | Step 3 — complete field reference for frontmatter |
+| `templates/tests_structure.md` | Step 5 — for eval dataset layout and naming conventions |
