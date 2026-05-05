@@ -4,7 +4,7 @@ description: "Generate minimal seed-data stubs for Salesforce metadata evaluatio
 license: LICENSE.txt has complete terms
 metadata:
   version: "1.0"
-  stage: Draft
+  stage: Pilot
 allowed-tools: Bash(sf project deploy start) Read Write
 ---
 
