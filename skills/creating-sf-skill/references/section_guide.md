@@ -23,7 +23,7 @@ metadata:
   last_updated: "{YYYY-MM-DD}"
   compatibility: "Requires Salesforce CLI, Python 3.9+"
 license: Apache-2.0
-allowed-tools: Bash Read Write
+allowed-tools: Bash(sf project deploy start) Read Write
 ---
 ```
 
@@ -51,10 +51,10 @@ exclusions. The description must be 100-300 words with 5+ specific trigger phras
 ### allowed-tools Field
 
 Declares which tools the skill can access. This scopes the agent's tool use during
-skill execution:
+skill execution. Scope Bash to specific commands rather than blanket access:
 
 ```yaml
-allowed-tools: Bash Read Write
+allowed-tools: Bash(sf project deploy start) Read Write
 ```
 
 Include only the tools the skill actually needs. Common values: `Bash`, `Read`, `Write`,

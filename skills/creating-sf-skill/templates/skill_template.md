@@ -9,11 +9,10 @@ license: LICENSE.txt has complete terms
 metadata:
   version: "1.0"
   stage: Draft
-  related-skills: "<skill1>, <skill2>"
   author: "<team-name>"
   last_updated: "<YYYY-MM-DD>"
   compatibility: "<REQUIRED_TOOLS_AND_ENVIRONMENT>"
-allowed-tools: <Bash Read Write — list only the tools the skill needs>
+allowed-tools: <list only the tools the skill needs, e.g. Bash(sf project deploy start) Read Write>
 ---
 
 # <Skill Title>
