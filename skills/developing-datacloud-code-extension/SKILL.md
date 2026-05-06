@@ -83,8 +83,8 @@ sf data-code-extension function init --package-dir <directory>
 my-transform/              # Project root
 ├── payload/               # CRITICAL: This is what --package-dir must point to for deploy
 │   ├── entrypoint.py      # Main transformation code
-│   ├── requirements.txt   # Python dependencies
 │   └── config.json        # Code extension configuration
+├── requirements.txt       # Python dependencies
 └── README.md
 ```
 
