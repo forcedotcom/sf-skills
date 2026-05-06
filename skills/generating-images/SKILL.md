@@ -43,7 +43,7 @@ Use these defaults unless the user specifies otherwise:
 Run `download-image.sh` (located in this skill's `scripts/` directory) to download and preview the image:
 
 ```bash
-bash skills/generating-images/scripts/download-image.sh \
+bash scripts/download-image.sh \
   --url "<image_url_from_response>" \
   --id "<responseId>" \
   --format "<outputFormat>" \
