@@ -94,7 +94,8 @@ sf agent activate --json \
 
 Critical notes:
 - `sf org create agent-user` works in **all org types** (scratch, sandbox, production) — use it instead of the legacy `sf org create user` or `sf data create record` approach
-- The command auto-assigns `AgentforceServiceAgentUser` — no separate permset assignment needed
+- The command auto-assigns `AgentforceServiceAgentBase`, `AgentforceServiceAgentUser`, and `EinsteinGPTPromptTemplateUser` — no separate permset assignment needed
+- The command may exit non-zero with `PermissionSetAssignmentError` if a permset license is exhausted, **even when the user was created successfully**. Always inspect `result.username` and `result.permissionSetErrors[]` from the JSON output. If the only failure is `EinsteinGPTPromptTemplateUser` and your agent has no Prompt Template actions, you can proceed. Otherwise, free a license (or use `--base-username` to retry against a different license pool) before continuing.
 - Capture the generated username from the command output (`result.username`) and use it for `default_agent_user`
 - Always test with preview BEFORE publishing to avoid version management overhead
 - Assign any custom permission sets (`{AgentName}_Access`) BEFORE publishing to prevent "Internal Error"
