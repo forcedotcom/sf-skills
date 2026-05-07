@@ -1,6 +1,8 @@
 ---
 name: generating-images
-description: Generates high-fidelity visual assets, logos, and UI mockups using the media-management MCP server. Trigger this skill whenever the user asks to "generate image," "create logo," "produce a hero banner," "design a UI icon," or "build a visual asset." It is explicitly designed to handle technical specifications including file formats (PNG, JPEG, WEBP), specific dimensions (e.g., "1024x1024"), and transparency requirements. Load this skill when the user needs to integrate generated imagery into application code or web pages. It ensures consistent output quality and provides a standardized SVG fallback if the generation tool is unavailable.
+description: "Generates high-fidelity visual assets, logos, and UI mockups using the media-management MCP server. Trigger this skill whenever the user asks to generate an image, create a logo, produce a hero banner, design a UI icon, or build a visual asset. It is explicitly designed to handle technical specifications including file formats (PNG, JPEG, WEBP), specific dimensions (e.g. 1024x1024), and transparency requirements. Use this skill when the user needs to integrate generated imagery into application code or web pages. It ensures consistent output quality and provides a standardized SVG fallback if the generation tool is unavailable."
+metadata:
+  version: "1.0"
 ---
 
 # Generating Images
