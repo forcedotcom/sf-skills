@@ -139,8 +139,8 @@ After `init`, you'll have:
 my-transform/
 ├── payload/
 │   ├── entrypoint.py      # Your transformation code
-│   ├── config.json        # Permissions and configuration
-│   └── requirements.txt   # Python dependencies
+│   └── config.json        # Permissions and configuration
+├── requirements.txt       # Python dependencies
 └── README.md
 ```
 
