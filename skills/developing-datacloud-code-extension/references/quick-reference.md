@@ -219,8 +219,8 @@ sf data-code-extension script scan --entrypoint ./payload/entrypoint.py
 my-project/
 ├── payload/
 │   ├── entrypoint.py      # Main code
-│   ├── config.json        # Auto-generated permissions
-│   └── requirements.txt   # Auto-generated dependencies
+│   └── config.json        # Auto-generated permissions
+├── requirements.txt       # Auto-generated dependencies
 └── README.md
 ```
 
