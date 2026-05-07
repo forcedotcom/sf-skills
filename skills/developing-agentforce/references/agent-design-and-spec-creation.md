@@ -122,7 +122,11 @@ sf data query --json -q "SELECT Username FROM User WHERE Profile.UserLicense.Nam
 
 **If results are returned:** Ask which username to use. Record choice in the Agent Spec Configuration section. Verify permissions per [Agent User Setup & Permissions](agent-user-setup.md).
 
-**If no results are returned:** STOP. Do NOT invent a username. Ask if you should create a new user, then read [Agent User Setup & Permissions](agent-user-setup.md) for user creation instructions.
+**If no results are returned:** STOP. Do NOT invent a username. Ask if you should create a new user. If yes, use:
+```bash
+sf org create agent-user --target-org TARGET_ORG --first-name <AgentName> --last-name Agent --json
+```
+Then read the generated username from `result.username`. See [Agent User Setup & Permissions](agent-user-setup.md) for the complete provisioning workflow.
 
 **WRONG:** Fabricating a username when query returns nothing
 ```
