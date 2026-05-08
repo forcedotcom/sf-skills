@@ -14,16 +14,21 @@ A widget is a UEM (Unified Experience Model) tree of blocks and regions. The wid
 
 ```ts
 interface BlockType {
-   type: 'block'
-   definition: string  // {namespace}/{blockName}
-   attributes?: Record<string, any>
-   children?: (BlockType | RegionType)[]
+  type: 'block'
+  definition: string  // {namespace}/{blockName}
+  attributes?: Record<string, any>
+  meta?: {
+    forEach?: string   // expression resolving to an array, e.g. "{!$attrs.items}"
+    forItem?: string   // loop variable (must start with $), e.g. "$item"
+    if?: string        // boolean expression; block is omitted when falsy
+  }
+  children?: (BlockType | RegionType)[]
 }
 
 interface RegionType {
-   type: 'region'
-   name: string
-   children: BlockType[]
+  type: 'region'
+  name: string
+  children: BlockType[]
 }
 ```
 ---
@@ -88,6 +93,171 @@ interface RegionType {
 
 ---
 
+## 🔁 Iteration with forEach / forItem
+
+Use `forEach`/`forItem` when a block repeats over an array. Whether that applies at the root level depends on the schema shape — see step 5 of the Workflow for the decision.
+
+### Rules
+- Place `forEach` on the `meta` object of the **repeating** block (a row, card, list item, etc.), **not** on the container block. When a container holds repeating children (e.g. a list wrapper and its item rows), `forEach`/`forItem` goes on the child, not the container — otherwise a new container is created per item instead of one container with all items inside it.
+- The value must be an expression resolving to an array: `"{!$attrs.<arrayAttrName>}"`, e.g. `"{!$attrs.items}"`.
+- `forItem` (required with `forEach`) names the loop variable for the current item. **Must start with `$`**, e.g. `"$item"`.
+- All children of the `forEach` block reference the loop variable (e.g. `{!$item.id}`, **not** `{!$attrs.items.id}`).
+- For **nested lists** (inner arrays on each item), add another `forEach` block inside the repeating block's children, using a distinct `forItem` name (e.g. `"$subItem"`).
+
+### Example — top-level list
+
+```json
+{
+  "type": "block",
+  "definition": "namespace/arrayBlockDefiniton",
+  "meta": {
+    "forEach": "{!$attrs.items}",
+    "forItem": "$item"
+  },
+  "children": [
+    {
+      "type": "block",
+      "definition": "namespace/blockDefinition1",
+      "attributes": { "content": "{!$item.id}" }
+    },
+    {
+      "type": "block",
+      "definition": "namespace/blockDefinition2",
+      "attributes": { "content": "{!$item.total}" }
+    }
+  ]
+}
+```
+
+### Example — container block with repeating child
+
+When a container block holds repeating items (e.g. a list wrapper and its item rows), place `forEach`/`forItem` on the **child** (the repeating element), not on the container.
+
+```json
+{
+  "type": "block",
+  "definition": "namespace/containerBlockDefinition",
+  "attributes": { "variant": "default" },
+  "children": [
+    {
+      "type": "block",
+      "definition": "namespace/itemBlockDefinition",
+      "meta": {
+        "forEach": "{!$attrs.items}",
+        "forItem": "$item"
+      },
+      "attributes": { "title": "{!$item.name}" }
+    }
+  ]
+}
+```
+
+### Example — nested list (inner items)
+
+```json
+{
+  "type": "block",
+  "definition": "namespace/arrayBlockDefiniton",
+  "meta": { "forEach": "{!$attrs.items}", "forItem": "$item" },
+  "children": [
+    {
+      "type": "block",
+      "definition": "namespace/blockDefinition1",
+      "attributes": { "content": "{!$item.id}" }
+    },
+    {
+      "type": "block",
+      "definition": "namespace/blockDefinition1",
+      "meta": { "forEach": "{!$item.lineItems}", "forItem": "$lineItem" },
+      "children": [
+        {
+          "type": "block",
+          "definition": "namespace/blockDefinition2",
+          "attributes": { "content": "{!$lineItem.name}" }
+        },
+        {
+          "type": "block",
+          "definition": "namespace/blockDefinition2",
+          "attributes": { "content": "{!$lineItem.count}" }
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
+
+## 🔀 Conditional rendering with if
+
+- Place `"if"` on the `meta` object of a block to conditionally include it.
+- The expression must resolve to a truthy/falsy value. When falsy, the block **and all its children** are excluded from the rendered output.
+- `if` can be combined with `forEach` on the same `meta` object.
+
+### Example
+
+```json
+{
+  "type": "block",
+  "definition": "namespace/blockDefinition",
+  "meta": { "if": "{!$attrs.isTrue}" },
+  "attributes": { "label": "Label"}
+}
+```
+
+### Example — if inside a forEach loop
+
+```json
+{
+  "type": "block",
+  "definition": "namespace/blockDefinition1",
+  "meta": { "forEach": "{!$attrs.items}", "forItem": "$item" },
+  "children": [
+    {
+      "type": "block",
+      "definition": "namespace/blockDefinition2",
+      "attributes": { "content": "{!$item.id}" }
+    },
+    {
+      "type": "block",
+      "definition": "namespace/blockDefinition3",
+      "meta": { "if": "{!$item.isTrue}" },
+      "attributes": { "label": "Label"}
+    }
+  ]
+}
+```
+
+### Example — forEach and if on the same block
+
+`forEach` and `if` can be placed together on the same `meta` object. The block is first evaluated against `if` — if falsy, the entire loop is skipped. If truthy, the block repeats for every item in the array.
+
+```json
+{
+  "type": "block",
+  "definition": "namespace/arrayBlockDefinition",
+  "meta": {
+    "forEach": "{!$attrs.items}",
+    "forItem": "$item",
+    "if": "{!$attrs.showItems}"
+  },
+  "children": [
+    {
+      "type": "block",
+      "definition": "namespace/blockDefinition2",
+      "attributes": { "content": "{!$item.id}" }
+    },
+    {
+      "type": "block",
+      "definition": "namespace/blockDefinition3",
+      "attributes": { "content": "{!$item.total}" }
+    }
+  ]
+}
+```
+
+---
+
 ## 💡Workflow
 
 1. **Schema Parsing**
@@ -105,7 +275,12 @@ interface RegionType {
 
 5. **Build Widget**
 - Construct the UEM tree. Map each property in the **widget spec** to block properties and preserve order of the **widget spec**.
-- For block properties that must show or pass runtime data, use the placeholder syntax (see **Attribute binding using placeholder syntax** above).
+- **Decide whether to iterate at the root level:**
+  - If the schema represents a **single object** (e.g. one item — root `type: object` with scalar/list properties) — do NOT add `forEach` on the top-level block. Render its properties directly. Use `forEach`/`forItem` only on blocks that repeat over an array property within it (e.g. the list of cart items).
+  - If the schema represents a **collection** (e.g. a list of items) — wrap the repeating block in a `forEach` / `forItem` meta directive so the widget renders one row/card per item. See **Iteration with forEach / forItem** above.
+- For block properties that must show or pass runtime data, use the placeholder syntax (see **Attribute binding using placeholder syntax** above). Inside a `forEach` block, reference the loop variable (e.g. `{!$item.attrName}`) instead of `{!$attrs.items.attrName}`.
+- Add `"if"` on the `meta` object of any block that should render conditionally (see **Conditional rendering with if** above).
+- For inner arrays on each item, add a nested `forEach` block with a distinct `forItem` name.
 - Use block properties from the schemas retrieved in step 4.
 
 6. **Write output to CLT Bundle**
@@ -122,3 +297,9 @@ interface RegionType {
 - Block definitions always follow the `{namespace}/{blockName}` convention.
 - Use the same definition format returned by `discoverUiComponents` when calling `getUiComponentSchemas`
 - Placeholder syntax for non-list properties is `{!$attrs.<attrName>}` and for list properties is `{!$attrs.<listAttrName>.item}`.
+- **`forEach` + `forItem` are required together.** Never use one without the other.
+- **`forItem` values must start with `$`** (e.g. `"$item"`, `"$order"`, `"$line"`).
+- Inside a `forEach` block, children **must** reference the loop variable (`{!$item.attrName}`), not the original array path.
+- Nested `forEach` blocks must use a **different** `forItem` name from the outer loop.
+- `"if"` expressions must be boolean. Use comparison or logic expressions (e.g. `{!$item.isActive}`).
+- `"if"` and `"forEach"` can coexist on the same `meta` object.
