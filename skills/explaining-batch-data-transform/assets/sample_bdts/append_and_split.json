@@ -1,0 +1,77 @@
+{
+  "version": "66.0",
+  "nodes": {
+    "LOAD_WEB_ORDERS": {
+      "action": "load",
+      "sources": [],
+      "parameters": {
+        "dataset": {"name": "WebOrders__dlo", "type": "dataLakeObject"},
+        "fields": ["OrderId__c", "Amount__c", "ChannelOrderKey__c"],
+        "sampleDetails": {"type": "TopN", "sortBy": []}
+      }
+    },
+    "LOAD_STORE_ORDERS": {
+      "action": "load",
+      "sources": [],
+      "parameters": {
+        "dataset": {"name": "StoreOrders__dlo", "type": "dataLakeObject"},
+        "fields": ["OrderId__c", "Amount__c", "ChannelOrderKey__c"],
+        "sampleDetails": {"type": "TopN", "sortBy": []}
+      }
+    },
+    "APPEND_ALL_ORDERS": {
+      "action": "appendV2",
+      "sources": ["LOAD_WEB_ORDERS", "LOAD_STORE_ORDERS"],
+      "parameters": {
+        "allowImplicitDisjointSchema": false,
+        "fieldMappings": [
+          {"targetField": "OrderId__c",          "sources": [{"node": "LOAD_WEB_ORDERS", "field": "OrderId__c"},          {"node": "LOAD_STORE_ORDERS", "field": "OrderId__c"}]},
+          {"targetField": "Amount__c",           "sources": [{"node": "LOAD_WEB_ORDERS", "field": "Amount__c"},           {"node": "LOAD_STORE_ORDERS", "field": "Amount__c"}]},
+          {"targetField": "ChannelOrderKey__c",  "sources": [{"node": "LOAD_WEB_ORDERS", "field": "ChannelOrderKey__c"},  {"node": "LOAD_STORE_ORDERS", "field": "ChannelOrderKey__c"}]}
+        ]
+      }
+    },
+    "SPLIT_CHANNEL_KEY": {
+      "action": "split",
+      "sources": ["APPEND_ALL_ORDERS"],
+      "parameters": {
+        "sourceField": "ChannelOrderKey__c",
+        "delimiter": "-",
+        "targetFields": [
+          {"name": "Channel__c", "label": "Channel"},
+          {"name": "OrderNumber__c", "label": "Order Number"}
+        ]
+      }
+    },
+    "OUTPUT_ORDERS": {
+      "action": "outputD360",
+      "sources": ["SPLIT_CHANNEL_KEY"],
+      "parameters": {
+        "name": "OrdersWithChannel__dlm",
+        "type": "dataModelObject",
+        "writeMode": "OVERWRITE",
+        "fieldsMappings": [
+          {"sourceField": "OrderId__c",       "targetField": "OrderId__c"},
+          {"sourceField": "Amount__c",        "targetField": "Amount__c"},
+          {"sourceField": "Channel__c",       "targetField": "Channel__c"},
+          {"sourceField": "OrderNumber__c",   "targetField": "OrderNumber__c"}
+        ]
+      }
+    }
+  },
+  "ui": {
+    "nodes": {
+      "LOAD_WEB_ORDERS":    {"label": "Web Orders",       "type": "LOAD_DATASET", "top": 100, "left": 100},
+      "LOAD_STORE_ORDERS":  {"label": "Store Orders",     "type": "LOAD_DATASET", "top": 260, "left": 100},
+      "APPEND_ALL_ORDERS":  {"label": "Union",            "type": "APPEND",       "top": 180, "left": 260},
+      "SPLIT_CHANNEL_KEY":  {"label": "Split channel key", "type": "SPLIT",        "top": 180, "left": 420},
+      "OUTPUT_ORDERS":      {"label": "Orders + channel", "type": "OUTPUT",       "top": 180, "left": 580}
+    },
+    "connectors": [
+      {"source": "LOAD_WEB_ORDERS",    "target": "APPEND_ALL_ORDERS"},
+      {"source": "LOAD_STORE_ORDERS",  "target": "APPEND_ALL_ORDERS"},
+      {"source": "APPEND_ALL_ORDERS",  "target": "SPLIT_CHANNEL_KEY"},
+      {"source": "SPLIT_CHANNEL_KEY",  "target": "OUTPUT_ORDERS"}
+    ]
+  }
+}
