@@ -1,0 +1,58 @@
+{
+  "version": "66.0",
+  "nodes": {
+    "LOAD_ACCOUNT": {
+      "action": "load",
+      "sources": [],
+      "parameters": {
+        "dataset": {"name": "ssot__Account__dlm", "type": "dataModelObject"},
+        "fields": ["ssot__Id__c", "ssot__Name__c", "ssot__Industry__c"],
+        "sampleDetails": {"type": "TopN", "sortBy": []}
+      }
+    },
+    "FORMULA_NAME_UPPER": {
+      "action": "formula",
+      "sources": ["LOAD_ACCOUNT"],
+      "parameters": {
+        "expressionType": "SQL",
+        "fields": [
+          {
+            "name": "AccountNameUpper__c",
+            "label": "Account Name (upper)",
+            "formulaExpression": "upper(ssot__Name__c)",
+            "type": "TEXT",
+            "businessType": "Text",
+            "precision": 255,
+            "defaultValue": ""
+          }
+        ]
+      }
+    },
+    "OUTPUT_ACCOUNT_UPPER": {
+      "action": "outputD360",
+      "sources": ["FORMULA_NAME_UPPER"],
+      "parameters": {
+        "name": "Account_Upper__dlm",
+        "type": "dataModelObject",
+        "writeMode": "OVERWRITE",
+        "fieldsMappings": [
+          {"sourceField": "ssot__Id__c", "targetField": "ssot__Id__c"},
+          {"sourceField": "AccountNameUpper__c", "targetField": "Name_Upper__c"},
+          {"sourceField": "ssot__Industry__c", "targetField": "Industry__c"}
+        ]
+      }
+    }
+  },
+  "ui": {
+    "nodes": {
+      "LOAD_ACCOUNT":         {"label": "Account", "type": "LOAD_DATASET", "top": 100, "left": 100},
+      "FORMULA_NAME_UPPER":   {"label": "Uppercase Name", "type": "FORMULA", "top": 100, "left": 260},
+      "OUTPUT_ACCOUNT_UPPER": {"label": "Account Upper", "type": "OUTPUT", "top": 100, "left": 420}
+    },
+    "connectors": [
+      {"source": "LOAD_ACCOUNT", "target": "FORMULA_NAME_UPPER"},
+      {"source": "FORMULA_NAME_UPPER", "target": "OUTPUT_ACCOUNT_UPPER"}
+    ],
+    "hiddenColumns": []
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "version": "66.0",
+  "nodes": {
+    "LOAD_ORDERS": {
+      "action": "load",
+      "sources": [],
+      "parameters": {
+        "dataset": {"name": "ssot__SalesOrder__dlm", "type": "dataModelObject"},
+        "fields": ["ssot__Id__c", "ssot__AccountId__c", "ssot__Status__c", "ssot__GrandTotalAmount__c"],
+        "sampleDetails": {"type": "TopN", "sortBy": []}
+      }
+    },
+    "LOAD_ACCOUNTS": {
+      "action": "load",
+      "sources": [],
+      "parameters": {
+        "dataset": {"name": "ssot__Account__dlm", "type": "dataModelObject"},
+        "fields": ["ssot__Id__c", "ssot__Name__c", "ssot__Industry__c"],
+        "sampleDetails": {"type": "TopN", "sortBy": []}
+      }
+    },
+    "FILTER_ACTIVE_ORDERS": {
+      "action": "filter",
+      "sources": ["LOAD_ORDERS"],
+      "parameters": {
+        "filterExpressions": [
+          {"type": "TEXT", "field": "ssot__Status__c", "operator": "EQUAL", "operands": ["Active"]},
+          {"type": "NUMBER", "field": "ssot__GrandTotalAmount__c", "operator": "GREATER_THAN", "operands": ["0"]},
+          {"type": "NUMBER", "field": "ssot__GrandTotalAmount__c", "operator": "IS_NOT_NULL", "operands": []}
+        ],
+        "filterBooleanLogic": "1 AND 2 AND 3"
+      }
+    },
+    "JOIN_ORDER_ACCOUNT": {
+      "action": "join",
+      "sources": ["FILTER_ACTIVE_ORDERS", "LOAD_ACCOUNTS"],
+      "parameters": {
+        "joinType": "LEFT_OUTER",
+        "leftKeys": ["ssot__AccountId__c"],
+        "rightQualifier": "Account",
+        "rightKeys": ["ssot__Id__c"]
+      }
+    },
+    "OUTPUT_ENRICHED": {
+      "action": "outputD360",
+      "sources": ["JOIN_ORDER_ACCOUNT"],
+      "parameters": {
+        "name": "Order_Enriched__dlm",
+        "type": "dataModelObject",
+        "writeMode": "OVERWRITE",
+        "fieldsMappings": [
+          {"sourceField": "ssot__Id__c",                  "targetField": "OrderId__c"},
+          {"sourceField": "ssot__AccountId__c",            "targetField": "AccountId__c"},
+          {"sourceField": "ssot__GrandTotalAmount__c",     "targetField": "Amount__c"},
+          {"sourceField": "Account.ssot__Name__c",         "targetField": "AccountName__c"},
+          {"sourceField": "Account.ssot__Industry__c",     "targetField": "Industry__c"}
+        ]
+      }
+    }
+  },
+  "ui": {
+    "nodes": {
+      "LOAD_ORDERS":          {"label": "Sales Orders",      "type": "LOAD_DATASET", "top": 100, "left": 100},
+      "LOAD_ACCOUNTS":        {"label": "Accounts",          "type": "LOAD_DATASET", "top": 260, "left": 100},
+      "FILTER_ACTIVE_ORDERS": {"label": "Active, >0",        "type": "FILTER",       "top": 100, "left": 260},
+      "JOIN_ORDER_ACCOUNT":   {"label": "Join Account info", "type": "JOIN",         "top": 180, "left": 420},
+      "OUTPUT_ENRICHED":      {"label": "Order Enriched",    "type": "OUTPUT",       "top": 180, "left": 580}
+    },
+    "connectors": [
+      {"source": "LOAD_ORDERS", "target": "FILTER_ACTIVE_ORDERS"},
+      {"source": "FILTER_ACTIVE_ORDERS", "target": "JOIN_ORDER_ACCOUNT"},
+      {"source": "LOAD_ACCOUNTS", "target": "JOIN_ORDER_ACCOUNT"},
+      {"source": "JOIN_ORDER_ACCOUNT", "target": "OUTPUT_ENRICHED"}
+    ]
+  }
+}
