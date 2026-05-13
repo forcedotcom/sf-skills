@@ -12,21 +12,21 @@ To contribute, create your own copy:
 2.  Click the **Fork** button in the top-right corner.
 3.  Select your GitHub account as the destination.
 4.  GitHub will create your personal fork at:
-    `https://github.com/<your-username>/afv-library`.
+    `https://github.com/<your-username>/sf-skills`.
 
 ## 2. Clone Your Fork
 
 Clone your personal fork:
 
 ``` sh
-git clone https://github.com/<your-username>/afv-library.git
-cd afv-library
+git clone https://github.com/<your-username>/sf-skills.git
+cd sf-skills
 ```
 
 Add the original repository as the upstream remote:
 
 ``` sh
-git remote add upstream https://github.com/forcedotcom/afv-library.git
+git remote add upstream https://github.com/forcedotcom/sf-skills.git
 ```
 
 ## 3. Create a Branch
@@ -61,7 +61,7 @@ GitHub will display a **Compare & pull request** button.
 Once your branch is pushed to your fork, you can open a Pull Request
 (PR) to propose merging your changes into this repository.
 
-Unsure that your PR title is prefixed with  `feat:` or `fix:` as those will result in an update to the change log 
+Ensure that your PR title is prefixed with  `feat:` or `fix:` as those will result in an update to the change log 
 and inclusion in SF tooling. 
 
 ### 6.1 Start the Pull Request
@@ -76,7 +76,7 @@ Click it.
 **Option B --- Manually**
 
 1.  Go to your fork on GitHub:\
-    `https://github.com/<your-username>/afv-library`
+    `https://github.com/<your-username>/sf-skills`
 2.  Switch to your feature branch.
 3.  Click the **Pull requests** tab.
 4.  Click **New pull request**.
@@ -88,15 +88,15 @@ Click it.
 
 Make sure GitHub is targeting the correct repositories and branches:
 
--   **Base repository:** `forcedotcom/afv-library`
+-   **Base repository:** `forcedotcom/sf-skills`
 -   **Base branch:** `main`
--   **Head repository:** `<your-username>/afv-library`
+-   **Head repository:** `<your-username>/sf-skills`
 -   **Head branch:** your feature branch (`my-feature-name`)
 
 Correct configuration:
 
-    base: forcedotcom/afv-library → main
-    compare: <your-username>/afv-library → my-feature-name
+    base: forcedotcom/sf-skills → main
+    compare: <your-username>/sf-skills → my-feature-name
 
 ------------------------------------------------------------------------
 
