@@ -1,4 +1,4 @@
-# Agentforce Vibes Library
+# Salesforce Skills Library
 
 This repository provides a curated collection of Salesforce agent skills for building applications. It includes skills for Agentforce agents, Lightning apps, Flow, Apex, SOQL, Lightning Web Components (LWC), UI bundles, objects and fields, permission sets, and related areas.
 
