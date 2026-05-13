@@ -1,4 +1,4 @@
-# Agentforce Vibes Library
+# Salesforce Skills Library
 
 This repository provides a curated collection of Salesforce agent skills for building applications. It includes skills for Agentforce agents, Lightning apps, Flow, Apex, SOQL, Lightning Web Components (LWC), UI bundles, objects and fields, permission sets, and related areas.
 
@@ -7,7 +7,7 @@ The skills are contributed by Salesforce and the broader community. It’s optim
 ## 🗂️ Structure
 
 ```
-afv-library/
+sf-skills/
 ├── skills/               # Directory-based executable workflows
 │   ├── generating-apex/
 │   ├── generating-custom-object/
@@ -26,7 +26,7 @@ afv-library/
 | **Tool** | **Usage** |
 |----------|-------------|
 | **Agentforce Vibes** | Skills are auto-installed and auto-updated |
-| **OpenCode, Claude Code, Codex, Cursor, [more](https://agentskills.io/)** | `npx skills add forcedotcom/afv-library` |
+| **OpenCode, Claude Code, Codex, Cursor, [more](https://agentskills.io/)** | `npx skills add forcedotcom/sf-skills` |
 
 ## 📦 Samples
 

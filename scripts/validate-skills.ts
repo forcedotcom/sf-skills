@@ -399,7 +399,7 @@ function main(): void {
   }
 
   const hasIssues = allErrors.length > 0 || allWarnings.length > 0
-  const footer = "Spec: https://agentskills.io/specification · Authoring guide: https://github.com/forcedotcom/afv-library#readme"
+  const footer = "Spec: https://agentskills.io/specification · Authoring guide: https://github.com/forcedotcom/sf-skills#readme"
 
   if (allWarnings.length > 0) {
     console.warn(`\n${allWarnings.length} warning(s):\n`)
