@@ -1,3 +1,12 @@
+# [1.9.0](https://github.com/forcedotcom/sf-skills/compare/1.8.0...1.9.0) (2026-05-14)
+
+
+### Features
+
+* @W-22444026@ Introducing Core Skills, Datacloud Skills, Industries and Utility Skills. ([#268](https://github.com/forcedotcom/sf-skills/issues/268)) ([37aa84d](https://github.com/forcedotcom/sf-skills/commit/37aa84df42c9a8c3f0e4e32c826f07d5e1c001aa))
+
+
+
 # [1.8.0](https://github.com/forcedotcom/sf-skills/compare/1.7.5...1.8.0) (2026-05-14)
 
 
