@@ -137,4 +137,4 @@ This setup is for the Data Cloud product family:
 - `activating-datacloud`
 - `retrieving-datacloud`
 
-For STDM/session tracing/parquet work, use `sf-ai-agentforce-observability` instead of this plugin-focused family.
+For STDM/session tracing/parquet work, use `observing-agentforce` instead of this plugin-focused family.

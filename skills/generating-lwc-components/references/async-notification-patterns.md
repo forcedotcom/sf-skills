@@ -658,4 +658,4 @@ connectedCallback() {
 | Platform Event definition | [building-sf-integrations/references/platform-events-guide.md](../../building-sf-integrations/references/platform-events-guide.md) |
 | Publishing from Apex | [sf-apex/references/best-practices.md](../../sf-apex/references/best-practices.md) |
 | State management | [state-management.md](state-management.md) |
-| Agentforce Models API | [sf-ai-agentforce/references/models-api.md](../../sf-ai-agentforce/references/models-api.md) |
+| Agentforce Models API | [developing-agentforce/references/models-api.md](../../developing-agentforce/references/models-api.md) |

@@ -15,7 +15,7 @@ Use `orchestrating-datacloud` when the task spans multiple Data Cloud phases:
 - It does **not** vendor or fork the external Data Cloud CLI plugin.
 - It does **not** use MCP.
 - It does **not** replace phase-specific skills once the problem is localized.
-- It does **not** cover STDM/session tracing/parquet analysis; use `sf-ai-agentforce-observability` for that.
+- It does **not** cover STDM/session tracing/parquet analysis; use `observing-agentforce` for that.
 
 ## Data Cloud skill family
 
