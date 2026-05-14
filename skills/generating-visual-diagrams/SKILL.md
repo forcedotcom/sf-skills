@@ -1,12 +1,6 @@
 ---
 name: generating-visual-diagrams
-description: "AI-powered image generation for Salesforce visuals via Nano Banana Pro.
-  Use this skill when the user needs rendered PNG/SVG output such as visual ERDs (Entity
-  Relationship Diagrams), UI mockups, wireframes, or architecture illustrations.
-  TRIGGER when: user asks for PNG/SVG output, UI mockups, wireframes, visual ERDs,
-  or says \"generate image\" / \"create mockup\".
-  DO NOT TRIGGER when: text-based Mermaid diagrams (use generating-mermaid-diagrams),
-  or non-visual documentation tasks."
+description: "AI-powered image generation for Salesforce visuals via Nano Banana Pro. Use this skill when the user needs rendered PNG/SVG output such as visual ERDs (Entity Relationship Diagrams), UI mockups, wireframes, or architecture illustrations. TRIGGER when: user asks for PNG/SVG output, UI mockups, wireframes, visual ERDs, or says \"generate image\" / \"create mockup\". DO NOT TRIGGER when: text-based Mermaid diagrams (use generating-mermaid-diagrams), or non-visual documentation tasks."
 license: MIT
 metadata:
   version: "1.0"

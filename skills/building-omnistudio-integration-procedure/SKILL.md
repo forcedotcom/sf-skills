@@ -1,13 +1,6 @@
 ---
 name: building-omnistudio-integration-procedure
-description: "OmniStudio Integration Procedure creation and validation with 110-point
-  scoring. Use when building server-side process orchestrations that combine Data Mapper
-  actions, Apex Remote Actions, HTTP callouts, and conditional logic.
-  TRIGGER when: user creates Integration Procedures, adds Data Mapper steps,
-  configures Remote Actions, or reviews existing IP configurations.
-  DO NOT TRIGGER when: building OmniScripts (use building-omnistudio-omniscript),
-  creating Data Mappers directly (use building-omnistudio-datamapper), or analyzing
-  cross-component dependencies (use analyzing-omnistudio-dependencies)."
+description: "OmniStudio Integration Procedure creation and validation with 110-point scoring. Use this skill when building server-side process orchestrations that combine Data Mapper actions, Apex Remote Actions, HTTP callouts, and conditional logic. TRIGGER when: user creates Integration Procedures, adds Data Mapper steps, configures Remote Actions, or reviews existing IP configurations. DO NOT TRIGGER when: building OmniScripts (use building-omnistudio-omniscript), creating Data Mappers directly (use building-omnistudio-datamapper), or analyzing cross-component dependencies (use analyzing-omnistudio-dependencies)."
 license: MIT
 metadata:
   version: "1.0"
