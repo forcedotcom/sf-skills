@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Template: External Client App - Global OAuth Settings
+  Use Case: Configure OAuth settings that apply globally to the ECA
+
+  Replace placeholders:
+  - {{APP_NAME}}: The ExternalClientApplication API name (must match .eca file)
+  - {{LABEL}}: Display label for this global OAuth settings configuration
+  - {{CALLBACK_URL}}: OAuth callback URL (must be HTTPS for web, custom scheme for mobile)
+  - {{PKCE_REQUIRED}}: true for public clients (mobile, SPA), false for confidential
+  - {{SECRET_OPTIONAL}}: true for public clients using PKCE only
+  - {{SECRET_FOR_REFRESH}}: true to require secret for refresh token requests
+  - {{ROTATE_KEY}}: true to enable consumer key rotation (recommended for production)
+  - {{ROTATE_SECRET}}: true to enable consumer secret rotation (recommended for production)
+
+  Security Recommendations:
+  - PKCE: REQUIRED for mobile and SPA applications (public clients)
+  - Key/Secret Rotation: Enable for production apps (can be automated via API)
+  - Consumer Secret Optional: Only true when using PKCE exclusively
+  - Introspect All Tokens: Enable if you need to validate tokens programmatically
+
+  File Naming: [AppName].ecaGlblOauth-meta.xml
+
+  NOTE: The file suffix is .ecaGlblOauth (abbreviated), NOT .ecaGlobalOauth
+-->
+<ExtlClntAppGlobalOauthSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <callbackUrl>{{CALLBACK_URL}}</callbackUrl>
+    <externalClientApplication>{{APP_NAME}}</externalClientApplication>
+    <isConsumerSecretOptional>{{SECRET_OPTIONAL}}</isConsumerSecretOptional>
+    <isIntrospectAllTokens>false</isIntrospectAllTokens>
+    <isPkceRequired>{{PKCE_REQUIRED}}</isPkceRequired>
+    <isSecretRequiredForRefreshToken>{{SECRET_FOR_REFRESH}}</isSecretRequiredForRefreshToken>
+    <label>{{LABEL}}</label>
+    <shouldRotateConsumerKey>{{ROTATE_KEY}}</shouldRotateConsumerKey>
+    <shouldRotateConsumerSecret>{{ROTATE_SECRET}}</shouldRotateConsumerSecret>
+</ExtlClntAppGlobalOauthSettings>

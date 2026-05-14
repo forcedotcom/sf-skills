@@ -474,7 +474,7 @@ public class WrappedAction {
 
 ### Implementation Steps
 
-1. **Create Named Credential** (via sf-integration skill)
+1. **Create Named Credential** (via building-sf-integrations skill)
 2. **Create HTTP Callout Flow** wrapping the external call
 3. **Reference Flow in Agent Script** with `flow://` target
 
@@ -571,13 +571,13 @@ When building agents with external API integrations, follow this order:
 ┌──────────────────────────────────────────────────────────────┐
 │  INTEGRATION + AGENTFORCE ORCHESTRATION ORDER                │
 ├──────────────────────────────────────────────────────────────┤
-│  1. sf-connected-apps  → Connected App (if OAuth needed)     │
-│  2. sf-integration     → Named Credential + External Service │
-│  3. sf-apex            → @InvocableMethod (if custom logic)  │
-│  4. sf-flow            → Flow wrapper (HTTP Callout / Apex)  │
-│  5. sf-deploy          → Deploy all metadata to org          │
-│  6. sf-ai-agentscript  → Agent with flow:// target           │
-│  7. sf-deploy          → Publish (sf agent publish           │
+│  1. configuring-connected-apps  → Connected App (if OAuth needed) │
+│  2. building-sf-integrations → Named Credential + External Service │
+│  3. generating-apex            → @InvocableMethod (if custom logic)  │
+│  4. generating-flow            → Flow wrapper (HTTP Callout / Apex)  │
+│  5. deploying-metadata          → Deploy all metadata to org          │
+│  6. developing-agentforce  → Agent with flow:// target           │
+│  7. deploying-metadata          → Publish (sf agent publish           │
 │                           authoring-bundle)                  │
 └──────────────────────────────────────────────────────────────┘
 ```
