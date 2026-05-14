@@ -1,0 +1,259 @@
+/**
+ * SOQL OPTIMIZATION PATTERNS
+ *
+ * These patterns demonstrate how to write efficient, selective queries
+ * that perform well within Salesforce governor limits.
+ */
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SELECTIVE vs NON-SELECTIVE QUERIES
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- ❌ NON-SELECTIVE: Status alone is not indexed
+SELECT Id, Name FROM Lead
+WHERE Status = 'Open'
+-- Scans ALL Lead records
+
+-- ✅ SELECTIVE: Add indexed field filter
+SELECT Id, Name FROM Lead
+WHERE Status = 'Open'
+AND CreatedDate = LAST_N_DAYS:30
+-- CreatedDate is indexed, reduces scan
+
+-- ❌ NON-SELECTIVE: Leading wildcard prevents index use
+SELECT Id, Name FROM Account
+WHERE Name LIKE '%corporation'
+
+-- ✅ SELECTIVE: Trailing wildcard uses index
+SELECT Id, Name FROM Account
+WHERE Name LIKE 'Acme%'
+
+-- ❌ NON-SELECTIVE: OR can prevent index optimization
+SELECT Id FROM Contact
+WHERE Email = 'test@test.com'
+OR Phone = '555-1234'
+
+-- ✅ SELECTIVE: Use UNION-style in Apex or multiple queries
+-- Query 1: SELECT Id FROM Contact WHERE Email = 'test@test.com'
+-- Query 2: SELECT Id FROM Contact WHERE Phone = '555-1234'
+-- Combine results in Apex
+
+// ═══════════════════════════════════════════════════════════════════════════
+// INDEXED FIELDS
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- Always indexed fields (use these in WHERE)
+-- • Id (primary key)
+-- • Name (standard Name field)
+-- • OwnerId
+-- • CreatedDate
+-- • LastModifiedDate
+-- • RecordTypeId
+-- • External ID fields (custom)
+-- • Master-Detail relationship fields
+-- • Lookup fields (selective when <100k parent records)
+
+-- ✅ GOOD: Uses indexed OwnerId
+SELECT Id, Name FROM Account
+WHERE OwnerId = '005xx000000XXXX'
+
+-- ✅ GOOD: Uses indexed CreatedDate
+SELECT Id, Name FROM Contact
+WHERE CreatedDate >= 2024-01-01T00:00:00Z
+
+-- ✅ GOOD: Uses indexed External ID
+SELECT Id, Name FROM Account
+WHERE External_Id__c = 'EXT-12345'
+
+// ═══════════════════════════════════════════════════════════════════════════
+// FIELD SELECTION OPTIMIZATION
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- ❌ BAD: Selecting unnecessary fields
+SELECT Id, Name, Description, BillingStreet, BillingCity, BillingState,
+       BillingPostalCode, BillingCountry, ShippingStreet, ShippingCity,
+       ShippingState, ShippingPostalCode, ShippingCountry, Phone, Fax,
+       AccountNumber, Website, Industry, AnnualRevenue, NumberOfEmployees,
+       Ownership, TickerSymbol, Description, Rating, Site, AccountSource
+FROM Account
+
+-- ✅ GOOD: Select only needed fields
+SELECT Id, Name, Industry, AnnualRevenue
+FROM Account
+
+-- For display only: Use specific fields
+SELECT Id, Name FROM Account
+
+-- For processing: Query fields you'll update
+SELECT Id, Status__c, Last_Processed__c FROM Account
+
+// ═══════════════════════════════════════════════════════════════════════════
+// LIMIT USAGE
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- ❌ BAD: No limit (could return 50,000 rows)
+SELECT Id, Name FROM Account
+
+-- ✅ GOOD: Appropriate limit
+SELECT Id, Name FROM Account LIMIT 200
+
+-- For pagination
+SELECT Id, Name FROM Account ORDER BY Name LIMIT 100 OFFSET 0
+
+-- For single record lookup
+SELECT Id, Name FROM Account WHERE Name = 'Acme Corp' LIMIT 1
+
+-- For existence check
+SELECT Id FROM Account WHERE Name = 'Acme Corp' LIMIT 1
+-- In Apex: if (!results.isEmpty()) { /* exists */ }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// RELATIONSHIP QUERY OPTIMIZATION
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- ❌ BAD: Deep nesting (5 levels is max, avoid if possible)
+SELECT Id, Account.Owner.Manager.Department.Name FROM Contact
+
+-- ✅ GOOD: Flatten when possible
+SELECT Id, Account.Name, Account.OwnerId FROM Contact
+-- Then query Owner separately if needed
+
+-- ❌ BAD: Too many child subqueries
+SELECT Id, Name,
+       (SELECT Id FROM Contacts),
+       (SELECT Id FROM Opportunities),
+       (SELECT Id FROM Cases),
+       (SELECT Id FROM Tasks),
+       (SELECT Id FROM Events),
+       (SELECT Id FROM Notes)
+FROM Account
+
+-- ✅ GOOD: Query what you need
+SELECT Id, Name,
+       (SELECT Id, Name FROM Contacts LIMIT 5)
+FROM Account
+
+-- ❌ BAD: Unfiltered subquery
+SELECT Id, (SELECT Id FROM Opportunities) FROM Account
+
+-- ✅ GOOD: Filtered subquery
+SELECT Id, (SELECT Id FROM Opportunities WHERE StageName != 'Closed Lost' LIMIT 10)
+FROM Account
+
+// ═══════════════════════════════════════════════════════════════════════════
+// BULK QUERY PATTERNS
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- ❌ BAD: Query in loop
+/*
+for (Contact c : contacts) {
+    Account a = [SELECT Name FROM Account WHERE Id = :c.AccountId];
+}
+*/
+
+-- ✅ GOOD: Bulk query with Map
+/*
+Set<Id> accountIds = new Set<Id>();
+for (Contact c : contacts) {
+    accountIds.add(c.AccountId);
+}
+
+Map<Id, Account> accountMap = new Map<Id, Account>(
+    [SELECT Id, Name FROM Account WHERE Id IN :accountIds]
+);
+
+for (Contact c : contacts) {
+    Account a = accountMap.get(c.AccountId);
+}
+*/
+
+-- Use IN clause for bulk operations
+SELECT Id, Name FROM Account WHERE Id IN :accountIdSet
+
+-- Bind variable with Set (most efficient)
+SELECT Id, Name FROM Contact WHERE AccountId IN :accountIds
+
+// ═══════════════════════════════════════════════════════════════════════════
+// FOR UPDATE (Record Locking)
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- Lock records for update (prevents concurrent modification)
+SELECT Id, Status__c FROM Account WHERE Id = :accountId FOR UPDATE
+
+-- Note: Only use FOR UPDATE when you need to prevent race conditions
+-- Adds overhead and can cause lock contention
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SECURITY ENFORCEMENT
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- ✅ Recommended: WITH SECURITY_ENFORCED
+SELECT Id, Name, Phone FROM Account
+WITH SECURITY_ENFORCED
+-- Throws exception if user lacks field access
+
+-- Alternative: USER_MODE (API 54.0+)
+SELECT Id, Name FROM Account
+WITH USER_MODE
+-- Respects sharing rules and FLS
+
+-- For admin operations: SYSTEM_MODE
+SELECT Id, Name FROM Account
+WITH SYSTEM_MODE
+-- Bypasses sharing (use with caution)
+
+// ═══════════════════════════════════════════════════════════════════════════
+// QUERY PLAN ANALYSIS
+// ═══════════════════════════════════════════════════════════════════════════
+
+/*
+Use Developer Console or CLI to analyze query plans:
+
+1. Developer Console:
+   - Query Editor > Check "Use Tooling API"
+   - Click "Query Plan" button
+
+2. CLI (uses REST API explain endpoint):
+   sf api request rest '/query/?explain=SELECT+Id+FROM+Account+WHERE+Name='\''Test'\''' --target-org my-org --json
+
+Plan Output:
+- Cardinality: Estimated rows returned
+- Fields: Index fields used
+- LeadingOperationType:
+  - "Index" = Good (using index)
+  - "TableScan" = Bad (scanning all records)
+- Cost: Relative cost (lower is better)
+- sObjectCardinality: Total records in object
+*/
+
+// ═══════════════════════════════════════════════════════════════════════════
+// LARGE DATA VOLUME PATTERNS
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- For tables with millions of records:
+
+-- 1. Always use indexed fields
+SELECT Id FROM Account
+WHERE External_Id__c = 'EXT-123'
+
+-- 2. Use date range with limit
+SELECT Id, Name FROM Contact
+WHERE CreatedDate >= 2024-01-01T00:00:00Z
+AND CreatedDate < 2024-02-01T00:00:00Z
+LIMIT 10000
+
+-- 3. Use skinny tables (configured by Salesforce Support)
+-- Query fields included in skinny table for best performance
+
+-- 4. Consider archiving old records
+SELECT Id FROM Account
+WHERE LastActivityDate < LAST_N_YEARS:2
+AND CreatedDate < LAST_N_YEARS:3
+
+-- 5. Use Database.query() with query locator for batch
+/*
+Database.QueryLocator ql = Database.getQueryLocator(
+    'SELECT Id, Name FROM Account WHERE CreatedDate = THIS_YEAR'
+);
+// Can process up to 50 million records in batch
+*/

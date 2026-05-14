@@ -1,0 +1,287 @@
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- SUBQUERY PATTERNS (Semi-Join & Anti-Join)
+-- ═══════════════════════════════════════════════════════════════════════════════
+--
+-- Subqueries filter the outer query based on related records.
+-- Two main patterns: Semi-Join (IN) and Anti-Join (NOT IN).
+--
+-- SEMI-JOIN (IN):
+-- • Returns records that HAVE matching related records
+-- • "Give me Accounts that have Opportunities"
+--
+-- ANTI-JOIN (NOT IN):
+-- • Returns records that DO NOT have matching related records
+-- • "Give me Accounts without any Contacts"
+--
+-- LIMITS:
+-- • Maximum 2 levels of semi-join nesting
+-- • Inner query can only return Id field
+-- • Inner query limited to 50,000 records
+--
+-- ═══════════════════════════════════════════════════════════════════════════════
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- SEMI-JOIN PATTERNS (Records WITH related records)
+-- ═══════════════════════════════════════════════════════════════════════════════
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- BASIC SEMI-JOIN: Accounts with Opportunities
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, Industry, Type
+FROM Account
+WHERE Id IN (
+    SELECT AccountId
+    FROM Opportunity
+)
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- FILTERED SEMI-JOIN: Accounts with OPEN Opportunities
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, Industry, AnnualRevenue
+FROM Account
+WHERE Id IN (
+    SELECT AccountId
+    FROM Opportunity
+    WHERE IsClosed = false
+    AND Amount > 50000
+)
+AND Industry = 'Technology'
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- SEMI-JOIN: Accounts with Won Opportunities this year
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, Type, Owner.Name
+FROM Account
+WHERE Id IN (
+    SELECT AccountId
+    FROM Opportunity
+    WHERE StageName = 'Closed Won'
+    AND CloseDate = THIS_YEAR
+)
+ORDER BY Name
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- SEMI-JOIN: Contacts at Accounts with Cases
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, FirstName, LastName, Email, Account.Name
+FROM Contact
+WHERE AccountId IN (
+    SELECT AccountId
+    FROM Case
+    WHERE Status != 'Closed'
+)
+AND Email != null
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- SEMI-JOIN: Products used in Opportunities
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, ProductCode, Family
+FROM Product2
+WHERE Id IN (
+    SELECT Product2Id
+    FROM OpportunityLineItem
+    WHERE Opportunity.StageName = 'Closed Won'
+)
+AND IsActive = true
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- ANTI-JOIN PATTERNS (Records WITHOUT related records)
+-- ═══════════════════════════════════════════════════════════════════════════════
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- BASIC ANTI-JOIN: Accounts without Contacts
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, Industry, Type
+FROM Account
+WHERE Id NOT IN (
+    SELECT AccountId
+    FROM Contact
+)
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- ANTI-JOIN: Accounts without Opportunities
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, Industry, Type, CreatedDate
+FROM Account
+WHERE Id NOT IN (
+    SELECT AccountId
+    FROM Opportunity
+)
+AND Type = 'Prospect'
+AND CreatedDate < LAST_90_DAYS
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- ANTI-JOIN: Contacts without Activities (no Tasks)
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, FirstName, LastName, Email, Account.Name
+FROM Contact
+WHERE Id NOT IN (
+    SELECT WhoId
+    FROM Task
+    WHERE WhoId != null
+)
+AND Email != null
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- ANTI-JOIN: Leads not converted
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, FirstName, LastName, Company, Status
+FROM Lead
+WHERE IsConverted = false
+AND Id NOT IN (
+    SELECT WhoId
+    FROM Task
+    WHERE CreatedDate = LAST_30_DAYS
+)
+AND Status = 'Open - Not Contacted'
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- ANTI-JOIN: Products not sold
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, ProductCode, Family
+FROM Product2
+WHERE Id NOT IN (
+    SELECT Product2Id
+    FROM OpportunityLineItem
+)
+AND IsActive = true
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- COMBINED PATTERNS
+-- ═══════════════════════════════════════════════════════════════════════════════
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- BOTH: Accounts with Contacts but no Opportunities
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, Industry
+FROM Account
+WHERE Id IN (
+    SELECT AccountId
+    FROM Contact
+)
+AND Id NOT IN (
+    SELECT AccountId
+    FROM Opportunity
+)
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- COMPLEX: Accounts with Open Cases but no recent Activity
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, Type, Owner.Name
+FROM Account
+WHERE Id IN (
+    SELECT AccountId
+    FROM Case
+    WHERE Status != 'Closed'
+    AND Priority = 'High'
+)
+AND Id NOT IN (
+    SELECT WhatId
+    FROM Task
+    WHERE ActivityDate >= LAST_7_DAYS
+    AND WhatId != null
+)
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- MULTI-CONDITION: Active customers needing attention
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, Industry, LastActivityDate
+FROM Account
+WHERE Type = 'Customer'
+AND Id IN (
+    SELECT AccountId
+    FROM Opportunity
+    WHERE StageName = 'Closed Won'
+    AND CloseDate >= LAST_YEAR
+)
+AND Id NOT IN (
+    SELECT WhatId
+    FROM Task
+    WHERE CreatedDate >= LAST_30_DAYS
+    AND WhatId != null
+)
+ORDER BY LastActivityDate ASC NULLS FIRST
+LIMIT 50
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- NESTED SUBQUERIES (Maximum 2 levels)
+-- ═══════════════════════════════════════════════════════════════════════════════
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- NESTED: Contacts at Accounts with Won Enterprise Opportunities
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, FirstName, LastName, Email
+FROM Contact
+WHERE AccountId IN (
+    SELECT AccountId
+    FROM Opportunity
+    WHERE StageName = 'Closed Won'
+    AND Amount >= 100000
+)
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- ALTERNATIVE: EXISTS-style pattern using relationship
+-- When you need to check existence with complex conditions
+-- ═══════════════════════════════════════════════════════════════════════════════
+
+-- Instead of subquery, sometimes a relationship query is clearer:
+-- "Accounts that have at least one high-value Opportunity"
+
+-- Using parent-to-child to verify related records exist:
+SELECT Id, Name,
+    (SELECT Id FROM Opportunities WHERE Amount > 100000 LIMIT 1)
+FROM Account
+WHERE Industry = 'Technology'
+
+-- Then filter in Apex for accounts that have the nested result
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- APEX PROCESSING PATTERN
+-- ═══════════════════════════════════════════════════════════════════════════════
+/*
+// Semi-join: Accounts with open high-value opportunities
+List<Account> accountsWithOpps = [
+    SELECT Id, Name, Industry
+    FROM Account
+    WHERE Id IN (
+        SELECT AccountId
+        FROM Opportunity
+        WHERE IsClosed = false
+        AND Amount > 100000
+    )
+];
+
+System.debug('Accounts with high-value pipeline: ' + accountsWithOpps.size());
+
+// Anti-join: Accounts needing outreach
+List<Account> neglectedAccounts = [
+    SELECT Id, Name, Type, LastActivityDate
+    FROM Account
+    WHERE Type = 'Customer'
+    AND Id NOT IN (
+        SELECT WhatId
+        FROM Task
+        WHERE CreatedDate >= LAST_30_DAYS
+        AND WhatId != null
+    )
+    ORDER BY LastActivityDate ASC NULLS FIRST
+    LIMIT 100
+];
+
+System.debug('Accounts needing outreach: ' + neglectedAccounts.size());
+*/
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- SF CLI USAGE
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- Semi-join:
+-- sf data query \
+--   --query "SELECT Id, Name FROM Account WHERE Id IN (SELECT AccountId FROM Opportunity WHERE StageName = 'Closed Won') LIMIT 20" \
+--   --target-org myorg \
+--   --json
+--
+-- Anti-join:
+-- sf data query \
+--   --query "SELECT Id, Name FROM Account WHERE Id NOT IN (SELECT AccountId FROM Contact) LIMIT 20" \
+--   --target-org myorg \
+--   --json

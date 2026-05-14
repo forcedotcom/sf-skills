@@ -1,0 +1,154 @@
+<template>
+    <div class="slds-card">
+        <!-- Header -->
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span>{inputLabel}</span>
+                    </h2>
+                </div>
+            </header>
+        </div>
+
+        <!-- Body -->
+        <div class="slds-card__body slds-card__body_inner">
+
+            <!-- Loading State -->
+            <template lwc:if={isLoading}>
+                <div class="slds-align_absolute-center slds-p-around_large">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Error State -->
+            <template lwc:if={error}>
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <lightning-icon icon-name="utility:error" size="small" alternative-text="Error"></lightning-icon>
+                    <h2 class="slds-m-left_x-small">{error}</h2>
+                </div>
+            </template>
+
+            <!-- Validation Error -->
+            <template lwc:if={errorMessage}>
+                <div class="slds-notify slds-notify_alert slds-alert_warning slds-m-bottom_small" role="alert">
+                    <span class="slds-assistive-text">Warning</span>
+                    <lightning-icon icon-name="utility:warning" size="small" alternative-text="Warning"></lightning-icon>
+                    <h2 class="slds-m-left_x-small">{errorMessage}</h2>
+                </div>
+            </template>
+
+            <!-- Empty State -->
+            <template lwc:if={!isLoading}>
+                <template lwc:if={!hasRecords}>
+                    <div class="slds-illustration slds-illustration_small">
+                        <div class="slds-text-longform">
+                            <h3 class="slds-text-heading_medium">No Records Found</h3>
+                            <p class="slds-text-body_regular">There are no records to display.</p>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Record List -->
+                <template lwc:if={hasRecords}>
+                    <div class="slds-grid slds-wrap slds-gutters_small">
+                        <template for:each={records} for:item="record">
+                            <div key={record.id} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-m-bottom_small">
+                                <!-- Record Tile (clickable) -->
+                                <div
+                                    class="record-tile slds-box slds-box_link"
+                                    data-id={record.id}
+                                    data-name={record.name}
+                                    onclick={handleRecordSelect}
+                                    role="button"
+                                    tabindex="0"
+                                    aria-pressed={record.isSelected}>
+
+                                    <article class="slds-tile">
+                                        <h3 class="slds-tile__title slds-truncate" title={record.name}>
+                                            <span>{record.name}</span>
+                                        </h3>
+                                        <div class="slds-tile__detail">
+                                            <p class="slds-text-body_small slds-text-color_weak">
+                                                {record.description}
+                                            </p>
+                                        </div>
+                                    </article>
+
+                                    <!-- Selection Indicator -->
+                                    <template lwc:if={record.isSelected}>
+                                        <lightning-icon
+                                            icon-name="utility:check"
+                                            size="small"
+                                            class="selected-icon"
+                                            alternative-text="Selected">
+                                        </lightning-icon>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Selection Summary -->
+                    <template lwc:if={hasSelection}>
+                        <div class="slds-m-top_medium slds-p-around_small slds-theme_info slds-box">
+                            <p class="slds-text-body_regular">
+                                <lightning-icon icon-name="utility:check" size="x-small" alternative-text="Selected" class="slds-m-right_x-small"></lightning-icon>
+                                <strong>Selected:</strong> {selectedRecordName}
+                            </p>
+                        </div>
+                    </template>
+                </template>
+            </template>
+        </div>
+
+        <!-- Footer with Navigation Buttons -->
+        <footer class="slds-card__footer">
+            <div class="slds-grid slds-grid_align-spread">
+                <!-- Back Button (left aligned) -->
+                <div>
+                    <template lwc:if={showBackButton}>
+                        <lightning-button
+                            label="Back"
+                            onclick={handleBack}
+                            icon-name="utility:back">
+                        </lightning-button>
+                    </template>
+                </div>
+
+                <!-- Next/Finish Buttons (right aligned) -->
+                <div class="slds-grid slds-grid_align-end slds-gutters_x-small">
+                    <template lwc:if={canPause}>
+                        <lightning-button
+                            label="Pause"
+                            onclick={handlePause}
+                            icon-name="utility:pause">
+                        </lightning-button>
+                    </template>
+
+                    <template lwc:if={showNextButton}>
+                        <lightning-button
+                            label="Next"
+                            variant="brand"
+                            onclick={handleNext}
+                            icon-name="utility:forward"
+                            icon-position="right"
+                            disabled={!hasSelection}>
+                        </lightning-button>
+                    </template>
+
+                    <template lwc:if={showFinishButton}>
+                        <lightning-button
+                            label="Finish"
+                            variant="brand"
+                            onclick={handleFinish}
+                            icon-name="utility:check"
+                            disabled={!hasSelection}>
+                        </lightning-button>
+                    </template>
+                </div>
+            </div>
+        </footer>
+    </div>
+</template>

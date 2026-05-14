@@ -1,0 +1,153 @@
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- PARENT-TO-CHILD QUERY (Subquery Pattern)
+-- ═══════════════════════════════════════════════════════════════════════════════
+--
+-- Returns parent records with related child records nested in the results.
+-- Child records are returned as a nested list within each parent record.
+--
+-- USE WHEN:
+-- • Starting from the parent object and need child record details
+-- • Need to iterate through parents and their related children
+-- • Building hierarchical data structures
+--
+-- LIMITS:
+-- • Maximum 20 subqueries per query
+-- • Child records limited by inner LIMIT (or 200 if not specified)
+-- • 5 levels of relationship depth
+--
+-- ═══════════════════════════════════════════════════════════════════════════════
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- BASIC: Account with Contacts
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, Industry, AnnualRevenue,
+    (SELECT Id, FirstName, LastName, Email, Phone, Title
+     FROM Contacts
+     ORDER BY LastName ASC
+     LIMIT 100)
+FROM Account
+WHERE Industry = 'Technology'
+LIMIT 50
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- MULTIPLE CHILDREN: Account with Contacts AND Opportunities
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, Industry,
+    (SELECT Id, FirstName, LastName, Email
+     FROM Contacts
+     WHERE Email != null
+     LIMIT 50),
+    (SELECT Id, Name, StageName, Amount, CloseDate
+     FROM Opportunities
+     WHERE IsClosed = false
+     ORDER BY CloseDate ASC
+     LIMIT 50)
+FROM Account
+WHERE Id IN :accountIds
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- FILTERED CHILDREN: Only active/specific child records
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name,
+    (SELECT Id, Subject, Status, Priority
+     FROM Cases
+     WHERE Status != 'Closed'
+     AND Priority = 'High'
+     ORDER BY CreatedDate DESC
+     LIMIT 25)
+FROM Account
+WHERE Type = 'Customer'
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- OPPORTUNITY with Products (OpportunityLineItems)
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, StageName, Amount, CloseDate,
+    Account.Name,
+    (SELECT Id, Name, Quantity, UnitPrice, TotalPrice,
+            Product2.Name, Product2.ProductCode
+     FROM OpportunityLineItems
+     ORDER BY TotalPrice DESC)
+FROM Opportunity
+WHERE StageName = 'Closed Won'
+AND CloseDate = THIS_QUARTER
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- CASE with Comments and Attachments
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, CaseNumber, Subject, Status, Priority,
+    Account.Name,
+    Contact.Name,
+    (SELECT Id, CommentBody, CreatedBy.Name, CreatedDate
+     FROM CaseComments
+     ORDER BY CreatedDate DESC
+     LIMIT 10),
+    (SELECT Id, Name, ContentType, BodyLength
+     FROM Attachments
+     LIMIT 20)
+FROM Case
+WHERE Status != 'Closed'
+ORDER BY Priority DESC, CreatedDate DESC
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- USER with all related activity
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, Username, IsActive,
+    (SELECT Id, Subject, Status, ActivityDate
+     FROM TasksOwned
+     WHERE Status != 'Completed'
+     ORDER BY ActivityDate ASC
+     LIMIT 25),
+    (SELECT Id, Subject, StartDateTime, EndDateTime
+     FROM EventsOwned
+     WHERE StartDateTime >= TODAY
+     ORDER BY StartDateTime ASC
+     LIMIT 25)
+FROM User
+WHERE IsActive = true
+AND Profile.Name = 'Standard User'
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- CUSTOM OBJECT: Parent with Custom Child Objects
+-- Replace {{ParentObject}}, {{ChildRelationshipName}}, {{ChildObject}} with actual names
+-- ───────────────────────────────────────────────────────────────────────────────
+-- SELECT Id, Name, Status__c,
+--     (SELECT Id, Name, Amount__c, Date__c
+--      FROM {{ChildRelationshipName}}__r
+--      WHERE Status__c = 'Active'
+--      ORDER BY Date__c DESC
+--      LIMIT 50)
+-- FROM {{ParentObject}}__c
+-- WHERE OwnerId = :userId
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- APEX PROCESSING PATTERN
+-- ═══════════════════════════════════════════════════════════════════════════════
+/*
+// Query with subquery
+List<Account> accounts = [
+    SELECT Id, Name,
+        (SELECT Id, FirstName, LastName FROM Contacts)
+    FROM Account
+    WHERE Id IN :accountIds
+];
+
+// Process parent and children
+for (Account acc : accounts) {
+    System.debug('Account: ' + acc.Name);
+
+    // Access child records via relationship name
+    if (acc.Contacts != null && !acc.Contacts.isEmpty()) {
+        for (Contact con : acc.Contacts) {
+            System.debug('  Contact: ' + con.FirstName + ' ' + con.LastName);
+        }
+    }
+}
+*/
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- SF CLI USAGE
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- sf data query \
+--   --query "SELECT Id, Name, (SELECT Id, Name FROM Contacts) FROM Account LIMIT 10" \
+--   --target-org myorg \
+--   --json

@@ -1,0 +1,242 @@
+/**
+ * AGGREGATE QUERY PATTERNS
+ *
+ * SOQL aggregate functions:
+ * - COUNT(), COUNT(field), COUNT_DISTINCT(field)
+ * - SUM(field), AVG(field), MIN(field), MAX(field)
+ *
+ * Use with GROUP BY for grouping results.
+ */
+
+// ═══════════════════════════════════════════════════════════════════════════
+// BASIC COUNT
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- Count all records
+SELECT COUNT() FROM Account
+
+-- Count with filter
+SELECT COUNT() FROM Contact WHERE Email != null
+
+-- Count with field alias
+SELECT COUNT(Id) total FROM Account
+
+-- Count distinct values
+SELECT COUNT_DISTINCT(Industry) FROM Account
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SUM, AVG, MIN, MAX
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- Sum of amounts
+SELECT SUM(Amount) totalAmount FROM Opportunity WHERE IsClosed = true
+
+-- Average amount
+SELECT AVG(Amount) avgAmount FROM Opportunity WHERE StageName = 'Closed Won'
+
+-- Min and Max
+SELECT MIN(Amount) smallest, MAX(Amount) largest
+FROM Opportunity
+WHERE IsClosed = true
+
+-- Combined aggregates
+SELECT
+    COUNT(Id) totalOpps,
+    SUM(Amount) totalAmount,
+    AVG(Amount) avgAmount,
+    MIN(Amount) minAmount,
+    MAX(Amount) maxAmount
+FROM Opportunity
+WHERE StageName = 'Closed Won'
+AND CALENDAR_YEAR(CloseDate) = 2024
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GROUP BY
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- Count by single field
+SELECT Industry, COUNT(Id)
+FROM Account
+GROUP BY Industry
+
+-- Count by multiple fields
+SELECT Industry, Type, COUNT(Id)
+FROM Account
+GROUP BY Industry, Type
+
+-- Sum by category
+SELECT StageName, SUM(Amount)
+FROM Opportunity
+GROUP BY StageName
+
+-- Average by owner
+SELECT OwnerId, AVG(Amount)
+FROM Opportunity
+GROUP BY OwnerId
+
+-- Aggregate by date part
+SELECT CALENDAR_MONTH(CloseDate), SUM(Amount)
+FROM Opportunity
+WHERE CALENDAR_YEAR(CloseDate) = 2024
+GROUP BY CALENDAR_MONTH(CloseDate)
+ORDER BY CALENDAR_MONTH(CloseDate)
+
+-- Year and Month grouping
+SELECT CALENDAR_YEAR(CloseDate) yr, CALENDAR_MONTH(CloseDate) mn, SUM(Amount)
+FROM Opportunity
+GROUP BY CALENDAR_YEAR(CloseDate), CALENDAR_MONTH(CloseDate)
+ORDER BY CALENDAR_YEAR(CloseDate), CALENDAR_MONTH(CloseDate)
+
+// ═══════════════════════════════════════════════════════════════════════════
+// HAVING CLAUSE
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- Filter groups by aggregate result
+SELECT Industry, COUNT(Id) cnt
+FROM Account
+GROUP BY Industry
+HAVING COUNT(Id) > 10
+
+-- Multiple HAVING conditions
+SELECT OwnerId, SUM(Amount) total, COUNT(Id) cnt
+FROM Opportunity
+WHERE StageName = 'Closed Won'
+GROUP BY OwnerId
+HAVING SUM(Amount) > 100000
+AND COUNT(Id) >= 5
+
+-- HAVING with different aggregate than SELECT
+SELECT LeadSource, COUNT(Id)
+FROM Lead
+GROUP BY LeadSource
+HAVING AVG(NumberOfEmployees) > 100
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GROUP BY ROLLUP (Subtotals)
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- Single rollup
+SELECT Industry, COUNT(Id)
+FROM Account
+GROUP BY ROLLUP(Industry)
+-- Returns: individual industries + grand total (null Industry row)
+
+-- Multiple field rollup
+SELECT Industry, Type, COUNT(Id)
+FROM Account
+GROUP BY ROLLUP(Industry, Type)
+-- Returns: Industry+Type combos, Industry subtotals, grand total
+
+-- With SUM
+SELECT StageName, CALENDAR_MONTH(CloseDate), SUM(Amount)
+FROM Opportunity
+WHERE CALENDAR_YEAR(CloseDate) = 2024
+GROUP BY ROLLUP(StageName, CALENDAR_MONTH(CloseDate))
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GROUP BY CUBE (All Combinations)
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- All dimension combinations
+SELECT Industry, Type, COUNT(Id)
+FROM Account
+GROUP BY CUBE(Industry, Type)
+-- Returns: Industry+Type, Industry only, Type only, grand total
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DATE FUNCTIONS IN AGGREGATES
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- By calendar year
+SELECT CALENDAR_YEAR(CreatedDate) yr, COUNT(Id)
+FROM Account
+GROUP BY CALENDAR_YEAR(CreatedDate)
+
+-- By calendar quarter
+SELECT CALENDAR_YEAR(CloseDate), CALENDAR_QUARTER(CloseDate), SUM(Amount)
+FROM Opportunity
+GROUP BY CALENDAR_YEAR(CloseDate), CALENDAR_QUARTER(CloseDate)
+
+-- By fiscal year (if fiscal year defined)
+SELECT FISCAL_YEAR(CloseDate), SUM(Amount)
+FROM Opportunity
+GROUP BY FISCAL_YEAR(CloseDate)
+
+-- By week
+SELECT WEEK_IN_YEAR(CreatedDate), COUNT(Id)
+FROM Lead
+WHERE CALENDAR_YEAR(CreatedDate) = 2024
+GROUP BY WEEK_IN_YEAR(CreatedDate)
+
+-- By day of week
+SELECT DAY_IN_WEEK(CreatedDate), COUNT(Id)
+FROM Case
+WHERE CreatedDate = THIS_MONTH
+GROUP BY DAY_IN_WEEK(CreatedDate)
+-- 1=Sunday, 2=Monday, etc.
+
+// ═══════════════════════════════════════════════════════════════════════════
+// COMMON AGGREGATE PATTERNS
+// ═══════════════════════════════════════════════════════════════════════════
+
+-- Sales by rep this year
+SELECT Owner.Name, SUM(Amount) totalSales, COUNT(Id) dealCount
+FROM Opportunity
+WHERE StageName = 'Closed Won'
+AND CloseDate = THIS_YEAR
+GROUP BY Owner.Name
+ORDER BY SUM(Amount) DESC
+
+-- Lead conversion rate by source
+SELECT LeadSource, COUNT(Id) total, SUM(CASE WHEN IsConverted = true THEN 1 ELSE 0 END) converted
+FROM Lead
+GROUP BY LeadSource
+-- Note: CASE not supported in SOQL. Calculate in Apex.
+
+-- Cases by status and priority
+SELECT Status, Priority, COUNT(Id)
+FROM Case
+WHERE CreatedDate = THIS_MONTH
+GROUP BY Status, Priority
+
+-- Average deal size by industry
+SELECT Account.Industry, AVG(Amount)
+FROM Opportunity
+WHERE StageName = 'Closed Won'
+GROUP BY Account.Industry
+HAVING AVG(Amount) > 50000
+
+-- Top accounts by opportunity count
+SELECT AccountId, Account.Name, COUNT(Id) oppCount
+FROM Opportunity
+GROUP BY AccountId, Account.Name
+ORDER BY COUNT(Id) DESC
+LIMIT 20
+
+-- Pipeline by stage and month
+SELECT StageName, CALENDAR_MONTH(CloseDate) closeMonth, SUM(Amount)
+FROM Opportunity
+WHERE IsClosed = false
+AND CloseDate = THIS_QUARTER
+GROUP BY StageName, CALENDAR_MONTH(CloseDate)
+ORDER BY CALENDAR_MONTH(CloseDate), StageName
+
+// ═══════════════════════════════════════════════════════════════════════════
+// AGGREGATE IN APEX
+// ═══════════════════════════════════════════════════════════════════════════
+
+/*
+// In Apex, aggregate results are returned as AggregateResult[]
+
+List<AggregateResult> results = [
+    SELECT Industry, COUNT(Id) cnt, SUM(AnnualRevenue) total
+    FROM Account
+    GROUP BY Industry
+];
+
+for (AggregateResult ar : results) {
+    String industry = (String) ar.get('Industry');
+    Integer count = (Integer) ar.get('cnt');
+    Decimal total = (Decimal) ar.get('total');
+}
+*/

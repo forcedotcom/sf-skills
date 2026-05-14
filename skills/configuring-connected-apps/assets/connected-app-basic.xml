@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Template: Connected App - Basic
+  Use Case: Simple API integration with minimal OAuth configuration
+
+  Replace placeholders:
+  - {{APP_NAME}}: Application name (no spaces, alphanumeric + underscore)
+  - {{CONTACT_EMAIL}}: Administrator contact email
+  - {{DESCRIPTION}}: Brief description of the app's purpose
+  - {{CALLBACK_URL}}: OAuth callback URL (must be HTTPS in production)
+-->
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>{{APP_NAME}}</label>
+    <contactEmail>{{CONTACT_EMAIL}}</contactEmail>
+    <description>{{DESCRIPTION}}</description>
+
+    <oauthConfig>
+        <callbackUrl>{{CALLBACK_URL}}</callbackUrl>
+        <isAdminApproved>false</isAdminApproved>
+        <isConsumerSecretOptional>false</isConsumerSecretOptional>
+        <scopes>Api</scopes>
+        <scopes>RefreshToken</scopes>
+    </oauthConfig>
+
+    <oauthPolicy>
+        <ipRelaxation>ENFORCE</ipRelaxation>
+        <refreshTokenPolicy>infinite</refreshTokenPolicy>
+    </oauthPolicy>
+</ConnectedApp>

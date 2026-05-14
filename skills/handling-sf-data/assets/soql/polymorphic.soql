@@ -1,0 +1,198 @@
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- POLYMORPHIC RELATIONSHIP QUERIES (TYPEOF Pattern)
+-- ═══════════════════════════════════════════════════════════════════════════════
+--
+-- Polymorphic lookups can point to multiple object types.
+-- Use TYPEOF to access object-specific fields based on the actual type.
+--
+-- COMMON POLYMORPHIC FIELDS:
+-- • Who (WhoId) - Task/Event → Contact OR Lead
+-- • What (WhatId) - Task/Event → Account, Opportunity, Case, etc.
+-- • Owner (OwnerId) - Most objects → User OR Queue
+-- • Related (RelatedToId) - Various → Multiple objects
+--
+-- USE WHEN:
+-- • Querying Task, Event, or other objects with polymorphic lookups
+-- • Need type-specific fields from the related record
+-- • Building reports that span multiple related object types
+--
+-- ═══════════════════════════════════════════════════════════════════════════════
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- BASIC TYPEOF: Task with Who (Contact vs Lead)
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Subject, Status, ActivityDate,
+    TYPEOF Who
+        WHEN Contact THEN FirstName, LastName, Email, Account.Name
+        WHEN Lead THEN FirstName, LastName, Email, Company
+    END
+FROM Task
+WHERE Status != 'Completed'
+AND ActivityDate >= TODAY
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- TYPEOF with What (Account, Opportunity, Case)
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Subject, Status, Priority,
+    TYPEOF What
+        WHEN Account THEN Name, Industry, AnnualRevenue, Type
+        WHEN Opportunity THEN Name, StageName, Amount, CloseDate
+        WHEN Case THEN CaseNumber, Subject, Status, Priority
+    END
+FROM Task
+WHERE CreatedDate = THIS_WEEK
+ORDER BY ActivityDate ASC
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- FULL TYPEOF: Both Who and What in same query
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Subject, Status, ActivityDate, Priority,
+    Owner.Name,
+    TYPEOF Who
+        WHEN Contact THEN
+            FirstName, LastName, Email, Phone,
+            Account.Name, Account.Industry
+        WHEN Lead THEN
+            FirstName, LastName, Email, Company, Status
+    END,
+    TYPEOF What
+        WHEN Account THEN Name, Industry, Type, BillingCity
+        WHEN Opportunity THEN Name, StageName, Amount, Probability
+        WHEN Case THEN CaseNumber, Subject, Status
+        WHEN Campaign THEN Name, Status, Type
+    END
+FROM Task
+WHERE OwnerId = :currentUserId
+AND Status = 'Not Started'
+ORDER BY ActivityDate ASC
+LIMIT 100
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- EVENT with polymorphic relationships
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Subject, StartDateTime, EndDateTime, Location,
+    TYPEOF Who
+        WHEN Contact THEN FirstName, LastName, Email, Title
+        WHEN Lead THEN FirstName, LastName, Company
+    END,
+    TYPEOF What
+        WHEN Account THEN Name, Phone, Website
+        WHEN Opportunity THEN Name, StageName, Amount
+    END
+FROM Event
+WHERE StartDateTime >= TODAY
+AND StartDateTime <= NEXT_MONTH
+ORDER BY StartDateTime ASC
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- Using ELSE clause for unhandled types
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Subject, Status,
+    TYPEOF What
+        WHEN Account THEN Name, Industry
+        WHEN Opportunity THEN Name, StageName
+        WHEN Case THEN CaseNumber
+        ELSE Name
+    END
+FROM Task
+WHERE ActivityDate = TODAY
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- FeedItem with polymorphic Parent
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Body, CreatedDate, CreatedBy.Name,
+    TYPEOF Parent
+        WHEN Account THEN Name, Industry
+        WHEN Opportunity THEN Name, StageName
+        WHEN Case THEN CaseNumber, Subject
+        WHEN Contact THEN FirstName, LastName
+        WHEN Lead THEN FirstName, LastName, Company
+        WHEN User THEN Name, Title
+    END
+FROM FeedItem
+WHERE CreatedDate = THIS_WEEK
+ORDER BY CreatedDate DESC
+LIMIT 50
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- ContentDocumentLink with polymorphic LinkedEntity
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, ContentDocument.Title, ContentDocument.FileType,
+    TYPEOF LinkedEntity
+        WHEN Account THEN Name, Industry
+        WHEN Contact THEN FirstName, LastName
+        WHEN Opportunity THEN Name, Amount
+        WHEN Case THEN CaseNumber, Subject
+    END
+FROM ContentDocumentLink
+WHERE ContentDocument.FileType = 'PDF'
+ORDER BY ContentDocument.CreatedDate DESC
+LIMIT 100
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- ALTERNATIVE: Check Type.Name without TYPEOF
+-- Use when you only need to identify the type, not access specific fields
+-- ═══════════════════════════════════════════════════════════════════════════════
+SELECT Id, Subject, Status,
+    Who.Type,
+    Who.Name,
+    What.Type,
+    What.Name
+FROM Task
+WHERE ActivityDate = TODAY
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- APEX PROCESSING PATTERN
+-- ═══════════════════════════════════════════════════════════════════════════════
+/*
+// Query with TYPEOF
+List<Task> tasks = [
+    SELECT Id, Subject,
+        TYPEOF Who
+            WHEN Contact THEN FirstName, LastName, Email
+            WHEN Lead THEN FirstName, LastName, Company
+        END
+    FROM Task
+    WHERE ActivityDate = TODAY
+];
+
+// Process based on type
+for (Task t : tasks) {
+    if (t.WhoId != null) {
+        Schema.SObjectType whoType = t.WhoId.getSObjectType();
+
+        if (whoType == Contact.SObjectType) {
+            Contact con = (Contact) t.getSObject('Who');
+            System.debug('Contact: ' + con.FirstName + ' ' + con.LastName);
+        }
+        else if (whoType == Lead.SObjectType) {
+            Lead lead = (Lead) t.getSObject('Who');
+            System.debug('Lead: ' + lead.FirstName + ' at ' + lead.Company);
+        }
+    }
+}
+*/
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- APEX ALTERNATIVE: Using instanceof
+-- ═══════════════════════════════════════════════════════════════════════════════
+/*
+for (Task t : tasks) {
+    SObject who = t.getSObject('Who');
+    if (who instanceof Contact) {
+        Contact con = (Contact) who;
+        System.debug('Contact: ' + con.Email);
+    } else if (who instanceof Lead) {
+        Lead lead = (Lead) who;
+        System.debug('Lead Company: ' + lead.Company);
+    }
+}
+*/
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- SF CLI USAGE
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- sf data query \
+--   --query "SELECT Id, Subject, TYPEOF Who WHEN Contact THEN FirstName, LastName WHEN Lead THEN Company END FROM Task WHERE ActivityDate = TODAY LIMIT 10" \
+--   --target-org myorg \
+--   --json

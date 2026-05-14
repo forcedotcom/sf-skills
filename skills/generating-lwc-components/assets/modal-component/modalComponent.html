@@ -1,0 +1,85 @@
+<template>
+    <!-- Backdrop -->
+    <div class={backdropClass}></div>
+
+    <!-- Modal Container -->
+    <section
+        role="dialog"
+        tabindex="-1"
+        aria-modal="true"
+        aria-hidden={modalAriaHidden}
+        aria-labelledby="modal-heading"
+        aria-describedby="modal-content"
+        class={modalContainerClass}>
+
+        <div class="slds-modal__container outerModalContent" onclick={handleBackdropClick}>
+            <!-- Modal Content Box -->
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content">
+
+                <!-- Header -->
+                <template lwc:if={showHeader}>
+                    <header class="slds-modal__header slds-p-bottom_medium">
+                        <lightning-button-icon
+                            class="slds-modal__close"
+                            icon-name="utility:close"
+                            alternative-text="Close"
+                            onclick={handleCancel}>
+                        </lightning-button-icon>
+
+                        <template lwc:if={modalHeader}>
+                            <h2 id="modal-heading" class="slds-text-heading_medium slds-hyphenate">
+                                {modalHeader}
+                            </h2>
+                        </template>
+
+                        <template lwc:if={modalTagline}>
+                            <p class="slds-m-top_x-small slds-text-color_weak">
+                                {modalTagline}
+                            </p>
+                        </template>
+                    </header>
+                </template>
+
+                <!-- Close button when no header -->
+                <template lwc:elseif={isOpen}>
+                    <lightning-button-icon
+                        class="slds-modal__close"
+                        icon-name="utility:close"
+                        alternative-text="Close"
+                        onclick={handleCancel}>
+                    </lightning-button-icon>
+                </template>
+
+                <!-- Slotted Body Content -->
+                <div class="slds-modal__body">
+                    <slot name="body"></slot>
+                </div>
+
+                <!-- Footer -->
+                <template lwc:if={!hideFooter}>
+                    <footer class="slds-modal__footer slds-p-top_medium">
+                        <slot name="footer">
+                            <!-- Default footer buttons -->
+                            <lightning-button
+                                label="Cancel"
+                                onclick={handleCancel}
+                                class="slds-m-right_x-small focusable">
+                            </lightning-button>
+                            <lightning-button
+                                variant="brand"
+                                label="Save"
+                                onclick={handleSave}
+                                class="focusable">
+                            </lightning-button>
+                        </slot>
+                    </footer>
+                </template>
+            </div>
+        </div>
+    </section>
+
+    <!-- Background content (hidden when modal is open) -->
+    <div aria-hidden={isOpen}>
+        <slot name="background"></slot>
+    </div>
+</template>
