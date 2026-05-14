@@ -74,7 +74,7 @@ These rules exist because Salesforce GraphQL has platform-specific behaviors tha
 
 1. **HTTP 200 does not mean success** — Salesforce returns HTTP 200 even when operations fail. **Always parse the `errors` array in the response body.**
 
-2. **Schema is the single source of truth** — Every entity name, field name, and type must be confirmed via the schema search script before use in a query. Never guess — Salesforce field names are case-sensitive, relationships may be polymorphic, and custom objects use suffixes (`__c`, `__e`). Objects added to UI API in v60+ may use a `_Record` suffix (e.g., `FeedItem_Record` instead of `FeedItem`).
+2. **Schema is the single source of truth — access it only via the search script** — Every entity name, field name, and type must be confirmed by running `bash scripts/graphql-search.sh <Entity>` before use in a query. Never read `schema.graphql` directly. Never guess — Salesforce field names are case-sensitive, relationships may be polymorphic, and custom objects use suffixes (`__c`, `__e`). Objects added to UI API in v60+ may use a `_Record` suffix (e.g., `FeedItem_Record` instead of `FeedItem`).
 
 3. **`@optional` on all record fields** (read queries) — Salesforce field-level security (FLS) causes queries to fail entirely if the user lacks access to even one field. The `@optional` directive (v65+) tells the server to omit inaccessible fields instead of failing. Apply it to every scalar field, parent relationship, and child relationship. Consuming code must use optional chaining (`?.`) and nullish coalescing (`??`).
 
@@ -102,7 +102,7 @@ These rules exist because Salesforce GraphQL has platform-specific behaviors tha
 
 ### Step 1: Acquire Schema
 
-The `schema.graphql` file (265K+ lines) is the source of truth. **Never open or parse it directly** — no cat, less, head, tail, editors, or programmatic parsers.
+The `schema.graphql` file (265K+ lines) is the source of truth. **Never open or parse it directly** — do NOT use `Read`, `Grep`, `Bash`, `cat`, `head`, `tail`, `grep`, `rg`, `less`, `sed`, `awk`, editors, or any tool to read, search, or parse this file. It will overwhelm your context. Use only `bash scripts/graphql-search.sh <Entity>`.
 
 Verify preconditions 1–3 (see [Preconditions](#preconditions--verify-before-starting)), then proceed to Step 2.
 
