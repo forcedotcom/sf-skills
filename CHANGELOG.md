@@ -1,3 +1,12 @@
+# [1.8.0](https://github.com/forcedotcom/sf-skills/compare/1.7.5...1.8.0) (2026-05-14)
+
+
+### Features
+
+* sync-validate-skill-main-branch-changes-from-internal-to-public @W-22488862@ ([#266](https://github.com/forcedotcom/sf-skills/issues/266)) ([4f105dc](https://github.com/forcedotcom/sf-skills/commit/4f105dc17b7764aa8005171f3eff6f92ff5e3c78))
+
+
+
 ## [1.7.5](https://github.com/forcedotcom/sf-skills/compare/1.7.4...1.7.5) (2026-05-13)
 
 
