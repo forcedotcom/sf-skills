@@ -1,6 +1,6 @@
 ---
 name: enriching-metadata-business-context
-description: Enriches Salesforce metadata source files (Custom Objects and LWC) with business context by generating or updating enrichedDescription blocks that explain WHY the metadata was created, HOW the decision was made, and WHAT it does. Triggers automatically on force-app/**/*-meta.xml files.
+description: Use this skill when creating, generating, or editing any Salesforce metadata source file (Custom Objects, LWC) matching force-app/**/*-meta.xml. Enriches metadata with business context by generating or updating enrichedDescription blocks that explain WHY the metadata was created, HOW the decision was made, and WHAT it does.
 ---
 
 # Skill: Enriching Metadata Business Context
