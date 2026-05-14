@@ -1,6 +1,6 @@
 ---
 name: running-apex-tests
-description: "Apex test execution, coverage analysis, and test-fix loops with 120-point scoring. Use when the user needs to run Apex tests, check code coverage, fix failing tests, or work with *Test.cls / *_Test.cls files. TRIGGER when: user runs Apex tests, checks code coverage, fixes failing tests, or touches *Test.cls / *_Test.cls files. DO NOT TRIGGER when: writing Apex production code (use generating-apex), Agentforce agent testing (use sf-ai-agentforce-testing), or Jest/LWC tests (use generating-lwc-components)."
+description: "Apex test execution, coverage analysis, and test-fix loops with 120-point scoring. Use when the user needs to run Apex tests, check code coverage, fix failing tests, or work with *Test.cls / *_Test.cls files. TRIGGER when: user runs Apex tests, checks code coverage, fixes failing tests, or touches *Test.cls / *_Test.cls files. DO NOT TRIGGER when: writing Apex production code (use generating-apex), Agentforce agent testing (use testing-agentforce), or Jest/LWC tests (use generating-lwc-components)."
 license: MIT
 metadata:
   version: "1.1"
@@ -21,7 +21,7 @@ Use `running-apex-tests` when the work involves:
 
 Delegate elsewhere when the user is:
 - writing or refactoring production Apex → `generating-apex` skill
-- testing Agentforce agents → `sf-ai-agentforce-testing` skill
+- testing Agentforce agents → `testing-agentforce` skill
 - testing LWC with Jest → [generating-lwc-components](../generating-lwc-components/SKILL.md)
 
 ---
