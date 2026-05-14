@@ -1,0 +1,44 @@
+{
+  "label": "<INDEX_NAME>",
+  "developerName": "<INDEX_NAME>",
+  "description": "Hybrid search index on a structured Data Cloud DMO",
+  "sourceDmoDeveloperName": "<SOURCE_DMO>__dlm",
+  "chunkDmoName": "<INDEX_NAME> chunk",
+  "chunkDmoDeveloperName": "<INDEX_NAME>_chunk",
+  "vectorDmoName": "<INDEX_NAME> index",
+  "vectorDmoDeveloperName": "<INDEX_NAME>_index",
+  "searchType": "HYBRID",
+  "vectorEmbedding": {
+    "vectorEmbeddingRelatedFields": []
+  },
+  "rankingConfigurations": [],
+  "chunkingConfiguration": {
+    "fieldLevelConfigurations": [
+      {
+        "sourceDmoDeveloperName": "<SOURCE_DMO>__dlm",
+        "sourceDmoFieldDeveloperName": "<TEXT_FIELD>__c",
+        "config": {
+          "id": "passage_extraction",
+          "userValues": [
+            { "id": "max_tokens", "value": "512" },
+            { "id": "strip_html", "value": "true" }
+          ]
+        }
+      }
+    ]
+  },
+  "vectorEmbeddingConfiguration": {
+    "embeddingModel": {
+      "id": "e5_large_v2",
+      "userValues": [
+        { "id": "dimension", "value": "1024" },
+        { "id": "max_token_limit", "value": "512" }
+      ]
+    },
+    "index": {
+      "id": "HNSW",
+      "userValues": []
+    },
+    "similarityMetric": "COSINE"
+  }
+}
