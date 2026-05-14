@@ -1,6 +1,6 @@
 ---
 name: switching-org
-description: Switches the active Salesforce org (default target-org) using the Salesforce CLI. Use whenever someone wants to change which org CLI commands run against — whether they say "switch org", "change default org", "set my org to", "use alias", "point to", or describe wanting to work against a specific org, scratch org, sandbox, or production.
+description: "Switches the active Salesforce org (default target-org) using the Salesforce CLI. Use whenever someone wants to change which org CLI commands run against — whether they say \"switch org\", \"change default org\", \"set my org to\", \"use alias\", \"point to\", or describe wanting to work against a specific org, scratch org, sandbox, or production."
 compatibility: Salesforce CLI (sf) v2+
 metadata:
   version: "1.0"
