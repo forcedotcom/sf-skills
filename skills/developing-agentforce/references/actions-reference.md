@@ -575,9 +575,9 @@ When building agents with external API integrations, follow this order:
 │  2. building-sf-integrations → Named Credential + External Service │
 │  3. generating-apex            → @InvocableMethod (if custom logic)  │
 │  4. generating-flow            → Flow wrapper (HTTP Callout / Apex)  │
-│  5. deploying-sf-metadata          → Deploy all metadata to org          │
+│  5. deploying-metadata          → Deploy all metadata to org          │
 │  6. sf-ai-agentscript  → Agent with flow:// target           │
-│  7. deploying-sf-metadata          → Publish (sf agent publish           │
+│  7. deploying-metadata          → Publish (sf agent publish           │
 │                           authoring-bundle)                  │
 └──────────────────────────────────────────────────────────────┘
 ```

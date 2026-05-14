@@ -1,4 +1,4 @@
-<!-- Parent: deploying-sf-metadata/SKILL.md -->
+<!-- Parent: deploying-metadata/SKILL.md -->
 # Trigger Deployment Safety Guide
 
 ## Overview

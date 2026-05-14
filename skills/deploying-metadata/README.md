@@ -1,4 +1,4 @@
-# deploying-sf-metadata
+# deploying-metadata
 
 Comprehensive Salesforce DevOps automation using sf CLI v2. Validate, deploy, verify, and hand off cleanly to post-deploy activities.
 
@@ -17,7 +17,7 @@ Comprehensive Salesforce DevOps automation using sf CLI v2. Validate, deploy, ve
 ### 1. Invoke the skill
 
 ```
-Skill: deploying-sf-metadata
+Skill: deploying-metadata
 Request: "Deploy all changes to org dev with validation"
 ```
 
@@ -62,10 +62,10 @@ After a successful dry run, guide the user to the next safe step:
 ## Orchestration Order
 
 ```
-generating-custom-object/generating-flow → deploying-sf-metadata → handling-sf-data
+generating-custom-object/generating-flow → deploying-metadata → handling-sf-data
 ```
 
-**Within deploying-sf-metadata**:
+**Within deploying-metadata**:
 1. Objects/Fields
 2. Permission Sets
 3. Apex
@@ -102,8 +102,3 @@ generating-custom-object/generating-flow → deploying-sf-metadata → handling-
 - sf CLI v2
 - Target Salesforce org
 - Proper permissions for deployment
-
-## License
-
-MIT License. See LICENSE file.
-Copyright (c) 2024-2026 Salesforce Skills Contributors

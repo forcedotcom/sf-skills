@@ -1,7 +1,7 @@
 ---
 name: handling-sf-data
-description: "Salesforce data operations with 130-point scoring. Use this skill to create, update, delete, bulk import/export, generate test data, and clean up org records using sf CLI and anonymous Apex. TRIGGER when: user creates test data, performs bulk import/export, uses sf data CLI commands, needs data factory patterns for Apex tests, or needs to seed/clean records in a Salesforce org. DO NOT TRIGGER when: SOQL query writing only (use querying-soql), Apex test execution (use running-apex-tests), or metadata deployment (use deploying-sf-metadata)."
-license: LICENSE.txt has complete terms
+description: "Salesforce data operations with 130-point scoring. Use this skill to create, update, delete, bulk import/export, generate test data, and clean up org records using sf CLI and anonymous Apex. TRIGGER when: user creates test data, performs bulk import/export, uses sf data CLI commands, needs data factory patterns for Apex tests, or needs to seed/clean records in a Salesforce org. DO NOT TRIGGER when: SOQL query writing only (use querying-soql), Apex test execution (use running-apex-tests), or metadata deployment (use deploying-metadata)."
+license: MIT
 metadata:
   version: "1.1"
 ---
@@ -22,7 +22,7 @@ Use `handling-sf-data` when the work involves:
 Delegate elsewhere when the user is:
 - writing SOQL only → [querying-soql](../querying-soql/SKILL.md)
 - running or repairing Apex tests → [running-apex-tests](../running-apex-tests/SKILL.md)
-- deploying metadata first → [deploying-sf-metadata](../deploying-sf-metadata/SKILL.md)
+- deploying metadata first → [deploying-metadata](../deploying-metadata/SKILL.md)
 - creating or modifying custom objects / fields → [generating-custom-object](../generating-custom-object/SKILL.md) or [generating-custom-field](../generating-custom-field/SKILL.md)
 
 ---
@@ -62,7 +62,7 @@ Ask for or infer:
 - Prefer **CLI-first** for straightforward CRUD; use anonymous Apex when the operation truly needs server-side orchestration.
 
 If metadata is missing, stop and hand off to:
-- [generating-custom-object](../generating-custom-object/SKILL.md) or [generating-custom-field](../generating-custom-field/SKILL.md) to create the missing schema, then [deploying-sf-metadata](../deploying-sf-metadata/SKILL.md) to deploy it before retrying the data operation
+- [generating-custom-object](../generating-custom-object/SKILL.md) or [generating-custom-field](../generating-custom-field/SKILL.md) to create the missing schema, then [deploying-metadata](../deploying-metadata/SKILL.md) to deploy it before retrying the data operation
 
 ---
 
@@ -182,7 +182,7 @@ Cleanup: <exact delete or rollback guidance>
 | create missing custom objects | [generating-custom-object](../generating-custom-object/SKILL.md) | schema must exist before data operations |
 | create missing custom fields | [generating-custom-field](../generating-custom-field/SKILL.md) | field-level schema must exist before data creation |
 | run bulk-sensitive Apex validation | [running-apex-tests](../running-apex-tests/SKILL.md) | test execution and coverage |
-| deploy missing schema first | [deploying-sf-metadata](../deploying-sf-metadata/SKILL.md) | metadata readiness |
+| deploy missing schema first | [deploying-metadata](../deploying-metadata/SKILL.md) | metadata readiness |
 | implement production Apex logic consuming the data | [generating-apex](../generating-apex/SKILL.md) | Apex class / trigger authoring |
 | implement Flow logic consuming the data | [generating-flow](../generating-flow/SKILL.md) | Flow authoring and automation |
 

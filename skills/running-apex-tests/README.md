@@ -72,7 +72,7 @@ sf apex run test --class-names MyClassTest --output-dir test-results --target-or
 | sf-apex | Fix failing Apex code |
 | debugging-apex-logs | Analyze test failures with debug logs |
 | handling-sf-data | Generate 251+ bulk test records |
-| deploying-sf-metadata | Validate before deployment |
+| deploying-metadata | Validate before deployment |
 
 ## Agentic Test-Fix Loop
 
@@ -92,7 +92,3 @@ When enabled, the skill will:
 - sf CLI v2
 - Target Salesforce org
 - Test classes in org or local project
-
-## License
-
-MIT License. See LICENSE file.

@@ -1,18 +1,18 @@
 ---
-name: deploying-sf-metadata
+name: deploying-metadata
 description: "Salesforce DevOps automation using sf CLI v2. TRIGGER when: user deploys metadata, creates/manages scratch orgs or sandboxes, sets up CI/CD pipelines, or troubleshoots deployment errors with sf project deploy. DO NOT TRIGGER when: writing Apex code (use generating-apex), building LWC components (use generating-lwc-components), creating metadata definitions (use generating-custom-object or generating-custom-field), or querying org data (use handling-sf-data)."
-license: LICENSE.txt has complete terms
+license: MIT
 metadata:
   version: "1.1"
 ---
 
-# deploying-sf-metadata: Comprehensive Salesforce DevOps Automation
+# deploying-metadata: Comprehensive Salesforce DevOps Automation
 
 Use this skill when the user needs **deployment orchestration**: dry-run validation, targeted or manifest-based deploys, CI/CD workflow advice, scratch-org management, failure triage, or safe rollout sequencing for Salesforce metadata.
 
 ## When This Skill Owns the Task
 
-Use `deploying-sf-metadata` when the work involves:
+Use `deploying-metadata` when the work involves:
 - `sf project deploy start`, `quick`, `report`, or retrieval workflows
 - release sequencing across objects, permission sets, Apex, and Flows
 - CI/CD gates, test-level selection, or deployment reports

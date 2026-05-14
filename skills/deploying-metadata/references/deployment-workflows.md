@@ -1,7 +1,7 @@
-<!-- Parent: deploying-sf-metadata/SKILL.md -->
+<!-- Parent: deploying-metadata/SKILL.md -->
 # Salesforce Deployment Workflow Examples
 
-This file contains practical examples of common Salesforce deployment scenarios using the deploying-sf-metadata skill.
+This file contains practical examples of common Salesforce deployment scenarios using the deploying-metadata skill.
 
 ## Example 1: Basic Production Deployment
 
@@ -392,4 +392,4 @@ This file contains practical examples of common Salesforce deployment scenarios 
 
 ---
 
-*These examples demonstrate common patterns. The deploying-sf-metadata skill adapts to your specific use case and provides guided assistance.*
+*These examples demonstrate common patterns. The deploying-metadata skill adapts to your specific use case and provides guided assistance.*

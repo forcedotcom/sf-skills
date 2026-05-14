@@ -1,7 +1,7 @@
 ---
 name: building-sf-integrations
 description: "Salesforce integration architecture and runtime plumbing with 120-point scoring. Use this skill to set up Named Credentials, External Credentials, External Services, REST/SOAP callout patterns, Platform Events, and Change Data Capture. TRIGGER when: user sets up Named Credentials, External Services, REST/SOAP callouts, Platform Events, CDC, or touches .namedCredential-meta.xml files. DO NOT TRIGGER when: Connected App/OAuth config (use configuring-connected-apps), Apex-only logic (use generating-apex), or data import/export (use handling-sf-data)."
-license: LICENSE.txt has complete terms
+license: MIT
 metadata:
   version: "1.1"
 ---
@@ -22,7 +22,7 @@ Use `building-sf-integrations` when the work involves:
 Delegate elsewhere when the user is:
 - configuring the OAuth app itself → [configuring-connected-apps](../configuring-connected-apps/SKILL.md)
 - writing Apex-only business logic → [generating-apex](../generating-apex/SKILL.md)
-- deploying metadata → [deploying-sf-metadata](../deploying-sf-metadata/SKILL.md)
+- deploying metadata → [deploying-metadata](../deploying-metadata/SKILL.md)
 - importing/exporting data → [handling-sf-data](../handling-sf-data/SKILL.md)
 
 ---
@@ -75,7 +75,7 @@ Check:
 
 ### 5. Hand off deployment or implementation details
 Use:
-- [deploying-sf-metadata](../deploying-sf-metadata/SKILL.md) for deployment
+- [deploying-metadata](../deploying-metadata/SKILL.md) for deployment
 - [generating-apex](../generating-apex/SKILL.md) for deeper service / retry code
 - [generating-flow](../generating-flow/SKILL.md) for declarative HTTP callout orchestration
 
@@ -126,7 +126,7 @@ Next step: <deploy, register, test, or implement>
 | OAuth app setup | [configuring-connected-apps](../configuring-connected-apps/SKILL.md) | consumer key / cert / app config |
 | advanced callout service code | [generating-apex](../generating-apex/SKILL.md) | Apex implementation |
 | declarative HTTP callout / Flow wrapper | [generating-flow](../generating-flow/SKILL.md) | Flow orchestration |
-| deploy integration metadata | [deploying-sf-metadata](../deploying-sf-metadata/SKILL.md) | validation and rollout |
+| deploy integration metadata | [deploying-metadata](../deploying-metadata/SKILL.md) | validation and rollout |
 | use integration from Agentforce | [developing-agentforce](../developing-agentforce/SKILL.md) | agent action composition |
 
 ---

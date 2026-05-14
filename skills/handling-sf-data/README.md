@@ -55,9 +55,9 @@ Request: "Create 251 test Account records with varying Industries for trigger te
 
 ## Cross-Skill Integration
 
-### With deploying-sf-metadata
+### With deploying-metadata
 ```
-Skill(skill="deploying-sf-metadata")
+Skill(skill="deploying-metadata")
 Request: "Describe Invoice__c in org dev - show all fields"
 ```
 Then use handling-sf-data with accurate field names and permitted values.
@@ -110,7 +110,3 @@ handling-sf-data/
 - sf CLI v2
 - Target Salesforce org (sandbox or production)
 - Claude Code with skill plugins enabled
-
-## License
-
-See the LICENSE file for terms.

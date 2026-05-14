@@ -95,11 +95,5 @@ configuring-connected-apps/
 
 ## Dependencies
 
-- **deploying-sf-metadata**: For deploying apps to orgs
+- **deploying-metadata**: For deploying apps to orgs
 - **sf-metadata**: For creating related metadata (Named Credentials)
-
-## License
-
-MIT License. See [LICENSE](LICENSE) file.
-
-Copyright (c) 2024-2025 Salesforce

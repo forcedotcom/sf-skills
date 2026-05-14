@@ -1,4 +1,4 @@
-<!-- Parent: deploying-sf-metadata/SKILL.md -->
+<!-- Parent: deploying-metadata/SKILL.md -->
 # Deployment Report Template
 
 Standard output format for Salesforce deployment summaries.

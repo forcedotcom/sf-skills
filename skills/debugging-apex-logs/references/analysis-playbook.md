@@ -49,5 +49,5 @@ Prefer fixes that are:
 
 - use `sf-apex` for code fixes
 - use `running-apex-tests` to reproduce and verify
-- use `deploying-sf-metadata` to deploy fixes
+- use `deploying-metadata` to deploy fixes
 - use `handling-sf-data` when the issue depends on missing or malformed test data

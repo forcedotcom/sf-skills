@@ -72,8 +72,3 @@ sf apex tail log --target-org [alias] --color
 - sf CLI v2
 - Target Salesforce org
 - Debug logs enabled for target user
-
-## License
-
-MIT License. See LICENSE file.
-Copyright (c) 2024-2025 Salesforce

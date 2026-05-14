@@ -1,7 +1,7 @@
-<!-- Parent: deploying-sf-metadata/SKILL.md -->
-# Multi-Skill Orchestration: deploying-sf-metadata Perspective
+<!-- Parent: deploying-metadata/SKILL.md -->
+# Multi-Skill Orchestration: deploying-metadata Perspective
 
-This document details how deploying-sf-metadata fits into the multi-skill workflow for Salesforce development.
+This document details how deploying-metadata fits into the multi-skill workflow for Salesforce development.
 
 ---
 
@@ -17,7 +17,7 @@ This document details how deploying-sf-metadata fits into the multi-skill workfl
 │  2. generating-flow                                                         │
 │     └── Create flow definitions (LOCAL files)                               │
 │                                                                             │
-│  3. deploying-sf-metadata  ◀── YOU ARE HERE                                            │
+│  3. deploying-metadata  ◀── YOU ARE HERE                                            │
 │     └── Deploy all metadata (REMOTE)                                        │
 │                                                                             │
 │  4. handling-sf-data                                                                 │
@@ -27,11 +27,11 @@ This document details how deploying-sf-metadata fits into the multi-skill workfl
 
 ---
 
-## Why deploying-sf-metadata Goes Third (Not Last)
+## Why deploying-metadata Goes Third (Not Last)
 
-deploying-sf-metadata is the **bridge** between local files and the org:
+deploying-metadata is the **bridge** between local files and the org:
 
-| Before deploying-sf-metadata | After deploying-sf-metadata |
+| Before deploying-metadata | After deploying-metadata |
 |------------------|-----------------|
 | Metadata exists locally | Metadata exists in org |
 | Flows reference objects | Flows can run |
@@ -41,7 +41,7 @@ deploying-sf-metadata is the **bridge** between local files and the org:
 
 ---
 
-## Deploy Order WITHIN deploying-sf-metadata
+## Deploy Order WITHIN deploying-metadata
 
 When deploying multiple metadata types:
 
@@ -87,12 +87,12 @@ When deploying agents with external API integrations:
 │  3. generating-apex   → Create @InvocableMethod (if needed)                 │
 │  4. generating-flow   → Create Flow wrapper                                 │
 │                                                                             │
-│  5. deploying-sf-metadata         ◀── FIRST DEPLOYMENT                                 │
+│  5. deploying-metadata         ◀── FIRST DEPLOYMENT                                 │
 │     └── Deploy: Objects, Fields, Permission Sets, Apex, Flows              │
 │                                                                             │
 │  6. developing-agentforce → Create agent with flow:// target               │
 │                                                                             │
-│  7. deploying-sf-metadata         ◀── SECOND DEPLOYMENT (Agent Publish)                │
+│  7. deploying-metadata         ◀── SECOND DEPLOYMENT (Agent Publish)                │
 │     └── sf agent publish authoring-bundle --api-name [AgentName]           │
 │                                                                             │
 │  8. handling-sf-data           → Create test data                                    │
@@ -165,12 +165,12 @@ sf agent activate --api-name AgentName --version N --target-org alias --json
 
 ## Invocation Patterns
 
-| From Skill | To deploying-sf-metadata | When |
+| From Skill | To deploying-metadata | When |
 |------------|--------------|------|
-| generating-custom-object | → deploying-sf-metadata | "Deploy objects to [org]" |
-| generating-flow | → deploying-sf-metadata | "Deploy flow with --dry-run" |
-| generating-apex | → deploying-sf-metadata | "Deploy classes with RunLocalTests" |
-| developing-agentforce | → deploying-sf-metadata | "Deploy and publish agent" |
+| generating-custom-object | → deploying-metadata | "Deploy objects to [org]" |
+| generating-flow | → deploying-metadata | "Deploy flow with --dry-run" |
+| generating-apex | → deploying-metadata | "Deploy classes with RunLocalTests" |
+| developing-agentforce | → deploying-metadata | "Deploy and publish agent" |
 
 ---
 
@@ -178,6 +178,6 @@ sf agent activate --api-name AgentName --version N --target-org alias --json
 
 | Topic | Location |
 |-------|----------|
-| Deployment workflows | `deploying-sf-metadata/references/deployment-workflows.md` |
-| Agent deployment guide | `deploying-sf-metadata/references/agent-deployment-guide.md` |
-| Deploy script template | `deploying-sf-metadata/references/deploy.sh` |
+| Deployment workflows | `deploying-metadata/references/deployment-workflows.md` |
+| Agent deployment guide | `deploying-metadata/references/agent-deployment-guide.md` |
+| Deploy script template | `deploying-metadata/references/deploy.sh` |

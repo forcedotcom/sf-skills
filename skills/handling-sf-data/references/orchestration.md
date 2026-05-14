@@ -17,7 +17,7 @@ This document details how handling-sf-data fits into the multi-skill workflow fo
 │  2. sf-flow                                                                 │
 │     └── Create flow definitions (LOCAL files)                               │
 │                                                                             │
-│  3. deploying-sf-metadata                                                               │
+│  3. deploying-metadata                                                               │
 │     └── Deploy all metadata (REMOTE)                                        │
 │                                                                             │
 │  4. handling-sf-data  ◀── YOU ARE HERE (LAST!)                                      │
@@ -38,7 +38,7 @@ This document details how handling-sf-data fits into the multi-skill workflow fo
 ```
 ERROR: "SObject type 'Quote__c' is not supported"
 CAUSE: Quote__c object was never deployed to the org
-FIX:   Run deploying-sf-metadata BEFORE handling-sf-data
+FIX:   Run deploying-metadata BEFORE handling-sf-data
 ```
 
 ---
@@ -47,7 +47,7 @@ FIX:   Run deploying-sf-metadata BEFORE handling-sf-data
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| `SObject type 'X' not supported` | Object not deployed | Deploy via deploying-sf-metadata first |
+| `SObject type 'X' not supported` | Object not deployed | Deploy via deploying-metadata first |
 | `INVALID_FIELD: No such column 'Field__c'` | Field not deployed OR FLS | Deploy field + Permission Set |
 | `REQUIRED_FIELD_MISSING` | Validation rule requires field | Include all required fields |
 | `FIELD_CUSTOM_VALIDATION_EXCEPTION` | Validation rule triggered | Use valid test data values |
@@ -61,7 +61,7 @@ When testing triggers or flows, always create test data AFTER deployment:
 ```
 1. sf-apex   → Create trigger handler class
 2. sf-flow   → Create record-triggered flow
-3. deploying-sf-metadata → Deploy trigger + flow + objects
+3. deploying-metadata → Deploy trigger + flow + objects
 4. handling-sf-data   ◀── CREATE TEST DATA NOW
               └── Triggers and flows will fire!
 ```
@@ -104,7 +104,7 @@ sf apex run --file test-factory.apex --target-org alias
 | From handling-sf-data | To Skill | When |
 |--------------|----------|------|
 | handling-sf-data | → sf-metadata | "Describe Invoice__c" (discover object structure) |
-| handling-sf-data | → deploying-sf-metadata | "Redeploy field after adding validation rule" |
+| handling-sf-data | → deploying-metadata | "Redeploy field after adding validation rule" |
 
 ---
 
@@ -132,7 +132,7 @@ Test Data Factory classes work with handling-sf-data:
 ```
 sf-apex:  Creates TestDataFactory_Account.cls
           ↓
-deploying-sf-metadata: Deploys factory class
+deploying-metadata: Deploys factory class
           ↓
 handling-sf-data:  Calls factory via Anonymous Apex
           ↓
@@ -153,8 +153,8 @@ After testing, clean up in reverse order:
 
 ```
 1. handling-sf-data   → Delete test records
-2. deploying-sf-metadata → Deactivate flows (if needed)
-3. deploying-sf-metadata → Remove test metadata (if needed)
+2. deploying-metadata → Deactivate flows (if needed)
+3. deploying-metadata → Remove test metadata (if needed)
 ```
 
 **Cleanup command:**

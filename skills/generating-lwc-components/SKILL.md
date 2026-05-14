@@ -5,7 +5,7 @@ description: >
   TRIGGER when: user creates/edits LWC components, touches lwc/**/*.js, .html,
   .css, .js-meta.xml files, or asks about wire service, SLDS, or Jest LWC tests.
   DO NOT TRIGGER when: Apex classes (use generating-apex), Aura components, or Visualforce.
-license: LICENSE.txt has complete terms
+license: MIT
 metadata:
   version: "1.1"
 ---
@@ -26,7 +26,7 @@ Use `generating-lwc-components` when the work involves:
 Delegate elsewhere when the user is:
 - writing Apex controllers or business logic first → [generating-apex](../generating-apex/SKILL.md)
 - building Flow XML rather than an LWC screen component → [generating-flow](../generating-flow/SKILL.md)
-- deploying metadata → [deploying-sf-metadata](../deploying-sf-metadata/SKILL.md)
+- deploying metadata → [deploying-metadata](../deploying-metadata/SKILL.md)
 
 ---
 
@@ -84,7 +84,7 @@ Check:
 ### 5. Hand off supporting backend or deploy work
 Use:
 - [generating-apex](../generating-apex/SKILL.md) for controllers / services
-- [deploying-sf-metadata](../deploying-sf-metadata/SKILL.md) for deployment
+- [deploying-metadata](../deploying-metadata/SKILL.md) for deployment
 - [running-apex-tests](../running-apex-tests/SKILL.md) only for Apex-side test loops, not Jest
 
 ---
@@ -135,8 +135,8 @@ Local Dev commands install just-in-time on first run. They are long-running proc
 |---|---|---|
 | Apex controller or service | [generating-apex](../generating-apex/SKILL.md) | backend logic |
 | embed in Flow screens | [generating-flow](../generating-flow/SKILL.md) | declarative orchestration |
-| deploy component bundle | [deploying-sf-metadata](../deploying-sf-metadata/SKILL.md) | org rollout |
-| create supporting metadata (message channels, objects) | [deploying-sf-metadata](../deploying-sf-metadata/SKILL.md) | metadata deployment |
+| deploy component bundle | [deploying-metadata](../deploying-metadata/SKILL.md) | org rollout |
+| create supporting metadata (message channels, objects) | [deploying-metadata](../deploying-metadata/SKILL.md) | metadata deployment |
 
 ---
 

@@ -83,7 +83,7 @@ Automate credential configuration without manual UI steps:
 | configuring-connected-apps | Create OAuth Connected App for Named Credential |
 | generating-apex | Custom callout services beyond templates |
 | generating-flow | HTTP Callout Flow for Agentforce |
-| deploying-sf-metadata | Deploy credentials and callout code |
+| deploying-metadata | Deploy credentials and callout code |
 | sf-ai-agentscript | Agent actions using External Services |
 
 ## Documentation
@@ -93,7 +93,3 @@ Automate credential configuration without manual UI steps:
 - [references/named-credentials-guide.md](references/named-credentials-guide.md) - Template reference
 - [references/callout-patterns.md](references/callout-patterns.md) - REST/SOAP patterns
 - [references/event-patterns.md](references/event-patterns.md) - Platform Events & CDC
-
-## License
-
-See [LICENSE](LICENSE) for complete terms.

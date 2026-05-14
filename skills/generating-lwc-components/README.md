@@ -78,7 +78,7 @@ S → Security     │ Enforce permissions, FLS, and data protection
 | generating-apex | Create @AuraEnabled controllers |
 | generating-flow | Embed in Flow screens |
 | generating-metadata | Create Lightning Message Channels |
-| deploying-sf-metadata | Deploy component to org |
+| deploying-metadata | Deploy component to org |
 
 ## Spring '26 Features (API 66.0)
 

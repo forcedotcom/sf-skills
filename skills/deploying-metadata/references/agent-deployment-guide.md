@@ -1,4 +1,4 @@
-<!-- Parent: deploying-sf-metadata/SKILL.md -->
+<!-- Parent: deploying-metadata/SKILL.md -->
 # Agentforce Agent Deployment Guide
 
 > Complete DevOps guide for deploying Agentforce agents using SF CLI
@@ -13,7 +13,7 @@ This guide covers the complete deployment lifecycle for Agentforce agents, inclu
 
 **Related Skills:**
 - `developing-agentforce` - Agent authoring, publishing, Agent Builder, and Prompt Builder
-- `deploying-sf-metadata` - This skill - deployment orchestration
+- `deploying-metadata` - This skill - deployment orchestration
 
 ---
 
@@ -570,10 +570,10 @@ sf agent activate --api-name My_Agent --target-org myorg
 
 | From Skill | To Skill | Purpose |
 |------------|----------|---------|
-| developing-agentforce | deploying-sf-metadata | Publish and activate agents |
-| generating-apex | deploying-sf-metadata | Deploy Apex before agent |
-| generating-flow | deploying-sf-metadata | Deploy Flows before agent |
-| building-sf-integrations | deploying-sf-metadata | Deploy Named Credentials for external APIs |
+| developing-agentforce | deploying-metadata | Publish and activate agents |
+| generating-apex | deploying-metadata | Deploy Apex before agent |
+| generating-flow | deploying-metadata | Deploy Flows before agent |
+| building-sf-integrations | deploying-metadata | Deploy Named Credentials for external APIs |
 
 ### Integration Pattern
 
@@ -581,7 +581,7 @@ sf agent activate --api-name My_Agent --target-org myorg
 # 1. generating-apex creates InvocableMethod class
 # 2. generating-flow creates wrapper Flow
 # 3. developing-agentforce creates agent with flow:// action
-# 4. deploying-sf-metadata orchestrates deployment in correct order
+# 4. deploying-metadata orchestrates deployment in correct order
 ```
 
 ---

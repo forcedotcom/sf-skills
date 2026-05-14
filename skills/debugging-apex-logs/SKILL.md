@@ -1,7 +1,7 @@
 ---
 name: debugging-apex-logs
 description: "Salesforce debug log analysis and troubleshooting with 100-point scoring. TRIGGER when: user analyzes debug logs, hits governor limits, reads stack traces, or touches .log files from Salesforce orgs. DO NOT TRIGGER when: running Apex tests (use running-apex-tests), generating or fixing Apex code (use generating-apex), or Agentforce session tracing (use observing-agentforce)."
-license: LICENSE.txt has complete terms
+license: MIT
 metadata:
   version: "1.1"
 ---
@@ -137,7 +137,7 @@ Verify: <test or rerun step>
 |---|---|---|
 | Implement Apex fix | [generating-apex](../generating-apex/SKILL.md) | code change generation / review |
 | Reproduce via tests | [running-apex-tests](../running-apex-tests/SKILL.md) | test execution and coverage loop |
-| Deploy fix | [deploying-sf-metadata](../deploying-sf-metadata/SKILL.md) | deployment orchestration |
+| Deploy fix | [deploying-metadata](../deploying-metadata/SKILL.md) | deployment orchestration |
 | Create debugging data | [handling-sf-data](../handling-sf-data/SKILL.md) | targeted seed / repro data |
 
 ---

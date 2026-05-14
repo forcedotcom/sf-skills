@@ -1,7 +1,7 @@
 ---
 name: configuring-connected-apps
-description: "Salesforce Connected Apps and External Client Apps OAuth configuration with 120-point scoring. Use this skill to configure OAuth flows, JWT bearer auth, Connected Apps, and External Client Apps in Salesforce. TRIGGER when: user configures OAuth flows, JWT bearer auth, Connected Apps, ECAs, or touches .connectedApp-meta.xml / .eca-meta.xml files. DO NOT TRIGGER when: configuring Named Credentials for callouts (use building-sf-integrations), reviewing permission policies (use deploying-sf-metadata), or writing Apex token-handling code (use generating-apex)."
-license: LICENSE.txt has complete terms
+description: "Salesforce Connected Apps and External Client Apps OAuth configuration with 120-point scoring. Use this skill to configure OAuth flows, JWT bearer auth, Connected Apps, and External Client Apps in Salesforce. TRIGGER when: user configures OAuth flows, JWT bearer auth, Connected Apps, ECAs, or touches .connectedApp-meta.xml / .eca-meta.xml files. DO NOT TRIGGER when: configuring Named Credentials for callouts (use building-sf-integrations), reviewing permission policies (use deploying-metadata), or writing Apex token-handling code (use generating-apex)."
+license: MIT
 allowed-tools: Bash Read Write Edit Glob Grep WebFetch AskUserQuestion TodoWrite
 metadata:
   version: "1.1"
@@ -22,7 +22,7 @@ Use this skill when the user needs **OAuth app configuration** in Salesforce: Co
 
 **Out of scope — delegate elsewhere:**
 - Configuring Named Credentials or runtime callouts → [building-sf-integrations](../building-sf-integrations/SKILL.md)
-- Deploying metadata to orgs → [deploying-sf-metadata](../deploying-sf-metadata/SKILL.md)
+- Deploying metadata to orgs → [deploying-metadata](../deploying-metadata/SKILL.md)
 - Writing Apex token-handling code → [generating-apex](../generating-apex/SKILL.md)
 
 ---
@@ -190,7 +190,7 @@ Score: <x>/120
 | Need | Delegate to | Reason |
 |---|---|---|
 | Named Credential / callout runtime config | [building-sf-integrations](../building-sf-integrations/SKILL.md) | runtime integration setup |
-| Deploy app metadata | [deploying-sf-metadata](../deploying-sf-metadata/SKILL.md) | org validation and deployment |
+| Deploy app metadata | [deploying-metadata](../deploying-metadata/SKILL.md) | org validation and deployment |
 | Apex token or refresh handling | [generating-apex](../generating-apex/SKILL.md) | implementation logic |
 
 ---

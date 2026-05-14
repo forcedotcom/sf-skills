@@ -1,7 +1,7 @@
 ---
 name: running-apex-tests
 description: "Apex test execution, coverage analysis, and test-fix loops with 120-point scoring. Use when the user needs to run Apex tests, check code coverage, fix failing tests, or work with *Test.cls / *_Test.cls files. TRIGGER when: user runs Apex tests, checks code coverage, fixes failing tests, or touches *Test.cls / *_Test.cls files. DO NOT TRIGGER when: writing Apex production code (use generating-apex), Agentforce agent testing (use sf-ai-agentforce-testing), or Jest/LWC tests (use generating-lwc-components)."
-license: LICENSE.txt has complete terms
+license: MIT
 metadata:
   version: "1.1"
 ---
@@ -123,7 +123,7 @@ Next step: <fix class, add test, rerun scope, or widen regression>
 |------|-------------|--------|
 | Fix production code or author test classes | `generating-apex` skill | Code generation and repair |
 | Create bulk / edge-case test data | [handling-sf-data](../handling-sf-data/SKILL.md) | Realistic test datasets |
-| Deploy updated tests to org | [deploying-sf-metadata](../deploying-sf-metadata/SKILL.md) | Deployment workflows |
+| Deploy updated tests to org | [deploying-metadata](../deploying-metadata/SKILL.md) | Deployment workflows |
 | Inspect detailed runtime logs | [debugging-apex-logs](../debugging-apex-logs/SKILL.md) | Deeper failure analysis |
 
 ---
