@@ -1,6 +1,8 @@
 ---
 name: implementing-ui-bundle-file-upload
 description: "MUST activate when the project contains a uiBundles/*/src/ directory and the task involves uploading, attaching, or dropping files. Use this skill when adding file upload functionality to a UI bundle app. Provides progress tracking and Salesforce ContentVersion integration. This feature provides programmatic APIs ONLY — build custom UI using the upload() API. ALWAYS use this instead of building file upload from scratch with FormData or XHR."
+metadata:
+  version: "1.0"
 ---
 
 # File Upload API (workflow)

@@ -4,7 +4,7 @@ description: "Build, modify, debug, and deploy agents with Agentforce Agent Scri
 license: Apache-2.0
 compatibility: "Requires Agentforce license, API v66.0+, Einstein Agent User"
 metadata:
-  version: "0.5.1"
+  version: "1.0"
   last_updated: "2026-04-08"
 ---
 

@@ -1,6 +1,8 @@
 ---
 name: generating-custom-lightning-type
 description: "Use this skill when users need to create Custom Lightning Types (CLTs) for Einstein Agent actions or structured input/output schemas. Trigger when users mention CLT, Custom Lightning Types, JSON schemas for agents, type definitions, lightning__objectType, or editor/renderer configurations. This is complex - always use this skill for CLT work."
+metadata:
+  version: "1.0"
 ---
 
 ## When to Use This Skill

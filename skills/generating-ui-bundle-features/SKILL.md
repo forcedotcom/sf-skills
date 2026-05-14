@@ -1,6 +1,8 @@
 ---
 name: generating-ui-bundle-features
 description: "MUST activate when the project contains a uiBundles/*/src/ directory and the user wants to add authentication or search to their app. Use this skill when adding authentication or search to a UI bundle app. Only covers two features: authentication (login, logout, protected routes, session management) and search (global search across pages and content). Always use this skill for these two features instead of building from scratch."
+metadata:
+  version: "1.0"
 ---
 
 # UI Bundle Features

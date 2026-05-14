@@ -1,6 +1,8 @@
 ---
 name: building-ui-bundle-frontend
 description: "MUST activate before editing ANY file under uiBundles/*/src/ for visual or UI changes to an EXISTING app — pages, components, sections, layout, styling, colors, fonts, navigation, animations, or any look-and-feel change. Use this skill when modifying pages, components, layout, styling, or navigation in an existing UI bundle app. Activate when the project contains appLayout.tsx, routes.tsx, src/pages/, src/components/, or global.css. This skill contains critical project-specific conventions (appLayout.tsx shell, shadcn/ui components, Tailwind CSS, Salesforce base-path routing, module restrictions) that override general knowledge. Without this skill, generated code will use wrong imports, break routing, or ignore project structure. Do NOT use when creating a new app from scratch (use building-ui-bundle-app instead)."
+metadata:
+  version: "1.0"
 ---
 
 # UI Bundle UI
