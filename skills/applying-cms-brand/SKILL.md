@@ -30,7 +30,7 @@ Universal skill for searching, extracting, and applying CMS brand guidelines to 
 
 ## Before You Start
 
-**CRITICAL: You must retrieve brand instructions BEFORE generating or modifying any content.**
+**CRITICAL: You must retrieve brand instructions BEFORE generating or modifying any brand.**
 
 When a user requests branded content:
 
