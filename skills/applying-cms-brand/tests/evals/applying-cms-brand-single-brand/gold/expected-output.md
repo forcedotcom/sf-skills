@@ -40,4 +40,3 @@ Your success drives everything we do. We're here to support you at every step."
 - [ ] Output matches brand tone (warm, encouraging, empowering)
 - [ ] Content rules are respected (active voice, short sentences, "you" addressing)
 - [ ] Guardrails are not violated (no competitor names, no performance guarantees)
-- [ ] Agent summarized which guidelines were applied

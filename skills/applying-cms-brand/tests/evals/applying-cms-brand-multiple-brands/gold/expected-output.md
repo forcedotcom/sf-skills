@@ -44,4 +44,3 @@ Enterprise-grade reliability. Startup-speed agility. Built for teams that move f
 - [ ] Output matches brand voice (bold, authoritative, forward-thinking)
 - [ ] Output matches brand tone (confident, aspirational, direct)
 - [ ] Guardrails are respected (no passive headlines, no "simple"/"easy", no clichés)
-- [ ] Agent summarized which guidelines were applied
