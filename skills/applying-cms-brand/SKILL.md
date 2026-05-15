@@ -49,8 +49,6 @@ CMS Branding Progress:
 - [ ] Step 1: Determine if brand is already identified or needs search
 - [ ] Step 2: Search for brands (if needed) and present options to user
 - [ ] Step 3: Extract brand instructions for the selected brand
-- [ ] Step 4: Apply brand guidelines to generated content
-- [ ] Step 5: Confirm branding was applied correctly
 ```
 
 ## Step 1: Determine Brand Context
@@ -149,57 +147,6 @@ The extracted brand instructions typically include:
 | Content Rules | Dos and don'ts for content generation |
 | Style Guidelines | Typography, color, spacing preferences |
 | Guardrails | Hard restrictions on language, topics, or claims |
-
-## Step 4: Apply Brand Guidelines
-
-After extracting brand instructions, apply them to ALL content you generate:
-
-### Text Content
-- Match the specified brand voice and tone
-- Use approved terminology and key messages
-- Respect content guardrails (forbidden words, topics, claims)
-- Follow formatting guidelines (sentence length, paragraph structure)
-
-### UI Components (React/LWC)
-- Apply brand colors using CSS custom properties or design tokens
-- Use specified typography (font family, sizes, weights)
-- Follow spacing and layout guidelines
-- Match the visual tone (minimal, bold, playful, etc.)
-
-### Code Generation
-- Apply brand colors as variables/tokens at the top of stylesheets
-- Use semantic naming that reflects brand terminology
-- Include comments referencing which brand guideline drove a decision (only when non-obvious)
-
-### Application Pattern
-
-```
-When generating content with branding:
-
-1. Read the brand instructions from Step 3
-2. Identify applicable guidelines for the content type
-3. Generate content that adheres to ALL applicable guidelines
-4. Self-check: Does this content match the brand voice? Tone? Rules?
-5. If any guideline is violated, regenerate the affected content
-```
-
-## Step 5: Confirm Application
-
-After applying branding:
-
-1. Summarize which brand guidelines were applied
-2. Highlight any guidelines that couldn't be applied (and why)
-3. Ask the user if the branding feels right
-
-```
-I applied the "[Brand Name]" brand guidelines:
-- Voice: [description]
-- Tone: [description]
-- Colors: [applied where]
-- [Other guidelines applied]
-
-Does the branding look correct, or would you like adjustments?
-```
 
 ## Error Handling
 
