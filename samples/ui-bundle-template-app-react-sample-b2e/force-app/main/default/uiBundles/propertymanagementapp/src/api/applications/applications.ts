@@ -1,7 +1,6 @@
 import GET_APPLICATIONS from "./query/getApplications.graphql?raw";
 import UPDATE_APPLICATION_STATUS from "./query/updateApplicationStatus.graphql?raw";
 import APPLICATION_FOR_APPROVAL_QUERY from "./query/applicationForApproval.graphql?raw";
-import USER_BY_CONTACT_QUERY from "./query/userByContact.graphql?raw";
 import EXISTING_TENANT_QUERY from "./query/existingTenant.graphql?raw";
 import { createRecord } from "@salesforce/ui-bundle/api";
 import type {
@@ -11,8 +10,6 @@ import type {
 	UpdateApplicationStatusMutationVariables,
 	ApplicationForApprovalQuery,
 	ApplicationForApprovalQueryVariables,
-	UserByContactQuery,
-	UserByContactQueryVariables,
 	ExistingTenantQuery,
 	ExistingTenantQueryVariables,
 } from "../graphql-operations-types.js";
@@ -81,20 +78,11 @@ async function ensureTenantForApprovedApplication(applicationId: string): Promis
 		throw new Error("Application record not found.");
 	}
 
-	const contactId = applicationNode.User__c?.value ?? null;
+	const userId = applicationNode.User__c?.value ?? null;
 	const propertyId = applicationNode.Property__c?.value ?? null;
 	const startDate = applicationNode.Start_Date__c?.value ?? null;
 
-	if (!contactId || !propertyId) {
-		return;
-	}
-
-	const userData = await executeGraphQL<UserByContactQuery, UserByContactQueryVariables>(
-		USER_BY_CONTACT_QUERY,
-		{ contactId },
-	);
-	const userId = userData.uiapi?.query?.User?.edges?.[0]?.node?.Id ?? null;
-	if (!userId) {
+	if (!userId || !propertyId) {
 		return;
 	}
 

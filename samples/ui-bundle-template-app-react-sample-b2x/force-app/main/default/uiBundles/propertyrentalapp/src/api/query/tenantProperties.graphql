@@ -1,0 +1,24 @@
+query TenantProperties($userId: ID!) {
+	uiapi {
+		query {
+			Tenant__c(where: { User__c: { eq: $userId } }, first: 50) {
+				edges {
+					node {
+						Id
+						Property__c @optional {
+							value
+						}
+						Property__r @optional {
+							Name @optional {
+								value
+							}
+							Address__c @optional {
+								value
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

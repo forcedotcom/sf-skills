@@ -17,7 +17,7 @@ export interface ApplicationRecordInput {
 
 export async function createApplicationRecord(
 	input: ApplicationRecordInput,
-): Promise<{ id: string }> {
+): Promise<{ id: string; name: string | null }> {
 	const fields: Record<string, unknown> = {};
 
 	if (input.Property__c != null && input.Property__c !== "") {
@@ -43,12 +43,11 @@ export async function createApplicationRecord(
 		string,
 		unknown
 	>;
-	const id =
-		typeof result.id === "string"
-			? result.id
-			: (result.fields as Record<string, { value?: string }> | undefined)?.Id?.value;
+	const fields_result = result.fields as Record<string, { value?: string }> | undefined;
+	const id = typeof result.id === "string" ? result.id : fields_result?.Id?.value;
 	if (!id) {
 		throw new Error("Create succeeded but no record id returned");
 	}
-	return { id };
+	const name = fields_result?.Name?.value ?? null;
+	return { id, name };
 }

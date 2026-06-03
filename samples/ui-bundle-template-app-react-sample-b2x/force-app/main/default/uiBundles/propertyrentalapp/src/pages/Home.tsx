@@ -13,7 +13,7 @@ import {
 	extractAmenities,
 	extractAddress,
 } from "@/api/properties/propertyNodeUtils";
-import { useCachedAsyncData } from "@/features/object-search/hooks/useCachedAsyncData";
+import { useAsyncData } from "@/hooks/useAsyncData";
 import PropertyListingCard, {
 	PropertyListingCardSkeleton,
 } from "@/components/properties/PropertyListingCard";
@@ -102,10 +102,9 @@ export default function Home() {
 		text: string;
 	} | null>(null);
 
-	const { data: searchResult, loading: featuredLoading } = useCachedAsyncData<PropertySearchResult>(
+	const { data: searchResult, loading: featuredLoading } = useAsyncData<PropertySearchResult>(
 		() => searchProperties({ first: FEATURED_PAGE_SIZE }),
 		[],
-		{ key: "featuredProperties" },
 	);
 
 	const featuredResults = useMemo(

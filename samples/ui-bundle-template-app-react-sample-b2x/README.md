@@ -42,7 +42,7 @@ force-app/main/default/
 ├── layouts/                # Page layouts for all 17 custom objects
 ├── networks/               # Experience Cloud network metadata
 ├── objects/                # 17 Custom Objects (Property, Tenant, Lease, etc.)
-├── permissionsets/         # Access: Property_Management (Admin) & Tenant (Scoped)
+├── permissionsets/         # Property_Rental_Guest_User_Access (guest browsing)
 ├── sites/                  # Salesforce Sites configuration
 ├── triggers/               # Apex Triggers: MaintenanceRequest & Tenant
 └── uiBundles/
@@ -109,6 +109,8 @@ npm run setup -- --target-org <alias> --yes
 | `--skip-data`             | Skip data preparation and import                                                     |
 | `--skip-graphql`          | Skip GraphQL schema fetch and codegen                                                |
 | `--skip-ui-bundle-build`  | Skip `npm install` and UI Bundle build                                               |
+| `--skip-role`             | Skip role assignment to current user                                                 |
+| `--skip-self-reg`         | Skip Experience Cloud self-registration configuration                                |
 | `--skip-dev`              | Do not launch the dev server at the end                                              |
 | `--permset-name <name>`   | Assign only a specific permission set (repeatable). Default: all sets in the project |
 | `--ui-bundle-name <name>` | UI Bundle folder name under `uiBundles/` (default: auto-detected)                    |
@@ -119,6 +121,58 @@ For a full list of options:
 ```bash
 npm run setup -- --help
 ```
+
+### Setup Configuration (`scripts/org-setup.config.json`)
+
+The `npm run setup` script reads `scripts/org-setup.config.json` to control which steps run and how they behave. Each top-level section is **optional** — if a section is absent, the corresponding step is hidden from the interactive picker.
+
+```json
+{
+  "permsetAssignments": {
+    "assignments": {
+      "Property_Management_Access": { "assignee": "currentUser" },
+      "Tenant_Maintenance_Access": { "assignee": "skip" },
+      "Property_Rental_Guest_User_Access": {
+        "assignee": "guestUser",
+        "siteName": "propertyrentalapp"
+      }
+    }
+  },
+  "role": {
+    "assignee": "currentUser",
+    "roleName": "Admin"
+  },
+  "selfRegistration": {
+    "siteName": "propertyrentalapp",
+    "selfRegProfile": "Property Rental Prospect Profile",
+    "accountName": "Property Rental Self-Registration"
+  }
+}
+```
+
+#### `permsetAssignments.assignments`
+
+Each key is a permission set API name. The `assignee` value controls who it is assigned to:
+
+| Value            | Behavior                                                                          |
+| ---------------- | --------------------------------------------------------------------------------- |
+| `"currentUser"`  | Assigns to the user running the script (resolved via `sf org display`)            |
+| `"skip"`         | Explicitly skips this permission set                                              |
+| `"guestUser"`    | Auto-resolves the site's guest user (requires `siteName` field on the same entry) |
+| `"user@org.com"` | Assigns to a specific user by username                                            |
+
+#### `role`
+
+Assigns a role to the current user — a prerequisite for Experience Cloud self-registration. Only `"currentUser"` is supported as the `assignee`.
+
+#### `selfRegistration`
+
+Enables Experience Cloud self-registration by:
+
+1. Setting `<selfRegistration>true</selfRegistration>` in the network metadata
+2. Adding the specified profile to network member groups
+3. Creating an Account record for self-registered users
+4. Creating the `NetworkSelfRegistration` record
 
 > **After the automated setup completes**, proceed to [Org Configuration](#org-configuration) for the manual steps that cannot be automated via CLI (profile cloning, site member configuration, guest user setup, and publishing the Experience Cloud site).
 
@@ -215,12 +269,13 @@ sf project deploy start --source-dir force-app/main/default/uiBundles --target-o
 
 ### 4. Assign Permission Sets
 
-Two permission sets are included in this project:
+Three permission sets are included in this project:
 
-| Permission Set               | Purpose                                                                                                 | Assign To                       |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| `Property_Management_Access` | Full CRUD access to all custom objects. Intended for property managers and admin users.                 | Internal users managing the app |
-| `Tenant_Maintenance_Access`  | Scoped read/write access for tenants. Allows creating and updating their own maintenance requests only. | Tenant community users          |
+| Permission Set                      | Purpose                                                                                                       | Assign To                       |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `Property_Management_Access`        | Full CRUD access to all custom objects. Intended for property managers and admin users.                       | Internal users managing the app |
+| `Tenant_Maintenance_Access`         | Scoped read/write access for tenants. Allows creating and updating their own maintenance requests only.       | Tenant community users          |
+| `Property_Rental_Guest_User_Access` | Read-only access to property objects for unauthenticated browsing. Includes Apex class access for auth flows. | Site guest user                 |
 
 Assign permission sets using the CLI:
 
@@ -308,9 +363,9 @@ Community users require a profile that is based on one of the standard community
 #### 2a. Clone the Base Profile
 
 1. Go to **Setup > Users > Profiles**.
-2. Locate either **Customer Community User** or **Customer Community Plus User**.
-   - Choose **Customer Community Plus User** if you need ownership-based record-level sharing (recommended).
-3. Click **Clone** next to the profile. Give it a descriptive name such as `Property Rental Tenant`.
+2. Locate either **Customer Community User** or **Customer Community Login User**.
+   - Choose **Customer Community Plus User** if you need ownership-based record-level sharing.
+3. Click **Clone** next to the profile. Give it a descriptive name such as `Property Rental Prospect Profile`.
 4. Click **Save**.
 
 #### 2b. Edit the Cloned Profile
@@ -398,7 +453,7 @@ After deploying the Experience Cloud site metadata, configure its membership and
 #### Members
 
 1. In the left navigation, click **Members**.
-2. Under **Select Profiles**, add the cloned community profile (`Property Rental Tenant`) to the **Selected Profiles** list.
+2. Under **Select Profiles**, add the cloned community profile (`Property Rental Prospect Profile`) to the **Selected Profiles** list.
 3. Click **Save**.
 
 #### Login & Registration
@@ -406,7 +461,7 @@ After deploying the Experience Cloud site metadata, configure its membership and
 1. In the left navigation, click **Login & Registration**.
 2. Check **Allow customers and partners to self-register**.
 3. Under **Registration**, set:
-   - **Profile**: Select your cloned community profile (`Property Rental Tenant`).
+   - **Profile**: Select your cloned community profile (`Property Rental Prospect Profile`).
    - **Account**: Select or create an account record to associate self-registered users with (e.g., a generic "Portal Account").
 4. Click **Save**.
 
@@ -457,31 +512,26 @@ Add the following classes. These are required for the self-registration and logi
 
 ### Step 5: Create Criteria-Based Sharing Rules for Guest Access
 
-By default, Salesforce does not expose any records to guest users. You must create **criteria-based sharing rules** to make available properties and listings visible to unauthenticated site visitors.
+By default, Salesforce does not expose any records to guest users. A **criteria-based sharing rule** is included in the deployed metadata to make properties visible to unauthenticated site visitors.
 
 > **Organization-Wide Defaults (OWD):** Criteria-based sharing rules for guest users only work correctly when the object's OWD is set to **Public Read Only** or **Private**. Verify your OWD settings at **Setup > Sharing Settings** before proceeding.
 
-#### Create a Sharing Rule for Properties
+#### Included Sharing Rule: Properties
+
+The deployed metadata includes a sharing rule for `Property__c` (`Property_Rental_App_Guest_User_Access`) that grants **Read** access to the site's guest user for all properties with a non-empty Name field. This is deployed automatically with `sf project deploy start`.
+
+#### Optional: Create Additional Sharing Rules
+
+If you need to expose additional objects (e.g., Property Listings) to guest users, create sharing rules manually:
 
 1. Go to **Setup > Sharing Settings**.
-2. Scroll to the **Property Sharing Rules** section and click **New**.
+2. Scroll to the relevant object's sharing rules section and click **New**.
 3. Configure the rule:
-   - **Label**: `Available Properties for Guest Users`
    - **Rule Type**: Select **Guest user access, based on criteria**
-   - **Criteria**: `Status Equals Available` (adjust the field and value to match your data model)
-   - **Share with**: Select **Guests of the Property Rental App site** (the guest user group for your Experience Cloud site)
+   - **Criteria**: Match records you want to expose (e.g., `Status Equals Active`)
+   - **Share with**: Select **Guests of the Property Rental App site**
    - **Access Level**: `Read Only`
 4. Click **Save**.
-
-#### Create a Sharing Rule for Property Listings
-
-Repeat the same steps in the **Property Listing Sharing Rules** section:
-
-- **Label**: `Available Property Listings for Guest Users`
-- **Rule Type**: `Guest user access, based on criteria`
-- **Criteria**: Match listings you want to expose (e.g., `Status Equals Active`)
-- **Share with**: `Guests of the Property Rental App site`
-- **Access Level**: `Read Only`
 
 > **Note:** The "Guests of [site name]" option only appears in the sharing rule target list after the Experience Cloud site has been created and saved. If you do not see it, confirm the site metadata has been deployed and the site exists in the org.
 

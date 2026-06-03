@@ -5,7 +5,7 @@ import {
 	fetchDistinctMaintenanceWorkerType,
 	type MaintenanceWorkerSearchNode,
 } from "../api/maintenanceWorkers/maintenanceWorkerSearchService";
-import { useCachedAsyncData } from "../features/object-search/hooks/useCachedAsyncData";
+import { useAsyncData } from "../hooks/useAsyncData";
 import {
 	useObjectSearchParams,
 	type UseObjectSearchParamsReturn,
@@ -67,18 +67,14 @@ const SORT_CONFIGS: SortFieldConfig<string>[] = [
 export default function MaintenanceWorkerSearch() {
 	const [selectedWorker, setSelectedWorker] = useState<MaintenanceWorkerSearchNode | null>(null);
 
-	const { data: typeOptions } = useCachedAsyncData(fetchDistinctMaintenanceWorkerType, [], {
-		key: "distinctMaintenanceWorkerType",
-		ttl: 30_000,
-	});
+	const { data: typeOptions } = useAsyncData(fetchDistinctMaintenanceWorkerType, []);
 
 	const { filters, query, pagination, resetAll } = useObjectSearchParams<
 		Maintenance_Worker__C_Filter,
 		Maintenance_Worker__C_OrderBy
 	>(FILTER_CONFIGS, SORT_CONFIGS, PAGINATION_CONFIG);
 
-	const searchKey = `maintenance-workers:${JSON.stringify({ where: query.where, orderBy: query.orderBy, first: pagination.pageSize, after: pagination.afterCursor })}`;
-	const { data, loading, error } = useCachedAsyncData(
+	const { data, loading, error } = useAsyncData(
 		() =>
 			searchMaintenanceWorkers({
 				where: query.where,
@@ -87,7 +83,6 @@ export default function MaintenanceWorkerSearch() {
 				after: pagination.afterCursor,
 			}),
 		[query.where, query.orderBy, pagination.pageSize, pagination.afterCursor],
-		{ key: searchKey },
 	);
 
 	const validMaintenanceWorkerNodes = useMemo(

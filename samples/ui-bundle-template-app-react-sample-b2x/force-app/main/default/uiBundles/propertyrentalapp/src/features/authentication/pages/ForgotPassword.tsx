@@ -3,9 +3,9 @@ import { z } from "zod";
 import { CenteredPageLayout } from "../layout/centered-page-layout";
 import { AuthForm } from "../forms/auth-form";
 import { useAppForm } from "../hooks/form";
-import { createDataSDK } from "@salesforce/sdk-data";
+import { createDataSDK } from "@salesforce/platform-sdk";
 import { ROUTES, AUTH_PLACEHOLDERS } from "../authenticationConfig";
-import { handleApiResponse, getErrorMessage } from "../utils/helpers";
+import { ApiError, handleApiResponse } from "../utils/helpers";
 
 const forgotPasswordSchema = z.object({
 	username: z.string().trim().toLowerCase().email("Please enter a valid username"),
@@ -13,7 +13,7 @@ const forgotPasswordSchema = z.object({
 
 export default function ForgotPassword() {
 	const [success, setSuccess] = useState(false);
-	const [submitError, setSubmitError] = useState<string | null>(null);
+	const [submitError, setSubmitError] = useState<React.ReactNode>(null);
 
 	const form = useAppForm({
 		defaultValues: { username: "" },
@@ -33,10 +33,25 @@ export default function ForgotPassword() {
 						Accept: "application/json",
 					},
 				});
-				await handleApiResponse(response, "Failed to send reset link");
+				await handleApiResponse(response);
 				setSuccess(true);
 			} catch (err) {
-				setSubmitError(getErrorMessage(err, "Failed to send reset link"));
+				console.error("Failed to send reset link", err);
+				if (err instanceof ApiError) {
+					setSubmitError(
+						err.errors.length === 1 ? (
+							err.errors[0]
+						) : (
+							<ul>
+								{err.errors.map((e, i) => (
+									<li key={i}>{e}</li>
+								))}
+							</ul>
+						),
+					);
+				} else {
+					setSubmitError("Failed to send reset link");
+				}
 			}
 		},
 		onSubmitInvalid: () => {},

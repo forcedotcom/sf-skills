@@ -1,15 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router";
 import { useAuth } from "../context/AuthContext";
 import { AUTH_REDIRECT_PARAM, ROUTES } from "../authenticationConfig";
-import { CardSkeleton } from "../layout/card-skeleton";
-
-export interface PrivateRouteProps {
-	/**
-	 * Whether to show a card skeleton placeholder while authentication is loading.
-	 * @default false
-	 */
-	showCardSkeleton?: boolean;
-}
 
 /**
  * [Dev Note] Route Guard:
@@ -17,11 +8,11 @@ export interface PrivateRouteProps {
  * Otherwise, redirects to Login with a 'startUrl' parameter so the user can be
  * returned to this page after successful login.
  */
-export default function PrivateRoute({ showCardSkeleton = false }: PrivateRouteProps) {
+export default function PrivateRoute() {
 	const { isAuthenticated, loading } = useAuth();
 	const location = useLocation();
 
-	if (loading) return showCardSkeleton ? <CardSkeleton contentMaxWidth="md" /> : null;
+	if (loading) return null;
 
 	if (!isAuthenticated) {
 		const searchParams = new URLSearchParams();

@@ -1,5 +1,5 @@
 import { geocodeAddress, getStateZipFromAddress, type GeocodeResult } from "@/utils/geocode";
-import { useCachedAsyncData } from "@/features/object-search/hooks/useCachedAsyncData";
+import { useAsyncData } from "@/hooks/useAsyncData";
 
 async function geocodeWithFallback(address: string): Promise<GeocodeResult | null> {
 	const normalized = address.replace(/\n/g, ", ").trim();
@@ -20,14 +20,10 @@ export function useGeocode(address: string | null | undefined): {
 } {
 	const trimmed = address?.trim() ?? "";
 
-	const { data: coords, loading } = useCachedAsyncData(
-		() => {
-			if (!trimmed) return Promise.resolve(null);
-			return geocodeWithFallback(trimmed);
-		},
-		[trimmed],
-		{ key: `geocode:${trimmed}`, ttl: 600_000 },
-	);
+	const { data: coords, loading } = useAsyncData(() => {
+		if (!trimmed) return Promise.resolve(null);
+		return geocodeWithFallback(trimmed);
+	}, [trimmed]);
 
 	return { coords, loading };
 }

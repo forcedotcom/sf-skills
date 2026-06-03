@@ -1,7 +1,7 @@
 /**
  * Extensible user profile fetching and updating via UI API GraphQL.
  */
-import { createDataSDK } from "@salesforce/sdk-data";
+import { createDataSDK } from "@salesforce/platform-sdk";
 import { flattenGraphQLRecord } from "../utils/helpers";
 
 const USER_PROFILE_FIELDS_FULL = `
@@ -46,9 +46,10 @@ function getUserProfileMutation(fields: string): string {
     }`;
 }
 
-function throwOnGraphQLErrors(response: any): void {
-	if (response?.errors?.length) {
-		throw new Error(response.errors.map((e: any) => e.message).join("; "));
+function throwOnGraphQLErrors(errors: { message: string }[] | undefined): void {
+	if (errors?.length) {
+		console.error("GraphQL request failed", errors);
+		throw new Error("An unexpected error occurred");
 	}
 }
 
@@ -62,11 +63,14 @@ export async function fetchUserProfile<T>(
 	fields: string = USER_PROFILE_FIELDS_FULL,
 ): Promise<T> {
 	const data = await createDataSDK();
-	const response: any = await data.graphql?.(getUserProfileQuery(fields), {
-		userId,
+	const result = await data.graphql!.query<any>({
+		query: getUserProfileQuery(fields),
+		variables: {
+			userId,
+		},
 	});
-	throwOnGraphQLErrors(response);
-	return flattenGraphQLRecord<T>(response?.data?.uiapi?.query?.User?.edges?.[0]?.node);
+	throwOnGraphQLErrors(result.errors);
+	return flattenGraphQLRecord<T>(result.data?.uiapi?.query?.User?.edges?.[0]?.node);
 }
 
 /**
@@ -87,9 +91,12 @@ export async function updateUserProfile<T>(
 	values: Record<string, unknown>,
 ): Promise<T> {
 	const data = await createDataSDK();
-	const response: any = await data.graphql?.(getUserProfileMutation(USER_PROFILE_FIELDS_FULL), {
-		input: { Id: userId, User: { ...values } },
+	const result = await data.graphql!.mutate<any>({
+		mutation: getUserProfileMutation(USER_PROFILE_FIELDS_FULL),
+		variables: {
+			input: { Id: userId, User: { ...values } },
+		},
 	});
-	throwOnGraphQLErrors(response);
-	return flattenGraphQLRecord<T>(response?.data?.uiapi?.UserUpdate?.Record);
+	throwOnGraphQLErrors(result.errors);
+	return flattenGraphQLRecord<T>(result.data?.uiapi?.UserUpdate?.Record);
 }

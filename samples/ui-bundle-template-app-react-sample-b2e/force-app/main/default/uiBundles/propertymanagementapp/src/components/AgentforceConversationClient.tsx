@@ -13,38 +13,6 @@ import type {
 } from "../types/conversation";
 
 const GLOBAL_HOST_ID = "agentforce-conversation-client-global-host";
-
-const DEFAULT_STYLE_TOKENS: NonNullable<AgentforceClientConfig["styleTokens"]> = {
-	containerBackground: "#fafafa",
-
-	headerBlockBackground: "#372949",
-	headerBlockTextColor: "#ffffff",
-	headerBlockIconColor: "#ffffff",
-	headerBlockBorderBottomColor: "#3b0764",
-	headerBlockFocusBorder: "#c4b5fd",
-
-	messageBlockInboundBackgroundColor: "#ffffff",
-	messageBlockInboundTextColor: "#1f2937",
-	messageBlockInboundBorder: "1px solid #e5e7eb",
-
-	messageBlockOutboundBackgroundColor: "#ede9fe",
-	messageBlockOutboundTextColor: "#1f2937",
-	messageBlockOutboundBorder: "1px solid #d8b4fe",
-
-	messageInputTextColor: "#1f2937",
-	messageInputTextBackgroundColor: "#ffffff",
-	messageInputFooterBorderColor: "#d1d5db",
-	messageInputFooterBorderFocusColor: "#9ca3af",
-	messageInputFocusShadow: "0 0 0 3px rgba(156, 163, 175, 0.25)",
-	messageInputFooterPlaceholderText: "#6b7280",
-
-	messageInputFooterSendButton: "#7e22ce",
-	messageInputFooterSendButtonHoverColor: "#6b21a8",
-	messageInputSendButtonIconColor: "#ffffff",
-	messageInputSendButtonDisabledColor: "#e5e7eb",
-	messageInputActionButtonFocusBorder: "#a855f7",
-	errorBlockBackground: "#fafafa",
-};
 const SINGLETON_KEY = "__agentforceConversationClientSingleton";
 
 interface AgentforceConversationClientSingleton {
@@ -55,6 +23,12 @@ interface AgentforceConversationClientSingleton {
 interface WindowWithAgentforceSingleton extends Window {
 	[SINGLETON_KEY]?: AgentforceConversationClientSingleton;
 }
+
+type GlobalWithSfdcEnv = typeof globalThis & {
+	SFDC_ENV?: {
+		orgUrl?: string;
+	};
+};
 
 function getSingleton(): AgentforceConversationClientSingleton {
 	const win = window as WindowWithAgentforceSingleton;
@@ -77,7 +51,8 @@ function getOrCreateGlobalHost(): HTMLDivElement {
 }
 
 function getDefaultEmbedOptions(): ResolvedEmbedOptions {
-	return { salesforceOrigin: window.location.origin };
+	const sfdcEnv = (globalThis as GlobalWithSfdcEnv).SFDC_ENV;
+	return { salesforceOrigin: sfdcEnv?.orgUrl };
 }
 
 /**
@@ -96,6 +71,8 @@ export function AgentforceConversationClient({
 	styleTokens,
 	salesforceOrigin,
 	frontdoorUrl,
+	onReady,
+	onError,
 }: AgentforceConversationClientProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const normalizedAgentforceClientConfig = useMemo<AgentforceClientConfig>(() => {
@@ -111,8 +88,9 @@ export function AgentforceConversationClient({
 		return {
 			...(agentId !== undefined && { agentId }),
 			...(agentLabel !== undefined && { agentLabel }),
-			styleTokens: { ...DEFAULT_STYLE_TOKENS, ...styleTokens },
+			...(styleTokens !== undefined && { styleTokens }),
 			renderingConfig,
+			channel: "Vibes",
 		};
 	}, [agentId, agentLabel, inlineProp, headerEnabled, showHeaderIcon, width, height, styleTokens]);
 
@@ -146,13 +124,31 @@ export function AgentforceConversationClient({
 			}
 			const host = inline ? containerRef.current! : getOrCreateGlobalHost();
 
-			embedAgentforceClient({
-				container: host,
-				salesforceOrigin: salesforceOrigin ?? options.salesforceOrigin,
-				frontdoorUrl: frontdoorUrl ?? options.frontdoorUrl,
-				agentforceClientConfig: normalizedAgentforceClientConfig,
-			});
-			singleton.initialized = true;
+			try {
+				embedAgentforceClient({
+					container: host,
+					salesforceOrigin: salesforceOrigin ?? options.salesforceOrigin,
+					frontdoorUrl: frontdoorUrl ?? options.frontdoorUrl,
+					agentforceClientConfig: normalizedAgentforceClientConfig,
+					onReady,
+					onError,
+				});
+				singleton.initialized = true;
+			} catch (err) {
+				// Strip a partially-created LO element so the next mount can retry.
+				const partialEmbed = document.querySelector('lightning-out-application[data-lo="acc"]');
+				partialEmbed?.remove();
+				console.error("AgentforceConversationClient: initialization failed", err);
+			}
+		};
+
+		const safeInitialize = (options: ResolvedEmbedOptions) => {
+			try {
+				initialize(options);
+			} catch (initErr) {
+				console.error("AgentforceConversationClient: initialization failed", initErr);
+				singleton.initialized = false;
+			}
 		};
 
 		const shouldFetchFrontdoor = window.location.hostname === "localhost";
@@ -165,7 +161,7 @@ export function AgentforceConversationClient({
 						return;
 					}
 					const { frontdoorUrl: resolvedFrontdoorUrl } = await res.json();
-					initialize({ frontdoorUrl: resolvedFrontdoorUrl });
+					safeInitialize({ frontdoorUrl: resolvedFrontdoorUrl });
 				})
 				.catch((err) => {
 					console.error("AgentforceConversationClient: failed to fetch frontdoor URL", err);
@@ -176,7 +172,7 @@ export function AgentforceConversationClient({
 		} else {
 			singleton.initPromise = Promise.resolve()
 				.then(() => {
-					initialize(getDefaultEmbedOptions());
+					safeInitialize(getDefaultEmbedOptions());
 				})
 				.catch((err) => {
 					console.error("AgentforceConversationClient: failed to embed Agentforce client", err);
@@ -190,7 +186,7 @@ export function AgentforceConversationClient({
 			// Intentionally no cleanup:
 			// This component guarantees a single LO initialization per window.
 		};
-	}, [salesforceOrigin, frontdoorUrl, normalizedAgentforceClientConfig, inline]);
+	}, [salesforceOrigin, frontdoorUrl, normalizedAgentforceClientConfig, inline, onReady, onError]);
 
 	if (!inline) {
 		return null;

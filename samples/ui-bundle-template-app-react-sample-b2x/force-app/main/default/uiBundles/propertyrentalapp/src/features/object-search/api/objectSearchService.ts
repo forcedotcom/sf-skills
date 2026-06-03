@@ -1,4 +1,4 @@
-import { createDataSDK } from "@salesforce/sdk-data";
+import { createDataSDK } from "@salesforce/platform-sdk";
 
 export interface ObjectSearchOptions<TWhere, TOrderBy> {
 	where?: TWhere;
@@ -21,21 +21,20 @@ export async function searchObjects<TResult, TQuery, TVariables>(
 	const { where, orderBy, first = 20, after } = options;
 
 	const data = await createDataSDK();
-	const response = await data.graphql?.<TQuery, TVariables>(query, {
-		first,
-		after,
-		where,
-		orderBy,
-	} as TVariables);
+	const variables = { first, after, where, orderBy } as TVariables;
+	const result = await data.graphql!.query<TQuery, TVariables>({
+		query: query,
+		variables: variables,
+	});
 
-	if (response?.errors?.length) {
-		throw new Error(response.errors.map((e) => e.message).join("; "));
+	if (result.errors?.length) {
+		throw new Error(result.errors.map((e) => e.message).join("; "));
 	}
 
-	const result = (response?.data as Record<string, unknown> | undefined)?.uiapi as
+	const uiapi = (result.data as Record<string, unknown> | undefined)?.uiapi as
 		| Record<string, unknown>
 		| undefined;
-	const queryResult = (result?.query as Record<string, unknown> | undefined)?.[objectName] as
+	const queryResult = (uiapi?.query as Record<string, unknown> | undefined)?.[objectName] as
 		| TResult
 		| undefined;
 
@@ -56,17 +55,16 @@ export async function fetchDistinctValues<TQuery>(
 	fieldName: string,
 ): Promise<PicklistOption[]> {
 	const data = await createDataSDK();
-	const response = await data.graphql?.<TQuery>(query);
-	const errors = response?.errors;
+	const result = await data.graphql!.query<TQuery>({ query: query });
 
-	if (errors?.length) {
-		throw new Error(errors.map((e) => e.message).join("; "));
+	if (result.errors?.length) {
+		throw new Error(result.errors.map((e) => e.message).join("; "));
 	}
 
-	const result = (response?.data as Record<string, unknown> | undefined)?.uiapi as
+	const uiapi = (result.data as Record<string, unknown> | undefined)?.uiapi as
 		| Record<string, unknown>
 		| undefined;
-	const aggregate = (result?.aggregate as Record<string, unknown> | undefined)?.[objectName] as
+	const aggregate = (uiapi?.aggregate as Record<string, unknown> | undefined)?.[objectName] as
 		| { edges?: Array<{ node?: { aggregate?: Record<string, unknown> } }> }
 		| undefined;
 

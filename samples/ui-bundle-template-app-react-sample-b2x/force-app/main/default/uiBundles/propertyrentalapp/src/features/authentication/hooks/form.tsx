@@ -40,7 +40,7 @@ function TextField({
 	const id = providedId ?? generatedId;
 	const descriptionId = `${id}-description`;
 	const errorId = `${id}-error`;
-	const isInvalid = field.state.meta.isTouched && field.state.meta.errors.length > 0;
+	const isInvalid = field.state.meta.isBlurred && field.state.meta.errors.length > 0;
 
 	// Deduplicate errors by message
 	const errors = field.state.meta.errors;

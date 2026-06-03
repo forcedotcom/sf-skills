@@ -11,7 +11,7 @@ A property management sample React UI Bundle for the Salesforce platform. Demons
    - [1. Install Dependencies](#1-install-dependencies)
    - [2. Authenticate Your Org](#2-authenticate-your-org)
    - [3. Deploy Metadata](#3-deploy-metadata)
-   - [4. Assign Permission Set](#4-assign-permission-set)
+   - [4. Assign Permission Sets](#4-assign-permission-sets)
    - [5. Import Sample Data](#5-import-sample-data)
    - [6. Generate GraphQL Types](#6-generate-graphql-types)
    - [7. Rebuild the UI Bundle](#7-rebuild-the-ui-bundle)
@@ -27,9 +27,9 @@ A property management sample React UI Bundle for the Salesforce platform. Demons
 ```
 force-app/main/default/
 ├── uiBundles/            # React UI Bundle (source, config, tests)
-├── objects/              # 17 Custom Objects (Property, Tenant, Lease, etc.)
+├── objects/              # 18 Custom Objects (Property, Tenant, Lease, Agent, etc.)
 ├── layouts/              # Page layouts for all custom objects
-├── permissionsets/       # Property_Management_Access (Full CRUD)
+├── permissionsets/       # Property_Management_Access (Full CRUD) & Tenant_Maintenance_Access (Scoped)
 └── data/                 # Sample JSON data (use: sf data import tree)
 ```
 
@@ -91,6 +91,38 @@ For a full list of options:
 ```bash
 npm run setup -- --help
 ```
+
+### Setup Configuration (`scripts/org-setup.config.json`)
+
+The `npm run setup` script reads `scripts/org-setup.config.json` to control permission set assignment behavior. Each top-level section is **optional** — if a section is absent, the corresponding step is hidden from the interactive picker.
+
+```json
+{
+  "permsetAssignments": {
+    "defaultAssignee": "skip",
+    "assignments": {
+      "Property_Management_Access": { "assignee": "currentUser" },
+      "Tenant_Maintenance_Access": { "assignee": "skip" }
+    }
+  }
+}
+```
+
+#### `permsetAssignments`
+
+| Field             | Description                                                                  |
+| ----------------- | ---------------------------------------------------------------------------- |
+| `defaultAssignee` | Fallback assignee for permission sets not explicitly listed in `assignments` |
+| `assignments`     | Per-permission-set overrides (key = permission set API name)                 |
+
+Each assignment's `assignee` value controls who it is assigned to:
+
+| Value            | Behavior                                                                          |
+| ---------------- | --------------------------------------------------------------------------------- |
+| `"currentUser"`  | Assigns to the user running the script (resolved via `sf org display`)            |
+| `"skip"`         | Explicitly skips this permission set                                              |
+| `"guestUser"`    | Auto-resolves the site's guest user (requires `siteName` field on the same entry) |
+| `"user@org.com"` | Assigns to a specific user by username                                            |
 
 ---
 
@@ -167,18 +199,21 @@ sf project deploy start --source-dir force-app/main/default/uiBundles --target-o
 
 Replace `<alias>` with your target org alias.
 
-### 4. Assign Permission Set
+### 4. Assign Permission Sets
 
-After deploying the metadata, assign the `Property_Management_Access` permission set to grant access to the custom objects and fields:
+After deploying the metadata, assign permission sets to grant access to the custom objects and fields:
+
+| Permission Set               | Purpose                                                                                                 | Assign To                       |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `Property_Management_Access` | Full CRUD access to all custom objects. Intended for property managers and admin users.                 | Internal users managing the app |
+| `Tenant_Maintenance_Access`  | Scoped read/write access for tenants. Allows creating and updating their own maintenance requests only. | Tenant community users          |
 
 ```bash
+# Assign Property_Management_Access to the current user
 sf org assign permset --name Property_Management_Access --target-org <alias>
-```
 
-To assign to a specific user:
-
-```bash
-sf org assign permset --name Property_Management_Access --on-behalf-of <username> --target-org <alias>
+# Assign Tenant_Maintenance_Access to a specific tenant user
+sf org assign permset --name Tenant_Maintenance_Access --on-behalf-of <username> --target-org <alias>
 ```
 
 Replace `<alias>` with your target org alias.

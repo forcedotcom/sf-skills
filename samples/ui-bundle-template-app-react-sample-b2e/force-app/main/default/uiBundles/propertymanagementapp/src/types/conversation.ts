@@ -4,6 +4,11 @@
  * For full license text, see the LICENSE.txt file
  */
 
+import type {
+	AgentforceErrorHandler,
+	AgentforceReadyHandler,
+} from "@salesforce/agentforce-conversation-client";
+
 export interface ResolvedEmbedOptions {
 	salesforceOrigin?: string;
 	frontdoorUrl?: string;
@@ -32,4 +37,8 @@ export interface AgentforceConversationClientProps {
 	salesforceOrigin?: string;
 	/** Optional. If not provided, resolved internally in dev via /__lo/frontdoor. */
 	frontdoorUrl?: string;
+	/** Callback invoked when the Lightning Out application is ready. */
+	onReady?: AgentforceReadyHandler;
+	/** Callback invoked when a Lightning Out error occurs. */
+	onError?: AgentforceErrorHandler;
 }

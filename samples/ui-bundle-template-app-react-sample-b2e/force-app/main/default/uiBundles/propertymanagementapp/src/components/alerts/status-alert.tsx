@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import { AlertCircleIcon, CheckCircle2Icon } from 'lucide-react';
+import { AlertCircleIcon, CheckCircle2Icon, InfoIcon } from 'lucide-react';
 import { Alert, AlertDescription } from '../../components/ui/alert';
 import { useId } from 'react';
 
@@ -8,6 +8,7 @@ const statusAlertVariants = cva('', {
     variant: {
       error: '',
       success: '',
+      info: 'text-blue-600 *:[svg]:text-current *:data-[slot=alert-description]:text-blue-600/90',
     },
   },
   defaultVariants: {
@@ -18,11 +19,11 @@ const statusAlertVariants = cva('', {
 interface StatusAlertProps extends VariantProps<typeof statusAlertVariants> {
   children?: React.ReactNode;
   /** Alert variant type. @default "error" */
-  variant?: 'error' | 'success';
+  variant?: 'error' | 'success' | 'info';
 }
 
 /**
- * Status alert component for displaying error or success messages.
+ * Status alert component for displaying error, success, or info messages.
  * Returns null if no children are provided.
  */
 export function StatusAlert({ children, variant = 'error' }: StatusAlertProps) {
@@ -31,6 +32,12 @@ export function StatusAlert({ children, variant = 'error' }: StatusAlertProps) {
 
   const isError = variant === 'error';
 
+  const icon = {
+    error: <AlertCircleIcon aria-hidden="true" />,
+    success: <CheckCircle2Icon aria-hidden="true" />,
+    info: <InfoIcon aria-hidden="true" />,
+  }[variant];
+
   return (
     <Alert
       variant={isError ? 'destructive' : 'default'}
@@ -38,11 +45,7 @@ export function StatusAlert({ children, variant = 'error' }: StatusAlertProps) {
       aria-describedby={descriptionId}
       role={isError ? 'alert' : 'status'}
     >
-      {isError ? (
-        <AlertCircleIcon aria-hidden="true" />
-      ) : (
-        <CheckCircle2Icon aria-hidden="true" />
-      )}
+      {icon}
       <AlertDescription id={descriptionId}>{children}</AlertDescription>
     </Alert>
   );

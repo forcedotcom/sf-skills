@@ -6,7 +6,7 @@ import {
 	fetchDistinctPropertyType,
 	type PropertySearchNode,
 } from "../api/properties/propertySearchService";
-import { useCachedAsyncData } from "../features/object-search/hooks/useCachedAsyncData";
+import { useAsyncData } from "../hooks/useAsyncData";
 import {
 	useObjectSearchParams,
 	type UseObjectSearchParamsReturn,
@@ -55,22 +55,15 @@ const PROPERTY_SORT_CONFIGS: SortFieldConfig<string>[] = [
 export default function PropertySearch() {
 	const [selectedProperty, setSelectedProperty] = useState<PropertySearchNode | null>(null);
 
-	const { data: statusOptions } = useCachedAsyncData(fetchDistinctPropertyStatus, [], {
-		key: "distinctPropertyStatus",
-		ttl: 30_000,
-	});
-	const { data: typeOptions } = useCachedAsyncData(fetchDistinctPropertyType, [], {
-		key: "distinctPropertyType",
-		ttl: 30_000,
-	});
+	const { data: statusOptions } = useAsyncData(fetchDistinctPropertyStatus, []);
+	const { data: typeOptions } = useAsyncData(fetchDistinctPropertyType, []);
 
 	const { filters, query, pagination, resetAll } = useObjectSearchParams<
 		Property__C_Filter,
 		Property__C_OrderBy
 	>(FILTER_CONFIGS, PROPERTY_SORT_CONFIGS, PAGINATION_CONFIG);
 
-	const searchKey = `properties:${JSON.stringify({ where: query.where, orderBy: query.orderBy, first: pagination.pageSize, after: pagination.afterCursor })}`;
-	const { data, loading, error } = useCachedAsyncData(
+	const { data, loading, error } = useAsyncData(
 		() =>
 			searchProperties({
 				where: query.where,
@@ -79,7 +72,6 @@ export default function PropertySearch() {
 				after: pagination.afterCursor,
 			}),
 		[query.where, query.orderBy, pagination.pageSize, pagination.afterCursor],
-		{ key: searchKey },
 	);
 
 	const validPropertyNodes = useMemo(

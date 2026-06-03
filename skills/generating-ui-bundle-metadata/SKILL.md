@@ -24,6 +24,7 @@ After generation:
 1. Replace all default boilerplate — "React App", "Vite + React", default `<title>`, placeholder text
 2. Populate the home page with real content (landing section, banners, hero, navigation)
 3. Update navigation and placeholders (see the `building-ui-bundle-frontend` skill)
+4. **Configure a hosting target** — a UI bundle without a `<target>` in its meta XML will not be visible in the org. Use `generating-ui-bundle-custom-app` for internal (App Launcher) apps or `generating-ui-bundle-site` for external (Experience Site) apps.
 
 Always install dependencies before running any scripts in the UI bundle directory.
 
@@ -39,7 +40,44 @@ A UIBundle bundle lives under `uiBundles/<AppName>/` and must contain:
 ### Meta XML
 
 Required fields: `masterLabel`, `version` (max 20 chars), `isActive` (boolean).
-Optional: `description` (max 255 chars).
+Optional: `description` (max 255 chars), `target`.
+
+#### Target Field
+
+The `<target>` element specifies where the UI bundle is hosted:
+
+| Value | Use Case | Companion Metadata |
+|-------|----------|-------------------|
+| `Experience` | External-facing site via Digital Experience | Network, CustomSite, DigitalExperienceConfig, DigitalExperienceBundle |
+| `CustomApplication` | Internal app via Lightning App Launcher | CustomApplication (`applications/*.app-meta.xml`) |
+
+A `<target>` is **required** for the app to be accessible in a Salesforce org. A UI bundle deployed without a target will not appear anywhere — no App Launcher entry, no Experience Site URL. Always pair the bundle with one of:
+- `generating-ui-bundle-site` (for `Experience` target)
+- `generating-ui-bundle-custom-app` (for `CustomApplication` target)
+
+**Example with Experience target:**
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<UIBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <masterLabel>propertyrentalapp</masterLabel>
+    <description>A Salesforce UI Bundle.</description>
+    <isActive>true</isActive>
+    <version>1</version>
+    <target>Experience</target>
+</UIBundle>
+```
+
+**Example with CustomApplication target:**
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<UIBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <masterLabel>propertymanagementapp</masterLabel>
+    <description>A Salesforce UI Bundle.</description>
+    <isActive>true</isActive>
+    <version>1</version>
+    <target>CustomApplication</target>
+</UIBundle>
+```
 
 ### ui-bundle.json
 

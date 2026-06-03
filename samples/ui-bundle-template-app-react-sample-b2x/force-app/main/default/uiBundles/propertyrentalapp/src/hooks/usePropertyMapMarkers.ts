@@ -82,47 +82,53 @@ export function usePropertyMapMarkers(results: PropertySearchNode[]): {
 		}
 	}
 	const idsKey = [...new Set(propertyIds)].join(",");
+	const uniqIds = idsKey === "" ? [] : idsKey.split(",");
 
-	const resultsRef = useRef(results);
+	// Compute direct markers synchronously (nodes that already have coordinates)
+	const directMarkers: MapMarker[] = [];
+	const missingIds: string[] = [];
+	for (const node of results) {
+		if (!uniqIds.includes(node.Id)) continue;
+		const coords = getCoordinatesFromNode(node);
+		if (coords) {
+			directMarkers.push({
+				lat: coords.lat,
+				lng: coords.lng,
+				label: propertyIdToLabel.get(node.Id) ?? "Property",
+				propertyId: node.Id,
+			});
+		}
+	}
+	for (const id of uniqIds) {
+		const hasDirect = directMarkers.some((m) => m.propertyId === id);
+		if (!hasDirect) missingIds.push(id);
+	}
+
+	// Handle cases that don't need async work during render
+	const [prevIdsKey, setPrevIdsKey] = useState(idsKey);
+	if (prevIdsKey !== idsKey) {
+		setPrevIdsKey(idsKey);
+		if (uniqIds.length === 0) {
+			if (markers.length > 0) setMarkers([]);
+			if (loading) setLoading(false);
+		} else if (missingIds.length === 0) {
+			setMarkers(spreadDuplicateMarkers(directMarkers));
+			if (loading) setLoading(false);
+		} else {
+			if (!loading) setLoading(true);
+		}
+	}
+
+	// Stable reference to labels for use in the async effect
 	const labelMapRef = useRef(propertyIdToLabel);
 	useEffect(() => {
-		resultsRef.current = results;
 		labelMapRef.current = propertyIdToLabel;
 	});
 
 	useEffect(() => {
-		const uniqIds = idsKey === "" ? [] : idsKey.split(",");
-		if (uniqIds.length === 0) {
-			setMarkers([]);
-			setLoading(false);
-			return;
-		}
+		if (uniqIds.length === 0 || missingIds.length === 0) return;
 		let cancelled = false;
-		setLoading(true);
 		const currentLabels = labelMapRef.current;
-		const directMarkers: MapMarker[] = [];
-		const missingIds: string[] = [];
-		for (const node of results) {
-			if (!uniqIds.includes(node.Id)) continue;
-			const coords = getCoordinatesFromNode(node);
-			if (coords) {
-				directMarkers.push({
-					lat: coords.lat,
-					lng: coords.lng,
-					label: propertyIdToLabel.get(node.Id) ?? "Property",
-					propertyId: node.Id,
-				});
-			}
-		}
-		for (const id of uniqIds) {
-			const hasDirect = directMarkers.some((m) => m.propertyId === id);
-			if (!hasDirect) missingIds.push(id);
-		}
-		if (missingIds.length === 0) {
-			setMarkers(spreadDuplicateMarkers(directMarkers));
-			setLoading(false);
-			return;
-		}
 		fetchPropertyAddresses(missingIds)
 			.then((idToAddress) => {
 				if (cancelled) return;
@@ -130,8 +136,10 @@ export function usePropertyMapMarkers(results: PropertySearchNode[]): {
 					([, addr]) => addr != null && addr.trim() !== "",
 				);
 				if (toGeocode.length === 0) {
-					setMarkers(spreadDuplicateMarkers(directMarkers));
-					setLoading(false);
+					if (!cancelled) {
+						setMarkers(spreadDuplicateMarkers(directMarkers));
+						setLoading(false);
+					}
 					return;
 				}
 				Promise.all(
@@ -175,6 +183,7 @@ export function usePropertyMapMarkers(results: PropertySearchNode[]): {
 		return () => {
 			cancelled = true;
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps --- only re-run when IDs change
 	}, [idsKey]);
 
 	return { markers, loading };

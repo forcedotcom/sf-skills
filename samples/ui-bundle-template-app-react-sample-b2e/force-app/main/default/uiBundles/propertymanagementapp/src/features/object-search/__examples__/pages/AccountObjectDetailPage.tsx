@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router";
-import { createDataSDK } from "@salesforce/sdk-data";
+import { createDataSDK } from "@salesforce/platform-sdk";
 import { AlertCircle, ChevronDown, ChevronRight, FileQuestion } from "lucide-react";
 import GET_ACCOUNT_DETAIL from "../api/query/getAccountDetail.graphql?raw";
 import type {
@@ -18,7 +18,7 @@ import {
 } from "../../../../components/ui/collapsible";
 import { Separator } from "../../../../components/ui/separator";
 import { Skeleton } from "../../../../components/ui/skeleton";
-import { useCachedAsyncData } from "../../hooks/useCachedAsyncData";
+import { useAsyncData } from "../../hooks/useAsyncData";
 import { ObjectBreadcrumb } from "../../components/ObjectBreadcrumb";
 
 type AccountNode = NonNullable<
@@ -29,16 +29,16 @@ type AccountNode = NonNullable<
 
 async function fetchAccountDetail(recordId: string): Promise<AccountNode | null | undefined> {
 	const data = await createDataSDK();
-	const response = await data.graphql?.<GetAccountDetailQuery, GetAccountDetailQueryVariables>(
-		GET_ACCOUNT_DETAIL,
-		{ id: recordId },
-	);
+	const result = await data.graphql!.query<GetAccountDetailQuery, GetAccountDetailQueryVariables>({
+		query: GET_ACCOUNT_DETAIL,
+		variables: { id: recordId },
+	});
 
-	if (response?.errors?.length) {
-		throw new Error(response.errors.map((e) => e.message).join("; "));
+	if (result.errors?.length) {
+		throw new Error(result.errors.map((e) => e.message).join("; "));
 	}
 
-	return response?.data?.uiapi?.query?.Account?.edges?.[0]?.node;
+	return result.data?.uiapi?.query?.Account?.edges?.[0]?.node;
 }
 
 export default function AccountObjectDetail() {
@@ -49,9 +49,7 @@ export default function AccountObjectDetail() {
 		data: account,
 		loading,
 		error,
-	} = useCachedAsyncData(() => fetchAccountDetail(recordId!), [recordId], {
-		key: `account:${recordId}`,
-	});
+	} = useAsyncData(() => fetchAccountDetail(recordId!), [recordId]);
 
 	return (
 		<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">

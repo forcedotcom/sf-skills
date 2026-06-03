@@ -9,7 +9,7 @@ import { Loader2 } from "lucide-react";
 import { createContactUsLead } from "@/api/leads/leadApi";
 import { useAuth } from "@/features/authentication/context/AuthContext";
 import { fetchUserProfile } from "@/features/authentication/api/userProfileApi";
-import { useCachedAsyncData } from "@/features/object-search/hooks/useCachedAsyncData";
+import { useAsyncData } from "@/hooks/useAsyncData";
 import type { UserInfo } from "@/api/leads/leadApi";
 
 function SuccessCard() {
@@ -167,14 +167,10 @@ export default function Contact() {
 	const [submitError, setSubmitError] = useState<string | null>(null);
 	const [submitted, setSubmitted] = useState(false);
 
-	const { data: userInfo } = useCachedAsyncData(
-		() => {
-			if (!isAuthenticated || !user?.id) return Promise.resolve(null);
-			return fetchUserProfile<UserInfo>(user.id);
-		},
-		[isAuthenticated, user?.id],
-		{ key: `contact-user-profile:${user?.id ?? ""}`, ttl: 300_000 },
-	);
+	const { data: userInfo } = useAsyncData(() => {
+		if (!isAuthenticated || !user?.id) return Promise.resolve(null);
+		return fetchUserProfile<UserInfo>(user.id);
+	}, [isAuthenticated, user?.id]);
 
 	const handleSubmit = useCallback(
 		async (e: SubmitEvent<HTMLFormElement>) => {

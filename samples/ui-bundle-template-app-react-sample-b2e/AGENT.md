@@ -148,9 +148,9 @@ Do not consider a task complete until all three steps have been run successfully
 
 **Before writing any code that connects to Salesforce, you MUST invoke the `using-ui-bundle-salesforce-data` skill. Do not write any data access code without consulting it first.**
 
-This applies to: GraphQL queries/mutations, REST calls, SDK initialization, custom hooks that fetch data, or any code that imports from `@salesforce/sdk-data`.
+This applies to: GraphQL queries/mutations, REST calls, SDK initialization, custom hooks that fetch data, or any code that imports from `@salesforce/platform-sdk`.
 
-- **All data access uses the Data SDK** (`@salesforce/sdk-data`) via `createDataSDK()`.
+- **All data access uses the Data SDK** (`@salesforce/platform-sdk`) via `createDataSDK()`.
 - **Never** use `fetch()` or `axios` directly for Salesforce data.
 - **GraphQL is preferred** for record operations (`sdk.graphql`). Use `sdk.fetch` only when GraphQL cannot cover the case (UI API REST, Apex REST, Connect REST, Einstein LLM).
 - Use optional chaining: `sdk.graphql?.()`, `sdk.fetch?.()`.
@@ -181,7 +181,7 @@ Any endpoint not listed above is not permitted.
 6. **HTTP 200 does not mean success** — Salesforce returns HTTP 200 even on failure. Always check the `errors` array in the response body.
 
 #### GraphQL inline queries
-Must use the `gql` template tag from `@salesforce/sdk-data` — plain template strings bypass `@graphql-eslint` schema validation. For complex queries, use external `.graphql` files with codegen.
+Must use the `gql` template tag from `@salesforce/platform-sdk` — plain template strings bypass `@graphql-eslint` schema validation. For complex queries, use external `.graphql` files with codegen.
 
 #### Current user info
 Use GraphQL (`uiapi { currentUser { Id Name { value } } }`), not Chatter (`/chatter/users/me`).

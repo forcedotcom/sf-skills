@@ -4,10 +4,10 @@ import { z } from "zod";
 import { CenteredPageLayout } from "../layout/centered-page-layout";
 import { AuthForm } from "../forms/auth-form";
 import { useAppForm } from "../hooks/form";
-import { createDataSDK } from "@salesforce/sdk-data";
+import { createDataSDK } from "@salesforce/platform-sdk";
 import { ROUTES, AUTH_PLACEHOLDERS } from "../authenticationConfig";
 import { newPasswordSchema } from "../authHelpers";
-import { handleApiResponse, getErrorMessage } from "../utils/helpers";
+import { ApiError, handleApiResponse } from "../utils/helpers";
 
 const changePasswordSchema = z
 	.object({
@@ -17,7 +17,7 @@ const changePasswordSchema = z
 
 export default function ChangePassword() {
 	const [success, setSuccess] = useState(false);
-	const [submitError, setSubmitError] = useState<string | null>(null);
+	const [submitError, setSubmitError] = useState<React.ReactNode>(null);
 
 	const form = useAppForm({
 		defaultValues: { currentPassword: "", newPassword: "", confirmPassword: "" },
@@ -40,11 +40,26 @@ export default function ChangePassword() {
 						Accept: "application/json",
 					},
 				});
-				await handleApiResponse(response, "Password change failed");
+				await handleApiResponse(response);
 				setSuccess(true);
 				form.reset();
 			} catch (err) {
-				setSubmitError(getErrorMessage(err, "Password change failed"));
+				console.error("Password change failed", err);
+				if (err instanceof ApiError) {
+					setSubmitError(
+						err.errors.length === 1 ? (
+							err.errors[0]
+						) : (
+							<ul>
+								{err.errors.map((e, i) => (
+									<li key={i}>{e}</li>
+								))}
+							</ul>
+						),
+					);
+				} else {
+					setSubmitError("Password change failed");
+				}
 			}
 		},
 		onSubmitInvalid: () => {},
@@ -56,6 +71,7 @@ export default function ChangePassword() {
 				<AuthForm
 					title="Change Password"
 					description="Enter your current and new password below"
+					showAlreadyLoggedIn={false}
 					error={submitError}
 					success={
 						success && (

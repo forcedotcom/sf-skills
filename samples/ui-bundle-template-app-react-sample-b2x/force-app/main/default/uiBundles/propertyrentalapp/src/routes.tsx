@@ -10,7 +10,6 @@ import ForgotPassword from "./features/authentication/pages/ForgotPassword";
 import ResetPassword from "./features/authentication/pages/ResetPassword";
 import Profile from "./features/authentication/pages/Profile";
 import ChangePassword from "./features/authentication/pages/ChangePassword";
-import AuthenticationRoute from "./features/authentication/layouts/authenticationRouteLayout";
 import PrivateRoute from "./features/authentication/layouts/privateRouteLayout";
 import { ROUTES } from "./features/authentication/authenticationConfig";
 import Dashboard from "@/pages/Dashboard";
@@ -44,32 +43,27 @@ export const routes: RouteObject[] = [
         element: <AccountSearch />
       },
       {
-        element: <AuthenticationRoute />,
-        children: [
-          {
-            path: ROUTES.LOGIN.PATH,
-            element: <Login />,
-            handle: { showInNavigation: false, label: "Login", title: ROUTES.LOGIN.TITLE }
-          },
-          {
-            path: ROUTES.REGISTER.PATH,
-            element: <Register />,
-            handle: { showInNavigation: false, title: ROUTES.REGISTER.TITLE }
-          },
-          {
-            path: ROUTES.FORGOT_PASSWORD.PATH,
-            element: <ForgotPassword />,
-            handle: { showInNavigation: false, title: ROUTES.FORGOT_PASSWORD.TITLE }
-          },
-          {
-            path: ROUTES.RESET_PASSWORD.PATH,
-            element: <ResetPassword />,
-            handle: { showInNavigation: false, title: ROUTES.RESET_PASSWORD.TITLE }
-          }
-        ]
+        path: ROUTES.LOGIN.PATH,
+        element: <Login />,
+        handle: { showInNavigation: false, label: "Login", title: ROUTES.LOGIN.TITLE }
       },
       {
-        element: <PrivateRoute showCardSkeleton />,
+        path: ROUTES.REGISTER.PATH,
+        element: <Register />,
+        handle: { showInNavigation: false, title: ROUTES.REGISTER.TITLE }
+      },
+      {
+        path: ROUTES.FORGOT_PASSWORD.PATH,
+        element: <ForgotPassword />,
+        handle: { showInNavigation: false, title: ROUTES.FORGOT_PASSWORD.TITLE }
+      },
+      {
+        path: ROUTES.RESET_PASSWORD.PATH,
+        element: <ResetPassword />,
+        handle: { showInNavigation: false, title: ROUTES.RESET_PASSWORD.TITLE }
+      },
+      {
+        element: <PrivateRoute />,
         children: [
           {
             path: ROUTES.PROFILE.PATH,

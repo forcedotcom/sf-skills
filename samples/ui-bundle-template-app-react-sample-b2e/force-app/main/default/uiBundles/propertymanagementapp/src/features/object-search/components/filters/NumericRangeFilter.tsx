@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Input } from "../../../../components/ui/input";
 
 import { useFilterField } from "../FilterContext";
@@ -67,12 +67,16 @@ export function NumericRangeFilterInputs({
 
 	const externalMin = value?.min ?? "";
 	const externalMax = value?.max ?? "";
-	useEffect(() => {
+	const [prevExternalMin, setPrevExternalMin] = useState(externalMin);
+	const [prevExternalMax, setPrevExternalMax] = useState(externalMax);
+	if (prevExternalMin !== externalMin) {
+		setPrevExternalMin(externalMin);
 		setLocalMin(externalMin);
-	}, [externalMin]);
-	useEffect(() => {
+	}
+	if (prevExternalMax !== externalMax) {
+		setPrevExternalMax(externalMax);
 		setLocalMax(externalMax);
-	}, [externalMax]);
+	}
 
 	const isOutOfBounds = (v: string) => {
 		if (v === "") return false;

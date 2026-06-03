@@ -18,7 +18,7 @@ import {
 	useObjectSearchParams,
 	type PaginationConfig,
 } from "@/features/object-search/hooks/useObjectSearchParams";
-import { useCachedAsyncData } from "@/features/object-search/hooks/useCachedAsyncData";
+import { useAsyncData } from "@/hooks/useAsyncData";
 import type { FilterFieldConfig } from "@/features/object-search/utils/filterUtils";
 import type {
 	SortFieldConfig,
@@ -107,18 +107,11 @@ export default function PropertySearch() {
 	>(FILTER_CONFIGS, SORT_CONFIGS, PAGINATION_CONFIG);
 
 	/* ── Data fetching ── */
-	const searchKey = `rentalProperties:${JSON.stringify({
-		where: query.where,
-		orderBy: query.orderBy,
-		first: pagination.pageSize,
-		after: pagination.afterCursor,
-	})}`;
-
 	const {
 		data: searchResult,
 		loading: resultsLoading,
 		error: resultsError,
-	} = useCachedAsyncData<PropertySearchResult>(
+	} = useAsyncData<PropertySearchResult>(
 		() =>
 			searchProperties({
 				where: query.where,
@@ -127,7 +120,6 @@ export default function PropertySearch() {
 				after: pagination.afterCursor,
 			}),
 		[query.where, query.orderBy, pagination.pageSize, pagination.afterCursor],
-		{ key: searchKey },
 	);
 
 	/* ── Derive results + maps ── */
@@ -208,20 +200,26 @@ export default function PropertySearch() {
 			}
 		}, SEARCH_FILTER_DEBOUNCE_MS);
 		return () => clearTimeout(t);
-	}, [searchQuery]);
+	}, [searchQuery, filters]);
 
 	// Sync local searchQuery when the committed value changes externally (e.g. URL nav)
-	useEffect(() => {
+	const [prevCommittedSearchValue, setPrevCommittedSearchValue] = useState(committedSearchValue);
+	if (prevCommittedSearchValue !== committedSearchValue) {
+		setPrevCommittedSearchValue(committedSearchValue);
 		setSearchQuery(committedSearchValue);
-	}, [committedSearchValue]);
+	}
 
 	const committedPriceFilter = filters.active.find((f) => f.field === "Monthly_Rent__c");
 	const [stagedPriceMin, setStagedPriceMin] = useState(committedPriceFilter?.min ?? "");
 	const [stagedPriceMax, setStagedPriceMax] = useState(committedPriceFilter?.max ?? "");
-	useEffect(() => {
+	const [prevPriceMin, setPrevPriceMin] = useState(committedPriceFilter?.min);
+	const [prevPriceMax, setPrevPriceMax] = useState(committedPriceFilter?.max);
+	if (prevPriceMin !== committedPriceFilter?.min || prevPriceMax !== committedPriceFilter?.max) {
+		setPrevPriceMin(committedPriceFilter?.min);
+		setPrevPriceMax(committedPriceFilter?.max);
 		setStagedPriceMin(committedPriceFilter?.min ?? "");
 		setStagedPriceMax(committedPriceFilter?.max ?? "");
-	}, [committedPriceFilter?.min, committedPriceFilter?.max]);
+	}
 
 	const committedBedroomFilter = filters.active.find((f) => f.field === "Bedrooms__c");
 	const committedBedrooms = rangeToBedroomBucket(
@@ -229,15 +227,19 @@ export default function PropertySearch() {
 		committedBedroomFilter?.max,
 	);
 	const [stagedBedrooms, setStagedBedrooms] = useState<BedroomFilter>(committedBedrooms);
-	useEffect(() => {
+	const [prevCommittedBedrooms, setPrevCommittedBedrooms] = useState(committedBedrooms);
+	if (prevCommittedBedrooms !== committedBedrooms) {
+		setPrevCommittedBedrooms(committedBedrooms);
 		setStagedBedrooms(committedBedrooms);
-	}, [committedBedrooms]);
+	}
 
 	const committedSortBy = sortStateToSortBy(sort.current);
 	const [stagedSortBy, setStagedSortBy] = useState<SortBy>(committedSortBy ?? "price_asc");
-	useEffect(() => {
+	const [prevCommittedSortBy, setPrevCommittedSortBy] = useState(committedSortBy);
+	if (prevCommittedSortBy !== committedSortBy) {
+		setPrevCommittedSortBy(committedSortBy);
 		setStagedSortBy(committedSortBy ?? "price_asc");
-	}, [committedSortBy]);
+	}
 
 	// Set default sort on mount if none set
 	useEffect(() => {

@@ -1,3 +1,12 @@
+# [1.14.0](https://github.com/forcedotcom/sf-skills/compare/1.13.0...1.14.0) (2026-06-03)
+
+
+### Features
+
+* release 3 new skills: generating-ui-bundle-custom-app, reviewing-lwc-mobile-offline, using-mobile-native-capabilities @W-22808637@ ([d7c6531](https://github.com/forcedotcom/sf-skills/commit/d7c6531eb5f9268e6073d02f8fa9b71426b6fb96))
+
+
+
 # [1.13.0](https://github.com/forcedotcom/sf-skills/compare/1.12.0...1.13.0) (2026-06-01)
 
 

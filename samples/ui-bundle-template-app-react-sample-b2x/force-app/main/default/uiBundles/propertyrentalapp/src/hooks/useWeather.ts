@@ -3,7 +3,7 @@
  * Detects user location via Geolocation API; falls back to San Francisco.
  */
 import { useState, useEffect } from "react";
-import { useCachedAsyncData } from "@/features/object-search/hooks/useCachedAsyncData";
+import { useAsyncData } from "@/hooks/useAsyncData";
 
 const FALLBACK = {
 	LAT: 37.7749,
@@ -297,10 +297,9 @@ export function useWeather(lat?: number | null, lng?: number | null) {
 	const longitude = lng ?? geo.longitude;
 	const canFetch = lat != null || geo.resolved;
 
-	const cached = useCachedAsyncData(
+	const cached = useAsyncData(
 		() => fetchWeather(latitude, longitude),
 		[latitude, longitude, canFetch],
-		{ key: `weather:${latitude},${longitude}:${canFetch}`, ttl: 300_000 },
 	);
 
 	if (!canFetch) {

@@ -9,8 +9,7 @@ import { SkeletonField } from "@/components/SkeletonPrimitives";
 import { fetchPropertyDetailById } from "@/api/properties/propertyDetailGraphQL";
 import { createApplicationRecord } from "@/api/applications/applicationApi";
 import { useAuth } from "@/features/authentication/context/AuthContext";
-import { fetchUserContact } from "../features/authentication/api/userProfileApi";
-import { useCachedAsyncData } from "@/features/object-search/hooks/useCachedAsyncData";
+import { useAsyncData } from "@/hooks/useAsyncData";
 
 function ApplicationSkeleton() {
 	return (
@@ -46,28 +45,14 @@ export default function Application() {
 	const [searchParams] = useSearchParams();
 	const propertyId = searchParams.get("propertyId") ?? "";
 
-	const { data: contactData } = useCachedAsyncData(
-		() => {
-			if (!user?.id) return Promise.resolve(null);
-			return fetchUserContact<{ ContactId?: string }>(user.id);
-		},
-		[user?.id],
-		{ key: `contact:${user?.id ?? ""}`, ttl: 300_000 },
-	);
-	const contactId = contactData?.ContactId ?? null;
-
 	const {
 		data: property,
 		loading,
 		error: loadError,
-	} = useCachedAsyncData(
-		() => {
-			if (!propertyId?.trim()) return Promise.resolve(null);
-			return fetchPropertyDetailById(propertyId);
-		},
-		[propertyId],
-		{ key: `app-property:${propertyId}` },
-	);
+	} = useAsyncData(() => {
+		if (!propertyId?.trim()) return Promise.resolve(null);
+		return fetchPropertyDetailById(propertyId);
+	}, [propertyId]);
 
 	const listing = property?.Property_Listings__r?.edges?.[0]?.node ?? null;
 	const images = (property?.Property_Images__r?.edges ?? []).flatMap((e) =>
@@ -85,7 +70,7 @@ export default function Application() {
 
 	const [submitting, setSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
-	const [submittedId, setSubmittedId] = useState<string | null>(null);
+	const [submittedName, setSubmittedName] = useState<string | null>(null);
 
 	const handleSubmit = useCallback(
 		async (e: SubmitEvent<HTMLFormElement>) => {
@@ -93,35 +78,48 @@ export default function Application() {
 			setSubmitError(null);
 			setSubmitting(true);
 			try {
-				const id = await createApplicationRecord({
+				const result = await createApplicationRecord({
 					Property__c: propertyId || null,
 					Status__c: "Submitted",
-					User__c: contactId || user?.id || "",
+					User__c: user?.id || "",
 					Start_Date__c: moveInDate.trim() || null,
 					Employment__c: employment.trim() || null,
 					References__c: references.trim() || null,
 				});
-				setSubmittedId(id.id);
+				setSubmittedName(result.name ?? result.id);
 			} catch (err) {
 				setSubmitError(err instanceof Error ? err.message : "Failed to submit application.");
 			} finally {
 				setSubmitting(false);
 			}
 		},
-		[propertyId, contactId, moveInDate, employment, references, user?.id],
+		[propertyId, moveInDate, employment, references, user],
 	);
 
 	if (loading) {
 		return <ApplicationSkeleton />;
 	}
 
-	if (submittedId) {
+	if (submittedName) {
 		return (
 			<div className="mx-auto max-w-[900px]">
 				<Card className="mb-6 rounded-2xl border border-border p-6 shadow-sm">
 					<h2 className="mb-2 text-2xl font-semibold text-foreground">Application submitted</h2>
 					<p className="text-sm text-muted-foreground">
-						Your application has been saved. Reference: {submittedId}
+						Your application
+						{propertyName ? (
+							<>
+								{" "}
+								for <span className="font-medium text-foreground">{propertyName}</span>
+							</>
+						) : null}{" "}
+						has been submitted.
+						{submittedName && (
+							<>
+								{" "}
+								Reference: <span className="font-medium text-foreground">{submittedName}</span>
+							</>
+						)}
 					</p>
 					<div className="mt-4 flex gap-2 items-center">
 						<Link to="/properties" className="text-sm text-primary no-underline hover:underline">

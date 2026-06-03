@@ -35,8 +35,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 			const userData = await getCurrentUser();
 			setUser(userData);
 		} catch (err) {
-			const errorMessage = err instanceof Error ? err.message : "Authentication failed";
-			setError(errorMessage);
+			console.error("Authentication failed", err);
+			setError("Authentication failed");
 			setUser(null);
 		} finally {
 			setLoading(false);
@@ -53,8 +53,25 @@ export function AuthProvider({ children }: AuthProviderProps) {
 	}, []);
 
 	useEffect(() => {
-		checkAuth();
-	}, [checkAuth]);
+		let cancelled = false;
+		getCurrentUser()
+			.then((userData) => {
+				if (!cancelled) setUser(userData);
+			})
+			.catch((err) => {
+				console.error("Authentication failed", err);
+				if (!cancelled) {
+					setError("Authentication failed");
+					setUser(null);
+				}
+			})
+			.finally(() => {
+				if (!cancelled) setLoading(false);
+			});
+		return () => {
+			cancelled = true;
+		};
+	}, []);
 
 	const value: AuthContextType = {
 		user,

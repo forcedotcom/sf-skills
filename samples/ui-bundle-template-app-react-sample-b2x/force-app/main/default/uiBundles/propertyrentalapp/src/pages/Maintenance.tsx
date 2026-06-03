@@ -13,14 +13,12 @@ import {
 	type MaintenanceRequestNode,
 } from "@/api/maintenanceRequests/maintenanceRequestApi";
 import { useAuth } from "@/features/authentication/context/AuthContext";
+import { useTenantAccess } from "@/context/TenantAccessContext";
 import {
 	useObjectSearchParams,
 	type PaginationConfig,
 } from "@/features/object-search/hooks/useObjectSearchParams";
-import {
-	useCachedAsyncData,
-	clearCacheEntry,
-} from "@/features/object-search/hooks/useCachedAsyncData";
+import { useAsyncData } from "@/hooks/useAsyncData";
 import PaginationControls from "@/features/object-search/components/PaginationControls";
 import type {
 	Maintenance_Request__C_Filter,
@@ -90,6 +88,7 @@ function MaintenanceSkeleton() {
 
 export default function Maintenance() {
 	const { loading: authLoading } = useAuth();
+	const { tenantProperties } = useTenantAccess();
 
 	const { query, pagination } = useObjectSearchParams<
 		Maintenance_Request__C_Filter,
@@ -98,18 +97,11 @@ export default function Maintenance() {
 
 	const [refreshCounter, setRefreshCounter] = useState(0);
 
-	const searchKey = `maintenance-requests:${JSON.stringify({
-		orderBy: query.orderBy,
-		first: pagination.pageSize,
-		after: pagination.afterCursor,
-		refresh: refreshCounter,
-	})}`;
-
 	const {
 		data: searchResult,
 		loading,
 		error,
-	} = useCachedAsyncData(
+	} = useAsyncData(
 		() =>
 			searchMaintenanceRequests({
 				where: query.where,
@@ -118,7 +110,6 @@ export default function Maintenance() {
 				after: pagination.afterCursor,
 			}),
 		[query.where, query.orderBy, pagination.pageSize, pagination.afterCursor, refreshCounter],
-		{ key: searchKey },
 	);
 
 	const requests = useMemo(
@@ -138,6 +129,7 @@ export default function Maintenance() {
 	const [description, setDescription] = useState("");
 	const [type, setType] = useState<string>("");
 	const [priority, setPriority] = useState<string>("Standard");
+	const [selectedTenantIdx, setSelectedTenantIdx] = useState(0);
 	const [dateRequested, setDateRequested] = useState(() => {
 		const d = new Date();
 		return d.toISOString().slice(0, 10);
@@ -146,6 +138,8 @@ export default function Maintenance() {
 	const [submitError, setSubmitError] = useState<string | null>(null);
 	const [submitSuccess, setSubmitSuccess] = useState(false);
 
+	const selectedTenant = tenantProperties[selectedTenantIdx] ?? tenantProperties[0];
+
 	const handleSubmit = useCallback(
 		async (e: React.FormEvent) => {
 			e.preventDefault();
@@ -153,6 +147,10 @@ export default function Maintenance() {
 			const desc = description.trim();
 			if (!t && !desc) {
 				setSubmitError("Title or description is required");
+				return;
+			}
+			if (!selectedTenant) {
+				setSubmitError("No property associated with your tenant record");
 				return;
 			}
 			setSubmitting(true);
@@ -165,6 +163,8 @@ export default function Maintenance() {
 					Priority__c: priority,
 					Status__c: "New",
 					Scheduled__c: dateRequested ? new Date(dateRequested).toISOString() : undefined,
+					Property__c: selectedTenant.Property__c.value,
+					User__c: selectedTenant.Id,
 				});
 				setSubmitSuccess(true);
 				setTitle("");
@@ -172,7 +172,6 @@ export default function Maintenance() {
 				setType("");
 				setPriority("Standard");
 				setDateRequested(new Date().toISOString().slice(0, 10));
-				clearCacheEntry(searchKey);
 				setRefreshCounter((c) => c + 1);
 			} catch (err) {
 				setSubmitError(err instanceof Error ? err.message : "Failed to submit request");
@@ -180,7 +179,7 @@ export default function Maintenance() {
 				setSubmitting(false);
 			}
 		},
-		[title, description, type, priority, dateRequested, searchKey],
+		[title, description, type, priority, dateRequested, selectedTenant],
 	);
 
 	if (authLoading) return <MaintenanceSkeleton />;
@@ -193,6 +192,35 @@ export default function Maintenance() {
 				</CardHeader>
 				<CardContent className="space-y-4">
 					<form onSubmit={handleSubmit} className="space-y-4">
+						{tenantProperties.length > 1 && (
+							<div className="space-y-2">
+								<Label htmlFor="maintenance-property">Property *</Label>
+								<select
+									id="maintenance-property"
+									className="flex h-9 w-full rounded-xl border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-[color,box-shadow] duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-primary"
+									aria-label="Property"
+									value={selectedTenantIdx}
+									onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+										setSelectedTenantIdx(Number(e.target.value))
+									}
+								>
+									{tenantProperties.map((tp, idx) => (
+										<option key={tp.Property__c.value} value={idx}>
+											{tp.Property__r?.Address__c?.value ?? tp.Property__r?.Name?.value}
+										</option>
+									))}
+								</select>
+							</div>
+						)}
+						{tenantProperties.length === 1 && selectedTenant && (
+							<div className="space-y-2">
+								<Label>Property</Label>
+								<p className="text-sm text-muted-foreground">
+									{selectedTenant.Property__r?.Address__c?.value ??
+										selectedTenant.Property__r?.Name?.value}
+								</p>
+							</div>
+						)}
 						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 							<div className="space-y-2">
 								<Label htmlFor="maintenance-title">Title *</Label>

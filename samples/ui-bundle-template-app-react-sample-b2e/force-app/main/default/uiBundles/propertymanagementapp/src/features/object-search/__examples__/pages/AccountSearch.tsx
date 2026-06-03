@@ -6,7 +6,7 @@ import {
 	fetchDistinctIndustries,
 	fetchDistinctTypes,
 } from "../api/accountSearchService";
-import { useCachedAsyncData } from "../../hooks/useCachedAsyncData";
+import { useAsyncData } from "../../hooks/useAsyncData";
 import { fieldValue } from "../../utils/fieldUtils";
 import { useObjectSearchParams } from "../../hooks/useObjectSearchParams";
 import { Alert, AlertTitle, AlertDescription } from "../../../../components/ui/alert";
@@ -42,8 +42,8 @@ import PaginationControls from "../../components/PaginationControls";
 import type { PaginationConfig } from "../../hooks/useObjectSearchParams";
 
 const PAGINATION_CONFIG: PaginationConfig = {
-	defaultPageSize: 6,
-	validPageSizes: [6, 12, 24, 48],
+	defaultPageSize: 7,
+	validPageSizes: [7, 14, 28, 42],
 };
 
 type AccountNode = NonNullable<
@@ -77,22 +77,15 @@ const ACCOUNT_SORT_CONFIGS: SortFieldConfig<keyof Account_OrderBy>[] = [
 
 export default function AccountSearch() {
 	const [filtersOpen, setFiltersOpen] = useState(true);
-	const { data: industryOptions } = useCachedAsyncData(fetchDistinctIndustries, [], {
-		key: "distinctIndustries",
-		ttl: 300_000,
-	});
-	const { data: typeOptions } = useCachedAsyncData(fetchDistinctTypes, [], {
-		key: "distinctTypes",
-		ttl: 300_000,
-	});
+	const { data: industryOptions } = useAsyncData(fetchDistinctIndustries, []);
+	const { data: typeOptions } = useAsyncData(fetchDistinctTypes, []);
 
 	const { filters, sort, query, pagination, resetAll } = useObjectSearchParams<
 		Account_Filter,
 		Account_OrderBy
 	>(FILTER_CONFIGS, ACCOUNT_SORT_CONFIGS, PAGINATION_CONFIG);
 
-	const searchKey = `accounts:${JSON.stringify({ where: query.where, orderBy: query.orderBy, first: pagination.pageSize, after: pagination.afterCursor })}`;
-	const { data, loading, error } = useCachedAsyncData(
+	const { data, loading, error } = useAsyncData(
 		() =>
 			searchAccounts({
 				where: query.where,
@@ -101,7 +94,6 @@ export default function AccountSearch() {
 				after: pagination.afterCursor,
 			}),
 		[query.where, query.orderBy, pagination.pageSize, pagination.afterCursor],
-		{ key: searchKey },
 	);
 
 	const pageInfo = data?.pageInfo;
@@ -196,7 +188,7 @@ export default function AccountSearch() {
 						<ActiveFilters filters={filters.active} onRemove={filters.remove} />
 					</div>
 
-					<div className="min-h-112">
+					<div className="min-h-132">
 						{/* Loading state */}
 						{loading && (
 							<>

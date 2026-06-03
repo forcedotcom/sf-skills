@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { z } from "zod";
 
 import { CenteredPageLayout } from "../layout/centered-page-layout";
-import { CardSkeleton } from "../layout/card-skeleton";
 import { AuthForm } from "../forms/auth-form";
 import { useAppForm } from "../hooks/form";
 import { ROUTES } from "../authenticationConfig";
 import { emailSchema } from "../authHelpers";
-import { getErrorMessage } from "../utils/helpers";
 import { useUser } from "../context/AuthContext";
 import { fetchUserProfile, updateUserProfile } from "../api/userProfileApi";
+import { Skeleton } from "../../../components/ui/skeleton";
+import { Field, FieldLabel } from "../../../components/ui/field";
 
 const optionalString = z
 	.string()
@@ -31,6 +31,38 @@ const profileSchema = z.object({
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
+
+function FieldSkeleton({ label }: { label: string }) {
+	return (
+		<Field>
+			<FieldLabel>{label}</FieldLabel>
+			<Skeleton className="h-9 w-full rounded-md" />
+		</Field>
+	);
+}
+
+function ProfileFieldsSkeleton() {
+	return (
+		<div role="status" aria-live="polite">
+			<span className="sr-only">Loading profile…</span>
+			<FieldSkeleton label="Email" />
+			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-start">
+				<FieldSkeleton label="First name" />
+				<FieldSkeleton label="Last name" />
+			</div>
+			<FieldSkeleton label="Phone" />
+			<FieldSkeleton label="Street" />
+			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-start">
+				<FieldSkeleton label="City" />
+				<FieldSkeleton label="State" />
+			</div>
+			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-start">
+				<FieldSkeleton label="Postal Code" />
+				<FieldSkeleton label="Country" />
+			</div>
+		</div>
+	);
+}
 
 export default function Profile() {
 	const user = useUser();
@@ -62,7 +94,8 @@ export default function Profile() {
 				setSuccess(true);
 				window.scrollTo({ top: 0, behavior: "smooth" });
 			} catch (err) {
-				setSubmitError(getErrorMessage(err, "Failed to update profile"));
+				console.error("Failed to update profile", err);
+				setSubmitError("Failed to update profile");
 			}
 		},
 		onSubmitInvalid: () => {},
@@ -88,10 +121,9 @@ export default function Profile() {
 				}
 			})
 			.catch((err: any) => {
+				console.error("Failed to load profile", err);
 				if (mounted) {
-					setLoadError(getErrorMessage(err, "Failed to load profile"));
-				} else {
-					console.error("Failed to load profile", err);
+					setLoadError("Failed to load profile");
 				}
 			});
 		return () => {
@@ -106,9 +138,7 @@ export default function Profile() {
 		}
 	}, [profile, form]);
 
-	if (!profile && !loadError) {
-		return <CardSkeleton contentMaxWidth="md" loadingText="Loading profile…" />;
-	}
+	const loading = !profile && !loadError;
 
 	return (
 		<CenteredPageLayout contentMaxWidth="md" title={ROUTES.PROFILE.TITLE}>
@@ -116,44 +146,51 @@ export default function Profile() {
 				<AuthForm
 					title="Profile"
 					description="Update your account information"
+					showAlreadyLoggedIn={false}
 					error={loadError ?? submitError}
 					success={success && "Profile updated!"}
-					submit={{ text: "Save Changes", loadingText: "Saving…" }}
+					submit={{ text: "Save Changes", loadingText: "Saving…", disabled: loading }}
 					footer={{ link: ROUTES.CHANGE_PASSWORD.PATH, linkText: "Change password" }}
 				>
-					<form.AppField name="Email">
-						{(field) => <field.EmailField label="Email" disabled />}
-					</form.AppField>
-					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-start">
-						<form.AppField name="FirstName">
-							{(field) => <field.TextField label="First name" autoComplete="given-name" />}
-						</form.AppField>
-						<form.AppField name="LastName">
-							{(field) => <field.TextField label="Last name" autoComplete="family-name" />}
-						</form.AppField>
-					</div>
-					<form.AppField name="Phone">
-						{(field) => <field.TextField label="Phone" type="tel" autoComplete="tel" />}
-					</form.AppField>
-					<form.AppField name="Street">
-						{(field) => <field.TextField label="Street" autoComplete="street-address" />}
-					</form.AppField>
-					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-start">
-						<form.AppField name="City">
-							{(field) => <field.TextField label="City" autoComplete="address-level2" />}
-						</form.AppField>
-						<form.AppField name="State">
-							{(field) => <field.TextField label="State" autoComplete="address-level1" />}
-						</form.AppField>
-					</div>
-					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-start">
-						<form.AppField name="PostalCode">
-							{(field) => <field.TextField label="Postal Code" autoComplete="postal-code" />}
-						</form.AppField>
-						<form.AppField name="Country">
-							{(field) => <field.TextField label="Country" autoComplete="country-name" />}
-						</form.AppField>
-					</div>
+					{loading ? (
+						<ProfileFieldsSkeleton />
+					) : (
+						<>
+							<form.AppField name="Email">
+								{(field) => <field.EmailField label="Email" disabled />}
+							</form.AppField>
+							<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-start">
+								<form.AppField name="FirstName">
+									{(field) => <field.TextField label="First name" autoComplete="given-name" />}
+								</form.AppField>
+								<form.AppField name="LastName">
+									{(field) => <field.TextField label="Last name" autoComplete="family-name" />}
+								</form.AppField>
+							</div>
+							<form.AppField name="Phone">
+								{(field) => <field.TextField label="Phone" type="tel" autoComplete="tel" />}
+							</form.AppField>
+							<form.AppField name="Street">
+								{(field) => <field.TextField label="Street" autoComplete="street-address" />}
+							</form.AppField>
+							<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-start">
+								<form.AppField name="City">
+									{(field) => <field.TextField label="City" autoComplete="address-level2" />}
+								</form.AppField>
+								<form.AppField name="State">
+									{(field) => <field.TextField label="State" autoComplete="address-level1" />}
+								</form.AppField>
+							</div>
+							<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-start">
+								<form.AppField name="PostalCode">
+									{(field) => <field.TextField label="Postal Code" autoComplete="postal-code" />}
+								</form.AppField>
+								<form.AppField name="Country">
+									{(field) => <field.TextField label="Country" autoComplete="country-name" />}
+								</form.AppField>
+							</div>
+						</>
+					)}
 				</AuthForm>
 			</form.AppForm>
 		</CenteredPageLayout>

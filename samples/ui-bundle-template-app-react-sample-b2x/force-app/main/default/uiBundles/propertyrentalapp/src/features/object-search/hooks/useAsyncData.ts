@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface UseAsyncDataResult<T> {
 	data: T | null;
@@ -22,18 +22,27 @@ export function useAsyncData<T>(
 	const [data, setData] = useState<T | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [generation, setGeneration] = useState(0);
 
-	// Re-create the fetcher reference only when deps change.
-	// eslint-disable-next-line react-hooks/exhaustive-deps --- deps are explicitly managed by the caller
-	const memoizedFetcher = useCallback(fetcher, deps);
+	const fetcherRef = useRef(fetcher);
+	useEffect(() => {
+		fetcherRef.current = fetcher;
+	});
+
+	// Detect dep changes during render to reset loading state and bump generation
+	const [prevDeps, setPrevDeps] = useState(deps);
+	if (deps.length !== prevDeps.length || deps.some((d, i) => d !== prevDeps[i])) {
+		setPrevDeps(deps);
+		setGeneration((g) => g + 1);
+		if (!loading) setLoading(true);
+		if (error !== null) setError(null);
+	}
 
 	useEffect(() => {
-		// Guard against setting state after unmount or dep change.
 		let cancelled = false;
-		setLoading(true);
-		setError(null);
 
-		memoizedFetcher()
+		fetcherRef
+			.current()
 			.then((result) => {
 				if (!cancelled) setData(result);
 			})
@@ -48,7 +57,7 @@ export function useAsyncData<T>(
 		return () => {
 			cancelled = true;
 		};
-	}, [memoizedFetcher]);
+	}, [generation]);
 
 	return { data, loading, error };
 }

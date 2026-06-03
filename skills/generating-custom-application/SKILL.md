@@ -1,6 +1,6 @@
 ---
 name: generating-custom-application
-description: "Use this skill when users need to create or configure Salesforce Custom Applications. Trigger when users mention custom apps, application metadata, app navigation, or organizing tabs into applications. Use when users want to create app containers for tabs and pages. Always use this skill for custom application work."
+description: "Use this skill when users need to create or configure tab-based Salesforce Custom Applications with navigation, branding, and action overrides. Trigger when users mention custom apps, application metadata, app navigation, or organizing tabs into applications. Use when users want to create app containers for tabs and pages. Do NOT use when the goal is hosting a React UI bundle in the App Launcher — use generating-ui-bundle-custom-app for that case."
 metadata:
   version: "1.0"
 ---

@@ -5,7 +5,7 @@ import {
 	searchApplications,
 	fetchDistinctApplicationStatus,
 } from "../api/applications/applicationSearchService";
-import { useCachedAsyncData } from "../features/object-search/hooks/useCachedAsyncData";
+import { useAsyncData } from "../hooks/useAsyncData";
 import {
 	useObjectSearchParams,
 	type UseObjectSearchParamsReturn,
@@ -72,11 +72,9 @@ export default function ApplicationSearch() {
 	const [selectedApplication, setSelectedApplication] = useState<ApplicationSearchNode | null>(
 		null,
 	);
+	const [refreshKey, setRefreshKey] = useState(0);
 
-	const { data: statusOptions } = useCachedAsyncData(fetchDistinctApplicationStatus, [], {
-		key: "distinctApplicationStatus",
-		ttl: 30_000,
-	});
+	const { data: statusOptions } = useAsyncData(fetchDistinctApplicationStatus, []);
 
 	const { filters, query, pagination, resetAll } = useObjectSearchParams<
 		Application__C_Filter,
@@ -86,8 +84,7 @@ export default function ApplicationSearch() {
 		() => query.orderBy ?? { CreatedDate: { order: ResultOrder.Desc } },
 		[query.orderBy],
 	);
-	const searchKey = `applications:${JSON.stringify({ where: query.where, orderBy: effectiveOrderBy, first: pagination.pageSize, after: pagination.afterCursor })}`;
-	const { data, loading, error } = useCachedAsyncData(
+	const { data, loading, error } = useAsyncData(
 		() =>
 			searchApplications({
 				where: query.where,
@@ -95,8 +92,7 @@ export default function ApplicationSearch() {
 				first: pagination.pageSize,
 				after: pagination.afterCursor,
 			}),
-		[query.where, effectiveOrderBy, pagination.pageSize, pagination.afterCursor],
-		{ key: searchKey },
+		[query.where, effectiveOrderBy, pagination.pageSize, pagination.afterCursor, refreshKey],
 	);
 
 	const validApplicationNodes = useMemo(
@@ -119,6 +115,7 @@ export default function ApplicationSearch() {
 				if (selectedApplication?.Id === applicationId) {
 					setSelectedApplication({ ...selectedApplication, Status__c: { value: status } });
 				}
+				setRefreshKey((k) => k + 1);
 				toast.success("Status updated", {
 					description: "Application status has been updated successfully.",
 				});

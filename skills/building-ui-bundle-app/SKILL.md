@@ -3,7 +3,7 @@ name: building-ui-bundle-app
 description: "MUST activate when the user wants to build, create, or generate a React application, React app, web application, single-page application (SPA), or frontend application — even if no project files exist yet. MUST also activate when the project contains a uiBundles/*/src/ directory or sfdx-project.json and the prompt says create, build, construct, or generate a new app, site, or page from scratch — even if the prompt also describes visual styling. MUST also activate when the task spans more than one ui-bundle skill. Use this skill when building a complete app end-to-end. This is the orchestrator that coordinates scaffolding, features, data access, frontend UI, integrations, and deployment in the correct dependency order. Without it, phases execute out of order and the app breaks. Do NOT use for Lightning Experience apps with custom objects (use generating-lightning-app). Do NOT use for single-concern edits to an existing page (use building-ui-bundle-frontend)."
 metadata:
   version: "1.0"
-  related-skills: generating-ui-bundle-metadata, generating-ui-bundle-features, using-ui-bundle-salesforce-data, building-ui-bundle-frontend, implementing-ui-bundle-agentforce-conversation-client, implementing-ui-bundle-file-upload, deploying-ui-bundle, generating-ui-bundle-site
+  related-skills: generating-ui-bundle-metadata, generating-ui-bundle-features, using-ui-bundle-salesforce-data, building-ui-bundle-frontend, implementing-ui-bundle-agentforce-conversation-client, implementing-ui-bundle-file-upload, deploying-ui-bundle, generating-ui-bundle-site, generating-ui-bundle-custom-app
 ---
 
 # Building a UI Bundle App
@@ -126,7 +126,11 @@ Final UI bundle build (rebuilds with the deployed schema)
 
 Follows the canonical 7-step deployment sequence. Must deploy metadata before fetching schema. Must assign permissions before schema fetch.
 
-### Phase 7: Experience Site (Optional)
+### Phase 7: Hosting Target
+
+Choose **one** of the following based on the app's audience:
+
+#### Phase 7a: Experience Site (External)
 
 ```
 Resolve site properties (siteName, appDevName, etc.)
@@ -136,7 +140,21 @@ Generate site metadata (Network, CustomSite, DigitalExperience)
 Deploy site infrastructure
 ```
 
-Creates the Digital Experience site that hosts the UI bundle. Only needed when the user wants a public-facing or authenticated site URL.
+Creates the Digital Experience site that hosts the UI bundle. Use when the user wants a public-facing or authenticated site URL for external users.
+
+#### Phase 7b: Custom Application (Internal)
+
+```
+Resolve app properties (appName, appNamespace, appLabel)
+    v
+Generate CustomApplication metadata (applications/*.app-meta.xml)
+    v
+Add <target>CustomApplication</target> to .uibundle-meta.xml
+    v
+Deploy custom application
+```
+
+Creates a Custom Application entry in the Lightning App Launcher. Use when the app is for internal users accessing it within Lightning Experience.
 
 ---
 
@@ -184,7 +202,7 @@ INTEGRATIONS (if applicable):
 
 DEPLOYMENT:
 - Target org: [org alias if known]
-- Experience Site: [yes/no, site name if applicable]
+- Hosting target: [Experience Site / Custom Application / none]
 
 SKILL LOAD ORDER:
 1. generating-ui-bundle-metadata
@@ -194,7 +212,8 @@ SKILL LOAD ORDER:
 5a. implementing-ui-bundle-agentforce-conversation-client (if chat requested)
 5b. implementing-ui-bundle-file-upload (if file upload requested)
 6. deploying-ui-bundle
-7. generating-experience-react-site (if site requested)
+7a. generating-ui-bundle-site (if Experience Site requested -- external users)
+7b. generating-ui-bundle-custom-app (if Custom Application requested -- internal users)
 ```
 
 ### STEP 2: Per-Phase Execution
@@ -248,11 +267,17 @@ Execute each phase sequentially. Complete all steps within a phase before moving
 - 3. Verify: Confirm deployment succeeds and app is accessible
 - 4. Checkpoint: App deployed -- proceed to Phase 7 if needed
 
-**Phase 7 -- Experience Site** (skip if not requested)
-- 1. Load skill: Invoke `generating-experience-react-site`
+**Phase 7a -- Experience Site** (skip if not requested or if Custom Application chosen)
+- 1. Load skill: Invoke `generating-ui-bundle-site`
 - 2. Execute: Resolve properties, generate site metadata, deploy
 - 3. Verify: Confirm site URL is accessible
 - 4. Checkpoint: Site live -- build complete
+
+**Phase 7b -- Custom Application** (skip if not requested or if Experience Site chosen)
+- 1. Load skill: Invoke `generating-ui-bundle-custom-app`
+- 2. Execute: Resolve app properties, generate CustomApplication metadata, add CustomApplication target to meta XML
+- 3. Verify: Confirm app appears in App Launcher
+- 4. Checkpoint: App registered -- build complete
 
 ### STEP 3: Final Summary
 
@@ -268,7 +293,7 @@ PHASES COMPLETED:
 [x] Phase 4: UI -- [count] pages, [count] components
 [x] Phase 5: Integrations -- [list or "none"]
 [x] Phase 6: Deployment -- deployed to [org]
-[x] Phase 7: Experience Site -- [site URL or "skipped"]
+[x] Phase 7: Hosting Target -- [Experience Site URL / Custom Application name / "skipped"]
 
 FILES GENERATED:
 [list key files and their paths]

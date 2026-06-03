@@ -8,7 +8,7 @@ import {
 	fetchDistinctMaintenanceRequestPriority,
 	type MaintenanceRequestSearchNode,
 } from "../api/maintenanceRequests/maintenanceRequestSearchService";
-import { useCachedAsyncData } from "../features/object-search/hooks/useCachedAsyncData";
+import { useAsyncData } from "../hooks/useAsyncData";
 import {
 	useObjectSearchParams,
 	type UseObjectSearchParamsReturn,
@@ -87,19 +87,9 @@ const SORT_CONFIGS: SortFieldConfig<string>[] = [
 export default function MaintenanceRequestSearch() {
 	const [selectedRequest, setSelectedRequest] = useState<MaintenanceRequestSearchNode | null>(null);
 
-	const { data: statusOptions } = useCachedAsyncData(fetchDistinctMaintenanceRequestStatus, [], {
-		key: "distinctMaintenanceRequestStatus",
-		ttl: 30_000,
-	});
-	const { data: typeOptions } = useCachedAsyncData(fetchDistinctMaintenanceRequestType, [], {
-		key: "distinctMaintenanceRequestType",
-		ttl: 30_000,
-	});
-	const { data: priorityOptions } = useCachedAsyncData(
-		fetchDistinctMaintenanceRequestPriority,
-		[],
-		{ key: "distinctMaintenanceRequestPriority", ttl: 30_000 },
-	);
+	const { data: statusOptions } = useAsyncData(fetchDistinctMaintenanceRequestStatus, []);
+	const { data: typeOptions } = useAsyncData(fetchDistinctMaintenanceRequestType, []);
+	const { data: priorityOptions } = useAsyncData(fetchDistinctMaintenanceRequestPriority, []);
 
 	const { filters, query, pagination, resetAll } = useObjectSearchParams<
 		Maintenance_Request__C_Filter,
@@ -109,8 +99,7 @@ export default function MaintenanceRequestSearch() {
 		() => query.orderBy ?? { CreatedDate: { order: ResultOrder.Desc } },
 		[query.orderBy],
 	);
-	const searchKey = `maintenance-requests:${JSON.stringify({ where: query.where, orderBy: effectiveOrderBy, first: pagination.pageSize, after: pagination.afterCursor })}`;
-	const { data, loading, error } = useCachedAsyncData(
+	const { data, loading, error } = useAsyncData(
 		() =>
 			searchMaintenanceRequests({
 				where: query.where,
@@ -119,7 +108,6 @@ export default function MaintenanceRequestSearch() {
 				after: pagination.afterCursor,
 			}),
 		[query.where, effectiveOrderBy, pagination.pageSize, pagination.afterCursor],
-		{ key: searchKey },
 	);
 
 	const validMaintenanceRequestNodes = useMemo(

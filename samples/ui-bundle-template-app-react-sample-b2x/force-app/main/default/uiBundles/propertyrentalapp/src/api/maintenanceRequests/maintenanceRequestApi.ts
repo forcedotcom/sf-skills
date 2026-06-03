@@ -43,6 +43,8 @@ export interface CreateMaintenanceRequestInput {
 	Priority__c?: string;
 	Status__c?: string;
 	Scheduled__c?: string | null;
+	Property__c?: string | null;
+	User__c?: string | null;
 }
 
 function getRecordIdFromResponse(result: Record<string, unknown>): string {
@@ -66,6 +68,8 @@ export async function createMaintenanceRequest(
 	};
 	if (input.Type__c?.trim()) fields.Type__c = input.Type__c.trim();
 	if (input.Scheduled__c?.trim()) fields.Scheduled__c = input.Scheduled__c.trim();
+	if (input.Property__c?.trim()) fields.Property__c = input.Property__c.trim();
+	if (input.User__c?.trim()) fields.User__c = input.User__c.trim();
 	const result = (await createRecord(OBJECT_API_NAME, fields)) as unknown as Record<
 		string,
 		unknown

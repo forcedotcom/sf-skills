@@ -7,12 +7,7 @@ import {
 	type MaintenanceRequestNode,
 } from "@/api/maintenanceRequests/maintenanceRequestApi";
 import { ResultOrder } from "@/api/graphql-operations-types";
-import {
-	useCachedAsyncData,
-	clearCacheEntry,
-} from "@/features/object-search/hooks/useCachedAsyncData";
-
-const CACHE_KEY = "maintenance-requests";
+import { useAsyncData } from "@/hooks/useAsyncData";
 
 async function fetchMaintenanceNodes(): Promise<MaintenanceRequestNode[]> {
 	const result = await searchMaintenanceRequests({
@@ -30,14 +25,11 @@ export function useMaintenanceRequests(): {
 } {
 	const [generation, setGeneration] = useState(0);
 
-	const { data, loading, error } = useCachedAsyncData(fetchMaintenanceNodes, [generation], {
-		key: `${CACHE_KEY}:${generation}`,
-	});
+	const { data, loading, error } = useAsyncData(fetchMaintenanceNodes, [generation]);
 
 	const refetch = useCallback(() => {
-		clearCacheEntry(`${CACHE_KEY}:${generation}`);
 		setGeneration((g) => g + 1);
-	}, [generation]);
+	}, []);
 
 	return { requests: data ?? [], loading, error, refetch };
 }

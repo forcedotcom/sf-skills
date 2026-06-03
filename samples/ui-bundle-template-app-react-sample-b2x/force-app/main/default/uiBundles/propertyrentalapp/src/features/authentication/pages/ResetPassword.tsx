@@ -5,16 +5,16 @@ import { CenteredPageLayout } from "../layout/centered-page-layout";
 import { AuthForm } from "../forms/auth-form";
 import { StatusAlert } from "../../../components/alerts/status-alert";
 import { useAppForm } from "../hooks/form";
-import { createDataSDK } from "@salesforce/sdk-data";
+import { createDataSDK } from "@salesforce/platform-sdk";
 import { ROUTES, AUTH_PLACEHOLDERS } from "../authenticationConfig";
 import { newPasswordSchema } from "../authHelpers";
-import { handleApiResponse, getErrorMessage } from "../utils/helpers";
+import { ApiError, handleApiResponse } from "../utils/helpers";
 
 export default function ResetPassword() {
 	const [searchParams] = useSearchParams();
 	const token = searchParams.get("token");
 	const [success, setSuccess] = useState(false);
-	const [submitError, setSubmitError] = useState<string | null>(null);
+	const [submitError, setSubmitError] = useState<React.ReactNode>(null);
 
 	const form = useAppForm({
 		defaultValues: { newPassword: "", confirmPassword: "" },
@@ -34,12 +34,27 @@ export default function ResetPassword() {
 						Accept: "application/json",
 					},
 				});
-				await handleApiResponse(response, "Password reset failed");
+				await handleApiResponse(response);
 				setSuccess(true);
 				// Scroll to top of page after successful submission so user sees it
 				window.scrollTo({ top: 0, behavior: "smooth" });
 			} catch (err) {
-				setSubmitError(getErrorMessage(err, "Password reset failed"));
+				console.error("Password reset failed", err);
+				if (err instanceof ApiError) {
+					setSubmitError(
+						err.errors.length === 1 ? (
+							err.errors[0]
+						) : (
+							<ul>
+								{err.errors.map((e, i) => (
+									<li key={i}>{e}</li>
+								))}
+							</ul>
+						),
+					);
+				} else {
+					setSubmitError("Password reset failed");
+				}
 			}
 		},
 		onSubmitInvalid: () => {},

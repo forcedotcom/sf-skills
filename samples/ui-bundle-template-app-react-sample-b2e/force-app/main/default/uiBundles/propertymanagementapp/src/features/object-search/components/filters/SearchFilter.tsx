@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { SearchBar } from "../SearchBar";
 import { useFilterField } from "../FilterContext";
@@ -22,9 +22,11 @@ export function SearchFilter({
 	const [localValue, setLocalValue] = useState(value?.value ?? "");
 
 	const externalValue = value?.value ?? "";
-	useEffect(() => {
+	const [prevExternalValue, setPrevExternalValue] = useState(externalValue);
+	if (prevExternalValue !== externalValue) {
+		setPrevExternalValue(externalValue);
 		setLocalValue(externalValue);
-	}, [externalValue]);
+	}
 
 	const debouncedOnChange = useDebouncedCallback((v: string) => {
 		if (v) {

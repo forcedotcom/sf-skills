@@ -2,7 +2,6 @@ import type { RouteObject } from 'react-router';
 import AppLayout from './appLayout';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
-import TestAccPage from "./pages/TestAccPage";
 import { Navigate } from "react-router";
 import PropertySearch from "./pages/PropertySearch";
 import MaintenanceRequestSearch from "./pages/MaintenanceRequestSearch";
@@ -23,11 +22,6 @@ export const routes: RouteObject[] = [
       {
         path: '*',
         element: <NotFound />
-      },
-      {
-        path: "test-acc",
-        element: <TestAccPage />,
-        handle: { showInNavigation: true, label: "Test ACC" }
       },
       {
         path: "maintenance",

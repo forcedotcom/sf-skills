@@ -8,18 +8,13 @@ import {
 	fetchListingById,
 	type PropertyDetailNode,
 } from "@/api/properties/propertyDetailGraphQL";
-import {
-	useCachedAsyncData,
-	clearCacheEntry,
-} from "@/features/object-search/hooks/useCachedAsyncData";
+import { useAsyncData } from "@/hooks/useAsyncData";
 
 export interface PropertyDetailState {
 	property: PropertyDetailNode | null;
 	loading: boolean;
 	error: string | null;
 }
-
-const CACHE_KEY_PREFIX = "property-detail";
 
 async function fetchDetail(id: string): Promise<PropertyDetailNode | null> {
 	// First try directly as a Property__c ID (common path).
@@ -38,21 +33,15 @@ export function usePropertyDetail(
 ): PropertyDetailState & { refetch: () => void } {
 	const [generation, setGeneration] = useState(0);
 	const trimmedId = id?.trim() ?? "";
-	const cacheKey = `${CACHE_KEY_PREFIX}:${trimmedId}:${generation}`;
 
-	const { data, loading, error } = useCachedAsyncData(
-		() => {
-			if (!trimmedId) return Promise.resolve(null);
-			return fetchDetail(trimmedId);
-		},
-		[trimmedId, generation],
-		{ key: cacheKey },
-	);
+	const { data, loading, error } = useAsyncData(() => {
+		if (!trimmedId) return Promise.resolve(null);
+		return fetchDetail(trimmedId);
+	}, [trimmedId, generation]);
 
 	const refetch = useCallback(() => {
-		clearCacheEntry(cacheKey);
 		setGeneration((g) => g + 1);
-	}, [cacheKey]);
+	}, []);
 
 	return {
 		property: data ?? null,
