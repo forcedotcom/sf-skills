@@ -1,3 +1,12 @@
+# [1.16.0](https://github.com/forcedotcom/sf-skills/compare/1.15.0...1.16.0) (2026-06-16)
+
+
+### Features
+
+* Update LICENSE for sf-skills @W-22832966@ ([8774dfc](https://github.com/forcedotcom/sf-skills/commit/8774dfc8e285393f6dd956fe656f6633d2f2f35d))
+
+
+
 # [1.15.0](https://github.com/forcedotcom/sf-skills/compare/1.14.0...1.15.0) (2026-06-12)
 
 
