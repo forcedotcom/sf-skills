@@ -4,7 +4,6 @@ description: "Build, modify, debug, and deploy agents with Agentforce Agent Scri
 compatibility: "Requires Agentforce license, API v66.0+, Einstein Agent User"
 metadata:
   version: "1.0"
-  last_updated: "2026-04-08"
 ---
 
 # Agent Script Skill

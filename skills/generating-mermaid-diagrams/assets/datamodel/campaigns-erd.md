@@ -21,7 +21,7 @@ Pre-built data model for Salesforce Campaigns using `flowchart LR` format with c
 Enrich diagram with live org data:
 
 ```bash
-python3 ~/.claude/skills/generating-mermaid-diagrams/scripts/query-org-metadata.py \
+python3 ../../scripts/query-org-metadata.py \
     --objects Campaign,CampaignMember,CampaignInfluence,Lead,Contact,Opportunity \
     --target-org myorg
 ```

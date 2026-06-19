@@ -44,7 +44,7 @@ Ask for or infer:
 ## Core Operating Rules
 
 - Verify the external plugin runtime before running Data Cloud commands.
-- Run the shared readiness classifier before mutating ingestion assets: `node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase prepare --json`.
+- Run the shared readiness classifier before mutating ingestion assets: `node ../orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase prepare --json`.
 - Prefer inspecting existing streams and DLOs before creating new ingestion assets.
 - Suppress linked-plugin warning noise with `2>/dev/null` for normal usage.
 - Treat DLO naming and field naming as Data Cloud-specific, not CRM-native.
@@ -59,7 +59,7 @@ Ask for or infer:
 
 ### 1. Classify readiness for prepare work
 ```bash
-node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase prepare --json
+node ../orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase prepare --json
 ```
 
 ### 2. Inspect existing ingestion assets

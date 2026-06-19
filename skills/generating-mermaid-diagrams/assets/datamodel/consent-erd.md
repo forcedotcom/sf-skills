@@ -24,7 +24,7 @@ Pre-built data model for Salesforce Consent Management (GDPR/Privacy) using `flo
 Enrich diagram with live org data:
 
 ```bash
-python3 ~/.claude/skills/generating-mermaid-diagrams/scripts/query-org-metadata.py \
+python3 ../../scripts/query-org-metadata.py \
     --objects Individual,ContactPointEmail,ContactPointPhone,DataUsePurpose,ContactPointConsent \
     --target-org myorg
 ```

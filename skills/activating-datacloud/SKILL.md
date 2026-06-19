@@ -40,7 +40,7 @@ Ask for or infer:
 ## Core Operating Rules
 
 - Verify the upstream segment or insight is healthy before creating downstream delivery assets.
-- Run the shared readiness classifier before mutating activation assets: `node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase act --json`.
+- Run the shared readiness classifier before mutating activation assets: `node ../orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase act --json`.
 - Inspect available platforms and targets before mutating activation setup.
 - Keep destination definitions deterministic and reusable where possible.
 - Treat downstream credential and platform constraints as separate validation concerns.
@@ -52,7 +52,7 @@ Ask for or infer:
 
 ### 1. Classify readiness for act work
 ```bash
-node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase act --json
+node ../orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase act --json
 ```
 
 ### 2. Inspect destinations first

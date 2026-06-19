@@ -4,7 +4,6 @@ description: "Review a Lightning Web Component for **mobile offline** compatibil
 metadata:
   version: "1.0"
 ---
-<!-- adk-managed-skill -->
 
 # Reviewing LWC Mobile Offline
 

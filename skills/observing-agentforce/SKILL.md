@@ -4,7 +4,6 @@ description: "Analyze production Agentforce agent behavior using session traces 
 allowed-tools: Bash Read Write Edit Glob Grep
 metadata:
   version: "1.0"
-  last_updated: "2026-04-08"
   argument-hint: "<org-alias> [--agent-file <path>] [--session-id <id>] [--days <n>]"
   compatibility: claude-code
 ---

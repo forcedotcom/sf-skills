@@ -4,7 +4,6 @@ description: "Build a Salesforce LWC that uses native mobile device capabilities
 metadata:
   version: "1.0"
 ---
-<!-- adk-managed-skill -->
 
 # Using Mobile Native Capabilities
 

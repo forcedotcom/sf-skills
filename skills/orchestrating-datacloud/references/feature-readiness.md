@@ -27,13 +27,13 @@ Examples:
 Run the shared readiness classifier before mutation-heavy work:
 
 ```bash
-node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o myorg --json
+node ../scripts/diagnose-org.mjs -o myorg --json
 ```
 
 For retrieve/query work, only add a table probe when you already know the table name is real:
 
 ```bash
-node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o myorg --phase retrieve --describe-table MyDMO__dlm --json
+node ../scripts/diagnose-org.mjs -o myorg --phase retrieve --describe-table MyDMO__dlm --json
 ```
 
 ## Signal matrix

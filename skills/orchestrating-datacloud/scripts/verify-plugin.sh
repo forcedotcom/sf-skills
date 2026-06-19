@@ -10,7 +10,7 @@ fi
 
 if ! sf data360 man >/dev/null 2>&1; then
   echo "The community 'sf data360' runtime is not available." >&2
-  echo "Run bash ~/.claude/skills/orchestrating-datacloud/scripts/bootstrap-plugin.sh first." >&2
+  echo "Run bash ./scripts/bootstrap-plugin.sh first." >&2
   exit 1
 fi
 
@@ -54,5 +54,5 @@ fi
 
 echo "Verification complete."
 if [[ -n "${ORG}" ]]; then
-  echo "Next: node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o '${ORG}' --json"
+  echo "Next: node ./scripts/diagnose-org.mjs -o '${ORG}' --json"
 fi

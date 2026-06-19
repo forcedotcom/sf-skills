@@ -63,14 +63,12 @@ These are intentionally generic and should be adapted to the target org.
 
 ## Quick start
 
-> The script examples below assume the skill is installed under `~/.claude/skills/` via the full Claude Code installer. If you are working from a repo checkout, run the same scripts from that checkout path.
-
 ### 1. Verify the runtime
 
 ```bash
-bash ~/.claude/skills/orchestrating-datacloud/scripts/verify-plugin.sh
+bash ./scripts/verify-plugin.sh
 # or with an org alias
-bash ~/.claude/skills/orchestrating-datacloud/scripts/verify-plugin.sh myorg
+bash ./scripts/verify-plugin.sh myorg
 ```
 
 The helper treats `sf data360 doctor` as advisory and falls back to additional read-only smoke checks when an org is only partially provisioned.
@@ -78,9 +76,9 @@ The helper treats `sf data360 doctor` as advisory and falls back to additional r
 ### 2. Diagnose feature readiness before mutating
 
 ```bash
-node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o myorg --json
+node ./scripts/diagnose-org.mjs -o myorg --json
 # optional retrieve-plane probe, only when you know the table is real
-node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o myorg --phase retrieve --describe-table MyDMO__dlm --json
+node ./scripts/diagnose-org.mjs -o myorg --phase retrieve --describe-table MyDMO__dlm --json
 ```
 
 Use the diagnose helper to distinguish between:
@@ -94,7 +92,7 @@ Use the diagnose helper to distinguish between:
 ```bash
 python3 ~/.claude/sf-skills-install.py --with-datacloud-runtime
 # or run the helper script directly
-bash ~/.claude/skills/orchestrating-datacloud/scripts/bootstrap-plugin.sh
+bash ./scripts/bootstrap-plugin.sh
 ```
 
 ### 4. Start with read-only inspection

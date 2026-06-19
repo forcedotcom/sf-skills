@@ -43,7 +43,7 @@ Ask for or infer:
 ## Core Operating Rules
 
 - Verify the plugin runtime first; see [../orchestrating-datacloud/references/plugin-setup.md](../orchestrating-datacloud/references/plugin-setup.md).
-- Run the shared readiness classifier before mutating connections: `node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase connect --json`.
+- Run the shared readiness classifier before mutating connections: `node ../orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase connect --json`.
 - Prefer read-only discovery before connection creation.
 - Suppress linked-plugin warning noise with `2>/dev/null` for standard usage.
 - Remember that `connection list` requires `--connector-type`.
@@ -59,7 +59,7 @@ Ask for or infer:
 
 ### 1. Classify readiness for connect work
 ```bash
-node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase connect --json
+node ../orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase connect --json
 ```
 
 ### 2. Discover connector types

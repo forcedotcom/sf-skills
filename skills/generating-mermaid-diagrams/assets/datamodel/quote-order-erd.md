@@ -23,7 +23,7 @@ Pre-built data model for Salesforce Quotes and Orders using `flowchart LR` forma
 Enrich diagram with live org data:
 
 ```bash
-python3 ~/.claude/skills/generating-mermaid-diagrams/scripts/query-org-metadata.py \
+python3 ../../scripts/query-org-metadata.py \
     --objects Opportunity,Quote,QuoteLineItem,Order,OrderItem,Product2,Contract \
     --target-org myorg
 ```

@@ -210,7 +210,7 @@ style std fill:#f0f9ff,stroke:#0369a1,stroke-dasharray:5
 Use the provided Python script for efficient metadata queries:
 
 ```bash
-python3 ~/.claude/skills/generating-mermaid-diagrams/scripts/query-org-metadata.py \
+python3 ../scripts/query-org-metadata.py \
     --objects Account,Contact,Lead,Opportunity,Case \
     --target-org myorg \
     --output table

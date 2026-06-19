@@ -40,7 +40,7 @@ Ask for or infer:
 ## Core Operating Rules
 
 - Inspect DMO schema before creating mappings.
-- Run the shared readiness classifier before mutating harmonization assets: `node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase harmonize --json`.
+- Run the shared readiness classifier before mutating harmonization assets: `node ../orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase harmonize --json`.
 - Prefer `dmo list --all` when browsing the catalog, but use first-page `dmo list` for fast readiness checks.
 - Use `query describe` or `dmo get --json` instead of inventing unsupported describe flows.
 - Treat identity resolution runs as asynchronous and verify results after execution.
@@ -52,7 +52,7 @@ Ask for or infer:
 
 ### 1. Classify readiness for harmonize work
 ```bash
-node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase harmonize --json
+node ../orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase harmonize --json
 ```
 
 ### 2. Inspect the catalog

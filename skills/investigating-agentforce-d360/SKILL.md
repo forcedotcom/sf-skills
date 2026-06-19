@@ -1,6 +1,6 @@
 ---
 name: investigating-agentforce-d360
-description: "Data Cloud 360° view of a single Agentforce session. Pulls 24 STDM + GenAI DMO rows via the DC Query REST API, assembles a hierarchical session tree (Interaction → Step → Generation → GatewayRequest), renders a human-readable summary with transcript + per-turn topic/action invocations + LLM generations + tool calls + audit chain. TRIGGER when user asks to trace, inspect, summarize, or describe a specific Agentforce session by session id (Agent Session UUID `019d…` or MessagingSession id `0Mw…`). Also triggers on session discovery — find/list/search sessions by time, agent, channel, outcome, or conversation text — when the user has no session id yet. DO NOT TRIGGER for design-time architecture questions (use investigating-agentforce-architecture instead) or for runtime perf/latency/SLO questions that require platform telemetry beyond Data Cloud."
+description: "Data Cloud 360° view of a single Agentforce session. TRIGGER when user asks to trace, inspect, summarize, or describe a specific Agentforce session by session id (Agent Session UUID `019d…` or MessagingSession id `0Mw…`). Also triggers on session discovery — find/list/search sessions by time, agent, channel, outcome, or conversation text — when the user has no session id yet. DO NOT TRIGGER for design-time architecture questions (use investigating-agentforce-architecture instead) or for runtime perf/latency/SLO questions that require platform telemetry beyond Data Cloud."
 metadata:
   version: "1.0"
 ---

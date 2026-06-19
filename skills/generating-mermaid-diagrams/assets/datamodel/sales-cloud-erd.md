@@ -22,7 +22,7 @@ Pre-built data model for Salesforce Sales Cloud using `flowchart LR` format with
 Enrich diagram with live org data:
 
 ```bash
-python3 ~/.claude/skills/generating-mermaid-diagrams/scripts/query-org-metadata.py \
+python3 ../../scripts/query-org-metadata.py \
     --objects Account,Contact,Lead,Opportunity,Product2,Campaign \
     --target-org myorg
 ```

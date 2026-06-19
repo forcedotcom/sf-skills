@@ -23,7 +23,7 @@ Pre-built data model for Salesforce Scheduler (Lightning Scheduler) using `flowc
 Enrich diagram with live org data:
 
 ```bash
-python3 ~/.claude/skills/generating-mermaid-diagrams/scripts/query-org-metadata.py \
+python3 ../../scripts/query-org-metadata.py \
     --objects ServiceAppointment,ServiceResource,ServiceTerritory,WorkType \
     --target-org myorg
 ```

@@ -18,8 +18,6 @@ The orchestrating-datacloud family uses a **community `sf data360` CLI runtime**
 
 ## Recommended setup path
 
-The command examples below assume the skill is installed under `~/.claude/skills/` via the full Claude Code installer. If you are working from a cloned sf-skills repo instead, run the same scripts from that checkout path.
-
 If you use the Python installer, it can install this optional runtime for you:
 
 ```bash
@@ -29,7 +27,7 @@ python3 ~/.claude/sf-skills-install.py --with-datacloud-runtime
 Or use the helper script directly:
 
 ```bash
-bash ~/.claude/skills/orchestrating-datacloud/scripts/bootstrap-plugin.sh
+bash ../scripts/bootstrap-plugin.sh
 ```
 
 By default it clones the plugin into `~/.sf-community-tools/datacloud/sf-cli-plugin-data360`, installs dependencies, compiles it, and links it into the local Salesforce CLI.
@@ -41,7 +39,7 @@ git clone https://github.com/Jaganpro/sf-cli-plugin-data360.git
 cd sf-cli-plugin-data360
 yarn install
 npx tsc
-node ~/.claude/skills/orchestrating-datacloud/scripts/generate-manifest.mjs .
+node ../scripts/generate-manifest.mjs .
 sf plugins link .
 ```
 
@@ -49,9 +47,9 @@ sf plugins link .
 
 ```bash
 sf data360 man
-bash ~/.claude/skills/orchestrating-datacloud/scripts/verify-plugin.sh
-bash ~/.claude/skills/orchestrating-datacloud/scripts/verify-plugin.sh myorg
-node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o myorg --json
+bash ../scripts/verify-plugin.sh
+bash ../scripts/verify-plugin.sh myorg
+node ../scripts/diagnose-org.mjs -o myorg --json
 ```
 
 For newer command families such as `sf data360 query hybrid` and recent pagination fixes, update the community runtime to the latest upstream commit by re-running the bootstrap helper.
@@ -80,7 +78,7 @@ sf data360 segment list -o myorg 2>/dev/null
 If you see `Warning: @gthoppae/sf-cli-plugin-data360 is a linked ESM module and cannot be auto-transpiled`, generate the oclif command manifest:
 
 ```bash
-node ~/.claude/skills/orchestrating-datacloud/scripts/generate-manifest.mjs ~/.sf-community-tools/datacloud/sf-cli-plugin-data360
+node ../scripts/generate-manifest.mjs ~/.sf-community-tools/datacloud/sf-cli-plugin-data360
 ```
 
 This tells oclif to use pre-compiled output directly instead of attempting auto-transpilation. The `npx oclif manifest` alternative may fail on newer Node.js versions due to `@oclif/core` version mismatches.

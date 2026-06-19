@@ -25,7 +25,7 @@ Pre-built data model for Salesforce Field Service (formerly Field Service Lightn
 Enrich diagram with live org data:
 
 ```bash
-python3 ~/.claude/skills/generating-mermaid-diagrams/scripts/query-org-metadata.py \
+python3 ../../scripts/query-org-metadata.py \
     --objects WorkOrder,WorkOrderLineItem,ServiceAppointment,ServiceResource,ServiceTerritory \
     --target-org myorg
 ```

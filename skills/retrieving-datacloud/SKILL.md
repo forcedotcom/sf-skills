@@ -39,7 +39,7 @@ Ask for or infer:
 ## Core Operating Rules
 
 - Treat Data Cloud SQL as its own query language, not SOQL.
-- Run the shared readiness classifier before relying on query/search surfaces: `node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase retrieve --json`.
+- Run the shared readiness classifier before relying on query/search surfaces: `node ../orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase retrieve --json`.
 - Use describe before guessing columns.
 - Prefer `sqlv2` or async query flows for larger result sets.
 - Use vector search or hybrid search only when the search index lifecycle is healthy.
@@ -51,9 +51,9 @@ Ask for or infer:
 
 ### 1. Classify readiness for retrieve work
 ```bash
-node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase retrieve --json
+node ../orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase retrieve --json
 # optional query-plane probe, only with a real table name
-node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase retrieve --describe-table MyDMO__dlm --json
+node ../orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase retrieve --describe-table MyDMO__dlm --json
 ```
 
 ### 2. Choose the smallest correct query shape

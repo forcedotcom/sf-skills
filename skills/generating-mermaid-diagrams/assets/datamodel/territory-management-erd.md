@@ -20,7 +20,7 @@ Pre-built data model for Salesforce Enterprise Territory Management (Territory2)
 Enrich diagram with live org data:
 
 ```bash
-python3 ~/.claude/skills/generating-mermaid-diagrams/scripts/query-org-metadata.py \
+python3 ../../scripts/query-org-metadata.py \
     --objects Territory2Model,Territory2,Territory2Type,UserTerritory2Association,ObjectTerritory2Association \
     --target-org myorg
 ```

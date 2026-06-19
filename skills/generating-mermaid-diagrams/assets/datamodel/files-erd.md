@@ -21,7 +21,7 @@ Pre-built data model for Salesforce Files (Content) using `flowchart LR` format 
 Enrich diagram with live org data:
 
 ```bash
-python3 ~/.claude/skills/generating-mermaid-diagrams/scripts/query-org-metadata.py \
+python3 ../../scripts/query-org-metadata.py \
     --objects ContentDocument,ContentVersion,ContentDocumentLink,ContentWorkspace \
     --target-org myorg
 ```

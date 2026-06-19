@@ -22,7 +22,7 @@ Pre-built data model for Salesforce B2B Commerce using `flowchart LR` format wit
 Enrich diagram with live org data:
 
 ```bash
-python3 ~/.claude/skills/generating-mermaid-diagrams/scripts/query-org-metadata.py \
+python3 ../../scripts/query-org-metadata.py \
     --objects WebStore,WebCart,CartItem,BuyerGroup,BuyerAccount \
     --target-org myorg
 ```

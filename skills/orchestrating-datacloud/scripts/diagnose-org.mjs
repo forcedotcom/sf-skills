@@ -257,7 +257,7 @@ function guidanceFromProbe(scope, probe) {
   if (probe.state === 'runtime_missing') {
     return [
       'Install or relink the community sf data360 runtime before attempting Data Cloud work.',
-      'Use python3 ~/.claude/sf-skills-install.py --with-datacloud-runtime or bash ~/.claude/skills/orchestrating-datacloud/scripts/bootstrap-plugin.sh.',
+      'Use python3 ~/.claude/sf-skills-install.py --with-datacloud-runtime or bash ./scripts/bootstrap-plugin.sh.',
     ];
   }
 

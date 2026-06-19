@@ -92,7 +92,7 @@ Recommended checks:
 ```bash
 sf data360 man
 sf org display -o <alias>
-bash ~/.claude/skills/orchestrating-datacloud/scripts/verify-plugin.sh <alias>
+bash ./scripts/verify-plugin.sh <alias>
 ```
 
 Treat `sf data360 doctor` as a broad health signal, not the sole gate. On partially provisioned orgs it can fail even when read-only command families like connectors, DMOs, or segments still work.
@@ -100,12 +100,12 @@ Treat `sf data360 doctor` as a broad health signal, not the sole gate. On partia
 ### 2. Classify readiness before changing anything
 Run the shared classifier first:
 ```bash
-node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --json
+node ./scripts/diagnose-org.mjs -o <org> --json
 ```
 
 Only use a query-plane probe after you know the table name is real:
 ```bash
-node ~/.claude/skills/orchestrating-datacloud/scripts/diagnose-org.mjs -o <org> --phase retrieve --describe-table MyDMO__dlm --json
+node ./scripts/diagnose-org.mjs -o <org> --phase retrieve --describe-table MyDMO__dlm --json
 ```
 
 Use the classifier to distinguish:
