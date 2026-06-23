@@ -68,6 +68,15 @@ Define field permissions for sensitive or custom fields:
     <required>true</required>
 </fields>
 ```
+
+**A field counts as required (and must be omitted from `<fieldPermissions>`) when ANY of these are true:**
+- Field metadata contains `<required>true</required>`
+- Field is a **Master-Detail** relationship (`<type>MasterDetail</type>`) — implicitly required on the child object
+- Field is a **system required** standard field (e.g. `Name` on most objects, `OwnerId`, `CreatedById`)
+- Field is a **Lookup** with `<required>true</required>` set
+
+**Detection:** read the field's `*.field-meta.xml` before emitting a `<fieldPermissions>` entry. If you cannot read it, do not emit the entry — flag the field for manual review.
+
 - Use format `ObjectName.FieldName` for field references
 - Set both readable and editable to true when the user needs edit access; editable implies readable
 - If all fields should be visible, can alternatively enable the "viewAllFields" object permission
@@ -175,13 +184,17 @@ Important:
 Before deploying, verify:
 - [ ] fullName, label, description set
 - [ ] Permissions follow least privilege
-- [ ] No required fields in `<fieldPermissions>`
+- [ ] No required fields in `<fieldPermissions>` — for each entry, verified the field's `*.field-meta.xml` does NOT have `<required>true</required>` and is NOT a Master-Detail
 - [ ] No duplicate permissions
 - [ ] No lengthy comments
 
 ## What Causes Deployment Failure
 
-- **Field permissions on required fields:** Any required field in `<fieldPermissions>` fails deployment. Required fields cannot have FLS; omit them entirely. Always confirm from object/field metadata that a field exists and is not required—never assume.
+- **Field permissions on required fields:** Any required field in `<fieldPermissions>` fails deployment with an error like:
+
+  > `You can't edit field-level security for a required field, universally required field, or master-detail relationship field. Remove [Object.Field__c] from the permission set.`
+
+  Required fields cannot have explicit FLS — the platform grants it automatically. Omit them entirely. Always confirm from the field's `*.field-meta.xml` that the field is not required (see Step 3 "What counts as required") before adding it; never assume.
 - **Incorrect API names:** Using the wrong name or missing suffixes (e.g. missing `__c` for custom objects, fields, tabs) cause failure.
 
 ## Deployment
