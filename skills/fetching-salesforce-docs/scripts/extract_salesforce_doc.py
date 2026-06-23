@@ -240,6 +240,10 @@ def extract_official_salesforce_doc(url: str, timeout_seconds: int, use_stealth:
                   }
 
                   const selectorConfigs = [
+                    { selector: '.body.refbody', strategy: 'dev-refbody', base: 310 },
+                    { selector: '.body.conbody', strategy: 'dev-conbody', base: 310 },
+                    { selector: '.body.taskbody', strategy: 'dev-taskbody', base: 310 },
+                    { selector: '.body', strategy: 'dev-body', base: 300 },
                     { selector: 'article', strategy: 'article', base: 260 },
                     { selector: 'main', strategy: 'main', base: 220 },
                     { selector: '[role="main"]', strategy: 'role-main', base: 220 },
