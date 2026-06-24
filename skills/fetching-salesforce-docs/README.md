@@ -28,6 +28,14 @@ This skill does not include:
 - deciding when to follow child links from broad official guide pages
 - rejecting weak results such as shells, landing pages, and third-party summaries
 
+## Markdown shortcut (developer.salesforce.com)
+
+Modern developer-guide pages publish a raw-Markdown twin: swap `.html` → `.md` on the same URL
+and fetch it with a **plain web fetch** — no Playwright needed. The page's "Copy as Markdown" /
+"View as Markdown" links expose this. Try it **first** for `developer.salesforce.com/docs/platform/.../guide/*`
+pages. It does **not** work for legacy `atlas.*` pages (those return an HTML shell), and
+`help.salesforce.com` still needs the renderer — use the extractor below for those.
+
 ## Optional utility
 
 A tiny wrapper is available for official Salesforce doc URLs:

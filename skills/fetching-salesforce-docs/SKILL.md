@@ -95,7 +95,19 @@ This is especially important for:
 
 ### 5. For `developer.salesforce.com`
 
-Use this playbook:
+**Try the Markdown variant first — it needs no browser.** Modern developer-guide pages now
+publish a raw-Markdown twin: swap the `.html` extension for `.md` on the same URL and fetch it
+with a **plain web fetch** (the "Copy/View as Markdown" links on the page expose this). It returns
+clean Markdown (headings, fenced code, links) with no JS shell, so it's faster and lighter than
+Playwright. Example: `…/guide/js-dynamic-components.html` → `…/guide/js-dynamic-components.md`
+(verified 2026-06-24).
+- **Scope:** confirmed for modern guide pages under `developer.salesforce.com/docs/platform/.../guide/*`.
+  It does **not** work for legacy **`atlas.*`** pages — `.md` there returns an HTML shell, so fall
+  back to browser-rendered extraction for those.
+- If the `.md` fetch 404s or returns a shell ("Salesforce Developers" with no body), drop to the
+  Playwright playbook below.
+
+Otherwise use this playbook:
 - start with the most likely official guide root
 - if the page is JS-heavy, prefer browser-rendered extraction
 - check whether the exact concept appears on the page
