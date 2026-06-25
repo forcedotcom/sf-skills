@@ -342,6 +342,40 @@ mutation UpdateAccount {
 - `true` (default) — All operations succeed or all roll back.
 - `false` — Independent operations succeed individually, but dependent operations (using `@{alias}`) still roll back together.
 
+#### Mutation variable shape
+
+The UIAPI is **asymmetric**: query responses come back as `{ value, displayValue }` objects, but mutation inputs take **plain scalars**. Do not mirror response shapes into your variables.
+
+Three universal shapes — substitute your entity name for `<Entity>`:
+
+```js
+// Create — single level of entity-key wrapping; plain scalars inside
+{ input: { <Entity>: { Field1: "x", Field2: 42 } } }
+
+// Update — Id is a SIBLING of the entity key, NOT inside it
+{ input: { Id: "<record-id>", <Entity>: { Field1: "x" } } }
+
+// Delete — universal; mutation field is still <Entity>Delete
+{ input: { Id: "<record-id>" } }
+```
+
+GraphQL variable types match the schema verbatim:
+- Create: `$input: <Entity>CreateInput!`
+- Update: `$input: <Entity>UpdateInput!`
+- Delete: `$input: RecordDeleteInput!` (one shared input type for every entity)
+
+Mutation field names are PascalCase, entity-first: `<Entity>Create`, `<Entity>Update`, `<Entity>Delete`. Never `createLead` / `lead.create`.
+
+Payload selections:
+- Create / Update return `Record: <Entity>`; Update also exposes `success: Boolean`.
+- Delete payload is `RecordDeletePayload` and exposes `Id: ID` directly — there is no `Record` wrapper on Delete.
+
+Common failures to avoid:
+- ✘ `Field: { value: "x" }` on input — `{ value }` is the response shape, not the input shape.
+- ✘ `{ input: { <Entity>: { Id, ...fields } } }` on Update — `Id` belongs as a sibling of `<Entity>`, not inside it.
+- ✘ `{ input: { <Entity>: { <Entity>: {...} } } }` — the entity wrapper is exactly one level deep.
+- ✘ Inventing input type names like `LeadInput` or `CreateLeadInput` — the schema scalars are `<Entity>CreateInput` and `<Entity>UpdateInput`.
+
 #### Mutation Chaining
 
 Chain related mutations using `@{alias}` references to `Id` from earlier mutations. Required for parent-child creation (nested child creates are not supported).
