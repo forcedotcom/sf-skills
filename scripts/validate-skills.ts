@@ -420,7 +420,8 @@ Wrap values that contain \`: \` (colon + space), such as long descriptions with 
 /**
  * Extracts nested key-value pairs from the `metadata:` block in raw frontmatter.
  * Returns `null` if no metadata block, `"scalar"` if metadata has an inline value,
- * `"list"` if it contains YAML list items, or a `Record` of sub-keys.
+ * `"list"` if direct children are YAML list items, or a `Record` of sub-keys.
+ * Nested lists under sub-keys (e.g. cliTools: [{tool:"sf"}]) are allowed.
  */
 function parseMetadataBlock(rawFrontmatter: string): Record<string, string> | "scalar" | "list" | null {
   const lines = rawFrontmatter.split(/\r?\n/)
@@ -431,12 +432,16 @@ function parseMetadataBlock(rawFrontmatter: string): Record<string, string> | "s
   const inlineValue = metaLine.slice(metaLine.indexOf(":") + 1).trim()
   if (inlineValue && !inlineValue.startsWith("#")) return "scalar"
 
+  let directIndent: number | null = null
   const result: Record<string, string> = {}
   for (let i = metaIdx + 1; i < lines.length; i++) {
     const line = lines[i]
     if (!line.startsWith(" ") && !line.startsWith("\t")) break
+    const indent = line.length - line.trimStart().length
+    if (directIndent === null) directIndent = indent
     const trimmed = line.trim()
-    if (trimmed.startsWith("- ")) return "list"
+    if (indent === directIndent && trimmed.startsWith("- ")) return "list"
+    if (indent !== directIndent) continue
     const colonIdx = trimmed.indexOf(":")
     if (colonIdx === -1) continue
     const key = trimmed.slice(0, colonIdx).trim()
