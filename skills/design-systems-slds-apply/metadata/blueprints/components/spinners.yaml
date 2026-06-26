@@ -1,0 +1,135 @@
+name: "Spinners"
+description: "Loading indicators that show progress for operations that take time to complete, providing visual feedback that the system is working."
+category: "Feedback"
+slds_classes:
+  root: "slds-spinner"
+  elements:
+    - class: "slds-spinner__dot-a"
+      description: "First spinner dot element"
+      purpose: "Part of the animated spinner visual"
+    - class: "slds-spinner__dot-b"
+      description: "Second spinner dot element"
+      purpose: "Part of the animated spinner visual"
+  modifiers:
+    - class: "slds-spinner_xx-small"
+      description: "Extra extra small spinner size"
+      usage: "Very compact spinner for small components"
+    - class: "slds-spinner_x-small"
+      description: "Extra small spinner size"
+      usage: "Small spinner for compact interfaces"
+    - class: "slds-spinner_small"
+      description: "Small spinner size"
+      usage: "Standard small spinner"
+    - class: "slds-spinner_medium"
+      description: "Medium spinner size (default)"
+      usage: "Default spinner size for most use cases"
+    - class: "slds-spinner_large"
+      description: "Large spinner size"
+      usage: "Prominent spinner for main loading states"
+    - class: "slds-spinner_delayed"
+      description: "Delayed spinner appearance"
+      usage: "Spinner that appears after a delay to avoid flashing"
+    - class: "slds-spinner_inline"
+      description: "Inline spinner variant"
+      usage: "Spinner that flows with text content"
+  states: []
+variants:
+  - name: "Base"
+    description: "Standard loading spinner"
+    classes:
+      - "slds-spinner"
+    usage_context: "Default loading indicator for operations"
+    differences: "Animated circular spinner with rotating dots"
+  - name: "Inline"
+    description: "Spinner that flows with text content"
+    classes:
+      - "slds-spinner"
+      - "slds-spinner_inline"
+    usage_context: "Loading indicator within text or inline elements"
+    differences: "Smaller spinner designed to work with text flow"
+lightning_component:
+  name: "lightning-spinner"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-spinner"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS spinner blueprint"
+accessibility:
+  keyboard_support:
+    - "No keyboard interaction required (display-only)"
+  screen_reader:
+    - "Loading state announced through aria-live regions"
+    - "Alternative text provided for spinner meaning"
+    - "Loading completion communicated when appropriate"
+  aria_attributes:
+    - "aria-hidden='false' to ensure spinner is announced"
+    - "aria-live='polite' or 'assertive' for loading announcements"
+    - "aria-label describing the loading operation"
+    - "role='status' for loading state communication"
+usage_guidelines:
+  when_to_use:
+    - "During data loading operations"
+    - "For form submissions or saves"
+    - "When content is being generated or processed"
+    - "During asynchronous operations that take noticeable time"
+  when_not_to_use:
+    - "For operations that complete instantly"
+    - "When a progress bar would be more appropriate"
+    - "For decoration (spinners should indicate actual loading)"
+  best_practices:
+    - "Use appropriate size for the context"
+    - "Provide alternative text describing what's loading"
+    - "Consider delayed appearance for very fast operations"
+    - "Remove spinner when loading completes"
+    - "Position spinner appropriately for the loading context"
+  common_mistakes:
+    - "Using spinners for operations that complete instantly"
+    - "Not providing accessible text for the loading state"
+    - "Poor positioning that interferes with content"
+    - "Not removing spinner when loading completes"
+code_examples:
+  - title: "Medium Spinner"
+    code: |
+      <div role="status" class="slds-spinner slds-spinner_medium">
+            <span class="slds-assistive-text">Loading...</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+            </div>
+  - title: "Small Inline Spinner"
+    code: |
+      <div class="slds-text-body_regular">
+            Loading data <div role="status" class="slds-spinner slds-spinner_xx-small slds-spinner_inline">
+              <span class="slds-assistive-text">Loading</span>
+              <div class="slds-spinner__dot-a"></div>
+              <div class="slds-spinner__dot-b"></div>
+            </div>
+            </div>
+  - title: "Large Loading Spinner"
+    code: |
+      <div role="status" class="slds-spinner slds-spinner_large">
+            <span class="slds-assistive-text">Loading page content...</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+            </div>
+styling_hooks: []
+dependencies:
+  css_files:
+    - "spinner.css"
+  javascript: []
+  icons: []
+  other_components:
+    - "assistive-text"
+related_components:
+  - name: "Progress Bar"
+    relationship: "alternative"
+    description: "Alternative loading indicator showing progress percentage"
+  - name: "Progress Ring"
+    relationship: "alternative"
+    description: "Alternative circular progress indicator"
+  - name: "Illustration"
+    relationship: "similar"
+    description: "Can be combined with illustrations for empty states"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/spinners/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

@@ -1,0 +1,49 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields"
+  ],
+  "title": "DataKitObjectDependency - Metadata API",
+  "description": "Represents the dependency between two data kit objects. The object templates are added inside the data kit.",
+  "file_information": ".DataKitObjectDependency",
+  "directory_location": "DataKitObjectDependency",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "dataPackageKitDef": {
+      "type": "string",
+      "required": true,
+      "description": "The ID of the linked DataPackageKitDefinition."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the DataKitObjectDependency. This name can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Label that identifies the data kit object dependency."
+    },
+    "sourceObject": {
+      "type": "string",
+      "description": "The source data kit object template that the target object depends on."
+    },
+    "sourceObjectType": {
+      "type": "string",
+      "required": true,
+      "description": "The type of the source object referenced in the data kit. Valid values are: DataKitObjectTemplate DataSourceObject DataStreamTemplate DataSourceBundleDefinition MKtDataModelObject"
+    },
+    "targetObject": {
+      "type": "string",
+      "required": true,
+      "description": "The target data kit object template that depends on the source object."
+    }
+  }
+}

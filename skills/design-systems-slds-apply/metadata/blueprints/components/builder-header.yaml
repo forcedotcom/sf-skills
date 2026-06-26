@@ -1,0 +1,192 @@
+name: Builder Header
+description: A specialized global header component designed for builder and editor interfaces. It provides a fixed header
+  with navigation, branding, and utility actions, along with an optional toolbar for document-level actions.
+category: Layout
+slds_classes:
+  root: slds-builder-header
+  elements:
+  - class: slds-builder-header_container
+    description: Container that fixes the builder header to the top of the viewport
+    purpose: Wrapper element that positions the header at the top of the page
+  - class: slds-builder-header__item
+    description: Direct child item of the builder header
+    purpose: Contains navigation items, branding, or utilities
+  - class: slds-builder-header__item-label
+    description: Non-interactive label inside a header item
+    purpose: Displays text or branding within a header item
+  - class: slds-builder-header__item-action
+    description: Interactive action element inside a header item
+    purpose: Clickable button or link within a header item
+  - class: slds-builder-header__nav
+    description: Container for the navigation region
+    purpose: Holds the navigation list within the header
+  - class: slds-builder-header__nav-list
+    description: List element containing navigation items
+    purpose: Unordered list wrapper for navigation items
+  - class: slds-builder-header__nav-item
+    description: Individual navigation item
+    purpose: List item wrapping each navigation element
+  - class: slds-builder-header__utilities
+    description: Container for utility actions (back, help, etc.)
+    purpose: Holds utility links and actions, typically right-aligned
+  - class: slds-builder-header__utilities-item
+    description: Individual utility item
+    purpose: Wrapper for utility actions like back or help buttons
+  - class: slds-builder-toolbar
+    description: Toolbar region below the builder header
+    purpose: Contains document-level actions and controls
+  - class: slds-builder-toolbar__actions
+    description: Container for toolbar actions
+    purpose: Holds action buttons, typically right-aligned
+  - class: slds-builder-toolbar__item-group
+    description: Group of related toolbar items
+    purpose: Visually groups related buttons or controls
+  modifiers: []
+  states: []
+variants:
+- name: Base
+  description: Standard builder header with navigation
+  classes:
+  - slds-builder-header
+  usage_context: Default builder header for editor interfaces
+  differences: Fixed header with dark background and navigation items
+- name: With Toolbar
+  description: Builder header with toolbar region
+  classes:
+  - slds-builder-header_container
+  - slds-builder-header
+  - slds-builder-toolbar
+  usage_context: When document-level actions need to be accessible
+  differences: Includes a toolbar section below the main header
+lightning_component:
+  name: ''
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component - typically built with lightning-layout and custom styling
+accessibility:
+  keyboard_support:
+  - Tab to navigate between header items
+  - Enter or Space to activate header actions
+  - Arrow keys for navigation within header items
+  screen_reader:
+  - Header landmark announced
+  - Navigation landmark announced
+  - Action labels announced
+  - Current navigation state indicated
+  aria_attributes:
+  - role='banner' on header element
+  - role='navigation' on nav container
+  - aria-label on navigation regions
+  - aria-current for active navigation items
+usage_guidelines:
+  when_to_use:
+  - For builder, editor, or creation interfaces
+  - When consistent global navigation is needed
+  - For applications with document-level actions
+  - In complex editing workflows
+  when_not_to_use:
+  - For standard application navigation (use global-header)
+  - In simple viewing interfaces
+  - When header needs to scroll with content
+  - For mobile-first experiences
+  best_practices:
+  - Keep navigation items concise and clear
+  - Place most important actions in visible areas
+  - Use consistent iconography and labeling
+  - Ensure adequate touch targets for mobile
+  - Group related toolbar actions together
+  - Maintain proper contrast on dark background
+  common_mistakes:
+  - Overcrowding the header with too many items
+  - Inconsistent spacing between elements
+  - Poor color contrast on background
+  - Missing keyboard navigation support
+  - Not indicating current/active state
+code_examples:
+- title: Basic Builder Header
+  code: "<div class=\"slds-builder-header_container\">\n  <header class=\"slds-builder-header\">\n    <div class=\"slds-builder-header__item\"\
+    >\n      <div class=\"slds-builder-header__item-label\">\n        <span class=\"\" title=\"Salesforce\">\n          <svg\
+    \ class=\"slds-icon\" aria-hidden=\"true\">\n            <use xlink:href=\"/assets/icons/logo-sprite/svg/symbols.svg#salesforce\"\
+    ></use>\n          </svg>\n        </span>\n      </div>\n    </div>\n    <nav class=\"slds-builder-header__item slds-builder-header__nav\"\
+    \ role=\"navigation\" aria-label=\"Primary\">\n      <ul class=\"slds-builder-header__nav-list\">\n        <li class=\"\
+    slds-builder-header__nav-item\">\n          <a href=\"#\" class=\"slds-builder-header__item-action\">Setup</a>\n     \
+    \   </li>\n        <li class=\"slds-builder-header__nav-item\">\n          <a href=\"#\" class=\"slds-builder-header__item-action\"\
+    \ aria-current=\"page\">Editor</a>\n        </li>\n      </ul>\n    </nav>\n    <div class=\"slds-builder-header__item\
+    \ slds-builder-header__utilities\">\n      <div class=\"slds-builder-header__utilities-item\">\n        <a href=\"#\"\
+    \ class=\"slds-builder-header__item-action\">Back</a>\n      </div>\n      <div class=\"slds-builder-header__utilities-item\"\
+    >\n        <a href=\"#\" class=\"slds-builder-header__item-action\">Help</a>\n      </div>\n    </div>\n  </header>\n\
+    </div>\n"
+  description: Basic builder header with branding, navigation, and utilities
+- title: Builder Header with Toolbar
+  code: "<div class=\"slds-builder-header_container\">\n  <header class=\"slds-builder-header\">\n    <div class=\"slds-builder-header__item\"\
+    >\n      <div class=\"slds-builder-header__item-label\">\n        <span>Page Builder</span>\n      </div>\n    </div>\n\
+    \    <nav class=\"slds-builder-header__item slds-builder-header__nav\" role=\"navigation\" aria-label=\"Primary\">\n \
+    \     <ul class=\"slds-builder-header__nav-list\">\n        <li class=\"slds-builder-header__nav-item\">\n          <a\
+    \ href=\"#\" class=\"slds-builder-header__item-action\">Properties</a>\n        </li>\n        <li class=\"slds-builder-header__nav-item\"\
+    >\n          <a href=\"#\" class=\"slds-builder-header__item-action\" aria-current=\"page\">Content</a>\n        </li>\n\
+    \      </ul>\n    </nav>\n    <div class=\"slds-builder-header__item slds-builder-header__utilities\">\n      <div class=\"\
+    slds-builder-header__utilities-item\">\n        <button class=\"slds-button slds-button_neutral slds-builder-header__item-action\"\
+    >Cancel</button>\n      </div>\n      <div class=\"slds-builder-header__utilities-item\">\n        <button class=\"slds-button\
+    \ slds-button_brand slds-builder-header__item-action\">Save</button>\n      </div>\n    </div>\n  </header>\n  <div class=\"\
+    slds-builder-toolbar\">\n    <div class=\"slds-builder-toolbar__item-group\">\n      <button class=\"slds-button slds-button_icon\
+    \ slds-button_icon-border\" title=\"Undo\">\n        <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n        \
+    \  <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#undo\"></use>\n        </svg>\n        <span class=\"\
+    slds-assistive-text\">Undo</span>\n      </button>\n      <button class=\"slds-button slds-button_icon slds-button_icon-border\"\
+    \ title=\"Redo\">\n        <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n          <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#redo\"\
+    ></use>\n        </svg>\n        <span class=\"slds-assistive-text\">Redo</span>\n      </button>\n    </div>\n    <div\
+    \ class=\"slds-builder-toolbar__actions\">\n      <div class=\"slds-builder-toolbar__item-group\">\n        <button class=\"\
+    slds-button slds-button_icon slds-button_icon-border\" title=\"Preview\">\n          <svg class=\"slds-button__icon\"\
+    \ aria-hidden=\"true\">\n            <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#preview\"></use>\n\
+    \          </svg>\n          <span class=\"slds-assistive-text\">Preview</span>\n        </button>\n      </div>\n   \
+    \ </div>\n  </div>\n</div>\n"
+  description: Builder header with toolbar containing document actions
+styling_hooks:
+- name: --slds-g-color-brand-base-20
+  description: Background color of the builder header
+  css_property: background
+- name: --slds-g-color-neutral-base-100
+  description: Text color in the builder header
+  css_property: color
+- name: --slds-g-color-brand-base-10
+  description: Border color between header items
+  css_property: border-color
+- name: --slds-g-shadow-inset-inverse-focus-1
+  description: Focus shadow for header actions
+  css_property: box-shadow
+- name: --slds-g-color-border-base-1
+  description: Toolbar border color
+  css_property: border-color
+dependencies:
+  css_files:
+  - builder-header.css
+  - button.css
+  javascript:
+  - Navigation state management
+  - Active item highlighting
+  icons:
+  - utility:undo
+  - utility:redo
+  - utility:preview
+  - logo:salesforce
+  other_components:
+  - button
+  - icon
+related_components:
+- name: Global Header
+  relationship: alternative
+  description: Standard application header for non-builder interfaces
+- name: Page Header
+  relationship: related
+  description: Header for individual pages, not globally fixed
+- name: Docked Utility Bar
+  relationship: complementary
+  description: Can be used alongside builder header for utilities
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/builder-header/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-11'
+  author: SLDS Documentation Team
+  slds_version: 2.27.2
+  review_status: complete
+  source: official-slds
+  notes: Created from official SLDS documentation and design-system-internal source code

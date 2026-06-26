@@ -1,0 +1,73 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "WaveAnalyticAssetCollection - Metadata API",
+  "description": "Represents a collection of Analytics assets. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".collection",
+  "directory_location": "wave",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "collectionType": {
+      "type": "string",
+      "description": "The collection type."
+    },
+    "color": {
+      "type": "string",
+      "description": "The display color for the collection."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description that appears in the user interface."
+    },
+    "folder": {
+      "type": "string",
+      "description": "The internal API name of the folder or application."
+    },
+    "items": {
+      "type": "WaveAnalayticAssestCollectionItem",
+      "description": "A list of Analytics asset items."
+    },
+    "label": {
+      "type": "string",
+      "description": "The label for the collection."
+    },
+    "shares": {
+      "type": "FolderShare",
+      "description": "The folder sharing rules."
+    }
+  },
+  "sub_types": {
+    "WaveAnalyticAssestCollectionItem": {
+      "asset": {
+        "type": "string",
+        "description": "The asset name."
+      },
+      "assetType": {
+        "type": "string",
+        "description": "The asset type."
+      },
+      "sortOrder": {
+        "type": "int",
+        "description": "The sort order for the asset."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FolderShare\">\n  <xsd:sequence>\n    <xsd:element name=\"accessLevel\" type=\"tns:FolderShareAccessLevel\"/>\n    <xsd:element name=\"sharedTo\" type=\"xsd:string\"/>\n    <xsd:element name=\"sharedToType\" type=\"tns:FolderSharedToType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FolderShareAccessLevel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"View\"/>\n    <xsd:enumeration value=\"EditAllContents\"/>\n    <xsd:enumeration value=\"Manage\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FolderSharedToType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Group\"/>\n    <xsd:enumeration value=\"Role\"/>\n    <xsd:enumeration value=\"RoleAndSubordinates\"/>\n    <xsd:enumeration value=\"RoleAndSubordinatesInternal\"/>\n    <xsd:enumeration value=\"Manager\"/>\n    <xsd:enumeration value=\"ManagerAndSubordinatesInternal\"/>\n    <xsd:enumeration value=\"Organization\"/>\n    <xsd:enumeration value=\"Territory\"/>\n    <xsd:enumeration value=\"TerritoryAndSubordinates\"/>\n    <xsd:enumeration value=\"AllPrmUsers\"/>\n    <xsd:enumeration value=\"User\"/>\n    <xsd:enumeration value=\"PartnerUser\"/>\n    <xsd:enumeration value=\"AllCspUsers\"/>\n    <xsd:enumeration value=\"CustomerPortalUser\"/>\n    <xsd:enumeration value=\"PortalRole\"/>\n    <xsd:enumeration value=\"PortalRoleAndSubordinates\"/>\n    <xsd:enumeration value=\"ChannelProgramGroup\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WaveAnalyticAssetCollection\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"collectionType\" type=\"xsd:string\"/>\n        <xsd:element name=\"color\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"folder\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"items\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WaveAnalyticAssetCollectionItem\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"shares\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FolderShare\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WaveAnalyticAssetCollectionItem\">\n  <xsd:sequence>\n    <xsd:element name=\"asset\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"assetType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortOrder\" minOccurs=\"0\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a WaveAnalyticsAssetCollection component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>  \n<WaveAnalyticsAssetCollection xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <collectionType>static</collectionType>\n  <color>#1b96ff</color>\n  <description>A collection of my Dashboards</description>\n  <folder>Shared</folder>\n  <label>My Dashboard Collection</label>\n  <items>\n     <item>\n        <asset>Dashboard One</asset>\n        <assetType>dashboard</assetType>\n        <sortOrder>1</sortOrder>\n     </item>\n     <item>\n        <asset>Dashboard Two</asset>\n        <assetType>dashboard</assetType>\n        <sortOrder>2</sortOrder>\n     </item>\n  </items>\n  <shares>\n    <accessLevel>EditAllContents</accessLevel>\n    <sharedTo>shareswith@org.ee</sharedTo>\n    <sharedToType>User</sharedToType>\n  </shares>\n</WaveAnalyticsAssetCollection>"
+    }
+  ]
+}

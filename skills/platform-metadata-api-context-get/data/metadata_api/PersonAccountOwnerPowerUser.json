@@ -1,0 +1,38 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "PersonAccountOwnerPowerUser - Metadata API",
+  "description": "Represents a user who can own more than 50,000 customer or partner portal accounts. Person account owner power users can own a large number of either customer or partner users. They can’t change their role, look up to a parent role, or reparent their role. Person account owner power user objects can't be created if deferred sharing is turned on for your org. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "The unique name of the object in the API."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label entered when the person account owner power user is created."
+    },
+    "portalType": {
+      "type": "string",
+      "required": true,
+      "description": "The type of portal user account that the person account owner power user can own. Possible values are: CustomerPortal—Customer Portal Partner—Partner Portal"
+    },
+    "user": {
+      "type": "string",
+      "required": true,
+      "description": "The unique ID associated with the person account owner power user."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PersonAccountOwnerPowerUser\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"portalType\" type=\"xsd:string\"/>\n        <xsd:element name=\"user\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

@@ -1,0 +1,95 @@
+name: Breadcrumbs
+description: A navigation aid that shows users their current location within a hierarchical structure and provides links to
+  navigate back to parent levels.
+category: Navigation
+slds_classes:
+  root: slds-breadcrumb
+  elements:
+  - class: slds-breadcrumb__item
+    description: Individual breadcrumb item wrapper
+    purpose: Contains a single breadcrumb link or text
+  modifiers: []
+  states:
+  - class: slds-is-current
+    description: Current page indicator
+    trigger: Applied to the current page breadcrumb item
+variants:
+- name: Base
+  description: Standard breadcrumb navigation with linked trail
+  classes:
+  - slds-breadcrumb
+  usage_context: Default implementation for hierarchical navigation
+  differences: Horizontal list of linked navigation items with separators
+lightning_component:
+  name: lightning-breadcrumbs
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-breadcrumbs
+  mapping_notes: Direct mapping - Lightning component implements SLDS breadcrumb blueprint
+accessibility:
+  keyboard_support:
+  - Tab navigation through breadcrumb links
+  - Enter/Space to activate breadcrumb links
+  screen_reader:
+  - Navigation landmark conveyed through proper markup
+  - Breadcrumb trail structure announced
+  - Current location clearly identified
+  aria_attributes:
+  - role='navigation' for breadcrumb container
+  - aria-label='Breadcrumb' for navigation context
+  - aria-current='page' for current location
+usage_guidelines:
+  when_to_use:
+  - For hierarchical navigation structures
+  - When users need to understand their current location
+  - To provide quick navigation to parent levels
+  - In multi-level content organization
+  when_not_to_use:
+  - For flat, non-hierarchical navigation
+  - When the hierarchy is only one level deep
+  - In mobile interfaces with limited space
+  best_practices:
+  - Keep breadcrumb labels concise and descriptive
+  - Show the full path to current location
+  - Make parent levels clickable for navigation
+  - Use consistent separator styling
+  - Position breadcrumbs near the top of content
+  common_mistakes:
+  - Making breadcrumb labels too long or verbose
+  - Not making parent levels clickable
+  - Using breadcrumbs for non-hierarchical content
+  - Inconsistent separator styling
+code_examples:
+- title: Basic Breadcrumbs
+  description: Standard breadcrumb navigation with multiple levels
+  code: "<nav class=\"slds-breadcrumb\" role=\"navigation\" aria-label=\"Breadcrumb\">\n      <ol class=\"\">\n        <li\
+    \ class=\"slds-breadcrumb__item\">\n          <a href=\"#\" class=\"\">Home</a>\n        </li>\n        <li class=\"slds-breadcrumb__item\"\
+    >\n          <a href=\"#\" class=\"\">Parent Page</a>\n        </li>\n        <li class=\"slds-breadcrumb__item\">\n \
+    \         <span class=\"\" aria-current=\"page\">Current Page</span>\n        </li>\n      </ol>\n      </nav>\n"
+- title: Simple Breadcrumbs
+  description: Breadcrumb with only one parent level
+  code: "<nav class=\"slds-breadcrumb\" role=\"navigation\" aria-label=\"Breadcrumb\">\n      <ol class=\"\">\n        <li\
+    \ class=\"slds-breadcrumb__item\">\n          <a href=\"#\" class=\"\">Parent Page</a>\n        </li>\n        <li class=\"\
+    slds-breadcrumb__item\">\n          <span class=\"\" aria-current=\"page\">Current Page</span>\n        </li>\n      </ol>\n\
+    \      </nav>\n"
+dependencies:
+  css_files:
+  - breadcrumb.css
+  javascript: []
+  icons: []
+  other_components: []
+related_components:
+- name: Path
+  relationship: similar
+  description: Similar navigation concept for process steps
+- name: Vertical Navigation
+  relationship: alternative
+  description: Alternative navigation pattern for hierarchical content
+- name: Global Navigation
+  relationship: container
+  description: Often contains breadcrumb navigation
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/breadcrumbs/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

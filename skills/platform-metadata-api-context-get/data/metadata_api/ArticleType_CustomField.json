@@ -1,0 +1,88 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ArticleType CustomField - Metadata API",
+  "description": "Represents the metadata associated with an article type custom field. Use this metadata type to create, update, or delete article type custom field definitions.",
+  "file_information": "Custom fields are defined as part of the article type. ArticleType field names have a suffix of __c like other custom objects, and must be dot-qualified with the name of the article type to which they belong. See ArticleType for more information.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "defaultValue": {
+      "type": "string",
+      "description": "If specified, represents the default value of the field. This field was deprecated in API version 48.0."
+    },
+    "deleteConstraint": {
+      "type": "Metadata Field Types (enumeration of type string)",
+      "description": "Provides deletion options for lookup relationships. Valid values are: Cascade—Deletes the lookup record as well as associated lookup fields. Restrict—Prevents the record from being deleted if it's in a lookup relationship. SetNull—This is the default. If the lookup record is deleted, the lookup field is cleared. For more information on lookup relationships, see \"Object Relationships\" in Salesforce Help."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the field."
+    },
+    "formula": {
+      "type": "string",
+      "description": "If specified, represents a formula on the field."
+    },
+    "formulaTreatBlankAs": {
+      "type": "Metadata Field Types (enumeration of type string)",
+      "description": "Indicates how to treat blanks in a formula. Valid values are: BlankAsBlank and BlankAsZero."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "Inherited from Metadata, this field is defined in the WSDL for this metadata type. It must be specified when creating, updating, or deleting. See createMetadata() to see an example of this field specified for a call. This value cannot be null."
+    },
+    "inlineHelpText": {
+      "type": "string",
+      "description": "Represents the content of field-level help. For more information, see \"Define Field-Level Help\" in Salesforce Help."
+    },
+    "label": {
+      "type": "string",
+      "description": "Label for the field. You cannot update the label for standard fields in Article Type such as Title, UrlName, Summary, etc."
+    },
+    "length": {
+      "type": "int",
+      "description": "Length of the field."
+    },
+    "picklist": {
+      "type": "Picklist (Including Dependent Picklist)",
+      "description": "( Deprecated. Use this field in API version 37.0 and earlier only. In later versions, use valueSet instead.) If specified, the field is a picklist, and this field enumerates the picklist values and labels."
+    },
+    "referenceTo": {
+      "type": "string",
+      "description": "If specified, indicates a reference this field has to another object."
+    },
+    "relationshipLabel": {
+      "type": "string",
+      "description": "Label for the relationship."
+    },
+    "relationshipName": {
+      "type": "string",
+      "description": "If specified, indicates the value for one-to-many relationships. For example, in the object MyObject that had a relationship to YourObject, the relationship name might be YourObjects."
+    },
+    "required": {
+      "type": "boolean",
+      "description": "Indicates whether the field requires a value on creation (true) or not (false)."
+    },
+    "type": {
+      "type": "FieldType",
+      "description": "Indicates the field type for the field. Valid values are: Checkbox available in version 30.0 and later Currency ArticleCurrency Date DateTime Email File Formula Html Lookup Number Percent Phone Picklist DependentPicklist MultiselectPicklist Text TextArea LongTextArea URL",
+      "required": true
+    },
+    "visibleLines": {
+      "type": "int",
+      "description": "Indicates the number of lines displayed for the field."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomObject xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <fields>\n        <fullName>Comments__c</fullName>\n        <description>add your comments about this object here</description>\n        <label>Comments</label>\n        <length>32000</length>\n        <type>LongTextArea</type>\n        <visibleLines>30</visibleLines>\n    </fields>\n</CustomObject>"
+    }
+  ]
+}

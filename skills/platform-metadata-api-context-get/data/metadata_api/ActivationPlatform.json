@@ -1,0 +1,95 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ActivationPlatform - Metadata API",
+  "description": "Represents the ActivationPlatform configuration, such as platform name, delivery schedule, output format, and destination folder.",
+  "file_information": ".activationPlatform",
+  "directory_location": "activationPlatforms",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "activationPlatformConnectorType": {
+      "type": "ActivationPlatformConnectorType (enumeration of type string)",
+      "description": "Reserved for future use."
+    },
+    "activationPlatformAdditionalMetadata": {
+      "type": "string",
+      "description": "Provides additional details about the activation platform, including subscriber override options, partner supported IDs, and file output properties such as maximum file size, compression settings, and the maximum number of records per file."
+    },
+    "dataConnector": {
+      "type": "string",
+      "description": "Reference to the ActvPfrmDataConnectorS3 metadata type, which contains S3 bucket and export directory information into which Data 360 writes data."
+    },
+    "description": {
+      "type": "string",
+      "required": true,
+      "description": "The description for ActivationPlatform."
+    },
+    "enabled": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates if ActivationPlatform is enabled (true) or not (false). The default is false."
+    },
+    "includeSegmentNames": {
+      "type": "boolean",
+      "description": "Indicates whether to include the segment name in metadata (true) or not (false)."
+    },
+    "logoUrl": {
+      "type": "string",
+      "description": "URL of the logo for the activation channel destination."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The name for the activation channel destination."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes for this ActivationPlartform."
+    },
+    "outputFormat": {
+      "type": "ActivationPlatformFileOutputFormat (enumeration of type string)",
+      "required": true,
+      "description": "The output format of the file.Valid values are: CSV JSON PARQUET"
+    },
+    "outputGrouping": {
+      "type": "ActivationPlatformFileOutputGrouping (enumeration of type string)",
+      "required": true,
+      "description": "The grouping of the output.Valid values are: PER_ACCOUNT PER_SEGMENT"
+    },
+    "periodicRefreshFrequecy": {
+      "type": "ActivationPlatformPeriodicFullRefresh (enumeration of type string)",
+      "description": "The frequency (in days) for periodic full refreshes when using incremental refresh mode.Valid values are: REFRESH_30 REFRESH_60"
+    },
+    "platformType": {
+      "type": "ActivationPlatformType (enumeration of type string)",
+      "required": true,
+      "description": "The type of the Activation Platform.Valid values are: Advertising Analytics Marketing Publishing Technology"
+    },
+    "refreshFrequency": {
+      "type": "ActivationPlatformRefreshFrequency (enumeration of type string)",
+      "required": true,
+      "description": "Indicates how often the activation platform accepts data delivery.Valid value is: TWENTY_FOUR"
+    },
+    "refreshMode": {
+      "type": "ActivationPlatformRefreshMode (enumeration of type string)",
+      "required": true,
+      "description": "Defines how the refresh method handles refreshing files.Valid values are: FULL INCREMENTAL"
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ActivationPlatform component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ActivationPlatform xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <dataConnector>S3Connector</dataConnector>\n    <description>Activation Platform Description</description>\n    <enabled>false</enabled>\n    <includeSegmentNames>false</includeSegmentNames>\n    <logoUrl>link to logo</logoUrl>\n    <masterLabel>MyExternalPlatform</masterLabel>\n    <notes>Notes about this Platform</notes>\n    <outputFormat>CSV</outputFormat>\n    <outputGrouping>PER_ACCOUNT</outputGrouping>\n    <refreshMode>FULL</refreshMode>\n    <refreshFrequency>TWENTY_FOUR</refreshFrequency>\n    <periodicRefreshFrequecy>NEVER</periodicRefreshFrequecy>\n    <platformType>Advertising</platformType>\n</ActivationPlatform>"
+    }
+  ]
+}

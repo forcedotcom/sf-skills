@@ -1,0 +1,179 @@
+name: Chat
+description: A component for displaying current or past chat sessions between customers and service agents. It appears as
+  a chronological log with messages, events, and bookend markers to indicate session boundaries.
+category: Complex Components
+slds_classes:
+  root: slds-chat
+  elements:
+  - class: slds-chat-list
+    description: List container for chat items
+    purpose: Holds the ordered list of chat messages and events
+  - class: slds-chat-listitem
+    description: Individual item in the chat list
+    purpose: Wraps each message, event, or bookend in the chat
+  - class: slds-chat-listitem_inbound
+    description: Inbound message list item (customer to agent)
+    purpose: Styles messages received from customer
+  - class: slds-chat-listitem_outbound
+    description: Outbound message list item (agent to customer)
+    purpose: Styles messages sent by agent, right-aligned
+  - class: slds-chat-listitem_bookend
+    description: Bookend item marking session start/end
+    purpose: Visual separator for chat session boundaries
+  - class: slds-chat-listitem_event
+    description: Event item in chat log
+    purpose: Displays system events like 'Agent joined'
+  - class: slds-chat-message
+    description: Message container
+    purpose: Wraps chat message content and metadata
+  - class: slds-chat-message__body
+    description: Message body container
+    purpose: Contains message text and avatar alignment
+  - class: slds-chat-message__text
+    description: Message text content
+    purpose: Displays the actual message content
+  - class: slds-chat-message_faux-avatar
+    description: Faux avatar for alignment
+    purpose: Aligns consecutive messages without showing duplicate avatars
+  - class: slds-chat-avatar
+    description: Avatar element in chat
+    purpose: Displays user avatar in chat messages
+  - class: slds-chat-icon
+    description: Icon styling within chat
+    purpose: Styles icons used in messages and events
+  - class: slds-chat-message__file
+    description: File attachment in message
+    purpose: Displays file attachments in chat
+  - class: slds-chat-message__image_loading
+    description: Loading state for images
+    purpose: Shows loading indicator for image attachments
+  modifiers: []
+  states: []
+variants:
+- name: Base
+  description: Standard chat log display
+  classes:
+  - slds-chat
+  usage_context: Default chat implementation with messages and events
+  differences: Chronological display with inbound and outbound messages
+lightning_component:
+  name: ''
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component - typically built with custom components for messaging platforms
+accessibility:
+  keyboard_support:
+  - Tab to navigate through interactive elements
+  - Screen reader reads messages in chronological order
+  screen_reader:
+  - role='log' on chat container
+  - Messages announced as they appear
+  - Sender identification announced
+  - Timestamps and metadata announced
+  aria_attributes:
+  - role='log' on chat container
+  - aria-label for chat region
+  - aria-live for new messages (polite or assertive)
+  - Sender and timestamp information accessible
+usage_guidelines:
+  when_to_use:
+  - For customer service chat interfaces
+  - To display chat history or transcripts
+  - In messaging or communication features
+  - For live or archived chat sessions
+  when_not_to_use:
+  - For comments or discussion threads
+  - For simple message lists without conversation context
+  - For email or notification displays
+  - When real-time updates aren't needed
+  best_practices:
+  - Display messages in chronological order
+  - Clearly differentiate inbound and outbound messages
+  - Include timestamps for message context
+  - Show sender identification (avatar and name)
+  - Use bookends to mark session boundaries
+  - Handle long messages with proper wrapping
+  - Support file attachments and rich content
+  common_mistakes:
+  - Not distinguishing message direction clearly
+  - Missing timestamps on messages
+  - Poor handling of consecutive messages
+  - Inadequate spacing between messages
+  - Not marking session start/end clearly
+code_examples:
+- title: Basic Chat Log
+  code: "<section class=\"slds-chat\" role=\"log\" aria-label=\"Chat conversation\">\n      <ul class=\"slds-chat-list\">\n\
+    \        <li class=\"slds-chat-listitem slds-chat-listitem_bookend\">\n          <div class=\"slds-chat-bookend\">\n \
+    \           <span class=\"slds-icon_container slds-icon-utility-chat slds-chat-icon\">\n              <svg class=\"slds-icon\
+    \ slds-icon_x-small\" aria-hidden=\"true\">\n                <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#chat\"\
+    ></use>\n              </svg>\n            </span>\n            <p>Chat started</p>\n          </div>\n        </li>\n\
+    \        <li class=\"slds-chat-listitem slds-chat-listitem_inbound\">\n          <div class=\"slds-chat-message\">\n \
+    \           <span class=\"slds-avatar slds-avatar_circle slds-chat-avatar\">\n              <img src=\"/assets/images/avatar1.jpg\"\
+    \ alt=\"Customer\" />\n            </span>\n            <div class=\"slds-chat-message__body\">\n              <div class=\"\
+    slds-chat-message__text slds-chat-message__text_inbound\">\n                <span>Hello, I need help with my account</span>\n\
+    \              </div>\n            </div>\n          </div>\n        </li>\n        <li class=\"slds-chat-listitem slds-chat-listitem_outbound\"\
+    >\n          <div class=\"slds-chat-message\">\n            <div class=\"slds-chat-message__body\">\n              <div\
+    \ class=\"slds-chat-message__text slds-chat-message__text_outbound\">\n                <span>Hi! I'd be happy to help.\
+    \ What can I assist you with?</span>\n              </div>\n            </div>\n            <span class=\"slds-avatar\
+    \ slds-avatar_circle slds-chat-avatar\">\n              <img src=\"/assets/images/avatar2.jpg\" alt=\"Agent\" />\n   \
+    \         </span>\n          </div>\n        </li>\n        <li class=\"slds-chat-listitem slds-chat-listitem_bookend\"\
+    >\n          <div class=\"slds-chat-bookend\">\n            <span class=\"slds-icon_container slds-icon-utility-end_chat\
+    \ slds-chat-icon\">\n              <svg class=\"slds-icon slds-icon_x-small\" aria-hidden=\"true\">\n                <use\
+    \ xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#end_chat\"></use>\n              </svg>\n            </span>\n\
+    \            <p>Chat ended</p>\n          </div>\n        </li>\n      </ul>\n      </section>\n"
+- title: Chat with Events
+  code: "<section class=\"slds-chat\" role=\"log\" aria-label=\"Chat with events\">\n      <ul class=\"slds-chat-list\">\n\
+    \        <li class=\"slds-chat-listitem slds-chat-listitem_event\">\n          <div class=\"slds-chat-event\">\n     \
+    \       <div class=\"slds-chat-event__body\">\n              <span class=\"slds-icon_container slds-icon-utility-user\
+    \ slds-chat-icon\">\n                <svg class=\"slds-icon slds-icon_x-small\" aria-hidden=\"true\">\n              \
+    \    <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#user\"></use>\n                </svg>\n          \
+    \    </span>\n              <p>Agent Sarah joined the chat</p>\n            </div>\n          </div>\n        </li>\n\
+    \        <li class=\"slds-chat-listitem slds-chat-listitem_inbound\">\n          <div class=\"slds-chat-message\">\n \
+    \           <span class=\"slds-avatar slds-avatar_circle slds-chat-avatar\">\n              <abbr class=\"slds-avatar__initials\"\
+    \ title=\"John Doe\">JD</abbr>\n            </span>\n            <div class=\"slds-chat-message__body\">\n           \
+    \   <div class=\"slds-chat-message__text slds-chat-message__text_inbound\">\n                <span>Can you help me reset\
+    \ my password?</span>\n              </div>\n              <div class=\"slds-chat-message__meta\" aria-label=\"10:30 AM\"\
+    >10:30 AM</div>\n            </div>\n          </div>\n        </li>\n        <li class=\"slds-chat-listitem slds-chat-listitem_outbound\"\
+    >\n          <div class=\"slds-chat-message\">\n            <div class=\"slds-chat-message__body\">\n              <div\
+    \ class=\"slds-chat-message__text slds-chat-message__text_outbound\">\n                <span>Of course! I'll send you\
+    \ a reset link.</span>\n              </div>\n              <div class=\"slds-chat-message__meta\" aria-label=\"10:31\
+    \ AM\">10:31 AM</div>\n            </div>\n            <span class=\"slds-avatar slds-avatar_circle slds-chat-avatar\"\
+    >\n              <abbr class=\"slds-avatar__initials\" title=\"Sarah Agent\">SA</abbr>\n            </span>\n        \
+    \  </div>\n        </li>\n      </ul>\n      </section>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - chat.css
+  - avatar.css
+  - icon.css
+  javascript:
+  - Message scrolling and auto-scroll to latest
+  - Real-time message updates
+  - Typing indicators
+  icons:
+  - utility:chat
+  - utility:end_chat
+  - utility:user
+  other_components:
+  - avatar
+  - icon
+related_components:
+- name: Activity Timeline
+  relationship: similar
+  description: Similar chronological display pattern
+- name: Feed
+  relationship: similar
+  description: Alternative for activity streams
+- name: Publisher
+  relationship: complementary
+  description: Input component for sending messages
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/chat/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  author: SLDS Documentation Team
+  slds_version: 2.27.2
+  review_status: complete
+  source: official-slds
+  notes: Created from official SLDS documentation and design-system-internal source code Cleaned invalid classes and CSS variables
+    on 2025-11-12 using slds-plus.css as source of truth.

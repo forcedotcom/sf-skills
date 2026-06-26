@@ -1,0 +1,155 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "IntegrationProviderDef - Metadata API",
+  "description": "Represents an integration definition associated with a service process. Stores data for the Industries: Send Apex Async Request and Industries: Send External Async Request invocable actions.",
+  "file_information": ".integrationProviderDefinition",
+  "directory_location": "integrationProviderDefinition",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "Specifies whether this Integration Definition is active. The default is false."
+    },
+    "apexClass": {
+      "type": "string",
+      "description": "The custom Apex class that the related Industries: Send Apex Async Request invocable action invokes. Specify either apexClass or fileBasedApexClass but not both. Applies only if the type is Apex."
+    },
+    "description": {
+      "type": "string",
+      "description": "A meaningful explanation of the Integration Definition."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "A system name for the Integration Definition."
+    },
+    "externalServiceOperationName": {
+      "type": "string",
+      "description": "The external service operation that the related Industries: Send External Async Request invocable action invokes. Applies only if the type is LowCode."
+    },
+    "externalServiceRegistration": {
+      "type": "string",
+      "description": "The external service that the related Industries: Send External Async Request invocable action invokes. Applies only if the type is LowCode."
+    },
+    "fileBasedApexClass": {
+      "type": "string",
+      "description": "The Salesforce-provided Apex class that the related Industries: Send Apex Async Request invocable action invokes. Specify either apexClass or fileBasedApexClass but not both. Applies only if the type is Apex."
+    },
+    "fileBasedExternalService": {
+      "type": "string",
+      "description": "The Salesforce-provided external service that the Integration Definition invokes. This field is used for packaged or system-provided external service integrations. Applies only if the type is LowCode. Available in API version 64.0 and later."
+    },
+    "fileBasedInputDataProcessor": {
+      "type": "string",
+      "description": "The Salesforce-provided Integration Procedure that processes the specified data. This field references packaged or system-provided data processors. Applies only if the type is LowCode. Available in API version 64.0 and later."
+    },
+    "fileBasedOmniUiCard": {
+      "type": "string",
+      "description": "The Salesforce-provided OmniStudio UI Card that's associated with this Integration Definition. This enables packaged UI components for integration configuration. Available in API version 64.0 and later."
+    },
+    "fileBasedOutputDataProcessor": {
+      "type": "string",
+      "description": "The Salesforce-provided Integration Procedure that processes the returned data. This field references packaged or system-provided output processors. Applies only if the type is LowCode. Available in API version 64.0 and later."
+    },
+    "inputDataProcessor": {
+      "type": "string",
+      "description": "The optional Integration Procedure that processes the sent data. Applies only if the type is LowCode."
+    },
+    "integrationProviderAttributes": {
+      "type": "IntegrationProviderAttr[]",
+      "description": "Custom attributes that store data associated with an Integration Definition."
+    },
+    "javaClassName": {
+      "type": "string",
+      "description": "Name of the Java class that the Integration Definition invokes. Applies only if the type is Java. Available in API version 59.0 and later."
+    },
+    "outputDataProcessor": {
+      "type": "string",
+      "description": "The optional Integration Procedure that processes the returned data. Applies only if the type is LowCode."
+    },
+    "providerLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A meaningful name for the Integration Definition."
+    },
+    "type": {
+      "type": "DefinitionType (enumeration of type string)",
+      "required": true,
+      "description": "What the Integration Definition calls, either an Apex class or an external service.Values are: Apex Java LowCode"
+    }
+  },
+  "sub_types": {
+    "IntegrationProviderAttr": {
+      "dataType": {
+        "type": "AttrDataType (enumeration of type string)",
+        "required": true,
+        "description": "The data type of the attribute.Values are: Date DateTime Double Integer Percentage String Boolean"
+      },
+      "dateTimeValue": {
+        "type": "dateTime",
+        "description": "The value of the attribute if the dataType is DateTime."
+      },
+      "dateValue": {
+        "type": "date",
+        "description": "The value of the attribute if the dataType is Date."
+      },
+      "description": {
+        "type": "string",
+        "description": "A meaningful explanation of the attribute."
+      },
+      "developerName": {
+        "type": "string",
+        "required": true,
+        "description": "A system name for the attribute."
+      },
+      "doubleValue": {
+        "type": "double",
+        "description": "The value of the attribute if the dataType is Double."
+      },
+      "integerValue": {
+        "type": "int",
+        "description": "The value of the attribute if the dataType is Integer."
+      },
+      "label": {
+        "type": "string",
+        "required": true,
+        "description": "A meaningful name for the attribute."
+      },
+      "percentageValue": {
+        "type": "double",
+        "description": "The value of the attribute if the dataType is Percentage."
+      },
+      "required": {
+        "type": "boolean",
+        "required": true,
+        "description": "Specifies whether the attribute is required."
+      },
+      "stringValue": {
+        "type": "string",
+        "description": "The value of the attribute if the dataType is String."
+      },
+      "trueOrFalseValue": {
+        "type": "boolean",
+        "description": "The value of the attribute if the dataType is Boolean."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an IntegrationProviderDef component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<IntegrationProviderDef xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <developerName>EmailUpdate</developerName>\n   <providerLabel>EmailUpdate</providerLabel>\n   <type>Apex</type>\n   <apexClass>SendEmailUpdate</apexClass>\n   <integrationProviderAttributes>\n      <developerName>EmailAddress</developerName>\n      <label>EmailAddress</label>\n      <dataType>String</dataType>\n      <stringValue>person@example.com</stringValue>\n      <required>true</required>\n   </integrationProviderAttributes>\n</IntegrationProviderDef>"
+    }
+  ]
+}

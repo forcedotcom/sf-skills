@@ -1,0 +1,16 @@
+{
+  "displayName": "High Value Customers",
+  "developerName": "High_Value_Customers",
+  "description": "Example segment built from a unified DMO",
+  "segmentType": "Dbt",
+  "includeDbt": {
+    "models": {
+      "models": [
+        {
+          "name": "UnifiedCustomers",
+          "sql": "SELECT ui.ssot__Id__c FROM UnifiedssotIndividualMain__dlm ui JOIN ssot__SalesOrder__dlm so ON ui.ssot__Id__c = so.ssot__IndividualId__c GROUP BY ui.ssot__Id__c HAVING SUM(so.ssot__TotalAmount__c) > 1000"
+        }
+      ]
+    }
+  }
+}

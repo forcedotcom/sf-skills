@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DataImportManagementSettings - Metadata API",
+  "description": "Represents an org's contact and leads import settings.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableEasyImport": {
+      "type": "boolean",
+      "description": "Indicates whether Basic Data Import is enabled (true) or not (false). When true, users are guided step by step to select how they want to import contacts and leads to Salesforce."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DataImportManagementSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableDataConnectorHubspot\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEasyImport\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DataImportManagementSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DataImportManagementSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n          <enableEasyImport>true</enableEasyImport>\n</DataImportManagementSettings>"
+    }
+  ]
+}

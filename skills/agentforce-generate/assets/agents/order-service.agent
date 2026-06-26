@@ -1,0 +1,272 @@
+# Order Service Agent
+# ========================
+#
+# A complex real-world agent for e-commerce customer service featuring:
+# - Verification gate before order access
+# - Multiple specialized subagents (order status, tracking, returns)
+# - Two-level action system with Flow targets
+# - after_reasoning for post-action routing
+# - available when guards for conditional action visibility
+
+system:
+	instructions: |
+		You are an AI Customer Service Assistant helping customers with their orders.
+		Be helpful, empathetic, and efficient in resolving order-related issues.
+		Always verify customer identity before sharing order details.
+		Do not fabricate data — always use action results.
+	messages:
+		welcome: "Hello! I'm here to help you with your orders. How can I assist you today?"
+		error: "I apologize for the inconvenience. Let me try a different approach."
+
+config:
+	developer_name: "OrderServiceAgent"
+	agent_label: "Order Service Assistant"
+	description: "Helps customers check order status, process returns, and track shipments"
+	default_agent_user: "einsteinagent@00dxx000001234.ext"
+
+variables:
+	EndUserId: linked string
+		source: @MessagingSession.MessagingEndUserId
+		description: "Messaging End User ID"
+		visibility: "External"
+	RoutableId: linked string
+		source: @MessagingSession.Id
+		description: "Messaging Session ID"
+		visibility: "External"
+	ContactId: linked string
+		source: @MessagingEndUser.ContactId
+		description: "Contact ID"
+		visibility: "External"
+	customer_email: mutable string = ""
+		description: "Customer email for verification"
+	customer_verified: mutable boolean = False
+		description: "Whether customer identity has been verified"
+	order_number: mutable string = ""
+		description: "Current order number"
+	order_status: mutable string = ""
+		description: "Current order status"
+	tracking_number: mutable string = ""
+		description: "Shipment tracking number"
+	return_reason: mutable string = ""
+		description: "Reason for return"
+	return_initiated: mutable boolean = False
+		description: "Whether a return has been initiated"
+	return_label_url: mutable string = ""
+		description: "URL for return shipping label"
+
+language:
+	default_locale: "en_US"
+	additional_locales: ""
+	all_additional_locales: False
+
+start_agent agent_router:
+	description: "Route customers through verification then to the right subagent"
+	reasoning:
+		instructions: |
+			You are a router only. Do NOT answer questions or provide help directly.
+			Route all users to identity verification first.
+			If already verified, route to the appropriate subagent:
+			- Order questions -> use to_orders
+			- Returns -> use to_returns
+			- Tracking -> use to_tracking
+		actions:
+			to_verify: @utils.transition to @subagent.verification
+				description: "Begin identity verification"
+			to_orders: @utils.transition to @subagent.order_status
+				description: "Check order status"
+				available when @variables.customer_verified == True
+			to_returns: @utils.transition to @subagent.returns
+				description: "Process a return"
+				available when @variables.customer_verified == True
+			to_tracking: @utils.transition to @subagent.shipment_tracking
+				description: "Track a shipment"
+				available when @variables.customer_verified == True
+
+subagent verification:
+	label: "Identity Verification"
+	description: "Verify customer identity before accessing order information"
+
+	actions:
+		verify_customer:
+			description: "Verify customer identity by email"
+			target: "flow://Verify_Customer_Identity"
+			inputs:
+				email: string
+					description: "Customer email address"
+			outputs:
+				verified: boolean
+					description: "Whether verification succeeded"
+				customer_name: string
+					description: "Verified customer name"
+
+	reasoning:
+		instructions: ->
+			if @variables.customer_verified == True:
+				| Welcome back! How can I help you today?
+
+			if @variables.customer_verified == False:
+				| To help you with your order, I need to verify your identity.
+				| What is the email address associated with your account?
+
+		actions:
+			verify: @actions.verify_customer
+				description: "Verify customer identity by email"
+				with email = ...
+				set @variables.customer_verified = @outputs.verified
+				set @variables.customer_email = @outputs.customer_name
+
+			proceed_to_orders: @utils.transition to @subagent.order_status
+				description: "Move to order lookup"
+				available when @variables.customer_verified == True
+
+			escalate_now: @utils.escalate
+				description: "Transfer to human agent"
+
+subagent order_status:
+	label: "Order Status"
+	description: "Look up order details and provide status updates"
+
+	actions:
+		lookup_order:
+			description: "Look up order by order number"
+			target: "flow://Lookup_Order"
+			inputs:
+				order_number: string
+					description: "Order number to look up"
+				customer_email: string
+					description: "Customer email for validation"
+			outputs:
+				status: string
+					description: "Order status"
+					is_displayable: True
+				tracking_number: string
+					description: "Shipment tracking number"
+					is_displayable: True
+				estimated_delivery: string
+					description: "Estimated delivery date"
+					is_displayable: True
+
+	reasoning:
+		instructions: ->
+			if @variables.order_status != "":
+				| Order {!@variables.order_number} status: {!@variables.order_status}
+				| Would you like to track your shipment or initiate a return?
+
+			if @variables.order_status == "":
+				| What is your order number? You can find it in your confirmation email.
+				| Use the find_order action to look up order details.
+
+		actions:
+			find_order: @actions.lookup_order
+				description: "Look up order details"
+				with order_number = ...
+				with customer_email = @variables.customer_email
+				set @variables.order_status = @outputs.status
+				set @variables.tracking_number = @outputs.tracking_number
+
+			to_returns: @utils.transition to @subagent.returns
+				description: "Start a return"
+				available when @variables.order_status != ""
+
+			to_tracking: @utils.transition to @subagent.shipment_tracking
+				description: "Track shipment"
+				available when @variables.tracking_number != ""
+
+			back: @utils.transition to @subagent.agent_router
+				description: "Route to a different subagent"
+
+subagent shipment_tracking:
+	label: "Shipment Tracking"
+	description: "Track shipment status and estimated delivery"
+
+	actions:
+		get_tracking_details:
+			description: "Get detailed tracking information"
+			target: "flow://Get_Tracking_Details"
+			inputs:
+				tracking_number: string
+					description: "Shipment tracking number"
+			outputs:
+				current_location: string
+					description: "Current package location"
+					is_displayable: True
+				estimated_delivery: string
+					description: "Estimated delivery date"
+					is_displayable: True
+				delivery_status: string
+					description: "Delivery status"
+					is_displayable: True
+
+	reasoning:
+		instructions: |
+			Look up the tracking information for the customer's shipment.
+			Use the track action with the tracking number.
+			Do not fabricate tracking details — always use the action result.
+
+		actions:
+			track: @actions.get_tracking_details
+				description: "Get tracking details"
+				with tracking_number = @variables.tracking_number
+
+			back: @utils.transition to @subagent.agent_router
+				description: "Route to a different subagent"
+
+subagent returns:
+	label: "Returns"
+	description: "Process return requests and generate return labels"
+
+	actions:
+		initiate_return:
+			description: "Initiate a return for an order"
+			target: "flow://Initiate_Return"
+			inputs:
+				order_number: string
+					description: "Order number to return"
+				reason: string
+					description: "Reason for return"
+			outputs:
+				return_label_url: string
+					description: "URL for return shipping label"
+					is_displayable: True
+				return_deadline: string
+					description: "Deadline to ship return"
+					is_displayable: True
+
+	reasoning:
+		instructions: ->
+			if @variables.return_initiated == True:
+				| Your return has been initiated!
+				| Return label: {!@variables.return_label_url}
+
+			if @variables.return_initiated == False:
+				| I can help you with a return for order {!@variables.order_number}.
+				| What is the reason for your return?
+				| Use the process_return action to start the return.
+
+		actions:
+			process_return: @actions.initiate_return
+				description: "Process the return request"
+				with order_number = @variables.order_number
+				with reason = ...
+				set @variables.return_initiated = True
+				set @variables.return_label_url = @outputs.return_label_url
+
+			back: @utils.transition to @subagent.agent_router
+				description: "Route to a different subagent"
+
+	after_reasoning: ->
+		if @variables.return_initiated == True:
+			transition to @subagent.follow_up
+
+subagent follow_up:
+	label: "Follow Up"
+	description: "Handle follow-up actions and next steps"
+	reasoning:
+		instructions: |
+			The customer's request has been processed.
+			Ask if there is anything else you can help with.
+		actions:
+			new_order: @utils.transition to @subagent.order_status
+				description: "Look up another order"
+			back: @utils.transition to @subagent.agent_router
+				description: "Start over"

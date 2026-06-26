@@ -1,0 +1,392 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CustomField - Metadata API",
+  "description": "Represents the metadata associated with a field. Use this metadata type to create, update, or delete custom field definitions on standard, custom, and external objects or standard field definitions on standard objects.",
+  "file_information": "Custom fields are user-defined fields and are part of the custom object or standard object definition. See CustomObject for more information. Standard fields are predefined on standard objects.\n\nNote: Retrieving a component of this metadata type in a project makes the component appear in any Profile and PermissionSet components that are retrieved in the same package.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "businessOwnerGroup": {
+      "type": "reference",
+      "description": "Indicates the group associated with this field. The business owner group understands the importance of the field’s data to your company, and can be responsible for determining the minimum security classification. This field is available in API version 45.0 and later."
+    },
+    "businessOwnerUser": {
+      "type": "reference",
+      "description": "Indicates the person associated with this field. The business owner understands the importance of the field’s data to your company, and can be responsible for determining the minimum security classification. This field is available in API version 45.0 and later."
+    },
+    "businessStatus": {
+      "type": "picklist",
+      "description": "Indicates whether the field is in use. Valid values include: Active DeprecateCandidate Hidden This field is available in API version 45.0 and later"
+    },
+    "caseSensitive": {
+      "type": "boolean",
+      "description": "Indicates whether the field is case-sensitive (true) or not (false). For indirect lookup relationship fields on external objects, this attribute affects how this custom field’s values are matched against the values of the referenceTargetField."
+    },
+    "complianceGroup": {
+      "type": "multipicklist",
+      "description": "Indicates the compliance acts, definitions, or regulations related to the field’s data. Valid values include: CCPA COPPA GDPR HIPAA PCI PII This field is available in API version 47.0 and later."
+    },
+    "customDataType": {
+      "type": "string",
+      "description": "Deprecated in the Spring ‘19 (API version 45.0) release."
+    },
+    "defaultValue": {
+      "type": "string",
+      "description": "If specified, represents the default value of the field."
+    },
+    "deleteConstraint": {
+      "type": "DeleteConstraint (enumeration of type string)",
+      "description": "Provides deletion options for lookup relationships. Valid values are: Cascade—Deletes the lookup record as well as associated lookup fields. Restrict—Prevents the record from being deleted if it's in a lookup relationship. SetNull—This value is the default. If the lookup record is deleted, the lookup field is cleared. For more information on lookup relationships, see \"Object Relationships\" in Salesforce Help."
+    },
+    "deprecated": {
+      "type": "boolean",
+      "description": "Reserved for future use."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the field."
+    },
+    "displayFormat": {
+      "type": "string",
+      "description": "The display format."
+    },
+    "displayLocationInDecimal": {
+      "type": "boolean",
+      "description": "Indicates how the geolocation values of a custom Location field appear in the user interface. If true, the geolocation values appear in decimal notation. If false, the geolocation values appear as degrees, minutes, and seconds."
+    },
+    "elementType": {
+      "type": "ElementType (enumeration of type string)",
+      "description": "Reserved for future use."
+    },
+    "encrypted": {
+      "type": "boolean",
+      "description": "This entry is about Shield Platform Encryption, not Classic Encryption. Indicates whether this field is encrypted (true) or not (false). This field is available in API version 34.0 through 43.0."
+    },
+    "encryptionScheme": {
+      "type": "EncryptionScheme (enumeration of type string)",
+      "description": "This entry is about Shield Platform Encryption, not Classic Encryption. For encrypted fields, determines which encryption scheme a field takes. Valid values are CaseInsensitiveDeterministicEncryption CaseSensitiveDeterministicEncryption None ProbabilisticEncryption This field is available in API version 44.0 and later."
+    },
+    "externalDeveloperName": {
+      "type": "string",
+      "description": "Available only for external objects. Name of the table column on the external data source that maps to this custom field in Salesforce. Corresponds to External Column Name in the user interface. This field is available in API version 32.0 and later."
+    },
+    "externalId": {
+      "type": "boolean",
+      "description": "Indicates whether the field is an external ID field (true) or not (false). This property is returned only if the custom field data type is AutoNumber, Email, Number, or Text."
+    },
+    "fieldManageability": {
+      "type": "FieldManageability (enumeration of type string)",
+      "description": "Determines who can update the field after it’s released in a managed package. Valid values: Locked—The field can’t be updated. DeveloperControlled—The creator of the record can update the field with a package upgrade. SubscriberControlled—Anyone with proper permissions can update the field. The field can’t be updated with a package upgrade. Available only for fields on custom metadata types. If the field type is MetadataRelationship, and the manageability of the entity definition field is: Subscriber-controlled, then the Field Definition field must be subscriber-controlled. Upgradeable, then the Field Definition field must be either upgradeable or subscriber-controlled."
+    },
+    "formula": {
+      "type": "string",
+      "description": "If specified, represents a formula on the field."
+    },
+    "formulaTreatBlanksAs": {
+      "type": "TreatBlanksAs (enumeration of type string)",
+      "description": "Indicates how to treat blanks in a formula. Valid values are: BlankAsBlank and BlankAsZero."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "Inherited from Metadata, this field is defined in the WSDL for this metadata type. It must be specified when creating, updating, or deleting. See createMetadata() to see an example of this field specified for a call. This value can't be null."
+    },
+    "globalPicklist": {
+      "type": "string.",
+      "description": "(This field is available in API version 37.0 only and removed from later versions.) If this custom field is a picklist that’s based on a global picklist, globalPicklist is the name of the global picklist whose value set this picklist inherits. A custom picklist that’s based on a global picklist is restricted. You can only add or remove values by editing the global picklist."
+    },
+    "indexed": {
+      "type": "boolean",
+      "description": "Indicates if the field is indexed. If this field is unique or the externalId is set true, the isIndexed value is set to true. This field has been deprecated as of API version 14.0 and is only provided for backward compatibility."
+    },
+    "inlineHelpText": {
+      "type": "string",
+      "description": "Represents the content of field-level help. For more information, see \"Define Field-Level Help\" in Salesforce Help."
+    },
+    "isAIPredictionField": {
+      "type": "boolean",
+      "description": "Available for Number type custom fields when you use Einstein Prediction Builder. Denotes whether the field can store and display Einstein prediction data on an object. Use Einstein Prediction Builder to determine the data for the target field. This field is available in API version 43.0 and later."
+    },
+    "isFilteringDisabled": {
+      "type": "boolean",
+      "description": "Available only for external objects. Indicates whether the custom field is available in filters. This field is available in API version 32.0 and later."
+    },
+    "isNameField": {
+      "type": "boolean",
+      "description": "Available only for external object fields of type text. For each external object, you can specify one field as the name field. If you set this value to true, make sure that the external table column identified by the externalDeveloperName attribute contains name values. This field is available in API version 32.0 and later."
+    },
+    "isSortingDisabled": {
+      "type": "boolean",
+      "description": "Available only for external objects. Indicates whether the custom field is sortable. This field is available in API version 32.0 and later."
+    },
+    "label": {
+      "type": "string",
+      "description": "Label for the field. You can't update the label for standard picklist fields, such as the Industry field for accounts."
+    },
+    "length": {
+      "type": "int",
+      "description": "Length of the field."
+    },
+    "lookupFilter": {
+      "type": "LookupFilter",
+      "description": "Represents the metadata associated with a lookup filter. This metadata type is used to create, update, or delete lookup filter definitions. This component has been removed as of API version 30.0 and is only available in previous API versions. The metadata associated with a lookup filter is now represented by the lookupFilter field in the CustomField component. This field is available in API version 30.0 and later. LookupFilter isn't supported on the article type object."
+    },
+    "maskChar": {
+      "type": "EncryptedFieldMaskChar (enumeration of type string)",
+      "description": "This page is about Classic Encryption, not Shield Platform Encryption. For encrypted fields, specifies the character to be used as a mask. Valid values are: asterisk X For more information on encrypted fields, see Classic Encryption for Custom Fields in Salesforce Help."
+    },
+    "maskType": {
+      "type": "EncryptedFieldMaskType (enumeration of type string)",
+      "description": "This page is about Classic Encryption, not Shield Platform Encryption. For encrypted text fields, specifies the format of the masked and unmasked characters in the field. Valid values are: all—All characters in the field are hidden. This option is equivalent to the Mask All Characters option in Salesforce. creditCard—The first 12 characters are hidden and the last four display. This option is equivalent to the Credit Card Number option in Salesforce. lastFour—All characters are hidden but the last four display. This option is equivalent to the Last Four Characters Clear option in Salesforce. nino—All characters are hidden. Salesforce automatically inserts spaces after each pair of characters if the field contains nine characters. This option is equivalent to the National Insurance Number option in Salesforce. sin—All characters are hidden but the last four display. This option is equivalent to the Social Insurance Number option in Salesforce. ssn—The first five characters are hidden and the last four display. This option is equivalent to the Social Security Number option in Salesforce. For more information on encrypted fields, see \"Classic Encryption for Custom Fields\" in Salesforce Help."
+    },
+    "metadataRelationshipControllingField": {
+      "type": "string",
+      "description": "In custom metadata relationships, represents the controlling field that specifies the standard or custom object in an entity definition metadata relationship. Required when creating a field definition or entity particle metadata relationship on a custom metadata type. The object specified in the controlling field determines the values available in its dependent field definition or entity particle. For example, specifying the Account object filters the available fields in the field definition to Account fields only. This field is available in API version 39.0 and later."
+    },
+    "picklist": {
+      "type": "Picklist",
+      "description": "(Deprecated. Use this field in API version 37.0 and earlier only. In later versions, use valueSet instead.) If specified, the field is a picklist, and this field enumerates the picklist values and labels."
+    },
+    "populateExistingRows": {
+      "type": "boolean",
+      "description": "Indicates whether existing rows are going to be populated (true) or not (false)."
+    },
+    "precision": {
+      "type": "int",
+      "description": "The precision for number values. Precision is the number of digits in a number. For example, the number 256.99 has a precision value of 5."
+    },
+    "referenceTargetField": {
+      "type": "string",
+      "description": "Available only for indirect lookup relationship fields on external objects. Specifies the custom field on the parent object to match against this indirect lookup relationship field, whose values come from an external data source. The specified custom field on the parent object must have both externalId and unique set to true. This field is available in API version 32.0 and later."
+    },
+    "referenceTo": {
+      "type": "string",
+      "description": "If specified, indicates a reference this field has to another object."
+    },
+    "relationshipLabel": {
+      "type": "string",
+      "description": "Label for the relationship."
+    },
+    "relationshipName": {
+      "type": "string",
+      "description": "If specified, indicates the value for one-to-many relationships. For example, in the object MyObject that had a relationship to YourObject, the relationship name can be YourObjects."
+    },
+    "relationshipOrder": {
+      "type": "int",
+      "description": "This field is valid for all master-detail relationships, but the value is only non-zero for junction objects. A junction object has two master-detail relationships, and is analogous to an association table in a many-to-many relationship. Junction objects must define one parent object as primary (0), the other as secondary (1). The definition of primary or secondary affects delete behavior and inheritance of look and feel, and record ownership for junction objects. For more information, see Salesforce Help. 0 or 1 are the only valid values, and 0 is always the value for objects that aren't junction objects."
+    },
+    "reparentableMasterDetail": {
+      "type": "boolean",
+      "description": "Indicates whether the child records in a master-detail relationship on a custom object can be reparented to different parent records. The default value is false. This field is available in API version 25.0 and later."
+    },
+    "required": {
+      "type": "boolean",
+      "description": "Indicates whether the field requires a value on creation (true) or not (false)."
+    },
+    "scale": {
+      "type": "int",
+      "description": "The scale for the field. Scale is the number of digits to the right of the decimal point in a number. For example, the number 256.99 has a scale of 2."
+    },
+    "securityClassification": {
+      "type": "picklist",
+      "description": "Indicates the sensitivity of the data contained in the field. Valid values include: Public Internal Confidential Restricted MissionCritical This field is available in API version 45.0 and later."
+    },
+    "startingNumber": {
+      "type": "int",
+      "description": "If specified, indicates the starting number for the field. When you create records, Starting Number ’s value increments to store the number that will be assigned to the next auto-number field created. You can’t retrieve the starting number of an auto-number field through Metadata API. To specify a Starting Number while deploying, add a startingNumber tag for your field to your package.xml file. For example: <startingNumber>42</startingNumber> If you deploy without specifying a Starting Number value in your package.xml file, the default starting number for standard fields is 0. The default starting number for custom fields is 1."
+    },
+    "stripMarkup": {
+      "type": "boolean",
+      "description": "Set to true to remove markup, or false to preserve markup. Used when converting a rich text area to a long text area."
+    },
+    "summarizedField": {
+      "type": "string",
+      "description": "Represents the field on the detail row that’s being summarized. This field can't be null unless the summaryOperation value is count."
+    },
+    "summaryFilterItems": {
+      "type": "FilterItem[]",
+      "description": "Represents the set of filter conditions for this field if it's a summary field. This field is summed on the child if the filter conditions are met."
+    },
+    "summaryForeignKey": {
+      "type": "string",
+      "description": "Represents the master-detail field on the child that defines the relationship between the parent and the child."
+    },
+    "summaryOperation": {
+      "type": "SummaryOperations (enumeration of type string)",
+      "description": "Represents the type of sum operation to be performed. Valid values are: Count Min Max Sum"
+    },
+    "trackFeedHistory": {
+      "type": "boolean",
+      "description": "Indicates whether the field is enabled for feed tracking (true) or not (false). To set this field to true, the enableFeeds field on the associated CustomObject must also be true. For more information, see \"Customize Chatter Feed Tracking\" in Salesforce Help. This field is available in API version 18.0 and later."
+    },
+    "trackHistory": {
+      "type": "boolean",
+      "description": "Indicates whether history tracking is enabled for the field (true) or not (false). Also available for standard object fields (picklist and lookup fields only) in API version 30.0 and later. To set trackHistory to true, the enableHistory field on the associated standard or custom object must also be true. For more information, see \"Field History Tracking\" in Salesforce Help. Field history tracking isn’t available for external objects."
+    },
+    "trackTrending": {
+      "type": "boolean",
+      "description": "Indicates whether historical trending data is captured for the field (true) or not (false). An object is enabled for historical trending if this attribute is true for at least one field. Available in API version 29.0 and later. For more information, see \"Report on Historical Changes\" in Salesforce Help."
+    },
+    "trueValueIndexed": {
+      "type": "boolean",
+      "description": "Only relevant for a checkbox field. If set, true values are built into the index. This field has been deprecated as of API version 14.0 and is only provided for backward compatibility."
+    },
+    "type": {
+      "type": "FieldType (enumeration of type string)",
+      "description": "Indicates the field type for the field. Valid values are enumerated in FieldType. For standard fields on standard objects, the type field is optional. This field is included for some standard field types, such as Picklist or Lookup, but not for others. The type field is included for custom fields."
+    },
+    "unique": {
+      "type": "boolean",
+      "description": "Indicates whether the field is unique (true) or not (false)."
+    },
+    "valueSet": {
+      "type": "ValueSet",
+      "description": "Represents the set of values that make up a picklist on a custom field. Each value is defined as a CustomValue. If this custom field is a picklist that uses a global value set, valueSet is the name of the global value set whose values this picklist inherits. A custom picklist that uses a global value set is restricted. You can only add or remove values by editing the global value set. A ValueSet component has either a valueSetDefinition or a valueName specified, but never both. This field is available in API version 38.0 and later."
+    },
+    "visibleLines": {
+      "type": "int",
+      "description": "Indicates the number of lines displayed for the field."
+    },
+    "writeRequiresMasterRead": {
+      "type": "boolean",
+      "description": "Sets the minimum sharing access level required on the primary record to create, edit, or delete child records. This field applies only to master-detail or junction object custom field types. true—Allows users with Read access to the primary record permission to create, edit, or delete child records. This setting makes sharing less restrictive. false—Allows users with Read/Write access to the primary record permission to create, edit, or delete child records. This setting is more restrictive than true, and is the default value. For junction objects, the most restrictive access from the two parents is enforced. For example, if you set to true on both master-detail fields, but users have Read access to one primary record and Read/Write access to the other primary record, users aren't able to create, edit, or delete child records."
+    }
+  },
+  "sub_types": {
+    "MktDataModelFieldAttributes": {
+      "definitionCreationType": {
+        "type": "DefinitionCreationType enumeration",
+        "description": "Indicates how this object was added. Valid values are: Bridge Custom Derived Standard System Valid values availble in API version 62.0 and later are: Activation_Audience Ad_Audience_Insights ADG Calculated_Insight CG_Audience Chunk Directory_Table External Problem_Records Segment_Membership Semantic Transform Vector_Embedding"
+      },
+      "invalidMergeActionType": {
+        "type": "InvalidMergeActionType (enumeration of type string)",
+        "description": "If this field is used for merging data, indicates what the system should do when an invalid merge occurs. Valid values are: Drop Keep Override"
+      },
+      "isDynamicLookup": {
+        "type": "boolean",
+        "description": "When true, the existing data is queried for a unique set of values for this field."
+      },
+      "primaryIndexOrder": {
+        "type": "int",
+        "description": "If supplied, indicates that this field is part of the primary key. The number value (starting at 1) indicates the order of attributes if it’s a compound primary key."
+      },
+      "refAttrDeveloperName": {
+        "type": "string",
+        "description": "When this is a Standard Field, it’s the Name of the field from the Reference Model."
+      },
+      "mktDatalakeSrcKeyQualifier": {
+        "type": "string",
+        "description": "String storing the developer name of MktDataLakeSrcKeyQualifier configured on the field"
+      }
+    },
+    "MktDataLakeFieldAttributes": {
+      "definitionCreationType": {
+        "type": "DefinitionCreationType (enumeration of type string)",
+        "description": "Indicates how this object is added. Valid values are: Bridge Custom Derived Standard System Valid values available in API version 62.0 and later are: ADG Calculated_Insight CG_Audience Chunk Directory_Table External Semantic Vector_Embedding"
+      },
+      "dateFormat": {
+        "type": "string",
+        "description": "Optional: The Date format of date, time, date/time fields in this Lake field. This field is deprecated in API version 55.0 and later."
+      },
+      "externalName": {
+        "type": "string",
+        "description": "The external name of this field."
+      },
+      "isEventDate": {
+        "type": "boolean",
+        "description": "When true, this field contains the event date for behavioral model area objects that are used to partition data."
+      },
+      "primaryIndexOrder": {
+        "type": "int",
+        "description": "If supplied, indicates that this field is part of the primary key. The number value (starting at 1) indicates the order of attributes if it’s a compound primary key."
+      },
+      "isInternalOrganization": {
+        "type": "boolean",
+        "description": "When true, this field contains the value for internal organization. In this case, the value of the field is the name of the internal organization. Landing Objects don't have access to the Salesforce ID and thus are using the developer name."
+      },
+      "isRecordModified": {
+        "type": "boolean",
+        "description": "Indicates the record modified field used to calibrate latest record version."
+      },
+      "mktDatalakeSrcKeyQualifier": {
+        "type": "string",
+        "description": "String storing the developer name of MktDataLakeSrcKeyQualifier configured on the field. Available in API version 55.0 and later."
+      },
+      "keyQualifierName": {
+        "type": "string",
+        "description": "Contains the developer name of key qualifier field. Available in API version 55.0 and later."
+      }
+    },
+    "LookupFilter": {
+      "active": {
+        "type": "boolean",
+        "description": "Indicates whether the lookup filter is active (true) or not (false).",
+        "required": true
+      },
+      "booleanFilter": {
+        "type": "string",
+        "description": "Specifies advanced filter conditions."
+      },
+      "description": {
+        "type": "string",
+        "description": "A description of what this filter does."
+      },
+      "errorMessage": {
+        "type": "string",
+        "description": "The error message that appears if the lookup filter fails."
+      },
+      "filterItems": {
+        "type": "FilterItem[]",
+        "description": "The set of filter conditions. You can have up to 10 FilterItems per lookup filter.",
+        "required": true
+      },
+      "infoMessage": {
+        "type": "string",
+        "description": "The information message displayed on the page. Use to describe things the user possibly doesn't understand, such as why certain items are excluded in the lookup filter."
+      },
+      "isOptional": {
+        "type": "boolean",
+        "description": "Indicates whether the lookup filter is optional (true) or not (false).",
+        "required": true
+      }
+    },
+    "FilterItem": {
+      "field": {
+        "type": "string",
+        "description": "Represents the field specified in the filter."
+      },
+      "operation": {
+        "type": "FilterOperation (enumeration of type string)",
+        "description": "Represents the filter operation for this filter item. Valid values are: equals notEqual lessThan greaterThan lessOrEqual greaterOrEqual contains notContain startsWith includes excludes within (DISTANCE criteria only)"
+      },
+      "value": {
+        "type": "string",
+        "description": "Represents the value of the filter item being operated upon, for example, if the filter is my_number_field__c > 1, the value of value is 1."
+      },
+      "valueField": {
+        "type": "string",
+        "description": "Specifies if the final column in the filter contains a field or a field value. Approval processes don’t support valueField entries in filter criteria."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomField\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"businessOwnerGroup\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"businessOwnerUser\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"businessStatus\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"caseSensitive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"complianceGroup\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customDataType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"defaultValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"deleteConstraint\" minOccurs=\"0\" type=\"tns:DeleteConstraint\"/>\n        <xsd:element name=\"deprecated\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"displayFormat\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"elementType\" minOccurs=\"0\" type=\"tns:ElementType\"/>\n        <xsd:element name=\"encryptionScheme\" minOccurs=\"0\" type=\"tns:EncryptionScheme\"/>\n        <xsd:element name=\"escapeMarkup\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"externalDeveloperName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalId\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"fieldManageability\" minOccurs=\"0\" type=\"tns:FieldManageability\"/>\n        <xsd:element name=\"formula\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"formulaTreatBlanksAs\" minOccurs=\"0\" type=\"tns:TreatBlanksAs\"/>\n        <xsd:element name=\"inlineHelpText\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isAIPredictionField\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isConvertLeadDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isFilteringDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isNameField\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isSortingDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"length\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"lookupFilter\" minOccurs=\"0\" type=\"tns:LookupFilter\"/>\n        <xsd:element name=\"maskChar\" minOccurs=\"0\" type=\"tns:EncryptedFieldMaskChar\"/>\n        <xsd:element name=\"maskType\" minOccurs=\"0\" type=\"tns:EncryptedFieldMaskType\"/>\n        <xsd:element name=\"metadataRelationshipControllingField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"mktDataLakeFieldAttributes\" minOccurs=\"0\" type=\"tns:MktDataLakeFieldAttributes\"/>\n        <xsd:element name=\"mktDataModelFieldAttributes\" minOccurs=\"0\" type=\"tns:MktDataModelFieldAttributes\"/>\n        <xsd:element name=\"populateExistingRows\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"precision\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"referenceTargetField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"referenceTo\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relationshipLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relationshipName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relationshipOrder\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"reparentableMasterDetail\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"required\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"restrictedAdminField\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"scale\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"securityClassification\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"startingNumber\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"stripMarkup\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"summarizedField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"summaryFilterItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n        <xsd:element name=\"summaryForeignKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"summaryOperation\" minOccurs=\"0\" type=\"tns:SummaryOperations\"/>\n        <xsd:element name=\"trackFeedHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"trackHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"trackTrending\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"translateData\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"type\" minOccurs=\"0\" type=\"tns:FieldType\"/>\n        <xsd:element name=\"unique\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"valueSet\" minOccurs=\"0\" type=\"tns:ValueSet\"/>\n        <xsd:element name=\"visibleLines\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"writeRequiresMasterRead\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"CustomObject\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionOverrides\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ActionOverride\"/>\n        <xsd:element name=\"allowInChatterGroups\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"articleTypeChannelDisplay\" minOccurs=\"0\" type=\"tns:ArticleTypeChannelDisplay\"/>\n        <xsd:element name=\"businessProcesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BusinessProcess\"/>\n        <xsd:element name=\"compactLayoutAssignment\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"compactLayouts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CompactLayout\"/>\n        <xsd:element name=\"customHelp\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customHelpPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customSettingsType\" minOccurs=\"0\" type=\"tns:CustomSettingsType\"/>\n        <xsd:element name=\"deploymentStatus\" minOccurs=\"0\" type=\"tns:DeploymentStatus\"/>\n        <xsd:element name=\"deprecated\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableActivities\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableBulkApi\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDataTranslation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDivisions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEnhancedLookup\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFeeds\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLicensing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePublishStatusTracking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableReports\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSearch\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSharing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableStreamingApi\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enrichments\" minOccurs=\"0\" type=\"tns:MetadataEnrichments\"/>\n        <xsd:element name=\"eventType\" minOccurs=\"0\" type=\"tns:PlatformEventType\"/>\n        <xsd:element name=\"externalDataSource\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalRepository\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalSharingModel\" minOccurs=\"0\" type=\"tns:SharingModel\"/>\n        <xsd:element name=\"fieldSets\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FieldSet\"/>\n        <xsd:element name=\"fields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomField\"/>\n        <xsd:element name=\"gender\" minOccurs=\"0\" type=\"tns:Gender\"/>\n        <xsd:element name=\"historyRetentionPolicy\" minOccurs=\"0\" type=\"tns:HistoryRetentionPolicy\"/>\n        <xsd:element name=\"household\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"indexes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Index\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"listViews\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ListView\"/>\n        <xsd:element name=\"mktDataLakeAttributes\" minOccurs=\"0\" type=\"tns:MktDataLakeAttributes\"/>\n        <xsd:element name=\"mktDataModelAttributes\" minOccurs=\"0\" type=\"tns:MktDataModelAttributes\"/>\n        <xsd:element name=\"nameField\" minOccurs=\"0\" type=\"tns:CustomField\"/>\n        <xsd:element name=\"pluralLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"profileSearchLayouts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileSearchLayouts\"/>\n        <xsd:element name=\"publishBehavior\" minOccurs=\"0\" type=\"tns:PlatformEventPublishBehavior\"/>\n        <xsd:element name=\"recordTypeTrackFeedHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"recordTypeTrackHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"recordTypes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecordType\"/>\n        <xsd:element name=\"searchLayouts\" minOccurs=\"0\" type=\"tns:SearchLayouts\"/>\n        <xsd:element name=\"sharingModel\" minOccurs=\"0\" type=\"tns:SharingModel\"/>\n        <xsd:element name=\"sharingReasons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingReason\"/>\n        <xsd:element name=\"sharingRecalculations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingRecalculation\"/>\n        <xsd:element name=\"startsWith\" minOccurs=\"0\" type=\"tns:StartsWith\"/>\n        <xsd:element name=\"validationRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ValidationRule\"/>\n        <xsd:element name=\"visibility\" minOccurs=\"0\" type=\"tns:SetupObjectVisibility\"/>\n        <xsd:element name=\"webLinks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WebLink\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"CustomValue\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"color\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"default\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"DefinitionCreationType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Standard\"/>\n    <xsd:enumeration value=\"Custom\"/>\n    <xsd:enumeration value=\"System\"/>\n    <xsd:enumeration value=\"Derived\"/>\n    <xsd:enumeration value=\"Bridge\"/>\n    <xsd:enumeration value=\"Curated\"/>\n    <xsd:enumeration value=\"Segment_Membership\"/>\n    <xsd:enumeration value=\"Calculated_Insight\"/>\n    <xsd:enumeration value=\"Ml_Prediction\"/>\n    <xsd:enumeration value=\"Activation_Audience\"/>\n    <xsd:enumeration value=\"CG_Audience\"/>\n    <xsd:enumeration value=\"Ad_Audience_Insights\"/>\n    <xsd:enumeration value=\"Transform\"/>\n    <xsd:enumeration value=\"ADG\"/>\n    <xsd:enumeration value=\"External\"/>\n    <xsd:enumeration value=\"Vector_Embedding\"/>\n    <xsd:enumeration value=\"Chunk\"/>\n    <xsd:enumeration value=\"Directory_Table\"/>\n    <xsd:enumeration value=\"Semantic\"/>\n    <xsd:enumeration value=\"Problem_Records\"/>\n    <xsd:enumeration value=\"Clean_Room\"/>\n    <xsd:enumeration value=\"Deletion_Records\"/>\n    <xsd:enumeration value=\"Auxiliary\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"DeleteConstraint\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Cascade\"/>\n    <xsd:enumeration value=\"Restrict\"/>\n    <xsd:enumeration value=\"SetNull\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ElementType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Float\"/>\n    <xsd:enumeration value=\"Text\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EncryptedFieldMaskChar\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"asterisk\"/>\n    <xsd:enumeration value=\"X\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EncryptedFieldMaskType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"all\"/>\n    <xsd:enumeration value=\"creditCard\"/>\n    <xsd:enumeration value=\"ssn\"/>\n    <xsd:enumeration value=\"lastFour\"/>\n    <xsd:enumeration value=\"sin\"/>\n    <xsd:enumeration value=\"nino\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EncryptionScheme\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"ProbabilisticEncryption\"/>\n    <xsd:enumeration value=\"CaseSensitiveDeterministicEncryption\"/>\n    <xsd:enumeration value=\"CaseInsensitiveDeterministicEncryption\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FieldManageability\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"DeveloperControlled\"/>\n    <xsd:enumeration value=\"SubscriberControlled\"/>\n    <xsd:enumeration value=\"Locked\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FieldType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AutoNumber\"/>\n    <xsd:enumeration value=\"Lookup\"/>\n    <xsd:enumeration value=\"MasterDetail\"/>\n    <xsd:enumeration value=\"Checkbox\"/>\n    <xsd:enumeration value=\"Currency\"/>\n    <xsd:enumeration value=\"Date\"/>\n    <xsd:enumeration value=\"DateTime\"/>\n    <xsd:enumeration value=\"Email\"/>\n    <xsd:enumeration value=\"Number\"/>\n    <xsd:enumeration value=\"Percent\"/>\n    <xsd:enumeration value=\"Phone\"/>\n    <xsd:enumeration value=\"Picklist\"/>\n    <xsd:enumeration value=\"MultiselectPicklist\"/>\n    <xsd:enumeration value=\"Text\"/>\n    <xsd:enumeration value=\"TextArea\"/>\n    <xsd:enumeration value=\"LongTextArea\"/>\n    <xsd:enumeration value=\"Html\"/>\n    <xsd:enumeration value=\"Url\"/>\n    <xsd:enumeration value=\"EncryptedText\"/>\n    <xsd:enumeration value=\"Summary\"/>\n    <xsd:enumeration value=\"Hierarchy\"/>\n    <xsd:enumeration value=\"File\"/>\n    <xsd:enumeration value=\"MetadataRelationship\"/>\n    <xsd:enumeration value=\"Location\"/>\n    <xsd:enumeration value=\"ExternalLookup\"/>\n    <xsd:enumeration value=\"IndirectLookup\"/>\n    <xsd:enumeration value=\"CustomDataType\"/>\n    <xsd:enumeration value=\"Time\"/>\n    <xsd:enumeration value=\"Address\"/>\n    <xsd:enumeration value=\"Array\"/>\n    <xsd:enumeration value=\"Integer\"/>\n    <xsd:enumeration value=\"Long\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FilterItem\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"operation\" type=\"tns:FilterOperation\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueField\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FilterOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"equals\"/>\n    <xsd:enumeration value=\"notEqual\"/>\n    <xsd:enumeration value=\"lessThan\"/>\n    <xsd:enumeration value=\"greaterThan\"/>\n    <xsd:enumeration value=\"lessOrEqual\"/>\n    <xsd:enumeration value=\"greaterOrEqual\"/>\n    <xsd:enumeration value=\"contains\"/>\n    <xsd:enumeration value=\"notContain\"/>\n    <xsd:enumeration value=\"startsWith\"/>\n    <xsd:enumeration value=\"includes\"/>\n    <xsd:enumeration value=\"excludes\"/>\n    <xsd:enumeration value=\"within\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"InvalidMergeActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Drop\"/>\n    <xsd:enumeration value=\"Keep\"/>\n    <xsd:enumeration value=\"Override\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"LookupFilter\">\n  <xsd:sequence>\n    <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"errorMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"filterItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n    <xsd:element name=\"infoMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isOptional\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"MappingAlertType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"Warning\"/>\n    <xsd:enumeration value=\"Error\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MktDataLakeFieldAttributes\">\n  <xsd:sequence>\n    <xsd:element name=\"dateFormat\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"definitionCreationType\" minOccurs=\"0\" type=\"tns:DefinitionCreationType\"/>\n    <xsd:element name=\"externalName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isEventDate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isInternalOrganization\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isRecordModified\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"keyQualifierName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"mktDatalakeSrcKeyQualifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"primaryIndexOrder\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"usageTag\" minOccurs=\"0\" type=\"tns:UsageTag\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MktDataModelFieldAttributes\">\n  <xsd:sequence>\n    <xsd:element name=\"definitionCreationType\" minOccurs=\"0\" type=\"tns:DefinitionCreationType\"/>\n    <xsd:element name=\"invalidMergeActionType\" minOccurs=\"0\" type=\"tns:InvalidMergeActionType\"/>\n    <xsd:element name=\"isDynamicLookup\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"keyQualifierName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"labelOverride\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"mappingAlertType\" minOccurs=\"0\" type=\"tns:MappingAlertType\"/>\n    <xsd:element name=\"masterLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"primaryIndexOrder\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"refAttrDeveloperName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"usageTag\" minOccurs=\"0\" type=\"tns:MktDataModelFieldUsageTag\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"MktDataModelFieldUsageTag\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"KeyQualifier\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"SummaryOperations\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"count\"/>\n    <xsd:enumeration value=\"sum\"/>\n    <xsd:enumeration value=\"min\"/>\n    <xsd:enumeration value=\"max\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"TreatBlanksAs\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"BlankAsBlank\"/>\n    <xsd:enumeration value=\"BlankAsZero\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"UsageTag\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"NONE\"/>\n    <xsd:enumeration value=\"KEY_QUALIFIER\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ValueSet\">\n  <xsd:sequence>\n    <xsd:element name=\"controllingField\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"restricted\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"valueSetDefinition\" minOccurs=\"0\" type=\"tns:ValueSetValuesDefinition\"/>\n    <xsd:element name=\"valueSetName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueSettings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ValueSettings\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ValueSetValuesDefinition\">\n  <xsd:sequence>\n    <xsd:element name=\"sorted\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomValue\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ValueSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"controllingFieldValue\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following example shows a field definition for a custom field that’s named Comments__c.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomObject xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n....\n<fields>\n        <fullName>Comments__c</fullName>\n        <description>Add your comments about this object here</description>\n        <inlineHelpText>This field contains help text for this object</inlineHelpText>\n        <label>Comments</label>\n        <length>32000</length>\n        <type>LongTextArea</type>\n        <visibleLines>30</visibleLines>\n</fields>\n....\n</CustomObject>"
+    },
+    {
+      "description": "This XML is the definition for two fields on the Account standard object—a custom field (MyCustomAccountField__c), and a standard field (Phone) that has history tracking enabled.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomObject xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <fields>\n        <fullName>MyCustomAccountField__c</fullName>\n        <description>A custom field on the Account standard object.</description>\n        <externalId>false</externalId>\n        <inlineHelpText>Some help text.</inlineHelpText>\n        <label>MyCustomAccountField</label>\n        <length>100</length>\n        <required>false</required>\n        <trackFeedHistory>false</trackFeedHistory>\n        <trackHistory>false</trackHistory>\n        <type>Text</type>\n        <unique>false</unique>\n    </fields>\n    <fields>\n        <fullName>Phone</fullName>\n        <trackFeedHistory>false</trackFeedHistory>\n        <trackHistory>true</trackHistory>\n    </fields>\n</CustomObject>"
+    }
+  ]
+}

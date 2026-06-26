@@ -1,0 +1,103 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "UiFormatSpecificationSet - Metadata API",
+  "description": "Represents a set of rules that define the style and visibility of conditional field formatting on Dynamic Forms-enabled Lightning page field instances.",
+  "file_information": ".uiFormatSpecificationSet",
+  "directory_location": "uiFormatSpecificationSets",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "field": {
+      "type": "string",
+      "required": true,
+      "description": "The object field that the conditional formatting is associated with."
+    },
+    "formatType": {
+      "type": "FormatType (enumeration of type string)",
+      "required": true,
+      "description": "The type of conditional formatting associated with the field. Values are: ICON"
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label for the conditional formatting ruleset, which displays in Setup."
+    },
+    "sobjectType": {
+      "type": "string",
+      "required": true,
+      "description": "The object the ruleset is associated with."
+    },
+    "uiFormatSpecifications": {
+      "type": "UiFormatSpecification[]",
+      "description": "The list of rules contained in the ruleset."
+    }
+  },
+  "sub_types": {
+    "UiFormatSpecification": {
+      "formatProperties": {
+        "type": "string",
+        "required": true,
+        "description": "The properties for a given formatType in JSON format."
+      },
+      "formatType": {
+        "type": "FormatType (enumeration of type string)",
+        "required": true,
+        "description": "The type of conditional formatting associated with the field when the rule evaluates to true. Values are: ICON"
+      },
+      "order": {
+        "type": "int",
+        "required": true,
+        "description": "A numerical value representing the conditional formatting rule’s position in the evaluation order."
+      },
+      "visibilityRule": {
+        "type": "UiFormulaRule",
+        "description": "A set of one or more filters that define the conditions under which the conditional formatting appears on the field.If the visibility rule evaluates to true, the formatting displays on the field. If false, it doesn’t display. If this field is null, the formatting displays by default."
+      }
+    },
+    "UiFormulaRule": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "Specifies advanced filter conditions such as 1 AND 2."
+      },
+      "criteria": {
+        "type": "UiFormulaCriterion[]",
+        "description": "List of one or more filters that, when evaluated, determine conditional field formatting visibility."
+      }
+    },
+    "UiFormulaCriterion": {
+      "leftValue": {
+        "type": "string",
+        "required": true,
+        "description": "The field upon which the filter is based. For example, AMOUNT."
+      },
+      "operator": {
+        "type": "string",
+        "required": true,
+        "description": "Defines the operator used to filter the data. Valid values are: CONTAINS EQUAL NE—not equal GT—greater than GE—greater than or equal LE—less than or equal LT—less than"
+      },
+      "rightValue": {
+        "type": "string",
+        "description": "The value by which you want to evaluate the formatting visibility. For example, 1000000."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"FormatType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ICON\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"UiFormatSpecification\">\n  <xsd:sequence>\n    <xsd:element name=\"formatProperties\" type=\"xsd:string\"/>\n    <xsd:element name=\"formatType\" type=\"tns:FormatType\"/>\n    <xsd:element name=\"order\" type=\"xsd:int\"/>\n    <xsd:element name=\"visibilityRule\" minOccurs=\"0\" type=\"tns:UiFormulaRule\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"UiFormatSpecificationSet\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"field\" type=\"xsd:string\"/>\n        <xsd:element name=\"formatType\" type=\"tns:FormatType\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"sobjectType\" type=\"xsd:string\"/>\n        <xsd:element name=\"uiFormatSpecifications\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:UiFormatSpecification\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"UiFormulaCriterion\">\n  <xsd:sequence>\n    <xsd:element name=\"leftValue\" type=\"xsd:string\"/>\n    <xsd:element name=\"operator\" type=\"xsd:string\"/>\n    <xsd:element name=\"rightValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"UiFormulaRule\">\n  <xsd:sequence>\n    <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"criteria\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:UiFormulaCriterion\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an UiFormatSpecificationSet component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<UiFormatSpecificationSet xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <field>Contact.Customer_Sentiment__c</field>\n    <formatType>ICON</formatType>\n    <masterLabel>Sentiment Score</masterLabel>\n    <sobjectType>Contact</sobjectType>\n    <uiFormatSpecifications>\n        <formatProperties>{&quot;icon&quot;:&quot;happy_face&quot;,\n&quot;iconColor&quot;:&quot;green&quot;}</formatProperties>\n        <formatType>ICON</formatType>\n        <order>1</order>\n        <visibilityRule>\n            <criteria>\n                <leftValue>{!Record.Customer_Sentiment__c}</leftValue>\n                <operator>EQUAL</operator>\n                <rightValue>Happy</rightValue>\n            </criteria>\n        </visibilityRule>\n    </uiFormatSpecifications>\n    <uiFormatSpecifications>\n        <formatProperties>{&quot;icon&quot;:&quot;neutral_face&quot;,\n&quot;iconColor&quot;:&quot;gray&quot;}</formatProperties>\n        <formatType>ICON</formatType>\n        <order>2</order>\n        <visibilityRule>\n            <criteria>\n                <leftValue>{!Record.Customer_Sentiment__c}</leftValue>\n                <operator>EQUAL</operator>\n                <rightValue>Neutral</rightValue>\n            </criteria>\n        </visibilityRule>\n    </uiFormatSpecifications>\n    <uiFormatSpecifications>\n        <formatProperties>{&quot;icon&quot;:&quot;sad_face&quot;,\n&quot;iconColor&quot;:&quot;red&quot;}</formatProperties>\n        <formatType>ICON</formatType>\n        <order>3</order>\n        <visibilityRule>\n            <criteria>\n                <leftValue>{!Record.Customer_Sentiment__c}</leftValue>\n                <operator>EQUAL</operator>\n                <rightValue>Unhappy</rightValue>\n            </criteria>\n        </visibilityRule>\n    </uiFormatSpecifications>\n</UiFormatSpecificationSet>"
+    }
+  ]
+}

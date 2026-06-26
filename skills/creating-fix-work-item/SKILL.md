@@ -1,6 +1,6 @@
 ---
 name: creating-fix-work-item
-description: "Creates a DevOps Center WorkItem to track a fix for a test failure or Code Analyzer violation. Before creating anything, it shows a subject/assignee/project preview and requires explicit confirmation. Use this skill when you want to create a fix work item, track a remediation task, or assign a test or analysis failure to a developer. TRIGGER when: the user wants to create a fix work item, log a remediation, or assign a failure to a developer for resolution. DO NOT TRIGGER when: writing the fix code itself (use generating-apex)."
+description: "Creates a DevOps Center WorkItem to track a fix for a test failure or Code Analyzer violation. Before creating anything, it shows a subject/assignee/project preview and requires explicit confirmation. Use this skill when you want to create a fix work item, track a remediation task, or assign a test or analysis failure to a developer. TRIGGER when: the user wants to create a fix work item, log a remediation, or assign a failure to a developer for resolution. DO NOT TRIGGER when: writing the fix code itself (use platform-apex-generate)."
 metadata:
   version: "1.0"
   minApiVersion: "67.0"

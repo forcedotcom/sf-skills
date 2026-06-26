@@ -1,0 +1,138 @@
+name: "Tabs"
+description: "A navigation component that organizes content into multiple panels, allowing users to switch between different views while maintaining context."
+category: "Navigation"
+slds_classes:
+  root: "slds-tabs_default"
+  elements:
+    - class: "slds-tabs_default__nav"
+      description: "Navigation container for tab headers"
+      purpose: "Contains the clickable tab headers"
+    - class: "slds-tabs_default__item"
+      description: "Individual tab header item"
+      purpose: "Wrapper for each tab button"
+    - class: "slds-tabs_default__link"
+      description: "Tab header link/button"
+      purpose: "Clickable element to activate tab"
+    - class: "slds-tabs_default__content"
+      description: "Content panel for active tab"
+      purpose: "Contains the content for the selected tab"
+  modifiers:
+    - class: "slds-tabs_scoped"
+      description: "Scoped tabs variant"
+      usage: "For contained, card-like tab interface"
+  states:
+    - class: "slds-is-active"
+      description: "Active tab state"
+      trigger: "Currently selected and visible tab"
+    - class: "slds-has-focus"
+      description: "Focus state for tab"
+      trigger: "When tab has keyboard focus"
+variants:
+  - name: "Default"
+    description: "Standard horizontal tabs"
+    classes:
+      - "slds-tabs_default"
+    usage_context: "Default tab implementation for content organization"
+    differences: "Horizontal tab headers with underline styling"
+  - name: "Scoped"
+    description: "Tabs with contained, card-like appearance"
+    classes:
+      - "slds-tabs_scoped"
+    usage_context: "When tabs need visual containment"
+    differences: "Card-style background with contained appearance"
+lightning_component:
+  name: "lightning-tabset"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-tabset"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS tabs blueprint"
+accessibility:
+  keyboard_support:
+    - "Tab to focus the tab list"
+    - "Arrow keys to navigate between tab headers"
+    - "Enter/Space to activate selected tab"
+    - "Tab to move focus into active tab content"
+  screen_reader:
+    - "Tab list structure announced"
+    - "Current tab and total count communicated"
+    - "Tab panel content associated with headers"
+  aria_attributes:
+    - "role='tablist' for tab navigation container"
+    - "role='tab' for individual tab headers"
+    - "role='tabpanel' for content areas"
+    - "aria-selected for active tab"
+    - "aria-controls linking tabs to panels"
+    - "aria-labelledby linking panels to tabs"
+usage_guidelines:
+  when_to_use:
+    - "To organize related content into logical groups"
+    - "When users need to switch between different views"
+    - "For content that doesn't need to be viewed simultaneously"
+    - "To reduce visual complexity and conserve space"
+  when_not_to_use:
+    - "When users need to see multiple sections at once"
+    - "For sequential processes (use progress indicator instead)"
+    - "When you have only one or two content sections"
+    - "For navigation between unrelated pages"
+  best_practices:
+    - "Use clear, descriptive tab labels"
+    - "Limit number of tabs to avoid overcrowding"
+    - "Order tabs logically by importance or workflow"
+    - "Ensure tab content is substantial enough to warrant separation"
+    - "Provide visual indication of active tab"
+  common_mistakes:
+    - "Too many tabs causing overcrowding"
+    - "Unclear or ambiguous tab labels"
+    - "Using tabs for navigation between unrelated content"
+    - "Poor mobile responsiveness"
+code_examples:
+  - title: "Basic Tabset"
+    code: |
+      <div class="slds-tabs_default">
+            <ul class="slds-tabs_default__nav" role="tablist">
+              <li class="slds-tabs_default__item slds-is-active" title="Item One" role="presentation">
+                <a class="slds-tabs_default__link" href="#tab-default-1" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-1" id="tab-default-1__item">Item One</a>
+              </li>
+              <li class="slds-tabs_default__item" title="Item Two" role="presentation">
+                <a class="slds-tabs_default__link" href="#tab-default-2" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-2" id="tab-default-2__item">Item Two</a>
+              </li>
+              <li class="slds-tabs_default__item" title="Item Three" role="presentation">
+                <a class="slds-tabs_default__link" href="#tab-default-3" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-3" id="tab-default-3__item">Item Three</a>
+              </li>
+            </ul>
+            <div id="tab-default-1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-default-1__item">
+              <h2>Item One Content</h2>
+              <p>Content for the first tab goes here...</p>
+            </div>
+            <div id="tab-default-2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item">
+              <h2>Item Two Content</h2>
+              <p>Content for the second tab goes here...</p>
+            </div>
+            <div id="tab-default-3" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-3__item">
+              <h2>Item Three Content</h2>
+              <p>Content for the third tab goes here...</p>
+            </div>
+            </div>
+styling_hooks: []
+dependencies:
+  css_files:
+    - "tabs.css"
+  javascript:
+    - "tabs.js"
+  icons: []
+  other_components: []
+related_components:
+  - name: "Vertical Navigation"
+    relationship: "alternative"
+    description: "Alternative navigation for hierarchical content"
+  - name: "Accordion"
+    relationship: "alternative"
+    description: "Alternative for collapsible content sections"
+  - name: "Path"
+    relationship: "similar"
+    description: "Similar multi-step navigation pattern"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/tabs/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

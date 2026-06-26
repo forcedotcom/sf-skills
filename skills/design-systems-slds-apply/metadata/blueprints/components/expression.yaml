@@ -1,0 +1,143 @@
+name: Expression
+description: A formula builder interface that allows users to construct complex expressions, calculations, and logical conditions
+  through visual components, operators, and functions with syntax validation and auto-completion.
+category: Input
+slds_classes:
+  root: ''
+  elements:
+  - class: slds-expression__group
+    description: Logical grouping container for expression elements
+    purpose: Groups related expression components together
+  - class: slds-expression__row
+    description: Individual row within expression builder
+    purpose: Contains a single expression statement or condition
+  - class: slds-expression__buttons
+    description: Action buttons for expression manipulation
+    purpose: Contains add, remove, and group action buttons
+  modifiers: []
+  states:
+  - class: slds-has-error
+    description: Error state for invalid expressions
+    trigger: Applied when expression syntax is invalid
+  - class: slds-is-editing
+    description: Active editing state
+    trigger: Applied when user is actively editing expression
+variants:
+- name: Base
+  description: Standard expression builder interface
+  classes: []
+  usage_context: Default implementation for expression building
+  differences: Basic expression builder with fields and operators
+- name: Compound
+  description: Multi-condition expression builder
+  classes: []
+  usage_context: When multiple logical conditions are needed
+  differences: Support for AND/OR logic and grouped conditions
+- name: Advanced
+  description: Advanced expression builder with functions
+  classes: []
+  usage_context: When complex calculations and functions are required
+  differences: Includes function library and advanced operators
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component equivalent - typically implemented using custom components with lightning-combobox
+    and lightning-input patterns
+accessibility:
+  keyboard_support:
+  - Tab navigation through expression elements
+  - Enter/Space to activate buttons and dropdowns
+  - Arrow keys for navigating expression components
+  - Delete/Backspace to remove expression elements
+  screen_reader:
+  - Expression structure and logic announced
+  - Field and operator selections described
+  - Validation errors clearly communicated
+  - Expression summary provided
+  aria_attributes:
+  - role='group' for expression sections
+  - aria-label for expression components
+  - aria-describedby for validation messages
+  - aria-expanded for collapsible groups
+  - aria-invalid for error states
+usage_guidelines:
+  when_to_use:
+  - For building complex business rules and formulas
+  - When users need to create calculated fields
+  - For advanced filtering and search criteria
+  - In workflow and automation rule builders
+  when_not_to_use:
+  - For simple single-field filters (use basic inputs)
+  - When users don't need complex logic
+  - For purely visual/design-related conditions
+  best_practices:
+  - Provide clear field and operator labels
+  - Include helpful examples and documentation
+  - Validate expressions in real-time
+  - Offer function assistance and auto-completion
+  - Group related conditions logically
+  common_mistakes:
+  - Poor validation feedback
+  - Overwhelming users with too many options
+  - Unclear operator meanings
+  - Not providing expression examples
+code_examples:
+- title: Basic Expression Builder
+  description: Advanced expression builder including functions and calculations
+  code: "<div class=\"\">\n      <div class=\"\">\n        <div class=\"slds-expression__group\">\n          <div class=\"\
+    slds-expression__row\">\n            <div class=\"slds-grid slds-grid_align-center\">\n              <div class=\"slds-col\"\
+    >\n                <div class=\"slds-form-element\">\n                  <label class=\"slds-form-element__label\">Function</label>\n\
+    \                  <div class=\"slds-form-element__control\">\n                    <div class=\"slds-combobox_container\"\
+    >\n                      <div class=\"slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click\">\n           \
+    \             <div class=\"slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right\">\n            \
+    \              <input type=\"text\" class=\"slds-input slds-combobox__input\" value=\"SUM(\" readonly>\n             \
+    \             <span class=\"slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right\">\n  \
+    \                          <svg class=\"slds-icon slds-icon_x-small\" aria-hidden=\"true\">\n                        \
+    \      <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#down\"></use>\n                            </svg>\n\
+    \                          </span>\n                        </div>\n                      </div>\n                   \
+    \ </div>\n                  </div>\n                </div>\n              </div>\n              <div class=\"slds-col\
+    \ slds-p-horizontal_x-small\">\n                <div class=\"slds-form-element\">\n                  <label class=\"slds-form-element__label\"\
+    >Field</label>\n                  <div class=\"slds-form-element__control\">\n                    <input type=\"text\"\
+    \ class=\"slds-input\" value=\"Opportunity Amount\">\n                  </div>\n                </div>\n             \
+    \ </div>\n              <div class=\"slds-col slds-no-flex\">\n                <span class=\"slds-text-body_regular\"\
+    >)</span>\n              </div>\n            </div>\n          </div>\n          <div class=\"slds-expression__row slds-m-top_small\"\
+    >\n            <div class=\"slds-form-element\">\n              <label class=\"slds-form-element__label\">Preview</label>\n\
+    \              <div class=\"slds-form-element__control\">\n                <div class=\"slds-form-element__static slds-p-around_small\
+    \ slds-text-color_weak\">\n                  SUM(Opportunity.Amount)\n                </div>\n              </div>\n \
+    \           </div>\n          </div>\n        </div>\n        <div class=\"slds-expression__buttons slds-m-top_small\"\
+    >\n          <div class=\"slds-button-group\">\n            <button class=\"slds-button slds-button_neutral\">Insert Field</button>\n\
+    \            <button class=\"slds-button slds-button_neutral\">Insert Function</button>\n            <button class=\"\
+    slds-button slds-button_neutral\">Insert Operator</button>\n          </div>\n        </div>\n      </div>\n      </div>\n"
+dependencies:
+  css_files:
+  - expression.css
+  - form-element.css
+  - combobox.css
+  - button.css
+  javascript:
+  - expression.js
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - form-element
+  - combobox
+  - button
+  - select
+  - input
+related_components:
+- name: Form Element
+  relationship: container
+  description: Uses form elements for input controls
+- name: Combobox
+  relationship: depends-on
+  description: Uses combobox for field and function selection
+- name: Visual Picker
+  relationship: alternative
+  description: Alternative for simpler selection scenarios
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/expression/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

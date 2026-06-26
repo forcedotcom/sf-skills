@@ -1,0 +1,131 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "OnboardingDataObjectGroup - Metadata API",
+  "description": "Represents a configuration that groups fields from one or more objects for a specific business purpose. For example, the Customer Contact Information onboarding data object group includes Name, Email, Phone Number, and Address.",
+  "file_information": ".onboardingDataObjectGroup",
+  "directory_location": "onboardingDataObjectGroups",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "Description of the onboarding data object group."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for OnboardingDataObjectGroup, which is defined when the OnboardingDataObjectGroup is created."
+    },
+    "usageType": {
+      "type": "OnboardingDataObjGrpUsageType (enumeration of type string)",
+      "required": true,
+      "description": "Specifies the purpose of the onboarding data object group. Valid values are: DocumentValidation ValidityPeriod"
+    },
+    "versionDetail": {
+      "type": "OnboardingDataObjGrpVer[]",
+      "description": "Versions of the onboarding data object group, which define the computation settings and related data objects."
+    }
+  },
+  "sub_types": {
+    "OnboardingDataObjGrpVer": {
+      "computationSource": {
+        "type": "string",
+        "description": "Unique name of the component that contains the computation logic to determine the group's validity, such as a Flow ID or ExpressionSet ID."
+      },
+      "computationType": {
+        "type": "OnboardingDataObjGrpCompType (enumeration of type string)",
+        "description": "Specifies the type of computation that's used for validity calculations of the onboarding data object group version. Valid values are: Formula StandardMinimumValidity"
+      },
+      "objectDetail": {
+        "type": "OnboardingDataObject[]",
+        "description": "Details of the data objects within this version."
+      },
+      "onbrdDataObjGrpDocCatgMaps": {
+        "type": "OnbrdDataObjGrpDocCatgMap[]",
+        "description": "Junction object that maps onboarding data category version, document type, and document category."
+      },
+      "status": {
+        "type": "OnboardingDataObjVerGrpStatus (enumeration of type string)",
+        "required": true,
+        "description": "Status of the onboarding data object group version. Valid values are: Active Inactive"
+      }
+    },
+    "OnbrdDataObjGrpDocCatgMap": {
+      "documentCategory": {
+        "type": "DocumentCategory[]",
+        "required": true,
+        "description": "Category that's used to group the document checklist items."
+      },
+      "documentType": {
+        "type": "DocumentType[]",
+        "description": "Type of file that's uploaded or attached in the document checklist item."
+      }
+    },
+    "OnboardingDataObject": {
+      "businessContext": {
+        "type": "OnboardingDataObjBusContext (enumeration of type string)",
+        "required": true,
+        "description": "Specifies the business context or scenario in which this validity configuration is applicable. Valid values are: KYC_VALIDITY DVC"
+      },
+      "fieldDetail": {
+        "type": "OnboardingDataObjectField[]",
+        "description": "Details of the fields within the data object."
+      },
+      "name": {
+        "type": "OnboardingDataObjGrpTgtObject (enumeration of type string)",
+        "required": true,
+        "description": "Target sObject type for this data object. Valid values are: Account Applicant ApplicationForm ApplicationFormProduct ApplicationFormSellerItem Contact IdentityDocument Opportunity PartyCreditProfile PartyExpense PartyFinancialAsset PartyFinancialAssetLien PartyFinancialLiability PartyFinclAssetAddlOwner PartyFinclLiabAddlBrwr PartyIdentityVerification PartyIdentityVerificationStep PartyIncome PartyProfile PartyProfileAddress PartyProfileRisk PartyScreeningSummary PersonEmployment"
+      },
+      "partyProfileDataObjectValidityDefinition": {
+        "type": "string",
+        "description": "Reference to the PartyProfileDataObjectValidityDefinition metadata type that defines validity settings for this data object."
+      },
+      "pathToRoot": {
+        "type": "string",
+        "description": "Relationship of the path from this data object to the root object in the hierarchy."
+      },
+      "relatedObjectRole": {
+        "type": "RelatedOnboardingDataObjRole (enumeration of type string)",
+        "description": "Specifies the type of relationship between this record and related onboarding data object record. Valid values are Parent and Child."
+      },
+      "relatedOnboardingDataObjRecord": {
+        "type": "string",
+        "description": "Reference to a related onboarding data object record."
+      },
+      "targetObjectRelationshipField": {
+        "type": "string",
+        "description": "API name of the target object's field that links this record to the related onboarding data object record."
+      }
+    },
+    "OnboardingDataObjectField": {
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "API name of the field on the target object."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"OnboardingDataObjBusContext\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"KYC_VALIDITY\"/>\n    <xsd:enumeration value=\"DVC\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"OnboardingDataObjGrpCompType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"StandardMinimumValidity\"/>\n    <xsd:enumeration value=\"Formula\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"OnboardingDataObjGrpUsageType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ValidityPeriod\"/>\n    <xsd:enumeration value=\"DocumentValidation\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"OnboardingDataObjGrpVer\">\n  <xsd:sequence>\n    <xsd:element name=\"computationSource\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"computationType\" minOccurs=\"0\" type=\"tns:OnboardingDataObjGrpCompType\"/>\n    <xsd:element name=\"objectDetail\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OnboardingDataObject\"/>\n    <xsd:element name=\"status\" type=\"tns:OnboardingDataObjVerGrpStatus\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"OnboardingDataObjVerGrpStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Active\"/>\n    <xsd:enumeration value=\"Inactive\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"OnboardingDataObject\">\n  <xsd:sequence>\n    <xsd:element name=\"businessContext\" type=\"tns:OnboardingDataObjBusContext\"/>\n    <xsd:element name=\"fieldDetail\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OnboardingDataObjectField\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"partyProfileDataObjectValidityDefinition\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"pathToRoot\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"relatedObjectRole\" minOccurs=\"0\" type=\"tns:RelatedOnboardingDataObjRole\"/>\n    <xsd:element name=\"relatedOnboardingDataObjRecord\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetObjectRelationshipField\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OnboardingDataObjectField\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OnboardingDataObjectGroup\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"usageType\" type=\"tns:OnboardingDataObjGrpUsageType\"/>\n        <xsd:element name=\"versionDetail\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OnboardingDataObjGrpVer\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"RelatedOnboardingDataObjRole\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Parent\"/>\n    <xsd:enumeration value=\"Child\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an OnboardingDataObjectGroup component where usageType is ValidityPeriod.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OnboardingDataObjectGroup xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>description text</description>\n    <masterLabel>Field Group Valid Configuration</masterLabel>\n    <usageType>ValidityPeriod</usageType>\n    <versionDetail>\n        <computationType>StandardMinimumValidity</computationType>\n        <objectDetail>\n            <businessContext>KYC_VALIDITY</businessContext>\n            <fieldDetail>\n                <name>Status</name>\n            </fieldDetail>\n            <name>PartyFinancialAssetLien</name>\n            <pathToRoot>PartyFinancialAsset.PartyProfile.Id</pathToRoot>\n            <relatedObjectRole>Parent</relatedObjectRole>\n            <targetObjectRelationshipField>PartyFinancialAsset</targetObjectRelationshipField>\n        </objectDetail>\n        <objectDetail>\n            <businessContext>KYC_VALIDITY</businessContext>\n            <fieldDetail>\n                <name>ValuationAmount</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>VerificationStatus</name>\n            </fieldDetail>\n            <name>PartyFinancialAsset</name>\n            <pathToRoot>PartyProfile.Id</pathToRoot>\n            <relatedObjectRole>Parent</relatedObjectRole>\n            <targetObjectRelationshipField>PartyProfile</targetObjectRelationshipField>\n        </objectDetail>\n        <objectDetail>\n            <businessContext>KYC_VALIDITY</businessContext>\n            <fieldDetail>\n                <name>IncomeAmount</name>\n            </fieldDetail>\n            <name>PartyIncome</name>\n            <pathToRoot>Party.Id</pathToRoot>\n            <relatedObjectRole>Parent</relatedObjectRole>\n            <targetObjectRelationshipField>Party</targetObjectRelationshipField>\n        </objectDetail>\n        <objectDetail>\n            <businessContext>KYC_VALIDITY</businessContext>\n            <fieldDetail>\n                <name>CreditScore</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>EmploymentType</name>\n            </fieldDetail>\n            <name>PartyProfile</name>\n            <pathToRoot>Id</pathToRoot>\n        </objectDetail>\n        <status>Inactive</status>\n    </versionDetail>\n</OnboardingDataObjectGroup>"
+    },
+    {
+      "description": "This is an example of an OnboardingDataObjectGroup component where usageType is DocumentValidation.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OnboardingDataObjectGroup xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>description text</description>\n     <masterLabel>Application Form DVC Orig</masterLabel>\n    <usageType>DocumentValidation</usageType>\n    <versionDetail>\n        <objectDetail>\n            <businessContext>DVC</businessContext>\n            <fieldDetail>\n                <name>BureauReportedFirstName</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>Name</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>Id</name>\n            </fieldDetail>\n            <name>PartyCreditProfile</name>\n            <pathToRoot>ReferenceObject.ApplicationForm.Id</pathToRoot>\n            <relatedObjectRole>Parent</relatedObjectRole>\n            <targetObjectRelationshipField>ReferenceObject</targetObjectRelationshipField>\n        </objectDetail>\n        <objectDetail>\n            <businessContext>DVC</businessContext>\n            <fieldDetail>\n                <name>ApplicantId</name>\n            </fieldDetail>\n            <name>PartyFinancialAsset</name>\n            <pathToRoot>Applicant.ApplicationForm.Id</pathToRoot>\n            <relatedObjectRole>Parent</relatedObjectRole>\n            <targetObjectRelationshipField>Applicant</targetObjectRelationshipField>\n        </objectDetail>\n        <objectDetail>\n            <businessContext>DVC</businessContext>\n            <fieldDetail>\n                <name>Name</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>ProductId</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>RequestedAmount</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>RequestedMonthlyPayment</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>RequestedTerm</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>Stage</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>SystemModstamp</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>TotalBrandOwnedItemAmt</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>TotalVendorOwnedItemAmt</name>\n            </fieldDetail>\n            <name>ApplicationFormProduct</name>\n            <pathToRoot>ApplicationForm.Id</pathToRoot>\n            <relatedObjectRole>Parent</relatedObjectRole>\n            <targetObjectRelationshipField>ApplicationForm</targetObjectRelationshipField>\n        </objectDetail>\n        <objectDetail>\n            <businessContext>DVC</businessContext>\n            <fieldDetail>\n                <name>Name</name>\n            </fieldDetail>\n            <name>ApplicationForm</name>\n            <pathToRoot>Id</pathToRoot>\n        </objectDetail>\n        <objectDetail>\n            <businessContext>DVC</businessContext>\n            <fieldDetail>\n                <name>FirstName</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>LastName</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>Name</name>\n            </fieldDetail>\n            <name>Applicant</name>\n            <pathToRoot>ApplicationForm.Id</pathToRoot>\n            <relatedObjectRole>Parent</relatedObjectRole>\n            <targetObjectRelationshipField>ApplicationForm</targetObjectRelationshipField>\n        </objectDetail>\n        <objectDetail>\n            <businessContext>DVC</businessContext>\n            <fieldDetail>\n                <name>AccountId</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>ApplicantId</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>ApplicationFormId</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>InterestRate</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>LastReferencedDate</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>LastViewedDate</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>Lender</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>Name</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>ShareType</name>\n            </fieldDetail>\n            <fieldDetail>\n                <name>SourceSystemIdentifier</name>\n            </fieldDetail>\n            <name>PartyFinancialLiability</name>\n            <pathToRoot>ApplicationForm.Id</pathToRoot>\n            <relatedObjectRole>Parent</relatedObjectRole>\n            <targetObjectRelationshipField>ApplicationForm</targetObjectRelationshipField>\n        </objectDetail>\n        <onbrdDataObjGrpDocCatgMaps>\n            <documentCategory>Id_Proof</documentCategory>\n            <documentType>Aadhaar</documentType>\n        </onbrdDataObjGrpDocCatgMaps>\n        <onbrdDataObjGrpDocCatgMaps>\n            <documentCategory>Address_Proof</documentCategory>\n            <documentType>Passport</documentType>\n        </onbrdDataObjGrpDocCatgMaps>\n        <onbrdDataObjGrpDocCatgMaps>\n            <documentCategory>Id_Proof</documentCategory>\n            <documentType>Passport</documentType>\n        </onbrdDataObjGrpDocCatgMaps>\n        <onbrdDataObjGrpDocCatgMaps>\n            <documentCategory>Id_Proof</documentCategory>\n            <documentType>Pan_Card</documentType>\n        </onbrdDataObjGrpDocCatgMaps>\n        <status>Inactive</status>\n    </versionDetail>\n</OnboardingDataObjectGroup>"
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ContentSettings - Metadata API",
+  "description": "Represents content settings for an org. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableChatterFileLink": {
+      "type": "boolean",
+      "description": "When true, allows users to share files via links. When set to false, users can’t use file sharing. Default is true."
+    },
+    "enableCMSC2CConnections": {
+      "type": "boolean",
+      "description": "When true, allows org to enable Salesforce CMS Cloud to Cloud Connections."
+    },
+    "enableContent": {
+      "type": "boolean",
+      "description": "When true, allows org to enable Content."
+    },
+    "enableContentAutoAssign": {
+      "type": "boolean",
+      "description": "When true, allows org to auto assign Content feature licenses to users."
+    },
+    "enableContentDistForPortalUsers": {
+      "type": "boolean",
+      "description": "When true, allows portal users to create Content Deliveries for managed files in a library."
+    },
+    "enableContentDistPwOptionsBit1": {
+      "type": "boolean",
+      "description": "When true, allow using with ContentDistPasswordOptionsBit2 to set up one of three possible delivery security options."
+    },
+    "enableContentDistPwOptionsBit2": {
+      "type": "boolean",
+      "description": "When true, allow using with ContentDistPasswordOptionsBit1 to set up one of three possible delivery security options."
+    },
+    "enableContentDistribution": {
+      "type": "boolean",
+      "description": "When true, allows the Content Delivery user permission to be enabled for users. Content deliveries let users create links to share files externally, with optional security settings."
+    },
+    "enableContentSupportMultiLanguage": {
+      "type": "boolean",
+      "description": "When true, enables content to support multiple languages."
+    },
+    "enableContentWorkspaceAccess": {
+      "type": "boolean",
+      "description": "When true, content libraries are visible in the API and UI for users who have read access to libraries, even if they don't have access to the original Salesforce CRM Content app."
+    },
+    "enableDeleteFileInContentPacks": {
+      "type": "boolean",
+      "description": "When true, enables an org preference that allows a file's owner to delete the file, which is included in one or more content packs. The default setting is based on the org."
+    },
+    "enableFileShareSetByRecord": {
+      "type": "boolean",
+      "description": "When true, files shared to records default to Set by Record."
+    },
+    "enableFilesUsrShareNetRestricted": {
+      "type": "boolean",
+      "description": "When true, files respect user sharing settings. Files shared with users with SharedUsers visibility are only accessible to users who are members of the Experience Cloud site the file was created in."
+    },
+    "enableJPGPreviews": {
+      "type": "boolean",
+      "description": "When true, attempts to use other SVG alternative formats such as JPG as preview images."
+    },
+    "enableLibraryManagedFiles": {
+      "type": "boolean",
+      "description": "When true, controls the ability to publish files created in Chatter with a Content Library (ContentWorkspace). The library can manage the file."
+    },
+    "enableShowChatterFilesInContent": {
+      "type": "boolean",
+      "description": "When true, allows users to search for Chatter files in content."
+    },
+    "enableSiteGuestUserToUploadFiles": {
+      "type": "boolean",
+      "description": "When true, site guest users can upload files."
+    },
+    "enableUploadFilesOnAttachments": {
+      "type": "boolean",
+      "description": "When true, shows the New File button on the Attachments related lists to upload files, rather than legacy Attachments."
+    },
+    "setValidContentTypeForAtchDocDownload": {
+      "type": "boolean",
+      "description": "When true, enables an org preference that controls whether the Content-Type HTTP response header is set to a valid content type during file and attachment downloads. If false the response header is set to the value that the user provided during file upload. Values provided by the user can be invalid. If the content type provided by the user isn’t a valid content type, the system tries to determine a valid content type based on the file name extension. This field is available in API version 50.0 and later."
+    },
+    "skipContentAssetTriggers": {
+      "type": "boolean",
+      "description": "When true, disables content trigger execution and custom validation on content assets."
+    },
+    "skipContentAssetTriggersOnDeploy": {
+      "type": "boolean",
+      "description": "When true, disables content trigger execution when deploying content assets."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ContentSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableCMSC2CConnections\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableChatterFileLink\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContent\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContentAutoAssign\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContentDistForPortalUsers\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContentDistPwOptionsBit1\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContentDistPwOptionsBit2\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContentDistribution\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContentHubAWSS3Pref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContentHubUploadAWSS3Pref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContentSupportMultiLanguage\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContentWorkspaceAccess\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDeleteFileInContentPacks\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFileIngestToDataCloud\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFileShareSetByRecord\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFilesUsrShareNetRestricted\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableJPGPreviews\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLWCFileUpload\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLWCFileUploadInFlows\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLibraryManagedFiles\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableShowChatterFilesInContent\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSiteGuestUserToUploadFiles\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableUploadFilesOnAttachments\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"setValidContentTypeForAtchDocDownload\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"skipContentAssetTriggers\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"skipContentAssetTriggersOnDeploy\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a Content.settings file.",
+      "code": "<ContentSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableChatterFileLink>true</enableChatterFileLink>\n    <enableCMSC2CConnections>true</enableCMSC2CConnections>\n    <enableContent>true</enableContent>\n    <enableContentAutoAssign>true</enableContentAutoAssign>\n    <enableContentDistForPortalUsers>true</enableContentDistForPortalUsers>\n    <enableContentDistribution>true</enableContentDistribution>\n    <enableContentSupportMultiLanguage>false</enableContentSupportMultiLanguage>\n    <enableContentWorkspaceAccess>true</enableContentWorkspaceAccess>\n    <enableFileShareSetByRecord>true</enableFileShareSetByRecord>\n    <enableFilesUsrShareNetRestricted>true</enableFilesUsrShareNetRestricted>\n    <enableJPGPreviews>true</enableJPGPreviews>\n    <enableLibraryManagedFiles>true</enableLibraryManagedFiles>\n    <enableShowChatterFilesInContent>true</enableShowChatterFilesInContent>\n    <enableSiteGuestUserToUploadFiles>true</enableSiteGuestUserToUploadFiles>\n    <enableUploadFilesOnAttachments>true</enableUploadFilesOnAttachments>\n    <skipContentAssetTriggers>true</skipContentAssetTriggers>\n    <skipContentAssetTriggersOnDeploy>true</skipContentAssetTriggersOnDeploy>\n</ContentSettings>"
+    },
+    {
+      "description": "The following is an example ContentSettings.xml manifest that references the ContentSettings definitions:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ContentSettings xmlns=\n    <types>\n        <members>Content</members>\n        <name>Settings</name>\n    </types>\n    <version>48.0</version>\n</ContentSettings>"
+    }
+  ]
+}

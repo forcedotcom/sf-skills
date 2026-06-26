@@ -1,0 +1,37 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields"
+  ],
+  "title": "AIApplication - Metadata API",
+  "description": "Represents an instance of an AI application. For example, Einstein Prediction Builder.",
+  "file_information": ".ai",
+  "directory_location": "aiApplications",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "developerName": {
+      "type": "string",
+      "description": "Represents the name of the application. Can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Label that identifies the AI application throughout the Salesforce user interface."
+    },
+    "status": {
+      "type": "AIApplicationStatus (enumeration of type string)",
+      "description": "The status of the application. Valid values are: Disabled Draft Enabled Migrated",
+      "required": true
+    },
+    "type": {
+      "type": "AIApplicationType (enumeration of type string)",
+      "description": "The type of AI application. Valid values are: PredictionBuilder"
+    }
+  }
+}

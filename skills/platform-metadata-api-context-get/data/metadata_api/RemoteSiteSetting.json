@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "RemoteSiteSetting - Metadata API",
+  "description": "Represents a remote site setting. Before any Visualforce page, Apex callout, or JavaScript code using XmlHttpRequest in an s-control or custom button can call an external site, that site must be registered in the Remote Site Settings page, or the call fails.",
+  "file_information": ".remoteSite",
+  "directory_location": "remoteSiteSettings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The description explaining what this remote site setting is used for."
+    },
+    "disableProtocolSecurity": {
+      "type": "boolean",
+      "description": "Indicates whether code within Salesforce can access the remote site regardless of whether the user's connection is over HTTP or HTTPS (true) or not (false). When true, code within Salesforce can pass data from an HTTPS session to an HTTP session, and vice versa. Only set to true if you understand the security implications.",
+      "required": true
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The name can only contain characters, letters, and the underscore (_) character. The name must start with a letter, and can’t end with an underscore or contain two consecutive underscore characters. Inherited from the Metadata component, this field isn’t defined in the WSDL for this component. It must be specified when creating, updating, or deleting. See create() to see an example of this field specified for a call."
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates if the remote site setting is active (true) or not (false).",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "description": "The URL for the remote site.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RemoteSiteSetting\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"disableProtocolSecurity\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isActive\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"url\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "A sample XML definition of a remote site setting is shown in this code block.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<RemoteSiteSetting xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>Used for Apex callout to mapping web service</description>\n    <disableProtocolSecurity>false</disableProtocolSecurity>\n    <isActive>true</isActive>\n    <url>https://www.maptestsite.net/mapping1</url>\n</RemoteSiteSetting>"
+    }
+  ]
+}

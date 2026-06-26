@@ -1,0 +1,36 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AppAnalyticsSettings - Metadata API",
+  "description": "Represents settings to retrieve AppExchange App Analytics usage data.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableAppAnalyticsOptOut": {
+      "type": "boolean",
+      "description": "Indicates whether the collection of AppExchange App Analytics package usage data from this org is disabled (true) or not (false). Available in API version 60.0 and later. Default is false."
+    },
+    "enableSimulationMode": {
+      "type": "boolean",
+      "description": "Indicates whether AppExchange App Analytics simulation mode is enabled (true) or disabled (false). Available in API version 50.0 and later. Default is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AppAnalyticsSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableAppAnalyticsEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAppAnalyticsNamespaceOrgEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAppAnalyticsOptOut\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSimulationMode\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of the AppAnalytics.settings file:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AppAnalyticsSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<enableSimulationMode>true</enableSimulationMode>\n\t<enableAppAnalyticsOptOut>false</enableAppAnalyticsOptOut>\n</AppAnalyticsSettings>"
+    }
+  ]
+}

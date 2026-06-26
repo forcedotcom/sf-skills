@@ -1,0 +1,197 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CMSConnectSource - Metadata API",
+  "description": "Represents the connection information for external content management systems that feed content to Experience Builder sites. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".cmsConnectSource",
+  "directory_location": "cmsConnectSource",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "cmsConnectAsset": {
+      "type": "CMSConnectAsset[]",
+      "description": "Represents CSS or JavaScript defined for the connection. 0–10 for CSS 0–10 for JavaScript"
+    },
+    "cmsConnectLanguage": {
+      "type": "CMSConnectLanguage[]",
+      "description": "0 to more. Represents language mappings defined for the connection."
+    },
+    "cmsConnectPersonalization": {
+      "type": "CMSConnectPersonalization[]",
+      "description": "0 or 1. Represents personalization defined for the connection. Only for use when type is AEM."
+    },
+    "cmsConnectResourceType": {
+      "type": "CMSConnectResourceType[]",
+      "description": "0–5. Represents JSON definitions defined for the connection."
+    },
+    "connectionType": {
+      "type": "CMSSourceConnectionType(enumeration of type string)",
+      "description": "Type of authentication being used with outside system. Valid values are: Public Authenticated",
+      "required": true
+    },
+    "cssScope": {
+      "type": "string",
+      "description": "The class name used to prefix and scope the CSS rules."
+    },
+    "developerName": {
+      "type": "string",
+      "description": "API name of the CMSConnectSource entity.",
+      "required": true
+    },
+    "languageEnabled": {
+      "type": "string",
+      "description": "Valid values are: Y to enable language mapping for connection. N if no language mapping is needed.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Connection name",
+      "required": true
+    },
+    "namedCredential": {
+      "type": "string",
+      "description": "Required when the connectionType is Authenticated. API name of namedCredential. Before deploying namedCredential, it must exist on the destination org.",
+      "required": true
+    },
+    "personalizationEnabled": {
+      "type": "string",
+      "description": "Valid values are: Y to enable personalization mapping for connection. Otherwise N.",
+      "required": true
+    },
+    "rootPath": {
+      "type": "string",
+      "description": "Root path.",
+      "required": true
+    },
+    "sortOrder": {
+      "type": "int",
+      "description": "Defines the load order of the connection when multiple connections defined on page. The load order begins with 1.",
+      "required": true
+    },
+    "status": {
+      "type": "CMSConnectionStatus(enumeration of type string)",
+      "description": "Status of connection. Valid values are: ACTIVE INACTIVE",
+      "required": true
+    },
+    "type": {
+      "type": "CMSConnectionSourceType(enumeration of type string)",
+      "description": "The identification of the source connection system. Valid values are: AEM Drupal WordPress SDL Sitecore Other",
+      "required": true
+    },
+    "websiteUrl": {
+      "type": "string",
+      "description": "Required if connectionType is Public",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "CMSConnectAsset": {
+      "assetPath": {
+        "type": "string",
+        "description": "Relative path of the asset."
+      },
+      "assetType": {
+        "type": "string",
+        "description": "When used in Apex, this value can be sent as an enum, otherwise, this field has a type of string. Allowed values as string CSS Javascript Allowed values as enum CSS Javascript"
+      },
+      "sortOrder": {
+        "type": "int",
+        "description": "Loading sequence on the page."
+      }
+    },
+    "CMSConnectLanguage": {
+      "cmsLanguage": {
+        "type": "string",
+        "description": "When a language placeholder is in the URL path, this value is used to replace it."
+      },
+      "language": {
+        "type": "string",
+        "description": "Salesforce supported language. For information see https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_translations.htm"
+      }
+    },
+    "CMSConnectPersonalization": {
+      "connectorPage": {
+        "type": "string",
+        "description": "The path to the JSP file that you created and installed in AEM."
+      },
+      "connectorPageAsset": {
+        "type": "string",
+        "description": "The path to your Javascript file. Providing this path allows you to run scripts dynamically."
+      }
+    },
+    "CMSConnectResourceType": {
+      "cmsConnectResourceDefinition": {
+        "type": "cmsConnectResourceDefinition[]",
+        "description": "0–10 allowed per CMSConnectResourceType."
+      },
+      "developerName": {
+        "type": "string",
+        "description": "API name of CMSConnectResourceType."
+      },
+      "masterLabel": {
+        "type": "string",
+        "description": "Content type name."
+      },
+      "resourceType": {
+        "type": "string",
+        "description": "The only allowed value is JSON."
+      }
+    },
+    "CMSConnectResourceDefinition": {
+      "developerName": {
+        "type": "string",
+        "description": "API name of CMSConnectResourceDefinition.",
+        "required": true
+      },
+      "masterLabel": {
+        "type": "string",
+        "description": "developerName of Content Item or Content List.",
+        "required": true
+      },
+      "options": {
+        "type": "int",
+        "description": "Identifies whether the content from the external source is a single item or a list. 0 for Content List 1 for Content Item",
+        "required": true
+      },
+      "payloadType": {
+        "type": "string",
+        "description": "The only valid value is JSON.",
+        "required": true
+      },
+      "resourceIdPath": {
+        "type": "string",
+        "description": "Relative path to ID. Required for Content Item."
+      },
+      "resourceNamePath": {
+        "type": "string",
+        "description": "Relative path to resource name. Required for Content Item."
+      },
+      "resourcePath": {
+        "type": "string",
+        "description": "JSON resource path.",
+        "required": true
+      },
+      "rootNodePath": {
+        "type": "string",
+        "description": "Only for Content List and collection. Defines the initial starting path for a collection or list."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CMSConnectAsset\">\n  <xsd:sequence>\n    <xsd:element name=\"assetPath\" type=\"xsd:string\"/>\n    <xsd:element name=\"assetType\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortOrder\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CMSConnectLanguage\">\n  <xsd:sequence>\n    <xsd:element name=\"cmsLanguage\" type=\"xsd:string\"/>\n    <xsd:element name=\"language\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CMSConnectPersonalization\">\n  <xsd:sequence>\n    <xsd:element name=\"connectorPage\" type=\"xsd:string\"/>\n    <xsd:element name=\"connectorPageAsset\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CMSConnectResourceDefinition\">\n  <xsd:sequence>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"options\" type=\"xsd:int\"/>\n    <xsd:element name=\"payloadType\" type=\"xsd:string\"/>\n    <xsd:element name=\"resourceIdPath\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"resourceNamePath\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"resourcePath\" type=\"xsd:string\"/>\n    <xsd:element name=\"rootNodePath\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CMSConnectResourceType\">\n  <xsd:sequence>\n    <xsd:element name=\"cmsConnectResourceDefinition\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CMSConnectResourceDefinition\"/>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"resourceType\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CMSConnectSource\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"cmsConnectAsset\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CMSConnectAsset\"/>\n        <xsd:element name=\"cmsConnectLanguage\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CMSConnectLanguage\"/>\n        <xsd:element name=\"cmsConnectPersonalization\" minOccurs=\"0\" type=\"tns:CMSConnectPersonalization\"/>\n        <xsd:element name=\"cmsConnectResourceType\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CMSConnectResourceType\"/>\n        <xsd:element name=\"connectionType\" type=\"tns:CMSSourceConnectionType\"/>\n        <xsd:element name=\"cssScope\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"languageEnabled\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"namedCredential\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"personalizationEnabled\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"rootPath\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sortOrder\" type=\"xsd:int\"/>\n        <xsd:element name=\"status\" type=\"tns:CMSConnectionStatus\"/>\n        <xsd:element name=\"type\" type=\"tns:CMSConnectionSourceType\"/>\n        <xsd:element name=\"websiteUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"CMSConnectionSourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AEM\"/>\n    <xsd:enumeration value=\"Drupal\"/>\n    <xsd:enumeration value=\"WordPress\"/>\n    <xsd:enumeration value=\"SDL\"/>\n    <xsd:enumeration value=\"Sitecore\"/>\n    <xsd:enumeration value=\"Other\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"CMSConnectionStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ACTIVE\"/>\n    <xsd:enumeration value=\"INACTIVE\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"CMSSourceConnectionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Public\"/>\n    <xsd:enumeration value=\"Authenticated\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CMSConnectSource definition.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CMSConnectSource xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <cmsConnectAsset>\n        <assetPath>etc/designs/capricorn/app-prefixed.min.css</assetPath>\n        <assetType>CSS</assetType>\n        <sortOrder>1</sortOrder>\n    </cmsConnectAsset>\n    <cmsConnectAsset>\n        <assetPath>etc/designs/capricorn/w3data.js</assetPath>\n        <assetType>Javascript</assetType>\n        <sortOrder>1</sortOrder>\n    </cmsConnectAsset>\n    <cmsConnectLanguage>\n        <cmsLanguage>en</cmsLanguage>\n        <language>en_US</language>\n    </cmsConnectLanguage>\n    <cmsConnectLanguage>\n        <cmsLanguage>fr</cmsLanguage>\n        <language>fr</language>\n    </cmsConnectLanguage>\n    <cmsConnectPersonalization>\n        <connectorPage>content/salesforceConnector.js</connectorPage>\n        <connectorPageAsset>content/js/capricorn/assets.js</connectorPageAsset>\n    </cmsConnectPersonalization>\n    <cmsConnectResourceType>\n        <cmsConnectResourceDefinition>\n            <developerName>Details</developerName>\n            <masterLabel>Details</masterLabel>\n            <options>0</options>\n            <payloadType>JSON</payloadType>\n            <resourceIdPath>ID</resourceIdPath>\n            <resourceNamePath>title</resourceNamePath>\n            <resourcePath>rest/v1.1/sites/cmstry.wordpress.com/posts/{component}</resourcePath>\n        </cmsConnectResourceDefinition>\n        <cmsConnectResourceDefinition>\n            <developerName>List</developerName>\n            <masterLabel>List</masterLabel>\n            <options>1</options>\n            <payloadType>JSON</payloadType>\n            <resourcePath>rest/v1.1/sites/cmstry.blog.wordpress.com/posts?number={itemsPerPage}&amp;page={pageNumber}</resourcePath>\n        </cmsConnectResourceDefinition>\n        <developerName>Posts</developerName>\n        <masterLabel>Posts</masterLabel>\n        <resourceType>JSON</resourceType>\n    </cmsConnectResourceType>\n    <connectionType>Public</connectionType>\n    <cssScope>capricorn</cssScope>\n    <developerName>Capricorn</developerName>\n    <languageEnabled>Y</languageEnabled>\n    <masterLabel>Capricorn</masterLabel>\n    <personalizationEnabled>Y</personalizationEnabled>\n    <rootPath>content/capricorn/{language}</rootPath>\n    <sortOrder>11</sortOrder>\n    <status>ACTIVE</status>\n    <type>AEM</type>\n    <websiteUrl>https://public-api.wordpress.com</websiteUrl>\n</CMSConnectSource>"
+    }
+  ]
+}

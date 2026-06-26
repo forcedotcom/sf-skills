@@ -1,0 +1,715 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Report - Metadata API",
+  "description": "Represents a custom report. This metadata type only supports custom reports; standard reports aren’t supported.",
+  "file_information": ".report",
+  "directory_location": "reports",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "aggregateFilters": {
+      "type": "ReportAggregateFilter[]",
+      "description": "List that defines filters on custom summary formulas for summary, matrix, and joined reports. Available in API version 64.0 and later."
+    },
+    "aggregates": {
+      "type": "ReportAggregate[]",
+      "description": "List that defines custom summary formulas for summary, matrix, and joined reports."
+    },
+    "block": {
+      "type": "Report[]",
+      "description": "Represents each block in a joined report where every block can be of a different report type."
+    },
+    "blockInfo": {
+      "type": "ReportBlockInfo",
+      "description": "Defines attributes for each block in a joined report."
+    },
+    "buckets": {
+      "type": "ReportBucketField[]",
+      "description": "Defines a bucket field to be used in the report. This field is available in API version 24.0 and later."
+    },
+    "chart": {
+      "type": "ReportChart",
+      "description": "Defines a chart for summary and matrix reports."
+    },
+    "colorRanges": {
+      "type": "ReportColorRange[]",
+      "description": "List that specifies conditional highlighting for report summary data. Salesforce Classic only."
+    },
+    "columns": {
+      "type": "ReportColumn[]",
+      "description": "List that specifies the fields displayed in the report. Fields appear in the report in the same order as they appear in the Metadata API file."
+    },
+    "crossFilters": {
+      "type": "ReportCrossFilter[]",
+      "description": "Defines a cross filter's object, related object, and condition (WITH or WITHOUT). This field is available in API version 66.0 and later."
+    },
+    "currency": {
+      "type": "CurrencyIsoCode (enumeration of type string)",
+      "description": "When using multiple currencies, some reports allow you to display converted amounts by selecting the appropriate column to display. For example, in opportunity reports, you can include the Amount (converted) column on the report. This field is an enumeration of type string that defines the currency in which to display converted amounts. Valid values: Must be one of the valid alphabetic, three-letter currency ISO codes defined by the ISO 4217 standard, such as USD, GBP SLE, or JPY."
+    },
+    "dataCategoryFilters": {
+      "type": "string",
+      "description": "Specifies a filter according to the data category."
+    },
+    "description": {
+      "type": "string",
+      "description": "Specifies a general description, which is displayed with the report name. Maximum characters: 255 characters."
+    },
+    "division": {
+      "type": "string",
+      "description": "If your organization uses divisions to segment data and the Affected by Divisions permission is enabled, records in the report must match this division. This field is available in API version 17.0 and later."
+    },
+    "filter": {
+      "type": "ReportFilter",
+      "description": "Limits report results to records with specific data. For example, you can limit report results to opportunities for which the amount is greater than $1,000: <filter> <criteriaItems> <column>AMOUNT</column> <operator>greaterThan</operator> <value>1000</value> </criteriaItems> </filter>"
+    },
+    "folderName": {
+      "type": "string",
+      "description": "Name of the folder that houses the report. This field is available in API version 35.0 and later."
+    },
+    "format": {
+      "type": "ReportFormat (enumeration of type string)",
+      "description": "Defines the report format. For example, Tabular for a simple data list without subtotals."
+    },
+    "formattingRules": {
+      "type": "ReportFormattingRule[] (enumeration of type string)",
+      "description": "List that specifies conditional highlighting for report data. Lightning Experience only."
+    },
+    "groupingsAcross": {
+      "type": "ReportGrouping[]",
+      "description": "List that defines the fields by which you want to group and subtotal data across a matrix report (row headings). When grouping by a date field, you can further group the data by a specific time period such as days, weeks, or months. Maximum: 2 fields."
+    },
+    "groupingsDown": {
+      "type": "ReportGrouping[]",
+      "description": "For Summary and Matrix reports: List that defines the fields by which you want to group and subtotal. For summary reports, choosing more than one sort field allows you to subsort your data. For matrix reports, specifies summary fields for column headings. When grouping by a date field, you can further group the data by a specific time period such as days, weeks, or months. Maximum for matrix reports: 2. Maximum for summary reports: 3"
+    },
+    "historicalSelector": {
+      "type": "ReportHistoricalSelector",
+      "description": "Defines a date range for which historical trend reporting data is to be captured. Default is “Any Historical Date.” Available in API version 29.0 and later."
+    },
+    "isSmartTotalDisabled": {
+      "type": "boolean",
+      "description": "false displays smart totalling on the report. Available in API version 29.0 and later."
+    },
+    "name": {
+      "type": "string",
+      "description": "The report name. For example, Opportunity Pipeline",
+      "required": true
+    },
+    "numSubscriptions": {
+      "type": "int",
+      "description": "Indicates whether a user has subscribed to this report Lightning Experience (1) or not (0). Tied to user context. This field is available in API version 38.0 and later."
+    },
+    "params": {
+      "type": "ReportParam[]",
+      "description": "List that specifies settings specific to each report type, in particular options that let you filter a report to obtain useful subsets. For example, the Activities report type lets you specify whether you want to see open or closed activities or both and whether you want to see tasks or events or both. Valid values depend on the report type."
+    },
+    "reportCustomDetailFormula": {
+      "type": "CustomDetailFormulas",
+      "description": "Allows you to apply row-level formulas to reports."
+    },
+    "reportType": {
+      "type": "string",
+      "description": "Defines the type of data in the report. For example, Opportunity to create a report of opportunities data.",
+      "required": true
+    },
+    "reportTypeApiName": {
+      "type": "string",
+      "description": "Defines the API Name for the report type. This field is available in API version 48.0 and later."
+    },
+    "roleHierarchyFilter": {
+      "type": "string",
+      "description": "The role name for a report drill down. Some reports, such as opportunity and activity reports, display Hierarchy links that allow you to drill down to different datasets based on the role hierarchy. This field is available in API version 17.0 and later."
+    },
+    "rowLimit": {
+      "type": "int",
+      "description": "Defines the maximum number of rows that can be returned for the report."
+    },
+    "scope": {
+      "type": "string",
+      "description": "Defines the scope of data on which you run the report. For example, whether you want to run the report against all opportunities, opportunities you own, or opportunities your team owns. Valid values depend on the reportType. For example, for Accounts reports: MyAccounts MyTeamsAccounts AllAccounts"
+    },
+    "showCurrentDate": {
+      "type": "boolean",
+      "description": "Can be set to true for historical trending reports in matrix format. Available in API version 29.0 and later."
+    },
+    "showDetails": {
+      "type": "boolean",
+      "description": "false shows a collapsed view of the report with only the headings, subtotals, and total. Default: true"
+    },
+    "showGrandTotal": {
+      "type": "boolean",
+      "description": "true displays the calculated total for the full report."
+    },
+    "showSubTotals": {
+      "type": "boolean",
+      "description": "true displays the calculated subtotals for sections of the report."
+    },
+    "sortColumn": {
+      "type": "string",
+      "description": "Specifies the field on which to sort data in the report. Use sortOrder to specify the sort order."
+    },
+    "sortOrder": {
+      "type": "SortOrder (enumeration of type string)",
+      "description": "Specifies the sort order. Use sortColumn to specify the field on which to sort."
+    },
+    "territoryHierarchyFilter": {
+      "type": "string",
+      "description": "The territory name for a report drill down. If your organization uses territory management, some reports display Hierarchy links that allow you to drill down to different datasets based on the territory hierarchy. This field is available in API version 17.0 and later."
+    },
+    "timeFrameFilter": {
+      "type": "ReportTimeFrameFilter",
+      "description": "Limits report results to records within a specified time frame."
+    },
+    "userFilter": {
+      "type": "string",
+      "description": "The username for a report drill down. Some reports, such as opportunity and activity reports, display Hierarchy links that allow you to drill down to different datasets based on the user hierarchy. This field is available in API version 17.0 and later."
+    }
+  },
+  "sub_types": {
+    "ReportAggregateFilter": {
+      "aggregate": {
+        "type": "string",
+        "description": "The name of the report aggregate to apply the filter to.",
+        "required": true
+      },
+      "operator": {
+        "type": "string",
+        "description": "The filter operator.",
+        "required": true
+      },
+      "value": {
+        "type": "string",
+        "description": "The filter value.",
+        "required": true
+      }
+    },
+    "ReportAggregate": {
+      "acrossGroupingContext": {
+        "type": "string",
+        "description": "Defines the row grouping level at which you want your custom summary formula to be displayed. This field is available in API version 15.0."
+      },
+      "calculatedFormula": {
+        "type": "string",
+        "description": "The custom summary formula. For example, AMOUNT:SUM + OPP_QUANTITY:SUM",
+        "required": true
+      },
+      "datatype": {
+        "type": "ReportAggregateDatatype (enumeration of type string)",
+        "description": "Specifies the data type for formatting and display of the custom summary formula results.",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "The custom summary formula description. Maximum: 255 characters."
+      },
+      "developerName": {
+        "type": "string",
+        "description": "The internal development name of the custom summary formula, for example, FORMULA1. This name is used to reference custom summary formulas from other report components, including conditional highlighting.",
+        "required": true
+      },
+      "downGroupingContext": {
+        "type": "string",
+        "description": "Defines the column grouping level at which you want your custom summary formula to be displayed. This field is available in API version 15.0 and later."
+      },
+      "isActive": {
+        "type": "boolean",
+        "description": "true displays the formula result in the report. false doesn’t display the result in the report.",
+        "required": true
+      },
+      "isCrossBlock": {
+        "type": "boolean",
+        "description": "Determines whether the custom summary formula is a cross-block formula, which is available with joined reports. true indicates a cross-block custom summary formula. false indicates a standard custom summary formula. This field is available in API version 25.0 and later."
+      },
+      "masterLabel": {
+        "type": "string",
+        "description": "The custom summary formula label (name).",
+        "required": true
+      },
+      "reportType": {
+        "type": "string",
+        "description": "Required for joined reports. Specifies the reportType of the blocks to which the aggregate can be added.",
+        "required": true
+      },
+      "scale": {
+        "type": "int",
+        "description": "The formula result is calculated to the specified number of decimal places. Valid values 0 through 18."
+      }
+    },
+    "ReportBlockInfo": {
+      "aggregateReferences": {
+        "type": "ReportAggregateReference[]",
+        "description": "Lists the aggregates that represent the custom summary formulas used in a joined report block."
+      },
+      "blockId": {
+        "type": "string",
+        "description": "blockId is used in cross-block custom summary formulas and joined report charts to identify the block containing each summary field. blockId is assigned automatically. Valid values are B1 through B5. This field is available in API version 25.0 and later.",
+        "required": true
+      },
+      "joinTable": {
+        "type": "string",
+        "description": "Refers to the entity used to join blocks in a joined report. The entity provides a list of fields that are available for globally grouping across the blocks.",
+        "required": true
+      }
+    },
+    "ReportAggregateReference": {
+      "aggregate": {
+        "type": "string",
+        "description": "The developerName of the ReportAggregate, which specifies the custom summary formula used in a block of a joined report.",
+        "required": true
+      }
+    },
+    "ReportBucketField": {
+      "bucketType": {
+        "type": "ReportBucketFieldType (enumeration of type string)",
+        "description": "Specifies the type of bucket. Valid values: text number picklist",
+        "required": true
+      },
+      "developerName": {
+        "type": "string",
+        "description": "A unique name used as the <field> value to display a bucket field in the column list and other report components, including sort, filter, list, group, and chart. Must be of the format BucketField_name. For example, BucketField_BusinessSize.",
+        "required": true
+      },
+      "masterLabel": {
+        "type": "string",
+        "description": "The bucket field label. Maximum 40 characters. Any line breaks, tabs, or multiple spaces at the beginning or end of the label are removed. Any of these characters within the label are reduced to a single space.",
+        "required": true
+      },
+      "nullTreatment": {
+        "type": "ReportBucketFieldNullTreatment (enumeration of type string)",
+        "description": "For numeric bucket fields only. Specifies whether empty values are treated as zeros ( z ) or not ( n )."
+      },
+      "otherBucketLabel": {
+        "type": "string",
+        "description": "The label of the container for unbucketed values."
+      },
+      "sourceColumnName": {
+        "type": "string",
+        "description": "The source field that the bucket is applied to. For example, SALES or INDUSTRY.",
+        "required": true
+      },
+      "values": {
+        "type": "ReportBucketFieldValue (enumeration of type string)",
+        "description": "Defines one bucket value used in the bucket field. While this name is plural, it represents a single bucket. In typical use, a bucket field contains multiple buckets."
+      }
+    },
+    "ReportBucketFieldValue": {
+      "sourceValues": {
+        "type": "ReportBucketFieldSourceValue (enumeration of type string)",
+        "description": "The value of a bucket in the bucket field. Valid values: sourceValue—Used for picklist and text bucket fields. For picklists, describes the picklist item in the bucket. For example, the sourceValue of a bucket on TYPE could be Customer. For text, the full string for the item in the bucket. For example, the sourceValue of a bucket on ADDRESS_STATE1 could be NY. from—Used only on numeric bucket fields. A non-inclusive lower bound for a numeric bucket range. This value must be a number. to—Used only on numeric bucket fields. The inclusive upper bound for a numeric bucket range. This value must be a number. In numeric buckets, the first value must only have to and last value must only have from. All other values must have both to and from."
+      },
+      "value": {
+        "type": "string",
+        "description": "The name of a specific bucket value within the bucket field.",
+        "required": true
+      }
+    },
+    "ReportGrouping": {
+      "aggregateType": {
+        "type": "ReportAggrType (enumeration of type string)",
+        "description": "The type of aggregate value to sort by. Valid values are: Sum Average Maximum Minimum RowCount Unique Median Noop"
+      },
+      "dateGranularity": {
+        "type": "UserDateGranularity (enumeration of type string)",
+        "description": "When grouping by a date field, the time period by which to group."
+      },
+      "field": {
+        "type": "string",
+        "description": "The field by which you want to summarize data. For example, CAMPAIGN_SOURCE",
+        "required": true
+      },
+      "sortByName": {
+        "type": "string",
+        "description": "The API name of the column, aggregate, or custom summary field used to order the grouping."
+      },
+      "sortOrder": {
+        "type": "SortOrder",
+        "description": "Whether to sort data in ascending or descending alphabetical and numerical order.",
+        "required": true
+      },
+      "sortType": {
+        "type": "ReportSortType (enumeration of type string)",
+        "description": "Indicates if the grouping is sorted by a column, aggregate, or custom summary field. Valid values are: Column Aggregate CustomSummaryFormula"
+      }
+    },
+    "ReportHistoricalSelector": {
+      "snapshot": {
+        "type": "string",
+        "description": "Represents the date value to apply a historical filter, either relative (in the format N_DAYS_AGO:2 ) or absolute (in the format yyyy-MM-dd ). If unspecified, it’s assumed that the filter is applied to all the columns the user sees. Available in API version 29.0 and later."
+      }
+    },
+    "CustomDetailFormulas": {
+      "calculatedFormula": {
+        "type": "string",
+        "description": "The custom formula. For example, AMOUNT:SUM + OPP_QUANTITY:SUM",
+        "required": true
+      },
+      "datatype": {
+        "type": "ReportCustomDetailFormulaDatatype (enumeration of type string)",
+        "description": "Specifies the data type for formatting and display of the formula results.",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "The formula description. Maximum: 255 characters."
+      },
+      "developerName": {
+        "type": "string",
+        "description": "The internal development name of the formula, for example, FORMULA1. This name is used to reference custom formulas from other report components, including conditional highlighting.",
+        "required": true
+      },
+      "label": {
+        "type": "string",
+        "description": "The name that identifies this formula.",
+        "required": true
+      },
+      "scale": {
+        "type": "int",
+        "description": "The formula result is calculated to the specified number of decimal places. Valid values 0 through 18."
+      }
+    },
+    "SortOrder": {
+      "Asc": {
+        "description": "Sorts data in ascending alphabetical and numerical order."
+      },
+      "Desc": {
+        "description": "Sorts data in descending alphabetical and numerical order."
+      }
+    },
+    "ReportColorRange": {
+      "aggregate": {
+        "type": "ReportSummaryType (enumeration of type string)",
+        "description": "Defines how the field specified in columnName is summarized. For example, Sum.",
+        "required": true
+      },
+      "columnName": {
+        "type": "string",
+        "description": "Specifies the field whose value ranges are represented by background colors.",
+        "required": true
+      },
+      "highBreakpoint": {
+        "type": "double",
+        "description": "Specifies the number that separates the mid color from the high color.",
+        "required": true
+      },
+      "highColor": {
+        "type": "string",
+        "description": "Specifies the color (in HTML format) to represent data that falls into the high number range. This color spans from the highBreakpoint value.",
+        "required": true
+      },
+      "lowBreakpoint": {
+        "type": "double",
+        "description": "Specifies the number that separates the low color from the mid color.",
+        "required": true
+      },
+      "lowColor": {
+        "type": "string",
+        "description": "Specifies a color (in HTML format) to represent data that falls into the low value range, below the lowBreakpoint value.",
+        "required": true
+      },
+      "midColor": {
+        "type": "string",
+        "description": "Specifies a color (in HTML format) to represent data that falls into the mid value range.",
+        "required": true
+      }
+    },
+    "ReportColumn": {
+      "aggregateTypes": {
+        "type": "ReportSummaryType[] (enumeration of type string)",
+        "description": "List that defines if and how each report field is summarized."
+      },
+      "field": {
+        "type": "string",
+        "description": "The field name. For example, AGE or OPPORTUNITY_NAME",
+        "required": true
+      },
+      "isExtendedColumn": {
+        "type": "boolean",
+        "description": "Indicates whether the column is extended (true) or not (false). Available in API version 65.0 and later."
+      },
+      "reverseColors": {
+        "type": "boolean",
+        "description": "In historical trend reports, displays greater Date values as green and greater Amount values as red, reversing the default colors. Available in API version 29.0 and later."
+      },
+      "showChanges": {
+        "type": "boolean",
+        "description": "In historical trend reports, adds a column displaying the difference between current and historical Date and Amount values. Available in API version 29.0 and later."
+      }
+    },
+    "ReportFilter": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "Specifies filter logic conditions."
+      },
+      "criteriaItems": {
+        "type": "ReportFilterItem",
+        "description": "The criteria by which you want to filter report data, either by comparing historical values or by applying a date range. <criteriaItems> criteriaItems ReportFilterItem <column>Opportunity.Opportunity__hd$Amount__hst</column> <columnToColumn>false</columnToColumn> <operator>equals</operator> <snapshot>N_DAYS_AGO:90</snapshot> <value>100</value> </criteriaItems>"
+      },
+      "language": {
+        "type": "Language (enumeration of type string)",
+        "description": "The language used when a report filters against a picklist value using the operators contains or startsWith. For a list of valid language values, see Language."
+      }
+    },
+    "ReportFilterItem": {
+      "column": {
+        "type": "string",
+        "description": "The field in which to filter data. For example, AMOUNT",
+        "required": true
+      },
+      "columnToColumn": {
+        "type": "boolean",
+        "description": "Indicates whether the filter is a column-to-column (field-to-field) filter. Available in API version 29.0 and later for historical trending reports. Available in API version 48.0 and later for general reports."
+      },
+      "isUnlocked": {
+        "type": "boolean",
+        "description": "Optional. Indicates whether the report filter is unlocked (true) or locked (false). You can edit unlocked filters on the report run page in Lightning Experience. If unspecified, the default value is false. Available in API version 38.0 and later."
+      },
+      "operator": {
+        "type": "FilterOperation (enumeration of type string)",
+        "description": "An enumeration of type string that defines the operator used to filter the data, for example, greaterThan. Valid values are: equals notEqual lessThan greaterThan lessOrEqual greaterOrEqual contains notContain startsWith includes excludes within (DISTANCE criteria only)",
+        "required": true
+      },
+      "snapshot": {
+        "type": "string",
+        "description": "Represents the date value, either relative (in the format N_DAYS_AGO:2 ) or absolute (in the format yyyy-MM-dd ). Available in API version 29.0 and later."
+      },
+      "value": {
+        "type": "string",
+        "description": "The value by which you want to filter the data, for example, 1000. The Metadata API filter condition values don’t always match the values that you enter in the report wizard. For example, in the Metadata API dates are always converted to the US date format and values entered in a non-US English language can be converted to a standard US English equivalent."
+      }
+    },
+    "ReportFormattingRule": {
+      "aggregate": {
+        "type": "ReportFormattingSummaryType (enumeration of type string)",
+        "description": "Defines how the field specified in columnName is summarized. For example, Sum."
+      },
+      "columnName": {
+        "type": "string",
+        "description": "Specifies the field whose value ranges are represented by colors.",
+        "required": true
+      },
+      "values": {
+        "type": "ReportFormattingRuleValue (enumeration of type string)",
+        "description": "Specifies the background colors and associated ranges for formatted data values.",
+        "required": true
+      }
+    },
+    "ReportFormattingRuleValue": {
+      "backgroundColor": {
+        "type": "string",
+        "description": "(Required) Specifies a highlighting color for the field in columnName. Must be a valid hex color string such as #54C254. At least one color is required. You can optionally specify a different color for up to 3 ranges as determined by rangeUpperBound. If you don’t specify a color for a particular range, the background is transparent."
+      },
+      "rangeUpperBound": {
+        "type": "double",
+        "description": "Delineates a range to which a background color applies. If you don’t specify an upper bound for a particular range, the bound is assumed to be plus infinity. The following example sets the background color for the Sales column to #B50E03 for aggregate sales less than or equal to 100, sets no background for sales from 100 to 1000, and sets the background color to #006714 for sales greater than 1000. <formattingRules> <aggregate>Sum</aggregate> <columnName>Sales</columnName> <values> <backgroundColor>#B50E03</backgroundColor> <rangeUpperBound>100.0</rangeUpperBound> </values> <values> <rangeUpperBound>1000.0</rangeUpperBound> </values> <values> <backgroundColor>#006714</backgroundColor> </values> </formattingRules>"
+      }
+    },
+    "ReportParam": {
+      "name": {
+        "type": "string",
+        "description": "Specifies a specific reportType setting.",
+        "required": true
+      },
+      "value": {
+        "type": "string",
+        "description": "The setting value.",
+        "required": true
+      }
+    },
+    "ReportChart": {
+      "backgroundColor1": {
+        "type": "string",
+        "description": "Specifies the beginning color (in HTML format) for a gradient color background."
+      },
+      "backgroundColor2": {
+        "type": "string",
+        "description": "Specifies the end color (in HTML format) for a gradient color background."
+      },
+      "backgroundFadeDir": {
+        "type": "ChartBackgroundDirection (enumeration of type string)",
+        "description": "Specifies the direction for a gradient color background. Use with backgroundColor1 to specify the beginning color and backgroundColor2 to specify the end color for the gradient design. Use white for both if you don’t want a background design. Valid values: Diagonal LeftToRight TopToBottom"
+      },
+      "chartSummaries": {
+        "type": "ChartSummary[]",
+        "description": "Specifies the summaries you want to use for the chart. Invalid summaries are ignored without notification. If there are no valid summaries, RowCount is used by default for the axis value. This field is available in API version 17.0 and later."
+      },
+      "chartType": {
+        "type": "ChartType (enumeration of type string)",
+        "description": "Specifies the chart type. Available chart types depend on the report type.",
+        "required": true
+      },
+      "enableHoverLabels": {
+        "type": "boolean",
+        "description": "Specifies whether to display values, labels, and percentages when hovering over charts. Hover details depend on chart type. Percentages apply to pie, donut, and funnel charts only. This field is available in API version 17.0 and later."
+      },
+      "expandOthers": {
+        "type": "boolean",
+        "description": "Specifies whether to combine all groups less than or equal to 3% of the total into a single 'Others' wedge or segment. Only applies to pie, donut, and funnel charts. Set to true to show all values individually on the chart; set to false to combine small groups into 'Others.' This field is available in API version 17.0 and later."
+      },
+      "groupingColumn": {
+        "type": "string",
+        "description": "Specifies the field by which to group data. This data is displayed on the X-axis for vertical column charts and on the Y-axis for horizontal bar charts."
+      },
+      "legendPosition": {
+        "type": "ChartLegendPosition (enumeration of type string)",
+        "description": "The location of the legend with respect to the chart. The valid values are: Bottom OnChart Right",
+        "required": true
+      },
+      "location": {
+        "type": "ChartPosition (enumeration of type string)",
+        "description": "Specifies whether the chart is displayed at the top or bottom of the report.",
+        "required": true
+      },
+      "secondaryGroupingColumn": {
+        "type": "string",
+        "description": "For grouped chart types: Specifies the field by which to group the data."
+      },
+      "showAxisLabels": {
+        "type": "boolean",
+        "description": "For bar and line charts: Specifies whether the chart displays names for each axis."
+      },
+      "showPercentage": {
+        "type": "boolean",
+        "description": "Indicates if percentages are displayed for wedges and segments of pie, donut, and funnel charts, as well as for gauges (true), or not (false)."
+      },
+      "showTotal": {
+        "type": "boolean",
+        "description": "Indicates if the total is displayed for donut charts and gauges (true), or not (false)."
+      },
+      "showValues": {
+        "type": "boolean",
+        "description": "Indicates if the values of individual records or groups are displayed for charts (true), or not (false)."
+      },
+      "size": {
+        "type": "ReportChartSize (enumeration of type string)",
+        "description": "Specifies the chart size.",
+        "required": true
+      },
+      "summaryAggregate": {
+        "type": "ReportSummaryType (enumeration of type string)",
+        "description": "Defines how to summarize the chart data. For example, Sum. No longer supported in version API 17.0 and later. See chartSummaries."
+      },
+      "summaryAxisManualRangeEnd": {
+        "type": "double",
+        "description": "When specifying the axis range manually: Defines the ending value."
+      },
+      "summaryAxisManualRangeStart": {
+        "type": "double",
+        "description": "When specifying the axis range manually: Defines the starting value."
+      },
+      "summaryAxisRange": {
+        "type": "ChartRangeType (enumeration of type string)",
+        "description": "For bar, line, and column charts: Defines whether to specify the axis range manually or automatically.",
+        "required": true
+      },
+      "summaryColumn": {
+        "type": "string",
+        "description": "Specifies the field by which to summarize the chart data. Typically this field is displayed on the Y-axis. No longer supported in version API 17.0 and later. See chartSummaries.",
+        "required": true
+      },
+      "textColor": {
+        "type": "string",
+        "description": "The color (in HTML format) of the chart text and labels."
+      },
+      "textSize": {
+        "type": "int",
+        "description": "The size of the chart text and labels. Valid values: 8 9 10 12 14 18 24 36 The maximum size is 18. Larger values are shown at 18 points."
+      },
+      "title": {
+        "type": "string",
+        "description": "The chart title. Max 255 characters."
+      },
+      "titleColor": {
+        "type": "string",
+        "description": "The color (in HTML format) of the title text."
+      },
+      "titleSize": {
+        "type": "int",
+        "description": "The size of the title text. Valid values: 8 9 10 12 14 18 24 36 The maximum size is 18. Larger values are shown at 18 points."
+      }
+    },
+    "ChartSummary": {
+      "aggregate": {
+        "type": "ReportSummaryType",
+        "description": "Specifies the aggregation method—such as Sum, Average, Min, and Max—for the summary value. Use the column field to specify the summary value to use for the aggregation. You don't need to specify this field for RowCount or custom summary formulas."
+      },
+      "axisBinding": {
+        "type": "ChartAxis",
+        "description": "Specifies the axis or axes to use on the chart. Use the column field to specify the summary value to use for the axis."
+      },
+      "column": {
+        "type": "string",
+        "description": "Specifies the summary field for the chart data. If all columns are invalid, RowCount is used by default for the axis value. For vertical column and horizontal bar combination charts, you can specify up to four values.",
+        "required": true
+      }
+    },
+    "ReportTimeFrameFilter": {
+      "dateColumn": {
+        "type": "string",
+        "description": "The date field on which to filter data. For example, CLOSE_DATE",
+        "required": true
+      },
+      "endDate": {
+        "type": "date",
+        "description": "When interval is INTERVAL_CUSTOM, specifies the end of the custom time period."
+      },
+      "interval": {
+        "type": "UserDateInterval (enumeration of type string)",
+        "description": "Specifies the period.",
+        "required": true
+      },
+      "startDate": {
+        "type": "date",
+        "description": "When interval is INTERVAL_CUSTOM, specifies the start of the custom time period."
+      }
+    },
+    "ReportCrossFilter": {
+      "criteriaItems": {
+        "type": "ReportFilterItem",
+        "description": "Represents the subfilters of a cross filter. There can be up to five subfilters. This field requires the following attributes. Column Operator Value"
+      },
+      "operation": {
+        "type": "ObjectFilterOperator (Enumeration of type string)",
+        "description": "The action indicating whether to include or exclude an object. Valid values: with and without."
+      },
+      "primaryTableColumn": {
+        "type": "string",
+        "description": "The field from the parent object used for the cross filter."
+      },
+      "relatedTable": {
+        "type": "string",
+        "description": "The child object used for the cross filter."
+      },
+      "relatedTableJoinColumn": {
+        "type": "string",
+        "description": "The field from the child object that is used to join the parent."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ChartAxis\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"x\"/>\n    <xsd:enumeration value=\"y\"/>\n    <xsd:enumeration value=\"y2\"/>\n    <xsd:enumeration value=\"r\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ChartBackgroundDirection\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TopToBottom\"/>\n    <xsd:enumeration value=\"LeftToRight\"/>\n    <xsd:enumeration value=\"Diagonal\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ChartLegendPosition\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Right\"/>\n    <xsd:enumeration value=\"Bottom\"/>\n    <xsd:enumeration value=\"OnChart\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ChartPosition\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"CHART_TOP\"/>\n    <xsd:enumeration value=\"CHART_BOTTOM\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ChartRangeType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Auto\"/>\n    <xsd:enumeration value=\"Manual\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ChartSummary\">\n  <xsd:sequence>\n    <xsd:element name=\"aggregate\" minOccurs=\"0\" type=\"tns:ReportSummaryType\"/>\n    <xsd:element name=\"axisBinding\" minOccurs=\"0\" type=\"tns:ChartAxis\"/>\n    <xsd:element name=\"column\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ChartType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"Scatter\"/>\n    <xsd:enumeration value=\"ScatterGrouped\"/>\n    <xsd:enumeration value=\"Bubble\"/>\n    <xsd:enumeration value=\"BubbleGrouped\"/>\n    <xsd:enumeration value=\"HorizontalBar\"/>\n    <xsd:enumeration value=\"HorizontalBarGrouped\"/>\n    <xsd:enumeration value=\"HorizontalBarStacked\"/>\n    <xsd:enumeration value=\"HorizontalBarStackedTo100\"/>\n    <xsd:enumeration value=\"VerticalColumn\"/>\n    <xsd:enumeration value=\"VerticalColumnGrouped\"/>\n    <xsd:enumeration value=\"VerticalColumnStacked\"/>\n    <xsd:enumeration value=\"VerticalColumnStackedTo100\"/>\n    <xsd:enumeration value=\"Line\"/>\n    <xsd:enumeration value=\"LineGrouped\"/>\n    <xsd:enumeration value=\"LineCumulative\"/>\n    <xsd:enumeration value=\"LineCumulativeGrouped\"/>\n    <xsd:enumeration value=\"Pie\"/>\n    <xsd:enumeration value=\"Donut\"/>\n    <xsd:enumeration value=\"Funnel\"/>\n    <xsd:enumeration value=\"VerticalColumnLine\"/>\n    <xsd:enumeration value=\"VerticalColumnGroupedLine\"/>\n    <xsd:enumeration value=\"VerticalColumnStackedLine\"/>\n    <xsd:enumeration value=\"Plugin\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"CurrencyIsoCode\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ADP\"/>\n    <xsd:enumeration value=\"AED\"/>\n    <xsd:enumeration value=\"AFA\"/>\n    <xsd:enumeration value=\"AFN\"/>\n    <xsd:enumeration value=\"ALL\"/>\n    <xsd:enumeration value=\"AMD\"/>\n    <xsd:enumeration value=\"ANG\"/>\n    <xsd:enumeration value=\"AOA\"/>\n    <xsd:enumeration value=\"ARS\"/>\n    <xsd:enumeration value=\"ATS\"/>\n    <xsd:enumeration value=\"AUD\"/>\n    <xsd:enumeration value=\"XAV\"/>\n    <xsd:enumeration value=\"AWG\"/>\n    <xsd:enumeration value=\"AZM\"/>\n    <xsd:enumeration value=\"AZN\"/>\n    <xsd:enumeration value=\"BAM\"/>\n    <xsd:enumeration value=\"BBD\"/>\n    <xsd:enumeration value=\"BDT\"/>\n    <xsd:enumeration value=\"BEF\"/>\n    <xsd:enumeration value=\"BGL\"/>\n    <xsd:enumeration value=\"BGN\"/>\n    <xsd:enumeration value=\"BHD\"/>\n    <xsd:enumeration value=\"BIF\"/>\n    <xsd:enumeration value=\"BMD\"/>\n    <xsd:enumeration value=\"BND\"/>\n    <xsd:enumeration value=\"BOB\"/>\n    <xsd:enumeration value=\"BOV\"/>\n    <xsd:enumeration value=\"BRB\"/>\n    <xsd:enumeration value=\"BRL\"/>\n    <xsd:enumeration value=\"BSD\"/>\n    <xsd:enumeration value=\"BTN\"/>\n    <xsd:enumeration value=\"BWP\"/>\n    <xsd:enumeration value=\"BYB\"/>\n    <xsd:enumeration value=\"BYN\"/>\n    <xsd:enumeration value=\"BYR\"/>\n    <xsd:enumeration value=\"BZD\"/>\n    <xsd:enumeration value=\"CAD\"/>\n    <xsd:enumeration value=\"CDF\"/>\n    <xsd:enumeration value=\"CHF\"/>\n    <xsd:enumeration value=\"CLF\"/>\n    <xsd:enumeration value=\"CLP\"/>\n    <xsd:enumeration value=\"CNH\"/>\n    <xsd:enumeration value=\"CNY\"/>\n    <xsd:enumeration value=\"COP\"/>\n    <xsd:enumeration value=\"CRC\"/>\n    <xsd:enumeration value=\"CSD\"/>\n    <xsd:enumeration value=\"CUC\"/>\n    <xsd:enumeration value=\"CUP\"/>\n    <xsd:enumeration value=\"CVE\"/>\n    <xsd:enumeration value=\"CYP\"/>\n    <xsd:enumeration value=\"CZK\"/>\n    <xsd:enumeration value=\"DEM\"/>\n    <xsd:enumeration value=\"DJF\"/>\n    <xsd:enumeration value=\"DKK\"/>\n    <xsd:enumeration value=\"DOP\"/>\n    <xsd:enumeration value=\"DZD\"/>\n    <xsd:enumeration value=\"ECS\"/>\n    <xsd:enumeration value=\"EEK\"/>\n    <xsd:enumeration value=\"EGP\"/>\n    <xsd:enumeration value=\"ERN\"/>\n    <xsd:enumeration value=\"ESP\"/>\n    <xsd:enumeration value=\"ETB\"/>\n    <xsd:enumeration value=\"EUR\"/>\n    <xsd:enumeration value=\"FIM\"/>\n    <xsd:enumeration value=\"FJD\"/>\n    <xsd:enumeration value=\"FKP\"/>\n    <xsd:enumeration value=\"XFL\"/>\n    <xsd:enumeration value=\"FRF\"/>\n    <xsd:enumeration value=\"GBP\"/>\n    <xsd:enumeration value=\"GBT\"/>\n    <xsd:enumeration value=\"GEL\"/>\n    <xsd:enumeration value=\"GHC\"/>\n    <xsd:enumeration value=\"GHS\"/>\n    <xsd:enumeration value=\"GIP\"/>\n    <xsd:enumeration value=\"GMD\"/>\n    <xsd:enumeration value=\"GNF\"/>\n    <xsd:enumeration value=\"GRD\"/>\n    <xsd:enumeration value=\"GTQ\"/>\n    <xsd:enumeration value=\"GWP\"/>\n    <xsd:enumeration value=\"GYD\"/>\n    <xsd:enumeration value=\"HKD\"/>\n    <xsd:enumeration value=\"HNL\"/>\n    <xsd:enumeration value=\"HRD\"/>\n    <xsd:enumeration value=\"HRK\"/>\n    <xsd:enumeration value=\"HTG\"/>\n    <xsd:enumeration value=\"HUF\"/>\n    <xsd:enumeration value=\"IDR\"/>\n    <xsd:enumeration value=\"IEP\"/>\n    <xsd:enumeration value=\"ILS\"/>\n    <xsd:enumeration value=\"INR\"/>\n    <xsd:enumeration value=\"IQD\"/>\n    <xsd:enumeration value=\"IRR\"/>\n    <xsd:enumeration value=\"ISK\"/>\n    <xsd:enumeration value=\"ITL\"/>\n    <xsd:enumeration value=\"JMD\"/>\n    <xsd:enumeration value=\"JOD\"/>\n    <xsd:enumeration value=\"JPY\"/>\n    <xsd:enumeration value=\"KES\"/>\n    <xsd:enumeration value=\"KGS\"/>\n    <xsd:enumeration value=\"KHR\"/>\n    <xsd:enumeration value=\"KMF\"/>\n    <xsd:enumeration value=\"KPW\"/>\n    <xsd:enumeration value=\"KRW\"/>\n    <xsd:enumeration value=\"KWD\"/>\n    <xsd:enumeration value=\"KYD\"/>\n    <xsd:enumeration value=\"KZT\"/>\n    <xsd:enumeration value=\"LAK\"/>\n    <xsd:enumeration value=\"LBP\"/>\n    <xsd:enumeration value=\"LKR\"/>\n    <xsd:enumeration value=\"LRD\"/>\n    <xsd:enumeration value=\"LSL\"/>\n    <xsd:enumeration value=\"LTL\"/>\n    <xsd:enumeration value=\"LUF\"/>\n    <xsd:enumeration value=\"LVL\"/>\n    <xsd:enumeration value=\"LYD\"/>\n    <xsd:enumeration value=\"MAD\"/>\n    <xsd:enumeration value=\"XMA\"/>\n    <xsd:enumeration value=\"MDL\"/>\n    <xsd:enumeration value=\"MGA\"/>\n    <xsd:enumeration value=\"MGF\"/>\n    <xsd:enumeration value=\"MKD\"/>\n    <xsd:enumeration value=\"MMK\"/>\n    <xsd:enumeration value=\"MNT\"/>\n    <xsd:enumeration value=\"MOP\"/>\n    <xsd:enumeration value=\"MRO\"/>\n    <xsd:enumeration value=\"MRU\"/>\n    <xsd:enumeration value=\"MTL\"/>\n    <xsd:enumeration value=\"MUR\"/>\n    <xsd:enumeration value=\"MVR\"/>\n    <xsd:enumeration value=\"MWK\"/>\n    <xsd:enumeration value=\"MXN\"/>\n    <xsd:enumeration value=\"MXV\"/>\n    <xsd:enumeration value=\"MYR\"/>\n    <xsd:enumeration value=\"MZM\"/>\n    <xsd:enumeration value=\"MZN\"/>\n    <xsd:enumeration value=\"NAD\"/>\n    <xsd:enumeration value=\"NGN\"/>\n    <xsd:enumeration value=\"NIO\"/>\n    <xsd:enumeration value=\"NLG\"/>\n    <xsd:enumeration value=\"NOK\"/>\n    <xsd:enumeration value=\"NPR\"/>\n    <xsd:enumeration value=\"NZD\"/>\n    <xsd:enumeration value=\"OMR\"/>\n    <xsd:enumeration value=\"PAB\"/>\n    <xsd:enumeration value=\"XPA\"/>\n    <xsd:enumeration value=\"PEN\"/>\n    <xsd:enumeration value=\"PGK\"/>\n    <xsd:enumeration value=\"PHP\"/>\n    <xsd:enumeration value=\"PKR\"/>\n    <xsd:enumeration value=\"PLN\"/>\n    <xsd:enumeration value=\"PTE\"/>\n    <xsd:enumeration value=\"PYG\"/>\n    <xsd:enumeration value=\"QAR\"/>\n    <xsd:enumeration value=\"RMB\"/>\n    <xsd:enumeration value=\"ROL\"/>\n    <xsd:enumeration value=\"RON\"/>\n    <xsd:enumeration value=\"RSD\"/>\n    <xsd:enumeration value=\"RUB\"/>\n    <xsd:enumeration value=\"RUR\"/>\n    <xsd:enumeration value=\"RWF\"/>\n    <xsd:enumeration value=\"SAR\"/>\n    <xsd:enumeration value=\"SBD\"/>\n    <xsd:enumeration value=\"SCR\"/>\n    <xsd:enumeration value=\"SDD\"/>\n    <xsd:enumeration value=\"SDG\"/>\n    <xsd:enumeration value=\"SEK\"/>\n    <xsd:enumeration value=\"SGD\"/>\n    <xsd:enumeration value=\"SHP\"/>\n    <xsd:enumeration value=\"SIT\"/>\n    <xsd:enumeration value=\"SKK\"/>\n    <xsd:enumeration value=\"SLE\"/>\n    <xsd:enumeration value=\"SLL\"/>\n    <xsd:enumeration value=\"XSO\"/>\n    <xsd:enumeration value=\"SOS\"/>\n    <xsd:enumeration value=\"SRD\"/>\n    <xsd:enumeration value=\"SRG\"/>\n    <xsd:enumeration value=\"SSP\"/>\n    <xsd:enumeration value=\"STD\"/>\n    <xsd:enumeration value=\"STN\"/>\n    <xsd:enumeration value=\"SUR\"/>\n    <xsd:enumeration value=\"SVC\"/>\n    <xsd:enumeration value=\"SYP\"/>\n    <xsd:enumeration value=\"SZL\"/>\n    <xsd:enumeration value=\"THB\"/>\n    <xsd:enumeration value=\"TJR\"/>\n    <xsd:enumeration value=\"TJS\"/>\n    <xsd:enumeration value=\"TMM\"/>\n    <xsd:enumeration value=\"TMT\"/>\n    <xsd:enumeration value=\"TND\"/>\n    <xsd:enumeration value=\"TOP\"/>\n    <xsd:enumeration value=\"TPE\"/>\n    <xsd:enumeration value=\"TRL\"/>\n    <xsd:enumeration value=\"TRY\"/>\n    <xsd:enumeration value=\"TTD\"/>\n    <xsd:enumeration value=\"TWD\"/>\n    <xsd:enumeration value=\"TZS\"/>\n    <xsd:enumeration value=\"UAH\"/>\n    <xsd:enumeration value=\"UGX\"/>\n    <xsd:enumeration value=\"USD\"/>\n    <xsd:enumeration value=\"UYU\"/>\n    <xsd:enumeration value=\"UZS\"/>\n    <xsd:enumeration value=\"VEB\"/>\n    <xsd:enumeration value=\"VEF\"/>\n    <xsd:enumeration value=\"VES\"/>\n    <xsd:enumeration value=\"VND\"/>\n    <xsd:enumeration value=\"VUV\"/>\n    <xsd:enumeration value=\"WST\"/>\n    <xsd:enumeration value=\"XAF\"/>\n    <xsd:enumeration value=\"XCD\"/>\n    <xsd:enumeration value=\"XCG\"/>\n    <xsd:enumeration value=\"XOF\"/>\n    <xsd:enumeration value=\"XPF\"/>\n    <xsd:enumeration value=\"YER\"/>\n    <xsd:enumeration value=\"YUM\"/>\n    <xsd:enumeration value=\"ZAR\"/>\n    <xsd:enumeration value=\"ZMK\"/>\n    <xsd:enumeration value=\"ZMW\"/>\n    <xsd:enumeration value=\"ZWD\"/>\n    <xsd:enumeration value=\"ZWG\"/>\n    <xsd:enumeration value=\"ZWL\"/>\n    <xsd:enumeration value=\"ZIG\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"DataCategoryFilterOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"above\"/>\n    <xsd:enumeration value=\"below\"/>\n    <xsd:enumeration value=\"at\"/>\n    <xsd:enumeration value=\"aboveOrBelow\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FilterOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"equals\"/>\n    <xsd:enumeration value=\"notEqual\"/>\n    <xsd:enumeration value=\"lessThan\"/>\n    <xsd:enumeration value=\"greaterThan\"/>\n    <xsd:enumeration value=\"lessOrEqual\"/>\n    <xsd:enumeration value=\"greaterOrEqual\"/>\n    <xsd:enumeration value=\"contains\"/>\n    <xsd:enumeration value=\"notContain\"/>\n    <xsd:enumeration value=\"startsWith\"/>\n    <xsd:enumeration value=\"includes\"/>\n    <xsd:enumeration value=\"excludes\"/>\n    <xsd:enumeration value=\"within\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"Language\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"en_US\"/>\n    <xsd:enumeration value=\"de\"/>\n    <xsd:enumeration value=\"es\"/>\n    <xsd:enumeration value=\"fr\"/>\n    <xsd:enumeration value=\"it\"/>\n    <xsd:enumeration value=\"ja\"/>\n    <xsd:enumeration value=\"sv\"/>\n    <xsd:enumeration value=\"ko\"/>\n    <xsd:enumeration value=\"zh_TW\"/>\n    <xsd:enumeration value=\"zh_CN\"/>\n    <xsd:enumeration value=\"pt_BR\"/>\n    <xsd:enumeration value=\"nl_NL\"/>\n    <xsd:enumeration value=\"da\"/>\n    <xsd:enumeration value=\"th\"/>\n    <xsd:enumeration value=\"fi\"/>\n    <xsd:enumeration value=\"ru\"/>\n    <xsd:enumeration value=\"es_MX\"/>\n    <xsd:enumeration value=\"no\"/>\n    <xsd:enumeration value=\"hu\"/>\n    <xsd:enumeration value=\"pl\"/>\n    <xsd:enumeration value=\"cs\"/>\n    <xsd:enumeration value=\"tr\"/>\n    <xsd:enumeration value=\"in\"/>\n    <xsd:enumeration value=\"ro\"/>\n    <xsd:enumeration value=\"vi\"/>\n    <xsd:enumeration value=\"uk\"/>\n    <xsd:enumeration value=\"iw\"/>\n    <xsd:enumeration value=\"el\"/>\n    <xsd:enumeration value=\"bg\"/>\n    <xsd:enumeration value=\"en_GB\"/>\n    <xsd:enumeration value=\"ar\"/>\n    <xsd:enumeration value=\"sk\"/>\n    <xsd:enumeration value=\"pt_PT\"/>\n    <xsd:enumeration value=\"hr\"/>\n    <xsd:enumeration value=\"sl\"/>\n    <xsd:enumeration value=\"fr_CA\"/>\n    <xsd:enumeration value=\"ka\"/>\n    <xsd:enumeration value=\"sr\"/>\n    <xsd:enumeration value=\"sh\"/>\n    <xsd:enumeration value=\"en_AU\"/>\n    <xsd:enumeration value=\"en_MY\"/>\n    <xsd:enumeration value=\"en_IN\"/>\n    <xsd:enumeration value=\"en_PH\"/>\n    <xsd:enumeration value=\"en_CA\"/>\n    <xsd:enumeration value=\"ro_MD\"/>\n    <xsd:enumeration value=\"bs\"/>\n    <xsd:enumeration value=\"mk\"/>\n    <xsd:enumeration value=\"lv\"/>\n    <xsd:enumeration value=\"lt\"/>\n    <xsd:enumeration value=\"et\"/>\n    <xsd:enumeration value=\"sq\"/>\n    <xsd:enumeration value=\"sh_ME\"/>\n    <xsd:enumeration value=\"mt\"/>\n    <xsd:enumeration value=\"ga\"/>\n    <xsd:enumeration value=\"eu\"/>\n    <xsd:enumeration value=\"cy\"/>\n    <xsd:enumeration value=\"is\"/>\n    <xsd:enumeration value=\"cac\"/>\n    <xsd:enumeration value=\"quc\"/>\n    <xsd:enumeration value=\"cak\"/>\n    <xsd:enumeration value=\"ms\"/>\n    <xsd:enumeration value=\"tl\"/>\n    <xsd:enumeration value=\"lb\"/>\n    <xsd:enumeration value=\"rm\"/>\n    <xsd:enumeration value=\"hy\"/>\n    <xsd:enumeration value=\"hi\"/>\n    <xsd:enumeration value=\"ur\"/>\n    <xsd:enumeration value=\"bn\"/>\n    <xsd:enumeration value=\"de_AT\"/>\n    <xsd:enumeration value=\"de_CH\"/>\n    <xsd:enumeration value=\"ta\"/>\n    <xsd:enumeration value=\"ar_DZ\"/>\n    <xsd:enumeration value=\"ar_BH\"/>\n    <xsd:enumeration value=\"ar_EG\"/>\n    <xsd:enumeration value=\"ar_IQ\"/>\n    <xsd:enumeration value=\"ar_JO\"/>\n    <xsd:enumeration value=\"ar_KW\"/>\n    <xsd:enumeration value=\"ar_LB\"/>\n    <xsd:enumeration value=\"ar_LY\"/>\n    <xsd:enumeration value=\"ar_MA\"/>\n    <xsd:enumeration value=\"ar_OM\"/>\n    <xsd:enumeration value=\"ar_QA\"/>\n    <xsd:enumeration value=\"ar_SA\"/>\n    <xsd:enumeration value=\"ar_SD\"/>\n    <xsd:enumeration value=\"ar_SY\"/>\n    <xsd:enumeration value=\"ar_TN\"/>\n    <xsd:enumeration value=\"ar_AE\"/>\n    <xsd:enumeration value=\"ar_YE\"/>\n    <xsd:enumeration value=\"zh_SG\"/>\n    <xsd:enumeration value=\"zh_HK\"/>\n    <xsd:enumeration value=\"en_HK\"/>\n    <xsd:enumeration value=\"en_IE\"/>\n    <xsd:enumeration value=\"en_SG\"/>\n    <xsd:enumeration value=\"en_ZA\"/>\n    <xsd:enumeration value=\"fr_BE\"/>\n    <xsd:enumeration value=\"fr_LU\"/>\n    <xsd:enumeration value=\"fr_CH\"/>\n    <xsd:enumeration value=\"de_BE\"/>\n    <xsd:enumeration value=\"de_LU\"/>\n    <xsd:enumeration value=\"it_CH\"/>\n    <xsd:enumeration value=\"nl_BE\"/>\n    <xsd:enumeration value=\"es_AR\"/>\n    <xsd:enumeration value=\"es_BO\"/>\n    <xsd:enumeration value=\"es_CL\"/>\n    <xsd:enumeration value=\"es_CO\"/>\n    <xsd:enumeration value=\"es_CR\"/>\n    <xsd:enumeration value=\"es_DO\"/>\n    <xsd:enumeration value=\"es_EC\"/>\n    <xsd:enumeration value=\"es_SV\"/>\n    <xsd:enumeration value=\"es_GT\"/>\n    <xsd:enumeration value=\"es_HN\"/>\n    <xsd:enumeration value=\"es_NI\"/>\n    <xsd:enumeration value=\"es_PA\"/>\n    <xsd:enumeration value=\"es_PY\"/>\n    <xsd:enumeration value=\"es_PE\"/>\n    <xsd:enumeration value=\"es_PR\"/>\n    <xsd:enumeration value=\"es_US\"/>\n    <xsd:enumeration value=\"es_UY\"/>\n    <xsd:enumeration value=\"es_VE\"/>\n    <xsd:enumeration value=\"ca\"/>\n    <xsd:enumeration value=\"af\"/>\n    <xsd:enumeration value=\"sw\"/>\n    <xsd:enumeration value=\"zu\"/>\n    <xsd:enumeration value=\"xh\"/>\n    <xsd:enumeration value=\"te\"/>\n    <xsd:enumeration value=\"ml\"/>\n    <xsd:enumeration value=\"kn\"/>\n    <xsd:enumeration value=\"mr\"/>\n    <xsd:enumeration value=\"gu\"/>\n    <xsd:enumeration value=\"pa\"/>\n    <xsd:enumeration value=\"en_NZ\"/>\n    <xsd:enumeration value=\"mi\"/>\n    <xsd:enumeration value=\"my\"/>\n    <xsd:enumeration value=\"fa\"/>\n    <xsd:enumeration value=\"km\"/>\n    <xsd:enumeration value=\"am\"/>\n    <xsd:enumeration value=\"kk\"/>\n    <xsd:enumeration value=\"ht\"/>\n    <xsd:enumeration value=\"sm\"/>\n    <xsd:enumeration value=\"haw\"/>\n    <xsd:enumeration value=\"zh_MY\"/>\n    <xsd:enumeration value=\"ru_LT\"/>\n    <xsd:enumeration value=\"ru_PL\"/>\n    <xsd:enumeration value=\"ru_AM\"/>\n    <xsd:enumeration value=\"ru_KZ\"/>\n    <xsd:enumeration value=\"ru_KG\"/>\n    <xsd:enumeration value=\"ru_BY\"/>\n    <xsd:enumeration value=\"ru_MD\"/>\n    <xsd:enumeration value=\"ru_UA\"/>\n    <xsd:enumeration value=\"en_AE\"/>\n    <xsd:enumeration value=\"en_BE\"/>\n    <xsd:enumeration value=\"en_CY\"/>\n    <xsd:enumeration value=\"en_DE\"/>\n    <xsd:enumeration value=\"en_IL\"/>\n    <xsd:enumeration value=\"en_IT\"/>\n    <xsd:enumeration value=\"en_NL\"/>\n    <xsd:enumeration value=\"en_MT\"/>\n    <xsd:enumeration value=\"en_ES\"/>\n    <xsd:enumeration value=\"en_PL\"/>\n    <xsd:enumeration value=\"en_DK\"/>\n    <xsd:enumeration value=\"en_SE\"/>\n    <xsd:enumeration value=\"en_NO\"/>\n    <xsd:enumeration value=\"en_FR\"/>\n    <xsd:enumeration value=\"en_HU\"/>\n    <xsd:enumeration value=\"en_CZ\"/>\n    <xsd:enumeration value=\"en_SK\"/>\n    <xsd:enumeration value=\"en_RO\"/>\n    <xsd:enumeration value=\"en_CH\"/>\n    <xsd:enumeration value=\"en_AL\"/>\n    <xsd:enumeration value=\"en_AD\"/>\n    <xsd:enumeration value=\"en_AG\"/>\n    <xsd:enumeration value=\"en_AT\"/>\n    <xsd:enumeration value=\"en_BS\"/>\n    <xsd:enumeration value=\"en_BB\"/>\n    <xsd:enumeration value=\"en_BZ\"/>\n    <xsd:enumeration value=\"en_BA\"/>\n    <xsd:enumeration value=\"en_BG\"/>\n    <xsd:enumeration value=\"en_HR\"/>\n    <xsd:enumeration value=\"en_DM\"/>\n    <xsd:enumeration value=\"en_EE\"/>\n    <xsd:enumeration value=\"en_FI\"/>\n    <xsd:enumeration value=\"en_GI\"/>\n    <xsd:enumeration value=\"en_GR\"/>\n    <xsd:enumeration value=\"en_GD\"/>\n    <xsd:enumeration value=\"en_GY\"/>\n    <xsd:enumeration value=\"en_IS\"/>\n    <xsd:enumeration value=\"en_JM\"/>\n    <xsd:enumeration value=\"en_JP\"/>\n    <xsd:enumeration value=\"en_LV\"/>\n    <xsd:enumeration value=\"en_LI\"/>\n    <xsd:enumeration value=\"en_LT\"/>\n    <xsd:enumeration value=\"en_LU\"/>\n    <xsd:enumeration value=\"en_MC\"/>\n    <xsd:enumeration value=\"en_ME\"/>\n    <xsd:enumeration value=\"en_MK\"/>\n    <xsd:enumeration value=\"en_PT\"/>\n    <xsd:enumeration value=\"en_RS\"/>\n    <xsd:enumeration value=\"en_SI\"/>\n    <xsd:enumeration value=\"en_KR\"/>\n    <xsd:enumeration value=\"en_KN\"/>\n    <xsd:enumeration value=\"en_LC\"/>\n    <xsd:enumeration value=\"en_VC\"/>\n    <xsd:enumeration value=\"en_TW\"/>\n    <xsd:enumeration value=\"en_TH\"/>\n    <xsd:enumeration value=\"en_TT\"/>\n    <xsd:enumeration value=\"en_TR\"/>\n    <xsd:enumeration value=\"nl_SR\"/>\n    <xsd:enumeration value=\"fr_HT\"/>\n    <xsd:enumeration value=\"de_LI\"/>\n    <xsd:enumeration value=\"es_AD\"/>\n    <xsd:enumeration value=\"sv_FI\"/>\n    <xsd:enumeration value=\"el_CY\"/>\n    <xsd:enumeration value=\"fr_MA\"/>\n    <xsd:enumeration value=\"kl\"/>\n    <xsd:enumeration value=\"ji\"/>\n    <xsd:enumeration value=\"hmn\"/>\n    <xsd:enumeration value=\"eo\"/>\n    <xsd:enumeration value=\"iw_EO\"/>\n    <xsd:enumeration value=\"eo_US\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ObjectFilterOperator\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"with\"/>\n    <xsd:enumeration value=\"without\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Report\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"aggregateFilters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportAggregateFilter\"/>\n        <xsd:element name=\"aggregates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportAggregate\"/>\n        <xsd:element name=\"block\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Report\"/>\n        <xsd:element name=\"blockInfo\" minOccurs=\"0\" type=\"tns:ReportBlockInfo\"/>\n        <xsd:element name=\"buckets\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportBucketField\"/>\n        <xsd:element name=\"chart\" minOccurs=\"0\" type=\"tns:ReportChart\"/>\n        <xsd:element name=\"colorRanges\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportColorRange\"/>\n        <xsd:element name=\"columns\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportColumn\"/>\n        <xsd:element name=\"crossFilters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportCrossFilter\"/>\n        <xsd:element name=\"currency\" minOccurs=\"0\" type=\"tns:CurrencyIsoCode\"/>\n        <xsd:element name=\"customDetailFormulas\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportCustomDetailFormula\"/>\n        <xsd:element name=\"dataCategoryFilters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportDataCategoryFilter\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"division\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"filter\" minOccurs=\"0\" type=\"tns:ReportFilter\"/>\n        <xsd:element name=\"folderName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"format\" type=\"tns:ReportFormat\"/>\n        <xsd:element name=\"formattingRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportFormattingRule\"/>\n        <xsd:element name=\"groupingsAcross\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportGrouping\"/>\n        <xsd:element name=\"groupingsDown\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportGrouping\"/>\n        <xsd:element name=\"historicalSelector\" minOccurs=\"0\" type=\"tns:ReportHistoricalSelector\"/>\n        <xsd:element name=\"isSmartTotalDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"numSubscriptions\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"params\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportParam\"/>\n        <xsd:element name=\"reportType\" type=\"xsd:string\"/>\n        <xsd:element name=\"reportTypeApiName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"roleHierarchyFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"rowLimit\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"scope\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"showCommonRowsOnly\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showCurrentDate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showDetails\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showGrandTotal\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showSubTotals\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"sortColumn\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sortOrder\" minOccurs=\"0\" type=\"tns:SortOrder\"/>\n        <xsd:element name=\"territoryHierarchyFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"timeFrameFilter\" minOccurs=\"0\" type=\"tns:ReportTimeFrameFilter\"/>\n        <xsd:element name=\"userFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ReportAggrType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Sum\"/>\n    <xsd:enumeration value=\"Average\"/>\n    <xsd:enumeration value=\"Maximum\"/>\n    <xsd:enumeration value=\"Minimum\"/>\n    <xsd:enumeration value=\"Unique\"/>\n    <xsd:enumeration value=\"RowCount\"/>\n    <xsd:enumeration value=\"Median\"/>\n    <xsd:enumeration value=\"Noop\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ReportAggregate\">\n  <xsd:sequence>\n    <xsd:element name=\"acrossGroupingContext\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"calculatedFormula\" type=\"xsd:string\"/>\n    <xsd:element name=\"datatype\" type=\"tns:ReportAggregateDatatype\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"downGroupingContext\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isActive\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isCrossBlock\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"reportType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"scale\" minOccurs=\"0\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ReportAggregateDatatype\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"currency\"/>\n    <xsd:enumeration value=\"percent\"/>\n    <xsd:enumeration value=\"number\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ReportAggregateFilter\">\n  <xsd:sequence>\n    <xsd:element name=\"aggregate\" type=\"xsd:string\"/>\n    <xsd:element name=\"operator\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportAggregateReference\">\n  <xsd:sequence>\n    <xsd:element name=\"aggregate\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportBlockInfo\">\n  <xsd:sequence>\n    <xsd:element name=\"aggregateReferences\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportAggregateReference\"/>\n    <xsd:element name=\"blockId\" type=\"xsd:string\"/>\n    <xsd:element name=\"joinTable\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportBucketField\">\n  <xsd:sequence>\n    <xsd:element name=\"bucketType\" type=\"tns:ReportBucketFieldType\"/>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"nullTreatment\" minOccurs=\"0\" type=\"tns:ReportFormulaNullTreatment\"/>\n    <xsd:element name=\"otherBucketLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sourceColumnName\" type=\"xsd:string\"/>\n    <xsd:element name=\"useOther\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"values\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportBucketFieldValue\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportBucketFieldSourceValue\">\n  <xsd:sequence>\n    <xsd:element name=\"from\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sourceValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"to\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ReportBucketFieldType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"text\"/>\n    <xsd:enumeration value=\"number\"/>\n    <xsd:enumeration value=\"picklist\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ReportBucketFieldValue\">\n  <xsd:sequence>\n    <xsd:element name=\"sourceValues\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportBucketFieldSourceValue\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportChart\">\n  <xsd:sequence>\n    <xsd:element name=\"backgroundColor1\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"backgroundColor2\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"backgroundFadeDir\" minOccurs=\"0\" type=\"tns:ChartBackgroundDirection\"/>\n    <xsd:element name=\"chartSummaries\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ChartSummary\"/>\n    <xsd:element name=\"chartType\" type=\"tns:ChartType\"/>\n    <xsd:element name=\"enableHoverLabels\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"expandOthers\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"groupingColumn\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"legendPosition\" minOccurs=\"0\" type=\"tns:ChartLegendPosition\"/>\n    <xsd:element name=\"location\" minOccurs=\"0\" type=\"tns:ChartPosition\"/>\n    <xsd:element name=\"secondaryGroupingColumn\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"showAxisLabels\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showPercentage\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showTotal\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showValues\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"size\" minOccurs=\"0\" type=\"tns:ReportChartSize\"/>\n    <xsd:element name=\"summaryAxisManualRangeEnd\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"summaryAxisManualRangeStart\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"summaryAxisRange\" minOccurs=\"0\" type=\"tns:ChartRangeType\"/>\n    <xsd:element name=\"textColor\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"textSize\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"title\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"titleColor\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"titleSize\" minOccurs=\"0\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ReportChartSize\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Tiny\"/>\n    <xsd:enumeration value=\"Small\"/>\n    <xsd:enumeration value=\"Medium\"/>\n    <xsd:enumeration value=\"Large\"/>\n    <xsd:enumeration value=\"Huge\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ReportColorRange\">\n  <xsd:sequence>\n    <xsd:element name=\"aggregate\" minOccurs=\"0\" type=\"tns:ReportSummaryType\"/>\n    <xsd:element name=\"columnName\" type=\"xsd:string\"/>\n    <xsd:element name=\"highBreakpoint\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"highColor\" type=\"xsd:string\"/>\n    <xsd:element name=\"lowBreakpoint\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"lowColor\" type=\"xsd:string\"/>\n    <xsd:element name=\"midColor\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportColumn\">\n  <xsd:sequence>\n    <xsd:element name=\"aggregateTypes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportSummaryType\"/>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"isExtendedColumn\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"reverseColors\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showChanges\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportCrossFilter\">\n  <xsd:sequence>\n    <xsd:element name=\"criteriaItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportFilterItem\"/>\n    <xsd:element name=\"operation\" type=\"tns:ObjectFilterOperator\"/>\n    <xsd:element name=\"primaryTableColumn\" type=\"xsd:string\"/>\n    <xsd:element name=\"relatedTable\" type=\"xsd:string\"/>\n    <xsd:element name=\"relatedTableJoinColumn\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportCustomDetailFormula\">\n  <xsd:sequence>\n    <xsd:element name=\"calculatedFormula\" type=\"xsd:string\"/>\n    <xsd:element name=\"dataType\" type=\"xsd:string\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"scale\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportDataCategoryFilter\">\n  <xsd:sequence>\n    <xsd:element name=\"dataCategory\" type=\"xsd:string\"/>\n    <xsd:element name=\"dataCategoryGroup\" type=\"xsd:string\"/>\n    <xsd:element name=\"operator\" type=\"tns:DataCategoryFilterOperation\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportFilter\">\n  <xsd:sequence>\n    <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"criteriaItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportFilterItem\"/>\n    <xsd:element name=\"language\" minOccurs=\"0\" type=\"tns:Language\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportFilterItem\">\n  <xsd:sequence>\n    <xsd:element name=\"column\" type=\"xsd:string\"/>\n    <xsd:element name=\"columnToColumn\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isUnlocked\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"operator\" type=\"tns:FilterOperation\"/>\n    <xsd:element name=\"snapshot\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ReportFormat\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"MultiBlock\"/>\n    <xsd:enumeration value=\"Matrix\"/>\n    <xsd:enumeration value=\"Summary\"/>\n    <xsd:enumeration value=\"Tabular\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ReportFormattingRule\">\n  <xsd:sequence>\n    <xsd:element name=\"aggregate\" minOccurs=\"0\" type=\"tns:ReportSummaryType\"/>\n    <xsd:element name=\"columnName\" type=\"xsd:string\"/>\n    <xsd:element name=\"values\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportFormattingRuleValue\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportFormattingRuleValue\">\n  <xsd:sequence>\n    <xsd:element name=\"backgroundColor\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"rangeUpperBound\" minOccurs=\"0\" type=\"xsd:double\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ReportFormulaNullTreatment\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"n\"/>\n    <xsd:enumeration value=\"z\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ReportGrouping\">\n  <xsd:sequence>\n    <xsd:element name=\"aggregateType\" minOccurs=\"0\" type=\"tns:ReportAggrType\"/>\n    <xsd:element name=\"dateGranularity\" minOccurs=\"0\" type=\"tns:UserDateGranularity\"/>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"hierarchyApiName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortByName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortOrder\" type=\"tns:SortOrder\"/>\n    <xsd:element name=\"sortType\" minOccurs=\"0\" type=\"tns:ReportSortType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportHistoricalSelector\">\n  <xsd:sequence>\n    <xsd:element name=\"snapshot\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportParam\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ReportSortType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Column\"/>\n    <xsd:enumeration value=\"Aggregate\"/>\n    <xsd:enumeration value=\"CustomSummaryFormula\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ReportSummaryType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Sum\"/>\n    <xsd:enumeration value=\"Average\"/>\n    <xsd:enumeration value=\"Maximum\"/>\n    <xsd:enumeration value=\"Minimum\"/>\n    <xsd:enumeration value=\"Unique\"/>\n    <xsd:enumeration value=\"Median\"/>\n    <xsd:enumeration value=\"Noop\"/>\n    <xsd:enumeration value=\"None\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ReportTimeFrameFilter\">\n  <xsd:sequence>\n    <xsd:element name=\"dateColumn\" type=\"xsd:string\"/>\n    <xsd:element name=\"endDate\" minOccurs=\"0\" type=\"xsd:date\"/>\n    <xsd:element name=\"interval\" type=\"tns:UserDateInterval\"/>\n    <xsd:element name=\"startDate\" minOccurs=\"0\" type=\"xsd:date\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SortOrder\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Asc\"/>\n    <xsd:enumeration value=\"Desc\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"UserDateGranularity\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"Day\"/>\n    <xsd:enumeration value=\"Week\"/>\n    <xsd:enumeration value=\"Month\"/>\n    <xsd:enumeration value=\"Quarter\"/>\n    <xsd:enumeration value=\"Year\"/>\n    <xsd:enumeration value=\"FiscalQuarter\"/>\n    <xsd:enumeration value=\"FiscalYear\"/>\n    <xsd:enumeration value=\"MonthInYear\"/>\n    <xsd:enumeration value=\"DayInMonth\"/>\n    <xsd:enumeration value=\"FiscalPeriod\"/>\n    <xsd:enumeration value=\"FiscalWeek\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"UserDateInterval\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"INTERVAL_CURRENT\"/>\n    <xsd:enumeration value=\"INTERVAL_CURNEXT1\"/>\n    <xsd:enumeration value=\"INTERVAL_CURPREV1\"/>\n    <xsd:enumeration value=\"INTERVAL_NEXT1\"/>\n    <xsd:enumeration value=\"INTERVAL_PREV1\"/>\n    <xsd:enumeration value=\"INTERVAL_CURNEXT3\"/>\n    <xsd:enumeration value=\"INTERVAL_CURFY\"/>\n    <xsd:enumeration value=\"INTERVAL_PREVFY\"/>\n    <xsd:enumeration value=\"INTERVAL_PREV2FY\"/>\n    <xsd:enumeration value=\"INTERVAL_AGO2FY\"/>\n    <xsd:enumeration value=\"INTERVAL_NEXTFY\"/>\n    <xsd:enumeration value=\"INTERVAL_PREVCURFY\"/>\n    <xsd:enumeration value=\"INTERVAL_PREVCUR2FY\"/>\n    <xsd:enumeration value=\"INTERVAL_CURNEXTFY\"/>\n    <xsd:enumeration value=\"INTERVAL_CUSTOM\"/>\n    <xsd:enumeration value=\"INTERVAL_YESTERDAY\"/>\n    <xsd:enumeration value=\"INTERVAL_TODAY\"/>\n    <xsd:enumeration value=\"INTERVAL_TOMORROW\"/>\n    <xsd:enumeration value=\"INTERVAL_LASTWEEK\"/>\n    <xsd:enumeration value=\"INTERVAL_THISWEEK\"/>\n    <xsd:enumeration value=\"INTERVAL_NEXTWEEK\"/>\n    <xsd:enumeration value=\"INTERVAL_LASTMONTH\"/>\n    <xsd:enumeration value=\"INTERVAL_THISMONTH\"/>\n    <xsd:enumeration value=\"INTERVAL_NEXTMONTH\"/>\n    <xsd:enumeration value=\"INTERVAL_LASTTHISMONTH\"/>\n    <xsd:enumeration value=\"INTERVAL_THISNEXTMONTH\"/>\n    <xsd:enumeration value=\"INTERVAL_CURRENTQ\"/>\n    <xsd:enumeration value=\"INTERVAL_CURNEXTQ\"/>\n    <xsd:enumeration value=\"INTERVAL_CURPREVQ\"/>\n    <xsd:enumeration value=\"INTERVAL_NEXTQ\"/>\n    <xsd:enumeration value=\"INTERVAL_PREVQ\"/>\n    <xsd:enumeration value=\"INTERVAL_CURNEXT3Q\"/>\n    <xsd:enumeration value=\"INTERVAL_CURY\"/>\n    <xsd:enumeration value=\"INTERVAL_PREVY\"/>\n    <xsd:enumeration value=\"INTERVAL_PREV2Y\"/>\n    <xsd:enumeration value=\"INTERVAL_AGO2Y\"/>\n    <xsd:enumeration value=\"INTERVAL_NEXTY\"/>\n    <xsd:enumeration value=\"INTERVAL_PREVCURY\"/>\n    <xsd:enumeration value=\"INTERVAL_PREVCUR2Y\"/>\n    <xsd:enumeration value=\"INTERVAL_CURNEXTY\"/>\n    <xsd:enumeration value=\"INTERVAL_LAST7\"/>\n    <xsd:enumeration value=\"INTERVAL_LAST30\"/>\n    <xsd:enumeration value=\"INTERVAL_LAST60\"/>\n    <xsd:enumeration value=\"INTERVAL_LAST90\"/>\n    <xsd:enumeration value=\"INTERVAL_LAST120\"/>\n    <xsd:enumeration value=\"INTERVAL_NEXT7\"/>\n    <xsd:enumeration value=\"INTERVAL_NEXT30\"/>\n    <xsd:enumeration value=\"INTERVAL_NEXT60\"/>\n    <xsd:enumeration value=\"INTERVAL_NEXT90\"/>\n    <xsd:enumeration value=\"INTERVAL_NEXT120\"/>\n    <xsd:enumeration value=\"LAST_FISCALWEEK\"/>\n    <xsd:enumeration value=\"THIS_FISCALWEEK\"/>\n    <xsd:enumeration value=\"NEXT_FISCALWEEK\"/>\n    <xsd:enumeration value=\"LAST_FISCALPERIOD\"/>\n    <xsd:enumeration value=\"THIS_FISCALPERIOD\"/>\n    <xsd:enumeration value=\"NEXT_FISCALPERIOD\"/>\n    <xsd:enumeration value=\"LASTTHIS_FISCALPERIOD\"/>\n    <xsd:enumeration value=\"THISNEXT_FISCALPERIOD\"/>\n    <xsd:enumeration value=\"CURRENT_ENTITLEMENT_PERIOD\"/>\n    <xsd:enumeration value=\"PREVIOUS_ENTITLEMENT_PERIOD\"/>\n    <xsd:enumeration value=\"PREVIOUS_TWO_ENTITLEMENT_PERIODS\"/>\n    <xsd:enumeration value=\"TWO_ENTITLEMENT_PERIODS_AGO\"/>\n    <xsd:enumeration value=\"CURRENT_AND_PREVIOUS_ENTITLEMENT_PERIOD\"/>\n    <xsd:enumeration value=\"CURRENT_AND_PREVIOUS_TWO_ENTITLEMENT_PERIODS\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "A sample XML snippet using cross filters to build an Accounts report for cases where case status isn’t closed:",
+      "code": "<crossFilters>\n        <criteriaItems>\n            <column>Status</column>\n            <operator>notequal</operator>\n            <value>Closed</value>\n        </criteriaItems>\n        <operation>with</operation>\n        <primaryTableColumn>ACCOUNT_ID</primaryTableColumn>\n        <relatedTable>Case</relatedTable>\n        <relatedTableJoinColumn>Account</relatedTableJoinColumn>\n    </crossFilters>"
+    },
+    {
+      "description": "A sample XML report definition:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Report xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <aggregates>\n        <acrossGroupingContext>CRT_Object__c$Id</acrossGroupingContext>\n        <calculatedFormula>PREVGROUPVAL(CRT_Object__c.Currency__c:AVG, CRT_Object__c.Id) *\n                PARENTGROUPVAL(CRT_Object__c.Number__c:MAX, CRT_Object__c.CreatedBy.Name, \n                COLUMN_GRAND_SUMMARY)/RowCount</calculatedFormula>\n        <datatype>number</datatype>\n        <developerName>FORMULA1</developerName>\n        <downGroupingContext>CRT_Object__c$CreatedBy</downGroupingContext>\n        <isActive>true</isActive>\n        <masterLabel>CurrCSF</masterLabel>\n        <scale>2</scale>\n    </aggregates>\n    <aggregates>\n        <acrossGroupingContext>CRT_Object__c$LastModifiedDate</acrossGroupingContext>\n        <calculatedFormula>IF(RowCount&gt;10, \n                BLANKVALUE(ROUND(PREVGROUPVAL(CRT_Object__c.Currency__c:SUM, \n                CRT_Object__c.LastModifiedDate),3), \n                PARENTGROUPVAL(CRT_Object__c.Number__c:SUM, ROW_GRAND_SUMMARY, \n                CRT_Object__c.Id))  , 1000)</calculatedFormula>\n        <datatype>number</datatype>\n        <developerName>FORMULA2</developerName>\n        <downGroupingContext>GRAND_SUMMARY</downGroupingContext>\n        <isActive>true</isActive>\n        <masterLabel>numCSF</masterLabel>\n        <scale>2</scale>\n    </aggregates>\n    <buckets>\n        <bucketType>number</bucketType>\n        <developerName>BucketField_BusinessSize</developerName>\n        <masterLabel>NumericBucket</masterLabel>\n        <nullTreatment>z</nullTreatment>\n        <sourceColumnName>SALES</sourceColumnName>\n        <values>\n            <sourceValues>\n                <to>10000</to>\n            </sourceValues>\n            <value>low</value>\n        </values>\n        <values>\n            <sourceValues>\n                <from>10000</from>\n                <to>25000</to>\n            </sourceValues>\n            <value>mid</value>\n        </values>\n        <values>\n            <sourceValues>\n                <from>25000</from>\n            </sourceValues>\n            <value>high</value>\n        </values>\n    </buckets>\n    <buckets>\n        <bucketType>text</bucketType>\n        <developerName>BucketField_Region</developerName>\n        <masterLabel>TextBucket</masterLabel>\n        <nullTreatment>n</nullTreatment>\n        <otherBucketLabel>Other</otherBucketLabel>\n        <sourceColumnName>ADDRESS1_STATE</sourceColumnName>\n        <values>\n            <sourceValues>\n                <sourceValue>CA</sourceValue>\n            </sourceValues>\n            <value>west</value>\n        </values>\n        <values>\n            <sourceValues>\n                <sourceValue>NY</sourceValue>\n            </sourceValues>\n            <sourceValues>\n                <sourceValue>Ontario</sourceValue>\n            </sourceValues>\n            <value>east</value>\n        </values>\n    </buckets>\n    <chart>\n        <backgroundColor1>#FFFFFF</backgroundColor1>\n        <backgroundColor2>#FFFFFF</backgroundColor2>\n        <backgroundFadeDir>Diagonal</backgroundFadeDir>\n        <chartSummaries>\n            <axisBinding>y</axisBinding>\n            <column>FORMULA1</column>\n        </chartSummaries>\n        <chartSummaries>\n            <axisBinding>y</axisBinding>\n            <column>FORMULA2</column>\n        </chartSummaries>\n        <chartSummaries>\n            <aggregate>Maximum</aggregate>\n            <axisBinding>y</axisBinding>\n            <column>CRT_Object__c$Number__c</column>\n        </chartSummaries>\n        <chartSummaries>\n            <axisBinding>y</axisBinding>\n            <column>RowCount</column>\n        </chartSummaries>\n        <chartType>VerticalColumn</chartType>\n        <groupingColumn>CRT_Object__c$LastModifiedDate</groupingColumn>\n        <legendPosition>Right</legendPosition>\n        <location>CHART_TOP</location>\n        <size>Medium</size>\n        <summaryAxisRange>Auto</summaryAxisRange>\n        <textColor>#000000</textColor>\n        <textSize>12</textSize>\n        <titleColor>#000000</titleColor>\n        <titleSize>18</titleSize>\n    </chart>\n    <columns>\n        <field>CRT_Object__c$Name</field>\n    </columns>\n    <columns>\n        <aggregateTypes>Average</aggregateTypes>\n        <field>CRT_Object__c$Currency__c</field>\n    </columns>\n    <columns>\n        <aggregateTypes>Maximum</aggregateTypes>\n        <field>CRT_Object__c$Number__c</field>\n    </columns>\n    <columns>\n        <field>BucketField__Region</field>\n    </columns>\n    <format>Matrix</format>\n    <groupingsAcross>\n        <dateGranularity>Day</dateGranularity>\n        <field>CRT_Object__c$Id</field>\n        <sortOrder>Asc</sortOrder>\n    </groupingsAcross>\n    <groupingsAcross>\n        <dateGranularity>Year</dateGranularity>\n        <field>CRT_Object__c$LastModifiedDate</field>\n        <sortOrder>Asc</sortOrder>\n    </groupingsAcross>\n    <groupingsDown>\n        <dateGranularity>Day</dateGranularity>\n        <field>CRT_Object__c$CreatedBy</field>\n        <sortOrder>Asc</sortOrder>\n    </groupingsDown>\n    <groupingsDown>\n        <dateGranularity>Day</dateGranularity>\n        <field>CRT_Object__c$Currency__c</field>\n        <sortOrder>Desc</sortOrder>\n    </groupingsDown>\n    <name>CrtMMVC</name>\n    <reportType>CRT1__c</reportType>\n    <scope>organization</scope>\n    <showDetails>false</showDetails>\n    <timeFrameFilter>\n        <dateColumn>CRT_Object__c$CreatedDate</dateColumn>\n        <interval>INTERVAL_CUSTOM</interval>\n    </timeFrameFilter>\n</Report>"
+    },
+    {
+      "description": "A sample XML report definition:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Report xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n<!-- This is a cross-block custom summary formula. Note that the calculated formula reference for a blocks reference uses the BlockId#Aggregate. -->\n    <aggregates>\n        <calculatedFormula>B1#AMOUNT:SUM+B2#EMPLOYEES:SUM</calculatedFormula>\n        <datatype>number</datatype>\n        <developerName>FORMULA</developerName>\n        <isActive>true</isActive>\n        <isCrossBlock>true</isCrossBlock>\n        <masterLabel>Cross-Block CSF Example</masterLabel>\n        <scale>2</scale>\n    </aggregates>\n<!-- This is a standard custom summary formula. Note that the calculated formula reference does not have block reference but just the aggregate name of the report type associated (Opportunity).-->\n    <aggregates>\n        <calculatedFormula>AMOUNT:SUM</calculatedFormula>\n        <developerName>FORMULA2</developerName>\n        <isActive>true</isActive>\n        <isCrossBlock>false</isCrossBlock>\n        <masterLabel>Standard CSF Example</masterLabel>\n        <reportType>Opportunity</reportType>\n        <scale>2</scale>\n    </aggregates>\n    <block>\n      <blockInfo>\n<!-- This is how the block defines that the custom summary formula should be referenced. In this example, it’s the in standard FORMULA 2 defined above. This block report has blockID B1.-->\n        <aggregateReferences>    \n          <aggregate>FORMULA2</aggregate>\n        </aggregateReference>\n        <blockId>B1</blockId>\n        <joinTable>a</joinTable>\n      </blockInfo>\n      <columns>\n        <field>TYPE</field>\n      </columns>\n      <format>Summary</format>\n      <name>Opportunities BLock 3</name>\n      <params>\n        <name>role_territory</name>\n        <value>role</value>\n      </params>\n      <params>\n        <name>terr</name>\n        <value>all</value>\n      </params>\n      <params>\n        <name>open</name>\n        <value>all</value>\n      </params>\n      <params>\n        <name>probability</name>\n        <value>0</value>\n      </params>\n      <params>\n        <name>co</name>\n        <value>1</value>\n      </params>\n      <reportType>Opportunity</reportType>\n      <scope>organization</scope>\n      <timeFrameFilter>\n        <dateColumn>CLOSE_DATE</dateColumn>\n        <interval>INTERVAL_CUSTOM</interval>\n      </timeFrameFilter>\n    </block>\n    <block>\n      <blockInfo>\n<!-- This is how the block defines that the custom summary formula should be referenced. In this example, it’s the cross-block custom summary formula FORMULA 1 defined above. This block report has blockId B2.-->\n        <aggregateReferences>\n          <aggregate>FORMULA1</aggregate>\n        </aggregateReferences>\n        <blockId>B2</blockId>\n        <joinTable>a</joinTable>\n      </blockInfo>\n      <columns>\n        <field>USERS.NAME</field>\n      </columns>\n      <columns>\n        <field>TYPE</field>\n      </columns>\n      <columns>\n         <field>DUE_DATE</field>\n      </columns>\n      <columns>\n        <field>LAST_UPDATE</field>\n      </columns>\n      <columns>\n        <field>ADDRESS1_STATE</field>\n      </columns>\n      <format>Summary</format\n      <name>Accounts block 5</name>\n      <params>\n        <name>terr</name>\n        <value>all</value>\n      </params>\n      <params>\n        <name>co</name>\n        <value>1</value>\n      </params>\n      <reportType>AccountList</reportType>\n      <scope>organization</scope>\n      <timeFrameFilter>\n        <dateColumn>CREATED_DATE</dateColumn>\n        <interval>INTERVAL_CUSTOM</interval>\n      </timeFrameFilter>\n    </block>\n    <blockInfo>\n      <blockId xsi:nil=\"true\"/>\n      <joinTable>a</joinTable>\n    </blockInfo>\n<chart>\n        <backgroundColor1>#FFFFFF</backgroundColor1>\n        <backgroundColor2>#FFFFFF</backgroundColor2>\n        <backgroundFadeDir>Diagonal</backgroundFadeDir>\n        <chartSummaries>\n            <axisBinding>y</axisBinding>\n<!-- This is how chart aggregates are designed in multiblock. We're using RowCount from Block 1.-->\n            <column>B1#RowCount</column>\n        </chartSummaries>\n        <chartType>HorizontalBar</chartType>\n        <enableHoverLabels>false</enableHoverLabels>\n        <expandOthers>true</expandOthers>\n        <groupingColumn>ACCOUNT_NAME</groupingColumn>\n        <location>CHART_TOP</location>\n        <showAxisLabels>true</showAxisLabels>\n        <showPercentage>false</showPercentage>\n        <showTotal>false</showTotal>\n        <showValues>false</showValues>\n        <size>Medium</size>\n        <summaryAxisRange>Auto</summaryAxisRange>\n        <textColor>#000000</textColor>\n        <textSize>12</textSize>\n        <titleColor>#000000</titleColor>\n        <titleSize>18</titleSize>\n    </chart>\n    <format>MultiBlock</format>\n    <groupingsDown>\n        <dateGranularity>Day</dateGranularity>\n        <field>ACCOUNT_NAME</field>\n        <sortOrder>Asc</sortOrder>\n    </groupingsDown>\n    <name>mb_mbapi</name>\n    <reportType>Opportunity</reportType>\n    <showDetails>true</showDetails>\n</Report>"
+    }
+  ]
+}

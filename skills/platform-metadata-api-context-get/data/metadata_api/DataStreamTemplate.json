@@ -1,0 +1,99 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DataStreamTemplate - Metadata API",
+  "description": "Represents the data stream that a user adds to a data kit.",
+  "file_information": ".dataStreamTemplate",
+  "directory_location": "dataStreamTemplates",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "dataConnectionSourceParameters": {
+      "type": "DataConnectionParamTmpl[]",
+      "description": "Input representation for the data connection source parameters."
+    },
+    "dataSourceBundleDefinition": {
+      "type": "string",
+      "required": true,
+      "description": "Reference to the bundle to which this template belongs."
+    },
+    "dataSourceObject": {
+      "type": "string",
+      "required": true,
+      "description": "Reference to the Data Source Objects (DSOs). A DSO represents the object from where the data was sourced."
+    },
+    "filterCriteria": {
+      "type": "string",
+      "description": "Filter applied to the data stream before the information is sent to Data Cloud."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Name assigned to the data stream template."
+    },
+    "objectCategory": {
+      "type": "string",
+      "required": true,
+      "description": "Category of the Data Model Object (DMO)."
+    },
+    "refreshDayOfMonth": {
+      "type": "int",
+      "description": "The duration of the day of the month after which the data stream must be refreshed."
+    },
+    "refreshDayOfWeek": {
+      "type": "int",
+      "description": "The duration of the day of the week after which the data stream must be refreshed."
+    },
+    "refreshFrequency": {
+      "type": "DataImportRefreshFrequency (enumeration of type string)",
+      "description": "The frequency with which the datastream must be refreshed. Possible values are: Batch NONE MINUTES_15 MINUTES_30 MINUTES_5 HOURLY DAILY WEEKLY MONTHLY NOT_APPLICABLE STREAMING Possible values available in API version 64.0 and later are: EVERY_12_HOURS EVERY_4_HOURS"
+    },
+    "refreshHours": {
+      "type": "string",
+      "description": "The duration after which the datastream must be refreshed."
+    },
+    "refreshMode": {
+      "type": "DataImportRefreshMode (enumeration of type string)",
+      "description": "The mode of refresh. Possible values are: FULL_REFRESH UPSERT INCREMENTAL REPLACE NEAR_REAL_TIME_INCREMENTAL NOT_APPLICABLE PARTIAL_UPDATE STREAMING"
+    },
+    "refreshStartDate": {
+      "type": "date",
+      "description": "The date to retrieve data based on the refresh frequency data. Available in API version 62.0 and later."
+    },
+    "sourceObjectName": {
+      "type": "string",
+      "description": "The name of the source object from which data is streamed. Available in API version 62.0 and later."
+    },
+    "streamType": {
+      "type": "StreamType (enumeration of type string)",
+      "description": "The type of data stream. Available in API version 62.0 and later. Possible values are: DIRECT_ACCESS DIRECT_ACCESS_ACCELERATED INGEST"
+    },
+    "streamingAppDataConnectorType": {
+      "type": "streamingAppDataConnectorType (enumeration of type string)",
+      "description": "The connector app for data streaming. Available in API version 63.0 and later. Possible values are: MobileApp WebApp"
+    },
+    "templateVersion": {
+      "type": "int",
+      "description": "The version number of the template. Available in API version 62.0 and later."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DataStreamTemplate component.",
+      "code": "<DataStreamTemplate xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <dataSourceBundleDefinition>b2</dataSourceBundleDefinition>\n    <dataSourceObject>sd3ds</dataSourceObject>\n    <masterLabel>b2</masterLabel>\n    <objectCategory>Profile</objectCategory>\n</DataStreamTemplate>"
+    },
+    {
+      "description": "The following is an example package.xml that references the previous definition.",
+      "code": "<types>\n        <members>ssd3s</members>\n        <name>DataStreamTemplate</name>\n    </types>"
+    }
+  ]
+}

@@ -1,0 +1,226 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "FieldServiceSettings - Metadata API",
+  "description": "Represents an organization’s Field Service settings.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "apptAssistantExpiration": {
+      "type": "int",
+      "description": "The expiration time of apptAssistantInfoUrl after which the customer stops seeing the mobile worker's location and estimated time of arrival. Available in API version 50.0 and later."
+    },
+    "apptAssistantInfoUrl": {
+      "type": "string",
+      "description": "The tracking URL that helps a customer see the mobile worker's estimated time of arrival and tracking information. Available in API version 50.0 and later."
+    },
+    "apptAssistantRadiusUnitValue": {
+      "type": "ApptAssistantRadiusUnit (enumeration of type string)",
+      "description": "The units for specifying the geofence radius. When the mobile worker enters this area, a Last Mile notification is automatically sent. Valid values are: Kilometer Meter Mile Yard Available in API version 50.0 and later."
+    },
+    "apptAssistantRadiusValue": {
+      "type": "int",
+      "description": "The geofence radius from the service appointment's address used for sending a notification to the customer when the mobile worker approaches the address. Available in API version 50.0 and later."
+    },
+    "apptAssistantStatus": {
+      "type": "string",
+      "description": "The status on the service appointment used to trigger En Route notification. The value has to match one of the service appointment's Status field options. When the mobile worker selects this status on a service appointment, the customer receives the En Route notification with tracking details. Available in API version 50.0 and later."
+    },
+    "canceledDefaultStatus": {
+      "type": "string",
+      "description": "The default status value when a service appointment is canceled. Available in API version 65.0 and later."
+    },
+    "cannotCompleteDefaultStatus": {
+      "type": "string",
+      "description": "The default status value when a service appointment can't be completed. Available in API version 65.0 and later."
+    },
+    "canPopulateGoogleAddress": {
+      "type": "boolean",
+      "description": "Allows desktop and mobile to send geolocation and map data to Google and Apple. Available in API version 57.0 and later."
+    },
+    "canSendAppCenterCrashReports": {
+      "type": "boolean",
+      "description": "Allows Salesforce to send crash reports to Microsoft App Center. Available in API version 57.0 and later."
+    },
+    "canStoreMobileAnalytics": {
+      "type": "boolean",
+      "description": "Allows third parties to store mobile analytics. Available in API version 57.0 and later."
+    },
+    "completedDefaultStatus": {
+      "type": "string",
+      "description": "The default status value when a service appointment is completed. Available in API version 65.0 and later."
+    },
+    "deepLinkPublicSecurityKey": {
+      "type": "string",
+      "description": "Provides a public security key for users accessing a deep link action in the Field Service mobile app. Hide the redirection warning by configuring the deep link URL with a security key. The deep link URL then processes the security check. Available in API version 54.0 and later."
+    },
+    "dispatchedDefaultStatus": {
+      "type": "string",
+      "description": "The default status value when a service appointment is dispatched. Available in API version 65.0 and later."
+    },
+    "doesAllowEditSaForCrew": {
+      "type": "boolean",
+      "description": "Lets service crew members edit their service appointments. This setting applies only if doesShareSaWithAr is selected. For assigned resources of type Crew, crew members get Read-Write access to their service appointment and, if doesShareSaParentWoWithAr is selected, to their service appointments’ parent work orders."
+    },
+    "doesShareSaParentWoWithAr": {
+      "type": "boolean",
+      "description": "Shares service appointments’ parent work orders with their assigned resources. This setting applies only if doesShareSaWithAr is selected and sharing access for work orders is set to Private or Public Read Only. Technician assigned resources get Read-Write access to their work orders. For assigned resources of type Crew, the crew leader gets Read-Write access and crew members get Read access. If the service appointment’s parent is a work order line item, assigned resources get access to the associated work order."
+    },
+    "doesShareSaWithAr": {
+      "type": "boolean",
+      "description": "Shares dispatched service appointments with their assigned resources. This setting applies only if sharing access for service appointments is set to Private or Public Read Only. Technician assigned resources get Read-Write access to their service appointments. For assigned resources of type Crew, the crew leader gets Read-Write access and crew members get Read access."
+    },
+    "enableDocumentBuilder": {
+      "type": "boolean",
+      "description": "Enables access to Document Builder feature."
+    },
+    "enableFloatingWorkOrder": {
+      "type": "boolean",
+      "description": "Enables floating work orders for the org. Allows users to create work orders with a floating recurrence cadence based on the previous work order's completion."
+    },
+    "enableLsdkMode": {
+      "type": "boolean",
+      "description": "Enables Lightning SDK in the Field Service mobile app."
+    },
+    "enablePopulateWorkOrderAddress": {
+      "type": "boolean",
+      "description": "Allows the address to be populated when work orders are generated from a maintenance plan."
+    },
+    "enableStandbyMode": {
+      "type": "boolean",
+      "description": "Turns on standby mode in the Field Service mobile app. When enabled, it helps mobile workers conserve battery and reduce distractions by pausing notifications and disabling data syncs when not actively working."
+    },
+    "enableWorkOrders": {
+      "type": "boolean",
+      "description": "Enables Work Orders for the org. This setting allows users to use the Work Order object, whether or not Field Service is enabled. When Field Service is enabled, you can’t turn off Work Orders."
+    },
+    "enableWorkPlansAutoGeneration": {
+      "type": "boolean",
+      "description": "Allows work plans and their work steps to be generated automatically when a work order or a work order line item is newly created. The specific work plans and work steps to be generated depends on matching criteria specified in Work Plan Selection Rules. Available in API version 52.0 and later."
+    },
+    "enableWorkStepManualStatusUpdate": {
+      "type": "boolean",
+      "description": "Allows a work step status to be updated manually. A prompt suggests a status update that users can accept or defer."
+    },
+    "fieldServiceNotificationsOrgPref": {
+      "type": "boolean",
+      "description": "Turns on in-app notifications for the Salesforce mobile app and Lightning Experience users. Notifications are sent when any of the following actions occurs on a work order or work order line item that they own or follow: A text or file post is added A tracked field is updated The record owner changes The resource assignments change on a related service appointment If the option to track all related objects is selected in the feed tracking settings for work orders, users are also notified when child records of work orders—such as service appointments—are created or deleted."
+    },
+    "fieldServiceOrgPref": {
+      "type": "boolean",
+      "description": "Indicates whether Field Service is enabled."
+    },
+    "inProgressDefaultStatus": {
+      "type": "string",
+      "description": "The default status value when a service appointment is in progress. Available in API version 65.0 and later."
+    },
+    "isGeoCodeSyncEnabled": {
+      "type": "boolean",
+      "description": "Syncs the location of a Service Resource to an Inventory object."
+    },
+    "isLocationHistoryEnabled": {
+      "type": "boolean",
+      "description": "Tracks the location history of a Service Resource."
+    },
+    "mobileFeedbackEmails": {
+      "type": "string",
+      "description": "Stores an email address to which a feedback email is sent when users leave feedback from the Field Service mobile app. Available in API version 54.0 and later."
+    },
+    "noneDefaultStatus": {
+      "type": "string",
+      "description": "The default status value when a service appointment has no specific status. Available in API version 65.0 and later."
+    },
+    "o2EngineEnabled": {
+      "type": "boolean",
+      "description": "Enables Field Service Enhanced Scheduling and Optimization. The default value is false. Available in API version 55.0 and later."
+    },
+    "objectMappingItem": {
+      "type": "ObjectMappingItem",
+      "description": "Represents an organization's custom field mapping for Work Plan or Work Step generation. Custom Fields can be mapped from WorkPlanTemplate to WorkPlan, WorkStepTemplate to WorkStep, or WorkPlanTemplateEntry to WorkStep. Available in API version 52.0 and later."
+    },
+    "optimizationServiceAccess": {
+      "type": "boolean",
+      "description": "Allows the optimization service to access data in your Salesforce org."
+    },
+    "overrideDefaultLwcStyling": {
+      "type": "boolean",
+      "description": "Allows the Field Service mobile app to override the default Lightning Web Component (LWC) styling with custom or branded styles. When enabled, it applies custom styling configurations (such as brand colors, themes, and visual elements) to LWCs within the mobile application."
+    },
+    "scheduledDefaultStatus": {
+      "type": "string",
+      "description": "The default status value when a service appointment is scheduled. Available in API version 65.0 and later."
+    },
+    "serviceAppointmentsDueDateOffsetOrgValue": {
+      "type": "int",
+      "description": "Indicates the number of days past the Created Date that the Due Date on auto-created service appointments should fall. Work types include an option to automatically add a service appointment to new work orders or work order line items using the work type."
+    },
+    "workOrderDurationSource": {
+      "type": "WorkOrderDurationSource (enumeration of type string)",
+      "description": "The source for the work order duration value. Possible values are: WorkType TotalFromWorkPlan Custom Available in API version 55.0 and later."
+    },
+    "workOrderLineItemSearchFields": {
+      "type": "string",
+      "description": "The work order line item fields that the search engine should scan to suggest knowledge articles on work order line items."
+    },
+    "workOrderSearchFields": {
+      "type": "string",
+      "description": "The work order fields that the search engine should scan to suggest knowledge articles on work orders."
+    }
+  },
+  "sub_types": {
+    "ObjectMappingItem": {
+      "mappingType": {
+        "type": "string",
+        "description": "The type of object mapping. Valid values are: WorkPlans_WorkPlanTemplate_WorkPlan — Maps a WorkPlanTemplate to a WorkPlan WorkPlans_WorkStepTemplate_WorkStep — Maps a WorkStepTemplate to a WorkStep WorkPlans_WorkPlanTemplateEntry_WorkStep — Maps a WorkPlanTemplateEntry to a WorkStep"
+      },
+      "objectMapping": {
+        "type": "ObjectMapping",
+        "description": "The object mapping details."
+      }
+    },
+    "ObjectMapping": {
+      "inputObject": {
+        "type": "string",
+        "description": "The name of the object type containing the source fields for mapping. Valid values are: WorkPlanTemplate WorkStepTemplate WorkPlanTemplateEntry",
+        "required": true
+      },
+      "mappingFields": {
+        "type": "[ObjectMappingField]",
+        "description": "The mapping of source object fields to target object fields.",
+        "required": true
+      },
+      "outputObject": {
+        "type": "string",
+        "description": "The name of the object type that receives data from the source fields. Valid values are: WorkPlan WorkStep",
+        "required": true
+      }
+    },
+    "ObjectMappingField": {
+      "inputField": {
+        "type": "string",
+        "description": "The name of a custom field supplying source data. This field is from the object specified in inputObject.",
+        "required": true
+      },
+      "outputField": {
+        "type": "string",
+        "description": "The name of a custom field that receives data from the source field specified in inputField. This field is from the object specified in outputObject.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ApptAssistantRadiusUnit\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Kilometer\"/>\n    <xsd:enumeration value=\"Meter\"/>\n    <xsd:enumeration value=\"Mile\"/>\n    <xsd:enumeration value=\"Yard\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FieldServiceSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"advancedDataSyncOrgPreference\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"apptAssistantExpiration\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"apptAssistantInfoUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"apptAssistantRadiusUnitValue\" minOccurs=\"0\" type=\"tns:ApptAssistantRadiusUnit\"/>\n        <xsd:element name=\"apptAssistantRadiusValue\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"apptAssistantStatus\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"canPopulateGoogleAddress\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"canSendAppCenterCrashReports\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"canStoreMobileAnalytics\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"deepLinkPublicSecurityKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"doesAllowEditSaForCrew\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesAvlCalcInclOvertime\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesAvlCalcInclPrimOnly\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesShareSaParentWoWithAr\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesShareSaWithAr\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAdvancedDataSync\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableBatchWindow\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDocumentBuilder\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFloatingWorkOrder\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLsdkMode\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePopulateWorkOrderAddress\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableServiceAppointmentLifecycle\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableStandbyMode\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableWorkOrders\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableWorkPlansAutoGeneration\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableWorkStepManualStatusUpdate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enrouteStatus\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"fieldServiceNotificationsOrgPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"fieldServiceOrgPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isGeoCodeSyncEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isLocationHistoryEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"mobileFeedbackEmails\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"o2EngineEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"objectMappingItem\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ObjectMappingItem\"/>\n        <xsd:element name=\"optimizationServiceAccess\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"overrideDefaultLwcStyling\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"serviceAppointmentsDueDateOffsetOrgValue\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"workOrderDurationSource\" minOccurs=\"0\" type=\"tns:WorkOrderDurationSource\"/>\n        <xsd:element name=\"workOrderLineItemSearchFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"workOrderSearchFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"MappingType\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"ObjectMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"inputObject\" type=\"xsd:string\"/>\n    <xsd:element name=\"mappingFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ObjectMappingField\"/>\n    <xsd:element name=\"outputObject\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ObjectMappingField\">\n  <xsd:sequence>\n    <xsd:element name=\"inputField\" type=\"xsd:string\"/>\n    <xsd:element name=\"outputField\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ObjectMappingItem\">\n  <xsd:sequence>\n    <xsd:element name=\"mappingType\" type=\"tns:MappingType\"/>\n    <xsd:element name=\"objectMapping\" type=\"tns:ObjectMapping\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"WorkOrderDurationSource\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"WorkType\"/>\n    <xsd:enumeration value=\"TotalFromWorkPlan\"/>\n    <xsd:enumeration value=\"Custom\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This sample file shows a subset of the possible field service settings that you can customize.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<FieldServiceSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <doesAllowEditSaForCrew>false</doesAllowEditSaForCrew>\n   <doesShareSaParentWoWithAr>false</doesShareSaParentWoWithAr>\n   <doesShareSaWithAr>false</doesShareSaWithAr>\n   <enableWorkOrders>false</enableWorkOrders>\n   <enableWorkPlansAutoGeneration>true</enableWorkPlansAutoGeneration>\n   <fieldServiceNotificationsOrgPref>false</fieldServiceNotificationsOrgPref>\n   <fieldServiceOrgPref>true</fieldServiceOrgPref>\n   <isGeoCodeSyncEnabled>false</isGeoCodeSyncEnabled>\n   <isLocationHistoryEnabled>false</isLocationHistoryEnabled>\n   <o2EngineEnabled>false</o2EngineEnabled>\n   <objectMappingItem>\n      <mappingType>WorkPlans_WorkPlanTemplate_WorkPlan</mappingType>\n      <objectMapping>\n         <inputObject>WorkPlanTemplate</inputObject>\n         <mappingFields>\n            <inputField>WorkPlanTemplate_CustomNumberField__c</inputField>\n            <outputField>WorkPlan_CustomNumberField__c</outputField>\n         </mappingFields>\n         <mappingFields>\n            <inputField>WorkPlanTemplate_CustomTextField__c</inputField>\n            <outputField>WorkPlan_CustomPicklistField__c</outputField>\n         </mappingFields>\n         <outputObject>WorkPlan</outputObject>\n      </objectMapping>\n   </objectMappingItem>\n   <objectMappingItem>\n      <mappingType>WorkPlans_WorkStepTemplate_WorkStep</mappingType>\n      <objectMapping>\n         <inputObject>WorkStepTemplate</inputObject>\n         <mappingFields>\n            <inputField>WokStepTemplate_CustomNumberField__c</inputField>\n            <outputField>WokStep_CustomNumberField__c</outputField>\n         </mappingFields>\n         <mappingFields>\n            <inputField>WokStepTemplate_CustomTextField__c</inputField>\n            <outputField>WokStep_CustomTextField__c</outputField>\n         </mappingFields>\n         <outputObject>WorkStep</outputObject>\n      </objectMapping>\n   </objectMappingItem>\n   <objectMappingItem>\n      <mappingType>WorkPlans_WorkPlanTemplateEntry_WorkStep</mappingType>\n      <objectMapping>\n         <inputObject>WorkPlanTemplateEntry</inputObject>\n         <mappingFields>\n            <inputField>WorkPlanTemplateEntry_CustomDateField__c</inputField>\n            <outputField>WokStep_CustomDateField__c</outputField>\n         </mappingFields>\n         <outputObject>WorkStep</outputObject>\n      </objectMapping>\n   </objectMappingItem>\n   <optimizationServiceAccess>false</optimizationServiceAccess>\n   <serviceAppointmentsDueDateOffsetOrgValue>7</serviceAppointmentsDueDateOffsetOrgValue>\n   <workOrderLineItemSearchFields>Subject</workOrderLineItemSearchFields>\n   <workOrderSearchFields>Subject</workOrderSearchFields>\n</FieldServiceSettings>"
+    }
+  ]
+}

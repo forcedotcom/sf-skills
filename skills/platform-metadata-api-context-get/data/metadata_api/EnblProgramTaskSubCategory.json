@@ -1,0 +1,47 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EnblProgramTaskSubCategory - Metadata API",
+  "description": "Represents a custom exercise type that an Enablement admin adds to an Enablement program in Program Builder. A custom exercise type also requires a corresponding EnblProgramTaskDefinition record for Program Builder and corresponding LearningItem and LearningItemType records for when users take the exercise in the Guidance Center.",
+  "file_information": ".enblProgramTaskSubCategory",
+  "directory_location": "enblProgramTaskSubCategories",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "The unique programmatic name for the EnblProgramTaskSubCategory record."
+    },
+    "icon": {
+      "type": "string",
+      "required": true,
+      "description": "The icon to use for the custom exercise type in Program Builder. Use the format iconType:iconName, where the values correspond to icon categories and names from the Salesforce Lightning Design System. iconType is the type of icon, such as standard or doctype. iconName is the icon name, such as flow or slide. For example, to use the Standard type Flow icon, this value is standard:flow. For details, see Implement Custom Exercise Types for Enablement Programs in the Sales Programs and Partner Tracks with Enablement Developer Guide."
+    },
+    "learningItemType": {
+      "type": "string",
+      "required": true,
+      "description": "The programmatic name of the LearningItemType record that represents this custom exercise type in the Guidance Center when users take a program."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for the EnblProgramTaskSubCategory, which is defined when it’s created."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an EnblProgramTaskSubCategory component for a custom exercise type that shows a screen flow.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EnblProgramTaskSubCategory xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <developerName>ScreenFlowTaskSubCategory</developerName>\n    <icon>standard:flow</icon>\n    <learningItemType>ScreenFlowLearningItemType</learningItemType>\n    <masterLabel>Screen Flow Exercise</masterLabel>\n</EnblProgramTaskSubCategory>"
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "RetrievalSummaryDefinition - Metadata API",
+  "description": "Represents a metadata type that stores the header information of a retrieval definition. It enables the configuration of data retrieval patterns for summarizing related records across object relationships.",
+  "file_information": ".retrievalSummaryDefinition",
+  "directory_location": "retrievalSummaryDefinitions",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name when RetrievalSummaryDefinition is created."
+    },
+    "retrievalSummaryDefFields": {
+      "type": "RetrievalSummaryDefField[]",
+      "description": "Collection of fields to retrieve from the root object of the retrieval definition. Each field definition specifies which field from the target object should be included in the retrieval and the order in which it should be processed."
+    },
+    "retrievalSummaryDefObjects": {
+      "type": "RetrievalSummaryDefObject[]",
+      "description": "Collection of rollup definitions that aggregate data from related objects. Each object definition specifies a related object, the aggregation logic to apply, and the fields to retrieve from that object. This enables hierarchical data aggregation across object relationships."
+    },
+    "rootObject": {
+      "type": "string",
+      "required": true,
+      "description": "API name of the primary object that serves as the starting point for the retrieval definition. This object serves as the anchor point for all retrieval and rollup operations defined in this metadata. The value must be a valid Salesforce object API name."
+    }
+  },
+  "sub_types": {
+    "RetrievalSummaryDefField": {
+      "field": {
+        "type": "string",
+        "required": true,
+        "description": "API name of the field to retrieve from the target object. This must be a valid field API name on the specified object."
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "required": true,
+        "description": "Processing order of the field in the retrieval operation. Fields are processed in ascending sequence number order. This allows you to control the order in which fields are displayed."
+      }
+    },
+    "RetrievalSummaryDefObject": {
+      "recordAggregationDefinition": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to the aggregation definition that specifies how data from the related object must be aggregated. This parameter references a RecordAggregationDefinition."
+      },
+      "retrievalSummaryDefFields": {
+        "type": "RetrievalSummaryDefField[]",
+        "description": "Collection of fields to retrieve from this related object. Each field definition specifies which field should be included and in what order. This is an optional array that allows you to specify additional fields beyond those defined in the aggregation definition."
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "required": true,
+        "description": "Processing order of the rollup operation. Rollups are processed in ascending sequence number order, allowing you to control the hierarchy of data aggregation when multiple related objects are involved."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a RetrievalSummaryDefinition component that retrieves data from an Account object and includes a rollup from related Opportunity records.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<RetrievalSummaryDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <masterLabel>Account Revenue Summary</masterLabel>\n   <rootObject>Account</rootObject>\n   <retrievalSummaryDefFields>\n      <field>Name</field>\n      <sequenceNumber>1</sequenceNumber>\n   </retrievalSummaryDefFields>\n   <retrievalSummaryDefFields>\n      <field>Industry</field>\n      <sequenceNumber>2</sequenceNumber>\n   </retrievalSummaryDefFields>\n   <retrievalSummaryDefObjects>\n      <recordAggregationDefinition>OpportunityRevenueRollup</recordAggregationDefinition>\n      <sequenceNumber>1</sequenceNumber>\n      <retrievalSummaryDefFields>\n         <field>Amount</field>\n         <sequenceNumber>1</sequenceNumber>\n      </retrievalSummaryDefFields>\n      <retrievalSummaryDefFields>\n         <field>CloseDate</field>\n         <sequenceNumber>2</sequenceNumber>\n      </retrievalSummaryDefFields>\n   </retrievalSummaryDefObjects>\n</RetrievalSummaryDefinition>"
+    }
+  ]
+}

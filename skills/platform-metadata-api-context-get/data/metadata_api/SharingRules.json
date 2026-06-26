@@ -1,0 +1,186 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition",
+    "child_metadata_types"
+  ],
+  "title": "SharingRules - Metadata API",
+  "description": "Represents the base container for sharing rules, which can be criteria-based, ownership-based, territory-based, or for guest user access. SharingRules enables you to share records with a set of users, using rules that specify the access level for the target user group.",
+  "file_information": "In API version 33.0 and later, components are stored in the sharingRules folder and their file name matches the object name with the suffix .sharingRules. Criteria-based, owner-based, territory-based, and guest user sharing rules are all contained in a object.sharingRule file.\n\nBefore API version 33.0, SharingRules components are stored in their corresponding object directory and the file name matches the object name. For example, the accountSharingRules directory contains an Account.sharingRules file for account sharing rules. SharingRules for custom objects are stored in the customObjectSharingRules directory, which contains files with the .sharingRules extension such as ObjA__c.sharingRules, where ObjA refers to the developer name of a custom object type.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "sharingCriteriaRules": {
+      "type": "SharingCriteriaRule[]",
+      "description": "An array of criteria-based sharing rules. Available in API version 33.0 and later."
+    },
+    "sharingGuestRules": {
+      "type": "SharingGuestRule[]",
+      "description": "An array of guest user sharing rules. Available in API version 47.0 and later."
+    },
+    "sharingOwnerRules": {
+      "type": "SharingOwnerRule[]",
+      "description": "An array of ownership-based sharing rules. Available in API version 33.0 and later."
+    },
+    "sharingTerritoryRules": {
+      "type": "SharingTerritoryRule[]",
+      "description": "An array of territory-based sharing rules. Available in API version 33.0 and later."
+    }
+  },
+  "sub_types": {
+    "SharingCriteriaRule": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "Advanced filter conditions that are specified for the sharing rule."
+      },
+      "criteriaItems": {
+        "type": "FilterItem[]",
+        "description": "An array of the boolean criteria (conditions) for the sharing rule."
+      },
+      "includeRecordsOwnedByAll": {
+        "type": "boolean",
+        "description": "Indicates whether records owned by users who can’t have an assigned role are included in the records shared (true) or not (false). Examples of users who can’t have an assigned role are high-volume users and system users such as automated process users.or Salesforce system users. You can’t edit this field after the sharing rule is created.",
+        "required": true
+      }
+    },
+    "SharingGuestRule": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "Advanced filter conditions that are specified for the sharing rule. Available in API version 48.0 and later."
+      },
+      "criteriaItems": {
+        "type": "FilterItem[]",
+        "description": "An array of the boolean criteria (conditions) for the sharing rule. Available in API version 48.0 and later."
+      },
+      "includeHVUOwnedRecords": {
+        "type": "boolean",
+        "description": "Indicates whether records owned by high-volume community or site users are included in the records shared (true) or not (false). By default, only records owned by authenticated users, guest users, and queues are included in sharing rules. This field has a default value of false. Available in API version 52.0 and later. You can’t edit this field after the sharing rule is created.",
+        "required": true
+      }
+    },
+    "SharingOwnerRule": {
+      "sharedFrom": {
+        "type": "SharedTo",
+        "description": "Specifies the record owners. If you’re using Sales Territories, use modelName.territoryName for the shared-to and shared-from territory and territoryAndSubordinates values on the SharedTo type, where: modelName equals the name of the active territory model in the API. territoryName equals the territory’s name in the API.",
+        "required": true
+      }
+    },
+    "AccountSharingRules": {
+      "criteriaBasedRules": {
+        "type": "AccountCriteriaBasedSharingRule[]",
+        "description": "List that defines user criteria-based rules."
+      },
+      "ownerRules": {
+        "type": "AccountOwnerSharingRule[]",
+        "description": "List that defines user membership-based rules."
+      }
+    },
+    "CampaignSharingRules": {
+      "criteriaBasedRules": {
+        "type": "CampaignCriteriaBasedSharingRule[]",
+        "description": "List that defines user criteria-based rules."
+      },
+      "ownerRules": {
+        "type": "CampaignOwnerSharingRule[]",
+        "description": "List that defines user membership-based rules."
+      }
+    },
+    "CaseSharingRules": {
+      "criteriaBasedRules": {
+        "type": "CaseCriteriaBasedSharingRule[]",
+        "description": "List that defines user criteria-based rules."
+      },
+      "ownerRules": {
+        "type": "CaseOwnerSharingRule[]",
+        "description": "List that defines user membership-based rules."
+      }
+    },
+    "ContactSharingRules": {
+      "criteriaBasedRules": {
+        "type": "ContactCriteriaBasedSharingRule[]",
+        "description": "List that defines user criteria-based rules."
+      },
+      "ownerRules": {
+        "type": "ContactOwnerSharingRule[]",
+        "description": "List that defines user membership-based rules."
+      }
+    },
+    "LeadSharingRules": {
+      "criteriaBasedRules": {
+        "type": "LeadCriteriaBasedSharingRule[]",
+        "description": "List that defines user criteria-based rules."
+      },
+      "ownerRules": {
+        "type": "LeadOwnerSharingRule[]",
+        "description": "List that defines user membership-based rules."
+      }
+    },
+    "OpportunitySharingRules": {
+      "criteriaBasedRules": {
+        "type": "OpportunityCriteriaBasedSharingRule[]",
+        "description": "List that defines user criteria-based rules."
+      },
+      "ownerRules": {
+        "type": "OpportunityOwnerSharingRule[]",
+        "description": "List that defines user membership-based rules."
+      }
+    },
+    "AccountTerritorySharingRules": {
+      "rules": {
+        "type": "AccountTerritorySharingRule[]",
+        "description": "List that defines user membership-based rules. The list of acceptable values for the sharedFrom fields are: territory territoryAndSubordinates"
+      }
+    },
+    "CustomObjectSharingRules": {
+      "criteriaBasedRules": {
+        "type": "CustomObjectCriteriaBasedSharingRule[]",
+        "description": "List that defines user criteria-based rules."
+      },
+      "ownerRules": {
+        "type": "CustomObjectOwnerSharingRule[]",
+        "description": "List that defines user membership-based rules."
+      }
+    },
+    "UserSharingRules": {
+      "criteriaBasedRules": {
+        "type": "UserCriteriaBasedSharingRule[]",
+        "description": "List that defines user criteria-based rules."
+      },
+      "membershipRules": {
+        "type": "UserMembershipSharingRule[]",
+        "description": "List that defines user membership-based rules."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AccountSharingRuleSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"caseAccessLevel\" type=\"xsd:string\"/>\n    <xsd:element name=\"contactAccessLevel\" type=\"xsd:string\"/>\n    <xsd:element name=\"opportunityAccessLevel\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FilterItem\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"operation\" type=\"tns:FilterOperation\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueField\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FilterOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"equals\"/>\n    <xsd:enumeration value=\"notEqual\"/>\n    <xsd:enumeration value=\"lessThan\"/>\n    <xsd:enumeration value=\"greaterThan\"/>\n    <xsd:enumeration value=\"lessOrEqual\"/>\n    <xsd:enumeration value=\"greaterOrEqual\"/>\n    <xsd:enumeration value=\"contains\"/>\n    <xsd:enumeration value=\"notContain\"/>\n    <xsd:enumeration value=\"startsWith\"/>\n    <xsd:enumeration value=\"includes\"/>\n    <xsd:enumeration value=\"excludes\"/>\n    <xsd:enumeration value=\"within\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SharedTo\">\n  <xsd:sequence>\n    <xsd:element name=\"allCustomerPortalUsers\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"allInternalUsers\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"allPartnerUsers\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"channelProgramGroup\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"channelProgramGroups\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"group\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"groups\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"guestUser\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"managerSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"managers\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"portalRole\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"portalRoleAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"queue\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"role\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"roleAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"roleAndSubordinatesInternal\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"roles\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"rolesAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territories\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territoriesAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territory\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territoryAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SharingBaseRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"accessLevel\" type=\"xsd:string\"/>\n        <xsd:element name=\"accountSettings\" minOccurs=\"0\" type=\"tns:AccountSharingRuleSettings\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"sharedTo\" type=\"tns:SharedTo\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharingCriteriaRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:SharingBaseRule\">\n      <xsd:sequence>\n        <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"criteriaItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n        <xsd:element name=\"includeRecordsOwnedByAll\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharingGuestRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:SharingBaseRule\">\n      <xsd:sequence>\n        <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"criteriaItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n        <xsd:element name=\"includeHVUOwnedRecords\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharingOwnerRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:SharingBaseRule\">\n      <xsd:sequence>\n        <xsd:element name=\"sharedFrom\" type=\"tns:SharedTo\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharingRules\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"sharingCriteriaRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingCriteriaRule\"/>\n        <xsd:element name=\"sharingGuestRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingGuestRule\"/>\n        <xsd:element name=\"sharingOwnerRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingOwnerRule\"/>\n        <xsd:element name=\"sharingTerritoryRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingTerritoryRule\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharingTerritoryRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:SharingOwnerRule\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following sample XML definition represents a criteria-based sharing rule in API version 33.0.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SharingRules xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <sharingCriteriaRules>\n        <fullName>AccountCriteriaShareWithCEO</fullName>\n        <accessLevel>Edit</accessLevel>\n        <accountSettings>\n            <caseAccessLevel>Read</caseAccessLevel>\n            <contactAccessLevel>Edit</contactAccessLevel>\n            <opportunityAccessLevel>Edit</opportunityAccessLevel>\n        </accountSettings>\n        <criteriaItems>\n            <field>Name</field>\n            <operation>startsWith</operation>\n            <value>Test</value>\n        </criteriaItems>\n        <description>my account criteria rule description</description>\n        <label>AccountCriteriaShareWithCEO</label>\n        <sharedTo>\n            <role>CEO</role>\n        </sharedTo>\n    </sharingCriteriaRules>\n</SharingRules>"
+    },
+    {
+      "description": "The following sample XML definition represents an ownership-based sharing rule in API version 33.0.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SharingRules xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <sharingOwnerRules>\n        <fullName>MyCase</fullName>\n        <accessLevel>Edit</accessLevel>\n        <description>my case test owner sharing rule desc</description>\n        <label>MyCase</label>\n        <sharedFrom>\n            <role>COO</role>\n        </sharedFrom>\n        <sharedTo>\n            <role>CEO</role>\n        </sharedTo>\n    </sharingOwnerRules>\n</SharingRules>"
+    },
+    {
+      "description": "The following sample XML definition represents a territory-based sharing rule in API version 33.0.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SharingRules xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <sharingTerritoryRules>\n        <fullName>MyAccountTerritoryRule</fullName>\n        <accessLevel>Read</accessLevel>\n        <accountSettings>\n            <caseAccessLevel>None</caseAccessLevel>\n            <contactAccessLevel>Read</contactAccessLevel>\n            <opportunityAccessLevel>None</opportunityAccessLevel>\n        </accountSettings>\n        <description>MyAccountTerritoryRule desc</description>\n        <label>MyAccountTerritoryRule</label>\n        <sharedFrom>\n            <territory>My_territory</territory>\n        </sharedFrom>\n        <sharedTo>\n            <role>CEO</role>\n        </sharedTo>\n    </sharingTerritoryRules>\n</SharingRules>"
+    },
+    {
+      "description": "The following is the definition of two account owner-based sharing rules in API version 32.0 and earlier. The file name corresponds to Account.sharingRules under the accountSharingRules directory. In this definition, ownerRules corresponds to AccountOwnerSharingRule.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AccountSharingRules xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <ownerRules>\n        <fullName>G1Dev_G2New</fullName>\n        <sharedFrom>\n            <group>G1Dev</group>\n        </sharedFrom>\n        <sharedTo>\n            <group>G2New</group>\n        </sharedTo>\n        <accountAccessLevel>Read</caseAccessLevel>\n        <caseAccessLevel>None</caseAccessLevel>\n        <contactAccessLevel>Read</contactAccessLevel>\n        <name>G1Dev_G2New</name>\n        <opportunityAccessLevel>Edit</opportunityAccessLevel>\n    </ownerRules>\n    <ownerRules>\n        <fullName>G2New_R1New</fullName>\n        <sharedFrom>\n            <group>G2New</group>\n        </sharedFrom>\n        <sharedTo>\n            <roleAndSubordinates>R1New</roleAndSubordinates>\n        </sharedTo>\n        <accountAccessLevel>Edit</accountAccessLevel>\n        <caseAccessLevel>Read</caseAccessLevel>\n        <contactAccessLevel>Edit</contactAccessLevel>\n        <name>G2New_R1New</name>\n        <opportunityAccessLevel>None</opportunityAccessLevel>\n    </ownerRules>\n</AccountSharingRules>"
+    },
+    {
+      "description": "The following is the definition of a user criteria-based sharing rule and a user membership-based sharing rule in API version 32.0 and earlier. The file name corresponds to User.sharingRules under the userSharingRules directory.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<UserSharingRules xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <criteriaBasedRules>\n        <fullName>shareUsers2</fullName>\n        <sharedTo>\n            <group>Asia_Division</group>\n        </sharedTo>\n        <criteriaItems>\n            <field>FirstName</field>\n            <operation>equals</operation>\n            <value>John</value>\n        </criteriaItems>\n        <name>shareUsers2</name>\n        <userAccessLevel>Read</userAccessLevel>\n    </criteriaBasedRules>\n    <membershipRules>\n        <fullName>shareUsers1</fullName>\n        <sharedTo>\n            <group>South_America_Division</group>\n        </sharedTo>\n        <sharedFrom>\n            <group>Asia_Division</group>\n        </sharedFrom>\n        <name>shareUsers1</name>\n        <userAccessLevel>Read</userAccessLevel>\n    </membershipRules>\n</UserSharingRules>"
+    }
+  ],
+  "child_metadata_types": "This entity contains the following child metadata types:\n\n- BaseSharingRule\n- CriteriaBasedSharingRule\n- OwnerSharingRule"
+}

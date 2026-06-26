@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Prompt Template: Basic Template
+
+    Use Case: Create reusable prompts for Einstein/Agentforce
+    - Standardize prompt patterns across org
+    - Include variable bindings from records
+    - Use in agents, flows, or Apex
+
+    Template Types:
+    - salesGeneration: Generate content (emails, summaries)
+    - fieldCompletion: Suggest field values
+    - recordSummary: Summarize records
+    - flexPrompt: General purpose
+
+    Setup Steps:
+    1. Replace all {{placeholder}} values
+    2. Define input variables and their sources
+    3. Deploy to org
+    4. Use in Agent Actions or Flows
+
+    File Location: force-app/main/default/promptTemplates/{{TemplateName}}.promptTemplate-meta.xml
+-->
+<PromptTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- API Name -->
+    <fullName>{{TemplateName}}</fullName>
+
+    <!-- Display name -->
+    <masterLabel>{{TemplateLabel}}</masterLabel>
+
+    <!-- Description of template purpose -->
+    <description>{{TemplateDescription}}</description>
+
+    <!--
+    Template Type:
+    - salesGeneration: Generate sales content
+    - fieldCompletion: Predict/suggest field values
+    - recordSummary: Summarize record data
+    - flexPrompt: General purpose (most flexible)
+    -->
+    <type>flexPrompt</type>
+
+    <!-- Active status -->
+    <isActive>true</isActive>
+
+    <!--
+    The Prompt Content:
+    Use {!variableName} for variable substitution.
+    Keep prompts clear, specific, and well-structured.
+    -->
+    <promptContent>
+You are an AI assistant helping with {{UseCaseDescription}}.
+
+Context:
+{!contextVariable}
+
+Task:
+{{TaskDescription}}
+
+Instructions:
+1. {{Instruction1}}
+2. {{Instruction2}}
+3. {{Instruction3}}
+
+Please provide a helpful response based on the context above.
+    </promptContent>
+
+    <!--
+    Input Variables:
+    Define variables that can be bound to record fields or runtime values.
+    -->
+    <promptTemplateVariables>
+        <developerName>contextVariable</developerName>
+        <promptTemplateVariableType>freeText</promptTemplateVariableType>
+        <isRequired>true</isRequired>
+    </promptTemplateVariables>
+
+    <!--
+    Variable Types:
+    - freeText: User-provided text input
+    - recordField: Bound to a specific field on a record
+    - relatedList: Data from related records
+    - resource: Static resource content
+
+    Example recordField variable:
+    <promptTemplateVariables>
+        <developerName>accountName</developerName>
+        <promptTemplateVariableType>recordField</promptTemplateVariableType>
+        <objectType>Account</objectType>
+        <fieldName>Name</fieldName>
+        <isRequired>true</isRequired>
+    </promptTemplateVariables>
+    -->
+
+    <!--
+    USAGE IN AGENT ACTIONS:
+
+    Option 1: Via GenAiFunction
+    Create GenAiFunction with invocationTargetType="prompt"
+    pointing to this template.
+
+    Option 2: Via Flow
+    Use "Prompt Template" action in Flow,
+    then wrap Flow in Agent Script action.
+
+    Option 3: Via Apex
+    Use ConnectApi.Einstein.evaluatePrompt() method.
+    -->
+</PromptTemplate>

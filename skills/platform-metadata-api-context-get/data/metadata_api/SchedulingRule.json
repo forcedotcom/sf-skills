@@ -1,0 +1,66 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SchedulingRule - Metadata API",
+  "description": "Represents a scheduling rule in Workforce Engagement Management. Scheduling rules determine when agents are assigned to shifts.",
+  "file_information": ".schedulingRule",
+  "directory_location": "SchedulingRules",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "isProtected": {
+      "type": "boolean",
+      "description": "Indicates whether the component is protected (true) or not (false). The default value is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the rule."
+    },
+    "schedulingCategory": {
+      "type": "SchedulingCategory (enumeration of type string)",
+      "required": true,
+      "description": "What the scheduling logic applies the rule to. The valid values are: A—Service Appointment B—Shift"
+    },
+    "schedulingRuleParameters": {
+      "type": "SchedulingRuleParameter[]",
+      "description": "Parameters associated with a scheduling rule, such as work limits."
+    },
+    "schedulingRuleType": {
+      "type": "SchedulingRuleType (enumeration of type string)",
+      "required": true,
+      "description": "Specifies the type of rule. The valid values are: A—Active Resources B—Match Skills C—Availability M—Match Territory Q—Match Queue RestTimeMinutes—Rest Time in Minutes. Available in API version 56.0 and later. W—Work Limit LimitNonstandardShifts—Specifies a rule type that limits how many non-standard shifts can be assigned to each agent. Available in API version 54.0 and later."
+    }
+  },
+  "sub_types": {
+    "SchedulingRuleParameter": {
+      "schedulingParameterKey": {
+        "type": "SchedulingParameterKey (enumeration of type string)",
+        "required": true,
+        "description": "The scheduling rule parameter key. C—Constraint Field Name L—Limit Type R—Resolution T—Time Resolution W—Work Unit ConsiderAbsence—Consider resource absences when evaluating availability. Available in API version 56.0 and later. ConsiderSTM—Consider service territory membership, which defines working hours, when evaluating availability. Available in API version 56.0 and later."
+      },
+      "value": {
+        "type": "string",
+        "description": "The scheduling rule parameter value."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SchedulingCategory\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"A\"/>\n    <xsd:enumeration value=\"B\"/>\n    <xsd:enumeration value=\"C\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"SchedulingParameterKey\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"L\"/>\n    <xsd:enumeration value=\"R\"/>\n    <xsd:enumeration value=\"W\"/>\n    <xsd:enumeration value=\"T\"/>\n    <xsd:enumeration value=\"C\"/>\n    <xsd:enumeration value=\"ConsiderAbsence\"/>\n    <xsd:enumeration value=\"ConsiderSTM\"/>\n    <xsd:enumeration value=\"BreakDurationMinutes\"/>\n    <xsd:enumeration value=\"BreakEarliestStartTime\"/>\n    <xsd:enumeration value=\"BreakLatestStartTime\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"SchedulingRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"schedulingCategory\" type=\"tns:SchedulingCategory\"/>\n        <xsd:element name=\"schedulingRuleParameters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SchedulingRuleParameter\"/>\n        <xsd:element name=\"schedulingRuleType\" type=\"tns:SchedulingRuleType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SchedulingRuleParameter\">\n  <xsd:sequence>\n    <xsd:element name=\"schedulingParameterKey\" type=\"tns:SchedulingParameterKey\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SchedulingRuleType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"M\"/>\n    <xsd:enumeration value=\"B\"/>\n    <xsd:enumeration value=\"W\"/>\n    <xsd:enumeration value=\"A\"/>\n    <xsd:enumeration value=\"RestTimeMinutes\"/>\n    <xsd:enumeration value=\"Q\"/>\n    <xsd:enumeration value=\"C\"/>\n    <xsd:enumeration value=\"ResourceBreak\"/>\n    <xsd:enumeration value=\"LimitNonstandardShifts\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a SchedulingRule component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SchedulingRule xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <masterLabel>Max Shifts Per Week</masterLabel>\n    <schedulingCategory>B</schedulingCategory>\n    <schedulingRuleParameters>\n        <schedulingParameterKey>C</schedulingParameterKey>\n        <value>MaxShiftsPerWeek</value>\n    </schedulingRuleParameters>\n    <schedulingRuleParameters>\n        <schedulingParameterKey>W</schedulingParameterKey>\n        <value>Shifts</value>\n    </schedulingRuleParameters>\n    <schedulingRuleParameters>\n        <schedulingParameterKey>R</schedulingParameterKey>\n        <value>Week</value>\n    </schedulingRuleParameters>\n    <schedulingRuleParameters>\n        <schedulingParameterKey>L</schedulingParameterKey>\n        <value>Max</value>\n    </schedulingRuleParameters>\n    <schedulingRuleType>W</schedulingRuleType>\n</SchedulingRule>"
+    }
+  ]
+}

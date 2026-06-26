@@ -1,0 +1,42 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Territory2Type - Metadata API",
+  "description": "Represents the metadata for a category of territories in Sales Territories. Every Territory2 must have a Territory2Type. This type extends the Metadata metadata type and inherits its fullName field. Available if Sales Territories has been enabled.",
+  "file_information": ".territory2Type",
+  "directory_location": "territory2Types",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "A description of the territory type."
+    },
+    "name": {
+      "type": "string",
+      "description": "The user interface label for the territory type.",
+      "required": true
+    },
+    "priority": {
+      "type": "int",
+      "description": "Used for Filter-Based Opportunity Territory Assignment (Pilot in Spring ’15 / Metadata API version 33). Lets you specify a priority for a territory type. For opportunity assignments, the filter examines all territories assigned to the account that the opportunity is assigned to. The account-assigned territory whose territory type priority is highest is then assigned to the opportunity. The priority field value on each territory type must be unique. Further, if there are multiple territories with the same territory type, and therefore the same priority, assigned to the account, no territory is not assigned to the opportunity.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Territory2Type\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"priority\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following example shows the definition of a Territory2Type component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Territory2Type xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <name>Geo</name>\n    <description>Geographic allocation</description>\n</Territory2Type>"
+    }
+  ]
+}

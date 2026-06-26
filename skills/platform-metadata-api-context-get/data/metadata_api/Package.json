@@ -1,0 +1,19 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "packagetypemembers",
+    "wsdl_segment"
+  ],
+  "title": "Package - Metadata API",
+  "description": "Specifies which metadata components to retrieve as part of a retrieve() call or defines a package of components.",
+  "packagetypemembers": {
+    "members": {
+      "description": "One or more named components, or the wildcard character (*) to retrieve all metadata components of the type specified in the <name> element. To retrieve a standard object, specify it by name. For example, <members>Account</members> retrieves the standard Account object."
+    },
+    "name": {
+      "description": "The type of metadata component to be retrieved. For example, <name>CustomObject</name> retrieves one or more custom objects as specified in the <members> element."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"APIAccessLevel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Unrestricted\"/>\n    <xsd:enumeration value=\"Restricted\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Package\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"apiAccessLevel\" minOccurs=\"0\" type=\"tns:APIAccessLevel\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"namespacePrefix\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"objectPermissions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileObjectPermissions\"/>\n        <xsd:element name=\"packageType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"postInstallClass\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"setupWeblink\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"types\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PackageTypeMembers\"/>\n        <xsd:element name=\"uninstallClass\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"version\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"PackageTypeMembers\">\n  <xsd:sequence>\n    <xsd:element name=\"members\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileObjectPermissions\">\n  <xsd:sequence>\n    <xsd:element name=\"allowCreate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"allowDelete\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"allowEdit\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"allowRead\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"modifyAllRecords\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"object\" type=\"xsd:string\"/>\n    <xsd:element name=\"viewAllFields\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"viewAllRecords\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RetrieveRequest\">\n  <xsd:sequence>\n    <xsd:element name=\"apiVersion\" type=\"xsd:double\"/>\n    <xsd:element name=\"packageNames\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"rootTypesWithDependencies\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"singlePackage\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"specificFiles\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"unpackaged\" minOccurs=\"0\" type=\"tns:Package\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SalesWorkQueueSettings - Metadata API",
+  "description": "Represents settings used to customize work queue options for third-party scoring. In Sales Engagement, you can add a custom number field on person accounts, contacts, or leads. Then, use the custom number field to sort the work queue. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".salesworkqueuesetting",
+  "directory_location": "salesworkqueuesettings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "featureName": {
+      "type": "string",
+      "description": "The feature that the SalesWorkQueueSettings record is configuring. The allowed value is ThirdPartyScore."
+    },
+    "targetEntity": {
+      "type": "string",
+      "description": "The type that the SalesWorkQueueSettings record is configuring. Possible values are: Contact Lead PersonAccount"
+    },
+    "targetField": {
+      "type": "string",
+      "description": "The developer name or ID of the custom number field that is used to sort the work queue. Custom fields must have a custom number data type. To use Einstein Intelligence Score for lead scoring, use ScoreIntelligence.Score for the developer name. To remove custom number fields from the work queue, use None."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SalesWorkQueueSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"featureName\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetEntity\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetField\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a SalesWorkQueueSettings component. The value for targetField is set to 00NRM000001g55D as an example of a custom field ID. Replace this value with the ID of your custom field.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SalesWorkQueueSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <featureName>ThirdPartyScore</featureName>\n    <targetEntity>Contact</targetEntity>\n    <targetField>00NRM000001g55D</targetField>\n</SalesWorkQueueSettings>"
+    }
+  ]
+}

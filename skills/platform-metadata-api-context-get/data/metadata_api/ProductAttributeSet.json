@@ -1,0 +1,33 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ProductAttributeSet - Metadata API",
+  "description": "Represents the ProductAttribute information being used as and attribute such as color_c, size_c .",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "A meaningful explanation of the attribute set."
+    },
+    "developerName": {
+      "type": "string",
+      "description": "A unique name for the attribute set."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The name of the attribute set."
+    },
+    "productAttributeSetItems": {
+      "type": "ProductAttributeSetItem",
+      "description": "A list of ProductAttributeSetItem."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProductAttributeSet\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"productAttributeSetItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProductAttributeSetItem\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ProductAttributeSetItem\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"isGroupedBy\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"sequence\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

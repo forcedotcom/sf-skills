@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CareRequestConfiguration - Metadata API",
+  "description": "Represents the details for a record type such as service request, drug request, or admission request. One or more record types can be associated with a care request.",
+  "file_information": ".careRequestConfiguration",
+  "directory_location": "careRequestConfigurations",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "careRequestRecordType": {
+      "type": "string",
+      "required": true,
+      "description": "The record type for the care request."
+    },
+    "careRequestRecords": {
+      "type": "CareRequestRecords[]",
+      "description": "The list of objects you can select to configure the care request."
+    },
+    "careRequestType": {
+      "type": "string",
+      "required": true,
+      "description": "The type of care request. For example, an appeal, a service request, or an admission."
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether the care request is active (true) or not (false)."
+    }
+  },
+  "sub_types": {
+    "CareRequestRecords": {
+      "careRequestRecord": {
+        "type": "string",
+        "required": true,
+        "description": "The object selected to configure the care request."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CareRequestConfiguration\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"careRequestRecordType\" type=\"xsd:string\"/>\n        <xsd:element name=\"careRequestRecords\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CareRequestRecords\"/>\n        <xsd:element name=\"careRequestType\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isDefaultRecordType\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"CareRequestRecords\">\n  <xsd:sequence>\n    <xsd:element name=\"careRequestRecord\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is an example of a CareRequestConfiguration component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CareRequestConfiguration xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <careRequestRecordType>DrugRequest</careRequestRecordType>\n    <careRequestRecords>\n        <careRequestRecord>CareRequestItem</careRequestRecord>\n    </careRequestRecords>\n    <careRequestRecords>\n        <careRequestRecord>CareRequestDrug</careRequestRecord>\n    </careRequestRecords>\n    <careRequestType>Drug Request</careRequestType>\n    <isActive>false</isActive>\n    <isDefaultRecordType>false</isDefaultRecordType>\n    <masterLabel>DrugRequest</masterLabel>\n</CareRequestConfiguration>"
+    }
+  ]
+}

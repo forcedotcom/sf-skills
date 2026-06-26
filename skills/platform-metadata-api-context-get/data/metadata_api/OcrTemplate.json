@@ -1,0 +1,180 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "OcrTemplate - Metadata API",
+  "description": "Represents the details of the mapping between a form and a Salesforce object using Intelligent Form Reader. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".ocrTemplate",
+  "directory_location": "ocrTemplates",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "Indicates whether the OCR template is active (true) or not (false)."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the OCR template."
+    },
+    "documentType": {
+      "type": "string",
+      "description": "The document type for which this template defines mappings.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label for the OCR template.",
+      "required": true
+    },
+    "ocrTargetObjects": {
+      "type": "OcrTargetObject[]",
+      "description": "Represents the details of the object to which information from a form is extracted and mapped."
+    },
+    "ocrTemplateSampleDocuments": {
+      "type": "OcrTemplateSampleDocument[]",
+      "description": "Represents the details of a sample document or a document type that's used as a reference while extracting and mapping information from a customer form."
+    },
+    "pageCount": {
+      "type": "integer",
+      "description": "The number of pages in the form from which information is extracted."
+    },
+    "templateName": {
+      "type": "string",
+      "description": "The name of the OCR template.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "OcrTargetObject": {
+      "ocrTargetObjectFieldMappings": {
+        "type": "OcrTargetObjFieldMapping[]",
+        "description": "Represents the details of how information from a form field is mapped to fields in an object."
+      },
+      "targetObject": {
+        "type": "string",
+        "description": "The object to which information from a form is mapped.",
+        "required": true
+      },
+      "targetObjectRecordType": {
+        "type": "string",
+        "description": "The developer name of the record type of the target object. Available in API version 56.0 and later."
+      }
+    },
+    "OcrTargetObjFieldMapping": {
+      "ocrSampleDocField": {
+        "type": "OcrSampleDocumentField[]",
+        "description": "The details of the field in a form whose value is extracted and mapped to a Salesforce object field."
+      },
+      "targetField": {
+        "type": "string",
+        "description": "The field to which information is mapped.",
+        "required": true
+      },
+      "type": {
+        "type": "OcrMappingType (enumeration of type string)",
+        "description": "Specifies the type of mapping. Available in API version 56.0 and later. Valid values are: FormField TableColumn The default value is FormField.",
+        "required": true
+      }
+    },
+    "OcrSampleDocumentField": {
+      "cellColumnNumber": {
+        "type": "int",
+        "description": "The column number in the item with the cell storing this field’s value. Available in API version 56.0 and later."
+      },
+      "cellColumnSpanValue": {
+        "type": "int",
+        "description": "The number of columns that span the cell storing this field’s value. Available in API version 56.0 and later."
+      },
+      "cellRowNumber": {
+        "type": "int",
+        "description": "The row number in the item with the cell storing this field’s value. Available in API version 56.0 and later."
+      },
+      "cellRowSpanValue": {
+        "type": "int",
+        "description": "The number of rows that span the cell storing this field’s value. Available in API version 56.0 and later."
+      },
+      "fieldLabelMaxX": {
+        "type": "double",
+        "description": "A normalized coordinate representing the right edge of the bounding box of the key."
+      },
+      "fieldLabelMaxY": {
+        "type": "double",
+        "description": "A normalized coordinate representing the bottom edge of the bounding box of the key."
+      },
+      "fieldLabelMinX": {
+        "type": "double",
+        "description": "A normalized coordinate representing the left edge of the bounding box of the key."
+      },
+      "fieldLabelMinY": {
+        "type": "double",
+        "description": "A normalized coordinate representing the top edge of the bounding box of the key."
+      },
+      "fieldValueName": {
+        "type": "string",
+        "description": "The name of the referred field value. Available in API version 56.0 and later."
+      },
+      "isAutoExtractedValue": {
+        "type": "boolean",
+        "description": "Indicates whether the key is automatically extracted (true) or not (false). Available in API version 57.0 and later. This field helps to distinguish auto-extracted keys from manual ones."
+      },
+      "keyContent": {
+        "type": "string",
+        "description": "The content in a particular area of the form, representing the field that is extracted by OCR."
+      },
+      "ocrSampleDocument": {
+        "type": "string",
+        "description": "The associated OCR sample document is used as a reference while extracting and mapping information from a customer form.",
+        "required": true
+      },
+      "ocrSampleDocumentPage": {
+        "type": "string",
+        "description": "A collection of fields that define a page in the OCR sample document."
+      },
+      "ocrSampleDocumentPageItem": {
+        "type": "OcrSampleDocumentPageItem",
+        "description": "A reference to the item on the sample document page containing this field's value. Available in API version 56.0 and later."
+      }
+    },
+    "OcrSampleDocumentPageItem": {
+      "hasHeader": {
+        "type": "boolean",
+        "description": "Indicates whether the OCR sample document page item has a header (true) or not (false). The default value is false. Available in API version 56.0 and later."
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "description": "The sequence number of the item on an OCR sample document page with multiple items. Available in API version 56.0 and later.",
+        "required": true
+      },
+      "title": {
+        "type": "string",
+        "description": "The title of the OCR sample document page item. Available in API version 56.0 and later."
+      },
+      "type": {
+        "type": "ItemType (enumeration of type string)",
+        "description": "Specifies the type of OCR sample document page item. Valid value is TABLE. Available in API version 56.0 and later.",
+        "required": true
+      }
+    },
+    "OcrTemplateSampleDocument": {
+      "ocrSampleDocument": {
+        "type": "string",
+        "description": "The associated OCR sample document is used as a reference while extracting and mapping information from a customer form."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a OcrTemplate component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OcrTemplate xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <active>false</active>\n   <documentType>Form</documentType>\n   <masterLabel>Form Test 222</masterLabel>\n   <ocrTargetObjects>\n      <ocrTargetObjFieldMappings>\n         <ocrSampleDocField>\n            <cellColumnNumber>1</cellColumnNumber>\n            <cellColumnSpanValue>1</cellColumnSpanValue>\n            <cellRowNumber>1</cellRowNumber>\n            <cellRowSpanValue>1</cellRowSpanValue>\n             <fieldLabelMaxX>0.5975854</fieldLabelMaxX>\n             <fieldLabelMaxY>0.46625894</fieldLabelMaxY>\n             <fieldLabelMinX>0.5065626</fieldLabelMinX>\n             <fieldLabelMinY>0.39605626</fieldLabelMinY>\n             <keyContent>Last Name</keyContent>\n             <ocrSampleDocument>image240</ocrSampleDocument>\n             <ocrSampleDocumentPage>1</ocrSampleDocumentPage>\n             <ocrSampleDocumentPageItem>\n                <hasHeader>false</hasHeader>\n                <sequenceNumber>1</sequenceNumber>\n                <title>Table1</title>\n                <type>TABLE</type>\n            </ocrSampleDocumentPageItem>\n        </ocrSampleDocField>\n      <targetField>Account.Name</targetField>\n      <type>TableColumn</type>\n      </ocrTargetObjFieldMappings>\n      <targetObject>Account</targetObject>\n      <targetObjectRecordType>Account.X240</targetObjectRecordType>\n   </ocrTargetObjects>\n   <ocrTemplateSampleDocuments>\n      <ocrSampleDocument>Form</ocrSampleDocument>\n   </ocrTemplateSampleDocuments>\n   <pageCount>10</pageCount>\n   <templateName>Form Test</templateName>\n</OcrTemplate>"
+    }
+  ]
+}

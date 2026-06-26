@@ -1,0 +1,93 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment"
+  ],
+  "title": "ExtlClntAppPushSettings - Metadata API",
+  "description": "Represents an external client app’s push notification settings.",
+  "file_information": ".ecaPush",
+  "directory_location": "extlClntAppPushSettings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "androidPushConfig": {
+      "type": "ExtlClntAppAndroidPushConfig",
+      "description": "Represents the push notification configuration of an Android mobile app."
+    },
+    "applePushConfig": {
+      "type": "ExtlClntAppApplePushConfig",
+      "description": "Represents the push notification configuration of an iOS mobile app."
+    },
+    "externalClientApplication": {
+      "type": "string",
+      "description": "The name of the associated external client app.",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "description": "Label for the external client app’s push notifications configuration."
+    },
+    "pushConfigLink": {
+      "type": "string",
+      "description": "Identifies the push notification credentials used by the app. Valid format is the org ID (for example, 00D000000000001 ) and an ExtlClntAppApplePushConfig or ExtlClntAppAndroidPushConfig record ID (for example, 1Dh000000000001 ) separated by a colon. For example: 00D000000000001:1Dh000000000001 If you configure pushConfigLink, you can’t also have androidPushConfig or applePushConfig in the same record."
+    },
+    "pushServiceType": {
+      "type": "PushServiceType (enumeration of type string)",
+      "description": "Identifies the mobile operating system of the mobile app. Valid values are: Apple Android",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "ExtlClntAppAndroidPushConfig": {
+      "fcmProject": {
+        "type": "string",
+        "description": "The ID of the Google Firebase project associated with the mobile app.",
+        "required": true
+      },
+      "serviceAccount": {
+        "type": "string",
+        "description": "The Base64-encoded Admin SDK private key for your Google Firebase service account. You can generate this key from the Service accounts tab in the Google Firebase console. The maximum length of the string is 8000 characters.",
+        "required": true
+      }
+    },
+    "ExtlClntAppApplePushConfig": {
+      "applicationBundle": {
+        "type": "string",
+        "description": "The bundle ID of the iOS mobile app from Apple App Store Connect."
+      },
+      "certificate": {
+        "type": "string",
+        "description": "The Base64-encoded TLS certificate with Apple Push Notification service (APNs) enabled. To generate and export this certificate, see Communicate with APNs using a TLS certificate in Apple Developer documentation."
+      },
+      "environment": {
+        "type": "ApplePushEnvironmentType (enumeration of type string)",
+        "description": "The Apple Push Notification service environment. Valid values are: Production Sandbox",
+        "required": true
+      },
+      "keyIdentifier": {
+        "type": "string",
+        "description": "The key identifier for the private key entered in the signingKey field. See Get a key identifier in Apple Developer documentation."
+      },
+      "password": {
+        "type": "string",
+        "description": "The password for the TLS certificate entered in the certificate field."
+      },
+      "signingKey": {
+        "type": "string",
+        "description": "The Base64-encoded private key with Apple Push Notification service (APNs) enabled. To generate and download this key, see Create a private key to access a service in Apple Developer documentation."
+      },
+      "teamIdentifier": {
+        "type": "string",
+        "description": "The team ID listed in the membership details of the Apple Developer account associated with the iOS mobile app."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ApplePushEnvironmentType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Sandbox\"/>\n    <xsd:enumeration value=\"Production\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ExtlClntAppAndroidPushConfig\">\n  <xsd:sequence>\n    <xsd:element name=\"fcmProject\" type=\"xsd:string\"/>\n    <xsd:element name=\"serviceAccount\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ExtlClntAppApplePushConfig\">\n  <xsd:sequence>\n    <xsd:element name=\"applicationBundle\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"certificate\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"environment\" type=\"tns:ApplePushEnvironmentType\"/>\n    <xsd:element name=\"keyIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"password\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"signingKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"teamIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ExtlClntAppPushSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"androidPushConfig\" minOccurs=\"0\" type=\"tns:ExtlClntAppAndroidPushConfig\"/>\n        <xsd:element name=\"applePushConfig\" minOccurs=\"0\" type=\"tns:ExtlClntAppApplePushConfig\"/>\n        <xsd:element name=\"externalClientApplication\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"pushConfigLink\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"pushServiceType\" type=\"tns:PushServiceType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"PushServiceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Apple\"/>\n    <xsd:enumeration value=\"Android\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

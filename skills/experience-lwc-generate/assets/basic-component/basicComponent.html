@@ -1,0 +1,111 @@
+<!--
+    BASIC LWC COMPONENT TEMPLATE - HTML
+
+    Template demonstrates:
+    - Conditional rendering (lwc:if / lwc:elseif / lwc:else)
+    - Iteration (for:each)
+    - Event binding (onclick)
+    - Data binding ({property})
+    - Slots for composition
+-->
+<template>
+    <lightning-card title={cardTitle} icon-name="standard:record">
+        <!-- Card Actions Slot -->
+        <lightning-button-icon
+            slot="actions"
+            icon-name="utility:refresh"
+            alternative-text="Refresh"
+            onclick={handleRefresh}>
+        </lightning-button-icon>
+
+        <!-- Loading State -->
+        <template lwc:if={isLoading}>
+            <div class="slds-p-around_medium slds-align_absolute-center">
+                <lightning-spinner
+                    alternative-text="Loading"
+                    size="small">
+                </lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error State -->
+        <template lwc:elseif={error}>
+            <div class="slds-p-around_medium">
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    <lightning-icon
+                        icon-name="utility:error"
+                        alternative-text="Error"
+                        size="x-small"
+                        class="slds-m-right_x-small">
+                    </lightning-icon>
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>{error}</h2>
+                </div>
+            </div>
+        </template>
+
+        <!-- Empty State -->
+        <template lwc:elseif={isEmpty}>
+            <div class="slds-p-around_medium slds-text-align_center">
+                <lightning-icon
+                    icon-name="utility:info"
+                    alternative-text="Info"
+                    size="small"
+                    class="slds-m-bottom_small">
+                </lightning-icon>
+                <p class="slds-text-body_regular slds-text-color_weak">
+                    No records found
+                </p>
+            </div>
+        </template>
+
+        <!-- Records List -->
+        <template lwc:else>
+            <ul class="slds-has-dividers_around-space">
+                <template for:each={records} for:item="record">
+                    <li key={record.Id} class="slds-item">
+                        <article class="slds-tile slds-tile_board">
+                            <div class="slds-tile__detail">
+                                <button
+                                    type="button"
+                                    data-id={record.Id}
+                                    data-name={record.Name}
+                                    onclick={handleRecordClick}
+                                    class="slds-button slds-button_reset slds-text-link_reset">
+                                    <div class="slds-grid slds-grid_align-spread">
+                                        <div class="slds-col">
+                                            <p class="slds-text-heading_small">
+                                                {record.Name}
+                                            </p>
+                                            <template lwc:if={record.Description}>
+                                                <p class="slds-text-body_small slds-text-color_weak">
+                                                    {record.Description}
+                                                </p>
+                                            </template>
+                                        </div>
+                                        <div class="slds-col slds-no-flex">
+                                            <lightning-icon
+                                                icon-name="utility:chevronright"
+                                                alternative-text="View"
+                                                size="x-small">
+                                            </lightning-icon>
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
+                        </article>
+                    </li>
+                </template>
+            </ul>
+        </template>
+
+        <!-- Footer Slot -->
+        <div slot="footer">
+            <template lwc:if={hasRecords}>
+                <p class="slds-text-body_small slds-text-color_weak">
+                    Showing {recordCount} records
+                </p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

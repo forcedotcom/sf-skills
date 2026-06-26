@@ -1,0 +1,387 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "brandingsets_folder",
+    "config_folder",
+    "routes_folder",
+    "themes_folder",
+    "variations_folder",
+    "views_folder",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExperienceBundle - Metadata API",
+  "description": "Represents a text-based code structure of the settings and site components, such as pages, branding sets, and themes that make up an Experience Builder site. Developers can quickly update and deploy Experience Builder sites programmatically using their preferred development tools. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": "ExperienceBundle components have the suffix .json and are stored in the experiences folder when retrieved. Each Experience Builder site in your org has its own folder. Each of these folders contains other folders for the supported properties.\n\nThe ExperienceBundle can contain one or more site definitions under the experiences folder. Each site definition has resource folders for brandingSets, config, routes, themes, variations, and views, each with additional, related configuration information in JSON files. Here’s an example site definition, showing the resource folders.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "experienceResources": {
+      "type": "ExperienceResources[]",
+      "description": "The list of resources in this ExperienceBundle. Each resource represents an artifact of a site such as brandingSets, config, routes, themes, variations, and views."
+    },
+    "label": {
+      "type": "string",
+      "description": "Represents the name of the ExperienceBundle.",
+      "required": true
+    },
+    "type": {
+      "type": "SiteType (enumeration of type string)",
+      "description": "Identifies the kind of site. Only Experience Builder sites are supported, using the value ChatterNetworkPicasso.",
+      "required": true
+    },
+    "urlPathPrefix": {
+      "type": "string",
+      "description": "Specify a URL prefix for an Experience Builder site. For example, in the site URL SitesSubdomainName.force.com/customers, customers is the UrlPathPrefix. Note: For authenticated LWR sites created before Winter ’23 and Aura sites, the URL path prefix ends in /s, and the part of the path without the /s must match the Network metadata type’s URL. For unauthenticated LWR sites and authenticated LWR sites created after Winter ’23 through Experience Builder or Connect API, this path doesn’t contain /s, and the path can be anything as long as there’s no conflict. Sample meta.xml file <?xml version=\"1.0\" encoding=\"UTF-8\"?> <ExperienceBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\"> <label>SampleStarterSite2</label> <type>ChatterNetworkPicasso</type> <urlPathPrefix>SampleStarterSite2/s</urlPathPrefix> </ExperienceBundle>"
+    }
+  },
+  "brandingsets_folder": {
+    "brandingSetType": {
+      "description": "Required in LWR sites. Not applicable for Aura sites. Represents whether the color palette stored in the branding set is for the entire site or a specific section. You can’t change one branding set type to another. Available in API Version 52.0 and later. Valid values are: APP: The branding set applies to the entire site. There can be only one branding set of this type. SCOPED: The branding set applies to a specific section.",
+      "required": true
+    },
+    "definitionName": {
+      "description": "Represents the name for the branding set that is used in grouping branding sets under a theme. Defined as theme :branding- theme. For example, if the site theme is Stella, the definitionName would be stella:branding-stella. In addition, there are several standard templates that have unique naming: Customer Account Portal uses cpt:branding-cpt Customer Service uses service:branding-service Help Center uses helpCenter:branding-helpCenter Partner Central uses prm:branding-prm Build Your Own uses starter:branding-starter Note: The combination of definitionName + label must be unique in your org.",
+      "required": true
+    },
+    "id": {
+      "description": "Represents the component’s GUID."
+    },
+    "label": {
+      "description": "Represents the name of the branding set. Note: The combination of definitionName + label must be unique in your org."
+    },
+    "type": {
+      "description": "Represents the component type. The only supported value is brandingSet."
+    },
+    "values": {
+      "description": "Represents a map of branding values that can be applied to a site.",
+      "required": true
+    }
+  },
+  "config_folder": {
+    "authenticationType": {
+      "description": "For LWR sites, indicates whether guest users have access to the site. Note: For Aura sites, use isAvailableToGuests instead. Valid values are: AUTHENTICATED: The site isn’t public. Only authenticated users can access the site after logging in. AUTHENTICATED_WITH_PUBLIC_ACCESS_ENABLED: The site is an authenticated site, but the Public can access the site checkbox is enabled in Experience Builder in Settings | General. Guest users can access the site. UNAUTHENTICATED: The unauthenticated site is publicly available to anyone on the web, and doesn’t support login or authentication. Guest users can access the site. UNAUTHENTICATED isn’t supported for LWR sites created after Winter ’23 through Experience Builder or Connect API. To allow guest user access, we recommend using AUTHENTICATED_WITH_PUBLIC_ACCESS_ENABLED. Available in API version 51.0 and later."
+    },
+    "forgotPasswordRouteId": {
+      "description": "Represents the ID of the route to use when a user forgets their password. Note: Unsupported if the active Experience Builder template for the site doesn't support login (such as Help Center)."
+    },
+    "isAvailableToGuests": {
+      "description": "For Aura sites, indicates whether public users have access to the site (true) or not (false). The default value is false. Note: For LWR sites, use authenticationType instead."
+    },
+    "isFilteredComponentsView": {
+      "description": "Indicates whether the list of components is filtered based on the current page type (true) or not (false). Some components require specific parameters from the page and don't work unless you manually configure them. The default value is false."
+    },
+    "isLockerServiceEnabled": {
+      "description": "Indicates whether Lightning Locker is enabled (true) or disabled (false). The default value is true. Available in API version 55.0 and later."
+    },
+    "isProgressiveRenderingEnabled": {
+      "description": "Indicates whether the display order of page components is prioritized (true) or not (false). The default value is false."
+    },
+    "loginAppPageId": {
+      "description": "Represents the ID of the login page. Unsupported if the active Experience Builder template for the site doesn't support login (such as Help Center)."
+    },
+    "mainAppPageId": {
+      "description": "Represents the ID of the main page.",
+      "required": true
+    },
+    "preferredDomain": {
+      "description": "Represents the name of the domain to use for indexing a site’s pages. Improves search engine results. Available in API version 48.0 and later."
+    },
+    "preferredDomainId": {
+      "description": "Represents the domain to use for indexing a site’s pages. Improves search engine results. Removed in API version 48.0. Use preferredDomain instead."
+    },
+    "selfRegistrationRouteId": {
+      "description": "Represents the ID of the login route to use for self-registration. Unsupported if the active Experience Builder template for the site doesn't support login (such as Help Center)."
+    },
+    "type": {
+      "description": "Represents the component type. The only supported value is appPage.",
+      "required": true
+    },
+    "id": {
+      "description": "Represents the component's GUID.",
+      "required": true
+    },
+    "isActive": {
+      "description": "Indicates whether a language is available to site visitors in the language selector (true) or not (false). The default value is true."
+    },
+    "trustedSiteName": {
+      "description": "Name of the allowlisted source as it appears in the UI."
+    },
+    "trustedSiteUrl": {
+      "description": "The fully qualified URL of the allowlisted source."
+    },
+    "defaultCode": {
+      "description": "Represents the base language code plus the country code where used.",
+      "required": true
+    },
+    "defaultLabel": {
+      "description": "Defines the display label for the language.",
+      "required": true
+    },
+    "countryCode": {
+      "description": "Represents the country code of the selected language. This string can be empty. It applies only when the selected language has variations depending on the country, like Arabic (Algeria) and Arabic (Bahrain). In this case, use countryCode to distinguish between them. For example:{ languageCode\":\"ar\", \"CountryCode\":\"DZ\", \"Label\":\"Arabic (Algeria) (DZ)\",}, { \"Code\":\"ar\", \"CountryCode\":\"BH\", \"Label\":\"Arabic (Bahrain) (BH)\",}"
+    },
+    "fallbackLanguageId": {
+      "description": "Represents the language to use when no content is available for the selected language. For example, if a site visitor chooses Japanese from the language selector, but there’s no content for that page in Japanese, then content is displayed in the fallback language. Only one level of fallback is allowed for LWR sites. Here are examples for an LWR site where English is the default language, and Spanish, French, and Finnish are available site languages. Not allowed: Spanish falls back to French, and French falls back to Finnish. This configuration includes two levels of fallback. Allowed: Spanish falls back to French, and French falls back to English. This configuration is allowed because English is the site’s default language. Allowed: Spanish falls back to French, and French has no fallback. This configuration includes only one level of fallback."
+    },
+    "label": {
+      "description": "Represents the name of the page.",
+      "required": true
+    },
+    "languageCode": {
+      "description": "Represents the language code for the selected language."
+    },
+    "showHamburgerMenu": {
+      "description": "Controls whether the hamburger menu is shown.",
+      "required": true
+    },
+    "mobilePublisherAppUpdateConfig": {
+      "description": "Controls whether and which App Version Update message is shown. To avoid service disruptions, users must be on the app version that supports enhanced domains.",
+      "required": true
+    },
+    "showBackButton": {
+      "description": "Controls whether the Back button is shown on iOS devices."
+    },
+    "showHamburgerMenuWithBackButton": {
+      "description": "Controls whether the hamburger menu is shown, in addition to the Back button, on iOS devices."
+    },
+    "enableAppUpdate": {
+      "description": "Controls whether the App Version Update message is shown, to encourage users to update by giving them a choice of whether to do so. Set the properties to \"enableAppUpdate\": true, and\"forceAppUpdate\": false to show the message that encourages your users to update. If you don’t want to show an update message, for example if all your users are on the correct version or your site uses a custom domain, set the property to\"enableAppUpdate\" : false, and don’t use the forceAppUpdate property."
+    },
+    "forceAppUpdate": {
+      "description": "Controls whether the App Version Update message to require users to update is shown. Set the properties to \"enableAppUpdate\": true, and\"forceAppUpdate\" : true to show the message that requires your users to update."
+    },
+    "minVersion": {
+      "description": "Controls the iOS and Android Minimum App Versions. These property values are currently hard coded to ensure that the app versions supporting enhanced domains are used."
+    },
+    "branding": {
+      "description": "Settings for the Native Navigation Bar component branding. Valid keys are: iconTintColorUnselected iconTintColor barTintColor Supply a valid 6 digit hexadecimal as the value for all properties."
+    },
+    "menuItems": {
+      "description": "Items which must be displayed in the Native Navigation Bar component."
+    },
+    "name": {
+      "description": "Optional. The label of the tab bar menu item."
+    },
+    "targetUrl": {
+      "description": "The relative URL to which the tab bar menu item points.",
+      "required": true
+    },
+    "iconAsset": {
+      "description": "Name of the ContentAsset to use for the tab bar menu item.",
+      "required": true
+    },
+    "cmsSettings": {
+      "description": "Settings for the CMS Connect header and footer. Valid values are: headerName headerUrl headerPersonalization footerName footerUrl footerPersonalization Both source and target org must have the CMSConnect and CMSPersonalization org perms enabled for settings to be retrieved."
+    },
+    "currentThemeId": {
+      "description": "Represents the UUID of the site's current theme. This field is available for mainAppPage.json and loginAppPage.json (where applicable).",
+      "required": true
+    },
+    "headMarkup": {
+      "description": "Allows the addition of custom markup to the site's main page <head> tag. Similar to using Experience Builder | Setting | Advanced | Head Markup See Salesforce Help for markup guidance.",
+      "required": true
+    },
+    "isRelaxedCSPLevel": {
+      "description": "Controls the ability to run scripts and script access to third-party hosts. The default is false. This field is available for mainAppPage.json and loginAppPage.json (where applicable)."
+    },
+    "templateName": {
+      "description": "The unique developer name of the template. Allowed values include: CPT Community Template (which represents the Customer Account Portal template) Help Center Template (which represents the Help Center template) microsite-template-marketing (which represents the Microsite (LWR) template PRM Community Template (which represents the Partner Central template) Service Community Template (which represents the Customer Service template) Starter Template (which represents the Build Your Own (Aura) template) talon-template-byo (which represents the Build Your Own (LWR) template) Custom_template_name (which is the name of a customized template that was exported as a Bolt Solution) Alternatively, you can retrieve a list of allowed template name values using Connect REST API. See Experience Builder Templates in the Connect REST API Developer Guide.",
+      "required": true
+    }
+  },
+  "routes_folder": {
+    "activeViewId": {
+      "description": "Represents the default view of the route. Used when there are no defined audiences or the user doesn’t match any audience. Available in API version 48.0 and later.",
+      "required": true
+    },
+    "appPageId": {
+      "description": "Represents the single page application (SPA) page for the route. It points to either main.json or login.json.",
+      "required": true
+    },
+    "configurationTags": {
+      "description": "Represents the configuration tags for the route. The only supported value is allow-in-static-site. Available in API Version 51.0 and later. Note: This is an internal property and must not be edited.",
+      "required": true
+    },
+    "devName": {
+      "description": "Represents the unique API name that’s defined when creating a new route. Available in API version 59.0 and later.",
+      "required": true
+    },
+    "id": {
+      "description": "Represents the component GUID. Inherited from the component.",
+      "required": true
+    },
+    "label": {
+      "description": "Represents the name of the route. Inherited from the component.",
+      "required": true
+    },
+    "objectApiName": {
+      "description": "The name of the custom object API. (Not available for standard objects.)",
+      "required": true
+    },
+    "pageAccess": {
+      "description": "Identifies the status of a route as public or private. When set to the default value UseParent, the status of the site determines the status of the route. Not editable from the user interface for routes that are always private. Valid values are UseParent, Public, and RequiresLogin.",
+      "required": true
+    },
+    "routeType": {
+      "description": "Identifies the type of route. Value is unique among all routes that share the same SPA page. The value in viewType must match.",
+      "required": true
+    },
+    "type": {
+      "description": "Represents the component type. The only supported value is route.",
+      "required": true
+    },
+    "urlPrefix": {
+      "description": "Represents the base URL for the route.",
+      "required": true
+    }
+  },
+  "themes_folder": {
+    "activeBrandingSetId": {
+      "description": "The id of the branding set currently in use. The branding set's definitionName must match the theme's brandingSetReference."
+    },
+    "customCSS": {
+      "description": "Custom CSS for pages created in the Experience Builder template."
+    },
+    "developerName": {
+      "description": "The unique developer name of the theme. Most themes derive their names directly, for example Jepson uses jespon for its developerName. Standard templates have unique values: cpt for Customer Account Portal service for Customer Service helpCenter for Help Center prm for Partner Central starter for Build Your Own",
+      "required": true
+    },
+    "id": {
+      "description": "Represents the component's GUID.",
+      "required": true
+    },
+    "label": {
+      "description": "Represents the name of the theme."
+    },
+    "layouts": {
+      "description": "Maps ThemeLayoutType to UUID, and contains the definition of the ThemeLayout. Login and Inner theme layouts are always required.",
+      "required": true
+    },
+    "type": {
+      "description": "Represents the component type. The only supported value is theme.",
+      "required": true
+    }
+  },
+  "variations_folder": {
+    "componentVariants": {
+      "description": "A list of component variants that belong to this experience variation. Note: Only one component variant per experience variation is allowed.",
+      "required": true
+    },
+    "developerName": {
+      "description": "The unique developer name of the experience variation. This name is used in the targetValue field of a Personalization API target and can’t be updated after it’s set. Note: For more information, see Audience.",
+      "required": true
+    },
+    "id": {
+      "description": "Represents the GUID of the component.",
+      "required": true
+    },
+    "type": {
+      "description": "Represents the type of the component. The only supported value is experienceVariation.",
+      "required": true
+    },
+    "propertyOverrides": {
+      "description": "Defines the property overrides for the given theme, route, or component targetId. For example, if the targetId is pointing to a theme, you can override the defaultBrandingSet property of the theme to use a different branding set for this experience variation. Supported property overrides: activeBrandingSetId Defines which branding set to use when targetId is a theme. Uses the format:\"activeBrandingSetId\":\"ID_of_brandingset\" activeViewId Defines which page variation to use when targetId is a route. Uses the format:\"activeViewId\":\"ID_of_view\" componentAttributes Supported only for CMS Collection components and navigation components, such as Navigation Menu or Tile Menu. Components can be placed in header and footer regions, and also in the view body. Defines which navigation linkset to display when targetId is a navigation component.The value of the property is a JSON container with a single key-value pair denoting the attribute and the value of the attribute. NavigationMenuEditorRefresh is the only supported attribute. Uses the format:\"componentAttributes\": {\"NavigationMenuEditorRefresh\":\"linkset_name\" } Defines which content collection to display when targetId is a CMS Collection component.The value of the property is a JSON container with a single key-value pair denoting the path to the attribute and the value of the attribute. config/dataProviderDefinition/attributes/dataProviderInfo/apiName is the only supported attribute. Uses the format:\"componentAttributes\": {\"config/dataProviderDefinition/attributes /dataProviderInfo/apiName\":\"collection_name\" } isVisible Defines whether a component is visible for the audience when targetId is a component. Unsupported for components in header or footer regions. Uses the format:\"isVisible\": boolean Only one entry in the map is allowed. For a component, you can vary either its visibility or attributes but not both together. Note",
+      "required": true
+    },
+    "targetId": {
+      "description": "The UUID of the item whose properties you’re overriding. Must be the ID of a theme, route, or component.",
+      "required": true
+    }
+  },
+  "views_folder": {
+    "appPageId": {
+      "description": "Single page application (SPA) page ID of the view. It points to either main.json or login.json.",
+      "required": true
+    },
+    "componentName": {
+      "description": "The FQN of the component. Only components that can be used in the component panel in Experience Builder can be used in this field.",
+      "required": true
+    },
+    "id": {
+      "description": "Represents the component GUID.",
+      "required": true
+    },
+    "label": {
+      "description": "The name that appears in Experience Builder | Settings | Theme | Configure.",
+      "required": true
+    },
+    "themeLayoutType": {
+      "description": "Theme layout type of the view (exposed only for views)."
+    },
+    "type": {
+      "description": "Represents the component type. The only supported value is renditionComponent.",
+      "required": true
+    },
+    "viewType": {
+      "description": "Matches routeType for the route.",
+      "required": true
+    },
+    "regionLabel": {
+      "description": "Specifies region labels for tabs. Note: This property is present only for tab regions that are children of a component."
+    },
+    "regionName": {
+      "description": "Matches the design attribute in the design file of the layout component.",
+      "required": true
+    },
+    "componentAttributes": {
+      "description": "The design attribute values of the component.",
+      "required": true
+    },
+    "renderPriority": {
+      "description": "Sets priority value for progressive rendering of the component. Possible Values: HIGHEST, HIGH, NEUTRAL Note: Only evaluated if the site has progressive rendering turned on in Experience Builder | Settings | Advanced."
+    },
+    "renditionMap": {
+      "description": "Map of different rendition keys to UUIDs of RenditionComponents."
+    },
+    "scopedBrandingSetID": {
+      "description": "Required for LWR sites. Not applicable for Aura sites. Represents the ID of a branding set for a specific community_layout:section component. Available in API Version 52.0 and later.",
+      "required": true
+    },
+    "renditionValue": {
+      "description": "Map of different variations of a component, such as different languages of text."
+    }
+  },
+  "sub_types": {
+    "ExperienceResources": {
+      "experienceResource": {
+        "type": "ExperienceResource[]",
+        "description": "The list of resources in this ExperienceBundle. Each resource represents a property for the site, such as brandingSets, config, routes, themes, and views."
+      }
+    },
+    "ExperienceResource": {
+      "fileName": {
+        "type": "string",
+        "description": "Name of resource file.",
+        "required": true
+      },
+      "format": {
+        "type": "string",
+        "description": "Only JSON is allowed.",
+        "required": true
+      },
+      "source": {
+        "type": "base64",
+        "description": "The JSON content of each file."
+      },
+      "type": {
+        "type": "string",
+        "description": "The type of the resource. Valid values are: brandingSets config routes themes views",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ExperienceBundle\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"experienceResources\" minOccurs=\"0\" type=\"tns:ExperienceResources\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"type\" type=\"tns:SiteType\"/>\n        <xsd:element name=\"urlPathPrefix\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ExperienceResource\">\n  <xsd:sequence>\n    <xsd:element name=\"fileName\" type=\"xsd:string\"/>\n    <xsd:element name=\"format\" type=\"xsd:string\"/>\n    <xsd:element name=\"source\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n    <xsd:element name=\"type\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ExperienceResources\">\n  <xsd:sequence>\n    <xsd:element name=\"experienceResource\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ExperienceResource\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SiteType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Siteforce\"/>\n    <xsd:enumeration value=\"Visualforce\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here’s an example of an ExperienceBundle declaration. For individual folder and file examples for the bundled code, see brandingSets, config, routes, themes, variations, and views.",
+      "code": "<xsd:complexType name=\"ExperienceBundle\">\n    <xsd:complexContent>\n        <xsd:extension base=\"tns:Metadata\">\n            <xsd:sequence>\n                <xsd:element name=\"experienceResources\" minOccurs=\"0\" type=\"tns:ExperienceResources\"/>\n                <xsd:element name=\"label\" type=\"xsd:string\"/>\n                <xsd:element name=\"type\" type=\"tns:SiteType\"/>\n            </xsd:sequence>\n        </xsd:extension>\n    </xsd:complexContent>\n</xsd:complexType>\n    <xsd:complexType name=\"ExperienceResources\">\n        <xsd:sequence>\n            <xsd:element name=\"experienceResource\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ExperienceResource\"/>\n        </xsd:sequence>\n    </xsd:complexType>\n<xsd:complexType name=\"ExperienceResource\">\n    <xsd:sequence>\n        <xsd:element name=\"fileName\" type=\"xsd:string\"/>\n        <xsd:element name=\"format\" type=\"xsd:string\"/>\n        <xsd:element name=\"source\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <xsd:element name=\"type\" type=\"xsd:string\"/>\n    </xsd:sequence>\n</xsd:complexType>"
+    }
+  ]
+}

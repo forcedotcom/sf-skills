@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExternalClientAppSettings - Metadata API",
+  "description": "Represents settings to enable external client app features.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableClientSecretInRestApiAccess": {
+      "type": "boolean",
+      "description": "Indicates whether OAuth consumer secrets can be accessed through the credentials REST API (true) or not (false). This field is available in API version 62.0 and later."
+    },
+    "enableConsumerSecretApiAccess": {
+      "type": "boolean",
+      "description": "DEPRECATED. Indicates whether OAuth consumer secrets can be accessed through Metadata API (true) or not (false). Use the external client app OAuth UI to access consumer secrets."
+    },
+    "enablePackageEcaOauthFromDevOrg": {
+      "type": "boolean",
+      "description": "Indicates whether you can package an external client app that is owned by an org, that isn't a Dev Hub org, (true) or not (false). It’s recommended that you only package OAuth-enabled external client apps that are owned by a Dev Hub org. This practice maintains the integrity of the OAuth client credentials by storing them on an org that won't be deleted. If you have other ways to maintain the OAuth client credentials, you can enable this field and package an external client app form a different type of org. External client apps built on ephemeral orgs, like Scratch orgs or sandboxes, can't be packaged even with this field set to true. This field is available in API version 62.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ExternalClientAppSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableClientSecretInRestApiAccess\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableConsumerSecretApiAccess\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePackageEcaOauthFromDevOrg\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The example shows a settings file component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ExternalClientAppSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n        <enableClientSecretInRestApiAccess>true</enableClientSecretInRestApiAccess>\n        <enableConsumerSecretApiAccess>true</enableConsumerSecretApiAccess>\n        <enablePackageEcaOauthFromDevOrg>false</enablePackageEcaOauthFromDevOrg>\n</ExternalClientAppSettings>"
+    }
+  ]
+}

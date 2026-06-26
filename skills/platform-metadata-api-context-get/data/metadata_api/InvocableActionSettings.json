@@ -1,0 +1,28 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "InvocableActionSettings - Metadata API",
+  "description": "Represents the org’s invocable action settings, such as whether partial save is allowed.This type extends the Metadata metadata type and inherits its fullName field.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "isPartialSaveAllowed": {
+      "type": "boolean",
+      "description": "Indicates whether partial save is enabled for most invocable actions that are invoked via REST API and executed in bulk. When the value is true, Salesforce tries three times to execute invocable actions that run successfully and rolls back only the invocable actions that fail to execute. This functionality is called partial save. If the field is set to false, if one invocable action fails, Salesforce rolls back other invocable actions in the same transaction and the entire transaction fails. Corresponds to the Enable Partial Save for Invocable Actions critical update."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"InvocableActionSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"isPartialSaveAllowed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of the InvocableAction.settings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<InvocableActionSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <isPartialSaveAllowed>false</isPartialSaveAllowed>\n</InvocableActionSettings>"
+    }
+  ]
+}

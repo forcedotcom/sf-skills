@@ -1,0 +1,45 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ServicePresenceStatus - Metadata API",
+  "description": "Represents a presence status that can be assigned to a service channel. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".servicePresenceStatus",
+  "directory_location": "servicePresenceStatuses",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "channels": {
+      "type": "ServiceChannelStatus",
+      "description": "Represents the status that’s associated with a specific service channel."
+    },
+    "label": {
+      "type": "string",
+      "description": "The label of the presence status."
+    }
+  },
+  "sub_types": {
+    "ServiceChannelStatus": {
+      "channel": {
+        "type": "string",
+        "description": "Represents the channels assigned to the presence status."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ServiceChannelStatus\">\n  <xsd:sequence>\n    <xsd:element name=\"channel\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ServicePresenceStatus\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"channels\" minOccurs=\"0\" type=\"tns:ServiceChannelStatus\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ServicePresenceStatus component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ServicePresenceStatus xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <channels>\n        <channel>Case</channel>\n    </channels>\n    <label>Available for Cases</label>\n</ServicePresenceStatus>"
+    }
+  ]
+}

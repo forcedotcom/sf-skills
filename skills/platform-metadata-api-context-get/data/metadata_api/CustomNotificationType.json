@@ -1,0 +1,94 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CustomNotificationType - Metadata API",
+  "description": "Represents the metadata associated with a custom notification type.",
+  "file_information": ".notiftype",
+  "directory_location": "notificationtypes",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "actionGroups": {
+      "type": "CustomNotificationActionGroup[]",
+      "description": "Optional. Indicates whether mobile action groups are enabled, allowing users to take actions directly from mobile notifications. actionGroups is a pilot or beta service that is subject to the Beta Services Terms at Agreements - Salesforce.com or a written Unified Pilot Agreement if executed by Customer, and applicable terms in the Product Terms Directory. Use of this pilot or beta service is at the Customer's sole discretion."
+    },
+    "customNotifTypeName": {
+      "type": "string",
+      "description": "Specifies a notification type name. Maximum number of characters: 80.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "Specifies a general description of the notification type, which is displayed with the notification type name. Maximum number of characters: 255."
+    },
+    "desktop": {
+      "type": "boolean",
+      "description": "Indicates whether the desktop delivery channel is enabled (true) or not (false).",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Specifies the label for the notification type.",
+      "required": true
+    },
+    "mobile": {
+      "type": "boolean",
+      "description": "Indicates whether the mobile delivery channel is enabled (true) or not (false).",
+      "required": true
+    },
+    "slack": {
+      "type": "boolean",
+      "description": "Reserved for future use."
+    }
+  },
+  "sub_types": {
+    "CustomNotificationActionGroup": {
+      "actions": {
+        "type": "CustomNotificationActionDefinition[]",
+        "description": "Represents the actions within a mobile action group."
+      },
+      "groupName": {
+        "type": "string",
+        "required": true,
+        "description": "Unique name of the mobile action group."
+      }
+    },
+    "CustomNotificationActionDefinition": {
+      "actionLabel": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the action seen in the push notification."
+      },
+      "actionName": {
+        "type": "string",
+        "required": true,
+        "description": "Unique identifier of the action in an action group."
+      },
+      "actionTarget": {
+        "type": "string",
+        "description": "The name of the Apex class where the action is implemented."
+      },
+      "actionType": {
+        "type": "NotificationActionType (enumeration of type string)",
+        "description": "Type of action. Required. Values are: NotificationApiAction: Server-side action where client needs to make action API call. Share: Client-side action where the app shares notification content to any channel."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomNotificationActionDefinition\">\n  <xsd:sequence>\n    <xsd:element name=\"actionLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"actionName\" type=\"xsd:string\"/>\n    <xsd:element name=\"actionTarget\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"actionType\" type=\"tns:NotificationActionType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CustomNotificationActionGroup\">\n  <xsd:sequence>\n    <xsd:element name=\"actions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomNotificationActionDefinition\"/>\n    <xsd:element name=\"groupName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CustomNotificationType\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionGroups\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomNotificationActionGroup\"/>\n        <xsd:element name=\"customNotifTypeName\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"desktop\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"mobile\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"slack\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"NotificationActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"NotificationApiAction\"/>\n    <xsd:enumeration value=\"Share\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is a definition of a custom notification type that is enabled for desktop and mobile.",
+      "code": "<CustomNotificationType xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <customNotifTypeName>Custom Notification</customNotifTypeName>\n    <desktop>true</desktop>\n    <masterLabel>Custom Notification</masterLabel>\n    <mobile>true</mobile>\n</CustomNotificationType>"
+    }
+  ]
+}

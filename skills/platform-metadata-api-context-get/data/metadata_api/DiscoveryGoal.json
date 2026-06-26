@@ -1,0 +1,361 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DiscoveryGoal - Metadata API",
+  "description": "Represents the metadata associated with an Einstein Discovery prediction definition.",
+  "file_information": ".goal",
+  "directory_location": "discovery",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "Indicates whether the prediction definition is active (True) or not (False)."
+    },
+    "deployedModels": {
+      "type": "DiscoveryDeployedModel[]",
+      "description": "One or more deployed models associated with this prediction definition."
+    },
+    "label": {
+      "type": "string",
+      "description": "Name of the prediction definition."
+    },
+    "modelCards": {
+      "type": "DiscoveryModelCard[]",
+      "description": "Model card for this prediction definition."
+    },
+    "outcome": {
+      "type": "DiscoveryGoalOutcome",
+      "description": "Outcome variable of this prediction definition."
+    },
+    "predictionType": {
+      "type": "DiscoveryPredictionType",
+      "description": "Type of prediction: Regression, Classification, or Unknown."
+    },
+    "pushbackField": {
+      "type": "string",
+      "description": "Automated writeback field for predictions. A custom field on the Salesforce object specified in subscribedEntity. Note: Removing a pushback field from the goal metadata causes the field to be deleted from the Salesforce object as well."
+    },
+    "pushbackType": {
+      "type": "DiscoveryPushbackType",
+      "description": "Type of writeback field for predictions."
+    },
+    "subscribedEntity": {
+      "type": "string",
+      "description": "Salesforce object associated with this model."
+    },
+    "terminalStateFilters": {
+      "type": "DiscoveryFilter[]",
+      "description": "If specified, one or more filter expressions that define the conditions under which an observation has attained its terminal state (the actual outcome has been reached). For performance monitoring, Einstein Discovery determines model accuracy by comparing a model’s predicted outcomes with actual (observed) outcomes."
+    }
+  },
+  "sub_types": {
+    "DiscoveryDeployedModel": {
+      "active": {
+        "type": "boolean",
+        "description": "Indicates whether the deployed model is active (True) or inactive (False)."
+      },
+      "aiModel": {
+        "type": "string",
+        "description": "Full name of the DiscoveryAIModel being deployed."
+      },
+      "classificationThreshold": {
+        "type": "double",
+        "description": "Threshold value. Applies only to binary classification models. For regression models, this is null."
+      },
+      "fieldMappings": {
+        "type": "DiscoveryFieldMap[]",
+        "description": "One or more mappings between model variables and either fields (in Salesforce objects) or columns (in CRM Analytics datasets)."
+      },
+      "filters": {
+        "type": "DiscoveryFilter[]",
+        "description": "If specified, one or more segmentation filters for the deployed model. When making a prediction, the first model that has filters matching a specific input row will be used to make the prediction. No filters indicates that the model matches all input rows."
+      },
+      "label": {
+        "type": "string",
+        "description": "Label for the deployed model. Appears in Model Manager."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the deployed model."
+      },
+      "prescribableFields": {
+        "type": "DiscoveryPrescribableField[]",
+        "description": "Actionable fields associated with improvements."
+      }
+    },
+    "DiscoveryFieldMap": {
+      "mappedField": {
+        "type": "string",
+        "description": "Field in a Salesforce object or column in a CRM Analytics dataset."
+      },
+      "modelField": {
+        "type": "string",
+        "description": "Model variable."
+      },
+      "sobjectFieldJoinKey": {
+        "type": "string",
+        "description": "Join key for a Salesforce object. Null if sourceType is AnalyticsDatasetField."
+      },
+      "source": {
+        "type": "string",
+        "description": "If the mapping is to a CRM Analytics dataset, this is the name of the dataset. Otherwise, null."
+      },
+      "sourceFieldJoinKey": {
+        "type": "string",
+        "description": "If the mapping is to a CRM Analytics dataset, this is the lookup column on that dataset used to perform the join. Otherwise, null."
+      },
+      "sourceType": {
+        "type": "DiscoveryFieldMapSourceType",
+        "description": "Data source type for field mapping."
+      }
+    },
+    "DiscoveryFieldMapSourceType": {
+      "SalesforceField": {
+        "type": "string",
+        "description": "Field in a Salesforce object."
+      },
+      "AnalyticsDatasetField": {
+        "type": "string",
+        "description": "Column in a CRM Analytics dataset."
+      }
+    },
+    "DiscoveryFilter": {
+      "field": {
+        "type": "string",
+        "description": "Name of the field to filter."
+      },
+      "operator": {
+        "type": "DiscoveryFilterOperator",
+        "description": "Operator used to calculate the filter."
+      },
+      "type": {
+        "type": "DiscoveryFilterFieldType",
+        "description": "Type of filter value."
+      },
+      "values": {
+        "type": "DiscoveryFilterValue[]",
+        "description": "One or more values selected for the filter."
+      }
+    },
+    "DiscoveryFilterOperator": {
+      "Equal": {
+        "type": "string",
+        "description": "Equal to operator (=)."
+      },
+      "NotEqual": {
+        "type": "string",
+        "description": "Not equal to operator (<>)."
+      },
+      "GreaterThan": {
+        "type": "string",
+        "description": "Greater than operator (>)."
+      },
+      "GreaterThanOrEqual": {
+        "type": "string",
+        "description": "Greater than or equal to operator (>=)."
+      },
+      "LessThan": {
+        "type": "string",
+        "description": "Less than operator (<)."
+      },
+      "LessThanOrEqual": {
+        "type": "string",
+        "description": "Less than or equal to operator (<=)."
+      },
+      "Between": {
+        "type": "string",
+        "description": "Between operator."
+      },
+      "NotBetween": {
+        "type": "string",
+        "description": "Not between operator."
+      },
+      "InSet": {
+        "type": "string",
+        "description": "In set operator."
+      },
+      "NotIn": {
+        "type": "string",
+        "description": "Not in operator."
+      },
+      "Contains": {
+        "type": "string",
+        "description": "Contains operator."
+      },
+      "StartsWith": {
+        "type": "string",
+        "description": "Starts with operator."
+      },
+      "EndsWith": {
+        "type": "string",
+        "description": "Ends with operator."
+      },
+      "IsNull": {
+        "type": "string",
+        "description": "Is null operator."
+      },
+      "IsNotNull": {
+        "type": "string",
+        "description": "Is not null operator."
+      }
+    },
+    "DiscoveryFilterFieldType": {
+      "Text": {
+        "type": "string",
+        "description": "Text field type."
+      },
+      "Number": {
+        "type": "string",
+        "description": "Number field type."
+      },
+      "Date": {
+        "type": "string",
+        "description": "Date field type."
+      },
+      "DateTime": {
+        "type": "string",
+        "description": "Datetime field type."
+      },
+      "Boolean": {
+        "type": "string",
+        "description": "Boolean field type."
+      }
+    },
+    "DiscoveryFilterValue": {
+      "type": {
+        "type": "DiscoveryFilterValueType",
+        "description": "Type of filter value."
+      },
+      "value": {
+        "type": "DiscoveryFilterValue",
+        "description": "Value."
+      }
+    },
+    "DiscoveryFilterValueType": {
+      "Constant": {
+        "type": "string",
+        "description": "Filter value is a constant."
+      },
+      "PlaceHolder": {
+        "type": "string",
+        "description": "Filter value is a placeholder."
+      }
+    },
+    "DiscoveryPrescribableField": {
+      "customDefinitions": {
+        "type": "DiscoveryCustomPrescribableFieldDefinition[]",
+        "description": "One or more strings for custom improvement text. Uses the default improvement text if none are specified."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the model field that is actionable."
+      }
+    },
+    "DiscoveryCustomPrescribableFieldDefinition": {
+      "filters": {
+        "type": "DiscoveryFilter[]",
+        "description": "Represents one or more filters associated with custom improvement text."
+      },
+      "template": {
+        "type": "string",
+        "description": "If specified, represents the user-provided template from which the custom text is computed. If not specified, then the default text is used."
+      }
+    },
+    "DiscoveryModelCard": {
+      "contactEmail": {
+        "type": "string",
+        "description": "Contact email for this model card."
+      },
+      "contactName": {
+        "type": "string",
+        "description": "Contact name for this model card."
+      },
+      "label": {
+        "type": "string",
+        "description": "Title for this model card."
+      },
+      "sections": {
+        "type": "string",
+        "description": "Sections in the model card."
+      }
+    },
+    "DiscoveryGoalOutcome": {
+      "field": {
+        "type": "string",
+        "description": "Name of the outcome variable."
+      },
+      "fieldLabel": {
+        "type": "string",
+        "description": "Label for the outcome variable."
+      },
+      "goal": {
+        "type": "DiscoveryOutcomeGoal",
+        "description": "Goal for the outcome variable."
+      },
+      "mappedField": {
+        "type": "string",
+        "description": "Mapped field."
+      }
+    },
+    "DiscoveryOutcomeGoal": {
+      "Minimize": {
+        "type": "string",
+        "description": "Maximize the outcome."
+      },
+      "Maximize": {
+        "type": "string",
+        "description": "Minimize the outcome."
+      },
+      "None": {
+        "type": "string",
+        "description": "Reserved for future use."
+      }
+    },
+    "DiscoveryPredictionType": {
+      "Unknown": {
+        "type": "string",
+        "description": "Unknown prediction type."
+      },
+      "Regression": {
+        "type": "string",
+        "description": "Regression prediction (numeric use case)."
+      },
+      "Classification": {
+        "type": "string",
+        "description": "Binary classification prediction."
+      },
+      "MulticlassClassification": {
+        "type": "string",
+        "description": "Multiclass classification prediction."
+      }
+    },
+    "DiscoveryPushbackType": {
+      "AiRecordInsight": {
+        "type": "string",
+        "description": "Automatic writeback type. Required."
+      },
+      "Direct": {
+        "type": "string",
+        "description": "Currently not supported. Reserved for future use."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DiscoveryCustomPrescribableFieldDefinition\">\n  <xsd:sequence>\n    <xsd:element name=\"filters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DiscoveryFilter\"/>\n    <xsd:element name=\"template\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DiscoveryDeployedModel\">\n  <xsd:sequence>\n    <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"aiModel\" type=\"xsd:string\"/>\n    <xsd:element name=\"classificationThreshold\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"fieldMappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DiscoveryFieldMap\"/>\n    <xsd:element name=\"filters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DiscoveryFilter\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"prescribableFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DiscoveryPrescribableField\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DiscoveryFieldMap\">\n  <xsd:sequence>\n    <xsd:element name=\"mappedField\" type=\"xsd:string\"/>\n    <xsd:element name=\"modelField\" type=\"xsd:string\"/>\n    <xsd:element name=\"sobjectFieldJoinKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"source\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sourceFieldJoinKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sourceType\" type=\"tns:DiscoveryFieldMapSourceType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"DiscoveryFieldMapSourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"SalesforceField\"/>\n    <xsd:enumeration value=\"AnalyticsDatasetField\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"DiscoveryFilter\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"operator\" type=\"tns:DiscoveryFilterOperator\"/>\n    <xsd:element name=\"type\" minOccurs=\"0\" type=\"tns:DiscoveryFilterFieldType\"/>\n    <xsd:element name=\"values\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DiscoveryFilterValue\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"DiscoveryFilterFieldType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Text\"/>\n    <xsd:enumeration value=\"Number\"/>\n    <xsd:enumeration value=\"Date\"/>\n    <xsd:enumeration value=\"DateTime\"/>\n    <xsd:enumeration value=\"Boolean\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"DiscoveryFilterOperator\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Equal\"/>\n    <xsd:enumeration value=\"NotEqual\"/>\n    <xsd:enumeration value=\"GreaterThan\"/>\n    <xsd:enumeration value=\"GreaterThanOrEqual\"/>\n    <xsd:enumeration value=\"LessThan\"/>\n    <xsd:enumeration value=\"LessThanOrEqual\"/>\n    <xsd:enumeration value=\"Between\"/>\n    <xsd:enumeration value=\"NotBetween\"/>\n    <xsd:enumeration value=\"InSet\"/>\n    <xsd:enumeration value=\"NotIn\"/>\n    <xsd:enumeration value=\"Contains\"/>\n    <xsd:enumeration value=\"StartsWith\"/>\n    <xsd:enumeration value=\"EndsWith\"/>\n    <xsd:enumeration value=\"IsNull\"/>\n    <xsd:enumeration value=\"IsNotNull\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"DiscoveryFilterValue\">\n  <xsd:sequence>\n    <xsd:element name=\"type\" type=\"tns:DiscoveryFilterValueType\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"DiscoveryFilterValueType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Constant\"/>\n    <xsd:enumeration value=\"PlaceHolder\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"DiscoveryGoal\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"deployedModels\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DiscoveryDeployedModel\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"modelCards\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DiscoveryModelCard\"/>\n        <xsd:element name=\"outcome\" type=\"tns:DiscoveryGoalOutcome\"/>\n        <xsd:element name=\"predictionType\" type=\"tns:DiscoveryPredictionType\"/>\n        <xsd:element name=\"pushbackField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"pushbackType\" minOccurs=\"0\" type=\"tns:DiscoveryPushbackType\"/>\n        <xsd:element name=\"subscribedEntity\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"terminalStateFilters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DiscoveryFilter\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"DiscoveryGoalOutcome\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"fieldLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"goal\" type=\"tns:DiscoveryOutcomeGoal\"/>\n    <xsd:element name=\"mappedField\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DiscoveryModelCard\">\n  <xsd:sequence>\n    <xsd:element name=\"contactEmail\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"contactName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sections\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"DiscoveryOutcomeGoal\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Minimize\"/>\n    <xsd:enumeration value=\"Maximize\"/>\n    <xsd:enumeration value=\"None\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"DiscoveryPredictionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Unknown\"/>\n    <xsd:enumeration value=\"Regression\"/>\n    <xsd:enumeration value=\"Classification\"/>\n    <xsd:enumeration value=\"MulticlassClassification\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"DiscoveryPrescribableField\">\n  <xsd:sequence>\n    <xsd:element name=\"customDefinitions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DiscoveryCustomPrescribableFieldDefinition\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"DiscoveryPushbackType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AiRecordInsight\"/>\n    <xsd:enumeration value=\"Direct\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here is a sample DiscoveryGoal:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DiscoveryGoal xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n   <active>true</active>\n   <deployedModels>\n      <active>true</active>\n      <aiModel>Maximize_Tenure</aiModel>\n      <fieldMappings>\n         <mappedField>Opportunity.Amount</mappedField>\n         <modelField>PTO</modelField>\n         <sourceType>SalesforceField</sourceType>\n      </fieldMappings>\n      <fieldMappings>\n         <mappedField>Opportunity.ExpectedRevenue</mappedField>\n         <modelField>Salary</modelField>\n         <sourceType>SalesforceField</sourceType>\n      </fieldMappings>\n      <fieldMappings>\n         <mappedField>Level</mappedField>\n         <modelField>Level</modelField>\n         <sobjectFieldJoinKey>Opportunity.Name</sobjectFieldJoinKey>\n         <source>employees</source>\n         <sourceFieldJoinKey>Name</sourceFieldJoinKey>\n         <sourceType>AnalyticsDatasetField</sourceType>\n      </fieldMappings>\n      <fieldMappings>\n         <mappedField>Opportunity.StageName</mappedField>\n         <modelField>Field</modelField>\n         <sourceType>SalesforceField</sourceType>\n      </fieldMappings>\n      <filters>\n         <field>Opportunity.StageName</field>\n         <operator>Equal</operator>\n         <values>\n            <type>Constant</type>\n            <value>Qualification</value>\n         </values>\n      </filters>\n      <label>employees</label>\n      <name>employees</name>\n      <prescribableFields>\n         <customDefinitions>\n           <filters>\n              <field>Salary</field>\n              <operator>LessThan</operator>\n              <type>Number</type>\n              <values>\n                 <type>PlaceHolder</type>\n                 <value>[value_low]</value>\n              </values>\n           </filters>\n           <template>Increase [field_name] by [diff]</template>\n         </customDefinitions>\n         <customDefinitions>\n            <filters>\n               <field>Salary</field>\n               <operator>GreaterThan</operator>\n               <type>Number</type>\n               <values>\n                   <type>PlaceHolder</type>\n                   <value>[value_low]</value>\n                </values>\n             </filters>\n             <template xsi:nil=\"true\"/>\n          </customDefinitions>\n          <name>Salary</name>\n      </prescribableFields>\n      <prescribableFields>\n          <customDefinitions>\n             <filters>\n                <field>Level</field>\n                <operator>LessThan</operator>\n                <type>Number</type>\n                <values>\n                   <type>PlaceHolder</type>\n                   <value>[value_low]</value>\n                </values>\n            </filters>\n            <template xsi:nil=\"true\"/>\n          </customDefinitions>\n          <customDefinitions>\n             <filters>\n                <field>Level</field>\n                <operator>GreaterThan</operator>\n                <type>Number</type>\n                <values>\n                   <type>PlaceHolder</type>\n                   <value>[value_low]</value>\n                 </values>\n              </filters>\n              <template xsi:nil=\"true\"/>\n          </customDefinitions>\n          <name>Level</name>\n      </prescribableFields>\n      <prescribableFields>\n         <name>Field</name>\n      </prescribableFields>\n   </deployedModels>\n   <label>employees_Tenure</label>\n   <outcome>\n      <field>Tenure</field>\n      <fieldLabel>Tenure</fieldLabel>\n      <goal>Maximize</goal>\n      <mappedField>Opportunity.Amount</mappedField>\n   </outcome>\n   <predictionType>Regression</predictionType>\n   <pushbackField>My_Pushback_Field__c</pushbackField>\n   <subscribedEntity>Opportunity</subscribedEntity>\n   <terminalStateFilters>\n      <field>Opportunity.Amount</field>\n      <operator>GreaterThan</operator>\n      <values>\n         <type>Constant</type>\n         <value>5</value>\n      </values>\n   </terminalStateFilters>\n   <terminalStateFilters>\n      <field>Opportunity.Amount</field>\n      <operator>LessThan</operator>\n      <values>\n         <type>Constant</type>\n         <value>10</value>\n      </values>\n   </terminalStateFilters>\n</DiscoveryGoal>"
+    }
+  ]
+}

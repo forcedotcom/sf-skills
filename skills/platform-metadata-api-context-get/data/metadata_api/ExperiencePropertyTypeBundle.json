@@ -1,0 +1,68 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExperiencePropertyTypeBundle (Beta) - Metadata API",
+  "description": "Represents a property type. Replaced in Spring ’26 by the updated LightningPropertyType. When you create a custom property type for a Lightning web component, use LightningPropertyType instead, and deploy that bundle to your org.",
+  "file_information": "ExperiencePropertyTypeBundle components are stored in the experiencePropertyTypeBundles folder. Here’s an example of how the folder is structured.\n\n```\n+--myMetadataPackage\n    +--experiencePropertyTypeBundles (1)\n        +--addressProperty (2)\n            +--schema.json (3)\n            +--design.json (4)\n```\n\n- In the experiencePropertyTypeBundles folder (1) is a folder for each custom property type.\n- Each custom property type folder is named in the format propertyTypeName. In this example (2), the name is addressProperty.\n- Each propertyTypeName folder contains a JSON file or files that define the property type. A schema.json file (3), which is a JSON schema that drives the property type validation An optional design.json file (4), which provides the user experience and property editor information for that property type\n- A schema.json file (3), which is a JSON schema that drives the property type validation\n- An optional design.json file (4), which provides the user experience and property editor information for that property type",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "Explanatory text about the property type."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for ExperiencePropertyTypeBundle, which is defined when the ExperiencePropertyTypeBundle is created."
+    },
+    "resources": {
+      "type": "ExperiencePropertyTypeBundleResource[]",
+      "description": "A list of source files in the experiencePropertyTypeBundles folder."
+    }
+  },
+  "sub_types": {
+    "ExperiencePropertyTypeBundleResource": {
+      "fileName": {
+        "type": "string",
+        "required": true,
+        "description": "The file name of the resource."
+      },
+      "filePath": {
+        "type": "string",
+        "required": true,
+        "description": "The file path of the resource."
+      },
+      "source": {
+        "type": "base64Binary",
+        "required": true,
+        "description": "The content of the resource."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ExperiencePropertyTypeBundle\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"resources\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ExperiencePropertyTypeBundleResource\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ExperiencePropertyTypeBundleResource\">\n  <xsd:sequence>\n    <xsd:element name=\"fileName\" type=\"xsd:string\"/>\n    <xsd:element name=\"filePath\" type=\"xsd:string\"/>\n    <xsd:element name=\"source\" type=\"xsd:base64Binary\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This example shows the directory structure in the .zip file of a property type named addressProperty.",
+      "code": "experiencePropertyTypeBundles\n    addressProperty\n        schema.json\n        design.json"
+    },
+    {
+      "description": "Contents of schema.json:",
+      "code": "{\n \"title\": \"Simple Address Type\",\n \"lightning:type\": \"lightning__objectType\",\n \"properties\": {\n   \"firstName\": {\n     \"lightning:type\": \"lightning__textType\",\n     \"title\": \"First Name\"\n   },\n   \"lastName\": {\n     \"lightning:type\": \"lightning__textType\",\n     \"title\": \"Last Name\"\n   },\n   \"address\": {\n     \"lightning:type\": \"lightning__textType\",\n     \"title\": \"Address Line 1\"\n   },\n   \"city\": {\n     \"lightning:type\": \"lightning__textType\",\n     \"title\": \"City\"\n   },\n   \"state\": {\n     \"lightning:type\": \"lightning__textType\",\n     \"title\": \"State\"\n   },\n   \"postalCode\": {\n     \"lightning:type\": \"lightning__numberType\",\n     \"title\": \"Postal Code\"\n   }\n },\n \"required\": [\"firstName\", \"lastName\"]\n}"
+    },
+    {
+      "description": "Contents of design.json (an optional file):",
+      "code": "{\n \"definition\": \"lightning/tabsetLayout\",\n \"children\": [\n   {\n     \"definition\": \"lightning/tabLayout\",\n     “attributes”: {\n        “label”: “First Tab”\n     },\n     “children”: [\n       {\n         \"definition\": \"lightning/propertyLayout\",\n         \"attributes\": {\n           \"property\": \"aProperty\"\n         }\n       },\n       {\n         \"definition\": \"lightning/propertyLayout\",\n         \"attributes\": {\n           \"property\": \"bProperty\"\n         }\n       },\n    ]\n   },\n     {\n     \"definition\": \"lightning/tabLayout\",\n     “attributes”: {\n        “label”: “Second Tab”\n     },\n     “children”: [\n       {\n         \"definition\": \"lightning/propertyLayout\",\n         \"attributes\": {\n           \"property\": \"cProperty\"\n         }\n       },\n     ]\n   },\n ]\n}"
+    }
+  ]
+}

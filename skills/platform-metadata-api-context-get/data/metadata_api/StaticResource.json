@@ -1,0 +1,49 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "StaticResource - Metadata API",
+  "description": "Represents a static resource file, often a code library in a ZIP file. Static resources allow you to upload content that you can reference in a Visualforce page, including archives (such as .zip and .jar files), images, style sheets, JavaScript, and other files. Static resources can be used only within your Salesforce org, so you can’t host content here for other apps or websites.",
+  "file_information": ".resource",
+  "directory_location": "staticresources",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "cacheControl": {
+      "type": "StaticResourceCacheControl (enumeration of type string)",
+      "description": "Indicates whether the static resource is marked with a public caching tag so that a third-party delivery client can cache the content. This field is available in API version 14.0. The valid values are: Private Public",
+      "required": true
+    },
+    "content": {
+      "type": "base64Binary",
+      "description": "The static resource content. Base 64-encoded binary data. Before making an API call, client applications must encode the binary attachment data as base64. Upon receiving a response, client applications must decode the base64 data to binary. This conversion is handled for you by a SOAP client. This field is inherited from the MetadataWithContent component."
+    },
+    "contentType": {
+      "type": "string",
+      "description": "The content type of the file, for example text/plain.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the static resource."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The static resource name. The name can only contain characters, letters, and the underscore (_) character. The name must start with a letter, and can’t end with an underscore or contain two consecutive underscore characters. Inherited from the Metadata component, this field isn’t defined in the WSDL for this component. It must be specified when creating, updating, or deleting. See create() to see an example of this field specified for a call."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"StaticResource\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"cacheControl\" type=\"tns:StaticResourceCacheControl\"/>\n        <xsd:element name=\"contentType\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"StaticResourceCacheControl\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Private\"/>\n    <xsd:enumeration value=\"Public\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<StaticResource xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <contentType>text/plain</contentType>\n    <description>Test Resource</description>\n</StaticResource>"
+    }
+  ]
+}

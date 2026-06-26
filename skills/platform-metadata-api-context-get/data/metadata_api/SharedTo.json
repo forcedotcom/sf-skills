@@ -1,0 +1,105 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "SharedTo - Metadata API",
+  "description": "SharedTo defines the sharing access for a list view or a folder. It can be used to specify the target and source for owner-based sharing rules.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "allCustomerPortalUsers": {
+      "type": "string",
+      "description": "A group containing all customer portal users. This field is available in API version 24.0 and later."
+    },
+    "allInternalUsers": {
+      "type": "string",
+      "description": "A group containing all internal and nonportal users. This field is available in API version 24.0 and later."
+    },
+    "allPartnerUsers": {
+      "type": "string",
+      "description": "A group containing all partner users. This field is available in API version 24.0 and later."
+    },
+    "channelProgramGroup": {
+      "type": "string",
+      "description": "A system-managed group with sharing access containing all partner members of the corresponding channel program or level. This field is available in API version 41.0 and later."
+    },
+    "channelProgramGroups": {
+      "type": "string[]",
+      "description": "A list of system-managed groups with sharing access containing all partner members of the corresponding channel programs or levels. This field is available in API version 41.0 and later."
+    },
+    "group": {
+      "type": "string[]",
+      "description": "A list of groups with sharing access. Use this field instead of the groups field.This field is available in API version 22.0 and later."
+    },
+    "guestUser": {
+      "type": "string[]",
+      "description": "A list of guest user nicknames with sharing access. This field can be used only with SharingGuestRule. This field is available in API version 47.0 and later."
+    },
+    "groups": {
+      "type": "string[]",
+      "description": "A list of groups with sharing access. Use the group field instead for API version 22.0 and later."
+    },
+    "managerSubordinates": {
+      "type": "string[]",
+      "description": "A list of users whose direct and indirect subordinates receive sharing access. This field is available in API version 24.0 and later."
+    },
+    "managers": {
+      "type": "string[]",
+      "description": "A list of users whose direct and indirect managers receive sharing access. This field is available in API version 24.0 and later."
+    },
+    "portalRole": {
+      "type": "string[]",
+      "description": "A list of groups with sharing access containing all users in a portal role. This field is available in API version 24.0 and later."
+    },
+    "portalRoleandSubordinates": {
+      "type": "string[]",
+      "description": "A list of groups with sharing access containing all users in a portal role or any users under that role. This field is available in API version 24.0 and later."
+    },
+    "role": {
+      "type": "string[]",
+      "description": "A list of roles with sharing access. Use this field instead of the roles field.This field is available in API version 22.0 and later."
+    },
+    "roleAndSubordinates": {
+      "type": "string[]",
+      "description": "A list of roles with sharing access. All roles below each of these roles in the role hierarchy also have sharing access. If portal accounts are enabled, then all roles and portal accounts below each of these roles in the role hierarchy also have sharing access. Use this field instead of the rolesAndSubordinates field.This field is available in API version 22.0 and later and is only available when digital experiences is enabled for your org and Experience Cloud site users are created with external account roles other than a shared person account role."
+    },
+    "roleAndSubordinatesInternal": {
+      "type": "string[]",
+      "description": "A list of roles with sharing access. All roles below each of these roles in the role hierarchy also have sharing access. This field is available in API version 22.0 and later."
+    },
+    "roles": {
+      "type": "string[]",
+      "description": "A list of roles with sharing access. Use the role field instead for API version 22.0 and later."
+    },
+    "rolesAndSubordinates": {
+      "type": "string[]",
+      "description": "A list of roles with sharing access. All roles below each of these roles in the role hierarchy also have sharing access. If portal accounts are enabled, then all roles and portal accounts below each of these roles in the role hierarchy also have sharing access. Use the roleAndSubordinates field instead for API version 22.0 and later."
+    },
+    "territories": {
+      "type": "string[]",
+      "description": "A list of territories with sharing access. Use the territory field instead for API version 22.0 and later."
+    },
+    "territoriesAndSubordinates": {
+      "type": "string[]",
+      "description": "A list of territories with sharing access. All territories below each of these territories in the territory hierarchy also have sharing access. Use the territoryAndSubordinates field instead for API version 22.0 and later."
+    },
+    "territory": {
+      "type": "string[]",
+      "description": "A list of territories with sharing access. Use this field instead of the territories field. If you’re using Sales Territories, use modelName.territoryName for the shared-to and shared-from territory values, where: modelName equals the name of the active territory model in the API. territoryName equals the territory’s name in the API. This field is available in API version 22.0 and later."
+    },
+    "territoryAndSubordinates": {
+      "type": "string[]",
+      "description": "A list of territories with sharing access. All territories below each of these territories in the territory hierarchy also have sharing access. Use this field instead of the territoriesAndSubordinates field. If you’re using Sales Territories, use modelName.territoryName for the shared-to and shared-from territoryAndSubordinates values, where: modelName equals the name of the active territory model in the API. territoryName equals the territory’s name in the API. This field is available in API version 22.0 and later."
+    },
+    "queue": {
+      "type": "string[]",
+      "description": "A list of queues with sharing access. Applies only to lead, case, and CustomObject sharing rules. This field is available in API version 24.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomObject\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionOverrides\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ActionOverride\"/>\n        <xsd:element name=\"allowInChatterGroups\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"articleTypeChannelDisplay\" minOccurs=\"0\" type=\"tns:ArticleTypeChannelDisplay\"/>\n        <xsd:element name=\"businessProcesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BusinessProcess\"/>\n        <xsd:element name=\"compactLayoutAssignment\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"compactLayouts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CompactLayout\"/>\n        <xsd:element name=\"customHelp\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customHelpPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customSettingsType\" minOccurs=\"0\" type=\"tns:CustomSettingsType\"/>\n        <xsd:element name=\"deploymentStatus\" minOccurs=\"0\" type=\"tns:DeploymentStatus\"/>\n        <xsd:element name=\"deprecated\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableActivities\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableBulkApi\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDataTranslation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDivisions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEnhancedLookup\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFeeds\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLicensing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePublishStatusTracking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableReports\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSearch\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSharing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableStreamingApi\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enrichments\" minOccurs=\"0\" type=\"tns:MetadataEnrichments\"/>\n        <xsd:element name=\"eventType\" minOccurs=\"0\" type=\"tns:PlatformEventType\"/>\n        <xsd:element name=\"externalDataSource\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalRepository\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalSharingModel\" minOccurs=\"0\" type=\"tns:SharingModel\"/>\n        <xsd:element name=\"fieldSets\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FieldSet\"/>\n        <xsd:element name=\"fields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomField\"/>\n        <xsd:element name=\"gender\" minOccurs=\"0\" type=\"tns:Gender\"/>\n        <xsd:element name=\"historyRetentionPolicy\" minOccurs=\"0\" type=\"tns:HistoryRetentionPolicy\"/>\n        <xsd:element name=\"household\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"indexes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Index\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"listViews\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ListView\"/>\n        <xsd:element name=\"mktDataLakeAttributes\" minOccurs=\"0\" type=\"tns:MktDataLakeAttributes\"/>\n        <xsd:element name=\"mktDataModelAttributes\" minOccurs=\"0\" type=\"tns:MktDataModelAttributes\"/>\n        <xsd:element name=\"nameField\" minOccurs=\"0\" type=\"tns:CustomField\"/>\n        <xsd:element name=\"pluralLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"profileSearchLayouts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileSearchLayouts\"/>\n        <xsd:element name=\"publishBehavior\" minOccurs=\"0\" type=\"tns:PlatformEventPublishBehavior\"/>\n        <xsd:element name=\"recordTypeTrackFeedHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"recordTypeTrackHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"recordTypes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecordType\"/>\n        <xsd:element name=\"searchLayouts\" minOccurs=\"0\" type=\"tns:SearchLayouts\"/>\n        <xsd:element name=\"sharingModel\" minOccurs=\"0\" type=\"tns:SharingModel\"/>\n        <xsd:element name=\"sharingReasons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingReason\"/>\n        <xsd:element name=\"sharingRecalculations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingRecalculation\"/>\n        <xsd:element name=\"startsWith\" minOccurs=\"0\" type=\"tns:StartsWith\"/>\n        <xsd:element name=\"validationRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ValidationRule\"/>\n        <xsd:element name=\"visibility\" minOccurs=\"0\" type=\"tns:SetupObjectVisibility\"/>\n        <xsd:element name=\"webLinks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WebLink\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"DashboardFolder\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Folder\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"DocumentFolder\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Folder\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"EmailFolder\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Folder\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"EmailTemplateFolder\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Folder\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Folder\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"accessType\" minOccurs=\"0\" type=\"tns:FolderAccessTypes\"/>\n        <xsd:element name=\"folderShares\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FolderShare\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"publicFolderAccess\" minOccurs=\"0\" type=\"tns:PublicFolderAccess\"/>\n        <xsd:element name=\"sharedTo\" minOccurs=\"0\" type=\"tns:SharedTo\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ListView\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"columns\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"division\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"filterScope\" type=\"tns:FilterScope\"/>\n        <xsd:element name=\"filters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ListViewFilter\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"language\" minOccurs=\"0\" type=\"tns:Language\"/>\n        <xsd:element name=\"queue\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sharedTo\" minOccurs=\"0\" type=\"tns:SharedTo\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ReportFolder\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Folder\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharedTo\">\n  <xsd:sequence>\n    <xsd:element name=\"allCustomerPortalUsers\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"allInternalUsers\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"allPartnerUsers\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"channelProgramGroup\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"channelProgramGroups\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"group\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"groups\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"guestUser\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"managerSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"managers\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"portalRole\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"portalRoleAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"queue\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"role\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"roleAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"roleAndSubordinatesInternal\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"roles\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"rolesAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territories\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territoriesAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territory\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territoryAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SharingBaseRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"accessLevel\" type=\"xsd:string\"/>\n        <xsd:element name=\"accountSettings\" minOccurs=\"0\" type=\"tns:AccountSharingRuleSettings\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"sharedTo\" type=\"tns:SharedTo\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharingCriteriaRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:SharingBaseRule\">\n      <xsd:sequence>\n        <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"criteriaItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n        <xsd:element name=\"includeRecordsOwnedByAll\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharingGuestRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:SharingBaseRule\">\n      <xsd:sequence>\n        <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"criteriaItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n        <xsd:element name=\"includeHVUOwnedRecords\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharingOwnerRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:SharingBaseRule\">\n      <xsd:sequence>\n        <xsd:element name=\"sharedFrom\" type=\"tns:SharedTo\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharingRules\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"sharingCriteriaRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingCriteriaRule\"/>\n        <xsd:element name=\"sharingGuestRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingGuestRule\"/>\n        <xsd:element name=\"sharingOwnerRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingOwnerRule\"/>\n        <xsd:element name=\"sharingTerritoryRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingTerritoryRule\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharingTerritoryRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:SharingOwnerRule\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

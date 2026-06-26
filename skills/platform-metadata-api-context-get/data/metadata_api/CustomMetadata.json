@@ -1,0 +1,90 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CustomMetadata - Metadata API",
+  "description": "Represents a record of a custom metadata type.",
+  "file_information": ".md",
+  "directory_location": "customMetadata",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "A description of the custom metadata record. This field can contain a maximum of 1,000 characters."
+    },
+    "label": {
+      "type": "string",
+      "description": "A label that represents the object throughout the Salesforce Setup user interface. Custom metadata records are currently visible only through the packaging user interface."
+    },
+    "protected": {
+      "type": "boolean",
+      "description": "Boolean. Indicates whether the record is protected (true) or not (false). When a custom metadata type is released in a managed package, access is limited in specific ways. Code that’s in the same managed package as custom metadata records can read the records. Code that’s in the same managed package as custom metadata types can read the records that belong to that type. Code that’s in a managed package that doesn’t contain either the type or the protected record can’t read the protected records. Code that the subscriber creates and code that’s in an unmanaged package can’t read the protected records. The developer can modify protected records with a package upgrade or by using the Metadata Apex classes (if the Apex code is in the same namespace as either the records or their type). The subscriber can’t read or modify protected records. The developer name of a protected record can’t be changed after release. The subscriber can’t create records of a protected type. Records that are hidden by these access rules are also unavailable to REST, SOAP, SOQL, and Setup."
+    },
+    "values": {
+      "type": "CustomMetadataValue[]",
+      "description": "Represents one or more values for custom fields on the custom metadata record."
+    }
+  },
+  "sub_types": {
+    "CustomMetadataValue": {
+      "field": {
+        "type": "string",
+        "description": "The non-object-qualified name of a custom field in the custom metadata type. This value corresponds to the name of a field on the custom metadata record’s custom metadata type. Include the namespace (if the type is from a managed package) and the __c suffix. The name of the custom metadata type isn’t required. For example, picklist1234__AlphaSort__c.",
+        "required": true
+      },
+      "value": {
+        "type": "Any type",
+        "description": "The value on a custom metadata record. Where fields are EntityDefinition and FieldDefinition, the qualified API names of the entity and the field it points to. This value can be null."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomMetadata\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"protected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"values\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomMetadataValue\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"CustomMetadataValue\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:anyType\" nillable=\"true\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Assuming Picklists R Us’s namespace is picklist1234 Planets customMetadata picklist1234__ReusablePicklist.Planets.md xsi:type AlphaSort__c",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomMetadata xmlns=\"http://soap.sforce.com/2006/04/metadata\" \n                   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \n                   xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n    <description>All the planets in the solar system. Does not \n                 include asteroids.</description>\n    <label>Planets</label>\n    <values>\n        <field>picklist1234__AlphaSort__c</field>\n        <value xsi:type=\"xsd:boolean\">false</value>\n    </values>\n</CustomMetadata>"
+    },
+    {
+      "description": "Picklists R Us creates its Reusable Picklist Option custom metadata type by deploying a file in the objects folder, named ReusablePicklist__mdt.object, with these contents.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomObject xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <fields>\n        <fullName>Picklist__c</fullName>\n        <externalId>false</externalId>\n        <label>Picklist</label>\n        <length>40</length>\n        <required>true</required>\n        <type>Text</type>\n        <unique>false</unique>\n    </fields>\n    <fields>\n        <fullName>SortOrder__c</fullName>\n        <externalId>false</externalId>\n        <label>Non-Alphabetical Sort Order</label>\n        <precision>3</precision>\n        <scale>0</scale>\n        <required>false</required>\n        <type>Number</type>\n        <unique>false</unique>\n    </fields>\n    <label>Reusable Picklist Option</label>\n    <pluralLabel>Reusable Picklist Options</pluralLabel>\n</CustomObject>"
+    },
+    {
+      "description": "To define the Mars picklist1234__ReusablePicklistOption.Mars.md ReusablePicklistOption__mdt",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomMetadata xmlns=\"http://soap.sforce.com/2006/04/metadata\" \n  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  \n  xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n    <label>Mars</label>\n    <values>\n        <field>picklist1234__Picklist__c</field>\n        <value xsi:type=\"xsd:string\">Planets</value>\n    </values>\n    <values>\n        <field>picklist1234__SortOrder__c</field>\n        <value xsi:type=\"xsd:int\">4</value>\n    </values>\n</CustomMetadata>"
+    },
+    {
+      "description": "To define the Motel6 picklist1234__ReusablePicklistOption.Motel6.md",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomMetadata xmlns=\"http://soap.sforce.com/2006/04/metadata\" \n  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \n  xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n    <label>Motel 6</label>\n    <values>\n        <field>picklist1234__Picklist__c</field>\n        <value xsi:type=\"xsd:string\">Hotels</value>\n    </values>\n</CustomMetadata>"
+    },
+    {
+      "description": "Because the SortOrder__c SortOrder__c xsi:nil SortOrder__c",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomMetadata xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n    <label>Motel 6</label>\n    <values>\n        <field>picklist1234__Picklist__c</field>\n        <value xsi:type=\"xsd:string\">Hotels</value>\n    </values>\n    <values>\n        <field>picklist1234__SortOrder__c</field>\n        <value xsi:nil=\"true\" />\n    </values>\n</CustomMetadata>"
+    },
+    {
+      "description": "This excerpt from a package.xml file illustrates the inclusion of custom metadata types and their namespaces in custom metadata records’ names. Assume that Picklists R Us’s namespace is picklist1234.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<package xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n…\n   <types>\n      <members>picklist1234__ReusablePicklist.Hotels</members>\n      <members>picklist1234__ReusablePicklist.Planets</members>\n      <members>picklist1234__ReusablePicklistOption.Bellagio</members>\n      <members>picklist1234__ReusablePicklistOption.Motel6</members>\n      <members>picklist1234__ReusablePicklistOption.Mercury</members>\n      <members>picklist1234__ReusablePicklistOption.Venus</members>\n      <members>picklist1234__ReusablePicklistOption.Earth</members>\n      <members>picklist1234__PicklistUsage.BookedHotel</members>\n      <members>\n         picklist1234__PicklistUsage.DestinationPlanetPL\n      </members>\n      <members>picklist1234__PicklistUsage.PlanetVisitedPl</members>\n      <name>CustomMetadata</name>\n   </types>\n… \n</package>"
+    },
+    {
+      "description": "TravelApp, Inc.’s package.xml package.xml package.xml",
+      "code": "<types>\n   <members>*</members>\n   <name>CustomMetadata</name>\n</types>"
+    },
+    {
+      "description": "If the custom metadata is from a managed package, the name after the dot in the package.xml file—between the two dots in the file name—is qualified by the managed package’s namespace. For example, assuming TravelApp uses the namespace travelApp1234, the first member element in the TravelApp package.xml file appears to Galactic Tours as:",
+      "code": "<members>picklist1234__ReusablePicklist.travelApp1234__Hotels</members>"
+    },
+    {
+      "description": "Here’s another example. In this case, we have an instance of custom metadata record, whose EntityDefinition field points to a custom object named SalesAgreement__c. The FieldDefinition field points to the custom field CustomerReference__c on SalesAgreement__c. You can deploy new custom metadata records and retrieve existing ones with EntityDefinition and FieldDefinition fields using qualified API names of custom and standard entities and their fields.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><values>\n<field>EntityDefintionField__c</field>\n<value xsi:type=\"xsd:string\">v1__SalesAgreement__c</value>\n</values>\n<values>\n<field>FieldDefinitionField__c</field>\n<value xsi:type=\"xsd:string\">v1__CustomerReference__c</value>\n</values>"
+    }
+  ]
+}

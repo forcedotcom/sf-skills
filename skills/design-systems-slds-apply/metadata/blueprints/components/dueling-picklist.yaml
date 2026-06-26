@@ -1,0 +1,196 @@
+name: "Dueling Picklist"
+
+description: "A dueling-picklist is used to move options between two lists and is often referred to as a multi-select. Sometimes, the list options can then be re-ordered, depending on the use case."
+
+category: "Input"
+
+slds_classes:
+  root: "slds-dueling-list"
+  elements:
+    - class: "slds-dueling-list__column"
+      description: "Column container for each list and button group"
+      purpose: "Organizes the two lists and control buttons in a flex layout"
+    - class: "slds-dueling-list__options"
+      description: "Bounding visual container for listbox of options"
+      purpose: "Contains the selectable options list with border and scrollable area"
+  modifiers:
+    - class: "slds-dueling-list__column_responsive"
+      description: "Responsive layout modifier for dueling picklist columns"
+      usage: "Applied to columns containing options to make them responsive and flexible"
+  states:
+    - class: "slds-is-selected"
+      description: "Selected state of a listbox option"
+      trigger: "When an option is selected (aria-selected='true')"
+    - class: "slds-is-grabbed"
+      description: "Grabbed state of a listbox option during drag"
+      trigger: "When an option is being dragged"
+    - class: "slds-is-disabled"
+      description: "Disabled state for the entire dueling picklist"
+      trigger: "When the component is not interactive"
+
+variants:
+  - name: "Base"
+    description: "Standard dueling picklist with two lists and move buttons"
+    classes: ["slds-dueling-list"]
+    usage_context: "Default dueling picklist implementation"
+    differences: "Two side-by-side lists with buttons to move items between them"
+  - name: "Responsive"
+    description: "Responsive dueling picklist that adapts to available space"
+    classes: ["slds-dueling-list", "slds-dueling-list__column_responsive"]
+    usage_context: "Use in narrow regions or responsive layouts"
+    differences: "Columns flex to available space, items truncate with ellipsis"
+
+lightning_component:
+  name: ""
+  url: "https://developer.salesforce.com/docs/component-library/overview/components"
+  mapping_notes: "No direct Lightning Base Component - use custom implementation with SLDS classes"
+
+accessibility:
+  keyboard_support:
+    - "Tab to navigate between lists and buttons"
+    - "Up/Down arrows to move focus and selection within a list"
+    - "Shift + Up/Down to extend selection"
+    - "Ctrl + Up/Down to move focus without changing selection"
+    - "Ctrl + Space to toggle selection on focused option"
+    - "Ctrl + A to select all options in a list"
+    - "Cmd/Ctrl + Left/Right to move selected items between lists"
+    - "Space to toggle Drag and Drop mode"
+    - "In Drag mode: Up/Down arrows move selected items within current list"
+  screen_reader:
+    - "List labels announced via aria-labelledby"
+    - "Operation instructions announced via aria-describedby"
+    - "Selected state announced for each option"
+    - "Drag and drop mode announced"
+  aria_attributes:
+    - "role='listbox' on each options container"
+    - "aria-multiselectable='true' on each listbox"
+    - "aria-selected on each option (true/false)"
+    - "aria-labelledby pointing to list label"
+    - "aria-describedby for operation instructions"
+    - "tabindex='0' on selected items, '-1' on others"
+    - "role='group' on form-element wrapper"
+    - "aria-labelledby on group pointing to group label ID"
+
+usage_guidelines:
+  when_to_use:
+    - "When users need to select multiple options from a large set"
+    - "For moving items between available and selected lists"
+    - "When reordering selected items is needed"
+    - "For complex multi-select scenarios"
+  when_not_to_use:
+    - "For single selection (use select or combobox)"
+    - "When only a few options exist (use checkboxes)"
+    - "In very constrained spaces"
+    - "When drag and drop is not supported"
+  best_practices:
+    - "Use group labels (fieldset/legend pattern) for accessibility"
+    - "Provide clear operation instructions"
+    - "Support both button and keyboard interactions"
+    - "Implement proper focus management"
+    - "Handle drag and drop gracefully with fallbacks"
+    - "Use responsive variant for narrow layouts"
+    - "Provide visual feedback for all interactions"
+  common_mistakes:
+    - "Not implementing proper ARIA listbox patterns"
+    - "Missing keyboard navigation support"
+    - "Inadequate focus management"
+    - "Not providing operation instructions"
+    - "Missing group labels for accessibility"
+
+code_examples:
+  - title: "Basic Dueling Picklist"
+    code: |
+      <div class="slds-form-element" role="group" aria-labelledby="dueling-picklist-label">
+        <div class="slds-form-element__label slds-form-element__legend" id="dueling-picklist-label">
+          Select Options
+        </div>
+        <div class="slds-form-element__control">
+          <div class="slds-dueling-list">
+            <div class="slds-dueling-list__column">
+              <span class="slds-form-element__label">Available</span>
+              <div class="slds-dueling-list__options" role="listbox" aria-multiselectable="true" aria-labelledby="available-label">
+                <div role="option" aria-selected="false" tabindex="0">Option 1</div>
+                <div role="option" aria-selected="false" tabindex="-1">Option 2</div>
+                <div role="option" aria-selected="false" tabindex="-1">Option 3</div>
+              </div>
+            </div>
+            <div class="slds-dueling-list__column">
+              <button class="slds-button slds-button_neutral">Move Right</button>
+              <button class="slds-button slds-button_neutral">Move Left</button>
+            </div>
+            <div class="slds-dueling-list__column">
+              <span class="slds-form-element__label">Selected</span>
+              <div class="slds-dueling-list__options" role="listbox" aria-multiselectable="true" aria-labelledby="selected-label">
+                <div role="option" aria-selected="false" tabindex="0">Option 4</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    description: "Basic dueling picklist with two lists and move buttons"
+  - title: "Responsive Dueling Picklist"
+    code: |
+      <div class="slds-form-element" role="group" aria-labelledby="responsive-picklist-label">
+        <div class="slds-form-element__label slds-form-element__legend" id="responsive-picklist-label">
+          Select Options
+        </div>
+        <div class="slds-form-element__control">
+          <div class="slds-dueling-list">
+            <div class="slds-dueling-list__column slds-dueling-list__column_responsive">
+              <span class="slds-form-element__label">Available</span>
+              <div class="slds-dueling-list__options" role="listbox" aria-multiselectable="true">
+                <div role="option" aria-selected="false" tabindex="0">Option 1</div>
+                <div role="option" aria-selected="false" tabindex="-1">Option 2</div>
+              </div>
+            </div>
+            <div class="slds-dueling-list__column">
+              <button class="slds-button slds-button_neutral">Move Right</button>
+              <button class="slds-button slds-button_neutral">Move Left</button>
+            </div>
+            <div class="slds-dueling-list__column slds-dueling-list__column_responsive">
+              <span class="slds-form-element__label">Selected</span>
+              <div class="slds-dueling-list__options" role="listbox" aria-multiselectable="true">
+                <div role="option" aria-selected="false" tabindex="0">Option 3</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    description: "Responsive dueling picklist that adapts to available space"
+
+styling_hooks: []
+
+dependencies:
+  css_files: ["dueling-picklist.css", "form-element.css", "listbox.css", "button.css"]
+  javascript:
+    - "Listbox selection management"
+    - "Item movement between lists"
+    - "Drag and drop functionality (optional)"
+    - "Keyboard navigation"
+    - "Focus management"
+  icons: []
+  other_components: ["form-element", "listbox", "button"]
+
+related_components:
+  - name: "Listbox"
+    relationship: "depends-on"
+    description: "ARIA listbox component used for each list"
+  - name: "Select"
+    relationship: "alternative"
+    description: "For single selection scenarios"
+  - name: "Multi-Select"
+    relationship: "similar"
+    description: "Alternative multi-select component"
+
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/dueling-picklist/"
+  design_guidelines: "https://v1.lightningdesignsystem.com/components/dueling-picklist/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-01-15"
+  author: "SLDS Documentation Team"
+  slds_version: "2.27.2"
+  review_status: "complete"
+  source: "official-slds"
+  notes: "Created from official SLDS documentation and design-system-internal source code with CSS selector annotations. Follows ARIA listbox practices for accessibility."
+

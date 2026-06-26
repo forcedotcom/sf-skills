@@ -1,0 +1,64 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ApexPage - Metadata API",
+  "description": "Represents a Visualforce page.",
+  "file_information": "The file suffix is .page for the page file. The accompanying metadata file is named PageName-meta.xml.\n\nVisualforce pages are stored in the pages folder in the corresponding package directory.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "apiVersion": {
+      "type": "double",
+      "description": "The API version for this page. Every page has an API version specified at creation. This field is available in API version 15.0 and later. If you set this field to a number lower than 15.0, it’s changed to 15.0.",
+      "required": true
+    },
+    "content": {
+      "type": "base64Binary",
+      "description": "The page content. Base 64-encoded binary data. Before making an API call, client applications must encode the binary attachment data as base64. Upon receiving a response, client applications must decode the base64 data to binary. This conversion is handled for you by a SOAP client. This field is inherited from the MetadataWithContent component."
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of what the page does."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The page developer name used as a unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from the Metadata component."
+    },
+    "availableInTouch": {
+      "type": "boolean",
+      "description": "Indicates if Visualforce tabs associated with the Visualforce page can be used in the Salesforce mobile app. (Use of this field for Salesforce Touch is deprecated.). This field is available in API version 27.0 and later. Standard object tabs that are overridden with a Visualforce page aren’t supported in the Salesforce mobile app, even if you set this field for the page. The default page for the object is displayed instead of the Visualforce page."
+    },
+    "confirmationTokenRequired": {
+      "type": "boolean",
+      "description": "Indicates whether GET requests for the page require a CSRF confirmation token. This field is available in API version 28.0 and later. If you change this field’s value from false to true, links to the page require a CSRF token to be added to them, or the page is inaccessible."
+    },
+    "label": {
+      "type": "string",
+      "description": "The label for this page.",
+      "required": true
+    },
+    "packageVersions": {
+      "type": "PackageVersion[]",
+      "description": "The list of installed managed package versions that are referenced by this Visualforce page. For more information about managed packages, see Second-Generation Managed Packages in the Salesforce DX Developer Guide. This field is available in API version 16.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ApexPage\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"apiVersion\" type=\"xsd:double\"/>\n        <xsd:element name=\"availableInTouch\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"confirmationTokenRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"packageVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PackageVersion\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"PackageVersion\">\n  <xsd:sequence>\n    <xsd:element name=\"majorNumber\" type=\"xsd:int\"/>\n    <xsd:element name=\"minorNumber\" type=\"xsd:int\"/>\n    <xsd:element name=\"namespace\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"packageId\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "SampleApexPage.page file:",
+      "code": "<apex:page>\n<h1>Congratulations</h1>\nThis is your new Page.\n</apex:page>"
+    },
+    {
+      "description": "SampleApexPage.page-meta.xml:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ApexPage xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>This is a sample Visualforce page.</description>\n    <label>SampleApexPage</label>\n</ApexPage>"
+    }
+  ]
+}

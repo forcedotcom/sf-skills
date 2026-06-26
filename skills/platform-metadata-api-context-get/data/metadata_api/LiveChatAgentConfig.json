@@ -1,0 +1,188 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LiveChatAgentConfig - Metadata API",
+  "description": "Represents the configuration of an organization’s Chat deployment, such as how many chats can be assigned to an agent and whether chat sounds are enabled.",
+  "file_information": ".liveChatAgentConfig",
+  "directory_location": "liveChatAgentConfigs",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "assignments": {
+      "type": "AgentConfigAssignments",
+      "description": "Specifies how agent configurations are assigned to Chat users. Agent configurations can be assigned to sets of users or sets of profiles."
+    },
+    "autoGreeting": {
+      "type": "string",
+      "description": "Specifies the greeting that displays when a customer begins a chat with an agent."
+    },
+    "capacity": {
+      "type": "int",
+      "description": "Specifies the maximum number of chats in which an agent can be engaged at a time."
+    },
+    "criticalWaitTime": {
+      "type": "int",
+      "description": "Specifies the number of seconds an agent can wait to answer an engaged chat before the chat tab flashes to alert the agent to answer it."
+    },
+    "customAgentName": {
+      "type": "string",
+      "description": "Specifies the custom name for an agent, if one has been set. Available in API version 29.0 and later."
+    },
+    "disableTransferConferenceGreeting": {
+      "type": "boolean",
+      "description": "Indicates whether the greeting is disabled for agents during chat transfer and chat conferencing (true) or not (false). Available in API version 53.0 and later."
+    },
+    "enableAgentFileTransfer": {
+      "type": "boolean",
+      "description": "Indicates whether file transfer is enabled for agents (true) or not (false). Available in API version 31.0 and later."
+    },
+    "enableAgentSneakPeek": {
+      "type": "boolean",
+      "description": "Specifies whether a supervisor can see the content of an agent’s message before they send it to a customer (true) or not (false)."
+    },
+    "enableAssistanceFlag": {
+      "type": "boolean",
+      "description": "Indicates whether agents can raise an assistance flag to notify a supervisor that they need help. Available in API version 35.0 and later."
+    },
+    "enableAutoAwayOnDecline": {
+      "type": "boolean",
+      "description": "Indicates whether an agent appears as “away” (true) or not (false) when an agent declines a chat with a customer."
+    },
+    "enableAutoAwayOnPushTimeout": {
+      "type": "boolean",
+      "description": "Indicates whether an agent appears as “away” (true) or not (false) when a chat request that's been pushed to the agent times out. Available in API version 34.0 and later."
+    },
+    "enableChatConferencing": {
+      "type": "boolean",
+      "description": "Indicates whether chat conferencing is enabled for agents (true) or not (false). Available in API version 34.0 and later."
+    },
+    "enableChatMonitoring": {
+      "type": "boolean",
+      "description": "Indicates whether chat monitoring is enabled for support supervisors (true) or not (false). Available in API version 29.0 and later."
+    },
+    "enableChatTransferToAgent": {
+      "type": "boolean",
+      "description": "Indicates whether agents can transfer a chat to another agent (true) or not (false). Available in API version 36.0 and later."
+    },
+    "enableChatTransferToButton": {
+      "type": "boolean",
+      "description": "Indicates whether agents can transfer a chat to a button (true) or not (false). Available in API version 36.0 and later."
+    },
+    "enableChatTransferToSkill": {
+      "type": "boolean",
+      "description": "Indicates whether agents can transfer a chat to a skill group (true) or not (false). Available in API version 36.0 and later."
+    },
+    "enableLogoutSound": {
+      "type": "boolean",
+      "description": "Indicates whether a sound plays (true) or not (false) when an agent logs out of Chat."
+    },
+    "enableNotifications": {
+      "type": "boolean",
+      "description": "Indicates whether notifications of incoming chats appear for agents (true) or not (false)."
+    },
+    "enableRequestSound": {
+      "type": "boolean",
+      "description": "Indicates whether a sound plays (true) or not (false) when a customer requests to chat with an agent."
+    },
+    "enableSneakPeek": {
+      "type": "boolean",
+      "description": "Indicates whether previews of customers’ messages are displayed as customers type (true) or not (false) in the agent’s Chat window. Available in API version 29.0 and later."
+    },
+    "enableVisitorBlocking": {
+      "type": "boolean",
+      "description": "Indicates whether an agent can block a visitor by IP address (true) or not (false). Available in API version 34.0 and later."
+    },
+    "enableWhisperMessage": {
+      "type": "boolean",
+      "description": "Indicates whether support supervisors can send whisper messages to agents during a chat (true) or not (false). Available in API version 29.0 and later."
+    },
+    "label": {
+      "type": "string",
+      "description": "Specifies the name of the configuration for agents’ default chat settings.",
+      "required": true
+    },
+    "supervisorDefaultAgentStatusFilter": {
+      "type": "SupervisorAgentStatusFilter (enumeration of type string)",
+      "description": "Specifies the Chat status for filtering the Agent Status list in the Supervisor Panel. Valid values are: Online Away Offline Available in API version 29.0 and later."
+    },
+    "supervisorDefaultButtonFilter": {
+      "type": "string",
+      "description": "Specifies the default button for filtering the Agent Status list in the Supervisor Panel. Available in API version 29.0 and later."
+    },
+    "supervisorDefaultSkillFilter": {
+      "type": "string",
+      "description": "Specifies the default skill for filtering the Agent Status list in the Supervisor Panel. Available in API version 29.0 and later."
+    },
+    "supervisorSkills": {
+      "type": "SupervisorAgentConfigSkills",
+      "description": "Specifies the list of agent skills that are assigned to a supervisor, as specified in their assigned Chat configuration. Available in API version 29.0 and later."
+    },
+    "transferableButtons": {
+      "type": "AgentConfigButtons",
+      "description": "Specifies the list of chat buttons that agents can transfer chats to. Available in API version 31.0 and later."
+    },
+    "transferableSkills": {
+      "type": "AgentConfigSkills",
+      "description": "Specifies the list of skill groups that agents can transfer chats to. Available in API version 31.0 and later."
+    }
+  },
+  "sub_types": {
+    "AgentConfigAssignments": {
+      "profiles": {
+        "type": "AgentConfigProfileAssignments",
+        "description": "Specifies the profiles that are associated with a specific agent configuration."
+      },
+      "users": {
+        "type": "AgentConfigUserAssignments",
+        "description": "Specifies the users that are associated with a specific agent configuration."
+      }
+    },
+    "AgentConfigButtons": {
+      "button": {
+        "type": "string[]",
+        "description": "Specifies the chat buttons that agents can transfer chats to."
+      }
+    },
+    "AgentConfigProfileAssignments": {
+      "profile": {
+        "type": "string",
+        "description": "Specifies the custom name of the profile associated with a specific agent configuration."
+      }
+    },
+    "AgentConfigSkills": {
+      "skill": {
+        "type": "string[]",
+        "description": "Specifies the skill groups that agents can transfer chats to."
+      }
+    },
+    "AgentConfigUserAssignments": {
+      "user": {
+        "type": "string",
+        "description": "Specifies the username of the user associated with a specific agent configuration."
+      }
+    },
+    "SupervisorAgentConfigSkills": {
+      "skill": {
+        "type": "string",
+        "description": "Specifies the agent skills available for filtering the Agent Status list in the Supervisor Panel."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AgentConfigAssignments\">\n  <xsd:sequence>\n    <xsd:element name=\"profiles\" minOccurs=\"0\" type=\"tns:AgentConfigProfileAssignments\"/>\n    <xsd:element name=\"users\" minOccurs=\"0\" type=\"tns:AgentConfigUserAssignments\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AgentConfigButtons\">\n  <xsd:sequence>\n    <xsd:element name=\"button\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AgentConfigProfileAssignments\">\n  <xsd:sequence>\n    <xsd:element name=\"profile\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AgentConfigSkills\">\n  <xsd:sequence>\n    <xsd:element name=\"skill\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AgentConfigUserAssignments\">\n  <xsd:sequence>\n    <xsd:element name=\"user\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"LiveChatAgentConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"assignments\" minOccurs=\"0\" type=\"tns:AgentConfigAssignments\"/>\n        <xsd:element name=\"autoGreeting\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"capacity\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"criticalWaitTime\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"customAgentName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"disableTransferConferenceGreeting\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAgentFileTransfer\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAgentSneakPeek\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAssistanceFlag\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAutoAwayOnDecline\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAutoAwayOnPushTimeout\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableChatConferencing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableChatMonitoring\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableChatTransferToAgent\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableChatTransferToButton\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableChatTransferToSkill\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLogoutSound\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableNotifications\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRequestSound\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSneakPeek\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableVisitorBlocking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableWhisperMessage\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"supervisorDefaultAgentStatusFilter\" minOccurs=\"0\" type=\"tns:SupervisorAgentStatusFilter\"/>\n        <xsd:element name=\"supervisorDefaultButtonFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"supervisorDefaultSkillFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"supervisorSkills\" minOccurs=\"0\" type=\"tns:SupervisorAgentConfigSkills\"/>\n        <xsd:element name=\"transferableButtons\" minOccurs=\"0\" type=\"tns:AgentConfigButtons\"/>\n        <xsd:element name=\"transferableSkills\" minOccurs=\"0\" type=\"tns:AgentConfigSkills\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SupervisorAgentConfigSkills\">\n  <xsd:sequence>\n    <xsd:element name=\"skill\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SupervisorAgentStatusFilter\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Online\"/>\n    <xsd:enumeration value=\"Away\"/>\n    <xsd:enumeration value=\"Offline\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is a sample of a liveChatAgentConfig file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LiveChatAgentConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <label>My Agent Configuration 1</label>\n    <autoGreeting>Hi, how can I help you?</autoGreeting>\n    <capacity>5</capacity>\n    <enableAutoAwayOnDecline>true</enableAutoAwayOnDecline>\n    <enableLogoutSound>true</enableLogoutSound>\n    <enableNotifications>true</enableNotifications>\n    <enableRequestSound>true</enableRequestSound>\n    <enableSneakPeek>true</enableSneakPeek>\n    <enableWhisperMessage>true</enableWhisperMessage>\n    <assignments>\n        <profiles>\n            <profile>standard</profile>\n        </profiles>\n        <users>\n            <user>jdoe@acme.com</user>\n        </users>\n    </assignments>\n</LiveChatAgentConfig>"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PlatformCachePartition - Metadata API",
+  "description": "Represents a partition in the Platform Cache. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".cachePartition",
+  "directory_location": "cachePartitions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "Describes the cache partition."
+    },
+    "isDefaultPartition": {
+      "type": "boolean",
+      "description": "Indicates whether this cache partition is the default partition in your organization (true) or not (false).",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label of the cache partition that appears in the Salesforce user interface.",
+      "required": true
+    },
+    "platformCachePartitionTypes": {
+      "type": "PlatformCachePartitionType[]",
+      "description": "An array of cache types that the partition can store."
+    }
+  },
+  "sub_types": {
+    "PlatformCachePartitionType": {
+      "allocatedCapacity": {
+        "type": "int",
+        "description": "The total storage capacity, in megabytes (MB), that is allocated for the cache type, including free, purchased, and trial cache. Purchased capacity includes organization-wide cache, which can be used in any partition, and namespace-specific cache, which can be used only in partitions associated with a namespace.",
+        "required": true
+      },
+      "allocatedPartnerCapacity": {
+        "type": "int",
+        "description": "Free capacity, in megabytes (MB). allocated to Developer Edition orgs for the cache type. Use this capacity with security-reviewed managed packages. Available in API version 51.0 and later.",
+        "required": true
+      },
+      "allocatedPurchasedCapacity": {
+        "type": "int",
+        "description": "The amount of namespace-specific purchased storage capacity, in MB, that is allocated for the cache type.",
+        "required": true
+      },
+      "allocatedTrialCapacity": {
+        "type": "int",
+        "description": "The amount of trial cache space, in MB, that is allocated for the cache type.",
+        "required": true
+      },
+      "cacheType": {
+        "type": "PlatformCacheType (enumeration of type string)",
+        "description": "The type of cache. Valid values are: Session—Session cache Organization—Org cache"
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PlatformCachePartition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isDefaultPartition\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"platformCachePartitionTypes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PlatformCachePartitionType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"PlatformCachePartitionType\">\n  <xsd:sequence>\n    <xsd:element name=\"allocatedCapacity\" type=\"xsd:int\"/>\n    <xsd:element name=\"allocatedPartnerCapacity\" type=\"xsd:int\"/>\n    <xsd:element name=\"allocatedPurchasedCapacity\" type=\"xsd:int\"/>\n    <xsd:element name=\"allocatedTrialCapacity\" type=\"xsd:int\"/>\n    <xsd:element name=\"cacheType\" type=\"tns:PlatformCacheType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"PlatformCacheType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Session\"/>\n    <xsd:enumeration value=\"Organization\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PlatformCachePartition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PlatformCachePartition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>Custom partition and marked as default.</description>\n    <isDefaultPartition>true</isDefaultPartition>\n    <masterLabel>myPartition</masterLabel>\n    <platformCachePartitionTypes>\n        <allocatedCapacity>10</allocatedCapacity>\n        <allocatedPurchasedCapacity>5</allocatedPurchasedCapacity>\n        <cacheType>Session</cacheType>\n    </platformCachePartitionTypes>\n    <platformCachePartitionTypes>\n        <allocatedCapacity>5</allocatedCapacity>\n        <allocatedPurchasedCapacity>5</allocatedPurchasedCapacity>\n        <cacheType>Organization</cacheType>\n    </platformCachePartitionTypes>\n</PlatformCachePartition>"
+    },
+    {
+      "description": "If a namespace is defined in your organization, add the namespace prefix to your partition name. For example:",
+      "code": "<members>Namespace.myPartition</members>"
+    }
+  ]
+}

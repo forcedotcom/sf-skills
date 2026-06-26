@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Template: Connected App - JWT Bearer Flow
+  Use Case: Server-to-server integration, CI/CD pipelines, headless automation
+
+  Replace placeholders:
+  - {{APP_NAME}}: Application name (no spaces, alphanumeric + underscore)
+  - {{CONTACT_EMAIL}}: Administrator contact email
+  - {{DESCRIPTION}}: Brief description of the app's purpose
+  - {{CERTIFICATE_NAME}}: Name of the certificate uploaded to Salesforce
+
+  Prerequisites:
+  1. Create a self-signed certificate or use CA-signed certificate
+  2. Upload certificate to Salesforce (Setup > Certificate and Key Management)
+  3. Use the certificate name (not file name) in this template
+
+  Note: No callback URL needed for JWT Bearer flow
+  Note: Consumer Secret is optional when using certificate authentication
+-->
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>{{APP_NAME}}</label>
+    <contactEmail>{{CONTACT_EMAIL}}</contactEmail>
+    <description>{{DESCRIPTION}} - JWT Bearer Authentication</description>
+
+    <oauthConfig>
+        <!-- JWT Bearer flow doesn't require callback URL, but Salesforce requires one -->
+        <callbackUrl>https://localhost/oauth/callback</callbackUrl>
+
+        <!-- Certificate for JWT signing -->
+        <certificate>{{CERTIFICATE_NAME}}</certificate>
+
+        <isAdminApproved>true</isAdminApproved>
+        <isConsumerSecretOptional>true</isConsumerSecretOptional>
+
+        <!-- API access scope - typically all that's needed for server-to-server -->
+        <scopes>Api</scopes>
+        <!-- RefreshToken not needed for JWT - each request gets new access token -->
+    </oauthConfig>
+
+    <oauthPolicy>
+        <ipRelaxation>ENFORCE</ipRelaxation>
+        <refreshTokenPolicy>zero</refreshTokenPolicy>
+    </oauthPolicy>
+
+    <!-- Require connected app to be assigned via permission sets or profiles -->
+    <permissionSetLicense>
+        <license>Salesforce</license>
+    </permissionSetLicense>
+</ConnectedApp>

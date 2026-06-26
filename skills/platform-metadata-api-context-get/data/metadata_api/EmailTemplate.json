@@ -1,0 +1,116 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EmailTemplate - Metadata API",
+  "description": "Represents a template for an email, mass email, list email, or Sales Engagement email. Supported in first-generation managed packages only.",
+  "file_information": ".email",
+  "directory_location": "email",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "apiVersion": {
+      "type": "double",
+      "description": "The API version if it's a Visualforce email template. Every Visualforce email template has an API version specified at creation. This field is available in API version 16.0 and later."
+    },
+    "attachedDocuments": {
+      "type": "string[]",
+      "description": "A list of references to documents in your organization. These documents are included as attachments in the email template. Each document is referenced by its path, for example MyFolder/MyDocument.txt."
+    },
+    "attachments": {
+      "type": "Attachment[]",
+      "description": "A list of attachments for the email template."
+    },
+    "available": {
+      "type": "boolean",
+      "description": "Indicates whether this template is offered to users when sending an email (true) or not (false).",
+      "required": true
+    },
+    "content": {
+      "type": "base64Binary",
+      "description": "Content of the email template. Base 64-encoded binary data. Before making an API call, client applications must encode the binary attachment data as base64. Upon receiving a response, client applications must decode the base64 data to binary. This conversion is handled for you by a SOAP client. This field contains: Binary content of the email body if type is set to text HTML email content if type is set to html HTML body if type is set to custom Visualforce body if type is set to visualforce This field is inherited from the MetadataWithContent component."
+    },
+    "description": {
+      "type": "string",
+      "description": "The email template description describes the reason for creating the template."
+    },
+    "encodingKey": {
+      "type": "Encoding (enumeration of type string)",
+      "description": "Required for Classic email templates. The default encoding setting is Unicode: UTF-8. Change it if your template requires data in a different format. Valid values include: UTF-8—Unicode (UTF-8) ISO-8859-1—General US & Western Europe (ISO-8859–1, ISO-LATIN-1) Shift_JIS—Japanese (Shift-JIS) ISO-2022-JP—Japanese (JIS) EUC-JP—Japanese (EUC-JP) x-SJIS_0213—Japanese (Shift-JIS_2004) ks_c_5601-1987—Korean (ks_c_5601-1987) Big5—Traditional Chinese (Big5) GB2312—Simplified Chinese (GB2312) Big5-HKSCS—Traditional Chinese Hong Kong (Big5–HKSCS) Lightning email templates don’t use this field. Instead, the encoding values are taken directly from the user’s encoding settings.",
+      "required": true
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The email template developer name used as a unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. If this field contained characters before version 14.0 that are no longer allowed, the characters were stripped out of this field, and the previous value of the field was saved in the name field. This field is inherited from the Metadata component."
+    },
+    "letterhead": {
+      "type": "string",
+      "description": "The letterhead name associated with this email template. Only available when type is set to html."
+    },
+    "name": {
+      "type": "string",
+      "description": "Email template name. The list of characters allowed in the fullName field has been reduced for versions 14.0 and later. This field contains the value contained in the fullName field before version 14.0.",
+      "required": true
+    },
+    "packageVersions": {
+      "type": "PackageVersion[]",
+      "description": "The list of package versions for any managed packages containing components that are referenced by this email template. This field is only relevant for Visualforce email templates. For more information about managed packages, see Second-Generation Managed Packages in the Salesforce DX Developer Guide. This field is available in API version 16.0 and later."
+    },
+    "relatedEntityType": {
+      "type": "Object Name (enumeration of type string)",
+      "description": "Reserved for future use with Lightning Experience."
+    },
+    "style": {
+      "type": "EmailTemplateStyle (enumeration of type string)",
+      "description": "The style of the template. This field is only available when type is set to html. Valid style values include: none freeForm formalLetter promotionRight promotionLeft newsletter products",
+      "required": true
+    },
+    "subject": {
+      "type": "string",
+      "description": "The email subject. The limit is 1,000 characters for Lightning email templates and 230 characters for Classic email templates."
+    },
+    "textOnly": {
+      "type": "string",
+      "description": "The text of the email body if type is set to html or custom."
+    },
+    "type": {
+      "type": "EmailTemplateType (enumeration of type string)",
+      "description": "The email template type. The valid values are: text - all users can create or change text email templates. html - administrators and users with the “Edit HTML Templates” permission can create HTML email templates based on a letterhead. custom - administrators and users with the “Edit HTML Templates” permission can create custom HTML email templates without using a letterhead. You must either know HTML or obtain the HTML code to insert in your email template. visualforce - administrators and users with the Customize Application permission can create email templates using Visualforce.",
+      "required": true
+    },
+    "UiType": {
+      "type": "EmailTemplateUiType (enumeration of type string)",
+      "description": "Indicates the user interface where this template is usable. Valid values are: Aloha (Salesforce Classic) SFX (Lightning Experience) SFX_Sample (Lightning Experience Sample) If UiType is SFX, the type must be custom. Packaging is supported for Salesforce Classic email templates only."
+    }
+  },
+  "sub_types": {
+    "Attachment": {
+      "content": {
+        "type": "base64Binary",
+        "description": "The attachment content. Base 64-encoded binary data. Before making an API call, client applications must encode the binary attachment data as base64. Upon receiving a response, client applications must decode the base64 data to binary. This conversion is handled for you by a SOAP client.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The attachment file name.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Attachment\">\n  <xsd:sequence>\n    <xsd:element name=\"content\" type=\"xsd:base64Binary\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"EmailTemplate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"apiVersion\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"attachedDocuments\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"attachments\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Attachment\"/>\n        <xsd:element name=\"available\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"encodingKey\" type=\"tns:Encoding\"/>\n        <xsd:element name=\"letterhead\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"packageVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PackageVersion\"/>\n        <xsd:element name=\"pageDevName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relatedEntityType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"style\" type=\"tns:EmailTemplateStyle\"/>\n        <xsd:element name=\"subject\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"textOnly\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"type\" type=\"tns:EmailTemplateType\"/>\n        <xsd:element name=\"uiType\" minOccurs=\"0\" type=\"tns:EmailTemplateUiType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"EmailTemplateStyle\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"none\"/>\n    <xsd:enumeration value=\"freeForm\"/>\n    <xsd:enumeration value=\"formalLetter\"/>\n    <xsd:enumeration value=\"promotionRight\"/>\n    <xsd:enumeration value=\"promotionLeft\"/>\n    <xsd:enumeration value=\"newsletter\"/>\n    <xsd:enumeration value=\"products\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EmailTemplateType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"text\"/>\n    <xsd:enumeration value=\"html\"/>\n    <xsd:enumeration value=\"custom\"/>\n    <xsd:enumeration value=\"visualforce\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EmailTemplateUiType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Aloha\"/>\n    <xsd:enumeration value=\"SFX\"/>\n    <xsd:enumeration value=\"SFX_Sample\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"Encoding\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"UTF-8\"/>\n    <xsd:enumeration value=\"ISO-8859-1\"/>\n    <xsd:enumeration value=\"Shift_JIS\"/>\n    <xsd:enumeration value=\"ISO-2022-JP\"/>\n    <xsd:enumeration value=\"EUC-JP\"/>\n    <xsd:enumeration value=\"ks_c_5601-1987\"/>\n    <xsd:enumeration value=\"Big5\"/>\n    <xsd:enumeration value=\"GB2312\"/>\n    <xsd:enumeration value=\"Big5-HKSCS\"/>\n    <xsd:enumeration value=\"x-SJIS_0213\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"PackageVersion\">\n  <xsd:sequence>\n    <xsd:element name=\"majorNumber\" type=\"xsd:int\"/>\n    <xsd:element name=\"minorNumber\" type=\"xsd:int\"/>\n    <xsd:element name=\"namespace\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"packageId\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here's a sample XML definition of an email template.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EmailTemplate xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <available>true</available>\n    <description>Sample Email Template</description>\n    <encodingKey>ISO-8859-1</encodingKey>\n    <name>Sample Email Template</name>\n    <style>none</style>\n    <subject>Sample email subject</subject>\n    <textOnly>Your case has been resolved.</textOnly>\n    <type>custom</type>\n</EmailTemplate>"
+    }
+  ]
+}

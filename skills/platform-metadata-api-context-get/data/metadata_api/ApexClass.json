@@ -1,0 +1,70 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ApexClass - Metadata API",
+  "description": "Represents an Apex class. An Apex class is a template or blueprint from which Apex objects are created. Classes consist of other classes, user-defined methods, variables, exception types, and static initialization code.",
+  "file_information": "The file suffix is .cls for the class file. The accompanying metadata file is named ClassName.cls-meta.xml.\n\nApex classes are stored in the classes folder in the corresponding package directory.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "apiVersion": {
+      "type": "double",
+      "description": "The API version for this class. Every class has an API version specified at creation."
+    },
+    "content": {
+      "type": "base64",
+      "description": "The Apex class definition. Base 64-encoded binary data. Before making an API call, client applications must encode the binary attachment data as base64. Upon receiving a response, client applications must decode the base64 data to binary. This conversion is handled for you by a SOAP client. This field is inherited from the MetadataWithContent component."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The Apex class name. The name can only contain characters, letters, and the underscore (_) character, must start with a letter, and can’t end with an underscore or contain two consecutive underscore characters. This field is inherited from the Metadata component."
+    },
+    "packageVersions": {
+      "type": "PackageVersion[]",
+      "description": "The list of installed managed package versions that are referenced by this Apex class. For more information about managed packages, see Second-Generation Managed Packages in the Salesforce DX Developer Guide. This field is available in API version 16.0 and later."
+    },
+    "status": {
+      "type": "ApexCodeUnitStatus (enumeration of type string)",
+      "description": "The status of the Apex class. The following string values are valid: Active - The class is active. Deleted - The class is marked for deletion. This value is useful for managed packages, because it allows a class to be deleted when a managed package is updated. ApexCodeUnitStatus includes an Inactive option, but it’s only supported for ApexTrigger; it isn’t supported for ApexClass."
+    }
+  },
+  "sub_types": {
+    "PackageVersion": {
+      "namespace": {
+        "type": "string",
+        "description": "In a packaging context, a namespace prefix is a one to 15-character alphanumeric identifier that distinguishes your package and its contents from packages of other developers on AppExchange. Namespace prefixes are case-insensitive. For example, ABC and abc aren’t recognized as unique. Your namespace prefix must be globally unique across all Salesforce orgs. Salesforce automatically prepends your namespace prefix, followed by two underscores (“__”), to all unique component names in your Salesforce organization. A unique package component is one that requires a name that no other component has within Salesforce, such as custom objects, custom fields, custom links, s-controls, and validation rules. For more information about namespaces, see Create and Register Your Namespace in the Second-Generation Managed Packaging Developer Guide.",
+        "required": true
+      },
+      "majorNumber": {
+        "type": "int",
+        "description": "The major number of the package version. A package version number has a majorNumber.minorNumber format.",
+        "required": true
+      },
+      "minorNumber": {
+        "type": "int",
+        "description": "The minor number of the package version. A package version number has a majorNumber.minorNumber format.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ApexClass\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"apiVersion\" type=\"xsd:double\"/>\n        <xsd:element name=\"packageVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PackageVersion\"/>\n        <xsd:element name=\"status\" type=\"tns:ApexCodeUnitStatus\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ApexCodeUnitStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Inactive\"/>\n    <xsd:enumeration value=\"Active\"/>\n    <xsd:enumeration value=\"Deleted\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"PackageVersion\">\n  <xsd:sequence>\n    <xsd:element name=\"majorNumber\" type=\"xsd:int\"/>\n    <xsd:element name=\"minorNumber\" type=\"xsd:int\"/>\n    <xsd:element name=\"namespace\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"packageId\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "MyHelloWorld.cls file:",
+      "code": "public class MyHelloWorld {\n// This method updates the Hello field on a list\n// of accounts.\npublic static void addHelloWorld(Account[] accs){\n\tfor (Account a:accs){\n\t\tif (a.Hello__c != 'World')\n\t\ta.Hello__c = 'World';\n\t\t}\n\t}\n}"
+    },
+    {
+      "description": "MyHelloWorld.cls-meta.xml:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ApexClass xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>66.0</apiVersion>\n</ApexClass>"
+    }
+  ]
+}

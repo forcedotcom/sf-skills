@@ -1,0 +1,156 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "OmniSupervisorConfig - Metadata API",
+  "description": "Represents the Omni-Channel supervisor configuration for an assigned group of supervisors.",
+  "file_information": ".omniSupervisorConfig",
+  "directory_location": "omniSupervisorConfigs",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "isTimelineHidden": {
+      "type": "boolean",
+      "required": true,
+      "description": "If set to true, hides the agent timeline from the supervisors assigned to this supervisor configuration. The default value is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A unique label for the supervisor configuration. The name must begin with a letter and can contain alphanumeric characters and underscores. It can’t contain spaces, two consecutive underscores, or end with an underscore. The name appears as Omni Supervisor Configuration Name in the UI."
+    },
+    "omniSpvsrConfigAIAgent": {
+      "type": "OmniSpvsrConfigAIAgent[]",
+      "description": "Represents AI agent bots that are visible to supervisors in this configuration. This field is available in API version 64.0 and later."
+    },
+    "omniSupervisorConfigAction": {
+      "type": "OmniSupervisorConfigAction[]",
+      "description": "Represents the actions available to the supervisors of this Omni-Channel supervisor configuration."
+    },
+    "omniSupervisorConfigGroup": {
+      "type": "OmniSupervisorConfigGroup[]",
+      "description": "Represents the group of agents who are visible to the supervisors of an Omni-Channel supervisor configuration. The group, if visible, appears in the Agents tab of Omni Supervisor."
+    },
+    "omniSupervisorConfigProfile": {
+      "type": "OmniSupervisorConfigProfile[]",
+      "description": "Represents the supervisor profiles to which an Omni-Channel supervisor configuration applies. User-level configurations override profile-level configurations."
+    },
+    "omniSupervisorConfigQueue": {
+      "type": "OmniSupervisorConfigQueue[]",
+      "description": "Represents the queues that are visible to the supervisors of an Omni-Channel supervisor configuration. The queue, if visible, appears in the Queues Backlog and Assigned Work tabs of Omni Supervisor."
+    },
+    "omniSupervisorConfigSkill": {
+      "type": "OmniSupervisorConfigSkill[]",
+      "description": "Represents the skills that are visible to the supervisors of an Omni-Channel supervisor configuration. These skills, if visible, appear in the Skills Backlog tab of Omni Supervisor."
+    },
+    "omniSupervisorConfigTab": {
+      "type": "OmniSupervisorConfigTab[]",
+      "description": "Represents the visible tabs specified in an Omni Supervisor configuration. This object is available in API version 60.0 and later."
+    },
+    "omniSupervisorConfigUser": {
+      "type": "OmniSupervisorConfigUser[]",
+      "description": "Represents the supervisor to which the Omni-Channel supervisor configuration applies. User-level configurations override profile-level configurations. This object is available in API version 64.0 and later."
+    },
+    "skillVisibility": {
+      "type": "OmniSuperSkillVisibilityType (enumeration of type string)",
+      "description": "Determines which work items based on skills are visible to the supervisors assigned to this supervisor configuration. Values are: AllSkills AnySkill"
+    }
+  },
+  "sub_types": {
+    "OmniSpvsrConfigAIAgent": {
+      "botDefinition": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the bot definition that is visible to supervisors in this configuration."
+      }
+    },
+    "OmniSupervisorConfigAction": {
+      "actionName": {
+        "type": "OmniSupervisorActionName (enumeration of type string)",
+        "required": true,
+        "description": "An action that a supervisor can perform. Values are: AWSDashboard AssignLearning ChangeGroups ChangeQueues ChangeSkills CustomAction ManageQueues"
+      },
+      "actionTab": {
+        "type": "OmniSupervisorActionTab (enumeration of type string)",
+        "required": true,
+        "description": "The tab where the action appears. Values are: AgentDetails AllAgents AssignedWork AssignedWorkDetails QueueDetails QueuesBacklog SkillDetails SkillsBacklog"
+      },
+      "customActionFlow": {
+        "type": "string",
+        "description": "A flow that performs a custom action."
+      },
+      "displayOrder": {
+        "type": "int",
+        "required": true,
+        "description": "The order in which the action is displayed."
+      }
+    },
+    "OmniSupervisorConfigGroup": {
+      "group": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the group of agents."
+      }
+    },
+    "OmniSupervisorConfigProfile": {
+      "profile": {
+        "type": "string",
+        "required": true,
+        "description": "The profile name."
+      }
+    },
+    "OmniSupervisorConfigQueue": {
+      "queue": {
+        "type": "string",
+        "required": true,
+        "description": "The queue name."
+      }
+    },
+    "OmniSupervisorConfigSkill": {
+      "skill": {
+        "type": "string",
+        "required": true,
+        "description": "The skill name."
+      }
+    },
+    "OmniSupervisorConfigTab": {
+      "displayOrder": {
+        "type": "int",
+        "description": "The order in which tabs are displayed in Omni Supervisor."
+      },
+      "flexipage": {
+        "type": "string",
+        "description": "The name of the FlexiPage added as a customized tab. Required when tabTypeis set to FlexipageType."
+      },
+      "tabType": {
+        "type": "OmniSupervisorTabType (enumeration of type string)",
+        "required": true,
+        "description": "Tabs shown on the Omni Supervisor page. Possible values are: Agents — the Agents tab AssignedWork — the Assigned Work tab FlexipageType — A custom tab created using Lightning App Builder, with the omniSupervisorPageType value of the FlexiPage Type field QueuesBacklog — the Queues Backlog tab SkillsBacklog — the Skills Backlog tab Wallboard — the Wallboard tab"
+      }
+    },
+    "OmniSupervisorConfigUser": {
+      "user": {
+        "type": "string",
+        "required": true,
+        "description": "Represents the supervisor to which the Omni-Channel supervisor configuration applies."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OmniSpvsrConfigAIAgent\">\n  <xsd:sequence>\n    <xsd:element name=\"botDefinition\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"OmniSuperSkillVisibilityType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AllSkills\"/>\n    <xsd:enumeration value=\"AnySkill\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"OmniSupervisorActionName\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ChangeQueues\"/>\n    <xsd:enumeration value=\"ChangeSkills\"/>\n    <xsd:enumeration value=\"AssignLearning\"/>\n    <xsd:enumeration value=\"AWSDashboard\"/>\n    <xsd:enumeration value=\"ManageQueues\"/>\n    <xsd:enumeration value=\"CustomAction\"/>\n    <xsd:enumeration value=\"ChangeGroups\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"OmniSupervisorActionTab\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AllAgents\"/>\n    <xsd:enumeration value=\"AgentDetails\"/>\n    <xsd:enumeration value=\"QueuesBacklog\"/>\n    <xsd:enumeration value=\"QueueDetails\"/>\n    <xsd:enumeration value=\"AssignedWork\"/>\n    <xsd:enumeration value=\"AssignedWorkDetails\"/>\n    <xsd:enumeration value=\"SkillsBacklog\"/>\n    <xsd:enumeration value=\"SkillDetails\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"OmniSupervisorConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"isTimelineHidden\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"omniSpvsrConfigAIAgent\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OmniSpvsrConfigAIAgent\"/>\n        <xsd:element name=\"omniSupervisorConfigAction\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OmniSupervisorConfigAction\"/>\n        <xsd:element name=\"omniSupervisorConfigGroup\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OmniSupervisorConfigGroup\"/>\n        <xsd:element name=\"omniSupervisorConfigProfile\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OmniSupervisorConfigProfile\"/>\n        <xsd:element name=\"omniSupervisorConfigQueue\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OmniSupervisorConfigQueue\"/>\n        <xsd:element name=\"omniSupervisorConfigSkill\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OmniSupervisorConfigSkill\"/>\n        <xsd:element name=\"omniSupervisorConfigTab\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OmniSupervisorConfigTab\"/>\n        <xsd:element name=\"omniSupervisorConfigUser\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OmniSupervisorConfigUser\"/>\n        <xsd:element name=\"skillVisibility\" minOccurs=\"0\" type=\"tns:OmniSuperSkillVisibilityType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"OmniSupervisorConfigAction\">\n  <xsd:sequence>\n    <xsd:element name=\"actionName\" type=\"tns:OmniSupervisorActionName\"/>\n    <xsd:element name=\"actionTab\" type=\"tns:OmniSupervisorActionTab\"/>\n    <xsd:element name=\"customActionFlow\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"displayOrder\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OmniSupervisorConfigGroup\">\n  <xsd:sequence>\n    <xsd:element name=\"group\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OmniSupervisorConfigProfile\">\n  <xsd:sequence>\n    <xsd:element name=\"profile\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OmniSupervisorConfigQueue\">\n  <xsd:sequence>\n    <xsd:element name=\"queue\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OmniSupervisorConfigSkill\">\n  <xsd:sequence>\n    <xsd:element name=\"skill\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OmniSupervisorConfigTab\">\n  <xsd:sequence>\n    <xsd:element name=\"displayOrder\" type=\"xsd:int\"/>\n    <xsd:element name=\"flexiPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"tabType\" type=\"tns:OmniSupervisorTabType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OmniSupervisorConfigUser\">\n  <xsd:sequence>\n    <xsd:element name=\"user\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"OmniSupervisorTabType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Wallboard\"/>\n    <xsd:enumeration value=\"Agents\"/>\n    <xsd:enumeration value=\"QueuesBacklog\"/>\n    <xsd:enumeration value=\"AssignedWork\"/>\n    <xsd:enumeration value=\"SkillsBacklog\"/>\n    <xsd:enumeration value=\"FlexipageType\"/>\n    <xsd:enumeration value=\"AIAgents\"/>\n    <xsd:enumeration value=\"AgentforceSDR\"/>\n    <xsd:enumeration value=\"Reports\"/>\n    <xsd:enumeration value=\"Alerts\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a OmniSupervisorConfig component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OmniSupervisorConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <isTimelineHidden>true</isTimelineHidden>\n    <masterLabel>Supervisor Config</masterLabel>\n    <skillVisibility>AllSkills</skillVisibility>\n    <omniSupervisorConfigAction>\n        <actionName>ChangeQueues</actionName>\n        <actionTab>AllAgents</actionTab>\n        <displayOrder>0</displayOrder>\n    </omniSupervisorConfigAction>\n    <omniSupervisorConfigGroup>\n        <group>Agent_Group</group>\n    </omniSupervisorConfigGroup>\n    <omniSupervisorConfigProfile>\n        <profile>contractmanager</profile>\n    </omniSupervisorConfigProfile>\n    <omniSupervisorConfigQueue>\n        <queue>CaseQueue</queue>\n    </omniSupervisorConfigQueue>\n    <omniSupervisorConfigSkill>\n        <skill>English</skill>\n    </omniSupervisorConfigSkill>\n</OmniSupervisorConfig>"
+    }
+  ]
+}

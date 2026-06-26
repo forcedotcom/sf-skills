@@ -1,0 +1,61 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DataObjectBuildOrgTemplate - Metadata API",
+  "description": "Represents the derived object template used to define the structure and configuration of data objects in a build organization. The object templates are added inside the data kit to deploy metadata.",
+  "file_information": ".DataObjectBuildOrgTemplate",
+  "directory_location": "DataObjectBuildOrgTemplate",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "Name of the data object build org template. This name can contain only underscores and alphanumeric characters and must be unique in your org."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label of the data object build org template."
+    },
+    "objectDevName": {
+      "type": "string",
+      "required": true,
+      "description": "The developer name of the object created from the objectPayload entity in the build org."
+    },
+    "objectPayload": {
+      "type": "string",
+      "required": true,
+      "description": "The serialized metadata for the entity. The build organization deserializes this payload to create the underlying metadata components."
+    },
+    "objectType": {
+      "type": "string",
+      "required": true,
+      "description": "The type of metadata entity associated with the template. Valid values are: DataGraph MktCalculatedInsightObject MktDataModelObject MktDataLakeObject"
+    },
+    "templateObject": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the template associated with the data object build org template."
+    },
+    "templateVersion": {
+      "type": "string",
+      "description": "The version number of the data object build org template."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DataObjectBuildOrgTemplate component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DataKitObjectTemplate xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <developerName xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n   <entityPayload>\n      {\n         \"dataSpaceName\": \"default\",\n         \"type\": \"DLO\",\n         \"developerName\": \"DLO_StaticCurrencyRates_Home\"\n      }\n   </entityPayload>\n   <masterLabel>StaticCurrencyRates_Home__dll</masterLabel>\n   <parentDataPackageKitDefinitionName xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n   <sourceObject>0viSB00000JzG05YAF</sourceObject>\n   <sourceObjectType>DataSpaceMember</sourceObjectType>\n   <templateVersion>1</templateVersion>\n</DataKitObjectTemplate>"
+    }
+  ]
+}

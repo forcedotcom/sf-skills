@@ -1,0 +1,62 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DelegateGroup - Metadata API",
+  "description": "Represents a group of users who have the same administrative privileges. These groups are different from public groups used for sharing.",
+  "file_information": ".delegateGroup",
+  "directory_location": "delegateGroups",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "customObjects": {
+      "type": "string[]",
+      "description": "The custom objects associated with the group. Delegated administrators can customize nearly every aspect of each of those custom objects, including creating a custom tab. However, they can’t create or modify relationships on the objects or set organization-wide sharing defaults. Delegated administrators must have access to custom objects to access the merge fields on those objects from formulas."
+    },
+    "groups": {
+      "type": "string[]",
+      "description": "The groups with users assigned by delegated administrators."
+    },
+    "label": {
+      "type": "string",
+      "description": "The delegated group’s non-API name.",
+      "required": true
+    },
+    "loginAccess": {
+      "type": "boolean",
+      "description": "Allows users in this group to log in as users in the role hierarchy that they administer (true) or not (false). Depending on your organization settings, individual users must grant login access to allow their administrators to log in as them.",
+      "required": true
+    },
+    "permissionSetGroups": {
+      "type": "string[]",
+      "description": "The permission set groups that can be assigned to users in specified roles and all subordinate roles by delegated administrators."
+    },
+    "permissionSets": {
+      "type": "string[]",
+      "description": "The permission sets that can be assigned to users in specified roles and all subordinate roles by delegated administrators."
+    },
+    "profiles": {
+      "type": "string[]",
+      "description": "The profiles that can be assigned to users by delegated administrators."
+    },
+    "roles": {
+      "type": "string[]",
+      "description": "The roles and subordinates for which delegated administrators of the group can create and edit users."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DelegateGroup\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"customObjects\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"groups\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"loginAccess\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"permissionSetGroups\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"permissionSets\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"profiles\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"roles\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DelegateGroup component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DelegateGroup xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <label>MyDelegateGroup</label>\n    <loginAccess>true</loginAccess>\n    <name>MyDelegateGroup</name>\n    <profiles>Chatter Free User</profiles>\n    <profiles>Chatter Moderator User</profiles>\n    <profiles>Marketing User</profiles>\n    <permissionSetGroups>My Permission Set Group</permissionSetGroups>\n    <permissionSets>My Permset</permissionSets>\n    <roles>LesserBossMan</roles>\n</DelegateGroup>"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AppExperienceSettings - Metadata API",
+  "description": "Represents settings for the app experience.This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "doesHideAllAppsInAppLauncher": {
+      "type": "boolean",
+      "description": "If set to false (default), all standard and custom apps show up on the App Launcher. If set to true, the admin must select which standard and custom apps to display on the App Launcher."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AppExperienceSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"doesHideAllAppsInAppLauncher\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an AppExperienceSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AppExperienceSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <doesHideAllAppsInAppLauncher>false</doesHideAllAppsInAppLauncher>\n</AppExperienceSettings>"
+    }
+  ]
+}

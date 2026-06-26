@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "MktCalcInsightObjectDef - Metadata API",
+  "description": "Represents Calculated Insight definition such as expression.",
+  "file_information": ".mktCalcInsightObjectDef",
+  "directory_location": "mktCalcInsightObjectDefs",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "builderExpression": {
+      "type": "string",
+      "description": "Reserved for internal use."
+    },
+    "creationType": {
+      "type": "CalculatedInsightCreationType(enumeration of type string)",
+      "description": "Describes whether this Calculated Insight Object Definition was added was added by the customer. Valid values include: Custom.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "The description for this Calculated Insight Object Definition."
+    },
+    "expression": {
+      "type": "string",
+      "description": "Required when the Calculated Insight Object Definition is for internal insight type. This is the SQL query to generate the calculated insight.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "App name for this Calculated Insight Object Definition.",
+      "required": true
+    },
+    "system": {
+      "type": "string",
+      "description": "Indicates how this calculated insight object definition was added, by the customer or by the system. Valid values are: Custom System (API version 61.0 and later)",
+      "required": true
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a MktCalcInsightObjectDef component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MktCalcInsightObjectDef xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <creationType>Custom</creationType>\n    <description>InsightName description</description>\n    <expression>SELECT COUNT(ssot__Individual__dlm.ssot__Id__c) as count__c FROM ssot__Individual__dlm</expression>\n</MktCalcInsightObjectDef>"
+    }
+  ]
+}

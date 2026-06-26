@@ -1,0 +1,80 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CommerceSettings - Metadata API",
+  "description": "Represents settings for various Commerce features.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "buyerGroupExtensibility": {
+      "type": "boolean",
+      "description": "Indicates whether Buyer Group Extensibility is enabled (true) or not (false). Available in API version 64.0 and later."
+    },
+    "commerceAnalyticsEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether Commerce Analytics is enabled (true) or not (false)."
+    },
+    "commerceAppEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether Commerce App is enabled (true) or not (false)."
+    },
+    "commerceConciergeEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether Commerce Concierge bots are enabled (true) or not (false)."
+    },
+    "commerceCopilotEcomEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether Commerce Copilot is enabled (true) or not (false)."
+    },
+    "commerceDCSegmentEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether the Data 360 segment integration is enabled (true) or not (false)."
+    },
+    "commerceDiscoveryExpansion": {
+      "type": "boolean",
+      "description": "Indicates whether the Commerce Discovery Expansion service is enabled (true) or not (false)."
+    },
+    "commerceEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether Commerce is enabled (true) or not (false)."
+    },
+    "commerceNGPEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether NGP (“Salesforce”) Pricing is enabled (true) or not (false)."
+    },
+    "commerceRLMSubs": {
+      "type": "boolean",
+      "description": "Indicates whether Commerce Revenue Lifecycle Management Subscriptions is enabled (true) or not (false)."
+    },
+    "generateInvPerSubscription": {
+      "type": "boolean",
+      "description": "Indicates whether a separate invoice is generated per subscription (true) or not (false). Available in API version 64.0 and later."
+    },
+    "lowestUnitPriceTracking": {
+      "type": "boolean",
+      "description": "Indicates whether lowest unit price tracking (for EU customers) is enabled (true) or not (false)."
+    },
+    "messagingEngagementDataKit": {
+      "type": "boolean",
+      "description": "Indicates whether Message Engagement data kit is enabled (true) or not (false). Message Engagement data kit is a Data 360 data model object (DMO) for a user’s engagement with a marketing message."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CommerceSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"b2CMerchantAgentEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"buyerGroupExtensibility\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"commerceAnalyticsEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"commerceAppEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"commerceConciergeEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"commerceContractPricing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"commerceCopilotEcomEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"commerceDCSegmentEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"commerceDiscoveryExpansion\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"commerceEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"commerceHighPrecisionQtyNGP\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"commerceNGPEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"commerceProcedurePlan\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"commerceRLMSubs\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"convCommShopCopilotEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCheckoutHSOIPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"extendCommerceContext\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"generateInvPerSubscription\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"lowestUnitPriceTracking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"merchAgentTemplateEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"messagingEngagementDataKit\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CommerceSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CommerceSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<buyerGroupExtensibility>false</buyerGroupExtensibility>\n\t<commerceAnalyticsEnabled>false</commerceAnalyticsEnabled>\n\t<commerceAppEnabled>false</commerceAppEnabled>\n\t<commerceConciergeEnabled>false</commerceConciergeEnabled>\n\t<commerceCopilotEcomEnabled>false</commerceCopilotEcomEnabled>\n\t<commerceDCSegmentEnabled>false</commerceDCSegmentEnabled>\n\t<commerceDiscoveryExpansion>false</commerceDiscoveryExpansion>\n\t<commerceEnabled>false</commerceEnabled>\n\t<commerceNGPEnabled>false</commerceNGPEnabled>\n\t<commerceRLMSubs>false</commerceRLMSubs>\n\t<generateInvPerSubscription>false</generateInvPerSubscription>\n\t<lowestUnitPriceTracking>false</lowestUnitPriceTracking>\n\t<messagingEngagementDataKit>false</messagingEngagementDataKit>\n</CommerceSettings>"
+    }
+  ]
+}

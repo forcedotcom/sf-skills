@@ -1,0 +1,38 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "TopicsForObjects - Metadata API",
+  "description": "Represents the ability to assign topics to objects or to remove topic assignments.",
+  "file_information": ".topicsForObjects",
+  "directory_location": "topicsForObjects",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableTopics": {
+      "type": "boolean",
+      "description": "When true, indicates whether users can assign topics or remove topic assignments. When false, users can’t assign or remove topics. Upon org creation, this value is true for the following objects: Account Asset Campaign Case Contact Content Document Contract Event Lead Opportunity Order Solution Task For all remaining standard objects and custom objects, the default is false.",
+      "required": true
+    },
+    "entityApiName": {
+      "type": "string",
+      "description": "Indicates the object’s API name for enabling topics.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"TopicsForObjects\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableTopics\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"entityApiName\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a TopicsForObjects component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<TopicsForObjects xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n       <enableTopics>false</enableTopics>\n       <entityApiName>Account</entityApiName>\n</TopicsForObjects>"
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields"
+  ],
+  "title": "DataStreamDefinition - Metadata API",
+  "description": "Contains data ingestion information such as connection, API, and file retrieval settings.",
+  "file_information": ".dataStreamDefinition",
+  "directory_location": "dataStreamDefinitions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "areHeadersIncludedInFile": {
+      "type": "boolean",
+      "description": "If true, headers are included in the file if this is a single file stream."
+    },
+    "bulkIngest": {
+      "type": "boolean",
+      "description": "If true, files are aggregated before data is ingested if the file names contain a wildcard. For example, profiles*.csv."
+    },
+    "definitionCreationType": {
+      "type": "string",
+      "description": "Enum tracks the source of an object or field creation. Valid values are: Custom Standard Valid values available in API version 62.0 and later are: ADG Calculated_Insight CG_Audience Chunk Directory_Table External Semantic Transform Vector_Embedding",
+      "required": true
+    },
+    "dataConnector": {
+      "type": "string",
+      "description": "Describe whether this data stream definition was created by a customer or by an internal system.",
+      "required": true
+    },
+    "dataConnectorType": {
+      "type": "DataConnectorType (enumeration of type string)",
+      "description": "The ingestion data source. Valid values are: ACCOUNTENGAGEMENT AwsS3 AzureBlob BIG_QUERY CuratedEntity DataCloud ExternalPlatform GoogleCloudStorage IngestApi REDSHIFT SalesforceCommerceCloud SalesforceDotCom SalesforceInteractionStudio SalesforceMarketingCloud SFTP Snowflake StreamingApp UPLOAD"
+    },
+    "dataExtensionIdentifier": {
+      "type": "string",
+      "description": "For a Marketing Cloud data extension, the unique identifier."
+    },
+    "dataExtractField": {
+      "type": "string",
+      "description": "Name of the transport field that’s used when the extract method is CDC."
+    },
+    "dataExtractMethods": {
+      "type": "DataImportDataExtractMethods (enumeration of type string)",
+      "description": "Describes how to identify the data to be extracted. Valid values include: DATETIME_CDC FULL_REFRESH NUMERIC_CDC BINARY_CDC (reserved for future use)"
+    },
+    "dataPlatDataSetBundle": {
+      "type": "string",
+      "description": "Identifies which data set bundle this definition was created from. Useful in cases where the same item can be configured across data connections."
+    },
+    "dataPlatformDataSet": {
+      "type": "string",
+      "description": "The description is provided by the developer."
+    },
+    "dataPlatformDataSetItemName": {
+      "type": "string",
+      "description": "Name of the Data Platform Set Item."
+    },
+    "dataSource": {
+      "type": "string",
+      "description": "A reference to the data source from which the data originated. This is usually the API name or a unique system identifier, such as the enterprise ID (EID) of the customer in the format MC_<EID>. Example: MCEnterprise or MC_12345.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the data stream definition.",
+      "required": true
+    },
+    "fileNameWildcard": {
+      "type": "string",
+      "description": "File or wildcard (*) used when finding files."
+    },
+    "internalOrganization": {
+      "type": "string",
+      "description": "The name of the internal organization."
+    },
+    "isLimitedToNewFiles": {
+      "type": "boolean",
+      "description": "If true, file retrieval is limited to new files."
+    },
+    "isMissingFileFailure": {
+      "type": "boolean",
+      "description": "If true, treat the case of missing files as a failure."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "UI label for this data stream definition.",
+      "required": true
+    },
+    "mktDataLakeObject": {
+      "type": "string",
+      "description": "Reference to the landing entity (target) where data will be stored.",
+      "required": true
+    },
+    "mktDataTranObject": {
+      "type": "string",
+      "description": "Reference to the object that’s used to transport information from the source to a landing entity (target)."
+    }
+  }
+}

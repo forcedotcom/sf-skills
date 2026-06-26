@@ -1,0 +1,215 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "GenAiPlanner - Metadata API",
+  "description": "Represents a planner for an agent. It’s a container for all the topics and actions used to interact with a large language model (LLM).",
+  "file_information": ".genAiPlanner",
+  "directory_location": "genAiPlanners",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "attributeMappings": {
+      "type": "GenAiPlannerAttrMapping[]",
+      "description": "A list of action attribute mappings."
+    },
+    "capabilities": {
+      "type": "string",
+      "description": "A set of tags associated with the agent."
+    },
+    "description": {
+      "type": "string",
+      "description": "A description explaining the general purpose and domain of the agent."
+    },
+    "genAiFunctions": {
+      "type": "GenAiPlannerFunctionDef[]",
+      "description": "A list of agent action definitions, such as a knowledge action, that are not contained in a topic."
+    },
+    "genAiPlannerRuleExpressions": {
+      "type": "GenAiPlannerRuleExpr[]",
+      "description": "Deprecated. Use ruleExpressions instead."
+    },
+    "genAiPlugins": {
+      "type": "GenAiPlannerFunctionDef[]",
+      "description": "A list of agent topic definitions."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The master label for the planner."
+    },
+    "plannerType": {
+      "type": "PlannerType (enumeration of type string)",
+      "required": true,
+      "description": "A particular approach to problem solving that is given as prompt instructions to a large language model (LLM). The only supported value is: AiCopilot__ReAct—Uses a reactive reasoning strategy to solve problems with the LLM. This strategy consists of prompting the LLM to generate the next step in response to an event and the current context. It differs from a sequential reasoning engine in that it doesn’t plan more than one step ahead of time."
+    },
+    "ruleExpressionAssignments": {
+      "type": "GenAiPlannerRuleExprAsgn[]",
+      "description": "A list of rule expression assignments."
+    },
+    "ruleExpressions": {
+      "type": "GenAiPlannerRuleExprDef[]",
+      "description": "A list of rule expressions."
+    }
+  },
+  "sub_types": {
+    "GenAiPlannerAttrMapping": {
+      "attributeName": {
+        "type": "string",
+        "required": true,
+        "description": "The attribute name in the format: Namespace.TopicName.ActionName.AttributeName."
+      },
+      "attributeType": {
+        "type": "AttributeType (enumeration of type string)",
+        "required": true,
+        "description": "The attribute type. Values are: CustomPluginFunctionAttribute—Map to a custom action input or output StandardPluginFunctionInput—Map to a standard action input StandardPluginFunctionOutput—Map output to a variable"
+      },
+      "constantValue": {
+        "type": "string",
+        "description": "Reserved for future use."
+      },
+      "mappingTargetName": {
+        "type": "string",
+        "description": "The target name for the attribute mapping."
+      },
+      "mappingType": {
+        "type": "AttributeMappingType (enumeration of type string)",
+        "required": true,
+        "description": "The target type. Values are: ActionAttribute Constant Variable ContextVariable"
+      }
+    },
+    "GenAiPlannerFunctionDef": {
+      "genAiCustomizedPlugin": {
+        "type": "GenAiLocalPlugin[]",
+        "description": "A list of custom agent topics."
+      },
+      "genAiFunctionName": {
+        "type": "string",
+        "description": "The name of the agent action."
+      },
+      "genAiPluginName": {
+        "type": "string",
+        "description": "The name of the agent topic."
+      }
+    },
+    "GenAiLocalPlugin": {
+      "aiPluginUtterances": {
+        "type": "AiPluginUtteranceDef[]",
+        "description": "A list of utterances that can be used to pick a topic during runtime."
+      },
+      "description": {
+        "type": "string",
+        "description": "The description of the topic."
+      },
+      "genAiFunctions": {
+        "type": "GenAiPluginFunctionDef[]",
+        "description": "A list of functions in the topic."
+      },
+      "genAiPluginInstructions": {
+        "type": "GenAiPluginInstructionDef[]",
+        "description": "A list of instructions in the topic."
+      },
+      "language": {
+        "type": "string",
+        "required": true,
+        "description": "The language of the topic."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "The master label for the topic."
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "Represents the API name of the topic. This name must be unique across all custom and customized topics. Can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+      },
+      "pluginType": {
+        "type": "PluginType (enumeration of type string)",
+        "required": true,
+        "description": "Values are: Topic"
+      },
+      "scope": {
+        "type": "string",
+        "description": "A specific job description for a topic."
+      }
+    },
+    "GenAiPlannerRuleExprAsgn": {
+      "ruleExpressionName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the rule expression."
+      },
+      "targetName": {
+        "type": "string",
+        "required": true,
+        "description": "The target of the assignment, which is a Namespace.TopicName.ActionName or a TopicName."
+      },
+      "targetType": {
+        "type": "string",
+        "required": true,
+        "description": "The type of the target. Values are: Function—A knowledge action Plugin—A topic PluginFunction—An action in a topic"
+      }
+    },
+    "GenAiPlannerRuleExprDef": {
+      "conditions": {
+        "type": "GenAiPlannerRuleExprCondition[]",
+        "description": "A list of conditions for a rule expression."
+      },
+      "expression": {
+        "type": "string",
+        "description": "An expression with the combined conditions."
+      },
+      "expressionLabel": {
+        "type": "string",
+        "required": true,
+        "description": "The expression label."
+      },
+      "expressionName": {
+        "type": "string",
+        "required": true,
+        "description": "The expression name."
+      },
+      "expressionType": {
+        "type": "string",
+        "description": "The expression type. Values are: handlebars—Reserved for future use sel—Salesforce Expression Language, as used in formula fields"
+      }
+    },
+    "GenAiPlannerRuleExprCondition": {
+      "leftOperand": {
+        "type": "string",
+        "required": true,
+        "description": "The left operand in the expression."
+      },
+      "leftOperandType": {
+        "type": "GenAiAgentVariableType (enumeration of type string)",
+        "required": true,
+        "description": "The type for the left operand. Values are: Variable ContextVariable Attribute"
+      },
+      "operator": {
+        "type": "GenAiRuleExpressionOperator (enumeration of type string)",
+        "required": true,
+        "description": "The operator in the expression. Values are: equal greaterThan greaterThanOrEqual lessThan lessThanOrEqual notEqual isEmpty isNotEmpty"
+      },
+      "rightOperandValue": {
+        "type": "string",
+        "description": "The value for the right operand."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a GenAiPlanner component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<GenAiPlanner xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>Copilot reasoning engine description</description>\n    <masterLabel>EmployeeCopilotPlanner</masterLabel>\n    <plannerType>AiCopilot__SequentialPlannerIntentClassifier</plannerType>\n</GenAiPlanner>"
+    }
+  ]
+}

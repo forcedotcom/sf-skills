@@ -1,0 +1,226 @@
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- AGGREGATE QUERIES (GROUP BY Pattern)
+-- ═══════════════════════════════════════════════════════════════════════════════
+--
+-- Aggregate functions summarize data across records.
+-- Use with GROUP BY to create summary reports.
+--
+-- AGGREGATE FUNCTIONS:
+-- • COUNT() - Count records
+-- • COUNT(field) - Count non-null field values
+-- • COUNT_DISTINCT(field) - Count unique values
+-- • SUM(field) - Sum numeric field values
+-- • AVG(field) - Average of numeric field values
+-- • MIN(field) - Minimum value
+-- • MAX(field) - Maximum value
+--
+-- IMPORTANT:
+-- • Aggregate queries return AggregateResult objects, not SObjects
+-- • Cannot use with Bulk API export (use sf data query instead)
+-- • GROUP BY fields must appear in SELECT or be aggregated
+--
+-- ═══════════════════════════════════════════════════════════════════════════════
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- BASIC COUNT: Count records by Industry
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Industry, COUNT(Id) RecordCount
+FROM Account
+WHERE Industry != null
+GROUP BY Industry
+ORDER BY COUNT(Id) DESC
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- SUM and AVG: Revenue by Industry
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Industry,
+    COUNT(Id) AccountCount,
+    SUM(AnnualRevenue) TotalRevenue,
+    AVG(AnnualRevenue) AvgRevenue,
+    MIN(AnnualRevenue) MinRevenue,
+    MAX(AnnualRevenue) MaxRevenue
+FROM Account
+WHERE Industry != null
+AND AnnualRevenue != null
+GROUP BY Industry
+HAVING SUM(AnnualRevenue) > 1000000
+ORDER BY SUM(AnnualRevenue) DESC
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- OPPORTUNITY PIPELINE: Revenue by Stage
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT StageName,
+    COUNT(Id) OpportunityCount,
+    SUM(Amount) TotalAmount,
+    AVG(Amount) AvgDealSize,
+    AVG(Probability) AvgProbability
+FROM Opportunity
+WHERE IsClosed = false
+GROUP BY StageName
+ORDER BY SUM(Amount) DESC
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- COUNT_DISTINCT: Unique values
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT LeadSource,
+    COUNT(Id) TotalOpportunities,
+    COUNT_DISTINCT(AccountId) UniqueAccounts,
+    SUM(Amount) TotalPipeline
+FROM Opportunity
+WHERE CreatedDate = THIS_YEAR
+AND LeadSource != null
+GROUP BY LeadSource
+ORDER BY SUM(Amount) DESC
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- MULTIPLE GROUP BY: Revenue by Industry and Type
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Account.Industry, Account.Type,
+    COUNT(Id) OpportunityCount,
+    SUM(Amount) TotalAmount
+FROM Opportunity
+WHERE Account.Industry != null
+AND Account.Type != null
+GROUP BY Account.Industry, Account.Type
+ORDER BY Account.Industry, SUM(Amount) DESC
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- DATE FUNCTIONS: Group by Time Period
+-- ───────────────────────────────────────────────────────────────────────────────
+-- By Calendar Month
+SELECT CALENDAR_MONTH(CloseDate) Month,
+    CALENDAR_YEAR(CloseDate) Year,
+    COUNT(Id) ClosedDeals,
+    SUM(Amount) Revenue
+FROM Opportunity
+WHERE StageName = 'Closed Won'
+AND CloseDate = THIS_YEAR
+GROUP BY CALENDAR_YEAR(CloseDate), CALENDAR_MONTH(CloseDate)
+ORDER BY CALENDAR_YEAR(CloseDate), CALENDAR_MONTH(CloseDate)
+
+-- By Week
+SELECT WEEK_IN_YEAR(CreatedDate) Week,
+    COUNT(Id) NewLeads
+FROM Lead
+WHERE CreatedDate = THIS_QUARTER
+GROUP BY WEEK_IN_YEAR(CreatedDate)
+ORDER BY WEEK_IN_YEAR(CreatedDate)
+
+-- By Day of Week
+SELECT DAY_IN_WEEK(CreatedDate) DayOfWeek,
+    COUNT(Id) CasesOpened
+FROM Case
+WHERE CreatedDate = LAST_90_DAYS
+GROUP BY DAY_IN_WEEK(CreatedDate)
+ORDER BY DAY_IN_WEEK(CreatedDate)
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- HAVING: Filter aggregated results
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT OwnerId, Owner.Name,
+    COUNT(Id) OpenOpportunities,
+    SUM(Amount) PipelineValue
+FROM Opportunity
+WHERE IsClosed = false
+GROUP BY OwnerId, Owner.Name
+HAVING COUNT(Id) >= 5
+AND SUM(Amount) >= 100000
+ORDER BY SUM(Amount) DESC
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- CASE METRICS: Cases by Status and Priority
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Status, Priority,
+    COUNT(Id) CaseCount,
+    AVG(CreatedDate) AvgCreatedDate
+FROM Case
+WHERE CreatedDate = THIS_QUARTER
+GROUP BY Status, Priority
+ORDER BY Status, Priority
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- ACCOUNT HEALTH: Accounts with Opportunity Metrics
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT AccountId, Account.Name,
+    COUNT(Id) TotalOpportunities,
+    SUM(CASE WHEN StageName = 'Closed Won' THEN 1 ELSE 0 END) WonOpportunities,
+    SUM(Amount) TotalPipeline,
+    MIN(CloseDate) EarliestClose,
+    MAX(CloseDate) LatestClose
+FROM Opportunity
+WHERE AccountId != null
+GROUP BY AccountId, Account.Name
+HAVING COUNT(Id) >= 3
+ORDER BY SUM(Amount) DESC
+LIMIT 50
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- ROLLUP: Subtotals (Enterprise Edition+)
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Industry, Type,
+    COUNT(Id) AccountCount
+FROM Account
+WHERE Industry != null
+GROUP BY ROLLUP(Industry, Type)
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- CUBE: All dimension combinations (Enterprise Edition+)
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Industry, Type,
+    COUNT(Id) AccountCount,
+    SUM(AnnualRevenue) TotalRevenue
+FROM Account
+WHERE Industry != null AND Type != null
+GROUP BY CUBE(Industry, Type)
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- APEX PROCESSING PATTERN
+-- ═══════════════════════════════════════════════════════════════════════════════
+/*
+// Aggregate queries return List<AggregateResult>
+List<AggregateResult> results = [
+    SELECT Industry,
+        COUNT(Id) RecordCount,
+        SUM(AnnualRevenue) TotalRevenue
+    FROM Account
+    WHERE Industry != null
+    GROUP BY Industry
+    ORDER BY SUM(AnnualRevenue) DESC
+];
+
+// Process aggregate results
+for (AggregateResult ar : results) {
+    String industry = (String) ar.get('Industry');
+    Integer count = (Integer) ar.get('RecordCount');
+    Decimal revenue = (Decimal) ar.get('TotalRevenue');
+
+    System.debug(industry + ': ' + count + ' accounts, $' + revenue);
+}
+
+// Using alias for complex expressions
+List<AggregateResult> oppResults = [
+    SELECT StageName Stage,
+        COUNT(Id) cnt,
+        SUM(Amount) total
+    FROM Opportunity
+    GROUP BY StageName
+];
+
+for (AggregateResult ar : oppResults) {
+    String stage = (String) ar.get('Stage');
+    Integer count = (Integer) ar.get('cnt');
+    Decimal total = (Decimal) ar.get('total');
+    System.debug(stage + ': ' + count + ' opps worth $' + total);
+}
+*/
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- SF CLI USAGE
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- sf data query \
+--   --query "SELECT Industry, COUNT(Id) RecordCount, SUM(AnnualRevenue) TotalRevenue FROM Account WHERE Industry != null GROUP BY Industry ORDER BY SUM(AnnualRevenue) DESC" \
+--   --target-org myorg \
+--   --json
+--
+-- NOTE: Aggregate queries do NOT work with sf data export bulk
+-- Use sf data query for aggregate results

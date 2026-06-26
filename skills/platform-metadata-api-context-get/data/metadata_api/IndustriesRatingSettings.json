@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "IndustriesRatingSettings - Metadata API",
+  "description": "Represents the settings for Rate Management.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableRating": {
+      "type": "boolean",
+      "description": "Indicates whether to enable Rate Management (true) or not (false). The default value is false."
+    },
+    "enableRatingWaterfall": {
+      "type": "boolean",
+      "description": "Indicates whether to enable Rating Waterfall (true) or not (false). The default value is false. Rating Waterfall provides insights into the rating data, which you can synchronize with your rating lookup tables."
+    },
+    "enableRatingWaterfallPersistence": {
+      "type": "boolean",
+      "description": "Indicates whether to enable Rating Waterfall Persistence (true) or not (false). The default value is false. Rating Waterfall Persistence stores rating data, which you can use to enhance the internal processes and increase efficiency."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"IndustriesRatingSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableRating\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRatingWaterfall\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRatingWaterfallPersistence\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an IndustriesRatingSettings component.",
+      "code": "<IndustriesRatingSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n     <enableRating>true</enableRating>\n     <enableRatingWaterfall>true</enableRatingWaterfall> \n     <enableRatingWaterfallPersistence>true</enableRatingWaterfallPersistence>\n</IndustriesRatingSettings>"
+    }
+  ]
+}

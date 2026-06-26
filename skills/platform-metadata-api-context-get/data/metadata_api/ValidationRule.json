@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ValidationRule - Metadata API",
+  "description": "Represents a validation rule, which is used to verify that the data a user enters in a record is valid and can be saved. A validation rule contains a formula or expression that evaluates the data in one or more fields and returns a value of true or false. Validation rules also include an error message that your client application can display to the user when the rule returns a value of true due to invalid data.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "Indicates whether this validation rule is active, (true), or not active (false).",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the validation rule."
+    },
+    "errorConditionFormula": {
+      "type": "string",
+      "description": "The formula defined in the validation rule. If the formula returns a value of true, an error message is displayed.",
+      "required": true
+    },
+    "errorDisplayField": {
+      "type": "string",
+      "description": "The fully specified name of a field in the application. If a value is supplied, the error message appears next to the specified field. If you do not specify a value or the field isn’t visible on the page layout, the value changes automatically to Top of Page."
+    },
+    "errorMessage": {
+      "type": "string",
+      "description": "The message that appears if the validation rule fails. The message must be 255 characters or less.",
+      "required": true
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The internal name of the object. White spaces and special characters are escaped for validity. The name must: Contain characters, letters, or the underscore (_) character Must start with a letter Can’t end with an underscore Can't contain two consecutive underscore characters. Inherited from the Metadata component, this field isn’t defined in the WSDL for this component. It must be specified when creating, updating, or deleting. See create() to see an example of this field specified for a call."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomObject\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionOverrides\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ActionOverride\"/>\n        <xsd:element name=\"allowInChatterGroups\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"articleTypeChannelDisplay\" minOccurs=\"0\" type=\"tns:ArticleTypeChannelDisplay\"/>\n        <xsd:element name=\"businessProcesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BusinessProcess\"/>\n        <xsd:element name=\"compactLayoutAssignment\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"compactLayouts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CompactLayout\"/>\n        <xsd:element name=\"customHelp\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customHelpPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customSettingsType\" minOccurs=\"0\" type=\"tns:CustomSettingsType\"/>\n        <xsd:element name=\"deploymentStatus\" minOccurs=\"0\" type=\"tns:DeploymentStatus\"/>\n        <xsd:element name=\"deprecated\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableActivities\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableBulkApi\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDataTranslation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDivisions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEnhancedLookup\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFeeds\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLicensing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePublishStatusTracking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableReports\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSearch\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSharing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableStreamingApi\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enrichments\" minOccurs=\"0\" type=\"tns:MetadataEnrichments\"/>\n        <xsd:element name=\"eventType\" minOccurs=\"0\" type=\"tns:PlatformEventType\"/>\n        <xsd:element name=\"externalDataSource\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalRepository\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalSharingModel\" minOccurs=\"0\" type=\"tns:SharingModel\"/>\n        <xsd:element name=\"fieldSets\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FieldSet\"/>\n        <xsd:element name=\"fields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomField\"/>\n        <xsd:element name=\"gender\" minOccurs=\"0\" type=\"tns:Gender\"/>\n        <xsd:element name=\"historyRetentionPolicy\" minOccurs=\"0\" type=\"tns:HistoryRetentionPolicy\"/>\n        <xsd:element name=\"household\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"indexes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Index\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"listViews\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ListView\"/>\n        <xsd:element name=\"mktDataLakeAttributes\" minOccurs=\"0\" type=\"tns:MktDataLakeAttributes\"/>\n        <xsd:element name=\"mktDataModelAttributes\" minOccurs=\"0\" type=\"tns:MktDataModelAttributes\"/>\n        <xsd:element name=\"nameField\" minOccurs=\"0\" type=\"tns:CustomField\"/>\n        <xsd:element name=\"pluralLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"profileSearchLayouts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileSearchLayouts\"/>\n        <xsd:element name=\"publishBehavior\" minOccurs=\"0\" type=\"tns:PlatformEventPublishBehavior\"/>\n        <xsd:element name=\"recordTypeTrackFeedHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"recordTypeTrackHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"recordTypes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecordType\"/>\n        <xsd:element name=\"searchLayouts\" minOccurs=\"0\" type=\"tns:SearchLayouts\"/>\n        <xsd:element name=\"sharingModel\" minOccurs=\"0\" type=\"tns:SharingModel\"/>\n        <xsd:element name=\"sharingReasons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingReason\"/>\n        <xsd:element name=\"sharingRecalculations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingRecalculation\"/>\n        <xsd:element name=\"startsWith\" minOccurs=\"0\" type=\"tns:StartsWith\"/>\n        <xsd:element name=\"validationRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ValidationRule\"/>\n        <xsd:element name=\"visibility\" minOccurs=\"0\" type=\"tns:SetupObjectVisibility\"/>\n        <xsd:element name=\"webLinks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WebLink\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ValidationRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"errorConditionFormula\" type=\"xsd:string\"/>\n        <xsd:element name=\"errorDisplayField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"errorMessage\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "A sample XML definition of a validation rule in a custom object is shown in this code block.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomObject xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <deploymentStatus>Deployed</deploymentStatus>\n    <fields>\n        <fullName>Mommy_Cat__c</fullName>\n        <label>Mommy Cat</label>\n        <referenceTo>Cat__c</referenceTo>\n        <relationshipName>Cats</relationshipName>\n        <type>Lookup</type>\n    </fields>\n    <label>Cat</label>\n    <nameField>\n        <label>Cat Name</label>\n        <type>Text</type>\n    </nameField>\n    <pluralLabel>Cats</pluralLabel>\n    <sharingModel>ReadWrite</sharingModel>\n    <validationRules>\n        <fullName>CatsRule</fullName>\n        <active>true</active>\n        <errorConditionFormula>OR(Name = &apos;Milo&apos;,Name = &apos;Moop&apos;)</errorConditionFormula>\n        <validationMessage>Name must be that of one of my cats</validationMessage>\n    </validationRules>\n</CustomObject>"
+    }
+  ]
+}

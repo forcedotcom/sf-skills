@@ -1,0 +1,116 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CommunityTemplateDefinition - Metadata API",
+  "description": "Represents the definition of an Experience Builder site template. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".communityTemplateDefinition",
+  "directory_location": "communityTemplateDefinitions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "baseTemplate": {
+      "type": "CommunityBaseTemplate (enumeration of type string)",
+      "description": "Denotes that this CommunityTemplateDefinition was created in API version 41.0 or later. The only valid value is c. This field is available in API 41.0 and later."
+    },
+    "bundlesInfo": {
+      "type": "CommunityTemplateBundleInfo[]",
+      "description": "The list of preview images and feature highlights of this CommunityTemplateDefinition."
+    },
+    "category": {
+      "type": "CommunityTemplateCategory (enumeration of type string)",
+      "description": "The optimized use case of this CommunityTemplateDefinition. Valid values are: Commerce IT Marketing Sales Service",
+      "required": true
+    },
+    "defaultBrandingSet": {
+      "type": "string",
+      "description": "The set of branding properties associated with this CommunityTemplateDefinition, as defined in the Theme panel in Experience Builder. Available in API version 40.0 and later. In API version 44.0 and later, this field is read-only and can be implemented in CommunityThemeDefinition."
+    },
+    "defaultThemeDefinition": {
+      "type": "string",
+      "description": "The assigned theme definition for this CommunityTemplateDefinition.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "The optional description text of this CommunityTemplateDefinition."
+    },
+    "enableExtendedCleanUpOnDelete": {
+      "type": "boolean",
+      "description": "False by default. Determines if deleting this CommunityTemplateDefinition attempts to delete other directly or indirectly referenced objects automatically, for example, CommunityThemeDefinition, Flexipage, or StaticResource. Values are true or false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label for this CommunityTemplateDefinition, which displays in Setup.",
+      "required": true
+    },
+    "navigationLinkSet": {
+      "type": "NavigationLinkSet",
+      "description": "The navigation menu associated with this CommunityTemplateDefinition. A navigation menu consists of items that users can click to go to other parts of the site. Available in API versions 37.0 to 46.0. In API versions 47.0 and later, use NavigationMenu."
+    },
+    "pageSetting": {
+      "type": "CommunityTemplatePageSetting[]",
+      "description": "The list of FlexiPage of this CommunityTemplateDefinition."
+    },
+    "publisher": {
+      "type": "string",
+      "description": "Defines the name of the publisher as seen in the Change Theme wizard. If no name is provided, the name of the org from which the package was originally exported is used. This field is available in API version 45.0 and later."
+    }
+  },
+  "sub_types": {
+    "CommunityTemplateBundleInfo": {
+      "description": {
+        "type": "string",
+        "description": "The optional description text of its CommunityTemplateBundleInfo."
+      },
+      "image": {
+        "type": "string",
+        "description": "Required only when the type is PreviewImage, otherwise this field is optional. A preview image for this CommunityTemplateDefinition.",
+        "required": true
+      },
+      "order": {
+        "type": "int",
+        "description": "An integer specifying the position of this CommunityTemplateBundleInfo relative to others of the same type within its CommunityTemplateDefinition. 1 is the first position, 3 is the maximum position for PreviewImage type, and 4 is the maximum position for the Highlight type.",
+        "required": true
+      },
+      "title": {
+        "type": "string",
+        "description": "The title of this CommunityTemplateBundleInfo to use in code.",
+        "required": true
+      },
+      "type": {
+        "type": "CommunityTemplateBundleInfoType (enumeration of type string)",
+        "description": "Stores descriptive information about the template that’s included in the export. The template powers the interface of the Experience Creation Wizard. Valid values are: Highlight—This CommunityTemplateBundleInfo is used as a highlighted feature. Up to 4 are supported. PreviewImage—This CommunityTemplateBundleInfo is used as a preview image. Up to 3 are supported.",
+        "required": true
+      }
+    },
+    "CommunityTemplatePageSetting": {
+      "page": {
+        "type": "string",
+        "description": "The list of FlexiPage of this CommunityTemplateDefinition.",
+        "required": true
+      },
+      "themeLayout": {
+        "type": "string",
+        "description": "The name of the FlexiPage for the theme layout. This field is available in API version 39.0 and later.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"CommunityBaseTemplate\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"c\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"CommunityTemplateBundleInfo\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"image\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"order\" type=\"xsd:int\"/>\n    <xsd:element name=\"title\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:CommunityTemplateBundleInfoType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"CommunityTemplateBundleInfoType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Highlight\"/>\n    <xsd:enumeration value=\"PreviewImage\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"CommunityTemplateCategory\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"IT\"/>\n    <xsd:enumeration value=\"Marketing\"/>\n    <xsd:enumeration value=\"Sales\"/>\n    <xsd:enumeration value=\"Service\"/>\n    <xsd:enumeration value=\"Commerce\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"CommunityTemplateDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"baseTemplate\" minOccurs=\"0\" type=\"tns:CommunityBaseTemplate\"/>\n        <xsd:element name=\"bundlesInfo\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CommunityTemplateBundleInfo\"/>\n        <xsd:element name=\"category\" type=\"tns:CommunityTemplateCategory\"/>\n        <xsd:element name=\"defaultBrandingSet\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"defaultThemeDefinition\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableExtendedCleanUpOnDelete\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"navigationLinkSet\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:NavigationLinkSet\"/>\n        <xsd:element name=\"pageSetting\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CommunityTemplatePageSetting\"/>\n        <xsd:element name=\"publisher\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"CommunityTemplatePageSetting\">\n  <xsd:sequence>\n    <xsd:element name=\"page\" type=\"xsd:string\"/>\n    <xsd:element name=\"themeLayout\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NavigationLinkSet\">\n  <xsd:sequence>\n    <xsd:element name=\"navigationMenuItem\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:NavigationMenuItem\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NavigationMenuItem\">\n  <xsd:sequence>\n    <xsd:element name=\"defaultListViewId\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"menuItemBranding\" minOccurs=\"0\" type=\"tns:NavigationMenuItemBranding\"/>\n    <xsd:element name=\"position\" type=\"xsd:int\"/>\n    <xsd:element name=\"publiclyAvailable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"subMenu\" minOccurs=\"0\" type=\"tns:NavigationSubMenu\"/>\n    <xsd:element name=\"target\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetPreference\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NavigationMenuItemBranding\">\n  <xsd:sequence>\n    <xsd:element name=\"tileImage\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NavigationSubMenu\">\n  <xsd:sequence>\n    <xsd:element name=\"navigationMenuItem\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:NavigationMenuItem\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CommunityTemplateDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CommunityTemplateDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <baseTemplate>c</baseTemplate>\n    <bundlesInfo>\n        <description>Feature Description</description>\n        <order>1</order>\n        <title>Feature Heading</title>\n        <type>Highlight</type>\n    </bundlesInfo>\n    <bundlesInfo>\n        <image>siteAsset_2dbe594eb6794173af78da264cd6a4a7</image>\n        <order>1</order>\n        <title>Preview Image</title>\n        <type>PreviewImage</type>\n    </bundlesInfo>\n    <category>Sales</category>\n    <defaultThemeDefinition>communityTemplate</defaultThemeDefinition>\n    <description>This is an Experience Builder template</description>\n    <enableExtendedCleanUpOnDelete>true</enableExtendedCleanUpOnDelete>\n    <masterLabel>communityTemplate</masterLabel>\n    <navigationLinkSet>\n        <navigationMenuItem>\n            <label>Topics</label>\n            <position>0</position>\n            <publiclyAvailable>true</publiclyAvailable>\n            <target>ShowMoreTopics</target>\n            <type>NavigationalTopic</type>\n        </navigationMenuItem>\n    </navigationLinkSet>\n    <pageSetting>\n        <page>communityTemplate_Report_List</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Topic_Catalog</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Check_Password</page>\n        <themeLayout>communityTemplate_themeLayout_Login</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Error</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_User_Settings</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Login</page>\n        <themeLayout>communityTemplate_themeLayout_Login</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Stream_List</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Sfdc_Page</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Group_Detail</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Report_Related_List</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Register</page>\n        <themeLayout>communityTemplate_themeLayout_Login</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_User_Profile</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Case_Detail</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Stream_Related_List</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Dashboard_Detail</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Group_List</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Canvasapp_Page</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Login_Error</page>\n        <themeLayout>communityTemplate_themeLayout_Login</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Create_Record</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Group_Related_List</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Search</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_File_Detail</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Case_List</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_User_List</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_File_List</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Question_Detail</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Dashboard_List</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Related_Record_List</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_File_Related_List</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Record_List</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Forgot_Password</page>\n        <themeLayout>communityTemplate_themeLayout_Login</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Home</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Dashboard_Related_List</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Account_Management</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Case_Related_List</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_User_Related_List</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Stream_Detail</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Topic_Detail</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Messages</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Report_Detail</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Record_Detail</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Feed_Detail</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n    <pageSetting>\n        <page>communityTemplate_Contact_Support</page>\n        <themeLayout>communityTemplate_themeLayout_Default</themeLayout>\n    </pageSetting>\n</CommunityTemplateDefinition>"
+    }
+  ]
+}

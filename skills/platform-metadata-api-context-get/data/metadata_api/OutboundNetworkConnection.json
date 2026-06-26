@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "OutboundNetworkConnection - Metadata API",
+  "description": "Represents a private connection between a Salesforce org and a third-party data service. The connection is outbound because the callouts are going out of Salesforce. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".outboundNetworkConnection",
+  "directory_location": "outboundNetworkConnections",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "connectionType": {
+      "type": "ExternalConnectionType (enumeration of type string)",
+      "description": "Specifies the cloud provider of the connection. AwsPrivateLink DataCloudPrivateConnection (Reserved for internal use)",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the connection. Maximum of 255 characters."
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Specifies whether the connection is active (true) or not (false).",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "description": "A user-friendly label for the connection.",
+      "required": true
+    },
+    "outboundNetworkConnProperties": {
+      "type": "OutboundNetworkConnProperty[]",
+      "description": "Name-value pairs that describe the properties of an outbound network connection. Specify a name-value pair for each of the properties."
+    },
+    "status": {
+      "type": "ExternalConnectionStatus(enumeration of type string)",
+      "description": "Connection status. The connection is initially Unprovisioned and moves through the other statuses automatically after an admin performs a Provision, Sync, or Teardown action. The valid values are: Unprovisioned Allocation PendingAcceptance PendingActivation RejectedRemotely DeletedRemotely TeardownInProgress Ready",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "OutboundNetworkConnProperty": {
+      "propertyName": {
+        "type": "OutboundConnPropertyName(enumeration of type string)",
+        "description": "The name of a property used to establish to an OutboundNetworkConnection. Valid values are: AwsVpcEndpointId—The unique endpoint ID provided by Salesforce after an outbound AwsPrivateLink is created. The value is read-only when the status is Ready. AwsVpcEndpointServiceName—The name of the customer’s endpoint service running in an AWS VPC that’s used for private connections with Salesforce. Region—The region in which the VPC is hosted. Enumerated values DataCloudPrivateNetwork* are reserved for internal use.",
+        "required": true
+      },
+      "propertyValue": {
+        "type": "string",
+        "description": "The value of OutboundConnPropertyName. For example, the propertyValue of Region can be us-west-2.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ExternalConnectionStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Unprovisioned\"/>\n    <xsd:enumeration value=\"Allocating\"/>\n    <xsd:enumeration value=\"PendingAcceptance\"/>\n    <xsd:enumeration value=\"PendingActivation\"/>\n    <xsd:enumeration value=\"RejectedRemotely\"/>\n    <xsd:enumeration value=\"DeletedRemotely\"/>\n    <xsd:enumeration value=\"TeardownInProgress\"/>\n    <xsd:enumeration value=\"Ready\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ExternalConnectionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AwsPrivateLink\"/>\n    <xsd:enumeration value=\"DataCloudPrivateConnection\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"OutboundConnPropertyName\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Region\"/>\n    <xsd:enumeration value=\"AwsVpcEndpointId\"/>\n    <xsd:enumeration value=\"AwsVpcEndpointServiceName\"/>\n    <xsd:enumeration value=\"DataCloudPrivateNetworkUrl\"/>\n    <xsd:enumeration value=\"DataCloudPrivateNetworkProvider\"/>\n    <xsd:enumeration value=\"DataCloudPrivateNetworkFunctionalDomain\"/>\n    <xsd:enumeration value=\"DataCloudPrivateNetworkFalconInstance\"/>\n    <xsd:enumeration value=\"DataCloudPrivateNetworkCustomUrls\"/>\n    <xsd:enumeration value=\"DataCloudPrivateNetworkAwsVpcEndpointId\"/>\n    <xsd:enumeration value=\"DataCloudPrivateNetworkAwsVpcEndpointServiceName\"/>\n    <xsd:enumeration value=\"DataCloudPrivateNetworkDefaultUrl\"/>\n    <xsd:enumeration value=\"DataCloudPrivateNetworkStatusCode\"/>\n    <xsd:enumeration value=\"DataCloudPrivateConnectDcVpcEndpointId\"/>\n    <xsd:enumeration value=\"DataCloudPrivateConnectDcDnsName\"/>\n    <xsd:enumeration value=\"TargetCloudProvider\"/>\n    <xsd:enumeration value=\"PNRSubType\"/>\n    <xsd:enumeration value=\"EndpointServiceVariant\"/>\n    <xsd:enumeration value=\"AssociatedPNRId\"/>\n    <xsd:enumeration value=\"AzureResourceId\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"OutboundNetworkConnProperty\">\n  <xsd:sequence>\n    <xsd:element name=\"propertyName\" type=\"tns:OutboundConnPropertyName\"/>\n    <xsd:element name=\"propertyValue\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OutboundNetworkConnection\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"connectionType\" type=\"tns:ExternalConnectionType\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"outboundNetworkConnProperties\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OutboundNetworkConnProperty\"/>\n        <xsd:element name=\"status\" type=\"tns:ExternalConnectionStatus\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following sample definition has the suffix .outboundNetworkConnection.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OutboundNetworkConnection xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <connectionType>AwsPrivateLink</connectionType>\n    <description>Outbound Connection to make a callout to a Service deployed in AWS VPC</description>\n    <isActive>true</isActive>\n    <label>MyOutboundConnection</label>\n    <outboundNetworkConnProperties>\n        <propertyName>Region</propertyName>\n        <propertyValue>us-west-2</propertyValue>\n    </outboundNetworkConnProperties>\n    <outboundNetworkConnProperties>\n        <propertyName>AwsVpcEndpointServiceName</propertyName>\n        <propertyValue>com.amazonaws.vpce.us-west-2.vpce-svc-00d7bd6285c123b4c</propertyValue>\n    </outboundNetworkConnProperties>\n    <status>Unprovisioned</status>\n</OutboundNetworkConnection>"
+    }
+  ]
+}

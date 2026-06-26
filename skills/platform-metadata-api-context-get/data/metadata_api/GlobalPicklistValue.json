@@ -1,0 +1,81 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "sub_types"
+  ],
+  "title": "GlobalPicklistValue - Metadata API",
+  "description": "Represents the definition of a value used in a global picklist. Custom picklist fields can inherit the picklist value set from a global picklist.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "color": {
+      "type": "string",
+      "description": "The color assigned to the picklist value when it’s used in charts on reports and dashboards. The color is in hexadecimal format; for example, #FF6600. If a color is not specified, it’s assigned dynamically upon chart generation."
+    },
+    "default": {
+      "type": "boolean",
+      "description": "Indicates whether this value is the default selection for the global picklist and the custom picklists that share its picklist value set. This field is set to true by default.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "The global picklist value’s description. It’s useful to include a description for a global picklist value so the reason for creating it can be tracked. Limit: 255 characters."
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether this value is currently active or inactive. The default value is true. Users can select only active values from a picklist. An API retrieve operation for global picklist values returns all active and inactive values in the picklist. (Meanwhile, retrieving the values of a non-global, unrestricted picklist returns only the active values.)"
+    }
+  },
+  "sub_types": {
+    "PicklistValue": {
+      "allowEmail": {
+        "type": "boolean",
+        "description": "Indicates whether this value lets users email a quote PDF (true), or not (false). This field is only relevant for the Status field in quotes. This field is available in API version 18.0 and later."
+      },
+      "closed": {
+        "type": "boolean",
+        "description": "Indicates whether this value is associated with a closed status (true), or not (false). This field is only relevant for the standard Status field in cases and tasks. This field is available in API version 16.0 and up to version 36.0. In version 37.0, this field is in GlobalPicklistValue."
+      },
+      "controllingFieldValues": {
+        "type": "string[]",
+        "description": "A list of values in the controlling field that are linked to this picklist value. The controlling field can be a checkbox or a picklist. This field is available in API version 14.0 and later. The values in the list depend on the field type: Checkbox: checked or unchecked. Picklist: The fullname of the picklist value in the controlling field."
+      },
+      "converted": {
+        "type": "boolean",
+        "description": "Indicates whether this value is associated with a converted status (true), or not (false). This field is relevant for only the standard Lead Status field in leads. Your organization can set its own guidelines for determining when a lead is qualified, but typically, you want to convert a lead as soon as it becomes a real opportunity that you want to forecast. For more information, see “Convert Qualified Leads” in the Salesforce online help. This field is available in API version 16.0 and later."
+      },
+      "cssExposed": {
+        "type": "boolean",
+        "description": "Indicates whether this value is available in your Self-Service Portal (true), or not (false). This field is only relevant for the standard Case Reason field in cases. Self-Service provides an online support channel for your customers - allowing them to resolve their inquiries without contacting a customer service representative. For more information about Self-Service, see “Setting Up Your Self-Service Portal” in the Salesforce online help. Note: Starting with Spring ’12, the Self-Service portal isn’t available for new Salesforce orgs. Existing orgs continue to have access to the Self-Service portal. This field is available in API version 16.0 and later."
+      },
+      "forecastCategory": {
+        "type": "ForecastCategories (enumeration of type string)",
+        "description": "Indicates whether this value is associated with a forecast category (true), or not (false). This field is only relevant for the standard Stage field in opportunities. Omitted Pipeline BestCase Forecast Closed This field is available in API version 16.0 and later."
+      },
+      "highPriority": {
+        "type": "boolean",
+        "description": "Indicates whether this value is a high priority item (true), or not (false). This field is only relevant for the standard Priority field in tasks. For more information about tasks, see “Start Using Tasks” in the Salesforce online help. This field is available in API version 16.0 and later."
+      },
+      "probability": {
+        "type": "int",
+        "description": "Indicates whether this value is a probability percentage (true), or not (false). This field is only relevant for the standard Stage field in opportunities. This field is available in API version 16.0 and later."
+      },
+      "reverseRole": {
+        "type": "string",
+        "description": "A picklist value corresponding to a reverse role name for a partner. If the role is “subcontractor”, then the reverse role might be “general contractor”. Assigning a partner role to an account in Salesforce creates a reverse partner relationship so that both accounts list the other as a partner. This field is only relevant for partner roles. For more information, see “Partner Fields” in the Salesforce online help. This field is available in API version 18.0 and later."
+      },
+      "reviewed": {
+        "type": "boolean",
+        "description": "Indicates whether this value is associated with a reviewed status (true), or not (false). This field is only relevant for the standard Status field in solutions. For more information about opportunities, see “Creating Solutions” in the Salesforce online help. This field is available in API version 16.0 and later."
+      },
+      "won": {
+        "type": "boolean",
+        "description": "Indicates whether this value is associated with a closed or won status (true), or not (false). This field is only relevant for the standard Stage field in opportunities. This field is available in API version 16.0 and later."
+      }
+    }
+  }
+}

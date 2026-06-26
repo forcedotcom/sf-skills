@@ -1,0 +1,297 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LoyaltyProgramSetup - Metadata API",
+  "description": "Represents the configuration of a loyalty program process including its parameters and rules. Program processes determine how new transaction journals are processed. When new transaction journals meet the criteria and conditions for a program process, actions that are set up in the process are triggered for the transaction journals.",
+  "file_information": ".loyaltyProgramSetup",
+  "directory_location": "loyaltyProgramSetups",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "label": {
+      "type": "string",
+      "description": "Name of the loyalty program that the program process is associated with. If a loyalty program or referral program with the specified name doesn't exist, a new LoyaltyProgram record is created. The name of a program must contain at least one alphanumeric character."
+    },
+    "programProcesses": {
+      "type": "LoyaltyProgramProcess[]",
+      "description": "Collection of loyalty program processes associated with a loyalty program or a referral program."
+    }
+  },
+  "sub_types": {
+    "LoyaltyProgramProcess": {
+      "description": {
+        "type": "string",
+        "description": "The description of the loyalty program process."
+      },
+      "executionType": {
+        "type": "LoyaltyPgmProcExecutionType (enumeration of type string)",
+        "description": "The mode of processing transaction journals by the loyalty program process.Possible values are: Batch BatchAndRealTime RealTime"
+      },
+      "journalSubType": {
+        "type": "string",
+        "description": "The subtype of transaction journals processed by the loyalty program process."
+      },
+      "journalType": {
+        "type": "string",
+        "description": "The type of transaction journal processed by the loyalty program process.Possible values for loyalty program: Accrual Redemption Possible value for referral program: Referral"
+      },
+      "loyaltyTierGroup": {
+        "type": "string",
+        "description": "The tier group of a loyalty program. This field is available in API version 56.0 and later. This field isn’t applicable for referral programs."
+      },
+      "parameters": {
+        "type": "LoyaltyProgramProcessParameter[]",
+        "description": "The parameters associated with the loyalty program process."
+      },
+      "processName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the loyalty program process."
+      },
+      "processType": {
+        "type": "string",
+        "required": true,
+        "description": "The type of records processed by the loyalty program process. For referral programs, the process type is TransactionJournal."
+      },
+      "rules": {
+        "type": "LoyaltyProgramProcessRule[]",
+        "description": "The rules associated with the loyalty program process."
+      },
+      "status": {
+        "type": "LoyaltyPgmProcStatus (enumeration of type string)",
+        "description": "The status of the loyalty program process. Possible values are: Active Draft Inactive Note: Only active program processes can process transaction journals."
+      }
+    },
+    "LoyaltyProgramProcessParameter": {
+      "condition": {
+        "type": "LoyaltyProgramProcessCondition",
+        "description": "The filter condition that decides which records are stored in the parameter."
+      },
+      "dataType": {
+        "type": "LoyaltyPgmProcParmDataType (enumeration of type string)",
+        "description": "The data type of the parameter. Determines the type of value that can be stored in the parameter.Possible values are: Boolean Date DateTime Numeric Sobject Text"
+      },
+      "decimalPlaces": {
+        "type": "int",
+        "description": "The number of decimal places supported by the parameter when it is of the type Variable and data type Numeric."
+      },
+      "description": {
+        "type": "string",
+        "description": "The description of the parameter."
+      },
+      "isCollection": {
+        "type": "boolean",
+        "description": "Indicates whether the parameter can store multiple values when it is of the type Variable."
+      },
+      "isInput": {
+        "type": "boolean",
+        "description": "Indicates whether a parameter can be used as an input outside the loyalty program process."
+      },
+      "isOutput": {
+        "type": "boolean",
+        "description": "Indicates whether a parameter can be used as an output outside the loyalty program process."
+      },
+      "objectName": {
+        "type": "string",
+        "description": "Name of the object whose records are stored by the parameter when it is of the type Variable and data type sObject."
+      },
+      "parameterName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the parameter."
+      },
+      "parameterType": {
+        "type": "LoyaltyPgmProcParmType (enumeration of type string)",
+        "description": "The type of value the parameter can store.Possible values are: Constant Formula Variable"
+      },
+      "value": {
+        "type": "string",
+        "description": "The value of the parameter when it is of the type Variable or Formula and isn't of the data type sObject."
+      }
+    },
+    "LoyaltyProgramProcessCondition": {
+      "conditionCriteria": {
+        "type": "string",
+        "required": true,
+        "description": "The criteria that determine when the condition is met by a record or by a transaction journal."
+      },
+      "conditionFilterCriteria": {
+        "type": "LoyaltyProgramProcessConditionFilterCriteria[]",
+        "description": "The filter criteria that determines which records or transaction journals are filtered."
+      },
+      "conditionName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the condition."
+      }
+    },
+    "LoyaltyProgramProcessConditionFilterCriteria": {
+      "operator": {
+        "type": "LoyaltyPgmProcCondOperator (enumeration of type string)",
+        "required": true,
+        "description": "The operator of the filter criteria.Possible values are: Contains DoesNotContain EndsWith Equals GreaterThan GreaterThanOrEquals IsNotNull IsNull LessThan LessThanOrEquals NotEquals StartsWith"
+      },
+      "sequence": {
+        "type": "int",
+        "required": true,
+        "description": "The sequence number of the filter criteria within a condition."
+      },
+      "sourceFieldName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the field used in the filter criteria."
+      },
+      "value": {
+        "type": "string",
+        "description": "The value of the filter criteria."
+      },
+      "valueType": {
+        "type": "LoyaltyPgmProcCondType (enumeration of type string)",
+        "required": true,
+        "description": "The type of value specified in the filter criteria.Possible values are: Formula Literal Lookup Parameter"
+      }
+    },
+    "LoyaltyProgramProcessRule": {
+      "actions": {
+        "type": "LoyaltyProgramProcessAction[]",
+        "description": "The actions associated with the rule."
+      },
+      "conditions": {
+        "type": "LoyaltyProgramProcessCondition[]",
+        "description": "The conditions associated with the rule."
+      },
+      "description": {
+        "type": "string",
+        "description": "The description of the rule."
+      },
+      "endDate": {
+        "type": "date",
+        "description": "The date until which the rule processes transaction journals."
+      },
+      "previousRule": {
+        "type": "string",
+        "description": "The rule that processes new transaction journals before the current rule. The current rule is triggered when the previous rule completes processing transaction journals."
+      },
+      "promotion": {
+        "type": "string",
+        "description": "The promotion associated with the rule. When a promotion is associated with a rule, the start date, end date, and status of the promotion determines the corresponding fields of the rule."
+      },
+      "ruleName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the rule."
+      },
+      "startDate": {
+        "type": "date",
+        "description": "The date from which the rule starts processing transaction journals."
+      },
+      "status": {
+        "type": "LoyaltyPgmProcRuleStatus (enumeration of type string)",
+        "description": "The status of the rule.Possible values are: Active Draft Inactive"
+      },
+      "stepMappings": {
+        "type": "LoyaltyProgramProcessRuleStepMapping[]",
+        "description": "The list of step mappings associated with rule."
+      }
+    },
+    "LoyaltyProgramProcessAction": {
+      "actionName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the action."
+      },
+      "actionParameters": {
+        "type": "LoyaltyProgramProcessActionParameter[]",
+        "description": "The parameters of the action."
+      },
+      "actionType": {
+        "type": "LoyaltyPgmProcActionType (enumeration of type string)",
+        "required": true,
+        "description": "The type of action.Possible values are: These values are used in Loyalty Management: AssignParameterValues—Assigns values to parameters. AssignBadgeToMember—Assigns a badge to a loyalty program member. This value is available in API version 56.0 and later. Crud—Creates or updates records in the target object. This value is available in API version 56.0 and later. CheckMemberBadgeAssignment—Checks whether a badge is assigned to a loyalty program member. This value is available in API version 56.0 and later. ChangeMemberTier—Changes the tier of a loyalty program member. This value is available in API version 56.0 and later. CreditPoints—Credits points to the loyalty program member associated with the transaction journal that's processed by the rule. DebitPoints—Debits points from the points balance of the loyalty program member associated with the transaction journal that's processed by the rule. GetMemberAttributesValues—Gets the details of a loyalty program member’s attribute value for the selected engagement attribute. This value is available in API version 55.0 and later. GetMemberPointBalance—Gets the points balance of a loyalty program member. GetMemberPromotions—Get promotions of a loyalty program member. This value is available in API version 56.0 and later. GetMemberTier—Gets the tier details of a loyalty program member. GetOutputsFromDecisionTable—Gets outputs provided by a decision table. This value is available in API version 56.0 and later. IncreaseUsageForCumulativePromotion—Increases a loyalty program member’s usage for a cumulative promotion. IssueVoucher—Issues a voucher to the loyalty program member associated with the transaction journal that's processed by the rule. RedeemVoucher—Redeems a voucher for the loyalty program member associated with the transaction journal that's processed by the rule. This value is available in API version 58.0 and later. —Updates the loyalty program member's usage towards achieving a cumulative promotion by a specified value. RunFlow—Runs a flow. RunProgramProcess—Runs an active loyalty program process as a subprocess. This value is available in API version 56.0 and later. SendMail—Sends emails to the loyalty program member for whom the process is run. This value is available in API version 59.0 and later. UpdateCurrentValueForMemberAttribute—Updates the loyalty program member's current attribute value for the selected engagement attribute. This value is available in API version 55.0 and later. UpdatePointBalance—Updates the points balance of the loyalty program member associated with the transaction journal that's processed by the rule. UpdateUsageForCumulativePromotion—Updates a loyalty program member’s usage for a cumulative promotion. These values are used in Referral Marketing: AssignParameterValues—Assigns values to parameters. Crud—Creates or updates records in the target object. GetMemberAttributesValues—Gets the details of an advocate's attribute value for the selected engagement attribute. GetMemberPromotions—Gets the promotions of an advocate. GetOutputsFromDecisionTable—Gets outputs provided by a decision table. IssueExtendedReward—Issues an extended reward to an advocate or a referred friend. This value is available in API version 64.0 and later. IssueVoucher—Issues a voucher to an advocate or a referred friend. RedeemVoucher—Redeems a voucher for an advocate or a friend. SendMail—Sends emails to a referral program’s advocates and referrals. UpdateCurrentValueForMemberAttribute—Updates an advocate’s current attribute value for the selected engagement attribute. These values are reserved for internal use: GetCustomerPromotionAttrValue—This value is available in API version 64.0 and later. UpdateCustomerPromotionAttrValue—This value is available in API version 64.0 and later."
+      },
+      "crudActionType": {
+        "type": "LoyaltyPgmProcCrudActType (enumeration of type string)",
+        "description": "The type of operation to perform on target object records by the action. This field is available from API version 56.0 and later. Note: This field is required when the actionType field value is CRUD. Possible values are: create update"
+      },
+      "decisionTable": {
+        "type": "string",
+        "description": "The decision that's invoked by the action for the transaction journal that's processed by the rule."
+      },
+      "decisionTableDatasetLink": {
+        "type": "string",
+        "description": "The dataset link associated with the selected decision table."
+      },
+      "entityApiName": {
+        "type": "string",
+        "description": "The API name of the target object. This field is available from API version 56.0 and later. Note: This field is required when the actionType field value is CRUD."
+      },
+      "flowDefinition": {
+        "type": "string",
+        "description": "The flow that's run by the action for the transaction journal that's processed by the rule. The selected flow must be of the type LoyaltyManagementFlow."
+      },
+      "loyaltyProgramProcess": {
+        "type": "string",
+        "description": "The subprogram processes that’s run by the action. This field is available from API version 56.0 and later. Note: This field is required when the actionType field value is RunProgramProcess."
+      }
+    },
+    "LoyaltyProgramProcessActionParameter": {
+      "operator": {
+        "type": "LoyaltyPgmProcActParamOper (enumeration of type string)",
+        "description": "The type of operator used in the action. This field is available in API version 56.0 and later.Possible value is: Equals"
+      },
+      "parameterName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of parameter. The parameter name must be the same as the input or the output field that's supported depending on the associated action's type."
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "description": "The sequence number of the parameter in the action. This field is available in API version 56.0 and later."
+      },
+      "value": {
+        "type": "string",
+        "required": true,
+        "description": "The value of the parameter."
+      },
+      "valueType": {
+        "type": "LoyaltyPgmProcActParamType (enumeration of type string)",
+        "description": "The type of value to provide in the parameter. This field is available in API version 56.0 and later.Possible values are: Literal—A constant value. Parameter—A runtime value passed using a parameter."
+      }
+    },
+    "LoyaltyProgramProcessRuleStepMapping": {
+      "associatedStep": {
+        "type": "string",
+        "required": true,
+        "description": "The action that's associated with the mapping."
+      },
+      "parentStep": {
+        "type": "string",
+        "description": "The condition that contains one or more child actions."
+      },
+      "sequence": {
+        "type": "int",
+        "required": true,
+        "description": "The sequence number of the mapping within a rule."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a LoyaltyProgramSetup component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LoyaltyProgramSetup xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <label>Cloud Kicks Inner Circle</label>\n    <programProcesses>\n        <executionType>RealTime</executionType>\n        <parameters>\n            <dataType>Numeric</dataType>\n            <decimalPlaces>0</decimalPlaces>\n            <isCollection>false</isCollection>\n            <isInput>false</isInput>\n            <isOutput>false</isOutput>\n            <parameterName>VoucherValue</parameterName>\n            <parameterType>Constant</parameterType>\n            <value>50</value>\n        </parameters>\n        <processName>Issue Vouchers</processName>\n        <processType>Transaction Journal</processType>\n        <rules>\n            <actions>\n                <actionName>Issue High Transaction Value Voucher</actionName>\n                <actionParameters>\n                    <operator>Equals</operator>\n                    <parameterName>VoucherDefinitionName</parameterName>\n                    <sequenceNumber>1</sequenceNumber>\n                    <value>Voucher for High Value Transactions</value>\n                    <valueType>Literal</valueType>\n                </actionParameters>\n                <actionParameters>\n                    <operator>Equals</operator>\n                    <parameterName>VoucherCode</parameterName>\n                    <sequenceNumber>2</sequenceNumber>\n                    <value>{!TransactionJournal.Order.Id}</value>\n                </actionParameters>\n                <actionParameters>\n                    <operator>Equals</operator>\n                    <parameterName>VoucherEffectiveDate</parameterName>\n                    <sequenceNumber>3</sequenceNumber>\n                    <value>DATEVALUE(&quot;2021-11-21 00:00:00&quot;)</value>\n                </actionParameters>\n                <actionParameters>\n                    <operator>Equals</operator>\n                    <parameterName>VoucherExpirationDate</parameterName>\n                    <sequenceNumber>4</sequenceNumber>\n                    <value>DATEVALUE(&quot;2022-01-01 00:00:00&quot;)</value>\n                </actionParameters>\n                <actionParameters>\n                    <operator>Equals</operator>\n                    <parameterName>VoucherFaceValue</parameterName>\n                    <sequenceNumber>5</sequenceNumber>\n                    <value>{!VoucherValue}</value>\n                </actionParameters>\n                <actionType>IssueVoucher</actionType>\n            </actions>\n            <conditions>\n                <conditionCriteria>1</conditionCriteria>\n                <conditionFilterCriteria>\n                    <operator>GreaterThanOrEquals</operator>\n                    <sequence>1</sequence>\n                    <sourceFieldName>TransactionJournal.TransactionAmount</sourceFieldName>\n                    <value>100</value>\n                    <valueType>Literal</valueType>\n                </conditionFilterCriteria>\n                <conditionName>New Condition</conditionName>\n                <conditionType>Condition</conditionType>\n            </conditions>\n            <endDate>2022-01-01</endDate>\n            <ruleName>Issue Voucher for Transactions Above $100</ruleName>\n            <startDate>2021-11-21</startDate>\n            <status>Draft</status>\n            <stepMappings>\n                <associatedStep>New Condition</associatedStep>\n                <sequence>1</sequence>\n            </stepMappings>\n            <stepMappings>\n                <associatedStep>Issue High Transaction Value Voucher</associatedStep>\n                <parentStep>New Condition</parentStep>\n                <sequence>1</sequence>\n            </stepMappings>\n        </rules>\n        <status>Draft</status>\n    </programProcesses>\n</LoyaltyProgramSetup>"
+    },
+    {
+      "description": "The following is an example package.xml that references the previous definition.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--\n   ~ Copyright 2020 Salesforce, Inc.\n   ~ All Rights Reserved\n   ~ Company Confidential\n-->\n<Package xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <types>\n      <members>*</members>\n      <name>LoyaltyProgramSetup</name>\n   </types>\n   <version>54.0</version>\n</Package>"
+    }
+  ]
+}

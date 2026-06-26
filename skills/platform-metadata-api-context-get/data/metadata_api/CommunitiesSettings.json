@@ -1,0 +1,116 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CommunitiesSettings - Metadata API",
+  "description": "Represents community settings for an org. Enable digital experiences and workspaces. Manage moderation, guest user and partner settings, and more. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "applyLoginPageTypeToEmbeddedLogin": {
+      "type": "boolean",
+      "description": "When true, applies the Experience Cloud site login page type (default, Login Discovery, Experience Builder, or Visualforce) to all Embedded Login implementations. When false, applies the username and password login page type to all Embedded Login implementations. For orgs created before the Salesforce Summer ‘20 release, the default setting is false. For new orgs, the default setting is true. Available in API version 49.0 and later."
+    },
+    "blockEmbeddedLoginUnknownURLRedirect": {
+      "type": "boolean",
+      "description": "When true, blocks redirects to unknown URLs that are provided in the state parameter of the OAuth response during a server-side callback. Redirects are allowed when the URL is in the same host or domain as the site, or is allow-listed in the Embedded Login salesforce-allowed-domains meta tag. When false, all redirects are allowed. For orgs created before the Salesforce Summer ‘21 release, the default setting is false. For new orgs, the default setting is true. Available in API version 52.0 and later."
+    },
+    "canModerateAllFeedPosts": {
+      "type": "boolean",
+      "description": "When true, allows moderation features, such as flags and rules, to be set on all feed posts including posts that are visible in Experience Cloud sites. When set to false, only feed posts in sites can be moderated. Default is false."
+    },
+    "canModerateInternalFeedPosts": {
+      "type": "boolean",
+      "description": "When true, allows moderation features, such as flags and rules, to be set on record feed posts created by internal users. Such posts can also be visible in multiple sites. Default is false."
+    },
+    "embeddedVisualforcePages": {
+      "type": "boolean",
+      "description": "When true, allows links to Visualforce pages from other Visualforce pages in Salesforce via the API. Default is false. Available in API version 48.0 and later."
+    },
+    "enableCommunityWorkspaces": {
+      "type": "boolean",
+      "description": "When true, allows admins to enable Experience Workspaces. Available in API version 48.0 and later."
+    },
+    "enableCspContactVisibilityPref": {
+      "type": "boolean",
+      "description": "When true, allows users to see contacts from private accounts that they have read access to, when the contact is controlled by the parent record. Available in API version 48.0 and later."
+    },
+    "enableCspNotesOnAccConPref": {
+      "type": "boolean",
+      "description": "When true, allows customer users to access notes and attachments associated with accounts and contacts. Available in API version 48.0 and later."
+    },
+    "enableEnablePRM": {
+      "type": "boolean",
+      "description": "When true, allows admins to enable partner users. Available in API version 48.0 and later."
+    },
+    "enableExternalAccHierPref": {
+      "type": "boolean",
+      "description": "When true, enables the External Account Hierarchy object. Available in API version 48.0 and later."
+    },
+    "enableGuestRecordReassignOrgPref": {
+      "type": "boolean",
+      "description": "Deprecated in API version 63.0 and later. When true, allows admins to set a default owner for records created by guest users. Available in API version 48.0 through 63.0."
+    },
+    "enableGuvSecurityOptOutPref": {
+      "type": "boolean",
+      "description": "When true, guest user visibility can be turned off. Available in API version 49.0 and later."
+    },
+    "enableInviteChatterGuestEnabled": {
+      "type": "boolean",
+      "description": "When true, allows guest users to be invited to use Chatter. Available in API version 48.0 and later."
+    },
+    "enableNetPortalUserReportOpts": {
+      "type": "boolean",
+      "description": "When true, allows external users in Experience Cloud sites, with permission, to run reports. Available in API version 48.0 and later."
+    },
+    "enableNetworksEnabled": {
+      "type": "boolean",
+      "description": "When true, allows users to enable digital experiences. Available in API version 47.0 and later."
+    },
+    "enableOotbProfExtUserOpsEnable": {
+      "type": "boolean",
+      "description": "When true, allows use of standard external profiles for self-registration and user creation. Available in API version 48.0 and later."
+    },
+    "enablePreventBadgeGuestAccess": {
+      "type": "boolean",
+      "description": "When true, hides badges from guest users in Experience Builder sites. Available in API version 53.0 and later."
+    },
+    "enablePowerCustomerCaseStatus": {
+      "type": "boolean",
+      "description": "When true, allows users with Customer Community Plus licenses to change case status. Available in API version 48.0 and later."
+    },
+    "enablePRMAccRelPref": {
+      "type": "boolean",
+      "description": "When true, enables Account Relationship object and Account Relationship Data Sharing Rule setup options. Available in API version 48.0 and later."
+    },
+    "enableRelaxPartnerAccountFieldPref": {
+      "type": "boolean",
+      "description": "When true, allows editing for partner account fields on and opportunities and leads. Available in API version 48.0 and later."
+    },
+    "enableUnsupportedBrowserModalPref": {
+      "type": "boolean",
+      "description": "When true, warnings about unsupported browsers are displayed in Experience Cloud sites. Available in API version 48.0 and later."
+    },
+    "enableUsernameUniqForOrgPref": {
+      "type": "boolean",
+      "description": "When true, username uniqueness is set at the org level. Available in API version 48.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CommunitiesSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"applyLoginPageTypeToEmbeddedLogin\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"blockEmbeddedLoginUnknownURLRedirect\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"canModerateAllFeedPosts\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"canModerateInternalFeedPosts\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"embeddedVisualforcePages\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCommunityWorkspaces\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCspContactVisibilityPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCspNotesOnAccConPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEnablePRM\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableExternalAccHierPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableGuestPermDisOptOutCruc\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableGuestSecurityOptOutCruc\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableGuvSecurityOptOutPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableInviteChatterGuestEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableNameFieldsUserPIIEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableNetPortalUserReportOpts\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableNetworksEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOotbProfExtUserOpsEnable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePRMAccRelPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePowerCustomerCaseStatus\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePreventBadgeGuestAccess\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRelaxPartnerAccountFieldPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableUnsupportedBrowserModalPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableUsernameUniqForOrgPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CommunitiesSettings component.",
+      "code": "<CommunitiesSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <canModerateAllFeedPosts>true</canModerateAllFeedPosts>\n    <canModerateInternalFeedPosts>true</canModerateInternalFeedPosts>\n</CommunitiesSettings>"
+    }
+  ]
+}

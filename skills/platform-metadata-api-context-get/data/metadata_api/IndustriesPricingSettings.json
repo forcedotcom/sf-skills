@@ -1,0 +1,61 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "IndustriesPricingSettings - Metadata API",
+  "description": "Represents the settings for Salesforce Pricing.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description",
+    "reserved_for_internal_use"
+  ],
+  "fields": {
+    "enableDebugPriceLogs": {
+      "type": "boolean",
+      "description": "Indicates whether to use price logs to diagnose and resolve pricing issues (true) or not (false). The default value is false. Available in API version 63.0 and later."
+    },
+    "enableHighAvailability": {
+      "type": "boolean",
+      "reserved_for_internal_use": true
+    },
+    "enableHighestPriceCompliance": {
+      "type": "boolean",
+      "description": "Indicates whether to track the maximum price of a product over a period of 30 days (true) or not (false). The default value is false. Available in API version 64.0 and later."
+    },
+    "enableLowestPriceCompliance": {
+      "type": "boolean",
+      "description": "Indicates whether to track the minimum price of a product over a period of 30 days (true) or not (false). The default value is false. Available in API version 62.0 and later."
+    },
+    "enablePricingProcParallelization": {
+      "type": "boolean",
+      "description": "Indicates whether to run pricing elements in parallel within a pricing procedure to optimize the performance of the pricing execution process (true) or not (false). The default value is false. Available in API version 64.0 and later."
+    },
+    "enablePricingWaterfall": {
+      "type": "boolean",
+      "description": "Indicates whether to enable Price Waterfall (true) or not (false). The default value is false. Price Waterfall provides insights that include price breakups and reasons for every step of the pricing process."
+    },
+    "enablePricingWaterfallPersistence": {
+      "type": "boolean",
+      "description": "Indicates whether to enable Price Waterfall Persistence (true) or not (false). The default value is false. Price Waterfall Persistence stores the process logs that provide insights into the internal pricing processes."
+    },
+    "enableSalesforcePricing": {
+      "type": "boolean",
+      "description": "Indicates whether to enable Salesforce Pricing (true) or not (false). The default value is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"IndustriesPricingSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableAbpLog\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDebugPriceLogs\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDerivedPricingLog\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableHighAvailability\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableHighestPriceCompliance\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLargeQuoteLog\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLargeTransactionPricing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLowestPriceCompliance\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePriceGuidanceAccess\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePricingProcParallelization\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePricingWaterfall\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePricingWaterfallPersistence\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePromotionLog\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePropagationLog\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSalesforcePricing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This example shows a sample IndustriesPricingSettings component.",
+      "code": "<IndustriesPricingSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n     <enableDebugPriceLogs>true</enableDebugPriceLogs>\n     <enableHighAvailability>true</enableHighAvailability>\n     <enableHighestPriceCompliance>true</enableHighestPriceCompliance>\n     <enableLowestPriceCompliance>true</enableLowestPriceCompliance>\n     <enablePricingProcParallelization>true</enablePricingProcParallelization>\n     <enablePricingWaterfall>true</enablePricingWaterfall>\n     <enablePricingWaterfallPersistence>true</enablePricingWaterfallPersistence>\n     <enableSalesforcePricing>true</enableSalesforcePricing>\n</IndustriesPricingSettings>"
+    }
+  ]
+}

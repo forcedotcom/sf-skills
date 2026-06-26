@@ -1,0 +1,146 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "communitytheme_setting",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CommunityThemeDefinition - Metadata API",
+  "description": "Represents the definition of a theme for an Experience Builder site. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".communityThemeDefinition",
+  "directory_location": "communityThemeDefinitions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "bundlesInfo": {
+      "type": "CommunityThemeBundleInfo[]",
+      "description": "If specified, at least one preview image and one highlight are required. Up to 3 preview images and 4 highlights are supported. Available in API version 44.0 and later"
+    },
+    "customThemeLayoutType": {
+      "type": "CommunityCustomThemeLayoutType[]",
+      "description": "The list of custom theme layout types available to the theme layout."
+    },
+    "defaultBrandingSet": {
+      "type": "string",
+      "description": "The set of branding properties associated with this CommunityThemeDefinition, as defined in the Theme panel in Experience Builder. Available in API version 44.0 and later."
+    },
+    "description": {
+      "type": "string",
+      "description": "The optional description text of this CommunityThemeDefinition."
+    },
+    "enableExtendedCleanUpOnDelete": {
+      "type": "boolean",
+      "description": "False by default. Determines if deleting this CommunityThemeDefinition attempts to delete other directly or indirectly referenced objects automatically, for example, FlexiPage. Values are true or false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label for this CommunityThemeDefinition, which displays in Setup.",
+      "required": true
+    },
+    "publisher": {
+      "type": "string",
+      "description": "Defines the name of the publisher as seen in the wizard for creating Experience Builder sites. If no name is provided, the name of the org from which the package was originally exported is used. This field is available in API version 45.0 and later."
+    },
+    "themeRouteOverride": {
+      "type": "CommunityThemeRouteOverride[]",
+      "description": "List of theme layout type overrides for flexipages (currently only for home). Available in API version 44.0 and later."
+    },
+    "themeSetting": {
+      "type": "CommunityTheme Setting []",
+      "description": "The list of settings for this CommunityThemeDefinition.",
+      "required": true
+    }
+  },
+  "communitytheme_setting": {
+    "customThemeLayoutType": {
+      "type": "string",
+      "description": "Required when themeLayoutType isn’t specified. The custom theme layout type associated with the theme layout. This field and themeLayoutType are mutually exclusive; you can’t specify both.",
+      "required": true
+    },
+    "themeLayout": {
+      "type": "string",
+      "description": "The configuration and layout for this theme.",
+      "required": true
+    },
+    "themeLayoutType": {
+      "type": "CommunityThemeLayoutType (enumeration of type string)",
+      "description": "Required when customThemeLayoutType isn’t specified. The default theme layout type associated with the theme layout. Valid values are Inner, Home, or Login. This field and customThemeLayoutType are mutually exclusive; you can’t specify both.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "CommunityThemeBundleInfo": {
+      "description": {
+        "type": "string",
+        "description": "The optional description text of its CommunityThemeBundleInfo."
+      },
+      "image": {
+        "type": "string",
+        "description": "Required only when the type is PreviewImage, otherwise this field is optional. A preview image for this CommunityThemeDefinition.",
+        "required": true
+      },
+      "order": {
+        "type": "int",
+        "description": "An integer specifying the position of this CommunityThemeBundleInfo relative to others of the same type within its CommunityThemeDefinition. 1 is the first position, 3 is the maximum position for PreviewImage type, and 4 is the maximum position for the Highlight type.",
+        "required": true
+      },
+      "title": {
+        "type": "string",
+        "description": "The title of this CommunityThemeBundleInfo to use in code.",
+        "required": true
+      },
+      "type": {
+        "type": "CommunityTemplateBundleInfoType (enumeration of type string)",
+        "description": "Stores descriptive information about the theme that is included in the export. Valid values are: Highlight—This CommunityThemeBundleInfo is used as a highlighted feature. Up to 4 are supported. PreviewImage—This CommunityThemeBundleInfo is used as a preview image. Up to 3 are supported.",
+        "required": true
+      }
+    },
+    "CommunityCustomThemeLayoutType": {
+      "description": {
+        "type": "string",
+        "description": "The description of the custom theme layout type."
+      },
+      "label": {
+        "type": "string",
+        "description": "The name of the custom theme layout type. The values Inner, Home, and Login are reserved.",
+        "required": true
+      }
+    },
+    "CommunityThemeRouteOverride": {
+      "customThemeLayoutType": {
+        "type": "string",
+        "description": "Required when themeLayoutType isn’t specified. Provides the custom theme layout type associated with the theme layout. This field and themeLayoutType are mutually exclusive; you can’t specify both.",
+        "required": true
+      },
+      "pageAttributes": {
+        "type": "string",
+        "description": "Specifies the attributes of the site page for which the default theme layout type is overridden. The only valid value is {\"PageName\":\"Home\"}.",
+        "required": true
+      },
+      "pageType": {
+        "type": "string",
+        "description": "Specifies the type of the site page for which the default theme layout type is overridden. The only valid value is comm__standardPage.",
+        "required": true
+      },
+      "themeLayoutType": {
+        "type": "CommunityThemeLayoutType (enumeration of type string)",
+        "description": "Required if customThemeLayoutType isn’t specified. Provides the default theme layout type associated with the theme layout. Valid values are Inner, Home, or Login. This field and customThemeLayoutType are mutually exclusive; you can’t specify both.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CommunityCustomThemeLayoutType\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CommunityTemplateBundleInfo\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"image\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"order\" type=\"xsd:int\"/>\n    <xsd:element name=\"title\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:CommunityTemplateBundleInfoType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"CommunityTemplateBundleInfoType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Highlight\"/>\n    <xsd:enumeration value=\"PreviewImage\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"CommunityThemeBundleInfo\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:CommunityTemplateBundleInfo\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"CommunityThemeDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"bundlesInfo\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CommunityThemeBundleInfo\"/>\n        <xsd:element name=\"customThemeLayoutType\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CommunityCustomThemeLayoutType\"/>\n        <xsd:element name=\"defaultBrandingSet\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableExtendedCleanUpOnDelete\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"publisher\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"themeRouteOverride\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CommunityThemeRouteOverride\"/>\n        <xsd:element name=\"themeSetting\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CommunityThemeSetting\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"CommunityThemeLayoutType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Login\"/>\n    <xsd:enumeration value=\"Home\"/>\n    <xsd:enumeration value=\"Inner\"/>\n    <xsd:enumeration value=\"ServiceNotAvailable\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"CommunityThemeRouteOverride\">\n  <xsd:sequence>\n    <xsd:element name=\"customThemeLayoutType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"pageAttributes\" type=\"xsd:string\"/>\n    <xsd:element name=\"pageType\" type=\"xsd:string\"/>\n    <xsd:element name=\"themeLayoutType\" minOccurs=\"0\" type=\"tns:CommunityThemeLayoutType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CommunityThemeSetting\">\n  <xsd:sequence>\n    <xsd:element name=\"customThemeLayoutType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"themeLayout\" type=\"xsd:string\"/>\n    <xsd:element name=\"themeLayoutType\" minOccurs=\"0\" type=\"tns:CommunityThemeLayoutType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CommunityThemeDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CommunityThemeDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <bundlesInfo>\n        <description>Batman Feature1 description</description>\n        <order>1</order>\n        <title>Batman Feature1</title>\n        <type>Highlight</type>\n    </bundlesInfo>\n    <bundlesInfo>\n        <image>siteAsset_d90e2d5ce4cf4d8899e233c051091246</image>\n        <order>1</order>\n        <title>siteAsset_d90e2d5ce4cf4d8899e233c051091246</title>\n        <type>PreviewImage</type>\n    </bundlesInfo>\n    <defaultBrandingSet>Batman</defaultBrandingSet>\n    <description>Batman theme</description>\n    <enableExtendedCleanUpOnDelete>true</enableExtendedCleanUpOnDelete>\n    <masterLabel>Batman</masterLabel>\n    <themeRouteOverride>\n        <pageAttributes>{&quot;PageName&quot;:&quot;Home&quot;}</pageAttributes>\n        <pageType>comm__standardPage</pageType>\n        <themeLayoutType>Home</themeLayoutType>\n    </themeRouteOverride>\n    <themeSetting>\n        <themeLayout>Batman_themeLayout_Login</themeLayout>\n        <themeLayoutType>Login</themeLayoutType>\n    </themeSetting>\n    <themeSetting>\n        <themeLayout>Batman_themeLayout_Home</themeLayout>\n        <themeLayoutType>Home</themeLayoutType>\n    </themeSetting>\n    <themeSetting>\n        <themeLayout>Batman_themeLayout_Default</themeLayout>\n        <themeLayoutType>Inner</themeLayoutType>\n    </themeSetting>\n</CommunityThemeDefinition>"
+    }
+  ]
+}

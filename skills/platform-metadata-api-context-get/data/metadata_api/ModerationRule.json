@@ -1,0 +1,99 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ModerationRule - Metadata API",
+  "description": "Represents a rule used in your Experience Cloud site to moderate member-generated content. Each rule specifies the member-generated content the rule applies to, the criteria to enforce the rule on, and the moderation action to take. Moderation rules help protect your site from spammers, bots, and offensive or inappropriate content. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".rule",
+  "directory_location": "moderation",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "action": {
+      "type": "ModerationRuleAction (enumeration of type string)",
+      "description": "Indicates the moderation action that you want to take. The valid values are: Block Review Replace Flag FreezeAndNotify (Reserved for future use.)",
+      "required": true
+    },
+    "actionLimit": {
+      "type": "int",
+      "description": "Indicates the moderation action limit. Available in API 39.0 and later."
+    },
+    "active": {
+      "type": "boolean",
+      "description": "Indicates whether the moderation rule is active (true) or inactive (false).",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the moderation rule."
+    },
+    "entitiesAndFields": {
+      "type": "ModerateEntityField[]",
+      "description": "Indicates the types of user-generated content this moderation rule applies to."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Label for the moderation rule.",
+      "required": true
+    },
+    "notifyLimit": {
+      "type": "int",
+      "description": "Indicates the notification limit of the moderation rule. Available in API 39.0 and later."
+    },
+    "userCriteria": {
+      "type": "string",
+      "description": "Represents the member criteria to use in moderation rules. Available in API 39.0 and later."
+    },
+    "userMessage": {
+      "type": "string",
+      "description": "The message you want your members to see when their content is blocked. Use the %BLOCKED_KEYWORD% variable to display up to five blocked words in the user message. If you don’t specify a message, the member sees the standard message: “You can’t use %BLOCKED_KEYWORD% or other inappropriate words in this site. Review your content and try again.”"
+    }
+  },
+  "sub_types": {
+    "ModeratedEntityField": {
+      "entityName": {
+        "type": "string",
+        "description": "Indicates the types of user-generated content the moderation rule applies to. Post and comments only apply to content created in groups and user profiles. All feed types, such as polls and links, are supported.",
+        "required": true
+      },
+      "fieldName": {
+        "type": "string",
+        "description": "Indicates the field the moderation rule applies to. Note: To moderate feed posts, use entityName FeedItem with fieldName RawBody. To moderate feed comments, use entityName FeedComment with fieldName RawCommentBody. The RawBody and RawCommentBody fields aren’t available in any other API."
+      },
+      "keywordList": {
+        "type": "KeywordList string",
+        "description": "Indicates the keyword list that you want to moderate against."
+      }
+    },
+    "ModerationRuleType": {
+      "type": {
+        "type": "(enumeration of type string)",
+        "description": "Indicates the type of rule to run on user-generated content. Valid values are: Content Rate Available in API 39.0 and later.",
+        "required": true
+      }
+    },
+    "RateLimitTimePeriod": {
+      "timePeriod": {
+        "type": "(enumeration of type string)",
+        "description": "Indicates the time period that is applied to the rate limit. Valid values are: Short Medium Available in API 39.0 and later.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ModeratedEntityField\">\n  <xsd:sequence>\n    <xsd:element name=\"entityName\" type=\"xsd:string\"/>\n    <xsd:element name=\"fieldName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"keywordList\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ModerationRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"action\" type=\"tns:ModerationRuleAction\"/>\n        <xsd:element name=\"actionLimit\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"entitiesAndFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ModeratedEntityField\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"notifyLimit\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"timePeriod\" minOccurs=\"0\" type=\"tns:RateLimitTimePeriod\"/>\n        <xsd:element name=\"type\" minOccurs=\"0\" type=\"tns:ModerationRuleType\"/>\n        <xsd:element name=\"userCriteria\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"userMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ModerationRuleAction\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Block\"/>\n    <xsd:enumeration value=\"FreezeAndNotify\"/>\n    <xsd:enumeration value=\"Review\"/>\n    <xsd:enumeration value=\"Replace\"/>\n    <xsd:enumeration value=\"Flag\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ModerationRuleType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Content\"/>\n    <xsd:enumeration value=\"Rate\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"RateLimitTimePeriod\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Short\"/>\n    <xsd:enumeration value=\"Medium\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ModerationRule component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ModerationRule xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <description>Blocks Bad Word List in posts, comments, Link URLs, titles, and poll choices.</description>\n   <masterLabel>Blocking Rule</masterLabel>\n   <action>Block</action>\n   <active>true</active>\n   <userMessage>You can't use %BLOCKED_KEYWORD% or other inappropriate words in this site. Review your content and try again.</userMessage>\n   <!-- Applies the rule to FeedComment.RawCommentBody (an internal only field), if it contains words from the keyword list specified -->\n   <entitiesAndFields>\n     <entityName>FeedComment</entityName>\n     <fieldName>RawCommentBody</fieldName>\n     <keywordList>site1.badword_list</keywordList>\n   </entitiesAndFields>\n   <entitiesAndFields>\n     <entityName>FeedItem</entityName>\n     <fieldName>LinkUrl</fieldName>\n     <keywordList>site1.badword_list</keywordList>\n   </entitiesAndFields>\n   <!-- Applies the rule to FeedItem.RawBody (an internal only field), if it contains words from the keyword list specified -->\n   <entitiesAndFields>\n     <entityName>FeedItem</entityName>\n     <fieldName>RawBody</fieldName>\n     <keywordList>site1.badword_list</keywordList>\n   </entitiesAndFields>\n   <entitiesAndFields>\n     <entityName>FeedItem</entityName>\n     <fieldName>Title</fieldName>\n     <keywordList>site1.badword_list</keywordList>\n   </entitiesAndFields>\n   <entitiesAndFields>\n     <entityName>FeedPollChoice</entityName>\n     <fieldName>ChoiceBody</fieldName>\n     <keywordList>site1.badword_list</keywordList>\n   </entitiesAndFields>\n</ModerationRule>"
+    }
+  ]
+}

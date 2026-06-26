@@ -1,0 +1,184 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "RecordActionDeployment - Metadata API",
+  "description": "Represents configuration settings for the Actions & Recommendations, Action Launcher, and Bulk Action Panel components. For example, you can have a deployment that specifies which types of actions to display, default actions for channels, and the actions that users can add at runtime. If the component shows Next Best Action recommendations, the deployment configures which strategies to use and how recommendations appear. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".deployment",
+  "directory_location": "recordActionDeployments",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "channelConfigurations": {
+      "type": "RecordActionDeploymentChannel",
+      "description": "Specifies configuration settings for different channels in an Actions & Recommendations deployment."
+    },
+    "componentName": {
+      "type": "ComponentName (enumeration of type string)",
+      "description": "Specifies the name of the component used in the deployment: ActionsAndRecommendations—0 ActionLauncher—1 BulkActionPanel—2. This value is available in API version 60.0 and later For example, a value of 1 indicates that 1 is stored in the database if Action Launcher is used to create a deployment. Available in API version 56.0 and later."
+    },
+    "deploymentContexts": {
+      "type": "RecordActionDeploymentContext",
+      "description": "Specifies the object context for quick actions and Next Best Action strategies. Available in API version 46.0 and later."
+    },
+    "hasComponents": {
+      "type": "boolean",
+      "description": "Indicates whether the record actions deployment includes components (true) or not (false). Available in API version 61.0 and later."
+    },
+    "hasGuidedActions": {
+      "type": "boolean",
+      "description": "Specifies that the component shows standard actions; for example, flows and quick actions. Available in API version 46.0 and later."
+    },
+    "hasOmniscripts": {
+      "type": "boolean",
+      "description": "Indicates whether the record actions deployment includes OmniScripts (true) or not (false). Available in API version 56.0 and later. The default value is false."
+    },
+    "hasRecommendations": {
+      "type": "boolean",
+      "description": "Specifies that the component shows recommendations from a Next Best Action strategy. Available in API version 46.0 and later."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Specifies the name of the deployment.",
+      "required": true
+    },
+    "recommendation": {
+      "type": "RecordActionRecommendation",
+      "description": "Specifies settings for how Next Best Action recommendations appear in the component. Available in API version 46.0 and later."
+    },
+    "selectableItems": {
+      "type": "RecordActionDeploymentSelectableItems",
+      "description": "Specifies the actions that users can add at runtime."
+    },
+    "shouldLaunchActionOnReject": {
+      "type": "boolean",
+      "description": "If true, launch the flow when the recommendation is rejected by the agent. Available in API version 48.0 and later.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "RecordActionDefaultItem": {
+      "action": {
+        "type": "string",
+        "description": "Specifies the API name of an action. For example, the API name of a flow, such as Verify_Information.",
+        "required": true
+      },
+      "isMandatory": {
+        "type": "boolean",
+        "description": "Specifies whether the action is marked as mandatory. The default value is false."
+      },
+      "isUiRemoveHidden": {
+        "type": "boolean",
+        "description": "Specifies whether the remove option is hidden in the UI. The default value is false. If true, the UI hides the ability to remove the action from the list."
+      },
+      "pinned": {
+        "type": "PinnedAction (enumeration of type string)",
+        "description": "Indicates whether the action is pinned to the Top or Bottom, or unpinned ( None ). The default value is None.",
+        "required": true
+      },
+      "position": {
+        "type": "int",
+        "description": "Indicates the order of the action among all actions associated with this record.",
+        "required": true
+      },
+      "type": {
+        "type": "RecordActionType (enumeration of type string)",
+        "description": "The type of action that’s associated with the record. Valid values are: Flow QuickAction (Available in API version 46.0 and later.) OmniScript (Available in API version 56.0 and later.) LWC (Available in API version 62.0 and later.) SvcCatalogItemDef (Available in API version 62.0 and later.) WebLink (Available in API version 62.0 and later.)",
+        "required": true
+      }
+    },
+    "RecordActionDeploymentChannel": {
+      "channel": {
+        "type": "ChannelSource (enumeration of type string)",
+        "description": "Specifies the channel. Valid values are Phone, Chat, or Default.",
+        "required": true
+      },
+      "channelItems": {
+        "type": "RecordActionDefaultItem",
+        "description": "Specifies default actions for a channel and attributes for each action, such as whether the action is pinned to the list top or bottom or whether an action is considered mandatory."
+      },
+      "isAutopopEnabled": {
+        "type": "boolean",
+        "description": "Specifies whether the first action in the list is launched when the record page opens. If true, the first action is launched. The default value is false."
+      }
+    },
+    "RecordActionDeploymentContext": {
+      "entityName": {
+        "type": "string",
+        "description": "Specifies the API name of an object to use as context.",
+        "required": true
+      },
+      "recommendationStrategy": {
+        "type": "string",
+        "description": "Specifies the API name of a Next Best Action strategy that overrides the default strategy on this page. A strategy is a metadata type RecommendationStrategy."
+      }
+    },
+    "RecordActionRecommendation": {
+      "defaultStrategy": {
+        "type": "string",
+        "description": "Specifies the API name of the default Next Best Action strategy, which is a metadata type, RecommendationStrategy."
+      },
+      "hasDescription": {
+        "type": "boolean",
+        "description": "If true, display the description for the recommendation.",
+        "required": true
+      },
+      "hasImage": {
+        "type": "boolean",
+        "description": "If true, display the image for the recommendation.",
+        "required": true
+      },
+      "hasRejectAction": {
+        "type": "boolean",
+        "description": "If true, display the label that the user clicks to reject the recommendation.",
+        "required": true
+      },
+      "hasTitle": {
+        "type": "boolean",
+        "description": "If true, display the title for the recommendation.",
+        "required": true
+      },
+      "maxDisplayRecommendations": {
+        "type": "int",
+        "description": "Specifies the maximum number of recommendations to display. Valid values are 1–4.",
+        "required": true
+      }
+    },
+    "RecordActionSelectableItem": {
+      "action": {
+        "type": "string",
+        "description": "Specifies the API name of an action. For example, the API name of a flow, such as Verify_Information.",
+        "required": true
+      },
+      "type": {
+        "type": "RecordActionType (enumeration of type string)",
+        "description": "The type of action that’s associated with the record. Valid values are: Flow QuickAction (Available in API version 46.0 and later.) OmniScript (Available in API version 56.0 and later.) LWC (Available in API version 62.0 and later.) SvcCatalogItemDef (Available in API version 62.0 and later.) WebLink (Available in API version 62.0 and later.)",
+        "required": true
+      },
+      "isFrequentAction": {
+        "type": "boolean",
+        "description": "Indicates whether an action is frequently accessed by users (true) or not (false). Available in version 57.0 and later. This field applies only to Action Launcher."
+      },
+      "frequentActionSequenceNbr": {
+        "type": "integer",
+        "description": "The sequence number that's assigned to a frequently used action that's shown on Action Launcher. Available in version 57.0 and later. This field applies only to Action Launcher."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ChannelSource\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Other\"/>\n    <xsd:enumeration value=\"Phone\"/>\n    <xsd:enumeration value=\"Chat\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ComponentName\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ActionsAndRecommendations\"/>\n    <xsd:enumeration value=\"ActionLauncher\"/>\n    <xsd:enumeration value=\"BulkActionPanel\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"PinnedAction\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"Top\"/>\n    <xsd:enumeration value=\"Bottom\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"RecordActionDefaultItem\">\n  <xsd:sequence>\n    <xsd:element name=\"action\" type=\"xsd:string\"/>\n    <xsd:element name=\"isMandatory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isUiRemoveHidden\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"pinned\" type=\"tns:PinnedAction\"/>\n    <xsd:element name=\"position\" type=\"xsd:int\"/>\n    <xsd:element name=\"type\" type=\"tns:RecordActionType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RecordActionDeployment\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"channelConfigurations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecordActionDeploymentChannel\"/>\n        <xsd:element name=\"componentName\" minOccurs=\"0\" type=\"tns:ComponentName\"/>\n        <xsd:element name=\"deploymentContexts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecordActionDeploymentContext\"/>\n        <xsd:element name=\"hasComponents\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hasGuidedActions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hasOmniscripts\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hasRecommendations\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"recommendation\" minOccurs=\"0\" type=\"tns:RecordActionRecommendation\"/>\n        <xsd:element name=\"selectableItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecordActionSelectableItem\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"RecordActionDeploymentChannel\">\n  <xsd:sequence>\n    <xsd:element name=\"channel\" type=\"tns:ChannelSource\"/>\n    <xsd:element name=\"channelItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecordActionDefaultItem\"/>\n    <xsd:element name=\"isAutopopEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RecordActionDeploymentContext\">\n  <xsd:sequence>\n    <xsd:element name=\"entityName\" type=\"xsd:string\"/>\n    <xsd:element name=\"recommendationStrategy\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RecordActionRecommendation\">\n  <xsd:sequence>\n    <xsd:element name=\"defaultStrategy\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"hasDescription\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"hasImage\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"hasRejectAction\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"hasTitle\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"maxDisplayRecommendations\" type=\"xsd:int\"/>\n    <xsd:element name=\"shouldLaunchActionOnReject\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RecordActionSelectableItem\">\n  <xsd:sequence>\n    <xsd:element name=\"action\" type=\"xsd:string\"/>\n    <xsd:element name=\"frequentActionSequenceNbr\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"isFrequentAction\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"type\" type=\"tns:RecordActionType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"RecordActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Flow\"/>\n    <xsd:enumeration value=\"QuickAction\"/>\n    <xsd:enumeration value=\"Omniscript\"/>\n    <xsd:enumeration value=\"LWC\"/>\n    <xsd:enumeration value=\"WebLink\"/>\n    <xsd:enumeration value=\"SvcCatalogItemDef\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is a sample of a recordActionDeployment file.",
+      "code": "<RecordActionDeployment xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <channelConfigurations>\n        <channel>Phone</channel>\n        <channelItems>\n            <action>Sample_Flow</action>\n            <isMandatory>false</isMandatory>\n            <isUiRemoveHidden>false</isUiRemoveHidden>\n            <position>1</position>\n            <pinned>Top</pinned>\n            <type>Flow</type>\n        </channelItems>\n        <channelItems>\n            <action>Another_Sample_Flow</action>\n            <isMandatory>false</isMandatory>\n            <isUiRemoveHidden>true</isUiRemoveHidden>\n            <position>2</position>\n            <pinned>Top</pinned>\n            <type>Flow</type>\n        </channelItems>\n        <isAutopopEnabled>true</isAutopopEnabled>\n    </channelConfigurations>\n    <masterLabel>Sample Deployment</masterLabel>\n    <selectableItems>\n        <action>Sample_Flow</action>\n        <type>Flow</type>\n        <isFrequentAction>true</isFrequentAction>\n        <frequentActionSequenceNbr>1</frequentActionSequenceNbr>\n    </selectableItems>\n    <selectableItems>\n        <action>Sample_Flow_2</action>\n        <type>Flow</type>\n        <isFrequentAction>false</isFrequentAction>\n    </selectableItems>\n    <hasGuidedActions>true</hasGuidedActions>\n    <hasRecommendations>true</hasRecommendations>\n    <recommendation>\n        <defaultStrategy>Sample_Global_Strategy</defaultStrategy>\n        <maxDisplayRecommendations>4</maxDisplayRecommendations>\n        <hasImage>true</hasImage>\n        <hasDescription>true</hasDescription>\n        <hasRejectAction>true</hasRejectAction>\n        <hasTitle>true</hasTitle>\n    </recommendation>\n    <deploymentContexts>\n        <entityName>Case</entityName>\n        <recommendationStrategy>Sample_Case_Strategy</recommendationStrategy>\n    </deploymentContexts>\n    <deploymentContexts>\n        <entityName>Account</entityName>\n        <recommendationStrategy>Sample_Acc_Strategy</recommendationStrategy>\n    </deploymentContexts>\n</RecordActionDeployment>"
+    }
+  ]
+}

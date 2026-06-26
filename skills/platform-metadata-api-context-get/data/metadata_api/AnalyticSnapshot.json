@@ -1,0 +1,80 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AnalyticSnapshot - Metadata API",
+  "description": "Represents a reporting snapshot. A reporting snapshot lets you report on historical data. Authorized users can save tabular or summary report results to fields on a custom object, then map those fields to corresponding fields on a target object. They can then schedule when to run the report to load the custom object's fields with the report's data. Reporting snapshots enable you to work with report data similarly to how you work with other records in Salesforce.",
+  "file_information": ".snapshot",
+  "directory_location": "analyticSnapshots",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "A description of the reporting snapshot."
+    },
+    "groupColumn": {
+      "type": "string",
+      "description": "A column that specifies which level to extract data from the source report. It’s only applicable for summary reports."
+    },
+    "mappings": {
+      "type": "AnalyticSnapshotMapping[]",
+      "description": "A list of reporting snapshot mappings. For valid values, see AnalyticSnapshotMapping."
+    },
+    "name": {
+      "type": "string",
+      "description": "The display name of the reporting snapshot.",
+      "required": true
+    },
+    "runningUser": {
+      "type": "string",
+      "description": "The username of the user whose role and sharing settings are used to run the reporting snapshot."
+    },
+    "sourceReport": {
+      "type": "string",
+      "description": "The report where data is extracted from.",
+      "required": true
+    },
+    "targetObject": {
+      "type": "string",
+      "description": "The custom object where data is inserted.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "AnalyticSnapshotMapping": {
+      "aggregateType": {
+        "type": "ReportSummaryType[] (enumeration of type string)",
+        "description": "List that defines if and how each report field is summarized. For valid values, see ReportSummaryType."
+      },
+      "sourceField": {
+        "type": "string",
+        "description": "The sourceField can be one of the following: The field on the sourceReport that you want to map to the targetField in the targetObject A summary of a filed on the sourceReport (for Summary reports only) A field on the reporting snapshot, such as JobName, RunningUser, or ExecutionTime (set through the user interface) Note: The sourceField must correspond to the sourceType you specify."
+      },
+      "sourceType": {
+        "type": "ReportJobSourceTypes[] (enumeration of type string)",
+        "description": "List that defines the report format for the reporting snapshot. For valid values, see ReportJobSourceTypes."
+      },
+      "targetField": {
+        "type": "string",
+        "description": "A field on the targetObject into which this particular sourceField is inserted."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AnalyticSnapshot\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"groupColumn\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"mappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticSnapshotMapping\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"runningUser\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sourceReport\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetObject\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticSnapshotMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"aggregateType\" minOccurs=\"0\" type=\"tns:ReportSummaryType\"/>\n    <xsd:element name=\"sourceField\" type=\"xsd:string\"/>\n    <xsd:element name=\"sourceType\" type=\"tns:ReportJobSourceTypes\"/>\n    <xsd:element name=\"targetField\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ReportJobSourceTypes\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"tabular\"/>\n    <xsd:enumeration value=\"summary\"/>\n    <xsd:enumeration value=\"snapshot\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ReportSummaryType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Sum\"/>\n    <xsd:enumeration value=\"Average\"/>\n    <xsd:enumeration value=\"Maximum\"/>\n    <xsd:enumeration value=\"Minimum\"/>\n    <xsd:enumeration value=\"Unique\"/>\n    <xsd:enumeration value=\"Median\"/>\n    <xsd:enumeration value=\"Noop\"/>\n    <xsd:enumeration value=\"None\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here’s a sample XML definition of a reporting snapshot.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AnalyticSnapshot xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>my description</description>\n    <groupColumn>INDUSTRY</groupColumn>\n    <mappings>\n        <aggregateType>Average</aggregateType>\n        <sourceField>SALES</sourceField>\n        <sourceType>summary</sourceType>\n        <targetField> myObject __c.Name</targetField>\n    </mappings>\n    <mappings>\n        <sourceField>ExecutionTime</sourceField>\n        <sourceType>snapshot</sourceType>\n        <targetField> myObject __c.field3__c</targetField>\n    </mappings>\n    <mappings>\n        <sourceField>INDUSTRY</sourceField>\n        <sourceType>tabular</sourceType>\n        <targetField>testObject__c.Name</targetField>\n    </mappings>\n    <name>my snapshot</name >\n    <runningUser>user@domain.com</runningUser>\n    <sourceReport>myFolder/mytSummaryReport</sourceReport>\n    <targetObject>myObject__c</targetObject>\n</AnalyticSnapshot>"
+    }
+  ]
+}

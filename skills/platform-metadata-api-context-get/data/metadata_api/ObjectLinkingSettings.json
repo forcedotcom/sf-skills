@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ObjectLinkingSettings (Beta) - Metadata API",
+  "description": "Represents the channel-object linking settings for an org. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableObjectLinking": {
+      "type": "boolean",
+      "description": "Indicates whether Channel-Object Linking is enabled, allowing you to link channel interactions to objects such as Contacts. The default value is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ObjectLinkingSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableObjectLinking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ObjectLinkingSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ObjectLinkingSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableObjectLinking>true</enableObjectLinking>\n</ObjectLinkingSettings>"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "OrchestrationPlanCtxMapping - Metadata API",
+  "description": "Represents the context mapping that Dynamic Revenue Orchestrator (DRO) uses to generate and orchestrate a plan for an object, such as a non-sales transaction for billing or another generic business process.",
+  "file_information": ".orchestrationPlanCtxMapping",
+  "directory_location": "orchestrationPlanCtxMappings",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "contextDefinition": {
+      "type": "string",
+      "required": true,
+      "description": "ContextDefinition that the orchestration use case is based on."
+    },
+    "contextItemNode": {
+      "type": "string",
+      "description": "Name of the item-level node in the context definition. The item node represents the line items or child records of the root node, such as the items in an order."
+    },
+    "contextMapping": {
+      "type": "string",
+      "required": true,
+      "description": "Name of the context mapping that maps the source object fields to the nodes in the context definition."
+    },
+    "contextRootNode": {
+      "type": "string",
+      "required": true,
+      "description": "Name of the root node in the context definition. The root node represents the parent record that the orchestration plan is generated for, such as an order."
+    },
+    "label": {
+      "type": "string",
+      "required": true,
+      "description": "UI label for the orchestration plan context mapping."
+    },
+    "objectName": {
+      "type": "string",
+      "required": true,
+      "description": "API name of the object that the orchestration plan is generated for. The combination of objectName and orchestrationType must be unique."
+    },
+    "orchestrationType": {
+      "type": "PlanUsageType (enumeration of type string)",
+      "required": true,
+      "description": "Type of orchestration plan that this context mapping applies to. Valid values are: Billing Fulfillment Generic IntegrationOrchestrator InsuranceRuleAction OrderFulfillment StageManagement"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OrchestrationPlanCtxMapping\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"contextDefinition\" type=\"xsd:string\"/>\n        <xsd:element name=\"contextItemNode\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"contextMapping\" type=\"xsd:string\"/>\n        <xsd:element name=\"contextRootNode\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"objectName\" type=\"xsd:string\"/>\n        <xsd:element name=\"orchestrationType\" type=\"tns:PlanUsageType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"PlanUsageType\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This sample shows the definition of an OrchestrationPlanCtxMapping component for a fulfillment plan that orchestrates an order.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OrchestrationPlanCtxMapping xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <label>Order Fulfillment Context Mapping</label>\n    <orchestrationType>Fulfillment</orchestrationType>\n    <contextDefinition>SalesTransactionContext__stdctx</contextDefinition>\n    <objectName>Order</objectName>\n    <contextMapping>OrderEntitiesMapping</contextMapping>\n    <contextRootNode>SalesTransaction</contextRootNode>\n    <contextItemNode>SalesTransactionItem</contextItemNode>\n</OrchestrationPlanCtxMapping>"
+    }
+  ]
+}

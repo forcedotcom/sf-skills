@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EmployeeUserSettings - Metadata API",
+  "description": "Represents the employee-user settings used for automatically creating or syncing employee and user data in work.com orgs. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "emailEncoding": {
+      "type": "string",
+      "description": "The default encoding setting is Unicode: UTF-8. Valid values include: UTF-8—Unicode (UTF-8) ISO-8859-1—General US & Western Europe (ISO-8859–1, ISO-LATIN-1) Shift_JIS—Japanese (Shift-JIS) ISO-2022-JP—Japanese (JIS) EUC-JP—Japanese (EUC-JP) x-SJIS_0213—Japanese (Shift-JIS_2004) ks_c_5601-1987—Korean (ks_c_5601-1987) Big5—Traditional Chinese (Big5) GB2312—Simplified Chinese (GB2312) Big5-HKSCS—Traditional Chinese Hong Kong (Big5–HKSCS)",
+      "required": true
+    },
+    "enableEmployeeAutoCreateUser": {
+      "type": "boolean",
+      "description": "If true, users are auto-created when a new employee record is created. The default value for this field is false."
+    },
+    "enableEmployeeIsSourceOfTruth": {
+      "type": "boolean",
+      "description": "If true, the employee record is the source of truth. The default value for this field is false."
+    },
+    "permset": {
+      "type": "string",
+      "description": "Represents a set of permissions that's used to grant more access to a user. You can use permission sets to grant access but not to deny access."
+    },
+    "profile": {
+      "type": "string",
+      "description": "Represents a user profile. A profile defines a user’s permission to perform different functions within Salesforce.",
+      "required": true
+    },
+    "usernameSuffix": {
+      "type": "string",
+      "description": "Represents a domain name. We create a unique login by combining this domain name with each employee’s username."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EmployeeUserSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"emailEncoding\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableEmployeeAutoCreateUser\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEmployeeIsSourceOfTruth\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"permset\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"profile\" type=\"xsd:string\"/>\n        <xsd:element name=\"usernameSuffix\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example EmployeeUser.settings-meta.xml force-app/main/default/settings",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EmployeeUserSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n<emailEncoding>ISO-8859-1</emailEncoding>\n<enableEmployeeAutoCreateUser>true</enableEmployeeAutoCreateUser>\n<enableEmployeeIsSourceOfTruth>false</enableEmployeeIsSourceOfTruth>\n<profile>MarketingProfile</profile>\n<usernameSuffix>example.com</usernameSuffix>\n</EmployeeUserSettings>"
+    }
+  ]
+}

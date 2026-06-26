@@ -1,0 +1,115 @@
+name: "Expandable Section"
+description: "A content container that can be expanded or collapsed to show or hide detailed information, providing progressive disclosure of content."
+category: "Layout"
+slds_classes:
+  root: "slds-section"
+  elements:
+    - class: "slds-section__title"
+      description: "Header area with expand/collapse control"
+      purpose: "Contains title and toggle button for section"
+    - class: "slds-section__title-action"
+      description: "Clickable area for expand/collapse"
+      purpose: "Interactive element to toggle section state"
+    - class: "slds-section__content"
+      description: "Collapsible content area"
+      purpose: "Contains the expandable section content"
+  modifiers: []
+  states:
+    - class: "slds-is-open"
+      description: "Expanded section state"
+      trigger: "When section content is visible"
+    - class: "slds-is-closed"
+      description: "Collapsed section state"
+      trigger: "When section content is hidden"
+variants:
+  - name: "Base"
+    description: "Standard expandable section"
+    classes:
+      - "slds-section"
+    usage_context: "Default expandable section for progressive disclosure"
+    differences: "Toggleable content section with expand/collapse control"
+lightning_component:
+  name: "No direct component"
+  url: "https://developer.salesforce.com/docs/component-library/overview/components"
+  mapping_notes: "No direct Lightning Base Component equivalent - typically implemented as custom component"
+accessibility:
+  keyboard_support:
+    - "Tab to focus expand/collapse button"
+    - "Enter/Space to toggle section state"
+    - "Tab to navigate through expanded content"
+  screen_reader:
+    - "Section title and current state announced"
+    - "Expansion state changes communicated"
+    - "Content availability indicated clearly"
+  aria_attributes:
+    - "aria-expanded on toggle button"
+    - "aria-controls linking button to content"
+    - "aria-labelledby for content area"
+    - "role='button' for toggle element"
+usage_guidelines:
+  when_to_use:
+    - "To manage large amounts of content in limited space"
+    - "For optional or secondary information"
+    - "When content hierarchy needs progressive disclosure"
+    - "To reduce cognitive load by hiding details initially"
+  when_not_to_use:
+    - "For critical information users must see"
+    - "When all content should be immediately visible"
+    - "For single pieces of simple information"
+  best_practices:
+    - "Use clear, descriptive section titles"
+    - "Provide visual indicators for expand/collapse state"
+    - "Group related content logically"
+    - "Consider default expanded state for important content"
+    - "Maintain consistent interaction patterns"
+  common_mistakes:
+    - "Hiding critical information in collapsed sections"
+    - "Unclear section titles or purposes"
+    - "Poor visual indicators for state"
+    - "Inconsistent expand/collapse behavior"
+code_examples:
+  - title: "Expandable Section"
+    code: |
+      <div class="slds-section slds-is-open">
+            <h3 class="slds-section__title">
+              <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                <svg class="slds-section__title-action-icon slds-button__icon slds-button__icon_left" aria-hidden="true">
+                  <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#switch"></use>
+                </svg>
+                <span class="slds-truncate" title="Section Title">Section Title</span>
+              </button>
+            </h3>
+            <div aria-hidden="false" class="slds-section__content" id="expando-unique-id">
+              <p>This is the expandable content area. It can contain any type of content including text, forms, lists, or other components.</p>
+            </div>
+            </div>
+styling_hooks: []
+dependencies:
+  css_files:
+    - "section.css"
+    - "button.css"
+  javascript:
+    - "section.js"
+  icons:
+    - "utility-sprite.svg"
+  other_components:
+    - "button"
+    - "icons"
+    - "truncate"
+related_components:
+  - name: "Accordion"
+    relationship: "similar"
+    description: "Similar expand/collapse pattern for multiple sections"
+  - name: "Tabs"
+    relationship: "alternative"
+    description: "Alternative for organizing multiple content areas"
+  - name: "Cards"
+    relationship: "container"
+    description: "Often used within card components"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/expandable-section/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

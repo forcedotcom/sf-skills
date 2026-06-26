@@ -1,0 +1,101 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "UIObjectRelationConfig - Metadata API",
+  "description": "Represents the admin-created configuration of the object relation UI component.",
+  "file_information": ".uiObjectRelationConfig",
+  "directory_location": "uiObjectRelationConfigs",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "contextObject": {
+      "type": "string",
+      "required": true,
+      "description": "The object that provides the context for this object relation configuration."
+    },
+    "contextObjectRecordType": {
+      "type": "string",
+      "description": "The record type of the context object for this configuration, if applicable."
+    },
+    "directRelationshipField": {
+      "type": "string",
+      "description": "For direct relationships, the child relationship field on the related object that matches the context object."
+    },
+    "indirectObjectContextField": {
+      "type": "string",
+      "description": "For indirect relationships, the field on the junction object that matches the context object."
+    },
+    "indirectObjectRelatedField": {
+      "type": "string",
+      "description": "For indirect relationships, the field on the junction object that matches the related object."
+    },
+    "indirectRelationshipObject": {
+      "type": "string",
+      "description": "For indirect relationships, the junction object representing the relationship between the related object and its context object."
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether the configuration is active (true) or not (false)."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Label for the UIObjectRelationConfig. In the UI, this field is UI Object Relation Config."
+    },
+    "relatedObject": {
+      "type": "string",
+      "required": true,
+      "description": "The object containing the data that this object relation configuration displays."
+    },
+    "relatedObjectRecordType": {
+      "type": "string",
+      "description": "The record type of the related object for this configuration."
+    },
+    "relationshipType": {
+      "type": "ObjectRelationshipType (enumeration of type string)",
+      "required": true,
+      "description": "A string indicating the type of relationship between the related object and context object.Valid values are: Direct Indirect InverseDirect Self"
+    },
+    "UIObjectRelationFieldConfigs": {
+      "type": "UIObjectRelationFieldConfig[]",
+      "description": "Provides a configuration for an object relation field on a specific row of content."
+    }
+  },
+  "sub_types": {
+    "UIObjectRelationFieldConfig": {
+      "displayLabel": {
+        "type": "string",
+        "required": true,
+        "description": "A string containing the user-defined label for this field, to be displayed on each object relation of this type."
+      },
+      "queryText": {
+        "type": "string",
+        "required": true,
+        "description": "A case-insensitive template query for generating the content in this field."
+      },
+      "rowOrder": {
+        "type": "int",
+        "required": true,
+        "description": "Determines the top-to-bottom display order of this field on the object relation UI."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ObjectRelationshipType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Direct\"/>\n    <xsd:enumeration value=\"Indirect\"/>\n    <xsd:enumeration value=\"Self\"/>\n    <xsd:enumeration value=\"InverseDirect\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"UIObjectRelationConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"UIObjectRelationFieldConfigs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:UIObjectRelationFieldConfig\"/>\n        <xsd:element name=\"contextObject\" type=\"xsd:string\"/>\n        <xsd:element name=\"contextObjectRecordType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"directRelationshipField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"indirectObjectContextField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"indirectObjectRelatedField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"indirectRelationshipObject\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"relatedObject\" type=\"xsd:string\"/>\n        <xsd:element name=\"relatedObjectRecordType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relationshipType\" type=\"tns:ObjectRelationshipType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"UIObjectRelationFieldConfig\">\n  <xsd:sequence>\n    <xsd:element name=\"displayLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"queryText\" type=\"xsd:string\"/>\n    <xsd:element name=\"rowOrder\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is an example of a UIObjectRelationConfig component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n <UIObjectRelationConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n     <UIObjectRelationFieldConfigs>\n         <displayLabel>Address:</displayLabel>\n         <queryText>{\n     \"startNode\": {\n         \"initialObject\": \"RelatedObject\"\n     },\n     \"traversalNodes\": [],\n     \"fieldNode\": {\n         \"fieldEnumOrId\": \"ShippingAddress\"\n     }\n }</queryText>\n         <rowOrder>1</rowOrder>\n     </UIObjectRelationFieldConfigs>\n     <UIObjectRelationFieldConfigs>\n         <displayLabel>Phone:</displayLabel>\n         <queryText>{\n     \"startNode\": {\n         \"initialObject\": \"RelatedObject\"\n     },\n     \"traversalNodes\": [],\n     \"fieldNode\": {\n         \"fieldEnumOrId\": \"Phone\"\n     }\n }</queryText>\n         <rowOrder>2</rowOrder>\n     </UIObjectRelationFieldConfigs>\n     <UIObjectRelationFieldConfigs>\n         <displayLabel>Fax:</displayLabel>\n         <queryText>{\n     \"startNode\": {\n         \"initialObject\": \"RelatedObject\"\n     },\n     \"traversalNodes\": [],\n     \"fieldNode\": {\n         \"fieldEnumOrId\": \"Fax\"\n     }\n }</queryText>\n         <rowOrder>3</rowOrder>\n     </UIObjectRelationFieldConfigs>\n     <UIObjectRelationFieldConfigs>\n         <displayLabel>Parent Organization:</displayLabel>\n         <queryText>{\n     \"startNode\": {\n         \"initialObject\": \"RelatedObject\"\n     },\n     \"traversalNodes\": [\n         {\n             \"destinationObjectEnumOrId\": \"Account\",\n             \"fieldEnumOrId\": \"ParentId\",\n             \"traversalDirection\": \"parent\"\n         }\n     ],\n     \"fieldNode\": {\n         \"fieldEnumOrId\": \"Name\"\n     }\n }</queryText>\n         <rowOrder>4</rowOrder>\n     </UIObjectRelationFieldConfigs>\n     <contextObject>Contact</contextObject>\n     <directRelationshipField>AccountId</directRelationshipField>\n     <isActive>true</isActive>\n     <masterLabel>Sample Primary Account Configuration</masterLabel>\n     <relatedObject>Account</relatedObject>\n     <relationshipType>Direct</relationshipType>\n     <indirectObjectRelatedField></indirectObjectRelatedField>\n     <indirectObjectContextField></indirectObjectContextField>\n     <contextObjectRecordType></contextObjectRecordType>\n     <indirectRelationshipObject></indirectRelationshipObject>\n     <relatedObjectRecordType></relatedObjectRecordType>\n </UIObjectRelationConfig>"
+    }
+  ]
+}

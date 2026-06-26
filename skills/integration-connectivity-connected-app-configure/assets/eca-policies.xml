@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Template: External Client App - Configurable Policies
+  Use Case: Admin-configurable security policies for the ECA
+
+  Note: This file is AUTO-GENERATED on first deployment.
+  Admins can modify these values in Setup UI or via Metadata API.
+
+  Replace placeholders:
+  - {{IP_RELAXATION}}: IP restriction policy
+  - {{REFRESH_TOKEN_POLICY}}: Refresh token lifetime policy
+  - {{SESSION_TIMEOUT}}: Session timeout in minutes
+
+  IP Relaxation Options:
+  - ENFORCE: Enforce IP restrictions (recommended)
+  - BYPASS: Bypass IP restrictions (use with caution)
+  - ENFORCE_ACTIVATED_USERS: Enforce for activated users only
+
+  Refresh Token Policies:
+  - infinite: Tokens never expire
+  - zero: No refresh tokens (use with JWT)
+  - specific_lifetime: Expire after specified period
+
+  File Naming: [AppName].ecaPlcy-meta.xml
+-->
+<ExtlClntAppConfigurablePolicies xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- IP Restriction Policy -->
+    <ipRelaxation>{{IP_RELAXATION}}</ipRelaxation>
+
+    <!-- Refresh Token Lifetime -->
+    <refreshTokenPolicy>{{REFRESH_TOKEN_POLICY}}</refreshTokenPolicy>
+    <!-- <refreshTokenValidityPeriod>30</refreshTokenValidityPeriod> -->
+
+    <!-- Session Timeout (minutes) -->
+    <sessionTimeout>{{SESSION_TIMEOUT}}</sessionTimeout>
+</ExtlClntAppConfigurablePolicies>

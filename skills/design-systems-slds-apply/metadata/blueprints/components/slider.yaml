@@ -1,0 +1,111 @@
+name: "Slider"
+description: "An input control that allows users to select a numeric value from a range by dragging a handle along a track, providing visual feedback for value selection."
+category: "Input"
+slds_classes:
+  root: "slds-slider"
+  elements:
+    - class: "slds-slider__range"
+      description: "The slider track element"
+      purpose: "Visual track that shows the selectable range"
+  modifiers:
+    - class: "slds-slider_vertical"
+      description: "Vertical slider orientation"
+      usage: "When vertical layout is preferred or required"
+  states:
+    - class: "slds-has-error"
+      description: "Error state styling"
+      trigger: "When slider validation fails"
+    - class: "slds-is-disabled"
+      description: "Disabled state styling"
+      trigger: "When slider is not interactive"
+variants:
+  - name: "Base"
+    description: "Standard horizontal slider"
+    classes:
+      - "slds-slider"
+    usage_context: "Default slider implementation for numeric range selection"
+    differences: "Horizontal slider with draggable handle on track"
+lightning_component:
+  name: "lightning-slider"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-slider"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS slider blueprint"
+accessibility:
+  keyboard_support:
+    - "Tab to focus the slider"
+    - "Arrow keys to adjust value in increments"
+    - "Page Up/Page Down for larger increments"
+    - "Home/End to go to minimum/maximum values"
+  screen_reader:
+    - "Current value announced when changed"
+    - "Range minimum and maximum communicated"
+    - "Step increment information provided"
+    - "Label and purpose announced"
+  aria_attributes:
+    - "role='slider' for the input element"
+    - "aria-valuenow for current value"
+    - "aria-valuemin for minimum value"
+    - "aria-valuemax for maximum value"
+    - "aria-label describing the slider purpose"
+    - "aria-describedby for additional instructions"
+usage_guidelines:
+  when_to_use:
+    - "For selecting numeric values from a continuous range"
+    - "When visual feedback of value position is helpful"
+    - "For settings or configuration values"
+    - "When precise value selection with constraints is needed"
+  when_not_to_use:
+    - "For discrete value selection (use select or radio instead)"
+    - "When exact precision is critical (use numeric input)"
+    - "For very large ranges where slider becomes impractical"
+  best_practices:
+    - "Provide clear labels for minimum and maximum values"
+    - "Use appropriate step increments for the use case"
+    - "Show current value clearly"
+    - "Ensure adequate touch target size for mobile"
+    - "Provide keyboard accessibility"
+  common_mistakes:
+    - "Making slider too small for precise interaction"
+    - "Using inappropriate step sizes"
+    - "Not showing current value"
+    - "Poor keyboard navigation implementation"
+code_examples:
+  - title: "Basic Slider"
+    code: |
+      <div class="slds-form-element">
+            <label class="slds-form-element__label" for="slider-id-01">Slider Label</label>
+            <div class="slds-form-element__control">
+              <div class="slds-slider">
+                <input type="range" id="slider-id-01" class="slds-slider__range" value="50" min="0" max="100" step="1" />
+                <span class="slds-slider__value" aria-hidden="true">50</span>
+              </div>
+            </div>
+            </div>
+styling_hooks:
+  - name: "--slds-c-slider-track-color-background"
+    description: "Background color for slider track"
+    category: "color"
+dependencies:
+  css_files:
+    - "slider.css"
+    - "form-element.css"
+  javascript: []
+  icons: []
+  other_components:
+    - "form-element"
+related_components:
+  - name: "Input"
+    relationship: "alternative"
+    description: "Alternative for precise numeric input"
+  - name: "Progress Bar"
+    relationship: "similar"
+    description: "Similar visual concept for showing values"
+  - name: "Range Input"
+    relationship: "variant"
+    description: "Dual-handle slider for range selection"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/slider/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

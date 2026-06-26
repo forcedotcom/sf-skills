@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PlatformEventChannelMember - Metadata API",
+  "description": "Represents an entity selected for Change Data Capture notifications on a standard or custom channel, or a platform event selected on a custom channel.",
+  "file_information": ".platformEventChannelMember",
+  "directory_location": "platformEventChannelMembers",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enrichedFields": {
+      "type": "EnrichedField[]",
+      "description": "One or more fields selected for Change Data Capture Enrichment. A non-empty enriched field is added to an update or delete change event even when not changed. For more information, see Enrich Change Events with Extra Fields When Subscribed with CometD in the Change Data Capture Developer Guide. Available in API version 51.0 and later."
+    },
+    "eventChannel": {
+      "type": "string",
+      "description": "The name of a channel. For the standard channel, the name is ChangeEvents. For a custom channel, the name is in this format: MyChannel__chn.",
+      "required": true
+    },
+    "filterExpression": {
+      "type": "string",
+      "description": "An expression that is used to filter the stream of events and deliver only the events that match specific criteria. The filter expression can contain one or more field-value expressions. The filter expression format is based on SOQL and supports a subset of SOQL operators and field types. For example, this filter expression delivers only events that contain the City__c field with a value of 'San Francisco'. City__c = 'San Francisco' For more information, see Filter Your Stream of Platform Events with Custom Channels in the Platform Events Developer Guide and Filter Your Stream of Change Events with Channels in the Change Data Capture Developer Guide. Available in API version 56.0 and later."
+    },
+    "selectedEntity": {
+      "type": "string",
+      "description": "The change event name of an entity selected for Change Data Capture notifications. For example, for the Account standard object, the name is AccountChangeEvent, or for a custom object MyObject__c, the name is MyObject__ChangeEvent.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "EnrichedField": {
+      "name": {
+        "type": "string",
+        "description": "The name of a field selected to enrich change events with."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EnrichedField\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PlatformEventChannelMember\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enrichedFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EnrichedField\"/>\n        <xsd:element name=\"eventChannel\" type=\"xsd:string\"/>\n        <xsd:element name=\"filterExpression\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"selectedEntity\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This PlatformEventChannelMember component represents the selection of the Lead change event as part of the Change Data Capture selections (the standard ChangeEvents channel).",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PlatformEventChannelMember xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <eventChannel>ChangeEvents</eventChannel>\n    <selectedEntity>LeadChangeEvent</selectedEntity>\n</PlatformEventChannelMember>"
+    },
+    {
+      "description": "If the channel has more than one selected entity, each entity is represented separately by a PlatformEventChannelMember component. For example, this component is a second member of the standard ChangeEvents channel and represents the Contact change event.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PlatformEventChannelMember xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <eventChannel>ChangeEvents</eventChannel>\n    <selectedEntity>ContactChangeEvent</selectedEntity>\n</PlatformEventChannelMember>"
+    },
+    {
+      "description": "This example is a selected entity on the SalesEvents__chn custom channel.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PlatformEventChannelMember xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <eventChannel>SalesEvents__chn</eventChannel>\n    <selectedEntity>ContactChangeEvent</selectedEntity>\n</PlatformEventChannelMember>"
+    },
+    {
+      "description": "This example shows one enriched field, Phone, for a selected entity on the SalesEvents__chn custom channel. Enriched fields are supported in API version 51.0 and later.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PlatformEventChannelMember xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enrichedFields>\n        <name>Phone</name>\n    </enrichedFields>\n    <eventChannel>SalesEvents__chn</eventChannel>\n    <selectedEntity>ContactChangeEvent</selectedEntity>\n</PlatformEventChannelMember>"
+    },
+    {
+      "description": "This example shows a filter expression for a ContactChangeEvent selected entity on the SalesEvents__chn custom channel.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PlatformEventChannelMember xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <eventChannel>SalesEvents__chn</eventChannel>\n    <filterExpression><![CDATA[(Region__c='AMER')]]></filterExpression>\n    <selectedEntity>ContactChangeEvent</selectedEntity>\n</PlatformEventChannelMember>"
+    }
+  ]
+}

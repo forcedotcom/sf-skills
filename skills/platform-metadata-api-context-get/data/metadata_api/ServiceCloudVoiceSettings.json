@@ -1,0 +1,83 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ServiceCloudVoiceSettings - Metadata API",
+  "description": "Represents an organization’s Service Cloud Voice settings.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "disableSCVTaskCreationForHVS": {
+      "type": "boolean",
+      "description": "Indicates whether to prevent the Sales Engagement automatic task creation feature from generating tasks from voice calls except click-to-dial calls initiated from Sales Engagements, To Do List, and Work Queue. The default value is false. Available in API version 61.0 and later. This field is optional."
+    },
+    "enableAmazonQueueManagement": {
+      "type": "boolean",
+      "description": "Indicates whether to enable the Amazon Connect queue management integration for Service Cloud Voice. When enabled, the system automatically synchronizes contact center queues across Salesforce and Amazon Connect, including voice groups and users. The default value is false. Available in API version 55.0 and later. This field is optional."
+    },
+    "enableDefaultChannelForSCV": {
+      "type": "boolean",
+      "description": "Indicates whether Service Cloud Voice uses the default phone channel for all end user identification. The default value is false. Available in API version 53.0 and later. This field is optional."
+    },
+    "enableDigitalVoiceWhatsapp": {
+      "type": "boolean",
+      "description": "Reserved for internal use."
+    },
+    "enableEndUserForSCV": {
+      "type": "boolean",
+      "description": "Indicates whether Service Cloud Voice matches callers to end user records. The default value is false. Available in API version 53.0 and later. This field is optional."
+    },
+    "enableOmniCapacityForSCV": {
+      "type": "boolean",
+      "description": "Indicates whether to enable Omni-Channel capacity management for Service Cloud Voice. If enabled, Service Cloud Voice Agentwork honors Omni-Channel capacity. The default value is false. Available in API version 54.0 and later. This field is optional."
+    },
+    "enablePhoneNumberMaskingForSCV": {
+      "type": "boolean",
+      "description": "Indicates whether to enable phone number masking functionality in Service Could Voice to protect sensitive data by redacting inbound and outbound phone numbers. When enabled, phone numbers are masked in Omni-Channel views, call recordings, and call transcripts. Masking doesn't apply to numbers used in rep-to-rep calls managed by partner telephony providers. The default value is false. Available in API version 61.0 and later. This field is optional."
+    },
+    "enablePTQueueManagement": {
+      "type": "boolean",
+      "description": "Indicates whether to enable queue management for Service Cloud Voice with Partner Telephony. When enabled, the system automatically synchronizes contact center queues across Salesforce and partner telephony services, including groups and users. The default value is false. Available in API version 56.0 and later. This field is optional."
+    },
+    "enableRZoneCloudVoiceOptIn": {
+      "type": "boolean",
+      "description": "Indicates whether you agree to the terms of using Service Cloud Voice with Amazon Connect in a Salesforce Government Cloud environment. The default value is false. This field is optional. Amazon Connect is a third-party Amazon service that sits outside the Salesforce Government Cloud FedRAMP environment. Amazon Connect is a separate service offered by Amazon and not a FedRAMP authorized service. Therefore, Amazon Connect’s processing environment falls outside the Government Cloud FedRAMP authorization boundary. To learn more, see Amazon Connect."
+    },
+    "enableSCVBYOT": {
+      "description": "Indicates whether to enable Service Cloud Voice with Partner Telephony. The default value is false. This field is optional. For API version 52.0 and later, we recommend using enableSCVExternalTelephony instead."
+    },
+    "enableSCVExternalTelephony": {
+      "type": "boolean",
+      "description": "Indicates whether to enable a third-party telephony service to work with Service Cloud Voice with Partner Telephony. The default value is false. This field is optional."
+    },
+    "enableSCVOpenVCAsNewTabHVS": {
+      "type": "boolean",
+      "description": "Indicates whether to open the Service Cloud Voice Console in a new tab for Sales Engagement scenarios. The default value is false. Available in API version 62.0 and later. This field is optional."
+    },
+    "enableSCVSupportBannerDisplayed": {
+      "type": "boolean",
+      "description": "Indicates whether to display the Service Cloud Voice support banner. The default value is false. Available in API version 59.0 and later. This field is optional."
+    },
+    "enableServiceCloudVoice": {
+      "type": "boolean",
+      "description": "Indicates whether to enable Service Cloud Voice with Amazon Connect. The default value is false. This field is optional."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ServiceCloudVoiceSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"disableSCVTaskCreationForHVS\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAmazonQueueManagement\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDefaultChannelForSCV\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEndUserForSCV\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOmniCapacityForSCV\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePTQueueManagement\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePhoneNumberMaskingForSCV\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRZoneCloudVoiceOptIn\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSCVBYOT\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSCVExternalTelephony\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSCVOpenVCAsNewTabHVS\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSCVSupportBannerDisplayed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableServiceCloudVoice\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ServiceCloudVoice.settings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ServiceCloudVoiceSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<enableServiceCloudVoice>true</enableServiceCloudVoice>\n</ServiceCloudVoiceSettings>"
+    }
+  ]
+}

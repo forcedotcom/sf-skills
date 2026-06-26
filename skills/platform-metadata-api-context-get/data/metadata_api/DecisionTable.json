@@ -1,0 +1,211 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DecisionTable - Metadata API",
+  "description": "Represents the information about a decision table.",
+  "file_information": ".decisionTable",
+  "directory_location": "decisionTables",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "collectOperator": {
+      "type": "DecisionTableCollectOperator (enumeration of type string)",
+      "description": "Specifies the operator that's used when the result is filtered by the Collect operator.Valid values are: Count Maximum Minimum None Sum"
+    },
+    "conditionCriteria": {
+      "type": "string",
+      "description": "Logic that's used to decide how the input fields are processed."
+    },
+    "conditionType": {
+      "type": "DecisionTableConditionType (enumeration of type string)",
+      "description": "Condition logic that's used for input fields.Valid values are: All Any Custom"
+    },
+    "dataSourceType": {
+      "type": "DecisionTableDataSourceType (enumeration of type string)",
+      "description": "Specifies the type of data source that's used to create a decision table.Valid values are: ContextDefinition CsvUpload MultipleSobjects SingleSobject"
+    },
+    "decisionTableParameters": {
+      "type": "DecisionTableParameter[]",
+      "description": "Parameters that you specify in a decision table."
+    },
+    "decisionTableSourceCriterias": {
+      "type": "DecisionTableSourceCriteria[]",
+      "description": "The fields and values from a data source that are used to define the condition logic of the data that's used in a decision table."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the decision table."
+    },
+    "doesConsiderNullValue": {
+      "type": "boolean",
+      "description": "Indicates whether a column that has a null value is considered for lookup (true) or not (false). The default value is false."
+    },
+    "downloadStatus": {
+      "type": "DecisionTableDownloadStatus (enumeration of type string)",
+      "description": "Specifies the progress status of a CSV download from a CSV-based lookup table. Available in API version 64.0 and later.Valid values are: Completed DownloadInProgress Failed"
+    },
+    "executionType": {
+      "type": "DecisionTableExecutionType (enumeration of type string)",
+      "description": "Indicates the backing storage for the Decision Table. Valid values are: Dmo Hbase Hbpo Solr Soql Execution type of Hbase must be passed in all caps (HBASE) in POST and PATCH calls."
+    },
+    "filterResultBy": {
+      "type": "DecisionTableHitPolicy (enumeration of type string)",
+      "description": "Specifies how the results of a decision table are filtered if a set of inputs returns multiple matching outputs.Valid values are: AnyValue CollectOperator FirstMatch OutputOrder Priority RuleOrder UniqueValues"
+    },
+    "hasIncrementalSyncFailed": {
+      "type": "boolean",
+      "description": "Indicates if the last incremental refresh failed."
+    },
+    "isIncrementalSyncEnabled": {
+      "type": "boolean",
+      "description": "Indicates if incremental refresh is enabled for the Decision Table."
+    },
+    "lastIncrementalSyncDate": {
+      "type": "string",
+      "description": "The date and time on which the last incremental refresh occured for the decision table."
+    },
+    "lastSyncDate": {
+      "type": "string",
+      "description": "Latest date on which the decision table was refreshed."
+    },
+    "refreshFailureReason": {
+      "type": "string",
+      "description": "Reason why the refresh of the decision table data failed."
+    },
+    "refreshStatus": {
+      "type": "DecisionTableRefreshStatus (enumeration of type string)",
+      "description": "Specifies the refresh status of the cached data in the decision table.Valid values are: Completed Failed InProgress Initiated"
+    },
+    "setupName": {
+      "type": "string",
+      "required": true,
+      "description": "Name of the decision table, which appears in Salesforce Setup."
+    },
+    "sourceConditionLogic": {
+      "type": "string",
+      "description": "The condition logic that's used to define the decision table from the source data."
+    },
+    "sourceObject": {
+      "type": "string",
+      "required": true,
+      "description": "Object that contains the rules based on which the decision table must provide outcomes."
+    },
+    "status": {
+      "type": "DecisionTableStatus (enumeration of type string)",
+      "required": true,
+      "description": "Status of the decision table. Valid values are: ActivationInProgress Active Draft Inactive"
+    },
+    "type": {
+      "type": "DecisionTableType (enumeration of type string)",
+      "description": "Stores the type of decision table.Valid values are: Advanced HighScaleExecution HighVolume LowVolume MediumVolume RealTime"
+    },
+    "uploadStatus": {
+      "type": "DecisionTableUploadStatus (enumeration of type string)",
+      "description": "Specifies the progress status of the CSV upload for a CSV based Lookup table.Valid values are: Completed CompletedWithErrors Failed UploadInProgress"
+    },
+    "usageType": {
+      "type": "ExpsSetProcessType (enumeration of type string)",
+      "description": "Type of industry or the application within the industry that's using a decision table.Valid values are: Bre ComplianceControl DecompositionEnrichmentMapping DefaultPricing DefaultRating EventOrchestration FinancialServicesCloud FulfillmentCondition GpaCalculation InsuranceClaimProcessing—Available in API version 65.0 and later. ItServiceManagement—Available in API version 65.0 and later. PlanCostCalculation PriceProtection PricingDiscovery ProductCategoryQualification ProductQualification RatingDiscovery RecordAlert ShipAndDebit StudentInformationSystem—Available in API version 65.0 and later. StudentSuccess TestProcess WarrantyClaim When Business Rules Engine is enabled for a Salesforce instance, the default value is 'Bre’. Other usage types are available to you depending on your industry solution and permission sets."
+    }
+  },
+  "sub_types": {
+    "DecisionTableParameter": {
+      "dataType": {
+        "type": "DTParameterDataType (enumeration of type string)",
+        "description": "The data type of the field used in a decision table.Valid values are: Boolean Currency Date DateTime Number Percent String"
+      },
+      "decimalScale": {
+        "type": "int",
+        "description": "The number of digits to the right of the decimal point."
+      },
+      "domainObject": {
+        "type": "string",
+        "description": "For polymorhpic fields, indicates the domain object in the field hierarchy."
+      },
+      "fieldName": {
+        "type": "string",
+        "required": true,
+        "description": "API name of the fields that selected as an input or output for the decision table."
+      },
+      "fieldPath": {
+        "type": "string",
+        "description": "The path of the field used in a decision table in relation to the object that the field belongs to."
+      },
+      "isGroupByField": {
+        "type": "boolean",
+        "description": "Indicates whether an input field is used to group the business rules of the decision table."
+      },
+      "isPriorityField": {
+        "type": "boolean",
+        "description": "Indicates whether a field is given priority."
+      },
+      "isRequired": {
+        "type": "boolean",
+        "description": "Indicates whether a field is required to be used for lookups."
+      },
+      "length": {
+        "type": "int",
+        "description": "The maximum number of characters supported for a field that's used in a decision table."
+      },
+      "operator": {
+        "type": "DecisionTableOperator (enumeration of type string)",
+        "description": "Operator used for the input field.Valid values are: Contains DoesNotExistIn DoesNotMatch Equals ExistsIn GreaterOrEqual GreaterThan IsNotNull IsNull LessOrEqual LessThan Matches NotEquals"
+      },
+      "sequence": {
+        "type": "int",
+        "description": "The sequence in which input fields are processed. This field is available in API version 52.0 and later."
+      },
+      "sortType": {
+        "type": "DecisionTableSortType (enumeration of type string)",
+        "description": "Sort outputs of a decision table based on the values of the input or output parameter field. This field is available in API version 56.0 and later.Valid values are: AscNullFirst AscNullLast DescNullFirst DescNullLast None"
+      },
+      "usage": {
+        "type": "DecisionTableParameterType (enumeration of type string)",
+        "required": true,
+        "description": "Usage type of a field. Valid values are: INPUT OUTPUT ROWCRITERIA"
+      }
+    },
+    "DecisionTableSourceCriteria": {
+      "operator": {
+        "type": "DTSourceCriteriaOperator (enumeration of type string)",
+        "required": true,
+        "description": "The operator that’s applied to an associated decision table’s field to filter the data. Valid values are: Contains DoesNotExistIn DoesNotMatch Equals ExistsIn GreaterOrEqual GreaterThan IsNotNull IsNull LessOrEqual LessThan Matches NotEquals"
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "required": true,
+        "description": "The sequence number used in the associated decision table's source condition logic."
+      },
+      "sourceFieldName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the field that's used in the decision table."
+      },
+      "value": {
+        "type": "string",
+        "description": "The value that’s expected in the source field used in the decision table."
+      },
+      "valueType": {
+        "type": "DTSourceCriteriaValueType (enumeration of type string)",
+        "required": true,
+        "description": "The type of the value that’s used to filter the source data. Valid values are: Formula Literal Lookup Parameter Picklist"
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DecisionTable component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DecisionTable xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <collectOperator>None</collectOperator>\n    <conditionCriteria>1 and 2 and 3 and 4</conditionCriteria>\n    <conditionType>All</conditionType>\n    <dataSourceType>SingleSobject</dataSourceType>\n    <decisionTableParameters>\n        <fieldName>IsDeleted</fieldName>\n        <operator>Equals</operator>\n        <usage>INPUT</usage>\n        <sequence>1</sequence>\n        <isGroupByField>true</isGroupByField>\n        <sortType>AscNullFirst</sortType>\n        <dataType>Number</dataType>\n        <fieldPath>AccountFeed.CommentsCount</fieldPath>\n        <domainObject>AccountFeed</domainObject>\n        <isPriorityField>false</isPriorityField>\n        <decimalScale>2</decimalScale>\n        <length>14</length>\n        <isRequired>false</isRequired>\n    </decisionTableParameters>\n    <decisionTableParameters>\n        <fieldName>IsActive</fieldName>\n        <usage>OUTPUT</usage>\n    </decisionTableParameters>\n    <decisionTableParameters>\n        <fieldName>LimitNumber</fieldName>\n        <operator>Equals</operator>\n        <usage>INPUT</usage>\n        <sequence>2</sequence>\n        <isGroupByField>false</isGroupByField>\n    </decisionTableParameters>\n    <decisionTableParameters>\n        <fieldName>LimitStartDate</fieldName>\n        <usage>OUTPUT</usage>\n    </decisionTableParameters>\n    <decisionTableParameters>\n        <fieldName>GivenBadgeCount</fieldName>\n        <operator>Equals</operator>\n        <usage>INPUT</usage>\n        <sequence>3</sequence>\n        <isGroupByField>false</isGroupByField>\n    </decisionTableParameters>\n    <decisionTableParameters>\n        <fieldName>Name</fieldName>\n        <operator>Equals</operator>\n        <usage>INPUT</usage>\n        <sequence>4</sequence>\n        <isGroupByField>false</isGroupByField>\n    </decisionTableParameters>\n    <decisionTableSourceCriterias>\n        <sourceFieldName>IsDeleted</sourceFieldName>\n        <operator>Equals</operator>\n        <value>false</value>\n        <sequenceNumber>1</sequenceNumber>\n        <valueType>Literal</valueType>\n    </decisionTableSourceCriterias>\n    <description>Sample DT created for md-common tests</description>\n    <filterResultBy>UniqueValues</filterResultBy>\n    <setupName>Sample DT</setupName>\n    <sourceObject>WorkBadgeDefinition</sourceObject>\n    <sourceConditionLogic>1</sourceConditionLogic>\n    <status>Draft</status>\n    <type>LowVolume</type>\n    <usageType>Bre</usageType>\n    <doesConsiderNullValue>false</doesConsiderNullValue>\n    <refreshStatus>Failed</refreshStatus>\n    <refreshFailureReason>Failed due to limit violation.</refreshFailureReason>\n    <executionType>Hbpo</executionType>\n    <lastIncrementalSyncDate>\"\"</lastIncrementalSyncDate>\n    <uploadStatus>Completed</uploadStatus>\n    <isIncrementalSyncEnabled>false</isIncrementalSyncEnabled>\n    <hasIncrementalSyncFailed>false</hasIncrementalSyncFailed>\n</DecisionTable>"
+    }
+  ]
+}

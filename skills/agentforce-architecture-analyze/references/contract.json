@@ -1,0 +1,244 @@
+{
+  "_doc": "retired-name references replaced with plugin-scoped layout. Machine-readable I/O contract for investigating-agentforce-architecture. Orchestrator code reads this file (not SKILL.md prose) to discover the input schema, output keys, STATUS enum, and error-contract rules. The architecture skill runs inline (no subagent).",
+  "_schema_version": "3.1",
+  "_schema_notes": "3.1 (2026-05-05) canonicalizes `invocation_type` on STANDARD_ACTION / UNKNOWN nodes in the metadata tree. Prior versions split this across `raw_invocation_type` (bundle-sourced nodes) and `raw_action_type` (flow-actionCall-sourced nodes). Both legacy keys are still tolerated by readers for one release.",
+  "input": {
+    "required": {
+      "org_alias": {
+        "type": "string",
+        "description": "sf CLI alias (e.g. 'my-org-alias'). Auth is always derived via `sf org display --target-org $ORG_ALIAS --json`."
+      },
+      "agent_api_name": {
+        "type": "string",
+        "regex": "^[A-Za-z0-9_]+$",
+        "description": "BotDefinition.DeveloperName (e.g. 'MyAgent'). Must match the regex above; INVALID_INPUT otherwise."
+      }
+    },
+    "optional": {
+      "agent_version_api_name": {
+        "type": "string",
+        "description": "BotVersion.DeveloperName (e.g. 'v5'). When omitted, the agent auto-picks the Active version with the highest natural-key sort (v10 > v9); VERSION_AUTO_PICKED=true in the RESULT block."
+      },
+      "org_id_15": {
+        "type": "string",
+        "regex": "^[A-Za-z0-9]{15}$",
+        "description": "15-char org ID. If omitted, derived from `sf org display`."
+      },
+      "org_id_18": {
+        "type": "string",
+        "regex": "^[A-Za-z0-9]{18}$",
+        "description": "18-char org ID. If omitted, derived from `sf org display`."
+      },
+      "session_id": {
+        "type": "string",
+        "description": "Only used to name the ephemeral $WORK_DIR. Random UUID if omitted."
+      },
+      "work_dir": {
+        "type": "absolute_path",
+        "description": "Ephemeral scratch. Default: /tmp/investigating-agentforce-architecture-<epoch>-<rand>."
+      },
+      "cache_root": {
+        "type": "absolute_path",
+        "description": "Internal rebuildable cache root. Default: ~/.vibe/cache/investigating-agentforce-architecture. Override with --cache-dir <path>."
+      },
+      "data_root": {
+        "type": "absolute_path",
+        "description": "Durable user-facing output root. Default: ~/.vibe/data/investigating-agentforce-architecture. Override with --data-dir <path>."
+      },
+      "force_refresh": {
+        "type": "boolean",
+        "description": "If true, ignore cache and rewrite. Default: false."
+      }
+    },
+    "minimum_viable": {
+      "org_alias": "my-org-alias",
+      "agent_api_name": "MyAgent"
+    },
+    "notes": [
+      "Standalone and orchestrated modes accept the same input fields; no renames.",
+      "To bypass cache, delete the cache entry or pass force_refresh: true."
+    ]
+  },
+  "output": {
+    "format": "Two-part return message: (1) one-line prose status, (2) blank line, (3) === RESULT === key-value block. The KV block is always LAST in the output and always present.",
+    "parse_rule": "Find the line '=== RESULT ===', then read subsequent lines as KEY=VALUE pairs until EOF. Values are raw strings; no quoting; one pair per line.",
+    "parse_examples": {
+      "bash": "awk -F= '/^STATUS=/{print $2; exit}' <<< \"$subagent_output\"",
+      "python": "import re; dict(line.split('=', 1) for line in output.splitlines() if re.match(r'^[A-Z_]+=', line))"
+    },
+    "keys": {
+      "STATUS": {
+        "type": "enum",
+        "presence": "always",
+        "description": "Terminal status. See error_contract for per-status required keys.",
+        "values": [
+          "OK",
+          "PARTIAL_OK",
+          "INVALID_INPUT",
+          "AUTH_REQUIRED",
+          "AGENT_NOT_FOUND",
+          "AGENT_VERSION_NOT_FOUND",
+          "RETRIEVE_FAILED",
+          "WRITE_FAILED"
+        ]
+      },
+      "ERROR_DETAIL": {
+        "type": "string",
+        "presence": "on_error",
+        "description": "Human-readable explanation on any non-OK STATUS. Sanitized (no backticks/quotes/dollar signs/newlines)."
+      },
+      "AGENT_API_NAME": {
+        "type": "string",
+        "presence": "always",
+        "description": "Echo of input agent_api_name. May be empty on INVALID_INPUT if sanitize rejected before resolution."
+      },
+      "AGENT_VERSION": {
+        "type": "string",
+        "presence": "on_success_or_after_resolve",
+        "description": "Resolved BotVersion.DeveloperName (e.g. 'v5')."
+      },
+      "VERSION_AUTO_PICKED": {
+        "type": "boolean",
+        "presence": "on_success_or_after_resolve",
+        "description": "True iff agent_version_api_name was omitted and the agent auto-picked."
+      },
+      "AGENT_GENERATION": {
+        "type": "enum",
+        "presence": "always",
+        "values": ["classic", "nga", "unknown"],
+        "description": "classic = AiCopilot__ planner, nga = Atlas__ planner, unknown = anything else / not resolved."
+      },
+      "BOT_ID": {
+        "type": "string",
+        "presence": "on_success_or_after_resolve",
+        "description": "18-char BotDefinition.Id from SOQL."
+      },
+      "ORG_ID_15": {
+        "type": "string",
+        "presence": "on_success_or_after_auth",
+        "description": "15-char org ID. Cache-key prefix."
+      },
+      "ORG_ID_18": {
+        "type": "string",
+        "presence": "on_success_or_after_auth",
+        "description": "18-char org ID (from `sf org display`)."
+      },
+      "OUTPUT_JSON_PATH": {
+        "type": "absolute_path",
+        "presence": "on_success",
+        "description": "Durable {agent}_{version}_metadata_tree.json path under the resolved data_root."
+      },
+      "OUTPUT_SUMMARY_PATH": {
+        "type": "absolute_path",
+        "presence": "always_empty",
+        "description": "Reserved — historically pointed at {agent}_{version}_metadata_tree.summary.md. Dropped in ; field is now always emitted empty for RESULT-block shape stability."
+      },
+      "CACHE_PATH": {
+        "type": "absolute_path",
+        "presence": "on_success_or_after_cache_check",
+        "description": "Cache dir ($CACHE_ROOT/$ORG_ID_15/$AGENT__$VERSION/). Ends with /."
+      },
+      "CACHE_HIT": {
+        "type": "boolean",
+        "presence": "on_success_or_after_cache_check",
+        "description": "True iff the cache was served without any Metadata API retrieves."
+      },
+      "CACHED_AT_UTC": {
+        "type": "iso8601_utc_or_empty",
+        "presence": "on_success_or_after_cache_check",
+        "description": "ISO-8601 UTC built-at time. On cache hit this is the age of the cached snapshot; on cold build this is the just-computed timestamp."
+      },
+      "NODE_COUNT": {
+        "type": "integer",
+        "presence": "on_success",
+        "description": "Total nodes in the declared_action_tree."
+      },
+      "DEPTH": {
+        "type": "integer",
+        "presence": "on_success",
+        "description": "Max depth of the tree (BOT_DEFINITION = depth 0)."
+      },
+      "PARTIAL": {
+        "type": "boolean",
+        "presence": "on_success",
+        "description": "True iff the tree is incomplete (planner unresolved OR MAX_WAVE hit). When true, STATUS=PARTIAL_OK."
+      },
+      "UNRESOLVED_COUNT": {
+        "type": "integer",
+        "presence": "on_success",
+        "description": "Length of tree._unresolved[]."
+      },
+      "AVAILABLE_BOTS": {
+        "type": "csv",
+        "presence": "on_AGENT_NOT_FOUND",
+        "description": "Comma-separated list of all BotDefinition.DeveloperName values in the org."
+      },
+      "AVAILABLE_VERSIONS": {
+        "type": "csv",
+        "presence": "on_AGENT_VERSION_NOT_FOUND",
+        "description": "Format: 'v5(Active),v4(Inactive),...' — natural-key sorted DESC."
+      },
+      "RESULT_BLOCK_PATH": {
+        "type": "absolute_path",
+        "presence": "always",
+        "description": "Path to $DATA_DIR/last_result_block.txt — byte-for-byte tee written BEFORE stdout."
+      },
+      "WALL_TIME_SECONDS": {
+        "type": "float",
+        "presence": "always",
+        "description": "End-to-end wall-clock seconds. Two decimals. Target: 90-220s cold, <2s warm."
+      }
+    }
+  },
+  "error_contract": {
+    "OK": {
+      "description": "Tree built, zero unresolved, planner resolved.",
+      "required_keys": ["STATUS", "AGENT_API_NAME", "AGENT_VERSION", "VERSION_AUTO_PICKED", "AGENT_GENERATION", "BOT_ID", "ORG_ID_15", "ORG_ID_18", "OUTPUT_JSON_PATH", "OUTPUT_SUMMARY_PATH", "CACHE_PATH", "CACHE_HIT", "CACHED_AT_UTC", "NODE_COUNT", "DEPTH", "PARTIAL", "UNRESOLVED_COUNT", "RESULT_BLOCK_PATH", "WALL_TIME_SECONDS"],
+      "optional_keys": []
+    },
+    "PARTIAL_OK": {
+      "description": "Tree built but planner unresolved (Bot.bot had no planner) OR waves hit MAX_WAVE=5. tree._unresolved[] explains.",
+      "required_keys": ["STATUS", "AGENT_API_NAME", "AGENT_VERSION", "AGENT_GENERATION", "BOT_ID", "ORG_ID_15", "ORG_ID_18", "OUTPUT_JSON_PATH", "CACHE_PATH", "PARTIAL", "UNRESOLVED_COUNT", "WALL_TIME_SECONDS", "RESULT_BLOCK_PATH"],
+      "optional_keys": ["OUTPUT_SUMMARY_PATH", "CACHE_HIT", "CACHED_AT_UTC", "NODE_COUNT", "DEPTH", "VERSION_AUTO_PICKED", "ERROR_DETAIL"]
+    },
+    "INVALID_INPUT": {
+      "description": "agent_api_name failed [A-Za-z0-9_]+ regex, or other input validation (org_alias empty, ORG_ID_15 regex, $WORK_DIR symlink/foreign-owned).",
+      "required_keys": ["STATUS", "ERROR_DETAIL", "AGENT_API_NAME"],
+      "optional_keys": ["ORG_ID_15", "ORG_ID_18"]
+    },
+    "AUTH_REQUIRED": {
+      "description": "`sf org display` returned nothing, or a SOQL/Metadata call failed with an auth error. Caller must run `sf org login web --alias $ORG_ALIAS`.",
+      "required_keys": ["STATUS", "ERROR_DETAIL", "AGENT_API_NAME"],
+      "optional_keys": ["ORG_ID_15", "ORG_ID_18"]
+    },
+    "AGENT_NOT_FOUND": {
+      "description": "BotDefinition.DeveloperName not in the org. AVAILABLE_BOTS carries the CSV of what IS in the org.",
+      "required_keys": ["STATUS", "ERROR_DETAIL", "AGENT_API_NAME", "AVAILABLE_BOTS"],
+      "optional_keys": ["ORG_ID_15", "ORG_ID_18"]
+    },
+    "AGENT_VERSION_NOT_FOUND": {
+      "description": "No matching BotVersion under the bot (explicit version doesn't exist, or no Active version found during auto-pick).",
+      "required_keys": ["STATUS", "ERROR_DETAIL", "AGENT_API_NAME", "AVAILABLE_VERSIONS"],
+      "optional_keys": ["BOT_ID", "ORG_ID_15", "ORG_ID_18"]
+    },
+    "RETRIEVE_FAILED": {
+      "description": "`sf project retrieve start` failed (network, permissions, zip unreadable). ERROR_DETAIL carries the specifics.",
+      "required_keys": ["STATUS", "ERROR_DETAIL", "AGENT_API_NAME", "AGENT_VERSION", "BOT_ID"],
+      "optional_keys": ["ORG_ID_15", "ORG_ID_18", "OUTPUT_JSON_PATH"]
+    },
+    "WRITE_FAILED": {
+      "description": "Filesystem write failed during finalize (DATA_DIR rename, CACHE_DIR rename, or tree rewrite).",
+      "required_keys": ["STATUS", "ERROR_DETAIL", "AGENT_API_NAME", "AGENT_VERSION"],
+      "optional_keys": ["BOT_ID", "ORG_ID_15", "ORG_ID_18", "CACHE_HIT", "CACHED_AT_UTC"]
+    }
+  },
+  "stability": {
+    "key_names": "Stable. Key-name changes require a NOTICE.md entry and a skill reinstall; consumers read this contract to discover the current key set.",
+    "error_codes": "The STATUS enum is fixed at 8 values. A new status is a breaking change for consumers that switch on STATUS.",
+    "path_format": "All path values are absolute (no tilde expansion required). One KEY=VALUE per line. No trailing whitespace.",
+    "order": "Keys inside the RESULT block appear in a stable order — orchestrators should not depend on order but may use it for human readability."
+  },
+  "referenced_files": {
+    "skill_md": "<SKILL_ROOT>/SKILL.md"
+  }
+}

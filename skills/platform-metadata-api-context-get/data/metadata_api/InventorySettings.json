@@ -1,0 +1,36 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "InventorySettings - Metadata API",
+  "description": "Represents options for the Salesforce Omnichannel Inventory product.This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableOCIB2CIntegration": {
+      "type": "boolean",
+      "description": "Indicates whether Omnichannel Inventory is allowed to exchange inventory data with B2C Commerce (true) or not (false). The default value is false."
+    },
+    "enableOmniChannelInventory": {
+      "type": "boolean",
+      "description": "Indicates whether Omnichannel Inventory features are enabled (true) or not (false). The default value is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"InventorySettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableOCIB2CIntegration\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOmniChannelInventory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an InventorySettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<InventorySettings xmlns=\"http://soap.sforce.com/2006/04/metadata\" \nxmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n    <enableOmniChannelInventory>true</enableOmniChannelInventory>\n    <enableOCIB2CIntegration>true</enableOCIB2CIntegration>\n    </InventorySettings>"
+    }
+  ]
+}

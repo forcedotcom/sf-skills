@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!--
+    Destructive Changes Template
+
+    Use this file to specify metadata components to delete from the target org.
+    This file should be used with --pre-destructive-changes or --post-destructive-changes
+
+    Example:
+    sf project deploy start \
+      --manifest manifest/package.xml \
+      --post-destructive-changes manifest/destructiveChanges.xml \
+      --target-org production
+    -->
+
+    <!-- Delete Apex Classes -->
+    <!--
+    <types>
+        <members>DeprecatedClass1</members>
+        <members>DeprecatedClass2</members>
+        <name>ApexClass</name>
+    </types>
+    -->
+
+    <!-- Delete Apex Triggers -->
+    <!--
+    <types>
+        <members>OldTrigger</members>
+        <name>ApexTrigger</name>
+    </types>
+    -->
+
+    <!-- Delete Custom Objects -->
+    <!--
+    <types>
+        <members>ObsoleteObject__c</members>
+        <name>CustomObject</name>
+    </types>
+    -->
+
+    <!-- Delete Custom Fields -->
+    <!--
+    <types>
+        <members>Account.DeprecatedField__c</members>
+        <members>Contact.OldField__c</members>
+        <name>CustomField</name>
+    </types>
+    -->
+
+    <!-- Delete Lightning Components -->
+    <!--
+    <types>
+        <members>oldComponent</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    -->
+
+    <!-- Delete Aura Components -->
+    <!--
+    <types>
+        <members>deprecatedAuraComponent</members>
+        <name>AuraDefinitionBundle</name>
+    </types>
+    -->
+
+    <!-- Delete Validation Rules -->
+    <!--
+    <types>
+        <members>Account.OldValidationRule</members>
+        <name>ValidationRule</name>
+    </types>
+    -->
+
+    <!-- Delete Workflow Rules -->
+    <!--
+    <types>
+        <members>Account.OldWorkflowRule</members>
+        <name>WorkflowRule</name>
+    </types>
+    -->
+
+    <!-- Delete Flows -->
+    <!--
+    <types>
+        <members>Deprecated_Flow</members>
+        <name>Flow</name>
+    </types>
+    -->
+
+    <!-- Delete Permission Sets -->
+    <!--
+    <types>
+        <members>ObsoletePermissionSet</members>
+        <name>PermissionSet</name>
+    </types>
+    -->
+
+    <!-- Delete Static Resources -->
+    <!--
+    <types>
+        <members>oldStaticResource</members>
+        <name>StaticResource</name>
+    </types>
+    -->
+
+    <!-- API Version -->
+    <version>66.0</version>
+</Package>
+
+<!--
+IMPORTANT NOTES:
+
+1. Order of operations:
+   - Pre-destructive: Deleted BEFORE deployment (--pre-destructive-changes)
+   - Post-destructive: Deleted AFTER deployment (--post-destructive-changes)
+
+2. Best practices:
+   - Test destructive changes in sandbox first
+   - Backup metadata before deletion
+   - Use --dry-run to validate before actual deployment
+   - Delete fields before objects
+   - Be careful with dependencies
+
+3. Common destructive change scenarios:
+   - Removing deprecated features
+   - Cleaning up unused metadata
+   - Refactoring object structures
+   - Removing test/demo data objects
+
+4. Example usage:
+   sf project deploy start \
+     --manifest manifest/package.xml \
+     --post-destructive-changes manifest/destructiveChanges.xml \
+     --target-org sandbox \
+     --dry-run \
+     --test-level RunLocalTests \
+     --wait 30
+
+5. Rollback:
+   - Keep backup of deleted metadata in version control
+   - Tag the commit before destructive deployment
+   - Can redeploy from backup if needed
+-->

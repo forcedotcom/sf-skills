@@ -1,0 +1,100 @@
+<template>
+    <lightning-card title="Contacts (GraphQL)" icon-name="standard:contact">
+        <!-- Actions slot -->
+        <div slot="actions">
+            <lightning-button-icon
+                icon-name="utility:refresh"
+                alternative-text="Refresh"
+                onclick={handleRefresh}>
+            </lightning-button-icon>
+        </div>
+
+        <div class="slds-p-horizontal_medium">
+            <!-- Loading State -->
+            <template lwc:if={isLoading}>
+                <div class="slds-align_absolute-center slds-p-around_large">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Error State -->
+            <template lwc:if={error}>
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>{error}</h2>
+                </div>
+            </template>
+
+            <!-- Empty State -->
+            <template lwc:if={hasNoData}>
+                <div class="slds-illustration slds-illustration_small">
+                    <div class="slds-text-longform">
+                        <h3 class="slds-text-heading_medium">No contacts found</h3>
+                        <p class="slds-text-body_regular">
+                            There are no contacts to display. Try adjusting your filters or creating new contacts.
+                        </p>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Data Display -->
+            <template lwc:if={hasData}>
+                <!-- Page Info -->
+                <div class="slds-m-bottom_small slds-text-body_small slds-text-color_weak">
+                    {currentPageInfo}
+                </div>
+
+                <!-- Contact List -->
+                <ul class="slds-has-dividers_bottom-space">
+                    <template for:each={contacts} for:item="contact">
+                        <li key={contact.id}
+                            class="slds-item slds-p-vertical_small slds-is-relative"
+                            data-id={contact.id}
+                            onclick={handleRowClick}>
+                            <article class="slds-tile slds-media">
+                                <div class="slds-media__figure">
+                                    <lightning-icon
+                                        icon-name="standard:contact"
+                                        size="small">
+                                    </lightning-icon>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h3 class="slds-tile__title">
+                                        <a href="javascript:void(0);">{contact.name}</a>
+                                    </h3>
+                                    <div class="slds-tile__detail">
+                                        <dl class="slds-list_horizontal slds-wrap">
+                                            <template lwc:if={contact.title}>
+                                                <dt class="slds-item_label slds-truncate">Title:</dt>
+                                                <dd class="slds-item_detail slds-truncate">{contact.title}</dd>
+                                            </template>
+                                            <template lwc:if={contact.email}>
+                                                <dt class="slds-item_label slds-truncate">Email:</dt>
+                                                <dd class="slds-item_detail slds-truncate">{contact.email}</dd>
+                                            </template>
+                                            <template lwc:if={contact.accountName}>
+                                                <dt class="slds-item_label slds-truncate">Account:</dt>
+                                                <dd class="slds-item_detail slds-truncate">{contact.accountName}</dd>
+                                            </template>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+                        </li>
+                    </template>
+                </ul>
+
+                <!-- Load More Button -->
+                <template lwc:if={hasNextPage}>
+                    <div class="slds-align_absolute-center slds-m-top_medium">
+                        <lightning-button
+                            label="Load More"
+                            onclick={handleLoadMore}
+                            disabled={isLoading}>
+                        </lightning-button>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

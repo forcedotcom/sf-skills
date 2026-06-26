@@ -1,0 +1,20 @@
+%% invocation_sequence.mmd - section 3 invocation sequence (sequenceDiagram)
+%%
+%% Placeholders (substituted by render_architecture.load_mermaid):
+%%   PARTICIPANTS placeholder: one `participant <Name>` line per lane,
+%%                             newline-joined; deactivate with
+%%                             `<Dst>-->>-<Src>: <response>`.
+%%   MESSAGES placeholder:     one `<Src>->>+<Dst>: <label>` per message line.
+%%
+%% placeholder names above are written as bare tokens (no double-
+%% curly) so load_mermaid's single-pass str.replace cannot substitute them
+%% here. That keeps %% headers intact in the rendered output - Mermaid
+%% ignores %% lines as comments at render time, and debuggability wins.
+%%
+%% Renderer (render_architecture.py::_render_invocation_sequence) is the sole
+%% consumer. Generation-aware: classic ReAct uses Planner<->TopicClassifier
+%% <->ActionExecutor; NGA orchestrations add one lane per sub-agent.
+sequenceDiagram
+    autonumber
+    {{PARTICIPANTS}}
+    {{MESSAGES}}

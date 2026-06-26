@@ -1,0 +1,36 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "MilestoneType - Metadata API",
+  "description": "Represents the name and description of a milestone, which you can use in an entitlement process to track important steps in cases.",
+  "file_information": ".milestoneType",
+  "directory_location": "milestoneTypes",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The description of the milestone."
+    },
+    "RecurrenceType": {
+      "type": "MilestoneTypeRecurrenceType (enumeration of type string)",
+      "description": "The type of recurrence for the milestone. Available in API version 29.0 and later. Valid values are: none—Specifies no recurrence for the milestone. The milestone occurs only one time until the entitlement process exits. recursIndependently—Specifies independent recurrence for the milestone. recursChained—Specifies sequential recurrence for the milestone."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MilestoneType\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"recurrenceType\" minOccurs=\"0\" type=\"tns:MilestoneTypeRecurrenceType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"MilestoneTypeRecurrenceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"none\"/>\n    <xsd:enumeration value=\"recursIndependently\"/>\n    <xsd:enumeration value=\"recursChained\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here’s a sample milestone type.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MilestoneType xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>First Response Time</description>\n</MilestoneType>"
+    }
+  ]
+}

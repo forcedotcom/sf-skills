@@ -1,0 +1,70 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment"
+  ],
+  "title": "Tag - Metadata API",
+  "description": "Reserved for future use.",
+  "file_information": ".tag",
+  "directory_location": "Tags",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "A description of the tag."
+    },
+    "label": {
+      "type": "string",
+      "description": "Label that identifies the tag in the Salesforce user interface.",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "description": "The unique name of the tag. Can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores.",
+      "required": true
+    },
+    "options": {
+      "type": "TagOption[]",
+      "description": "A list of options associated with the tag."
+    },
+    "properties": {
+      "type": "TagProperty[]",
+      "description": "A list of properties associated with the tag."
+    }
+  },
+  "sub_types": {
+    "TagOption": {
+      "name": {
+        "type": "string",
+        "description": "The name of the option.",
+        "required": true
+      },
+      "value": {
+        "type": "boolean",
+        "description": "The value of the option.",
+        "required": true
+      }
+    },
+    "TagProperty": {
+      "name": {
+        "type": "string",
+        "description": "The name of the property.",
+        "required": true
+      },
+      "value": {
+        "type": "string",
+        "description": "The value of the property.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Tag\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"options\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:TagOption\"/>\n        <xsd:element name=\"properties\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:TagProperty\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"TagOption\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"TagProperty\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"TagSet\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"options\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:TagOption\"/>\n        <xsd:element name=\"properties\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:TagProperty\"/>\n        <xsd:element name=\"tags\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Tag\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

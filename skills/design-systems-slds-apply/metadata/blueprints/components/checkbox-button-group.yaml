@@ -1,0 +1,192 @@
+name: "Checkbox Button Group"
+
+description: "A styled checkable input group that communicates if an option(s) are true, false or indeterminate. A set of checkbox buttons wrapped in a fieldset that is also a form element."
+
+category: "Input"
+
+slds_classes:
+  root: "slds-checkbox_button-group"
+  elements:
+    - class: "slds-checkbox_button"
+      description: "Individual checkbox button within the group"
+      purpose: "Container for each checkbox option in the button group"
+    - class: "slds-checkbox_faux"
+      description: "Visual checkbox replacement styled as a button"
+      purpose: "Custom-styled checkbox appearance that looks like a button"
+    - class: "slds-checkbox_button__label"
+      description: "Label element for the checkbox button"
+      purpose: "Provides clickable area and contains the checkbox faux element"
+  modifiers: []
+  states:
+    - class: "slds-has-error"
+      description: "Error state styling for the form element"
+      trigger: "When checkbox group validation fails"
+    - class: "slds-is-disabled"
+      description: "Disabled state styling"
+      trigger: "When checkbox group is not interactive"
+
+variants:
+  - name: "Base"
+    description: "Standard checkbox button group"
+    classes: ["slds-checkbox_button-group"]
+    usage_context: "Default checkbox button group implementation"
+    differences: "Group of checkbox buttons with shared border and styling"
+
+lightning_component:
+  name: ""
+  url: "https://developer.salesforce.com/docs/component-library/overview/components"
+  mapping_notes: "No direct Lightning Base Component - use checkbox-button components in a group"
+
+accessibility:
+  keyboard_support:
+    - "Tab to navigate between checkbox buttons"
+    - "Space to toggle checkbox state"
+    - "Arrow keys may navigate between options in some implementations"
+  screen_reader:
+    - "Fieldset legend announced as group label"
+    - "Checkbox state announced (checked/unchecked)"
+    - "Label text read with each checkbox"
+    - "Error messages associated and announced"
+  aria_attributes:
+    - "aria-describedby for error messages"
+    - "aria-invalid when validation fails"
+    - "aria-required for required checkbox groups"
+    - "fieldset and legend for group semantics"
+
+usage_guidelines:
+  when_to_use:
+    - "When users need to select multiple options from a related set"
+    - "For compact selection interfaces where button styling is preferred"
+    - "When options are closely related and benefit from visual grouping"
+    - "For scheduling, filtering, or multi-select scenarios"
+  when_not_to_use:
+    - "For mutually exclusive options (use radio button group instead)"
+    - "When only one option can be selected"
+    - "For simple binary choices (use single checkbox)"
+    - "When space is very limited (consider dropdown instead)"
+  best_practices:
+    - "Use clear, descriptive legend text for the group"
+    - "Keep option labels short and concise"
+    - "Group related options logically"
+    - "Provide immediate visual feedback for selections"
+    - "Ensure adequate touch target size for mobile"
+    - "Use error states to indicate validation issues"
+  common_mistakes:
+    - "Using checkbox button group for mutually exclusive options"
+    - "Making labels too long or unclear"
+    - "Not providing proper fieldset/legend structure"
+    - "Missing error state handling"
+    - "Inadequate spacing between buttons"
+
+code_examples:
+  - title: "Basic Checkbox Button Group"
+    code: |
+      <fieldset class="slds-form-element">
+        <legend class="slds-form-element__legend slds-form-element__label">
+          Scheduled Day(s)
+        </legend>
+        <div class="slds-form-element__control">
+          <div class="slds-checkbox_button-group">
+            <span class="slds-button slds-checkbox_button">
+              <input type="checkbox" name="checkbox" id="checkbox-monday" value="monday" />
+              <label class="slds-checkbox_button__label" for="checkbox-monday">
+                <span class="slds-checkbox_faux">Monday</span>
+              </label>
+            </span>
+            <span class="slds-button slds-checkbox_button">
+              <input type="checkbox" name="checkbox" id="checkbox-tuesday" value="tuesday" />
+              <label class="slds-checkbox_button__label" for="checkbox-tuesday">
+                <span class="slds-checkbox_faux">Tuesday</span>
+              </label>
+            </span>
+            <span class="slds-button slds-checkbox_button">
+              <input type="checkbox" name="checkbox" id="checkbox-wednesday" value="wednesday" />
+              <label class="slds-checkbox_button__label" for="checkbox-wednesday">
+                <span class="slds-checkbox_faux">Wednesday</span>
+              </label>
+            </span>
+          </div>
+        </div>
+      </fieldset>
+    description: "Basic checkbox button group with three day options"
+  - title: "Checkbox Button Group with Error State"
+    code: |
+      <fieldset class="slds-form-element slds-has-error">
+        <legend class="slds-form-element__legend slds-form-element__label">
+          Select at least one option
+        </legend>
+        <div class="slds-form-element__control">
+          <div class="slds-checkbox_button-group">
+            <span class="slds-button slds-checkbox_button">
+              <input type="checkbox" name="checkbox" id="checkbox-error-1" value="option1" aria-describedby="checkbox-error-message" />
+              <label class="slds-checkbox_button__label" for="checkbox-error-1">
+                <span class="slds-checkbox_faux">Option 1</span>
+              </label>
+            </span>
+            <span class="slds-button slds-checkbox_button">
+              <input type="checkbox" name="checkbox" id="checkbox-error-2" value="option2" />
+              <label class="slds-checkbox_button__label" for="checkbox-error-2">
+                <span class="slds-checkbox_faux">Option 2</span>
+              </label>
+            </span>
+          </div>
+        </div>
+        <div id="checkbox-error-message" class="slds-form-element__help">This field is required</div>
+      </fieldset>
+    description: "Checkbox button group with error state and validation message"
+  - title: "Disabled Checkbox Button Group"
+    code: |
+      <fieldset class="slds-form-element">
+        <legend class="slds-form-element__legend slds-form-element__label">
+          Disabled Options
+        </legend>
+        <div class="slds-form-element__control">
+          <div class="slds-checkbox_button-group">
+            <span class="slds-button slds-checkbox_button">
+              <input type="checkbox" name="checkbox" id="checkbox-disabled-1" value="option1" disabled />
+              <label class="slds-checkbox_button__label" for="checkbox-disabled-1">
+                <span class="slds-checkbox_faux">Disabled Option 1</span>
+              </label>
+            </span>
+            <span class="slds-button slds-checkbox_button">
+              <input type="checkbox" name="checkbox" id="checkbox-disabled-2" value="option2" disabled checked />
+              <label class="slds-checkbox_button__label" for="checkbox-disabled-2">
+                <span class="slds-checkbox_faux">Disabled Option 2 (Checked)</span>
+              </label>
+            </span>
+          </div>
+        </div>
+      </fieldset>
+    description: "Checkbox button group with disabled state options"
+
+styling_hooks: []
+
+dependencies:
+  css_files: ["checkbox-button-group.css", "form-element.css", "checkbox-button.css"]
+  javascript: []
+  icons: []
+  other_components: ["form-element", "checkbox-button"]
+
+related_components:
+  - name: "Checkbox Button"
+    relationship: "similar"
+    description: "Individual checkbox buttons that make up the group"
+  - name: "Radio Button Group"
+    relationship: "alternative"
+    description: "For mutually exclusive options"
+  - name: "Checkbox"
+    relationship: "similar"
+    description: "Standard checkbox input for single selections"
+
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/checkbox-button-group/"
+  design_guidelines: "https://v1.lightningdesignsystem.com/components/checkbox-button-group/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-01-15"
+  author: "SLDS Documentation Team"
+  slds_version: "2.27.2"
+  review_status: "complete"
+  source: "official-slds"
+  notes: "Created from official SLDS documentation and design-system-internal source code with CSS selector annotations"
+

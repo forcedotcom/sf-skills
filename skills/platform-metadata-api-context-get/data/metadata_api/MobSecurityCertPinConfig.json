@@ -1,0 +1,76 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "MobSecurityCertPinConfig - Metadata API",
+  "description": "Represents the authentication server certificate pin configuration on the Salesforce mobile app with Enhanced Mobile Security.",
+  "file_information": ".mobSecurityCertPinConfig",
+  "directory_location": "mobSecurityCertPinConfigs",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "certificateHash": {
+      "type": "string",
+      "required": true,
+      "description": "The unique identifier for the certificate."
+    },
+    "domainName": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the domain for the server that you want to pin the certificate to. For example, https://MyDomainName.my.salesforce.com."
+    },
+    "isEnabled": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether authentication server certificate pinning is enabled. The default value is false, which means that certificate pinning is disabled."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type. The default value is false."
+    },
+    "isSubdomainIncluded": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether subdomains use the same certificate pinning configuration as the specified domainName. The default value is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for MobSecurityCertPinConfig, which is defined when the MobSecurityCertPinConfig component is created."
+    },
+    "mobilePlatform": {
+      "type": "MobileSecurityMobilePlatform (enumeration of type string)",
+      "description": "The mobile operating system. Values are: Android iOS"
+    },
+    "mobileSecurityAssignment": {
+      "type": "string",
+      "description": "The name of the mobile security assignment associated with the mobile security policy. See MobileSecurityAssignment."
+    },
+    "severityLevel": {
+      "type": "MobileSecurityPolicySeverityLevel (enumeration of type string)",
+      "required": true,
+      "description": "The severity level of the mobile security policy. Values are: Critical— Wipes app data and logs user out Error—Blocks access to the app until the issue is resolved, but doesn’t log user out Info— Blocks prohibited action or logs user action and informs user Warn—Notifies the user of the violation and recommends how to resolve, but user is able to continue using the app"
+    },
+    "type": {
+      "type": "MobileSecurityCertPinType (enumeration of type string)",
+      "required": true,
+      "description": "The type of pin. Values are: AuthServer Resource"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MobSecurityCertPinConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"certificateHash\" type=\"xsd:string\"/>\n        <xsd:element name=\"domainName\" type=\"xsd:string\"/>\n        <xsd:element name=\"isEnabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isSubdomainIncluded\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"mobilePlatform\" minOccurs=\"0\" type=\"tns:MobileSecurityMobilePlatform\"/>\n        <xsd:element name=\"mobileSecurityAssignment\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"severityLevel\" type=\"tns:MobileSecurityPolicySeverityLevel\"/>\n        <xsd:element name=\"type\" type=\"tns:MobileSecurityCertPinType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"MobileSecurityCertPinType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AuthServer\"/>\n    <xsd:enumeration value=\"Resource\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"MobileSecurityMobilePlatform\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Android\"/>\n    <xsd:enumeration value=\"iOS\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"MobileSecurityPolicySeverityLevel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Warn\"/>\n    <xsd:enumeration value=\"Error\"/>\n    <xsd:enumeration value=\"Critical\"/>\n    <xsd:enumeration value=\"Info\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a MobSecurityCertPinConfig component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MobileSecurityCertPinConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <certificateHash>AaBbCcDdEeFfGg</certificateHash>\n    <domainName>login.salesforce.com</domainName>\n    <isEnabled>true</isEnabled>\n    <isProtected>false</isProtected>\n    <masterLabel>AuthenticationServerCertificatePinning</masterLabel>\n    <mobilePlatform>Android</mobilePlatform>\n    <mobileSecurityAssignment>MyMobileSecurityAssignment</mobileSecurityAssignment>\n    <severityLevel>info</severityLevel>\n    <type>AuthServer</type>\n</MobileSecurityCertPinConfig>"
+    }
+  ]
+}

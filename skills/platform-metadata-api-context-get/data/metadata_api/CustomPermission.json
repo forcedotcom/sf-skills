@@ -1,0 +1,65 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CustomPermission - Metadata API",
+  "description": "Represents a permission that grants access to a custom feature. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".customPermission",
+  "directory_location": "customPermissions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "connectedApp": {
+      "type": "string",
+      "description": "The name of the connected app that’s associated with this permission. Limit: 80 characters."
+    },
+    "description": {
+      "type": "string",
+      "description": "The custom permission description. Limit: 255 characters."
+    },
+    "isLicensed": {
+      "type": "boolean",
+      "description": "Read-only. Indicates whether the appropriate Salesforce license is required before accessing the permission (true) or not (false).",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "description": "The custom permission label. Limit: 80 characters.",
+      "required": true
+    },
+    "requiredPermission": {
+      "type": "CustomPermissionDependencyRequired[]",
+      "description": "Indicates which custom permissions are required by the parent custom permission. This field is available in API version 32.0 and later."
+    }
+  },
+  "sub_types": {
+    "CustomPermissionDependencyRequired": {
+      "customPermission": {
+        "type": "string",
+        "description": "The custom permission name.",
+        "required": true
+      },
+      "dependency": {
+        "type": "boolean",
+        "description": "Indicates whether this custom permission is required by the parent custom permission (true) or not (false).",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomPermission\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"connectedApp\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalClientApplication\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isLicensed\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"requiredPermission\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomPermissionDependencyRequired\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"CustomPermissionDependencyRequired\">\n  <xsd:sequence>\n    <xsd:element name=\"customPermission\" type=\"xsd:string\"/>\n    <xsd:element name=\"dependency\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CustomPermission component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomPermission xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <connectedApp>Acme</connectedApp>\n   <description>Read and edit access for Acme accounts.</description>\n   <label>Acme Account Full Access</label>\n   <requiredPermission>\n      <customPermission>Acme_Account_Read</customPermission>\n      <dependency>true</dependency>\n   </requiredPermission>\n</CustomPermission>"
+    }
+  ]
+}

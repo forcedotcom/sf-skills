@@ -1,0 +1,119 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExtlClntAppSamlConfigurablePolicies - Metadata API",
+  "description": "Represents SAML configuration policies for an external client app. Use this type to configure Salesforce as an identity provider for SAML single sign-on (SSO). In this type of SSO configuration, users log in to a third-party service provider, such as Google, using their Salesforce credentials.",
+  "file_information": ".ecaSamlPlcy",
+  "directory_location": "extlClntAppSamlConfigurablePolicies",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "acsUrl": {
+      "type": "string",
+      "required": true,
+      "description": "The assertion consumer service (ACS) URL from the third-party service provider. The ACS URL is the endpoint where the service provider receives SAML responses from Salesforce."
+    },
+    "certificate": {
+      "type": "string",
+      "description": "A security certificate that the third-party service provider uses to sign SAML requests. Include this field only if your service provider signs SAML requests and you also want to use a service provider-initiated SAML flow. If you include a certificate, Salesforce requires that all SAML requests from the service provider are signed. If you don't include a certificate, Salesforce accepts all SAML requests, whether or not they're signed."
+    },
+    "commaSeparatedPermissionSet": {
+      "type": "string",
+      "description": "A comma-separated list of permission set IDs that defines the user permissions required for an end user to use the SAML SSO flow. The permission sets that you specify here apply to the entire app, not just its SAML configuration."
+    },
+    "commaSeparatedProfile": {
+      "type": "string",
+      "description": "A comma-separated list of profile IDs that defines the profiles required for an end user to use the SAML SSO flow. Like permission sets, profiles define user permissions. The profiles that you specify here apply to the entire app, not just its SAML configuration. We recommend that you use permission sets to manage user permissions instead of profiles."
+    },
+    "customAttributes": {
+      "type": "ExtlClntAppSamlConfigurablePoliciesAttribute[]",
+      "description": "Custom attributes that you can use to send more information about the user in SAML responses. For example, send information about the user's country. The service provider can use the information to validate the user's identity."
+    },
+    "encryptionCertificate": {
+      "type": "string",
+      "description": "A certificate that's used to encrypt SAML assertions that Salesforce sends to the service provider. Use an X.509 certificate that's saved in your Certificate and Key Management settings. To get the certificate, work with a certificate provider. If you include an encryptionCertificate, make sure that your service provider is configured to decrypt SAML assertions."
+    },
+    "encryptionType": {
+      "type": "ExtlClntAppSamlEncryptType",
+      "description": "If you include an encryptionCertificate to encrypt SAML assertions, the encryptionType field specifies the encryption method. When the service provider receives SAML assertions from Salesforce, it detects this method and decrypts it. These values are valid. AES_128—Advanced Encryption Standard (AES) encryption algorithm with a 128-bit cryptographic key. AES_256—AES encryption algorithm with a 256-bit cryptographic key. For more information about AES encryption from the National Institute of Standards and Technology, see https://www.nist.gov/publications/advanced-encryption-standard-aes-0."
+    },
+    "entityUrl": {
+      "type": "string",
+      "required": true,
+      "description": "The entity ID from the third-party service provider. The entity ID is a globally unique ID that Salesforce uses to recognize the service provider."
+    },
+    "externalClientApplication": {
+      "type": "string",
+      "required": true,
+      "description": "The label for the parent ExternalClientApplication."
+    },
+    "issuer": {
+      "type": "string",
+      "description": "Specifies the URI from which Salesforce sends SAML responses. The service provider uses this value to confirm that the response came from Salesforce. If you don't include this field, Salesforce uses your My Domain by default. Include this field to specify a different value, such as an Experience Cloud site URL."
+    },
+    "label": {
+      "type": "string",
+      "description": "A name for your external client app SAML policies configuration."
+    },
+    "nameIdFormat": {
+      "type": "ExtlClntAppNameIdFormatType",
+      "description": "Specifies the format of the user's SSO identifier (dictated by the value of the subjectType field) in SAML messages. So that the service provider can recognize the user, the name ID format that Salesforce uses for SAML responses must match the format that the service provider uses. Get this value from your service provider. These values are valid. Unspecified (default)—No format. EmailAddress—The user's identifier is formatted as an email address. Persistent—The user's identifier is in an opaque format. Only Salesforce and the service provider can recognize it. The identifier doesn't change based on context. Transient—Like the Persistent identifier, the user's identifier is in an opaque format. But Transient identifiers are temporary values that can change."
+    },
+    "signingAlgorithmType": {
+      "type": "ExtlClntAppSamlSignAlgoType",
+      "description": "The signing algorithm that Salesforce uses to secure SAML messages. The signing algorithm generates a signature by hashing the private key that's stored in the certificate. Salesforce includes this signature in the SAML response—in both the response body and in the SAML assertion. When the service provider receives SAML responses, it validates the signature. Salesforce also applies this algorithm to single logout requests and responses. These values are valid. SHA1—Secure Hash Algorithm (SHA) 1 algorithm, which generates a 160-bit hash value. SHA256—SHA-256 algorithm,which generates a 256-bit hash value."
+    },
+    "singleLogoutBindingType": {
+      "type": "ExtlClntAppSamlBindingType",
+      "description": "The SAML HTTP binding type that the service provider uses when it initiates single logout. The binding type determines how the service provider transfers HTTP information to Salesforce. These values are valid. PostBinding–The service provider uses POST requests for single logout. RedirectBinding—The service provider sends single logout requests through the browser via GET requests."
+    },
+    "singleLogoutUrl": {
+      "type": "string",
+      "description": "The SAML single logout endpoint on the service provider. When Salesforce initiates single logout, it sends logout requests to this endpoint."
+    },
+    "startUrl": {
+      "type": "string",
+      "description": "A URL where users are directed after they authenticate. For example, direct users to a specific page in the service provider app. Deprecated. Use the startUrl field on the ExtlClntAppConfigurablePolicies metadata type instead."
+    },
+    "subjectCustomAttribute": {
+      "type": "string",
+      "description": "If the subjectType is CustomAttribute, specify which field you want to use to identify the user. Choose an existing field on the User object, or create a custom User field."
+    },
+    "subjectType": {
+      "type": "ExtlClntAppSamlSubjectType",
+      "description": "Specifies the user's SSO identifier. These values are valid. Username—The user's Salesforce username. FederationId—The user's federation ID, which maps to the FederationIdentifier—A field on the User object. The federation ID can be any value as long as both Salesforce and the service provider can recognize it. For example, get a value from the service provider and then specify it in Salesforce. UserId—The user's 15-character Salesforce user ID. CustomAttribute—An identifier that's taken from a custom field value. Specify the custom field in the subjectCustomAttribute field. PersistentId—An opaque identifier that only Salesforce and the service provider recognize."
+    }
+  },
+  "sub_types": {
+    "ExtlClntAppSamlConfigurablePoliciesAttribute": {
+      "formula": {
+        "type": "string",
+        "required": true,
+        "description": "A field that stores the user information that you want to send. Format the value as $<object name>.<field>.For example: $Organization.Country to indicate the Country field on the Organization object."
+      },
+      "key": {
+        "type": "string",
+        "required": true,
+        "description": "A unique name for the attribute to help you and the service provider recognize it in SAML responses."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ExtlClntAppNameIdFormatType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Unspecified\"/>\n    <xsd:enumeration value=\"EmailAddress\"/>\n    <xsd:enumeration value=\"Persistent\"/>\n    <xsd:enumeration value=\"Transient\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ExtlClntAppSamlBindingType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"RedirectBinding\"/>\n    <xsd:enumeration value=\"PostBinding\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ExtlClntAppSamlConfigurablePolicies\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"acsUrl\" type=\"xsd:string\"/>\n        <xsd:element name=\"certificate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"commaSeparatedPermissionSet\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"commaSeparatedProfile\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customAttributes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ExtlClntAppSamlConfigurablePoliciesAttribute\"/>\n        <xsd:element name=\"encryptionCertificate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"encryptionType\" minOccurs=\"0\" type=\"tns:ExtlClntAppSamlEncryptType\"/>\n        <xsd:element name=\"entityUrl\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalClientApplication\" type=\"xsd:string\"/>\n        <xsd:element name=\"issuer\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"nameIdFormat\" minOccurs=\"0\" type=\"tns:ExtlClntAppNameIdFormatType\"/>\n        <xsd:element name=\"signingAlgorithmType\" minOccurs=\"0\" type=\"tns:ExtlClntAppSamlSignAlgoType\"/>\n        <xsd:element name=\"singleLogoutBindingType\" minOccurs=\"0\" type=\"tns:ExtlClntAppSamlBindingType\"/>\n        <xsd:element name=\"singleLogoutUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"subjectCustomAttribute\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"subjectType\" minOccurs=\"0\" type=\"tns:ExtlClntAppSamlSubjectType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ExtlClntAppSamlConfigurablePoliciesAttribute\">\n  <xsd:sequence>\n    <xsd:element name=\"formula\" type=\"xsd:string\"/>\n    <xsd:element name=\"key\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ExtlClntAppSamlEncryptType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AES_128\"/>\n    <xsd:enumeration value=\"AES_256\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ExtlClntAppSamlSignAlgoType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"SHA1\"/>\n    <xsd:enumeration value=\"SHA256\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ExtlClntAppSamlSubjectType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Username\"/>\n    <xsd:enumeration value=\"FederationId\"/>\n    <xsd:enumeration value=\"UserId\"/>\n    <xsd:enumeration value=\"SpokeId\"/>\n    <xsd:enumeration value=\"CustomAttribute\"/>\n    <xsd:enumeration value=\"PersistentId\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ExtlClntAppSamlConfigurablePolicies component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ExtlClntAppSamlConfigurablePolicies xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <acsUrl>https://www.<serviceprovideracsurl>.com</acsUrl>\n    <entityUrl>https://www.<serviceproviderentityid>.com</entityUrl>\n    <externalClientApplication>mySamlEca</externalClientApplication>\n    <issuer>https://mydomainname.my.salesforce.com</issuer>\n    <label>myeca_samlpolicies</label>\n    <nameIdFormat>Unspecified</nameIdFormat>\n    <singleLogoutUrl>https://www.<serviceprovidersinglelogouturl>.com</singleLogoutUrl>\n    <singleLogoutBindingType>RedirectBinding</singleLogoutBindingType>\n    <subjectType>CustomAttribute</subjectType>\n    <subjectCustomAttribute>MyCustomField</subjectCustomAttribute>\n    <certificate>MIIDzDCCArQCCQCFaZKGsGqZ...</certificate>\n    <encryptionCertificate>MIIDzDCCArQCCQCFaZKGsGqZ...</encryptionCertificate>\n    <encryptionType>AES_128</encryptionType>\n    <signingAlgorithmType>SHA1</signingAlgorithmType>\n    <customAttributes>\n        <key>User Firstname</key>\n        <formula>$User.FirstName</formula>\n    </customAttributes>\n    <customAttributes>\n        <key>User Country</key>\n        <formula>$User.Country</formula>\n    </customAttributes>\n</ExtlClntAppSamlConfigurablePolicies>"
+    }
+  ]
+}

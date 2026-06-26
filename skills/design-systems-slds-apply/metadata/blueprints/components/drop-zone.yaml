@@ -1,0 +1,115 @@
+name: Drop Zone
+description: A component for screen building that provides a draggable drop target area where users can drop components or
+  elements. Indicates drop availability and provides visual feedback during drag operations.
+category: Complex Components
+slds_classes:
+  root: slds-drop-zone
+  elements:
+  - class: slds-drop-zone__label
+    description: Top label of the drop zone
+    purpose: Displays instructional text or title
+  - class: slds-drop-zone__label_container
+    description: Container for populated drop zone label
+    purpose: Wraps label content when zone contains items
+  - class: slds-drop-zone__label_button
+    description: Button within drop zone label
+    purpose: Interactive element in label area
+  - class: slds-drop-zone_drag__slot
+    description: Insertion point of drop zone
+    purpose: Target area where items are dropped
+  modifiers:
+  - class: slds-drop-zone_drag
+    description: Modifier indicating drop availability
+    purpose: Applied when component may be dropped in container
+  states: []
+variants:
+- name: Base
+  description: Standard drop zone for component placement
+  classes:
+  - slds-drop-zone
+  usage_context: Default drop zone for drag-and-drop interfaces
+  differences: Empty drop target ready to receive dragged items
+lightning_component:
+  name: ''
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component - implement with custom drag-and-drop JavaScript
+accessibility:
+  keyboard_support:
+  - Tab to focus on drop zone
+  - Enter or Space to activate alternative placement
+  - Arrow keys for keyboard-based positioning
+  screen_reader:
+  - Drop zone role and purpose announced
+  - Drag state changes announced
+  - Successful drop confirmed
+  aria_attributes:
+  - aria-label describing drop zone purpose
+  - aria-dropeffect indicating allowed operations
+  - aria-grabbed on draggable items
+  - role='region' or custom role for drop area
+usage_guidelines:
+  when_to_use:
+  - For screen or page builders
+  - When users need to arrange components visually
+  - For customizable dashboards or layouts
+  - In drag-and-drop interfaces
+  when_not_to_use:
+  - For simple file uploads (use file selector)
+  - When drag-and-drop adds unnecessary complexity
+  - For mobile-only experiences (touch drag can be difficult)
+  - When list reordering is sufficient
+  best_practices:
+  - Provide clear visual feedback during drag
+  - Show valid drop targets clearly
+  - Indicate when zone is ready to receive drops
+  - Provide alternative non-drag methods
+  - Handle touch interactions for mobile
+  - Show drop zone boundaries clearly
+  common_mistakes:
+  - Unclear drop target boundaries
+  - No visual feedback during drag
+  - Missing keyboard alternatives
+  - Poor mobile/touch support
+  - Not indicating valid vs invalid drops
+code_examples:
+- title: Basic Drop Zone
+  code: "<div class=\"slds-drop-zone\">\n  <span class=\"slds-drop-zone__label\">\n    Drop components here\n  </span>\n</div>\n"
+  description: Empty drop zone ready to receive components
+- title: Drop Zone in Drag State
+  code: "<div class=\"slds-drop-zone slds-drop-zone_drag\">\n  <span class=\"slds-drop-zone__label\">\n    Release to place\
+    \ component\n  </span>\n  <div class=\"slds-drop-zone_drag__slot\"></div>\n</div>\n"
+  description: Drop zone during active drag operation
+- title: Drop Zone with Content
+  code: "<div class=\"slds-drop-zone\">\n  <div class=\"slds-drop-zone__label_container\">\n    <button class=\"slds-button\
+    \ slds-drop-zone__label_button\">\n      Add Component\n    </button>\n  </div>\n  <div class=\"\">\n    <!-- Placed components\
+    \ appear here -->\n  </div>\n</div>\n"
+  description: Drop zone with placed content and add button
+styling_hooks: []
+dependencies:
+  css_files:
+  - drop-zone.css
+  javascript:
+  - Drag and drop event handlers
+  - Drop validation logic
+  - Visual feedback during drag
+  - Component placement logic
+  icons: []
+  other_components:
+  - button
+related_components:
+- name: File Selector
+  relationship: alternative
+  description: Alternative for file uploads
+- name: Builder Header
+  relationship: complementary
+  description: Often used together in builder interfaces
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/drop-zone/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-11'
+  author: SLDS Documentation Team
+  slds_version: 2.27.2
+  review_status: complete
+  source: official-slds
+  notes: Created from official SLDS documentation and design-system-internal source code

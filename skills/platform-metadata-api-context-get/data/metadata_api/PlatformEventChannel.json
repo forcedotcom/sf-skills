@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PlatformEventChannel - Metadata API",
+  "description": "Represents a channel that you can subscribe to in order to receive a stream of events. In API version 46.0 and earlier, it is the default standard channel for change data capture events. In API version 47.0 and later, it is a custom channel for change data capture events.",
+  "file_information": ".platformEventChannel",
+  "directory_location": "platformEventChannels",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "channelMembers": {
+      "type": "PlatformEventChannelSelectedEntity[]",
+      "description": "Removed. A list of event names of entities, including standard and custom objects, selected for Change Data Capture notifications. Note: This field is removed in API version 47.0 and later and is available only in API versions 45.0 and 46.0. In API version 47.0 and later, the channel members are each defined in a PlatformEventChannelMember component."
+    },
+    "channelType": {
+      "type": "PlatformEventChannelType (enumeration of type string)",
+      "description": "The channel type. Valid values are: data—Change Data Capture channel corresponding to the selected entities. event—A channel that contains platform events.",
+      "required": true
+    },
+    "eventType": {
+      "type": "PlatformEventChannelEventType (enumeration of type string)",
+      "description": "The type of events that the channel can hold. A channel can hold only one type of events. Use this field to optionally specify a specific type of events for a channel in combination with the channelType field. Valid values are: custom—The channel contains custom platform events. This value is valid with the channelType of event. data—The channel contains change data capture events. This value is valid with the channelType of data. monitoring—The channel contains Real-Time Event Monitoring events. This value is valid with the channelType of event. standard—Reserved for internal use. Available in API version 61.0 and later."
+    },
+    "label": {
+      "type": "string",
+      "description": "The channel label.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "PlatformEventChannelSelectedEntity": {
+      "selectedEntity": {
+        "type": "string",
+        "description": "The event name of an entity selected for Change Data Capture notifications. For example, for the Account standard object, the name is AccountChangeEvent, or for a custom object MyObject__c, the name is MyObject__ChangeEvent.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PlatformEventChannel\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"channelType\" type=\"tns:PlatformEventChannelType\"/>\n        <xsd:element name=\"eventType\" minOccurs=\"0\" type=\"tns:PlatformEventChannelEventType\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"PlatformEventChannelEventType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"custom\"/>\n    <xsd:enumeration value=\"standard\"/>\n    <xsd:enumeration value=\"monitoring\"/>\n    <xsd:enumeration value=\"data\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PlatformEventChannelType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"event\"/>\n    <xsd:enumeration value=\"data\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The PlatformEventChannel component contains the label of the custom channel and the channel type.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PlatformEventChannel xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <channelType>data</channelType>\n    <label>Custom Channel for Sales Events</label>\n</PlatformEventChannel>"
+    }
+  ]
+}

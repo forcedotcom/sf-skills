@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PardotSettings - Metadata API",
+  "description": "Represents Marketing Cloud Account Engagement settings in your Salesforce org. Account Engagement, formerly known as Pardot, is a B2B marketing automation solution that helps you create meaningful connections, generate more pipeline, and close more deals. Use these settings to configure how Account Engagement collects and displays data.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "cdpEnablementStatus": {
+      "type": "string",
+      "description": "The status of the enablement in Data 360 for the account engagement business unit."
+    },
+    "enableAeDataConnector": {
+      "type": "boolean",
+      "description": "Enable the Account Engagement Data 360 Connector for creating Account Engagement Data Streams."
+    },
+    "enableAIOptimizedSendTime": {
+      "type": "boolean",
+      "description": "Enable Einstein Send Time Optimization for sending Account Engagement emails."
+    },
+    "enableB2bmaAppEnabled": {
+      "type": "boolean",
+      "description": "Deprecated."
+    },
+    "enableEngagementHistoryDashboards": {
+      "type": "boolean",
+      "description": "Enable the Engagement History Dashboard and allow related Account Engagement data to be shared to campaign records in Salesforce by setting this value to true. The default value is false. If enableEnagementHistoryDashboards is disabled after being enabled, the Engagement History Dashboard is removed, but engagement data continues to be retained and updated."
+    },
+    "enableEnhancedProspectCustomFieldsSync": {
+      "type": "boolean",
+      "description": "Enable Object Sync to enhance with B2B Marketing Analytics or B2B Marketing Analytics Plus by setting this property to true. The default value is false. Available in API version 52.0 and later."
+    },
+    "enablePardotAppV1Enabled": {
+      "type": "boolean",
+      "description": "Enable the Account Engagement Lightning App by setting this property to true. The default value is false."
+    },
+    "enablePardotEnabled": {
+      "type": "boolean",
+      "description": "Deprecated."
+    },
+    "enablePardotObjectSync": {
+      "type": "boolean",
+      "description": "Deprecated."
+    },
+    "enableProspectActivityDataset": {
+      "type": "boolean",
+      "description": "Enable the Prospect and Activity Dataset for B2B Marketing Automation apps by setting this property to true. When enableProspectActivityDataset is true, the datasets take some time to populate. Depending on how much data and the type of licenses you have, enabling this preference can impact the account’s row limit for Analytics. If enableProspectActivityDataset is disabled after being enabled: The data that makes up the datasets is deleted. The Prospect and Activity Dataset in existing B2B Marketing Automation apps stops getting updates. The dataset isn’t available to add to new apps. When apps are reconfigured, the dataset is deleted. Requires that enableEnagementHistoryDashboards is set to true."
+    },
+    "PardotEngageFreqSetting": {
+      "type": "boolean",
+      "description": "Enable Einstein Engagement Frequency for sending Account Engagement emails."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"PardotSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableAIEinsteinEngageFreq\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAIOptimizedSendTime\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAeDataConnector\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableB2bmaAppEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEngagementHistoryDashboards\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEnhancedProspectCustomFieldsSync\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePardotAppV1Enabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePardotEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePardotObjectSync\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableProspectActivityDataset\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableUnifiedEngagementHistoryDashboards\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PardotSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PardotSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n<enablePardotEnabled>true</enablePardotEnabled>\n<enablePardotAppV1Enabled>true</enablePardotAppV1Enabled>\n<enableB2bmaAppEnabled>true</enableB2bmaAppEnabled>\n<enableEngagementHistoryDashboards>true</enableEngagementHistoryDashboards>\n<enableEnhancedProspectCustomFieldsSync>true</enableEnhancedProspectCustomFieldsSync>\n<enablePardotObjectSync>true</enablePardotObjectSync>\n<enableProspectActivityDataset>true</enableProspectActivityDataset>\n<enableAIOptimizedSendTime>true</enableAIOptimizedSendTime>\n</PardotSettings>"
+    }
+  ]
+}

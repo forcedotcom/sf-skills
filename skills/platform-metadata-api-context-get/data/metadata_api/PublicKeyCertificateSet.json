@@ -1,0 +1,65 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PublicKeyCertificateSet - Metadata API",
+  "description": "Represents a set of public certificate keys. On this entity we store a public certificates or JSON web keys.",
+  "file_information": ".PublicKeyCertificateSet",
+  "directory_location": "PublicKeyCertificateSet",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "A description of the public key certificate set."
+    },
+    "jwksEndPoint": {
+      "type": "string",
+      "description": "The URL of the HTTPS Server that returns the JWKS."
+    },
+    "jwtIssuer": {
+      "type": "string",
+      "description": "The user, organization, or service that issued the JSON web token. This value is case-sensitive."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label for the public key certificate set."
+    },
+    "publicKeyCertificateSetKeys": {
+      "type": "PublicKeyCertificateSetKey[]",
+      "description": "A set of public certificate keys associated with the public key certificate set."
+    },
+    "type": {
+      "type": "PublicKeyCertificateSetType (enumeration of type string)",
+      "required": true,
+      "description": "Determines how the server's public key set is retrieved. The keys are represented in JWK format. Values are: JWKS- Used to specify a certificate via the child Type PublicKeyCertificateSetKey. JWKS_URL- Used to specify a certificate via the jwksEndPoint field on this Type."
+    }
+  },
+  "sub_types": {
+    "PublicKeyCertificateSetKeys": {
+      "publicKeyCertificate": {
+        "type": "string",
+        "required": true,
+        "description": "The PublicKeyCertificate we want to reference."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PublicKeyCertificateSet\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"jwksEndPoint\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"jwtIssuer\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"publicKeyCertificateSetKeys\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PublicKeyCertificateSetKey\"/>\n        <xsd:element name=\"type\" type=\"tns:PublicKeyCertificateSetType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"PublicKeyCertificateSetKey\">\n  <xsd:sequence>\n    <xsd:element name=\"publicKeyCertificate\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"PublicKeyCertificateSetType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"JWKS\"/>\n    <xsd:enumeration value=\"JWKS_URL\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PublicKeyCertificateSet component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PublicKeyCertificateSet xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <masterLabel>pcks1</masterLabel>\n    <description>This is my description for a PublicKeyCertificateSet</description>\n    <type>JWKS</type>\n    <jwtIssuer>example.com</jwtIssuer>\n    <publicKeyCertificateSetKeys>\n            <publicKeyCertificate>pck1</publicKeyCertificate>\n    </publicKeyCertificateSetKeys>\n</PublicKeyCertificateSet>"
+    }
+  ]
+}

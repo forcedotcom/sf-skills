@@ -1,0 +1,205 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "FlowTest - Metadata API",
+  "description": "Represents the metadata associated with a flow test. Before you activate a record-triggered, autolaunched, or Data Cloud-triggered flow, you can test it to verify its expected results and identify flow run-time failures.",
+  "file_information": ".flowtest",
+  "directory_location": "flowtests",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The description of the flow test, such as what it does or how it works."
+    },
+    "flowApiName": {
+      "type": "string",
+      "required": true,
+      "description": "The API name of the flow associated with the flow test."
+    },
+    "flowTestDataSources": {
+      "type": "FlowTestDataSource[]",
+      "description": "An array of data sources for the flow test of a record-triggered flow or an autolaunched flow. This field is available in API version 66.0 and later."
+    },
+    "flowTestFlowVersions": {
+      "type": "FlowTestFlowVersion[]",
+      "description": "An array of flow versions that are associated with the flow test. This field is available in API version 66.0 and later."
+    },
+    "isolatedObjectExternalKeys": {
+      "type": "FlowTestIsolObjExtlKey[]",
+      "description": "An array of isolated objects and the key fields that uniquely identify each record for the flow test of a record-triggered flow or an autolaunched flow. This field is available in API version 66.0 and later."
+    },
+    "label": {
+      "type": "string",
+      "required": true,
+      "description": "The label of the flow test."
+    },
+    "testPoints": {
+      "type": "FlowTestPoint[]",
+      "description": "An array of test points for the test."
+    },
+    "testType": {
+      "type": "FlowTestType (enumeration of type string)",
+      "required": true,
+      "description": "Specifies whether the test contains assertions. This field is available in API version 66.0 and later.Possible values are: WithAssertion—The automated comparison of the actual flow outcome with the user-defined expected outcome that assertions define."
+    }
+  },
+  "sub_types": {
+    "FlowTestFlowVersion": {
+      "flowVersionNumber": {
+        "type": "string",
+        "description": "The version number of the flow version that’s associated with the flow test."
+      }
+    },
+    "FlowTestDataSource": {
+      "apexClass": {
+        "type": "string",
+        "required": true,
+        "description": "The Apex class associated with the data source when dataSourceType is ApexClass."
+      },
+      "dataSourceType": {
+        "type": "FlowTestDataSourceType (enumeration of type string)",
+        "required": true,
+        "description": "The data source type for the flow test.Possible value is ApexClass."
+      }
+    },
+    "FlowTestIsolObjExtlKey": {
+      "keyFields": {
+        "type": "FlowTestExtKeyField[]",
+        "description": "The key fields that identify unique records to test. Don’t use fields of the lookup data type."
+      },
+      "objectType": {
+        "type": "string",
+        "required": true,
+        "description": "The object type of the isolated data to test."
+      }
+    },
+    "FlowTestExtKeyField": {
+      "fieldName": {
+        "type": "string",
+        "required": true,
+        "description": "The field API name to identify the unique records to test."
+      }
+    },
+    "FlowTestPoint": {
+      "assertions": {
+        "type": "FlowTestAssertion[]",
+        "description": "An array of assertions for the test."
+      },
+      "elementApiName": {
+        "type": "string",
+        "required": true,
+        "description": "The element API names for the start of the flow and the end of the flow. Possible values are: Start Finish"
+      },
+      "isUseMockOuput": {
+        "description": "Reserved for future use."
+      },
+      "parameters": {
+        "type": "FlowTestParameter[]",
+        "description": "An array of parameters for the test."
+      }
+    },
+    "FlowTestAssertion": {
+      "conditions": {
+        "type": "FlowTestCondition[]",
+        "description": "An array of conditions for an assertion."
+      },
+      "errorMessage": {
+        "type": "string",
+        "description": "If the associated condition evaluates to false, this custom message appears in Flow Builder."
+      }
+    },
+    "FlowTestCondition": {
+      "leftValueReference": {
+        "type": "string",
+        "required": true,
+        "description": "The reference to the flow resource that the specified operator applies to."
+      },
+      "operator": {
+        "type": "FlowComparisonOperator (enumeration of type string)",
+        "required": true,
+        "description": "The flow test uses this value to evaluate the resource reference in the leftValueReference field.Possible values are: Contains EndsWith EqualTo GreaterThan GreaterThanOrEqualTo HasError—This value is available in API version 64.0 and later. In—This value is available in API version 56.0 and later. IsBlank—This value is available in API version 61.0 and later. IsChanged IsEmpty—This value is available in API version 61.0 and later. IsNull LessThan LessThanOrEqualTo NotEqualTo NotIn—This value is available in API version 56.0 and later. StartsWith WasSelected WasSet WasVisited"
+      },
+      "rightValue": {
+        "type": "FlowTestReferenceOrValue",
+        "description": "The value that the operator applies to the resource reference in the leftValueReference field."
+      }
+    },
+    "FlowTestReferenceOrValue": {
+      "booleanValue": {
+        "type": "boolean",
+        "description": "Specifies a boolean value."
+      },
+      "dateTimeValue": {
+        "type": "dateTime",
+        "description": "Specifies a dateTime value."
+      },
+      "dateValue": {
+        "type": "date",
+        "description": "Specifies a dateValue value."
+      },
+      "elementReference": {
+        "description": "Reserved for future use."
+      },
+      "jsonValue": {
+        "type": "string",
+        "description": "Specifies a JSON value for the isolated test data record. This field is available in API version 66.0 and later."
+      },
+      "numberValue": {
+        "type": "double",
+        "description": "Specifies a number value."
+      },
+      "sobjectValue": {
+        "type": "string",
+        "description": "Specifies an sObject value."
+      },
+      "stringValue": {
+        "type": "string",
+        "description": "Specifies a string value."
+      },
+      "timeValue": {
+        "type": "time",
+        "description": "Specifies a time value."
+      }
+    },
+    "FlowTestParameter": {
+      "leftValueReference": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the parameter. When type is InputTriggeringRecordInitial or InputTriggeringRecordUpdated, the value for leftValueReference must be $Record. When type is ScheduledPath, the value for leftValueReference must be ScheduledPathApiName."
+      },
+      "type": {
+        "type": "FlowTestParameterType (enumeration of type string)",
+        "required": true,
+        "description": "The type of parameter. Possible values are: InputTriggeringRecordInitial InputTriggeringRecordUpdated InputVariable—This value is available in API version 66.0 and later. ScheduledPath—Available in API version 56.0 and later."
+      },
+      "value": {
+        "type": "FlowTestReferenceOrValue",
+        "required": true,
+        "description": "The value that the operator applies to the resource reference in the leftValueReference field."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"FlowComparisonOperator\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"EqualTo\"/>\n    <xsd:enumeration value=\"NotEqualTo\"/>\n    <xsd:enumeration value=\"GreaterThan\"/>\n    <xsd:enumeration value=\"LessThan\"/>\n    <xsd:enumeration value=\"GreaterThanOrEqualTo\"/>\n    <xsd:enumeration value=\"LessThanOrEqualTo\"/>\n    <xsd:enumeration value=\"StartsWith\"/>\n    <xsd:enumeration value=\"EndsWith\"/>\n    <xsd:enumeration value=\"Contains\"/>\n    <xsd:enumeration value=\"IsNull\"/>\n    <xsd:enumeration value=\"IsChanged\"/>\n    <xsd:enumeration value=\"WasSet\"/>\n    <xsd:enumeration value=\"WasSelected\"/>\n    <xsd:enumeration value=\"WasVisited\"/>\n    <xsd:enumeration value=\"In\"/>\n    <xsd:enumeration value=\"NotIn\"/>\n    <xsd:enumeration value=\"IsBlank\"/>\n    <xsd:enumeration value=\"IsEmpty\"/>\n    <xsd:enumeration value=\"HasError\"/>\n    <xsd:enumeration value=\"HasNoValue\"/>\n    <xsd:enumeration value=\"HasValue\"/>\n    <xsd:enumeration value=\"IsAnniversaryOfToday\"/>\n    <xsd:enumeration value=\"IsNotAnniversaryOfToday\"/>\n    <xsd:enumeration value=\"IsToday\"/>\n    <xsd:enumeration value=\"IsTomorrow\"/>\n    <xsd:enumeration value=\"IsYesterday\"/>\n    <xsd:enumeration value=\"IsThisMonth\"/>\n    <xsd:enumeration value=\"IsNextMonth\"/>\n    <xsd:enumeration value=\"IsLastMonth\"/>\n    <xsd:enumeration value=\"ThisYear\"/>\n    <xsd:enumeration value=\"NextYear\"/>\n    <xsd:enumeration value=\"LastYear\"/>\n    <xsd:enumeration value=\"IsOn\"/>\n    <xsd:enumeration value=\"IsBefore\"/>\n    <xsd:enumeration value=\"IsAfter\"/>\n    <xsd:enumeration value=\"GreaterThanLastNumberOfDays\"/>\n    <xsd:enumeration value=\"LastNumberOfDays\"/>\n    <xsd:enumeration value=\"NextNumberOfDays\"/>\n    <xsd:enumeration value=\"LastNumberOfMonths\"/>\n    <xsd:enumeration value=\"NextNumberOfMonths\"/>\n    <xsd:enumeration value=\"LastNumberOfYears\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FlowTest\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"doesCommitChanges\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesSkipStartConditions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesTestWaitElement\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"flowApiName\" type=\"xsd:string\"/>\n        <xsd:element name=\"flowTestDataSources\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowTestDataSource\"/>\n        <xsd:element name=\"flowTestFlowVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowTestFlowVersion\"/>\n        <xsd:element name=\"isSubflowUseLatestFlowVer\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isolatedObjectExternalKeys\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowTestIsolObjExtlKey\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"runTestAsUser\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"testPoints\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowTestPoint\"/>\n        <xsd:element name=\"testType\" minOccurs=\"0\" type=\"tns:FlowTestType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"FlowTestAssertion\">\n  <xsd:sequence>\n    <xsd:element name=\"conditions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowTestCondition\"/>\n    <xsd:element name=\"errorMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowTestCondition\">\n  <xsd:sequence>\n    <xsd:element name=\"leftValueReference\" type=\"xsd:string\"/>\n    <xsd:element name=\"operator\" type=\"tns:FlowComparisonOperator\"/>\n    <xsd:element name=\"rightValue\" minOccurs=\"0\" type=\"tns:FlowTestReferenceOrValue\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowTestDataSource\">\n  <xsd:sequence>\n    <xsd:element name=\"apexClass\" type=\"xsd:string\"/>\n    <xsd:element name=\"dataSourceType\" type=\"tns:FlowTestDataSourceType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FlowTestDataSourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ApexClass\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FlowTestExtKeyField\">\n  <xsd:sequence>\n    <xsd:element name=\"fieldName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowTestFlowVersion\">\n  <xsd:sequence>\n    <xsd:element name=\"flowVersionNumber\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowTestIsolObjExtlKey\">\n  <xsd:sequence>\n    <xsd:element name=\"keyFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowTestExtKeyField\"/>\n    <xsd:element name=\"objectType\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowTestParameter\">\n  <xsd:sequence>\n    <xsd:element name=\"leftValueReference\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:FlowTestParameterType\"/>\n    <xsd:element name=\"value\" type=\"tns:FlowTestReferenceOrValue\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FlowTestParameterType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"InputTriggeringRecordInitial\"/>\n    <xsd:enumeration value=\"InputTriggeringRecordUpdated\"/>\n    <xsd:enumeration value=\"ScheduledPath\"/>\n    <xsd:enumeration value=\"InputVariable\"/>\n    <xsd:enumeration value=\"MockElementOutput\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FlowTestPoint\">\n  <xsd:sequence>\n    <xsd:element name=\"assertions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowTestAssertion\"/>\n    <xsd:element name=\"elementApiName\" type=\"xsd:string\"/>\n    <xsd:element name=\"isUseMockOutput\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"parameters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowTestParameter\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowTestReferenceOrValue\">\n  <xsd:sequence>\n    <xsd:element name=\"booleanValue\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n    <xsd:element name=\"dateTimeValue\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n    <xsd:element name=\"dateValue\" minOccurs=\"0\" type=\"xsd:date\"/>\n    <xsd:element name=\"elementReference\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n    <xsd:element name=\"jsonValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"numberValue\" minOccurs=\"0\" type=\"xsd:double\" nillable=\"true\"/>\n    <xsd:element name=\"sobjectValue\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n    <xsd:element name=\"stringValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"timeValue\" minOccurs=\"0\" type=\"xsd:time\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FlowTestType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"WithAssertion\"/>\n    <xsd:enumeration value=\"WithoutAssertion\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a FlowTest component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<FlowTest xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <flowApiName>Example_Test</flowApiName>\n    <label>Test Two</label>\n    <testPoints>\n        <elementApiName>Start</elementApiName>\n        <parameters>\n            <leftValueReference>$Record</leftValueReference>\n            <type>InputTriggeringRecordInitial</type>\n            <value>\n                <sobjectValue>{&quot;AnnualRevenue&quot;:100000,&quot;BillingCity&quot;:&quot;New York&quot;}}</sobjectValue>\n            </value>\n        </parameters>\n        <parameters>\n            <leftValueReference>ScheduledPathApiName</leftValueReference>\n            <type>ScheduledPath</type>\n            <value>Every_Monday</value>\n        </parameters>\n        <parameters>\n            <leftValueReference>$Record</leftValueReference>\n            <type>InputTriggeringRecordUpdated</type>\n            <value>\n                <sobjectValue>{&quot;AnnualRevenue&quot;:100000,&quot;BillingCity&quot;:&quot;New York&quot;}</sobjectValue>\n            </value>\n        </parameters>\n    </testPoints>\n    <testPoints>\n        <assertions>\n            <conditions>\n                <leftValueReference>$Record.Industry</leftValueReference>\n                <operator>EqualTo</operator>\n                <rightValue>\n                    <stringValue>Other</stringValue>\n                </rightValue>\n            </conditions>\n            <errorMessage>Industry was not set.</errorMessage>\n        </assertions>\n        <elementApiName>Finish</elementApiName>\n    </testPoints>\n</FlowTest>"
+    },
+    {
+      "description": "For isolated test data sample:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<FlowTest xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <flowApiName>Example_Test</flowApiName>\n    <label>Test Two</label>\n    <flowTestDataSources>\n        <apexClass>FlowTestDataFactory</apexClass>\n        <dataSourceType>ApexClass</dataSourceType>\n    </flowTestDataSources>\n    <flowTestFlowVersions>\n        <flowVersionNumber>1</flowVersionNumber>\n    </flowTestFlowVersions>   \n    <isolatedObjectExternalKeys>\n        <keyFields>\n            <fieldName>Phone</fieldName>\n        </keyFields>\n        <objectType>Account</objectType>\n    </isolatedObjectExternalKeys>\n    <testPoints>\n        <elementApiName>Start</elementApiName>                  \n        <parameters>\n            <leftValueReference>Accounts</leftValueReference>\n            <type>InputVariable</type>\n            <value>\n                <jsonValue>{&quot;fields&quot;:{&quot;Phone&quot;:&quot;4155551212&quot;},&quot;attributes&quot;:{&quot;type&quot;:&quot;Account&quot;}}</jsonValue>\n            </value>\n        </parameters>\n    </testPoints>\n    <testPoints>\n        <assertions>\n            <conditions>\n                <leftValueReference>Accounts.Phone</leftValueReference>\n                <operator>EqualTo</operator>\n                <rightValue>\n                    <stringValue>4155551212</stringValue>\n                </rightValue>\n            </conditions>         \n            <errorMessage>Account not found.</errorMessage>\n        </assertions>\n        <elementApiName>Finish</elementApiName>\n    </testPoints>\n    <testType>WithAssertion</testType>\n</FlowTest>"
+    }
+  ]
+}

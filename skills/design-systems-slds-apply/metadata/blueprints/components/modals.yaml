@@ -1,0 +1,152 @@
+name: "Modals"
+description: "Dialog overlays that display content above the main interface, requiring user interaction to continue with the underlying workflow."
+category: "Overlay"
+slds_classes:
+  root: "slds-modal"
+  elements:
+    - class: "slds-modal__container"
+      description: "Container for modal content"
+      purpose: "Centers and constrains modal dialog"
+    - class: "slds-modal__header"
+      description: "Header section of the modal"
+      purpose: "Contains title and close action"
+    - class: "slds-modal__content"
+      description: "Main content area of the modal"
+      purpose: "Contains the primary modal content"
+    - class: "slds-modal__footer"
+      description: "Footer section of the modal"
+      purpose: "Contains action buttons and controls"
+    - class: "slds-backdrop"
+      description: "Background overlay"
+      purpose: "Dims background and captures clicks"
+  modifiers:
+    - class: "slds-modal_small"
+      description: "Small modal size"
+      usage: "For simple confirmations or minimal content"
+    - class: "slds-modal_medium"
+      description: "Medium modal size (default)"
+      usage: "Standard modal size for most use cases"
+    - class: "slds-modal_large"
+      description: "Large modal size"
+      usage: "For complex forms or detailed content"
+    - class: "slds-modal_full"
+      description: "Full-screen modal"
+      usage: "For complex workflows or mobile experiences"
+    - class: "slds-fade-in-open"
+      description: "Animation for opening modal"
+      usage: "Smooth fade-in transition"
+  states:
+    - class: "slds-backdrop_open"
+      description: "Open state for backdrop"
+      trigger: "When modal is visible"
+variants:
+  - name: "Base"
+    description: "Standard modal dialog"
+    classes:
+      - "slds-modal"
+    usage_context: "Default modal implementation"
+    differences: "Centered dialog with header, content, and footer"
+lightning_component:
+  name: "Various (lightning-modal-*)"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-modal-header"
+  mapping_notes: "Mapped through lightning-modal-header, lightning-modal-body, lightning-modal-footer components"
+accessibility:
+  keyboard_support:
+    - "Tab to cycle through interactive elements within modal"
+    - "Escape to close modal"
+    - "Focus trapped within modal while open"
+    - "Focus returned to trigger element on close"
+  screen_reader:
+    - "Modal purpose announced when opened"
+    - "Content structure conveyed through proper markup"
+    - "Close action clearly identified"
+  aria_attributes:
+    - "role='dialog' for modal container"
+    - "aria-labelledby pointing to modal title"
+    - "aria-describedby for modal content when appropriate"
+    - "aria-modal='true' to indicate modal state"
+    - "aria-hidden='true' on background content"
+usage_guidelines:
+  when_to_use:
+    - "For critical information that requires user attention"
+    - "For complex forms or workflows"
+    - "When you need to interrupt the current workflow"
+    - "For confirmations of destructive actions"
+  when_not_to_use:
+    - "For simple notifications (use toast instead)"
+    - "For non-critical information"
+    - "When users need to reference background content"
+    - "For progressive enhancement (use inline expansion)"
+  best_practices:
+    - "Provide clear modal title and purpose"
+    - "Include obvious way to close or cancel"
+    - "Keep modal content focused and concise"
+    - "Use appropriate modal size for content"
+    - "Implement proper focus management"
+    - "Avoid stacking multiple modals"
+  common_mistakes:
+    - "Making modals too large or complex"
+    - "Poor focus management implementation"
+    - "Missing or unclear close options"
+    - "Overusing modals for non-critical content"
+code_examples:
+  - title: "Basic Modal"
+    code: |
+      <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+              <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                  <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                  </svg>
+                  <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Modal Header</h2>
+              </header>
+              <div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-1">
+                <p>Modal body content goes here...</p>
+              </div>
+              <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral">Cancel</button>
+                <button class="slds-button slds-button_brand">Save</button>
+              </footer>
+            </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+styling_hooks:
+  - name: "--slds-c-modal-color-background"
+    description: "Background color for modal"
+    category: "color"
+  - name: "--slds-c-modal-radius-border"
+    description: "Border radius for modal"
+    category: "border"
+dependencies:
+  css_files:
+    - "modal.css"
+    - "backdrop.css"
+    - "button.css"
+  javascript:
+    - "modal.js"
+  icons:
+    - "utility-sprite.svg"
+  other_components:
+    - "button"
+    - "button-icon"
+    - "backdrop"
+related_components:
+  - name: "Prompt"
+    relationship: "variant"
+    description: "Simplified modal for confirmations"
+  - name: "Popovers"
+    relationship: "alternative"
+    description: "Alternative overlay for contextual content"
+  - name: "Toast"
+    relationship: "alternative"
+    description: "Alternative for simple notifications"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/modals/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

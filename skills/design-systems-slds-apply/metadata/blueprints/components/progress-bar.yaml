@@ -1,0 +1,110 @@
+name: "Progress Bar"
+description: "A linear indicator that shows the completion status of a task or process, displaying progress as a filled portion of a horizontal bar."
+category: "Feedback"
+slds_classes:
+  root: "slds-progress-bar"
+  elements:
+    - class: "slds-progress-bar__value"
+      description: "The filled portion of the progress bar"
+      purpose: "Visual indicator of completion percentage"
+  modifiers:
+    - class: "slds-progress-bar_x-small"
+      description: "Extra small progress bar height"
+      usage: "Compact progress indicator"
+    - class: "slds-progress-bar_small"
+      description: "Small progress bar height"
+      usage: "Smaller progress indicator"
+    - class: "slds-progress-bar_medium"
+      description: "Medium progress bar height (default)"
+      usage: "Standard progress bar size"
+    - class: "slds-progress-bar_large"
+      description: "Large progress bar height"
+      usage: "Prominent progress indicator"
+    - class: "slds-progress-bar_circular"
+      description: "Circular progress bar variant"
+      usage: "Alternative circular progress visualization"
+  states: []
+variants:
+  - name: "Base"
+    description: "Standard horizontal progress bar"
+    classes:
+      - "slds-progress-bar"
+    usage_context: "Default progress visualization for linear tasks"
+    differences: "Horizontal bar with filled progress indicator"
+lightning_component:
+  name: "lightning-progress-bar"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-progress-bar"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS progress bar blueprint"
+accessibility:
+  keyboard_support:
+    - "No specific keyboard interactions required"
+  screen_reader:
+    - "Progress value announced as percentage"
+    - "Progress updates communicated to assistive technology"
+    - "Progress bar purpose described through labeling"
+  aria_attributes:
+    - "role='progressbar' for progress semantic"
+    - "aria-valuenow for current progress value"
+    - "aria-valuemin='0' for minimum value"
+    - "aria-valuemax='100' for maximum value"
+    - "aria-label describing the progress task"
+usage_guidelines:
+  when_to_use:
+    - "To show completion progress of tasks"
+    - "For file uploads or downloads"
+    - "During multi-step processes"
+    - "When users need to understand progress status"
+  when_not_to_use:
+    - "For indeterminate loading (use spinner instead)"
+    - "When progress cannot be measured"
+    - "For instant operations"
+  best_practices:
+    - "Show actual progress percentage when possible"
+    - "Update progress smoothly and frequently"
+    - "Provide context about what's progressing"
+    - "Use appropriate size for the context"
+    - "Include text labels for clarity"
+  common_mistakes:
+    - "Not updating progress frequently enough"
+    - "Using progress bars for indeterminate states"
+    - "Poor labeling of what's being tracked"
+    - "Inconsistent progress reporting"
+code_examples:
+  - title: "Basic Progress Bar"
+    code: |
+      <div class="slds-progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" aria-label="Progress: 25%">
+            <span class="slds-progress-bar__value" style="width: 25%;">
+              <span class="slds-assistive-text">Progress: 25%</span>
+            </span>
+            </div>
+  - title: "Large Progress Bar"
+    code: |
+      <div class="slds-progress-bar slds-progress-bar_large" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" aria-label="Upload progress: 75%">
+            <span class="slds-progress-bar__value" style="width: 75%;">
+              <span class="slds-assistive-text">Upload progress: 75%</span>
+            </span>
+            </div>
+styling_hooks: []
+dependencies:
+  css_files:
+    - "progress-bar.css"
+  javascript: []
+  icons: []
+  other_components: []
+related_components:
+  - name: "Progress Ring"
+    relationship: "alternative"
+    description: "Circular alternative for progress visualization"
+  - name: "Progress Indicator"
+    relationship: "similar"
+    description: "Step-based progress for multi-step processes"
+  - name: "Spinner"
+    relationship: "alternative"
+    description: "Alternative for indeterminate loading states"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/progress-bar/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

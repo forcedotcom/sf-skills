@@ -1,0 +1,120 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExtlClntAppOauthSettings - Metadata API",
+  "description": "Represents the settings configuration for the external client app’s OAuth plugin.",
+  "file_information": ".ecaOauth",
+  "directory_location": "extlClntAppOauthSettings",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "areAttributesIncludedInAssetToken": {
+      "type": "boolean",
+      "description": "Indicates whether custom attributes associated with the external client app are included in the JSON Web Token (JWT) payload of an asset token issued as a result of the asset token flow. The default value is false.Available in API version 61.0 and later."
+    },
+    "areCustomPermsIncludedInAssetToken": {
+      "type": "boolean",
+      "description": "Indicates whether custom permissions associated with the external client app are included in the JWT payload of an asset token issued as a result of the asset token flow. The default value is false.Available in API version 61.0 and later."
+    },
+    "assetTokenAudiences": {
+      "type": "string",
+      "description": "Required for the OAuth asset token flow. The audience (aud) claim in the JWT payload of an asset token issued by the external client app. This claim identifies who the asset token is intended for. The value must be an array of case-sensitive strings, each containing a StringOrURI value. Specify an audience for each intended consumer of the asset token.Available in API version 61.0 and later.",
+      "required": true
+    },
+    "assetTokenSigningCertificate": {
+      "type": "string",
+      "description": "Required for the asset token flow. The ID of the self-signed certificate used to sign asset tokens issued by the external client app. The certificate size is limited to 4 KB. If your certificate is too large, try using a DER-encoded file to reduce the size.Available in API version 61.0 and later.",
+      "required": true
+    },
+    "assetTokenValidity": {
+      "type": "int",
+      "description": "Required for the asset token flow. The period of time for which the asset token is valid after it’s issued, expressed as the number of seconds from 1970-01-01T0:0:0Z measured in UTC. The validity period must be within 3 minutes of the expiration time of the assertion.Available in API version 61.0 and later.",
+      "required": true
+    },
+    "clientAssertionCertificate": {
+      "type": "string",
+      "description": "A certificate that's used to sign a client attestation JSON Web Token (JWT), which is required for requests to the OAuth 2.0 authorization challenge endpoint for headless identity flows for first-party apps. To confirm that the app that sent the request is your first-party app, Salesforce validates the client attestation JWT against this certificate."
+    },
+    "commaSeparatedOauthScopes": {
+      "type": "string",
+      "description": "OAuth scopes for the external client app, written as a comma-separated list. Basic—Allows access to your identity URL service (the same behavior as deploying Address, Email, Phone, and Profile). Api—Allows access to the logged-in user's account over the APIs. Web—Allows use of the access_token on the web. This usage also includes visualforce, allowing access to Visualforce pages. Full—Allows access to all data accessible by the logged-in user. Chatter—Allows access to only the Connect REST API resources. CustomApplications—Provides access to custom applications, such as those using Visualforce. RefreshToken—Allows a refresh token to be returned if you’re eligible to receive one (the same behavior as deploying OfflineAccess). OpenID—Allows access to the logged-in user's unique identifier for OpenID Connect apps. Profile—Allows access to the logged-in user's profile (the same behavior as deploying Basic). Email—Allows access to the logged-in user's email address (the same behavior as deploying Basic). Address—Allows access to the logged-in user's street address (the same behavior as deploying Basic). Phone—Allows access to the logged-in user's phone number value (the same behavior as deploying Basic). OfflineAccess—Allows the app to interact with the user's data while the user is offline and get a refresh token (the same behavior as deploying RefreshToken). CustomPermissions—Allows access to the custom permissions in an organization associated with the external client app and shows whether the current user has each permission enabled. Wave—Allows access to the Analytics REST API resources. Eclair—Allows access to the Analytics REST API Charts Geodata resource. Pardot—Allows access to Pardot API services on behalf of the user. The full extent of accessible services is managed by the Pardot account. Lightning—Allows hybrid apps to directly obtain Lightning child sessions through the OAuth 2.0 hybrid app token flow and hybrid app refresh token flow. Content—Allows hybrid apps to directly obtain content child sessions through the OAuth 2.0 hybrid app token flow and hybrid app refresh token flow. CDPIngest—Allows access to Data Cloud ingest API services. Customers use these API services to upload and maintain external datasets in the Data 360. CDPProfile—Allows access to Data 360 profile. CDPQuery—Allows access to Data 360 metadata and query data. Chatbot—Allows access to Einstein Bot API services. CDPSegment—Allows access to Data 360 segments. CDPIdentityResolution—Allows access to Data 360 identity resolution. CDPCalculatedInsight—Allows access to Data 360 calculated insights. SFApiPlatform—Allows access to the Salesforce API Platform. Interaction—Allows access to Interaction Service API. EinsteinGPT—Allows access to Einstein Generative AI features in an org. PwdlessLogin—Allows access to Headless Passwordless Login API. Assign to an internal integration user to get an access token for authenticated requests to this API. ForgotPassword—Allows access to Headless Forgot Password API. Assign to an internal integration user to get an access token for authenticated requests to this API. UserRegistration—Allows access to Headless Registration API. Assign to an internal integration user to get an access token for authenticated requests to this API. MCP—Allows access to Model Context Protocol (MCP). SCRT—Allows access to Service Cloud Real-Time features."
+    },
+    "customAttributes": {
+      "type": "ExtlClntAppOauthSettingsAttribute[]",
+      "description": "Unique attributes to be included as developer defaults. The maximum number accepted is 128. Each custom attribute must have a unique key and use an available field."
+    },
+    "externalClientApplication": {
+      "type": "string",
+      "required": true,
+      "description": "The external client app associated with this OAuth plugin."
+    },
+    "isFirstPartyAppEnabled": {
+      "type": "boolean",
+      "description": "Determines whether a first-party app can send requests to the OAuth 2.0 authorization challenge endpoint on this Experience Cloud site. This endpoint support headless identity flows using the OAuth 2.0 for First-Party Applications draft protocol."
+    },
+    "label": {
+      "type": "string",
+      "description": "Label for the external client app."
+    },
+    "oauthLink": {
+      "type": "string",
+      "description": "An auto-generated value that combines the org ID and the OAuth Consumer ID."
+    },
+    "singleLogoutUrl": {
+      "type": "string",
+      "description": "URL where Salesforce sends a logout request when users log out of Salesforce."
+    },
+    "trustedIpRanges": {
+      "type": "ExtlClntAppOauthIpRange[]",
+      "description": "Specifies the ranges of IP addresses that can access the app without requiring the user to authenticate with the external client app. The maximum number of IP ranges is 128."
+    }
+  },
+  "sub_types": {
+    "ExtlClntAppOauthSettingsAttribute": {
+      "formula": {
+        "type": "string",
+        "required": true,
+        "description": "The existing field that includes the desired information. For example, Organization.Country."
+      },
+      "key": {
+        "type": "string",
+        "required": true,
+        "description": "A unique name for the attribute. For example, country."
+      }
+    },
+    "ExtlClntAppOauthIpRange": {
+      "description": {
+        "type": "string",
+        "description": "Identifies the purpose of the range, such as which part of a network corresponds to this range."
+      },
+      "endIpAddress": {
+        "type": "string",
+        "required": true,
+        "description": "Last address in the IP range, inclusive. Required with start address."
+      },
+      "startIpAddress": {
+        "type": "string",
+        "required": true,
+        "description": "First address in the IP range, inclusive. Required with end address."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ExtlClntAppOauthIpRange\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"endIpAddress\" type=\"xsd:string\"/>\n    <xsd:element name=\"startIpAddress\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ExtlClntAppOauthSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"areAttributesIncludedInAssetToken\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"areCustomPermsIncludedInAssetToken\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"assetTokenAudiences\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"assetTokenSigningCertificate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"assetTokenValidity\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"clientAssertionCertificate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"commaSeparatedCustomScopes\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"commaSeparatedOauthScopes\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customAttributes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ExtlClntAppOauthSettingsAttribute\"/>\n        <xsd:element name=\"externalClientApplication\" type=\"xsd:string\"/>\n        <xsd:element name=\"isFirstPartyAppEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"oauthLink\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"singleLogoutUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"trustedIpRanges\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ExtlClntAppOauthIpRange\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ExtlClntAppOauthSettingsAttribute\">\n  <xsd:sequence>\n    <xsd:element name=\"formula\" type=\"xsd:string\"/>\n    <xsd:element name=\"key\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ExtlClntAppOauthSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ExtlClntAppOauthSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <externalClientApplication>myeca</externalClientApplication>\n    <label>My Oauth Settings</label>\n    <trustedIpRanges>\n        <startIpAddress>10.55.2.0</startIpAddress>\n        <endIpAddress>10.55.2.255</endIpAddress>\n        <description>Building 6</description>\n    </trustedIpRanges>\n    <trustedIpRanges>\n        <startIpAddress>10.55.12.0</startIpAddress>\n        <endIpAddress>10.55.12.255</endIpAddress>\n    </trustedIpRanges>\n    <customAttributes>\n        <key>userattribute</key>\n        <formula>User.Country</formula>\n    </customAttributes>\n    <commaSeparatedOauthScopes>Basic, Web</commaSeparatedOauthScopes>\n</ExtlClntAppOauthSettings>"
+    }
+  ]
+}

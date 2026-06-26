@@ -1,0 +1,47 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "FeatureParameterDate - Metadata API",
+  "description": "Represents a date feature parameter in the Feature Management App (FMA). Feature parameters let you drive app behavior and track activation metrics in subscriber orgs that install your package. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".featureParameterDate",
+  "directory_location": "featureParameters",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "dataFlowDirection": {
+      "type": "FeatureParameterDataFlowDirection",
+      "description": "After a package containing the components is installed, indicates whether the feature parameter’s value is editable in your License Management Org (LMO) and read-only in your customer’s org or the other way around."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The feature parameter name that appears in the user interface."
+    },
+    "value": {
+      "type": "date",
+      "description": "The default value for this feature parameter. You can reference this value in your code, just like you reference other values in a subscriber’s org."
+    }
+  },
+  "sub_types": {
+    "FeatureParameterDataFlowDirection": {
+      "FeatureParameterDataFlowDirection": {
+        "type": "string",
+        "description": "After a package containing the components is installed, indicates whether the feature parameter’s value is editable in your License Management Org (LMO) and read-only in your customer’s org or the other way around. LmoToSubscriber SubscriberToLmo"
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a FeatureParameterDate component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<FeatureParameterDate xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <dataflowDirection>SubscriberToLmo</dataflowDirection>\n    <masterLabel>Activation Date</masterLabel>\n    <value>2017-10-23</value>\n</FeatureParameterDate>"
+    }
+  ]
+}

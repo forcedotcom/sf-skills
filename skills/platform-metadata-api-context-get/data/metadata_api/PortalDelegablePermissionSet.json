@@ -1,0 +1,48 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PortalDelegablePermissionSet - Metadata API",
+  "description": "Represents the org-level permission sets that can be assigned to a particular profile for external users or shoppers in a store after enabling the Delegable Administration perm.",
+  "file_information": ".portaldelegablepermissionset",
+  "directory_location": "portaldelegablepermissionsets",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label for the service that appears to users."
+    },
+    "permissionSet": {
+      "type": "string",
+      "required": true,
+      "description": "Foreign key to the permissionSet entity."
+    },
+    "profile": {
+      "type": "string",
+      "required": true,
+      "description": "Foreign key to the profile entity."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PortalDelegablePermissionSet\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"permissionSet\" type=\"xsd:string\"/>\n        <xsd:element name=\"profile\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is the definition of the PortalDelegablePermissionSet entity.",
+      "code": "<xsd:complexType name=\"PortalDelegablePermissionSet\">\n    <xsd:complexContent>\n     <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n       <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n       <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n       <xsd:element name=\"permissionSet\" type=\"xsd:string\"/>\n       <xsd:element name=\"profile\" type=\"xsd:string\"/>\n      </xsd:sequence>\n     </xsd:extension>\n    </xsd:complexContent>\n   </xsd:complexType>"
+    }
+  ]
+}

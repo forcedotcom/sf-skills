@@ -1,0 +1,97 @@
+name: Scoped Tabs
+description: A tabbed interface that provides scoped navigation within a specific context or container, allowing users to
+  switch between related content areas.
+category: Navigation
+slds_classes:
+  root: ''
+  elements: []
+  modifiers: []
+  states:
+  - class: slds-is-active
+    description: Active tab state
+    trigger: Applied to the currently selected tab
+  - class: slds-has-focus
+    description: Focused tab state
+    trigger: Applied when tab receives keyboard focus
+variants:
+- name: Base
+  description: Standard scoped tabs with horizontal navigation
+  classes: []
+  usage_context: Default implementation for scoped content switching
+  differences: Horizontal tab navigation with scoped styling
+lightning_component:
+  name: lightning-tabset
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-tabset
+  mapping_notes: Maps to lightning-tabset with variant='scoped' - provides scoped tab functionality
+accessibility:
+  keyboard_support:
+  - Tab to focus tab navigation
+  - Arrow keys to navigate between tabs
+  - Enter/Space to activate tabs
+  - Tab to move to tab panel content
+  screen_reader:
+  - Tab list structure announced
+  - Active tab clearly identified
+  - Tab panel content associated with tab
+  aria_attributes:
+  - role='tablist' for tab navigation container
+  - role='tab' for individual tab buttons
+  - role='tabpanel' for content areas
+  - aria-selected for active tab state
+  - aria-controls linking tabs to panels
+  - aria-labelledby linking panels to tabs
+usage_guidelines:
+  when_to_use:
+  - For scoped content organization within a container
+  - When content areas are related but distinct
+  - To provide contextual navigation within a section
+  - For secondary navigation within a page
+  when_not_to_use:
+  - For primary page navigation (use regular tabs)
+  - When content areas are unrelated
+  - For single content areas
+  best_practices:
+  - Keep tab labels concise and descriptive
+  - Limit number of tabs to avoid overflow
+  - Ensure tab content is related and contextual
+  - Provide clear visual indication of active tab
+  - Handle overflow gracefully with scrolling or menus
+  common_mistakes:
+  - Using too many tabs causing overflow issues
+  - Making tab labels unclear or ambiguous
+  - Not providing clear active state indication
+  - Using scoped tabs for unrelated content
+code_examples:
+- title: Basic Scoped Tabs
+  description: Scoped tabs with overflow handling for many tabs
+  code: "<div class=\"\">\n      <div class=\"\" role=\"tablist\">\n        <button class=\"slds-is-active\" role=\"tab\"\
+    \ aria-selected=\"true\">\n          Active Tab\n        </button>\n        <button class=\"\" role=\"tab\" aria-selected=\"\
+    false\">\n          Tab Two\n        </button>\n        <button class=\"\" role=\"tab\" aria-selected=\"false\">\n   \
+    \       Tab Three\n        </button>\n        <button class=\"\" role=\"tab\" aria-selected=\"false\">\n          Tab\
+    \ Four\n        </button>\n      </div>\n      </div>\n"
+dependencies:
+  css_files:
+  - scoped-tabs.css
+  - tabs.css
+  javascript:
+  - scoped-tabs.js
+  icons: []
+  other_components:
+  - tabs
+related_components:
+- name: Tabs
+  relationship: variant
+  description: Base tabs component that scoped tabs extends
+- name: Vertical Navigation
+  relationship: alternative
+  description: Alternative navigation pattern for content switching
+- name: Path
+  relationship: similar
+  description: Similar navigation concept for different contexts
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/scoped-tabs/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

@@ -1,0 +1,98 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DiscoveryStory - Metadata API",
+  "description": "Represents the metadata associated with a story used in Einstein Discovery.",
+  "file_information": ".story",
+  "directory_location": "discovery",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "application": {
+      "type": "string",
+      "description": "The CRM Analytics app the story is associated with.",
+      "required": true
+    },
+    "autopilot": {
+      "type": "DiscoveryStoryAutopilotStatus",
+      "description": "Optional. The autopilot status for the story. One of the following strings: Enabled Disabled"
+    },
+    "classificationThreshold": {
+      "type": "double",
+      "description": "Optional. The threshold for classification predictions for the story."
+    },
+    "label": {
+      "type": "string",
+      "description": "The story label. If you package a story, this label appears in Package Manager.",
+      "required": true
+    },
+    "outcome": {
+      "type": "DiscoveryStoryOutcome",
+      "description": "The selected outcome of the story.",
+      "required": true
+    },
+    "sourceContainer": {
+      "type": "string",
+      "description": "The source ID for the story.",
+      "required": true
+    },
+    "sourceType": {
+      "type": "DiscoveryStorySourceType",
+      "description": "The source type of the story. One of the following strings: AnalyticsDataset LiveDataset Report",
+      "required": true
+    },
+    "validationContainder": {
+      "type": "string",
+      "description": "Optional. The validation ID for the story."
+    }
+  },
+  "sub_types": {
+    "DiscoveryStoryOutcome": {
+      "failureValue": {
+        "type": "string",
+        "description": "Optional. The value if the story failed."
+      },
+      "field": {
+        "type": "string",
+        "description": "The field configuration for the story.",
+        "required": true
+      },
+      "goal": {
+        "type": "DiscoveryStoryOutcomeGoal",
+        "description": "The story outcome goal. One of the following strings: Maximize Minimize None",
+        "required": true
+      },
+      "label": {
+        "type": "string",
+        "description": "The story outcome label.",
+        "required": true
+      },
+      "successValue": {
+        "type": "string",
+        "description": "Optional. The value if the story succeeded."
+      },
+      "type": {
+        "type": "DiscoveryStoryOutcomeType",
+        "description": "The story outcome type. One of the following strings: Categorical Count Number Text",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DiscoveryStory\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"application\" type=\"xsd:string\"/>\n        <xsd:element name=\"autopilot\" minOccurs=\"0\" type=\"tns:DiscoveryStoryAutopilotStatus\"/>\n        <xsd:element name=\"classificationThreshold\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"outcome\" type=\"tns:DiscoveryStoryOutcome\"/>\n        <xsd:element name=\"sourceContainer\" type=\"xsd:string\"/>\n        <xsd:element name=\"sourceType\" type=\"tns:DiscoveryStorySourceType\"/>\n        <xsd:element name=\"validationContainer\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"DiscoveryStoryAutopilotStatus\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"DiscoveryStoryOutcome\">\n  <xsd:sequence>\n    <xsd:element name=\"failureValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"goal\" type=\"tns:DiscoveryStoryOutcomeGoal\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"successValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:DiscoveryStoryOutcomeType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"DiscoveryStoryOutcomeGoal\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:simpleType name=\"DiscoveryStoryOutcomeType\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:simpleType name=\"DiscoveryStorySourceType\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here is a sample DiscoveryStory:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DiscoverStory xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n    <application>MyStoryApp</application>\n    <autopilot>Enabled</autopilot>\n    <classificationThreshold>0.7383</classificationThreshold>\n    <label>SubscriberChanges</label>\n    <outcome>\n        <field>Subscriber</field>\n        <goal>Minimize</goal>\n        <label>SubscriberChangeOutcome</label>\n        <successValue>Success</successValue>\n        <type>Numerical</type>\n    </outcome>\n    <sourceContainer>01X00000000xxxx1AB</sourceContainer>\n    <sourceType>AnalyticsDataset</sourceType>\n</DiscoveryStory>"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "RegisteredExternalService - Metadata API",
+  "description": "Represents a registered external service, which provides an extension or integration.",
+  "file_information": ".registeredExternalService",
+  "directory_location": "registeredExternalServices",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "configUrl": {
+      "type": "string",
+      "description": "Link to the configuration page for the integration."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the external service provider. This field is available in API version 59.0 and later."
+    },
+    "documentationUrl": {
+      "type": "string",
+      "description": "Link to documentation for the registered external service."
+    },
+    "extensionPointName": {
+      "type": "ExtensionPointName (enumeration of type string)",
+      "description": "This field is available in API version 55.0 and later. Name of an extension point. Possible values are: Commerce_Domain_BuyerGroup_EvaluationService—Available in API version 65.0 and later. Commerce_Domain_Cart_Calculate Commerce_Domain_Checkout_CreateOrder Commerce_Domain_Inventory_CartCalculator Commerce_Domain_Inventory_Service Commerce_Domain_OrderManagement_Product Commerce_Domain_Pricing_CartCalculator Commerce_Domain_Pricing_Service Commerce_Domain_Promotions_CartCalculator Commerce_Domain_Promotions_ShippingCalculator Commerce_Domain_Shipping_CartCalculator Commerce_Domain_Shipping_SplitShipment Commerce_Domain_Tax_CartCalculator Commerce_Domain_Tax_Service Commerce_Endpoint_Account_Address Commerce_Endpoint_Account_Addresses Commerce_Endpoint_Cart_Item—Available in API version 62.0 and later. Commerce_Endpoint_Cart_ItemCollection—Available in API version 62.0 and later. Commerce_Endpoint_Catalog_Product Commerce_Endpoint_Catalog_Products Commerce_Endpoint_Search_ProductSearch Commerce_Endpoint_Gift_Wraps—Available in API version 65.0 and later. Commerce_Endpoint_Search_Products Commerce_Endpoint_Search_ProductsByCategory"
+    },
+    "externalServiceProvider": {
+      "type": "string",
+      "required": true,
+      "description": "The ID of an Apex class functioning as a provider. The Apex class can either implement one of the following interfaces: sfdc_checkout.CartInventoryValidation sfdc_checkout.CartPriceCalculations sfdc_checkout.CartShippingCharges sfdc_checkout.CartTaxCalculations or the Apex class can extend one of the base classes for an extension. See Available Extensions."
+    },
+    "externalServiceProviderType": {
+      "type": "RegistryProviderType (enumeration of type string)",
+      "required": true,
+      "description": "The type of external service provider. For an extension, you set the type to Extension, and you specify an extensionPointName. For example, for a Pricing Cart Calculator extension, you specify Commerce_Domain_Pricing_CartCalculator as the extensionPointName. For an integration, you set the type to one of the other possible values, such as Price, and you omit extensionPointName. Possible values are: Extension (this value is available in API version 55.0 and later) Inventory Price Promotions (this value is available in API version 53.0 and later) Shipment Tax"
+    },
+    "iconUri": {
+      "type": "string",
+      "description": "URI of icon for the extension provider. This field is available in API version 59.0 and later."
+    },
+    "isApplication": {
+      "type": "boolean",
+      "description": "Indicates if the extension provider is contained within a managed package. The default value is false. This field is available in API version 59.0 and later."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type. The default value is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The primary label for the RegisteredExternalService."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ExtensionPointName\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Commerce_Domain_Cart_Calculate\"/>\n    <xsd:enumeration value=\"Commerce_Domain_Tax_CartCalculator\"/>\n    <xsd:enumeration value=\"Commerce_Domain_Inventory_CartCalculator\"/>\n    <xsd:enumeration value=\"Commerce_Domain_Promotions_CartCalculator\"/>\n    <xsd:enumeration value=\"Commerce_Domain_Promotions_ShippingCalculator\"/>\n    <xsd:enumeration value=\"Commerce_Domain_Pricing_CartCalculator\"/>\n    <xsd:enumeration value=\"Commerce_Domain_Shipping_CartCalculator\"/>\n    <xsd:enumeration value=\"Commerce_Domain_Inventory_Service\"/>\n    <xsd:enumeration value=\"Commerce_Domain_Pricing_Service\"/>\n    <xsd:enumeration value=\"Commerce_Domain_Tax_Service\"/>\n    <xsd:enumeration value=\"Commerce_Domain_BuyerGroup_EvaluationService\"/>\n    <xsd:enumeration value=\"Commerce_Domain_Checkout_CreateOrder\"/>\n    <xsd:enumeration value=\"Commerce_Domain_Checkout_PlaceOrder\"/>\n    <xsd:enumeration value=\"Commerce_Domain_Shipping_SplitShipment\"/>\n    <xsd:enumeration value=\"Commerce_Domain_OrderManagement_Product\"/>\n    <xsd:enumeration value=\"Commerce_Endpoint_Account_Addresses\"/>\n    <xsd:enumeration value=\"Commerce_Endpoint_Account_Address\"/>\n    <xsd:enumeration value=\"Commerce_Endpoint_Catalog_Products\"/>\n    <xsd:enumeration value=\"Commerce_Endpoint_Catalog_Product\"/>\n    <xsd:enumeration value=\"Commerce_Endpoint_Gift_Wraps\"/>\n    <xsd:enumeration value=\"Commerce_Endpoint_Search_Products\"/>\n    <xsd:enumeration value=\"Commerce_Endpoint_Search_ProductSearch\"/>\n    <xsd:enumeration value=\"Commerce_Endpoint_Search_ProductsByCategory\"/>\n    <xsd:enumeration value=\"Commerce_Endpoint_Search_Suggestions\"/>\n    <xsd:enumeration value=\"Commerce_Endpoint_Cart_ItemCollection\"/>\n    <xsd:enumeration value=\"Commerce_Endpoint_Cart_Item\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RegisteredExternalService\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"configUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"documentationUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"extensionPointName\" minOccurs=\"0\" type=\"tns:ExtensionPointName\"/>\n        <xsd:element name=\"externalServiceProvider\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalServiceProviderType\" type=\"tns:RegistryProviderType\"/>\n        <xsd:element name=\"iconUri\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isApplication\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"RegistryProviderType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Price\"/>\n    <xsd:enumeration value=\"Promotions\"/>\n    <xsd:enumeration value=\"Inventory\"/>\n    <xsd:enumeration value=\"Shipment\"/>\n    <xsd:enumeration value=\"Tax\"/>\n    <xsd:enumeration value=\"Extension\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a RegisteredExternalService component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<RegisteredExternalService xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <externalServiceProvider>TaxSample</externalServiceProvider>\n    <externalServiceProviderType>Tax</externalServiceProviderType>\n    <documentationUrl>http://sample.com/doc</documentationUrl>\n    <configUrl>http://sample.com/config</configUrl>\n    <masterLabel>TaxService</masterLabel>\n    <isProtected>false</isProtected>\n</RegisteredExternalService>"
+    }
+  ]
+}

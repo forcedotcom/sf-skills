@@ -1,0 +1,49 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "sub_types",
+    "wsdl_segment"
+  ],
+  "title": "ConversationMessageDefinitionTranslation - Metadata API",
+  "description": "Represents translated labels and constant values for conversation message definitions in Enhanced Messaging and Messaging for In-App and Web.",
+  "fields_columns": [
+    "type",
+    "optional",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "constantValueTranslations": {
+      "type": "ConversationMessageConstantValueTranslation[]",
+      "optional": true,
+      "description": "An array of constant value translations that define translated versions of constants within the messaging component. Each element provides translations for specific constant values that customers see in the messaging interface. Available in API version 61.0 and later."
+    },
+    "label": {
+      "type": "string",
+      "required": true,
+      "description": "The translated label or display name for the conversation message definition. This represents the name that agents see when selecting messaging components in their preferred language. Available in API version 61.0 and later."
+    },
+    "name": {
+      "type": "string",
+      "required": true,
+      "description": "The unique identifier or name of the conversation message definition being translated. This must match the name of the base ConversationMessageDefinition for which this translation is created. Available in API version 61.0 and later."
+    }
+  },
+  "sub_types": {
+    "ConversationMessageConstantValueTranslation": {
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the constant value being translated."
+      },
+      "value": {
+        "type": "string",
+        "required": true,
+        "description": "The translated value for this constant."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ConversationMessageConstantValueTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConversationMessageDefinitionTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"constantValueTranslations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageConstantValueTranslation\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Translations\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"aiCoachAgentScnrDefs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AiCoachAgentScnrDefTranslation\"/>\n        <xsd:element name=\"botBlocks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotBlockTranslation\"/>\n        <xsd:element name=\"botTemplates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotTemplateTranslation\"/>\n        <xsd:element name=\"bots\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotTranslation\"/>\n        <xsd:element name=\"contextDefinitions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ContextDefinitionTranslation\"/>\n        <xsd:element name=\"conversationMessageDefinitions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageDefinitionTranslation\"/>\n        <xsd:element name=\"customApplications\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomApplicationTranslation\"/>\n        <xsd:element name=\"customLabels\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomLabelTranslation\"/>\n        <xsd:element name=\"customPageWebLinks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomPageWebLinkTranslation\"/>\n        <xsd:element name=\"customTabs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomTabTranslation\"/>\n        <xsd:element name=\"dashboardComponents\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DashboardComponentTranslation\"/>\n        <xsd:element name=\"dashboards\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DashboardTranslation\"/>\n        <xsd:element name=\"dataConnectors\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DataConnectorTranslation\"/>\n        <xsd:element name=\"desFieldTemplateMessages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ExplainabilityMsgTemplateFieldTranslation\"/>\n        <xsd:element name=\"flowDefinitions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowDefinitionTranslation\"/>\n        <xsd:element name=\"identityVerificationCustomFieldLabels\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:IdentityVerificationFieldTranslation\"/>\n        <xsd:element name=\"pipelineInspMetricConfigs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PipelineInspMetricConfigTranslation\"/>\n        <xsd:element name=\"productSpecificationTypes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProductSpecificationTypeTranslation\"/>\n        <xsd:element name=\"prompts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PromptTranslation\"/>\n        <xsd:element name=\"quickActions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GlobalQuickActionTranslation\"/>\n        <xsd:element name=\"recordAlertCategories\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecordAlertCategoryTranslation\"/>\n        <xsd:element name=\"recordAlertTemplates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecordAlertTemplateTranslation\"/>\n        <xsd:element name=\"reportTypes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportTypeTranslation\"/>\n        <xsd:element name=\"reports\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportTranslation\"/>\n        <xsd:element name=\"scontrols\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ScontrolTranslation\"/>\n        <xsd:element name=\"svcCatalogItemAttributes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ServiceProcessAttributeTranslation\"/>\n        <xsd:element name=\"svcCatalogItemGroups\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ServiceProcessItemGroupTranslation\"/>\n        <xsd:element name=\"timelineObjectDefinitions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:TimelineObjectDefinitionTranslation\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

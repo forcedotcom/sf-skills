@@ -1,0 +1,301 @@
+/**
+ * Jest Test File for TypeScript LWC Component
+ *
+ * Demonstrates typed testing patterns for LWC with:
+ * - Type-safe mock definitions
+ * - Typed event assertions
+ * - Interface-based test data
+ *
+ * This file ships with a .example suffix so Jest does not auto-discover it
+ * inside installed skill folders. Copy it into your project and rename it to:
+ * force-app/main/default/lwc/typescriptComponent/__tests__/typescriptComponent.test.ts
+ *
+ * Run after copying:
+ * sf force lightning lwc test run --spec force-app/main/default/lwc/typescriptComponent/__tests__/typescriptComponent.test.ts
+ */
+import { createElement, LightningElement } from 'lwc';
+import TypescriptComponent from 'c/typescriptComponent';
+import { getRecord } from 'lightning/uiRecordApi';
+import getAccounts from '@salesforce/apex/AccountController.getAccounts';
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TYPE DEFINITIONS FOR TESTS
+// ═══════════════════════════════════════════════════════════════════════════
+
+interface AccountRecord {
+    Id: string;
+    Name: string;
+    Industry?: string;
+    AnnualRevenue?: number;
+}
+
+interface MockWireAdapter {
+    emit: (data: unknown) => void;
+    error: (error: Error) => void;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MOCK SETUP
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Mock Apex controller
+jest.mock(
+    '@salesforce/apex/AccountController.getAccounts',
+    () => ({ default: jest.fn() }),
+    { virtual: true }
+);
+
+// Mock LDS getRecord
+jest.mock(
+    'lightning/uiRecordApi',
+    () => ({
+        getRecord: jest.fn(),
+        getFieldValue: jest.fn((data, field) => data?.fields?.[field.fieldApiName]?.value),
+        updateRecord: jest.fn()
+    }),
+    { virtual: true }
+);
+
+// Mock schema imports
+jest.mock('@salesforce/schema/Account.Name', () => ({ default: { fieldApiName: 'Name' } }), { virtual: true });
+jest.mock('@salesforce/schema/Account.Industry', () => ({ default: { fieldApiName: 'Industry' } }), { virtual: true });
+jest.mock('@salesforce/schema/Account.AnnualRevenue', () => ({ default: { fieldApiName: 'AnnualRevenue' } }), { virtual: true });
+jest.mock('@salesforce/schema/Account.Id', () => ({ default: { fieldApiName: 'Id' } }), { virtual: true });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TEST DATA
+// ═══════════════════════════════════════════════════════════════════════════
+
+const MOCK_ACCOUNTS: AccountRecord[] = [
+    { Id: '001xx000003DGQAAA4', Name: 'Acme Corporation', Industry: 'Technology', AnnualRevenue: 5000000 },
+    { Id: '001xx000003DGQBAA4', Name: 'Global Industries', Industry: 'Manufacturing', AnnualRevenue: 12000000 },
+    { Id: '001xx000003DGQCAA4', Name: 'Pinnacle Solutions', Industry: 'Consulting', AnnualRevenue: 750000 }
+];
+
+const MOCK_RECORD = {
+    id: '001xx000003DGQAAA4',
+    fields: {
+        Name: { value: 'Acme Corporation' },
+        Industry: { value: 'Technology' },
+        AnnualRevenue: { value: 5000000 }
+    }
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TEST UTILITIES
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Flush microtask queue and wait for LWC rendering
+ */
+const flushPromises = (): Promise<void> => new Promise(resolve => setTimeout(resolve, 0));
+
+/**
+ * Wait for specific number of render cycles
+ */
+const waitForRender = async (cycles: number = 1): Promise<void> => {
+    for (let i = 0; i < cycles; i++) {
+        await flushPromises();
+    }
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TESTS
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('c-typescript-component', () => {
+    let element: LightningElement & {
+        recordId?: string;
+        maxRecords?: number;
+    };
+
+    // Clean up after each test
+    afterEach(() => {
+        while (document.body.firstChild) {
+            document.body.removeChild(document.body.firstChild);
+        }
+        jest.clearAllMocks();
+    });
+
+    // ─────────────────────────────────────────────────────────────────────
+    // RENDERING TESTS
+    // ─────────────────────────────────────────────────────────────────────
+
+    describe('rendering', () => {
+        it('displays loading spinner initially', () => {
+            element = createElement('c-typescript-component', { is: TypescriptComponent });
+            document.body.appendChild(element);
+
+            const spinner = element.shadowRoot?.querySelector('lightning-spinner');
+            expect(spinner).not.toBeNull();
+        });
+
+        it('displays accounts after data loads', async () => {
+            // Arrange
+            (getAccounts as jest.Mock).mockResolvedValue(MOCK_ACCOUNTS);
+
+            // Act
+            element = createElement('c-typescript-component', { is: TypescriptComponent });
+            document.body.appendChild(element);
+
+            // Emit wire data
+            await waitForRender(2);
+
+            // Assert
+            const listItems = element.shadowRoot?.querySelectorAll('.slds-item');
+            expect(listItems?.length).toBe(MOCK_ACCOUNTS.length);
+        });
+
+        it('displays error message on failure', async () => {
+            // Arrange
+            const errorMessage = 'Failed to load accounts';
+            (getAccounts as jest.Mock).mockRejectedValue(new Error(errorMessage));
+
+            // Act
+            element = createElement('c-typescript-component', { is: TypescriptComponent });
+            document.body.appendChild(element);
+            await waitForRender(2);
+
+            // Assert
+            const errorAlert = element.shadowRoot?.querySelector('.slds-alert_error');
+            expect(errorAlert).not.toBeNull();
+        });
+
+        it('displays empty state when no accounts', async () => {
+            // Arrange
+            (getAccounts as jest.Mock).mockResolvedValue([]);
+
+            // Act
+            element = createElement('c-typescript-component', { is: TypescriptComponent });
+            document.body.appendChild(element);
+            await waitForRender(2);
+
+            // Assert
+            const emptyMessage = element.shadowRoot?.querySelector('.slds-text-color_weak');
+            expect(emptyMessage?.textContent).toContain('No accounts found');
+        });
+    });
+
+    // ─────────────────────────────────────────────────────────────────────
+    // EVENT HANDLING TESTS
+    // ─────────────────────────────────────────────────────────────────────
+
+    describe('event handling', () => {
+        it('dispatches accountselected event when account clicked', async () => {
+            // Arrange
+            (getAccounts as jest.Mock).mockResolvedValue(MOCK_ACCOUNTS);
+            const handler = jest.fn();
+
+            element = createElement('c-typescript-component', { is: TypescriptComponent });
+            element.addEventListener('accountselected', handler);
+            document.body.appendChild(element);
+            await waitForRender(2);
+
+            // Act
+            const accountLink = element.shadowRoot?.querySelector('a[data-id]') as HTMLAnchorElement;
+            accountLink?.click();
+            await waitForRender();
+
+            // Assert
+            expect(handler).toHaveBeenCalled();
+            const eventDetail = handler.mock.calls[0][0].detail;
+            expect(eventDetail.account).toBeDefined();
+            expect(eventDetail.account.Id).toBe(MOCK_ACCOUNTS[0].Id);
+        });
+
+        it('handles refresh button click', async () => {
+            // Arrange
+            (getAccounts as jest.Mock).mockResolvedValue(MOCK_ACCOUNTS);
+
+            element = createElement('c-typescript-component', { is: TypescriptComponent });
+            document.body.appendChild(element);
+            await waitForRender(2);
+
+            // Act
+            const refreshButton = element.shadowRoot?.querySelector('lightning-button[label="Refresh"]') as HTMLElement;
+            refreshButton?.click();
+            await waitForRender();
+
+            // Assert - refresh should trigger loading state
+            const spinner = element.shadowRoot?.querySelector('lightning-spinner');
+            expect(spinner).not.toBeNull();
+        });
+    });
+
+    // ─────────────────────────────────────────────────────────────────────
+    // API PROPERTY TESTS
+    // ─────────────────────────────────────────────────────────────────────
+
+    describe('@api properties', () => {
+        it('accepts maxRecords property', async () => {
+            // Arrange
+            (getAccounts as jest.Mock).mockResolvedValue(MOCK_ACCOUNTS);
+
+            // Act
+            element = createElement('c-typescript-component', { is: TypescriptComponent });
+            element.maxRecords = 5;
+            document.body.appendChild(element);
+            await waitForRender(2);
+
+            // Assert
+            expect((getAccounts as jest.Mock)).toHaveBeenCalledWith(
+                expect.objectContaining({ maxRecords: 5 })
+            );
+        });
+
+        it('accepts recordId property', () => {
+            // Act
+            element = createElement('c-typescript-component', { is: TypescriptComponent });
+            element.recordId = '001xx000003DGQAAA4';
+            document.body.appendChild(element);
+
+            // Assert
+            expect(element.recordId).toBe('001xx000003DGQAAA4');
+        });
+    });
+
+    // ─────────────────────────────────────────────────────────────────────
+    // TYPE SAFETY TESTS
+    // ─────────────────────────────────────────────────────────────────────
+
+    describe('type safety', () => {
+        it('handles undefined optional fields gracefully', async () => {
+            // Arrange - account without optional fields
+            const partialAccounts: AccountRecord[] = [
+                { Id: '001xx000003DGQAAA4', Name: 'Minimal Account' }
+            ];
+            (getAccounts as jest.Mock).mockResolvedValue(partialAccounts);
+
+            // Act
+            element = createElement('c-typescript-component', { is: TypescriptComponent });
+            document.body.appendChild(element);
+            await waitForRender(2);
+
+            // Assert - should render without errors
+            const listItems = element.shadowRoot?.querySelectorAll('.slds-item');
+            expect(listItems?.length).toBe(1);
+
+            // Industry span should not be rendered
+            const industrySpan = element.shadowRoot?.querySelector('.slds-text-body_small');
+            expect(industrySpan).toBeNull();
+        });
+
+        it('formats currency values correctly', async () => {
+            // Arrange
+            (getAccounts as jest.Mock).mockResolvedValue(MOCK_ACCOUNTS);
+
+            element = createElement('c-typescript-component', { is: TypescriptComponent });
+            document.body.appendChild(element);
+            await waitForRender(2);
+
+            // Act - select an account
+            const accountLink = element.shadowRoot?.querySelector('a[data-id]') as HTMLAnchorElement;
+            accountLink?.click();
+            await waitForRender();
+
+            // Assert - revenue should be formatted
+            const detailSection = element.shadowRoot?.querySelector('.slds-box');
+            expect(detailSection).not.toBeNull();
+        });
+    });
+});

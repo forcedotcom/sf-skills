@@ -1,0 +1,132 @@
+name: Lookups
+description: Search and selection components that allow users to find and select records from large datasets, with autocomplete
+  functionality and result filtering.
+category: Input
+slds_classes:
+  root: slds-lookup
+  elements:
+  - class: slds-lookup__menu
+    description: Results dropdown container
+    purpose: Contains search results and options
+  - class: slds-lookup__item
+    description: Individual result item
+    purpose: Represents a single search result
+  - class: slds-lookup__result-text
+    description: Primary result text
+    purpose: Main label for the search result
+  - class: slds-lookup__result-meta
+    description: Secondary result information
+    purpose: Additional context for the search result
+  modifiers: []
+  states:
+  - class: slds-has-focus
+    description: Focus state for lookup
+    trigger: When lookup has keyboard focus
+  - class: slds-is-open
+    description: Open state for dropdown
+    trigger: When results dropdown is visible
+  - class: slds-has-selection
+    description: Selection state
+    trigger: When a result has been selected
+variants:
+- name: Base
+  description: Standard lookup with search and results
+  classes:
+  - slds-lookup
+  usage_context: Default lookup for record selection
+  differences: Search input with dropdown results list
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component - typically implemented through custom components or third-party libraries
+accessibility:
+  keyboard_support:
+  - Tab to focus search input
+  - Type to search and filter results
+  - Arrow keys to navigate results
+  - Enter to select highlighted result
+  - Escape to close results dropdown
+  screen_reader:
+  - Search purpose and current value announced
+  - Result count and filtering status communicated
+  - Selected result clearly identified
+  - Loading and empty states announced
+  aria_attributes:
+  - role='combobox' for search input
+  - aria-expanded for dropdown state
+  - aria-activedescendant for current result
+  - role='listbox' for results container
+  - role='option' for individual results
+  - aria-autocomplete='list' for search behavior
+usage_guidelines:
+  when_to_use:
+  - For selecting records from large datasets
+  - When search and filtering capabilities are needed
+  - For relationship fields and record associations
+  - When autocomplete functionality improves usability
+  when_not_to_use:
+  - For small, fixed option lists (use select instead)
+  - When all options should be visible (use radio group)
+  - For simple text input without search
+  best_practices:
+  - Provide meaningful search result formatting
+  - Show loading states during search
+  - Handle empty search results gracefully
+  - Implement debounced search for performance
+  - Display relevant result metadata
+  common_mistakes:
+  - Poor search result formatting
+  - Missing loading and empty states
+  - Inadequate keyboard navigation
+  - Poor search performance optimization
+code_examples:
+- title: Account Lookup
+  code: "<div class=\"slds-lookup\" data-select=\"single\" data-scope=\"single\">\n      <div class=\"\">\n        <div class=\"\
+    slds-form-element\">\n          <label class=\"slds-form-element__label\" for=\"lookup-search\">\n            Search Accounts\n\
+    \          </label>\n          <div class=\"slds-form-element__control slds-input-has-icon slds-input-has-icon_right\"\
+    >\n            <input type=\"text\" class=\"slds-input\" id=\"lookup-search\" role=\"combobox\" aria-expanded=\"true\"\
+    \ aria-haspopup=\"listbox\" placeholder=\"Search Accounts...\" />\n            <span class=\"slds-icon_container slds-icon-utility-search\
+    \ slds-input__icon slds-input__icon_right\">\n              <svg class=\"slds-icon slds-icon_x-small\" aria-hidden=\"\
+    true\">\n                <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#search\"></use>\n            \
+    \  </svg>\n            </span>\n          </div>\n        </div>\n      </div>\n      <div class=\"slds-lookup__menu\"\
+    \ role=\"listbox\">\n        <ul class=\"slds-lookup__list\" role=\"presentation\">\n          <li class=\"slds-lookup__item\"\
+    \ role=\"option\">\n            <div class=\"slds-media\">\n              <div class=\"slds-media__figure\">\n       \
+    \         <span class=\"slds-icon_container slds-icon-standard-account\">\n                  <svg class=\"slds-icon slds-icon_small\"\
+    \ aria-hidden=\"true\">\n                    <use xlink:href=\"/assets/icons/standard-sprite/svg/symbols.svg#account\"\
+    ></use>\n                  </svg>\n                </span>\n              </div>\n              <div class=\"slds-media__body\"\
+    >\n                <div class=\"slds-lookup__result-text\">Acme Corporation</div>\n                <div class=\"slds-lookup__result-meta\
+    \ slds-text-body_small\">Account • San Francisco</div>\n              </div>\n            </div>\n          </li>\n  \
+    \      </ul>\n      </div>\n      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - lookup.css
+  - combobox.css
+  - media-objects.css
+  javascript:
+  - lookup.js
+  icons:
+  - utility-sprite.svg
+  - standard-sprite.svg
+  other_components:
+  - combobox
+  - media-objects
+  - input
+  - icons
+related_components:
+- name: Combobox
+  relationship: similar
+  description: Similar search and select pattern
+- name: Select
+  relationship: alternative
+  description: Alternative for smaller, fixed option sets
+- name: Pills
+  relationship: depends-on
+  description: Often used to display selected lookup results
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/lookups/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

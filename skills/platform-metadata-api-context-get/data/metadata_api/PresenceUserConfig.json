@@ -1,0 +1,122 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PresenceUserConfig - Metadata API",
+  "description": "Represents a configuration that determines a presence user’s settings.",
+  "file_information": ".presenceUserConfig",
+  "directory_location": "presenceUserConfigs",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "acwExtensionDuration": {
+      "type": "int",
+      "description": "The maximum length of time, measured in seconds, an agent can spend on After Conversation Work (ACW) each time they extend the timer. You must set this field if hasAcwExtensionEnabled is set to true. Specify a value from 10 through 3600. Available in API version 65.0 and later."
+    },
+    "afterConvoWorkMaxTime": {
+      "type": "int",
+      "description": "The maximum length of time, measured in seconds, an agent has to complete After Conversation Work (ACW). You must set this field if hasAfterConvoWorkTimer is set to true. Specify a value from 10 through 3600. Available in API version 65.0 and later."
+    },
+    "assignments": {
+      "type": "PresenceConfigAssignments",
+      "description": "Specifies how presence configurations are assigned to Omni-Channel users. Presence configurations can be assigned to sets of users or to sets of profiles."
+    },
+    "capacity": {
+      "type": "int",
+      "description": "The maximum number of work units an agent can be assigned at one time.",
+      "required": true
+    },
+    "declineReasons": {
+      "type": "string",
+      "description": "Specifies the list of decline reasons that an agent can select when they decline a work."
+    },
+    "enableAutoAccept": {
+      "type": "boolean",
+      "description": "Indicates whether work items that are routed to agents are automatically accepted (true) or not (false). Available only if enableDecline is set to false."
+    },
+    "enableDecline": {
+      "type": "boolean",
+      "description": "Indicates whether agents can decline work items that are routed to them (true) or not (false). Available only if enableAutoAccept is set to false."
+    },
+    "enableDeclineReason": {
+      "type": "boolean",
+      "description": "Indicates whether agents can select a reason for declining work requests (true) or not (false). This can be selected only if decline reasons are enabled."
+    },
+    "enableDisconnectSound": {
+      "type": "boolean",
+      "description": "Indicates whether a sound is played when agents are disconnected from Omni-Channel (true) or not (false)."
+    },
+    "enableRequestSound": {
+      "type": "boolean",
+      "description": "Indicates whether a sound plays with incoming work requests (true) or not (false). Set to true by default."
+    },
+    "hasAcwExtensionEnabled": {
+      "type": "boolean",
+      "description": "If set to true, agents can extend their After Conversation Work (ACW) time. Available only if hasAfterConvoWorkTimer is set to true. If set to true, you must also set the acwExtensionDuration and maxExtensions fields. The default value is false Available in API version 65.0 and later.."
+    },
+    "hasAfterConvoWorkTimer": {
+      "type": "boolean",
+      "description": "If set to true, After Conversation Work (ACW) time can be configured for the user. If set to true, you must also set the afterConvoWorkMaxTime field. The default value is false Available in API version 65.0 and later.."
+    },
+    "interruptibleCapacity": {
+      "type": "int",
+      "description": "Indicates the maximum number of work units using interruptible capacity that can be pushed to an agent at a time. An empty value defaults this field to the value set in the capacity field. Available in API version 57.0 and later when the Interruptible Capacity feature is enabled."
+    },
+    "label": {
+      "type": "string",
+      "description": "The label of the presence configuration."
+    },
+    "maxExtensions": {
+      "type": "string",
+      "description": "The maximum number of times an agent can extend their After Work Conversation (ACW) time. Specify a value from 1 through 10. You must set this field if hasAcwExtensionEnabled is set to true. Available in API version 65.0 and later."
+    },
+    "presenceStatusOnDecline": {
+      "type": "string",
+      "description": "The presence status that’s automatically assigned to the agent when the agent declines a work item. Available only if enableDecline is set to true."
+    },
+    "presenceStatusOnPushTimeout": {
+      "type": "string",
+      "description": "The presence status that’s automatically assigned to the agent when the agent doesn’t respond to a work item before push timeout occurs."
+    }
+  },
+  "sub_types": {
+    "PresenceConfigAssignments": {
+      "profiles": {
+        "type": "PresenceConfigProfileAssignments",
+        "description": "Specifies the profiles that are associated with a specific presence configuration."
+      },
+      "users": {
+        "type": "PresenceConfigUserAssignments",
+        "description": "Specifies the users that are associated with a specific presence configuration."
+      }
+    },
+    "PresenceConfigProfileAssignments": {
+      "profile": {
+        "type": "string",
+        "description": "Specifies the name of the profile associated with a specific presence configuration."
+      }
+    },
+    "PresenceConfigUserAssignments": {
+      "user": {
+        "type": "string",
+        "description": "Specifies the username of the user associated with a specific presence configuration."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PresenceConfigAssignments\">\n  <xsd:sequence>\n    <xsd:element name=\"profiles\" minOccurs=\"0\" type=\"tns:PresenceConfigProfileAssignments\"/>\n    <xsd:element name=\"users\" minOccurs=\"0\" type=\"tns:PresenceConfigUserAssignments\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PresenceConfigProfileAssignments\">\n  <xsd:sequence>\n    <xsd:element name=\"profile\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PresenceConfigUserAssignments\">\n  <xsd:sequence>\n    <xsd:element name=\"user\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PresenceUserConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"acwExtensionDuration\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"afterConvoWorkMaxTime\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"assignments\" minOccurs=\"0\" type=\"tns:PresenceConfigAssignments\"/>\n        <xsd:element name=\"capacity\" type=\"xsd:int\"/>\n        <xsd:element name=\"declineReasons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableAutoAccept\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDecline\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDeclineReason\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDisconnectSound\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRequestSound\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hasAcwExtensionEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hasAfterConvoWorkTimer\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"interruptibleCapacity\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"maxExtensions\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"presenceStatusOnDecline\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"presenceStatusOnPushTimeout\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"userDisplayName\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PresenceUserConfig component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PresenceUserConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <assignments>\n        <profiles>\n            <profile>standard</profile>\n        </profiles>\n        <users>\n            <user>jdoe@example.com</user>\n        </users>\n    </assignments>\n    <capacity>5</capacity>\n    <declineReasons>Incorrect_queue</declineReasons>\n    <enableAutoAccept>false</enableAutoAccept>\n    <enableDecline>true</enableDecline>\n    <enableDeclineReason>true</enableDeclineReason>\n    <enableDisconnectSound>true</enableDisconnectSound>\n    <enableRequestSound>true</enableRequestSound>\n    <label>My presence configuration</label>\n    <presenceStatusOnDecline>Away</presenceStatusOnDecline>\n    <presenceStatusOnPushTimeout>Break</presenceStatusOnPushTimeout>\n</PresenceUserConfig>"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "QuoteSettings - Metadata API",
+  "description": "Represents an org’s quotes settings, such as enabling quotes or creating quotes without an associated opportunity. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableQuote": {
+      "type": "boolean",
+      "description": "When set to true, users can access Quotes."
+    },
+    "enableQuotesWithoutOppEnabled": {
+      "type": "boolean",
+      "description": "When set to true, users can create quotes independently of an opportunity. For example, a user can create a quote for budgeting purposes, before creating the Opportunity. Default value is false. When set to false, users can only create quotes from an Opportunity. Before setting to false, delete any quotes that do not have opportunities. Available in API version 47.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"QuoteSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableQuote\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableQuotesWithoutOppEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The package file references the following Quote.settings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<QuoteSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableQuote>true</enableQuote>\n    <enableQuotesWithoutOppEnabled>true</enableQuotesWithoutOppEnabled>\n</QuoteSettings>"
+    }
+  ]
+}

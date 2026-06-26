@@ -1,0 +1,161 @@
+name: "Docked Form Footer"
+
+description: "A fixed footer component that docks to the bottom of the viewport, typically containing form action buttons like Save and Cancel. It remains visible as the user scrolls through long forms."
+
+category: "Layout"
+
+slds_classes:
+  root: "slds-docked-form-footer"
+  elements: []
+  modifiers: []
+  states: []
+
+variants:
+  - name: "Base"
+    description: "Standard docked footer with centered content"
+    classes: ["slds-docked-form-footer"]
+    usage_context: "Default footer for long forms that need persistent action buttons"
+    differences: "Fixed to bottom of viewport with shadow elevation"
+
+lightning_component:
+  name: ""
+  url: "https://developer.salesforce.com/docs/component-library/overview/components"
+  mapping_notes: "No direct Lightning Base Component - implement with custom footer and CSS positioning"
+
+accessibility:
+  keyboard_support:
+    - "Tab to navigate to footer buttons"
+    - "Enter or Space to activate buttons"
+  screen_reader:
+    - "Footer landmark announced if using footer element"
+    - "Button labels announced clearly"
+    - "Action sequence communicated"
+  aria_attributes:
+    - "role='contentinfo' if using div instead of footer"
+    - "Buttons should have clear aria-label if needed"
+
+usage_guidelines:
+  when_to_use:
+    - "For long forms that extend beyond viewport height"
+    - "When form actions need to remain always visible"
+    - "For edit or create flows with Save/Cancel actions"
+    - "In modal or page contexts with critical actions"
+  when_not_to_use:
+    - "For short forms that fit in viewport"
+    - "When inline form actions are sufficient"
+    - "In contexts where fixed positioning causes issues"
+    - "On small screens where footer takes too much space"
+  best_practices:
+    - "Keep action buttons clearly labeled and visible"
+    - "Place primary action on the right (e.g., Save)"
+    - "Include Cancel or secondary action on the left"
+    - "Ensure footer doesn't obscure important content"
+    - "Consider mobile viewport height limitations"
+    - "Provide adequate padding around buttons"
+  common_mistakes:
+    - "Overcrowding footer with too many actions"
+    - "Poor color contrast on footer background"
+    - "Forgetting to account for footer height in page layout"
+    - "Not handling mobile viewport properly"
+    - "Missing keyboard navigation support"
+
+code_examples:
+  - title: "Basic Docked Form Footer"
+    code: |
+      <div class="slds-docked-form-footer">
+        <button class="slds-button slds-button_neutral">Cancel</button>
+        <button class="slds-button slds-button_brand">Save</button>
+      </div>
+    description: "Simple docked footer with Save and Cancel buttons"
+  - title: "Docked Footer with Multiple Actions"
+    code: |
+      <div class="slds-docked-form-footer">
+        <div class="slds-grid slds-grid_align-spread slds-wrap">
+          <div class="slds-col slds-no-flex">
+            <button class="slds-button slds-button_neutral">Cancel</button>
+          </div>
+          <div class="slds-col slds-no-flex">
+            <div class="slds-button-group" role="group">
+              <button class="slds-button slds-button_neutral">Save Draft</button>
+              <button class="slds-button slds-button_brand">Save &amp; Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    description: "Docked footer with multiple action options"
+  - title: "Docked Footer in Form Context"
+    code: |
+      <div class="slds-card">
+        <div class="slds-card__header slds-grid">
+          <header class="slds-media slds-media_center slds-has-flexi-truncate">
+            <div class="slds-media__body">
+              <h2 class="slds-card__header-title">
+                <span>Edit Contact</span>
+              </h2>
+            </div>
+          </header>
+        </div>
+        <div class="slds-card__body slds-card__body_inner" style="padding-bottom: 5rem;">
+          <form>
+            <div class="slds-form-element">
+              <label class="slds-form-element__label" for="input-01">
+                <abbr class="slds-required" title="required">* </abbr>First Name
+              </label>
+              <div class="slds-form-element__control">
+                <input type="text" id="input-01" class="slds-input" required />
+              </div>
+            </div>
+            <div class="slds-form-element">
+              <label class="slds-form-element__label" for="input-02">
+                <abbr class="slds-required" title="required">* </abbr>Last Name
+              </label>
+              <div class="slds-form-element__control">
+                <input type="text" id="input-02" class="slds-input" required />
+              </div>
+            </div>
+            <!-- More form fields... -->
+          </form>
+        </div>
+      </div>
+      <div class="slds-docked-form-footer">
+        <button class="slds-button slds-button_neutral" type="button">Cancel</button>
+        <button class="slds-button slds-button_brand" type="submit">Save</button>
+      </div>
+    description: "Docked footer used with a form in a card, note padding-bottom on card body to prevent content overlap"
+
+styling_hooks:
+  - name: "--slds-g-color-neutral-base-95"
+    description: "Background color of the docked footer"
+    css_property: "background"
+
+dependencies:
+  css_files: ["docked-form-footer.css", "button.css"]
+  javascript:
+    - "Form submission handling"
+    - "Scroll position management"
+  icons: []
+  other_components: ["button", "button-group"]
+
+related_components:
+  - name: "Modal"
+    relationship: "alternative"
+    description: "Alternative pattern for forms in overlay context"
+  - name: "Page Header"
+    relationship: "complementary"
+    description: "Header component that pairs with form content"
+  - name: "Button"
+    relationship: "contains"
+    description: "Action buttons within the footer"
+
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/docked-form-footer/"
+
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-11"
+  author: "SLDS Documentation Team"
+  slds_version: "2.27.2"
+  review_status: "complete"
+  source: "official-slds"
+  notes: "Created from official SLDS documentation and design-system-internal source code"
+

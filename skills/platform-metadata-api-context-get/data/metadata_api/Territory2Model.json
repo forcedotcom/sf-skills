@@ -1,0 +1,41 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Territory2Model - Metadata API",
+  "description": "Represents the metadata associated with a territory model in Sales Territories. This type extends the Metadata metadata type and inherits its fullName field. Available if Sales Territories has been enabled.",
+  "file_information": ".territory2Model",
+  "directory_location": "territory2Models",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "customFields": {
+      "type": "FieldValue",
+      "description": "Custom fields defined on the Territory2Model object and used by this model. Their metadata is captured separately. Territory2 and Territory2Model objects do not handle values for Text Area (Long), Text Area (Rich), and text-encrypted custom fields. Fields are referenced using their API names. Compound field types like Location appear as their constituent column fields. For example, nnn_Latitude__s, nnn_Longitude__s where “nnn” is the field name and the suffixes are the geolocation components. Values of required custom fields are enforced during the deploy() operation."
+    },
+    "description": {
+      "type": "string",
+      "description": "A description for the territory model."
+    },
+    "name": {
+      "type": "string",
+      "description": "The user interface label for the territory model.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FieldValue\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:anyType\" nillable=\"true\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Territory2Model\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"customFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FieldValue\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"recordVisibility\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"userRecordAccess\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following example shows the definition of a Territory2Model component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n    <Territory2Model xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n    <name>FY13</name>\n    <description>Geographic allocation</description>\n    <customFields>\n        <name>Activation_DateTime__c</name>\n        <value xsi:type=\"xsd:dateTime\">2014-07-16T05:05:00.000Z</value>\n    </customFields>\n    <customFields>\n        <name>AutoNumber__c</name>\n        <value xsi:type=\"xsd:string\">M# 000001</value>\n    </customFields>\n    <customFields>\n        <name>DeactivationDate__c</name>\n        <value xsi:type=\"xsd:date\">2016-07-12</value>\n    </customFields>\n    <customFields>\n        <name>External_Id__c</name>\n        <value xsi:nil=\"true\"/>\n    </customFields>\n</Territory2Model>"
+    }
+  ]
+}

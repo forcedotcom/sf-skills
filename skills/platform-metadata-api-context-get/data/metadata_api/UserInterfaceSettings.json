@@ -1,0 +1,96 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "UserInterfaceSettings - Metadata API",
+  "description": "Represents the settings that modify the behavior of the org’s user interface.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "dynamicMruActionsOff": {
+      "type": "boolean",
+      "description": "Indicates whether users can create custom actions for their Recently Viewed lists (true) or not (false). The default is true. Available in API version 52.0 and later. Applies to Lightning Experience only."
+    },
+    "enableAsyncRelatedLists": {
+      "type": "boolean",
+      "description": "Indicates whether related lists are loaded asynchronously (true) or not (false). The default is false. Available in API version 47.0 and later. Salesforce Classic only."
+    },
+    "enableClickjackUserPageHeaderless": {
+      "type": "boolean",
+      "description": "Indicates whether a Visualforce page that hides the standard header has clickjack protections (true) or not (false). The default is true. This setting applies to all of your Visualforce pages."
+    },
+    "enableCollapsibleSections": {
+      "type": "boolean",
+      "description": "Indicates whether users are allowed to collapse or expand sections in record details by using the arrow icon next to the section heading. The default is true."
+    },
+    "enableCollapsibleSidebar": {
+      "type": "boolean",
+      "description": "Indicates whether users are allowed to show or hide the sidebar on every page that normally includes it (true) or not (false). The default is false. Applies to Salesforce Classic only."
+    },
+    "enableCustomObjectTruncate": {
+      "type": "boolean",
+      "description": "Indicates whether users with Customize Application permission can truncate custom objects (true) or not (false). When you truncate an object, you delete the object’s associated records permanently, while preserving the empty object and its metadata. The default is false. Available in API version 47.0 and later."
+    },
+    "enableCustomSidebarOnAllPages": {
+      "type": "boolean",
+      "description": "Indicates whether custom sidebar components are available on all pages for all org users (true) or not (false). The default is false. Applies to Salesforce Classic only."
+    },
+    "enableDeleteFieldHistory": {
+      "type": "boolean",
+      "description": "Indicates whether users can delete field history and field history archive records (true) or not (false). The default is false. Available in API version 47.0 and later."
+    },
+    "enableExternalObjectAsyncRelatedLists": {
+      "type": "boolean",
+      "description": "Indicates whether related lists of external objects are loaded asynchronously (true) or not (false). The default is true. Available in API version 48.0 and later. Salesforce Classic only."
+    },
+    "enableHoverDetails": {
+      "type": "boolean",
+      "description": "Indicates whether an interactive overlay containing record details is displayed (true) or not (false). The default is true. Note: To view hover details for a record, users need the appropriate sharing access and field-level security access for the fields in the mini page layout."
+    },
+    "enableInlineEdit": {
+      "type": "boolean",
+      "description": "Indicates whether users are allowed to edit field values on a record’s detail page (true) or not (false). The default is true."
+    },
+    "enablePersonalCanvas": {
+      "type": "boolean",
+      "description": "Indicates whether users can install and use personal canvas apps (true) or not (false). The default is true. This setting applies to all of your Visualforce pages."
+    },
+    "enableRelatedListHovers": {
+      "type": "boolean",
+      "description": "Indicates whether related list hover links display at the top of record detail pages and custom object detail pages in Setup (true) or not (false). Users can hover over a related list link to display the list and its number of records in an interactive overlay. Users quickly view and manage the related list items from the overlay. Users can also click a related list hover link to jump to the related list without having to scroll down the page. The default is true. Available in API version 50.0 and later."
+    },
+    "enableSldsV2DarkModeInCosmos": {
+      "type": "boolean",
+      "description": "Indicates whether individual users can enable dark mode (true) or not (false) for the Salesforce Cosmos theme. The default value is false. Available for SLDS 2 themes in select editions. See Salesforce Cosmos Theme and SLDS 2 Availability. Available in API version 65.0 and later. Note: Dark mode is a pilot or beta service that is subject to the Beta Services Terms at Agreements - Salesforce.com or a written Unified Pilot Agreement if executed by Customer, and applicable terms in the Product Terms Directory. Use of this pilot or beta service is at the Customer's sole discretion."
+    },
+    "enableQuickCreate": {
+      "type": "boolean",
+      "description": "Indicates whether an area displays on a tab home page (corresponds to the Show Quick Create setting), allowing users to create a record quickly with minimal information (true) or not (false). The Quick Create area displays by default on the tab home pages for leads, accounts, contacts, and opportunities. You can control whether the Quick Create area is displayed on all relevant tab home pages."
+    },
+    "multiColumnSortLv": {
+      "type": "boolean",
+      "description": "Indicates whether users can sort list views by multiple columns (true) or not (false). The default is true. Available in API version 63.0 and later."
+    },
+    "multiColumnSortRL": {
+      "type": "boolean",
+      "description": "Indicates whether users can sort related lists by multiple columns (true) or not (false). The default is true. Available in API version 63.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"UserInterfaceSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"alternateAlohaListView\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"dynamicMruActionsOff\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAsyncRelatedLists\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableClickjackUserPageHeaderless\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCollapsibleSections\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCollapsibleSideBar\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCustomObjectTruncate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCustomeSideBarOnAllPages\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDeleteFieldHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEinsteinCopilotSetupCompleted\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableExternalObjectAsyncRelatedLists\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableHoverDetails\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableInlineEdit\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLightningVerticalNav\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableNewPageLayoutEditor\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePersonalCanvas\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePrintableListViews\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableProfileCustomTabsets\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableQuickCreate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableQuickSetupPanel\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRelatedListHovers\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSldsV2\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSldsV2DarkModeInCosmos\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSpotlight\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableTabOrganizer\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableVertNavThemedIconsEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableVerticalNavSeamlessSwitching\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"multiColumnSort\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"multiColumnSortLv\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"multiColumnSortRl\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"usersEditSharedListViews\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a UserInterfaceSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<UserInterfaceSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <enableDeleteFieldHistory>false</enableDeleteFieldHistory>\n  <enableInlineEdit>true</enableInlineEdit>\n  <enableHoverDetails>false</enableHoverDetails>\n  <enableQuickCreate>true</enableQuickCreate>\n  <enablePersonalCanvas>false</enablePersonalCanvas>\n  <enableClickjackUserPageHeaderless>true</enableClickjackUserPageHeaderless>\n</UserInterfaceSettings>"
+    }
+  ]
+}

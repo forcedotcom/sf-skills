@@ -1,0 +1,44 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ApexComponent - Metadata API",
+  "description": "Represents a Visualforce component.",
+  "file_information": "The file suffix is .component for the page file. The accompanying metadata file is named ComponentName-meta.xml.\n\nVisualforce components are stored in the components folder in the corresponding package directory.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "apiVersion": {
+      "type": "double",
+      "description": "The API version for this Visualforce component. Every component has an API version specified at creation. This field is available in API version 16.0 and later."
+    },
+    "content": {
+      "type": "base64Binary",
+      "description": "The component content. Base 64-encoded binary data. Before making an API call, client applications must encode the binary attachment data as base64. Upon receiving a response, client applications must decode the base64 data to binary. This conversion is handled for you by a SOAP client. This field is inherited from the MetadataWithContent component."
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of what the component does."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The component developer name used as a unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from the Metadata component."
+    },
+    "label": {
+      "type": "string",
+      "description": "The label for this component.",
+      "required": true
+    },
+    "packageVersions": {
+      "type": "PackageVersion[]",
+      "description": "The list of installed managed package versions that are referenced by this Visualforce component. Package components and Visualforce custom component are distinct concepts. A package is comprised of many elements, such as custom objects, Apex classes and triggers, and custom pages and components. For more information about managed packages, see Second-Generation Managed Packages in the Salesforce DX Developer Guide. This field is available in API version 16.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ApexComponent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"apiVersion\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"packageVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PackageVersion\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"PackageVersion\">\n  <xsd:sequence>\n    <xsd:element name=\"majorNumber\" type=\"xsd:int\"/>\n    <xsd:element name=\"minorNumber\" type=\"xsd:int\"/>\n    <xsd:element name=\"namespace\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"packageId\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

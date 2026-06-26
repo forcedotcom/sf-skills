@@ -1,0 +1,58 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "WaveRecipe - Metadata API",
+  "description": "Represents the WaveRecipe type in an Analytics application. A recipe is a saved set of steps to perform on a specific source dataset or connected data. This type extends the MetadataWithContent metadata type and inherits its content and fullName fields.",
+  "file_information": ".wdpr",
+  "directory_location": "wave",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "application": {
+      "type": "string",
+      "description": "The internal name of the application."
+    },
+    "dataflow": {
+      "type": "string",
+      "description": "The dataflow ID for the Analytics recipe.",
+      "required": true
+    },
+    "format": {
+      "type": "string",
+      "description": "The format of the current recipe definition. Valid values are: R2 - recipes created with Data Prep R3 - recipes created with Data Prep (API version 49.0)"
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The recipe name that appears in the user interface.",
+      "required": true
+    },
+    "securityPredicate": {
+      "type": "string",
+      "description": "A filter condition that defines row-level access to records in a recipe."
+    },
+    "targetDatasetAlias": {
+      "type": "string",
+      "description": "The name of the dataset the recipe saves data results into."
+    },
+    "templateAssetSourceName": {
+      "type": "string",
+      "description": "Links the recipe to the template used to create it. Null for assets not created from a template."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WaveRecipe\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"application\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"dataflow\" type=\"xsd:string\"/>\n        <xsd:element name=\"format\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"securityPredicate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetDatasetAlias\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"templateAssetSourceName\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a WaveRecipe component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<WaveRecipe xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">    <content xsi:nil=\"true\"/>\n    <dataflow>02KB0000000b5c7MAA</dataflow>\n    <format>R3</format>\n    <masterLabel>recipe1</masterLabel>\n    <securityPredicate>'UserId' == \"$User.Id\"</securityPredicate>\n    <targetDatasetAlias>Dataset One</targetDatasetAlias>\n</WaveRecipe>"
+    }
+  ]
+}

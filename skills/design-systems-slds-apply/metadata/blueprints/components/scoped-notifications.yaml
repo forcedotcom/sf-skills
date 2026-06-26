@@ -1,0 +1,188 @@
+name: "Scoped Notifications"
+
+description: "Scoped notifications serve advisory information for the user that is not important enough to justify an alert. It is often presented as a status bar scoped to the container. They are not dismissible."
+
+category: "Feedback"
+
+slds_classes:
+  root: "slds-scoped-notification"
+  elements:
+    - class: "slds-media__figure"
+      description: "Container for the notification icon"
+      purpose: "Holds the utility icon that indicates notification type"
+    - class: "slds-media__body"
+      description: "Container for the notification message content"
+      purpose: "Contains the notification text and any links"
+  modifiers:
+    - class: "slds-scoped-notification_light"
+      description: "Light theme variant for scoped notification"
+      usage: "Use for light background notifications with dark text"
+    - class: "slds-scoped-notification_dark"
+      description: "Dark theme variant for scoped notification"
+      usage: "Use for dark background notifications with light text"
+    - class: "slds-theme_info"
+      description: "Informational theme (defaults to dark)"
+      usage: "For informational messages"
+    - class: "slds-theme_success"
+      description: "Success theme"
+      usage: "For success messages"
+    - class: "slds-theme_warning"
+      description: "Warning theme"
+      usage: "For warning messages"
+    - class: "slds-theme_error"
+      description: "Error theme"
+      usage: "For error messages"
+  states: []
+
+variants:
+  - name: "Light Theme"
+    description: "Light background scoped notification"
+    classes: ["slds-scoped-notification", "slds-scoped-notification_light"]
+    usage_context: "Use on light backgrounds or when dark theme is not appropriate"
+    differences: "Light background with dark text"
+  - name: "Dark Theme"
+    description: "Dark background scoped notification"
+    classes: ["slds-scoped-notification", "slds-scoped-notification_dark"]
+    usage_context: "Default for informational notifications, use for emphasis"
+    differences: "Dark background with light text"
+  - name: "Informational"
+    description: "Informational scoped notification"
+    classes: ["slds-scoped-notification", "slds-theme_info"]
+    usage_context: "For general information messages"
+    differences: "Informational styling, defaults to dark theme"
+  - name: "Success"
+    description: "Success scoped notification"
+    classes: ["slds-scoped-notification", "slds-theme_success"]
+    usage_context: "For success or completion messages"
+    differences: "Success color styling"
+  - name: "Warning"
+    description: "Warning scoped notification"
+    classes: ["slds-scoped-notification", "slds-theme_warning"]
+    usage_context: "For warning messages"
+    differences: "Warning color styling"
+  - name: "Error"
+    description: "Error scoped notification"
+    classes: ["slds-scoped-notification", "slds-theme_error"]
+    usage_context: "For error messages"
+    differences: "Error color styling"
+
+lightning_component:
+  name: ""
+  url: "https://developer.salesforce.com/docs/component-library/overview/components"
+  mapping_notes: "No direct Lightning Base Component - use custom implementation with SLDS classes"
+
+accessibility:
+  keyboard_support:
+    - "Tab to navigate to links within notification"
+    - "Focus visible on links for keyboard users"
+  screen_reader:
+    - "Notification content announced via role='status'"
+    - "Icon type announced (info, success, warning, error)"
+    - "Link text and context announced"
+  aria_attributes:
+    - "role='status' on container for live region announcements"
+    - "aria-label or assistive text on icons"
+    - "Proper link focus indicators"
+
+usage_guidelines:
+  when_to_use:
+    - "For advisory information that doesn't require immediate attention"
+    - "For status updates within a specific container or section"
+    - "For non-critical feedback messages"
+    - "When information should persist (not dismissible)"
+  when_not_to_use:
+    - "For critical errors (use alerts instead)"
+    - "For information requiring immediate attention (use alerts)"
+    - "For dismissible notifications (use toast or alerts)"
+    - "For page-level messages (use page-level alerts)"
+  best_practices:
+    - "Use appropriate theme (light/dark) for context"
+    - "Choose correct type (info/success/warning/error)"
+    - "Keep messages concise and actionable"
+    - "Include icons to reinforce message type"
+    - "Use links for actionable items within notifications"
+    - "Ensure sufficient color contrast"
+    - "Place within relevant container scope"
+  common_mistakes:
+    - "Using for critical errors that need alerts"
+    - "Making notifications dismissible (they're not)"
+    - "Using wrong theme for background context"
+    - "Missing icons for message type"
+    - "Too verbose or unclear messaging"
+
+code_examples:
+  - title: "Informational Scoped Notification (Dark Theme)"
+    code: |
+      <div class="slds-scoped-notification slds-media slds-media_center slds-theme_info" role="status">
+        <div class="slds-media__figure">
+          <svg class="slds-icon slds-icon_small" aria-hidden="true">
+            <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#info"></use>
+          </svg>
+        </div>
+        <div class="slds-media__body">
+          <p>This is an informational notification.</p>
+        </div>
+      </div>
+    description: "Informational scoped notification with dark theme (default)"
+  - title: "Success Scoped Notification"
+    code: |
+      <div class="slds-scoped-notification slds-media slds-media_center slds-theme_success" role="status">
+        <div class="slds-media__figure">
+          <svg class="slds-icon slds-icon_small" aria-hidden="true">
+            <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#success"></use>
+          </svg>
+        </div>
+        <div class="slds-media__body">
+          <p>Your changes have been saved successfully.</p>
+        </div>
+      </div>
+    description: "Success scoped notification"
+  - title: "Light Theme Scoped Notification"
+    code: |
+      <div class="slds-scoped-notification slds-scoped-notification_light slds-media slds-media_center" role="status">
+        <div class="slds-media__figure">
+          <svg class="slds-icon slds-icon_small slds-icon-text-default" aria-hidden="true">
+            <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#info"></use>
+          </svg>
+        </div>
+        <div class="slds-media__body">
+          <p>This is a light theme notification. <a href="#">Learn more</a></p>
+        </div>
+      </div>
+    description: "Light theme scoped notification with link"
+
+styling_hooks: []
+
+dependencies:
+  css_files: ["scoped-notifications.css", "media.css", "icons.css"]
+  javascript: []
+  icons:
+    - "utility:info"
+    - "utility:success"
+    - "utility:warning"
+    - "utility:error"
+  other_components: ["media", "icons"]
+
+related_components:
+  - name: "Alert"
+    relationship: "alternative"
+    description: "For critical or dismissible messages"
+  - name: "Toast"
+    relationship: "alternative"
+    description: "For dismissible temporary notifications"
+  - name: "Notifications"
+    relationship: "similar"
+    description: "General notification component"
+
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/scoped-notifications/"
+  design_guidelines: "https://v1.lightningdesignsystem.com/components/scoped-notifications/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-01-15"
+  author: "SLDS Documentation Team"
+  slds_version: "2.27.2"
+  review_status: "complete"
+  source: "official-slds"
+  notes: "Created from official SLDS documentation and design-system-internal source code with CSS selector annotations. Uses role='status' for accessibility."
+

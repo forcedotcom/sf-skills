@@ -1,0 +1,80 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "FieldRestrictionRule - Metadata API",
+  "description": "Represents a field visibility rule that controls whether a field is visible to a user, based on the field’s inclusion in a field set. If Enhanced Personal Information Management setting was enabled before Spring ’22, field visibility is based on the field’s compliance categorization. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".rule",
+  "directory_location": "fieldRestrictionRules",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "Indicates whether the rule is active (true) or not (false). The default value is false."
+    },
+    "classification": {
+      "type": "string[]",
+      "description": "The data classification compliance categorization or field set that is targeted by the rule. The rule applies to fields that are marked with this categorization or included in this field set. If you enabled Enhanced Personal Information Management before Spring ‘22 (API version 54.0), you can use Salesforce's default compliance categorization values or values that you add yourself. If you enabled Enhanced Personal Information Management after Spring ‘22 (API version 54.0), use the PersonalInfo_EPIM field set or a field set that you add yourself.",
+      "required": true
+    },
+    "classificationType": {
+      "type": "ClassificationType (enumeration of type string)",
+      "description": "The type of classification method used in your org. If you enabled Enhanced Personal Information Management before Spring ‘22 (API version 54.0), use ComplianceCategory. If you enabled Enhanced Personal Information Management after Spring ‘22, use FieldSet. ComplianceCategory— FieldSet— The default value is ComplianceCategory. Available in API version 54.0 and later."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the rule.",
+      "required": true
+    },
+    "enforcementType": {
+      "type": "EnforcementType (enumeration of type string)",
+      "description": "The type of rule. Possible values are: FieldRestrict—Field visibility rule. Only this value is valid. Restrict—Do not use. Scoping—Do not use.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The name of the rule.",
+      "required": true
+    },
+    "recordFilter": {
+      "type": "string",
+      "description": "The criteria that determine which fields are visible to the specified users. For example, the field can check if the logged-in user matches the Employee’s ID.",
+      "required": true
+    },
+    "targetEntity": {
+      "type": "string",
+      "description": "The object for which you're creating the rule. Only the Employee and User objects are supported.",
+      "required": true
+    },
+    "userCriteria": {
+      "type": "string",
+      "description": "The users that this rule applies to, such as all active users or users with a specified role or profile.",
+      "required": true
+    },
+    "version": {
+      "type": "int",
+      "description": "The rule's version number.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ClassificationType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ComplianceCategory\"/>\n    <xsd:enumeration value=\"FieldSet\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EnforcementType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Scoping\"/>\n    <xsd:enumeration value=\"Restrict\"/>\n    <xsd:enumeration value=\"FieldRestrict\"/>\n    <xsd:enumeration value=\"D360_Restrict\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FieldRestrictionRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"classification\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"classificationType\" minOccurs=\"0\" type=\"tns:ClassificationType\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"enforcementType\" type=\"tns:EnforcementType\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"recordFilter\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetEntity\" type=\"xsd:string\"/>\n        <xsd:element name=\"userCriteria\" type=\"xsd:string\"/>\n        <xsd:element name=\"version\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a FieldRestrictionRule component, which uses the ComplianceCategory classification type. The classification value is one of Salesforce's default compliance categorization values, but you can create a custom compliance categorization value to use instead.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<FieldRestrictionRule xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <active>true</active>\n    <classification>PII</classification>\n    <classificationType>ComplianceCategory</classificationType>\n    <description>Is Owner of Employee</description>\n    <enforcementType>FieldRestrict</enforcementType>\n    <masterLabel>Is Owner Field Restriction Rule</masterLabel>\n    <recordFilter>OwnerId = $User.Id</recordFilter>\n    <targetEntity>Employee</targetEntity>\n    <userCriteria>$User.IsActive = true</userCriteria>\n    <version>1</version>\n</FieldRestrictionRule>"
+    },
+    {
+      "description": "The following is an example of a FieldRestrictionRule component, which uses the FieldSet classification type. The classification value is Salesforce's default field set for personal information, but you can create a field set to use instead.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<FieldRestrictionRule xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <active>true</active>\n    <classification>PersonalInfo_EPIM</classification>\n    <classificationType>FieldSet</classificationType>\n    <description>Is Owner of Employee</description>\n    <enforcementType>FieldRestrict</enforcementType>\n    <masterLabel>Is Owner Field Restriction Rule</masterLabel>\n    <recordFilter>OwnerId = $User.Id</recordFilter>\n    <targetEntity>Employee</targetEntity>\n    <userCriteria>$User.IsActive = true</userCriteria>\n    <version>1</version>\n</FieldRestrictionRule>"
+    }
+  ]
+}

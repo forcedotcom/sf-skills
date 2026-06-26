@@ -1,0 +1,135 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExtlClntAppGlobalOauthSettings - Metadata API",
+  "description": "Represents the global settings for the OAuth plugin in an external client app. These settings include private and sensitive OAuth consumer information that can’t be packaged and must not be added to source control.",
+  "file_information": ".ecaGlblOauth",
+  "directory_location": "extlClntAppGlobalOauthSets",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "callbackUrl": {
+      "type": "string",
+      "description": "The endpoint that Salesforce calls back to your external client app during OAuth. It’s the OAuth redirect_uri."
+    },
+    "certificate": {
+      "type": "string",
+      "description": "If the app uses a certificate, the PEM-encoded certificate string. When provided, it enables the JWT Bearer flow. Available in API version 60.0 and later."
+    },
+    "consumerKey": {
+      "type": "string",
+      "description": "A value used by the consumer for identification to Salesforce. Referred to as client_id in OAuth 2.0."
+    },
+    "consumerSecret": {
+      "type": "string",
+      "description": "A value that is combined with the consumerKey and used by the consumer for identification to Salesforce. Referred to as client_secret in OAuth 2.0."
+    },
+    "externalClientApplication": {
+      "type": "string",
+      "required": true,
+      "description": "Name of the external client application."
+    },
+    "idTokenConfig": {
+      "type": "ExternalAppIdTokenConfig",
+      "description": "The settings for the ID token."
+    },
+    "isClientCredentialsFlowEnabled": {
+      "type": "boolean",
+      "description": "If set to true, the OAuth 2.0 client credentials flow is enabled. Available in API version 60.0 and later."
+    },
+    "isCodeCredFlowEnabled": {
+      "type": "boolean",
+      "description": "If set to true, the external client app can use the Authorization Code and Credentials Flow and its variations for headless login, passwordless login, and guest user identity services in an off-platform app. Headless registration isn’t currently supported for external client apps. The default value is false.To use this field, the Authorization Code and Credentials Flow must be enabled for your org in OAuth and OpenID Connect settings. Available in API version 61.0 and later."
+    },
+    "isCodeCredPostOnly": {
+      "type": "boolean",
+      "description": "If set to true, for the Authorization Code and Credentials Flow, the external client app is required to send the user’s credentials to the Salesforce services/oauth2/authorize endpoint in the body of a POST request. If set to false, the app can send a POST or GET request with the user’s credentials in the request body or in a Basic authorization header. The default value is false. To use this field, the Authorization Code and Credentials Flow must be enabled for your external client app. Headless registration, a variation of this flow, isn’t currently supported for external client apps. Available in API version 61.0 and later."
+    },
+    "isConsumerSecretOptional": {
+      "type": "boolean",
+      "description": "If set to false (default), the external app’s client secret is required in exchange for an access token in the OAuth 2.0 web server flow. If set to true, the external app’s client secret is optional."
+    },
+    "isDeviceFlowEnabled": {
+      "type": "boolean",
+      "description": "If set to true, the external client app can use the OAuth 2.0 device flow. Available in API version 60.0 and later."
+    },
+    "isIntrospectAllTokens": {
+      "type": "boolean",
+      "description": "If set to true, authorizes the external app to introspect all access and refresh all tokens. If set to false (default), the external client app can introspect its own tokens."
+    },
+    "isNamedUserJwtEnabled": {
+      "type": "boolean",
+      "description": "If set to true, the external client app issues JSON Web Token (JWT)-based access tokens. If set to false, it issues opaque access tokens. The default value is falseAvailable in API version 61.0 and later."
+    },
+    "isPkceRequired": {
+      "type": "boolean",
+      "description": "If set to true (default) Proof Key for Code for Exchange (PKCE) is required for OAuth integration. If set to false, PKCE is optional."
+    },
+    "isRefreshTokenRotationEnabled": {
+      "type": "boolean",
+      "description": "If set to true, the refresh token rotation is enabled. Available in API version 60.0 and later."
+    },
+    "isSecretRequiredForRefreshToken": {
+      "type": "boolean",
+      "description": "If set to true (default), the app’s client secret is required in the authorization request of a refresh token and hybrid refresh token flow. If set to false and an app sends the client secret in the authorization request, Salesforce still validates it."
+    },
+    "isSecretRequiredForTokenExchange": {
+      "type": "boolean",
+      "description": "If set to true, the app’s client secret is required for token exchange. Available in API version 60.0 and later."
+    },
+    "isTokenExchangeEnabled": {
+      "type": "boolean",
+      "description": "If set to true, token exchange is enabled. Available in API version 60.0 and later."
+    },
+    "label": {
+      "type": "string",
+      "description": "External Client Application Global OAuth Settings name."
+    },
+    "shouldRotateConsumerKey": {
+      "type": "boolean",
+      "description": "If set to true, the OAuth external client app's consumer key is replaced with a newly generated key on metadata deploy.. To maintain security, if this field is set to true, you must include the ignore warnings attribute in the deploy command. Default is false."
+    },
+    "shouldRotateConsumerSecret": {
+      "type": "boolean",
+      "description": "If set to true, the OAuth external client app’s consumer secret is replaced with a newly generated secret on metadata deploy. To maintain security, if this field is set to true, you must include the ignore warnings attribute in the deploy command. Default is false."
+    }
+  },
+  "sub_types": {
+    "ExternalAppIdTokenConfig": {
+      "idTokenAudience": {
+        "type": "string",
+        "description": "The audience that this ID token is intended for. The value is an array of case-sensitive strings. If no audiences are specified, the client_id of the relying party is returned as the default audience. Otherwise, the other audiences are returned with the client_id in the aud value."
+      },
+      "idTokenIncludeAttributes": {
+        "type": "boolean",
+        "description": "Indicates whether attributes are included in the ID token (true) or not (false)."
+      },
+      "idTokenIncludeStandardClaims": {
+        "type": "boolean",
+        "description": "Indicates whether standard claims about the authentication event are included in the ID token (true) or not (false)."
+      },
+      "idTokenValidityInMinutes": {
+        "type": "int",
+        "description": "The length of time that the ID token is valid for after it’s issued. The value can be 1–720 minutes. The default value is 2 minutes."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ExternalAppIdTokenConfig\">\n  <xsd:sequence>\n    <xsd:element name=\"idTokenAudience\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"idTokenIncludeAttributes\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"idTokenIncludeCustomPermissions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"idTokenIncludeStandardClaims\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"idTokenValidityInMinutes\" minOccurs=\"0\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ExtlClntAppGlobalOauthSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"callbackUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"certificate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"consumerKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"consumerSecret\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalClientApplication\" type=\"xsd:string\"/>\n        <xsd:element name=\"idTokenConfig\" minOccurs=\"0\" type=\"tns:ExternalAppIdTokenConfig\"/>\n        <xsd:element name=\"isClientCredentialsFlowEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isCodeCredFlowEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isCodeCredPostOnly\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isConsumerSecretOptional\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isDeviceFlowEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isEnforceRefreshTokenTTL\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isIntrospectAllTokens\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isNamedUserJwtEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isPkceRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isRefreshTokenRotationEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isSecretRequiredForRefreshToken\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isSecretRequiredForTokenExchange\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isTokenExchangeEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"shouldRotateConsumerKey\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"shouldRotateConsumerSecret\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This example shows an ExtlClntAppGlobalOauthSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ExtlClntAppGlobalOauthSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <callbackUrl>https://www.example.com</callbackUrl>\n    <externalClientApplication>myeca</externalClientApplication>\n    <idTokenConfig>\n        <idTokenAudience>SalesforceAudience</idTokenAudience>\n        <idTokenIncludeStandardClaims>true</idTokenIncludeStandardClaims>\n        <idTokenValidityInMinutes>0</idTokenValidityInMinutes>\n    </idTokenConfig>\n    <isConsumerSecretOptional>false</isConsumerSecretOptional>\n    <isIntrospectAllTokens>false</isIntrospectAllTokens>\n    <isPkceRequired>true</isPkceRequired>\n    <isSecretRequiredForRefreshToken>false</isSecretRequiredForRefreshToken>\n    <label>myecaglobalset</label>\n    <shouldRotateConsumerKey>false</shouldRotateConsumerKey>\n    <shouldRotateConsumerSecret>false</shouldRotateConsumerSecret>\n</ExtlClntAppGlobalOauthSettings>"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AccountPlanObjMeasCalcDef - Metadata API",
+  "description": "Represents the metadata associated with an account plan objective measure calculation definition. An account plan objective measure calculation definition contains a target object, rollup field, and logic for calculating the current value of a sales account plan objective measure.",
+  "file_information": ".accountPlanObjMeasCalcDef",
+  "directory_location": "accountPlanObjMeasCalcDefs",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "conditions": {
+      "type": "AccountPlanObjMeasCalcCond",
+      "description": "The field and value combinations for filtering records to include in the calculation definition."
+    },
+    "description": {
+      "type": "string",
+      "description": "A summary of the calculation definition that’s visible to users when they select the definition for an account plan objective measure."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "The unique name of the object in the API. The name: must be 40 characters or fewer must begin with a letter can contain only underscores and alphanumeric characters can’t include spaces can’t end with an underscore can’t contain 2 consecutive underscores"
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Label for this calculation definition. This display value is the internal label that doesn't get translated."
+    },
+    "rollupType": {
+      "type": "string",
+      "required": true,
+      "description": "The method for calculating the account plan objective measure’s current value from records that match the calculation definition and any optional conditions. Possible values are: Count Max Min Sum In Setup, this field’s label is Calculation Type."
+    },
+    "status": {
+      "type": "string",
+      "required": true,
+      "description": "Specifies the status of the calculation definition. Possible values are: Active Draft Inactive Only active calculation definitions are available for users to select when they specify an account plan objective measure."
+    },
+    "targetField": {
+      "type": "string",
+      "description": "The field on TargetObject to use for calculating the account plan objective measure’s current value. Rollup fields on the Campaign, Case, Contact, or Opportunity object are supported. In Setup, this field’s label is Rollup Field."
+    },
+    "targetObject": {
+      "type": "string",
+      "required": true,
+      "description": "The object to use for calculating the account plan objective measure’s current value. Possible values are: Campaign Case Contact Opportunity"
+    }
+  },
+  "sub_types": {
+    "AccountPlanObjMeasCalcCond": {
+      "fieldName": {
+        "type": "string",
+        "required": true,
+        "description": "A field on the calculation definition’s TargetObject that you want to filter by. Fields on the Campaign, Case, Contact, or Opportunity objects are supported."
+      },
+      "operation": {
+        "type": "string",
+        "required": true,
+        "description": "The logical operator for matching records with the specified field value. Possible values are: Contains Equals GreaterOrEqual GreaterThan LessOrEqual LessThan NotContain NotEqual StartsWith"
+      },
+      "value": {
+        "type": "string",
+        "required": true,
+        "description": "The value to match for the specified field."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AccountPlanObjMeasCalcCond\">\n  <xsd:sequence>\n    <xsd:element name=\"fieldName\" type=\"xsd:string\"/>\n    <xsd:element name=\"operation\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AccountPlanObjMeasCalcDef\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"conditions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AccountPlanObjMeasCalcCond\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"rollupType\" type=\"xsd:string\"/>\n        <xsd:element name=\"status\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetObject\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an AccountPlanObjMeasCalcDef component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AccountPlanObjMeasCalcDef xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<conditions>\n\t\t<fieldName>StageName</fieldName>\n\t\t<operation>Equals</operation>\n\t\t<value>ClosedWon</value>\n\t</conditions>\n\t<description>Define sales revenue goals. Current Value will be \n\t\tauto-calculated as the sum of your selected Opportunities \n\t\tAmount with 'Closed Won' Stage.\n\t</description>\n\t<developerName>Opportunity_Revenue_Targets</developerName>\n\t<masterLabel>Opportunity Revenue Targets</masterLabel>\n\t<rollupType>Sum</rollupType>\n\t<status>Active</status>\n\t<targetField>Amount</targetField>\n\t<targetObject>Opportunity</targetObject>\n</AccountPlanObjMeasCalcDef>"
+    }
+  ]
+}

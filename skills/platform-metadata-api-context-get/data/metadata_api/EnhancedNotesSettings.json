@@ -1,0 +1,36 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EnhancedNotesSettings - Metadata API",
+  "description": "Represents an org’s enhanced note settings, such as enabling enhanced notes and enabling tasks in enhanced notes.This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableEnhancedNotes": {
+      "type": "boolean",
+      "description": "Indicates whether enhanced notes are enabled (true) or not (false). With enhanced notes, users can relate a note to multiple records, access version history, and enjoy enhanced format options. Users must have the Use New Notes permission to use enhanced notes. Default value is true."
+    },
+    "enableTasksOnEnhancedNotes": {
+      "type": "boolean",
+      "description": "Indicates whether users can create tasks from notes (true) or not (false). In the Salesforce app, users can create a task from a note by swiping a line on the note. Alternatively, they can tap in the toolbar to add or update the status of an action item. Users must have the Use New Notes permission to use enhanced notes. Default value is true."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EnhancedNotesSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableEnhancedNotes\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableTasksOnEnhancedNotes\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of the EnhancedNotesSettings.settings file:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EnhancedNotesSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<enableEnhancedNotes>true</enableEnhancedNotes>\n\t<enableTasksOnEnhancedNotes>true</enableTasksOnEnhancedNotes>\n</EnhancedNotesSettings>"
+    }
+  ]
+}

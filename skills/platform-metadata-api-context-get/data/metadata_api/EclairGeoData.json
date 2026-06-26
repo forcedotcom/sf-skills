@@ -1,0 +1,73 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EclairGeoData - Metadata API",
+  "description": "Represents an Analytics custom map chart. Custom maps are user-defined maps that are uploaded to Analytics and are used just as standard maps are. Custom maps are accessed in Analytics from the list of maps available with the map chart type.",
+  "file_information": ".geodata",
+  "directory_location": "eclair",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "maps": {
+      "type": "EclairMap[]",
+      "description": "A list of EclairMap objects. Each EclairMap object specifies the bounding box (if any) and the map name that appears in the user interface."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Label for this object. This display value is the internal label that is not translated.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "EclairMap": {
+      "boundingBoxBottom": {
+        "type": "double",
+        "description": "When bounding-box coordinates are used, this contains the bottom coordinate."
+      },
+      "boundingBoxLeft": {
+        "type": "double",
+        "description": "When bounding-box coordinates are used, this contains the left side coordinate."
+      },
+      "boundingBoxRight": {
+        "type": "double",
+        "description": "When bounding-box coordinates are used, this contains the right side coordinate."
+      },
+      "boundingBoxTop": {
+        "type": "double",
+        "description": "When bounding-box coordinates are used, this contains the top coordinate."
+      },
+      "mapLabel": {
+        "type": "string",
+        "description": "The user-interface name of the map. This name appears in the maps list for the map chart in Analytics.",
+        "required": true
+      },
+      "mapName": {
+        "type": "string",
+        "description": "Label for this object. This display value is the internal label that is not translated.",
+        "required": true
+      },
+      "projection": {
+        "type": "string",
+        "description": "The type of map projection used to create the map. Valid values are: Equirectangular Mercator AlbersUSA",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EclairGeoData\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"maps\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EclairMap\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"EclairMap\">\n  <xsd:sequence>\n    <xsd:element name=\"boundingBoxBottom\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"boundingBoxLeft\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"boundingBoxRight\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"boundingBoxTop\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"mapLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"mapName\" type=\"xsd:string\"/>\n    <xsd:element name=\"projection\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an EclairGeoData component:",
+      "code": "<EclairGeoData xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n            <content xsi:nil=\"true\"/>            \n            <maps>              \n              <boundingBoxBottom>0.0</boundingBoxBottom>              \n              <boundingBoxLeft>100.0</boundingBoxLeft>              \n              <boundingBoxRight>100.0</boundingBoxRight>              \n              <boundingBoxTop>0.0</boundingBoxTop>              \n              <mapLabel>WorldMap0 Label</mapLabel>              \n              <mapName>WorldMap0</mapName>              \n              <projection>Equirectangular</projection>\n            </maps>\n            <maps>\n              <boundingBoxBottom>1.0</boundingBoxBottom>\n              <boundingBoxLeft>101.0</boundingBoxLeft>\n              <boundingBoxRight>101.0</boundingBoxRight>\n              <boundingBoxTop>1.0</boundingBoxTop>\n              <mapLabel>WorldMap1 Label</mapLabel>\n              <mapName>WorldMap1</mapName>\n              <projection>Mercator</projection>\n            </maps>\n            <masterLabel>WorldMapGeoDataToCreate Label</masterLabel>\n          </EclairGeoData>"
+    }
+  ]
+}

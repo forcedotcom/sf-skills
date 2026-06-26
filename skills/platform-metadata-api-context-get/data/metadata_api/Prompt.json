@@ -1,0 +1,255 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Prompt - Metadata API",
+  "description": "Represents the metadata related to in-app guidance, which includes prompts and walkthroughs. Help users discover your products and services, adopt your processes, or learn how to use a new feature. Write the content, select the target audience, and specify where and when the in-app guidance appears.",
+  "file_information": ".prompt",
+  "directory_location": "prompts",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label. Maximum of 80 characters."
+    },
+    "promptVersions": {
+      "type": "PromptVersion[]",
+      "description": "A list of in-app guidance entries. Each entry represents a different prompt or walkthrough."
+    }
+  },
+  "sub_types": {
+    "PromptVersion": {
+      "actionButtonLabel": {
+        "type": "string",
+        "description": "Label for the action button or link. Maximum of 25 characters. For a walkthrough, specify this value on the last step."
+      },
+      "actionButtonLink": {
+        "type": "string",
+        "description": "URL for the action button or link. Maximum of 1,000 characters. You can’t use the GROUP BY option in a SOQL query for this field. For a walkthrough, specify this value on the last step."
+      },
+      "body": {
+        "type": "string",
+        "required": true,
+        "description": "Body content. In API version 60.0 and later, enter up to 4,000 characters for all prompt types. In earlier API versions, enter up to 240 characters for floating prompts and targeted prompts. Enter up to 4,000 characters for docked prompts. For docked prompts, the maximum characters include HTML markup, not just readable text."
+      },
+      "customApplication": {
+        "type": "string",
+        "description": "Internal use only. No data is populated for this field."
+      },
+      "delayDays": {
+        "type": "int",
+        "description": "Required if recurrences are scheduled. Number of days in between occurrences. For a walkthrough, specify this value on the first step.",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "Description. Maximum of 255 characters."
+      },
+      "dismissButtonLabel": {
+        "type": "string",
+        "description": "Label for the dismiss button of a floating or targeted prompt. Maximum of 15 characters."
+      },
+      "displayPosition": {
+        "type": "PromptDisplayPosition (enumeration of type string)",
+        "description": "The position of a floating prompt on the page. Valid values are: BottomCenter BottomLeft BottomRight TopCenter TopLeft TopRight"
+      },
+      "displayType": {
+        "type": "PromptDisplayType (enumeration of type string)",
+        "required": true,
+        "description": "The type of prompt. Valid values are: DockedComposer—A docked prompt FloatingPanel—A floating prompt Targeted—A targeted prompt. Available in API version 52.0 and later."
+      },
+      "elementRelativePosition": {
+        "type": "PromptElementRelativePosition (enumeration of type string)",
+        "description": "Indicates the location of a targeted prompt relative to the element. Available in API version 52.0 and later. Valid values are: BottomCenter BottomLeft BottomRight LeftBottom LeftCenter LeftTop RightBottom RightCenter RightTop TopCenter TopLeft TopRight"
+      },
+      "endDate": {
+        "type": "date",
+        "description": "The date to stop showing the in-app guidance. For a walkthrough, specify this value on the first step."
+      },
+      "header": {
+        "type": "string",
+        "description": "Label for the header of a docked prompt. This value is the label contained in the window’s browser bar. Maximum of 36 characters."
+      },
+      "image": {
+        "type": "string",
+        "description": "The developer name of the contentAsset that holds the image. You can specify this field or the imageLink field, but not both."
+      },
+      "imageAltText": {
+        "type": "string",
+        "description": "Indicates the alt text of an image. Required if imageLocation, imageLink, or image is specified."
+      },
+      "imageLink": {
+        "type": "string",
+        "description": "The URL for a prompt’s image. You can specify this field or the image field, but not both. Available in API version 53.0 and later."
+      },
+      "imageLocation": {
+        "type": "picklist",
+        "description": "Indicates the location of the image in relation to the body text. Required if image, imageLink, or imageAltText is specified. Valid values are: Top Bottom Right, which is for floating or targeted prompts only Left, which is for floating or targeted prompts only"
+      },
+      "indexWithIsPublished": {
+        "type": "string",
+        "description": "Used by Salesforce for efficient querying."
+      },
+      "indexWithoutIsPublished": {
+        "type": "string",
+        "description": "Used by Salesforce for efficient querying."
+      },
+      "isPublished": {
+        "type": "boolean",
+        "description": "Indicates whether the in-app guidance is active (true) or not (false)."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "The label."
+      },
+      "publishedByUser": {
+        "type": "string",
+        "description": "Internal use only. No data is populated for this field."
+      },
+      "publishedDate": {
+        "type": "date",
+        "description": "Indicates the date the in-app guidance was activated. If installed from a package, this value is the date when the package was installed. For walkthroughs, this field can only be specified on the first step."
+      },
+      "referenceElementContext": {
+        "type": "textarea",
+        "description": "Used by Salesforce to identify the element that the targeted prompt is associated with. Available in API version 52.0 and later."
+      },
+      "shouldDisplayActionButton": {
+        "type": "boolean",
+        "description": "Indicates whether an action button or link is included (true) or not (false)."
+      },
+      "shouldIgnoreGlobalDelay": {
+        "type": "boolean",
+        "description": "Indicates whether the in-app guidance ignores the global time delay and instead shows on page load (true) or not (false). This field is available in API version 48.0 and later."
+      },
+      "startDate": {
+        "type": "date",
+        "description": "Indicates the date to start showing the in-app guidance. For a walkthrough, specify this value on the first step.In API version 48.0 and earlier, this field is required."
+      },
+      "stepNumber": {
+        "type": "int",
+        "description": "Required for walkthroughs only. Indicates the number of the last step the user viewed or interacted with in a walkthrough. Include up to 10 steps. Numbers must be consecutive without repeated or skipped numbers. Available in API version 49.0 and later.",
+        "required": true
+      },
+      "targetAppDeveloperName": {
+        "type": "string",
+        "description": "The app’s developer name where the in-app guidance appears. Deprecated in API version 51.0 and later."
+      },
+      "targetAppNamespacePrefix": {
+        "type": "string",
+        "description": "The app’s namespace prefix where the in-app guidance appears. This value must match the target app’s NamespacePrefix in the org that the package is being installed into. Maximum of 15 characters. Deprecated in API version 51.0 and later."
+      },
+      "targetPageKey1": {
+        "type": "string",
+        "required": true,
+        "description": "Used by Salesforce to identity the prompt’s page location along with targetPageKey2, targetPageKey3, targetPageKey4, and targetPageType."
+      },
+      "targetPageKey2": {
+        "type": "string",
+        "description": "Used by Salesforce to identity the prompt’s page location along with targetPageKey1, targetPageKey3, targetPageKey4, and targetPageType."
+      },
+      "targetPageKey3": {
+        "type": "string",
+        "description": "Used by Salesforce to identify the prompt’s page location along with targetPageKey1, targetPageKey2, targetPageKey4, and targetPageType."
+      },
+      "targetPageKey4": {
+        "type": "string",
+        "description": "Used by Salesforce to identify the prompt’s page location along with targetPageKey1, targetPageKey2, targetPageKey3, and targetPageType. This field is available in API version 53.0 and later."
+      },
+      "targetPageType": {
+        "type": "string",
+        "required": true,
+        "description": "Used by Salesforce to identity the page location along with targetPageKey1, targetPageKey2, targetPageKey3, and targetPageKey4."
+      },
+      "targetRecordType": {
+        "type": "string",
+        "description": "Used by Salesforce to determine if in-app guidance is specific to a record type. This field is available in API version 53.0 and later."
+      },
+      "themeColor": {
+        "type": "PromptThemeColor (enumeration of type string)",
+        "description": "Indicates which custom theme color is applied to the in-app guidance. Required if themeSaturation is specified. For a walkthrough, specify this value on the first step. Valid values are: Theme1, which is derived from the current brand color Theme2, which is derived from the current page background color Theme3, which is derived from the current global header color Theme4, which is derived from the current app theme color"
+      },
+      "themeSaturation": {
+        "type": "PromptThemeSaturation (enumeration of type string)",
+        "description": "Indicates which color value, or saturation, is applied to the in-app guidance that has a custom theme color. Required if themeColor is specified. For a walkthrough, specify this value on the first step. Valid values are: Dark Light"
+      },
+      "timesToDisplay": {
+        "type": "int",
+        "description": "Required if recurrences are scheduled. The maximum number of times to show the in-app guidance. Salesforce detects whether the user interacts with the in-app guidance, then determines whether to show the in-app guidance again or cancel scheduled recurrences. Maximum value of 30. For a walkthrough, specify this value on the first step.",
+        "required": true
+      },
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "The label for the title. Maximum of 36 characters."
+      },
+      "uiFormulaRule": {
+        "type": "UiFormulaRule[]",
+        "description": "A set of one or more permission filters that define the conditions under which the in-app guidance displays on the page.If the rule evaluates to true, the in-app guidance displays on the page. If false, it doesn't display. If this field is null, the in-app guidance displays by default."
+      },
+      "userAccess": {
+        "type": "PromptUserAccess (enumeration of type string)",
+        "description": "Indicates which permissions can see the in-app guidance. Valid values are: Everyone, which indicates that there’s no permission restrictions SpecificPermissions, which indicates that only users with all the specific user permissions specified can see the in-app guidance In API version 48.0 and earlier, this field is required."
+      },
+      "userProfileAccess": {
+        "type": "PromptUserProfileAccess (enumeration of type string)",
+        "description": "Indicates which profiles can see the in-app guidance. This field is available in API version 48.0 and later. Valid values are: Everyone, which indicates that there are no profile restrictions SpecificProfiles, which indicates that users with any of the specified user profiles can see the in-app guidance"
+      },
+      "versionNumber": {
+        "type": "int",
+        "required": true,
+        "description": "The number remains 1 since multiple versions aren’t saved in the org."
+      },
+      "videoLink": {
+        "type": "string",
+        "description": "The embed URL for a video in a docked prompt. Maximum of 1,000 characters. You can specify this field or the image field, but not both. This field is available in API version 48.0 and later. See Considerations for Creating In-App Guidance."
+      }
+    },
+    "UiFormulaRule": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "Specifies the AND filter condition."
+      },
+      "criteria": {
+        "type": "UiFormulaCriterion[]",
+        "description": "List of one or more filters that, when evaluated, determine visibility."
+      }
+    },
+    "UiFormulaCriterion": {
+      "leftValue": {
+        "type": "string",
+        "required": true,
+        "description": "The field used for filtering. Only standard and custom permissions can be included. You can use these expressions in the leftValue field when setting filters for visibility. {!$Permission.CustomPermission.permissionName}—Use this expression to control visibility based on the custom permissions of the user viewing the Lightning page. Supported for app, Home, and record pages only. {!$Permission.StandardPermission.permissionName}—Use this expression to control visibility based on the standard permissions of the user viewing the Lightning page. Supported for app, Home, and record pages only. {!ENCODED:{!ID:$User.Profile.Key}}—Use this expression to control visibility based on the custom or standard profile of the user viewing the Lightning page. Available in API Version 48.0 and later."
+      },
+      "operator": {
+        "type": "string",
+        "required": true,
+        "description": "Defines the operator used to filter the data. Valid value is EQUAL."
+      },
+      "rightValue": {
+        "type": "string",
+        "description": "Specifies if you want to evaluate the visibility for permissions or the name of the profile. For permissions, use true. For profiles, use the name of the profile. Available in API Version 48.0 and later. For example, Standardor custom_regionalsales."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Prompt\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"promptVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PromptVersion\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"PromptDisplayPosition\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TopLeft\"/>\n    <xsd:enumeration value=\"TopCenter\"/>\n    <xsd:enumeration value=\"TopRight\"/>\n    <xsd:enumeration value=\"BottomLeft\"/>\n    <xsd:enumeration value=\"BottomCenter\"/>\n    <xsd:enumeration value=\"BottomRight\"/>\n    <xsd:enumeration value=\"MiddleLeft\"/>\n    <xsd:enumeration value=\"MiddleCenter\"/>\n    <xsd:enumeration value=\"MiddleRight\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PromptDisplayType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"DockedComposer\"/>\n    <xsd:enumeration value=\"FloatingPanel\"/>\n    <xsd:enumeration value=\"Targeted\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PromptElementRelativePosition\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TopLeft\"/>\n    <xsd:enumeration value=\"TopCenter\"/>\n    <xsd:enumeration value=\"TopRight\"/>\n    <xsd:enumeration value=\"LeftTop\"/>\n    <xsd:enumeration value=\"LeftCenter\"/>\n    <xsd:enumeration value=\"LeftBottom\"/>\n    <xsd:enumeration value=\"RightTop\"/>\n    <xsd:enumeration value=\"RightCenter\"/>\n    <xsd:enumeration value=\"RightBottom\"/>\n    <xsd:enumeration value=\"BottomLeft\"/>\n    <xsd:enumeration value=\"BottomCenter\"/>\n    <xsd:enumeration value=\"BottomRight\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PromptExperience\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Lightning\"/>\n    <xsd:enumeration value=\"Site\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PromptImageLocation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Top\"/>\n    <xsd:enumeration value=\"Bottom\"/>\n    <xsd:enumeration value=\"Left\"/>\n    <xsd:enumeration value=\"Right\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PromptThemeColor\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Theme1\"/>\n    <xsd:enumeration value=\"Theme2\"/>\n    <xsd:enumeration value=\"Theme3\"/>\n    <xsd:enumeration value=\"Theme4\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PromptThemeSaturation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Dark\"/>\n    <xsd:enumeration value=\"Light\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PromptUserAccess\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Everyone\"/>\n    <xsd:enumeration value=\"SpecificPermissions\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PromptUserProfileAccess\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Everyone\"/>\n    <xsd:enumeration value=\"SpecificProfiles\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"PromptVersion\">\n  <xsd:sequence>\n    <xsd:element name=\"actionButtonLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"actionButtonLink\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"body\" type=\"xsd:string\"/>\n    <xsd:element name=\"customApplication\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"delayDays\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dismissButtonLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"displayPosition\" minOccurs=\"0\" type=\"tns:PromptDisplayPosition\"/>\n    <xsd:element name=\"displayType\" type=\"tns:PromptDisplayType\"/>\n    <xsd:element name=\"elementRelativePosition\" minOccurs=\"0\" type=\"tns:PromptElementRelativePosition\"/>\n    <xsd:element name=\"endDate\" minOccurs=\"0\" type=\"xsd:date\"/>\n    <xsd:element name=\"experience\" minOccurs=\"0\" type=\"tns:PromptExperience\"/>\n    <xsd:element name=\"experienceContext\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"header\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"icon\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"image\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"imageAltText\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"imageLink\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"imageLocation\" minOccurs=\"0\" type=\"tns:PromptImageLocation\"/>\n    <xsd:element name=\"indexWithIsPublished\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"indexWithoutIsPublished\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isPublished\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"publishedByUser\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"publishedDate\" minOccurs=\"0\" type=\"xsd:date\"/>\n    <xsd:element name=\"referenceElementContext\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"shouldDisplayActionButton\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"shouldIgnoreGlobalDelay\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"startDate\" minOccurs=\"0\" type=\"xsd:date\"/>\n    <xsd:element name=\"stepNumber\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"targetAppDeveloperName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetAppNamespacePrefix\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetPageKey1\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetPageKey2\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetPageKey3\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetPageKey4\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetPageType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetRecordType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"themeColor\" minOccurs=\"0\" type=\"tns:PromptThemeColor\"/>\n    <xsd:element name=\"themeSaturation\" minOccurs=\"0\" type=\"tns:PromptThemeSaturation\"/>\n    <xsd:element name=\"timesToDisplay\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"title\" type=\"xsd:string\"/>\n    <xsd:element name=\"uiFormulaRule\" minOccurs=\"0\" type=\"tns:UiFormulaRule\"/>\n    <xsd:element name=\"userAccess\" minOccurs=\"0\" type=\"tns:PromptUserAccess\"/>\n    <xsd:element name=\"userProfileAccess\" minOccurs=\"0\" type=\"tns:PromptUserProfileAccess\"/>\n    <xsd:element name=\"versionNumber\" type=\"xsd:int\"/>\n    <xsd:element name=\"videoLink\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"UiFormulaCriterion\">\n  <xsd:sequence>\n    <xsd:element name=\"leftValue\" type=\"xsd:string\"/>\n    <xsd:element name=\"operator\" type=\"xsd:string\"/>\n    <xsd:element name=\"rightValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"UiFormulaRule\">\n  <xsd:sequence>\n    <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"criteria\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:UiFormulaCriterion\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a Prompt component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Prompt xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <masterLabel>Prompt Label</masterLabel>\n    <promptVersions>\n        <actionButtonLabel>Learn How</actionButtonLabel>\n        <actionButtonLink>https://trailhead.salesforce.com/en/content/learn/modules/scrum-and-kanban-at-salesforce/learn-about-kanban</actionButtonLink>\n        <body>Explore how the Path and the Kanban view can help you track, manage, and update your records.</body>\n        <delayDays>1</delayDays>\n        <description>Kanban floating prompt</description>\n        <dismissButtonLabel>OK</dismissButtonLabel>\n        <displayPosition>TopLeft</displayPosition>\n        <displayType>FloatingPanel</displayType>\n        <endDate>2019-03-11</endDate>\n        <isPublished>true</isPublished>\n        <masterLabel>Prompt Label</masterLabel>\n        <publishedDate>2019-03-11</publishedDate>\n        <shouldDisplayActionButton>false</shouldDisplayActionButton>\n        <shouldIgnoreGlobalDelay>false</shouldIgnoreGlobalDelay>\n        <startDate>2019-03-11</startDate>\n        <targetAppDeveloperName>LightningSales</targetAppDeveloperName>\n        <targetAppNamespacePrefix>standard</targetAppNamespacePrefix>\n        <timesToDisplay>3</timesToDisplay>\n        <title>Get on the Path to Success</title>\n        <userAccess>SpecificPermissions</userAccess>\n        <userProfileAccess>SpecificProfiles</userProfileAccess>\n        <versionNumber>1</versionNumber>\n        <videolink>https://www.youtube.com/embed/Ko-gcObzTVo</videolink>\n        <uiFormulaRule>\n            <booleanFilter>(1 AND 2 AND 3) AND (4 OR 5)</booleanFilter>\n            <criteria>\n                <leftValue>{!$Permission.StandardPermission.ActivitiesAccess}</leftValue>\n                <operator>EQUAL</operator>\n                <rightValue>TRUE</rightValue>\n            </criteria>\n            <criteria>\n                <leftValue>{!$Permission.StandardPermission.ContentWorkspaces}</leftValue>\n                <operator>EQUAL</operator>\n                <rightValue>TRUE</rightValue>\n            </criteria>\n            <criteria>\n                <leftValue>{!$Permission.CustomPermission.MyCustomPerm}</leftValue>\n                <operator>EQUAL</operator>\n                <rightValue>TRUE</rightValue>\n            </criteria>\n            <criteria>\n                <leftValue>{!ENCODED:{!ID:$User.Profile.Key}}</leftValue>\n                <operator>EQUAL</operator>\n                <rightValue>Standard</rightValue>\n            </criteria>\n            <criteria>\n                <leftValue>{!ENCODED:{!ID:$User.Profile.Key}}</leftValue>\n                <operator>EQUAL</operator>\n                <rightValue>custom_mysysadmin</rightValue>\n            </criteria>\n        </uiFormulaRule>\n    </promptVersions>\n</Prompt>"
+    }
+  ]
+}

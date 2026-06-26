@@ -1,0 +1,117 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PricingRecipe - Metadata API",
+  "description": "Represents the data models or sets of objects of a particular cloud that the pricing data store consumes during design time and run time.",
+  "file_information": ".pricingRecipe",
+  "directory_location": "pricingRecipe",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "defaultPricingProcedure": {
+      "type": "ExpressionSetDefinition",
+      "description": "Expression set definition that's associated with this pricing recipe setting."
+    },
+    "defaultPricingProcedureDeveloperName": {
+      "type": "string",
+      "description": "For internal use only."
+    },
+    "defaultPricingProcedureId": {
+      "type": "string",
+      "description": "ID of the pricing procedure of the pricing recipe."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "API name of the pricing recipe."
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether the pricing recipe is active (true) or not (false).The default value is false"
+    },
+    "isInternal": {
+      "type": "boolean",
+      "description": "Indicates whether the price recipe record is created internally by the Salesforce platform (true) or not (false).The default value is false"
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Name for pricing recipe that's defined when the pricing recipe is created."
+    },
+    "pricingRecipeTableMapping": {
+      "type": "PricingRecipeTableMapping[]",
+      "description": "Mapping of the pricing components of a lookup table with the chosen pricing recipe."
+    }
+  },
+  "sub_types": {
+    "PricingRecipeTableMapping": {
+      "isInternal": {
+        "type": "boolean",
+        "description": "Indicates whether the price recipe field mapping record is created internally by the Salesforce platform (true) or not (false).The default value is false."
+      },
+      "lookupTable": {
+        "type": "DecisionTable",
+        "description": "Lookup table that's associated with either a decision matrix or decision table."
+      },
+      "lookupTableDeveloperName": {
+        "type": "string",
+        "description": "For internal use only."
+      },
+      "pricingComponentType": {
+        "type": "string",
+        "description": "Pricing component field data that the decision table is built on. Valid values are: AttributeDiscount BundleDiscount DerivedPricing ListPrice PriceAdjustmentMatrix PromotionsDiscount VolumeDiscount VolumeTierDiscount DiscountDistributionService. This value is available in API version 60.0 and later. MinimumPrice. Available in API version 62.0 and later."
+      },
+      "pricingProcedureOutputMapList": {
+        "type": "PricingProcedureOutputMap[]",
+        "description": "List of the mappings of the outputs of the pricing procedures to the associated lookup tables. Available in API version 60.0 and later."
+      },
+      "pricingRecipe": {
+        "type": "string",
+        "required": true,
+        "description": "Pricing data store that's associated with this pricing recipe field mapping."
+      }
+    },
+    "PricingProcedureOutputMap": {
+      "fieldName": {
+        "type": "string",
+        "description": "For internal use only."
+      },
+      "isPricingRecipeActive": {
+        "type": "boolean",
+        "description": "Indicates whether the associated pricing recipe is active (true) or not (false). The default value is false."
+      },
+      "outputFieldName": {
+        "type": "string",
+        "description": "Field name that contains the output type that's generated from the pricing element."
+      },
+      "outputFieldNameString": {
+        "type": "string",
+        "description": "Derived field that references a specific column in a decision table or decision matrix."
+      },
+      "outputType": {
+        "type": "string",
+        "description": "Output type that's generated from a pricing element. Valid values are: AdjustmentType AdjustmentValue CustomOutput HashOutput UnitPrice"
+      },
+      "pricingElementType": {
+        "type": "PricingElementType (enumeration of type string)",
+        "description": "Type of pricing element, which is a derived field from PricingRecipeTableMapping.PricingComponentType.Valid values are: AssetDiscovery AttributeDiscount BundleDiscount DerivedPricing DiscountDistributionService ListPrice MinimumPrice PriceAdjustmentMatrix PriceRevision PromotionsDiscount RuleFetch VolumeDiscount VolumeTierDiscount"
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PricingRecipe component.",
+      "code": "<PricingRecipe xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <defaultPricingProcedureId> </defaultPricingProcedureId>\n    <developerName>CMEDefaultRecipe</developerName>\n    <isActive>false</isActive>\n    <isInternal>false</isInternal>\n    <masterLabel>CMEDefaultRecipe</masterLabel>\n    <pricingRecipeTableMapping>\n        <isInternal>false</isInternal>\n        <lookupTableDeveloperName>Bundle_Based_Adjustment_Decision_Table</lookupTableDeveloperName>\n        <pricingComponentType>CUSTOMDISCOUNT</pricingComponentType>\n        <fileBasedDecisionTableName>Bundle Based Adjustment Entries</fileBasedDecisionTableName>\n        <pricingProcedureOutputMapList>\n            <fieldName>AdjustmentValue</fieldName>\n            <isPricingRecipeActive>false</isPricingRecipeActive>\n            <outputFieldName>0lPxx000000000f</outputFieldName>\n            <outputFieldNameString>false</outputFieldNameString>\n            <outputType>AdjustmentValue</outputType>\n\t     <pricingElementType>BundleDiscount</pricingElementType>\n        </pricingProcedureOutputMapList>\n        <pricingProcedureOutputMapList>\n            <fieldName>AdjustmentType</fieldName>\n            <isPricingRecipeActive>false</isPricingRecipeActive>\n            <outputFieldName>0lPxx000000000m</outputFieldName>\n            <outputFieldNameString>false</outputFieldNameString>\n            <outputType>AdjustmentType</outputType>\n\t     <pricingElementType>BundleDiscount</pricingElementType>\n        </pricingProcedureOutputMapList>\n        <pricingRecipe>CMEDefaultRecipe</pricingRecipe>\n    </pricingRecipeTableMapping>\n</PricingRecipe>"
+    }
+  ]
+}

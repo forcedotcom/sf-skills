@@ -1,0 +1,64 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ChatterExtension - Metadata API",
+  "description": "Represents the metadata used to describe a Rich Publisher App that’s integrated with the Chatter publisher.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "compositionComponent": {
+      "type": "string",
+      "description": "The composition component of the Rich Publisher App that you provide. It’s comprised of the lightning:availableForChatterExtensionComposer interface.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of your custom Rich Publisher App.",
+      "required": true
+    },
+    "extensionName": {
+      "type": "string",
+      "description": "The name of your extension. That is, your Rich Publisher App.",
+      "required": true
+    },
+    "headerText": {
+      "type": "string",
+      "description": "The text to show in the header of your app composer. Header text is required for Lightning type extensions. This text can be localized."
+    },
+    "hoverText": {
+      "type": "string",
+      "description": "The text to show when a user mouses over your extension’s icon. Mouse-over text is required for Lightning type extensions. This text can be localized."
+    },
+    "icon": {
+      "type": "string",
+      "description": "The icon to show in the Chatter publisher. Use an existing file asset id from your org.",
+      "required": true
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value. It currently has no impact."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Label for the ChatterExtension object.",
+      "required": true
+    },
+    "renderComponent": {
+      "type": "string",
+      "description": "The rendering component of the Rich Publisher App that you provide. It’s comprised of the lightning:availableForChatterExtensionRenderer interface.",
+      "required": true
+    },
+    "type": {
+      "type": "ChatterExtensionType (enumeration of type string)",
+      "description": "Describes the type of the extension. Currently, the only value supported is Lightning. Included to allow for other possible types in the future.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ChatterExtension\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"compositionComponent\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" type=\"xsd:string\"/>\n        <xsd:element name=\"extensionName\" type=\"xsd:string\"/>\n        <xsd:element name=\"headerText\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"hoverText\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"icon\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"renderComponent\" type=\"xsd:string\"/>\n        <xsd:element name=\"type\" type=\"tns:ChatterExtensionType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ChatterExtensionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Lightning\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

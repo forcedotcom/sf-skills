@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CampaignSettings - Metadata API",
+  "description": "Represents an org’s Campaign Influence, Einstein Attribution, Einstein Key Accounts, and campaign member settings. These features help you understand how your campaigns and accounts are affecting your opportunity pipeline.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "aiAttributionTimeframe": {
+      "type": "int",
+      "description": "Indicates the number of months between the opportunity creation date and an engagement activity, during which Einstein scans for influential campaigns. The value must be a multiple of three, up to 24. Available in API version 49.0 and later. This field supports Einstein Attribution."
+    },
+    "enableAIAttribution": {
+      "type": "boolean",
+      "description": "Indicates whether the Einstein Attribution feature is enabled (true) or not (false). The default value is false. Available in API version 49.0 and later."
+    },
+    "enableAccountsAsCM": {
+      "type": "boolean",
+      "description": "Indicates whether accounts can be used as campaign members (true) or not (false). The default value is false. Available in API version 51.0 and later."
+    },
+    "enableAutoCampInfluenceDisabled": {
+      "type": "boolean",
+      "description": "Indicates whether Salesforce creates Campaign Influence information (true) or not (false). enableCampaignInfluence2 must be false to use this setting. The default value is false."
+    },
+    "enableB2bmaCampaignInfluence2": {
+      "type": "boolean",
+      "description": "Indicates whether your org can access campaign influence models from other systems, such as Pardot (true) or not (false). enableCampaignInfluence2 must be true to use this setting. The default value is false."
+    },
+    "enableCampaignHistoryTrackEnabled": {
+      "type": "boolean",
+      "description": "This read-only field is reserved for system use."
+    },
+    "enableCampaignInfluence2": {
+      "type": "boolean",
+      "description": "Indicates whether Customizable Campaign Influence is enabled (true) or not (false). When true, Campaign Influence 1.0 is hidden from users and is no longer active. The default value is true."
+    },
+    "enableCampaignMemberTWCF": {
+      "type": "boolean",
+      "description": "This read-only field is reserved for system use."
+    },
+    "enableEKAI": {
+      "type": "boolean",
+      "description": "Indicates whether Einstein Key Accounts Identification is enabled (true) or not (false). The default value is false. Available in API version 53.0 and later."
+    },
+    "enableOpportunityInfluence": {
+      "description": "Indicates whether Opportunity Influence campaign attribution is enabled (true) or not (false). When enabled, Opportunity Influence connects opportunity revenue to specific campaigns. The default value is false. Available with Marketing Cloud Growth and Advanced editions in API version 63.0 and higher."
+    },
+    "enableSuppressNoValueCI2": {
+      "type": "boolean",
+      "description": "This read-only field is reserved for system use."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CampaignSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"aiAttributionTimeframe\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"enableAIAttribution\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAccountsAsCM\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAutoCampInfluenceDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableB2bmaCampaignInfluence2\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCampaignHistoryTrackEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCampaignInfluence2\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCampaignMemberTWCF\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEKAI\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOpportunityInfluence\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSuppressNoValueCI2\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of the Campaign.settings file:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CampaignSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableCampaignInfluence2>true</enableCampaignInfluence2>\n    <enableSuppressNoValueCI2>true</enableSuppressNoValueCI2>\n    <enableCampaignHistoryTrackEnabled>true</enableCampaignHistoryTrackEnabled>\n    <enableAutoCampInfluenceDisabled>true</enableAutoCampInfluenceDisabled>\n    <enableCampaignMemberTWCF>true</enableCampaignMemberTWCF>\n    <enableB2bmaCampaignInfluence2>true</enableB2bmaCampaignInfluence2>\n    <enableAccountsAsCM>true</enableAccountsAsCM>\n    <enableAIAttribution>true</enableAIAttribution>\n    <aiAttributionTimeframe>9</aiAttributionTimeframe>\n    <enableEKAI>true</enableEKAI>\n</CampaignSettings>"
+    }
+  ]
+}

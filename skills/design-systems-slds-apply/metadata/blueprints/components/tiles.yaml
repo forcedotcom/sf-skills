@@ -1,0 +1,108 @@
+name: Tiles
+description: Visual components that display content in a card-like format with media elements, ideal for presenting items
+  in grid layouts or lists.
+category: Layout
+slds_classes:
+  root: slds-tile
+  elements:
+  - class: slds-tile__detail
+    description: Main content area of the tile
+    purpose: Contains title, description, and metadata
+  - class: slds-tile__meta
+    description: Metadata container
+    purpose: Additional information about the tile content
+  modifiers:
+  - class: slds-tile_board
+    description: Board-style tile for kanban layouts
+    usage: Tiles used in board or kanban interfaces
+  states:
+  - class: slds-is-selected
+    description: Selected tile state
+    trigger: When tile is currently selected
+  - class: slds-has-focus
+    description: Focus state for interactive tiles
+    trigger: When tile has keyboard focus
+variants:
+- name: Base
+  description: Standard tile with media and content
+  classes:
+  - slds-tile
+  usage_context: Default tile implementation for content display
+  differences: Media object pattern with visual element and content
+lightning_component:
+  name: lightning-tile
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-tile
+  mapping_notes: Direct mapping - Lightning component implements SLDS tile blueprint
+accessibility:
+  keyboard_support:
+  - Tab to focus interactive tiles
+  - Enter/Space to activate tile actions
+  - Arrow keys for grid navigation when appropriate
+  screen_reader:
+  - Tile content and purpose announced
+  - Media elements described appropriately
+  - Selection states communicated
+  - Associated actions clearly identified
+  aria_attributes:
+  - aria-labelledby for tile titles
+  - aria-describedby for tile metadata
+  - role='button' or 'link' for interactive tiles
+  - aria-selected for selectable tiles
+usage_guidelines:
+  when_to_use:
+  - For displaying collections of related content
+  - In grid layouts showing multiple items
+  - For content previews or summaries
+  - When visual hierarchy with media is beneficial
+  when_not_to_use:
+  - For simple text lists (use list components)
+  - When media elements are not relevant
+  - For complex interactive content (use cards instead)
+  best_practices:
+  - Use consistent tile sizing within collections
+  - Provide meaningful titles and descriptions
+  - Choose appropriate media elements
+  - Maintain good visual hierarchy
+  - Support keyboard navigation for interactive tiles
+  common_mistakes:
+  - Inconsistent tile sizes in the same collection
+  - Poor media element choices
+  - Unclear or missing tile labels
+  - Overloading tiles with too much information
+code_examples:
+- title: Basic Tile
+  code: "<div class=\"slds-tile\">\n      <div class=\"\">\n        <span class=\"slds-icon_container slds-icon-standard-account\"\
+    >\n          <svg class=\"slds-icon\" aria-hidden=\"true\">\n            <use xlink:href=\"/assets/icons/standard-sprite/svg/symbols.svg#account\"\
+    ></use>\n          </svg>\n        </span>\n      </div>\n      <div class=\"slds-tile__detail\">\n        <div class=\"\
+    \">\n          <a href=\"#\" title=\"Acme Corporation\">Acme Corporation</a>\n        </div>\n        <div class=\"slds-tile__meta\"\
+    >\n          <span class=\"slds-text-body_small\">Customer • San Francisco</span>\n        </div>\n      </div>\n    \
+    \  </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - tile.css
+  - media-objects.css
+  javascript: []
+  icons:
+  - standard-sprite.svg
+  - utility-sprite.svg
+  other_components:
+  - media-objects
+  - icons
+related_components:
+- name: Cards
+  relationship: similar
+  description: Similar container concept with more structure
+- name: Media Objects
+  relationship: depends-on
+  description: Based on media object layout pattern
+- name: Avatar
+  relationship: depends-on
+  description: Often used as media element in tiles
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/tiles/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

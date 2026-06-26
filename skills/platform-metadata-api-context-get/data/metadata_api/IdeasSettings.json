@@ -1,0 +1,52 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "IdeasSettings - Metadata API",
+  "description": "Represents the metadata used to manage settings for Ideas.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableIdeaThemes": {
+      "type": "boolean",
+      "description": "Indicates whether Idea Themes is enabled (true) or not (false)."
+    },
+    "enableIdeas": {
+      "type": "boolean",
+      "description": "Indicates whether Ideas is enabled (true) or not (false)."
+    },
+    "enableIdeasReputation": {
+      "type": "boolean",
+      "description": "Indicates whether Reputation is enabled (true) or not (false). You can’t enable IdeasReputation without enabling the Ideas Reputation permission in your organization. This field is available in API version 28.0 and later."
+    },
+    "enableChatterProfile": {
+      "type": "boolean",
+      "description": "Indicates that the Chatter user profile is used for Ideas user profiles. If enableChatterProfile is true, the ideasProfilePage value must not be specified. If enableChatterProfile is false, then specify a ideasProfilePage value, otherwise the Ideas zone profile is used. This field is available in API version 29.0 and later."
+    },
+    "ideasProfilePage": {
+      "type": "string",
+      "description": "The name of the Visualforce page to use for a custom Ideas user profile, if enableChatterProfile is false. If enableChatterProfile is false, then specify a ideasProfilePage value, otherwise the Ideas zone profile is used. This field is available in API version 29.0 and later."
+    },
+    "halfLife": {
+      "type": "double",
+      "description": "Indicates how quickly old ideas drop in ranking on the Popular Ideas subtab. The half-life setting determines how the number of days after which old ideas drop in ranking on the Popular Ideas subtab, to make room for ideas with more recent votes. A shorter half-life moves older ideas down the page faster than a longer half-life."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"IdeasSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableChatterProfile\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableHtmlIdea\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableIdeaMultipleCategory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableIdeaThemes\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableIdeas\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableIdeasControllerExtensions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableIdeasReputation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"halfLife\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"ideasProfilePage\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example ideas.settings metadata file:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<IdeasSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <enableIdeaThemes>true</enableIdeaThemes>\n   <enableIdeas>true</enableIdeas>\n   <enableIdeasReputation>true</enableIdeasReputation>\n   <enableChatterProfile>false</enableChatterProfile>\n   <ideasProfilePage>name of Visualforce page</ideasProfilePage>\n   <halfLife>2.6</halfLife>\n</IdeasSettings>"
+    }
+  ]
+}

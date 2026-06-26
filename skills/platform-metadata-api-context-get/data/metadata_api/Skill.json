@@ -1,0 +1,69 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Skill - Metadata API",
+  "description": "Represents the settings for a skill used for field service or to route chats to agents in Chat, such as the name of the skill and which agents the skills are assigned to.",
+  "file_information": ".skill",
+  "directory_location": "skills",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "assignments": {
+      "type": "SkillAssignments",
+      "description": "Specifies how skills are assigned to Chat users. Skills can be assigned to sets of users or sets of profiles."
+    },
+    "description": {
+      "type": "string",
+      "description": "Specifies the description of the skill. This field is available in API version 38.0 and later."
+    },
+    "label": {
+      "type": "string",
+      "description": "Specifies the name of the skill."
+    },
+    "skillType": {
+      "type": "string",
+      "description": "Specifies the skill type, such as language or department, associated with the skill. This field is available in API version 58.0 and later."
+    }
+  },
+  "sub_types": {
+    "SkillAssignments": {
+      "profiles": {
+        "type": "SkillProfileAssignments",
+        "description": "Specifies the profiles that are associated with a specific skill."
+      },
+      "users": {
+        "type": "SkillUserAssignments",
+        "description": "Specifies the users that are associated with a specific skill."
+      }
+    },
+    "SkillProfileAssignments": {
+      "profile": {
+        "type": "string",
+        "description": "Specifies the custom name of the profile associated with a specific skill."
+      }
+    },
+    "SkillUserAssignments": {
+      "user": {
+        "type": "string",
+        "description": "Specifies the username of the user associated with a specific skill."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Skill\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"assignments\" minOccurs=\"0\" type=\"tns:SkillAssignments\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"skillType\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SkillAssignments\">\n  <xsd:sequence>\n    <xsd:element name=\"profiles\" minOccurs=\"0\" type=\"tns:SkillProfileAssignments\"/>\n    <xsd:element name=\"users\" minOccurs=\"0\" type=\"tns:SkillUserAssignments\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SkillProfileAssignments\">\n  <xsd:sequence>\n    <xsd:element name=\"profile\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SkillUserAssignments\">\n  <xsd:sequence>\n    <xsd:element name=\"user\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is a sample of a skill file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Skill xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <label>My Skill 1</label>\n    <assignments>\n        <profiles>\n            <profile>LiveAgentOperator</profile>\n            <profile>LiveAgentSupervisor</profile>\n        </profiles>\n        <users>\n            <user>jdoe@acme.com</user>\n        </users>\n    </assignments>\n</Skill>"
+    }
+  ]
+}

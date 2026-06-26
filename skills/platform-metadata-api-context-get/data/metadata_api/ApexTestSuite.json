@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ApexTestSuite - Metadata API",
+  "description": "Represents a suite of Apex test classes to include in a test run.",
+  "file_information": ".testSuite",
+  "directory_location": "testSuites",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "testClassName": {
+      "type": "string[]",
+      "description": "A list of Apex test classes, specified by name, to include in this test suite."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ApexTestSuite\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"testClassName\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "To include namespaced tests in an Apex test suite, specify each namespace individually. Local Apex tests consist of all tests in the org that don’t originate from managed packages.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ApexTestSuite xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <testClassName>LocalTestClass</testClassName>\n      <!-- LocalTestClass adds the test class named LocalTestClass. -->\n   <testClassName>A*Class</testClassName>\n      <!-- A*Class adds AClass, AnotherClass, AwesomeClass, and so on. -->\n   <testClassName>Namespace1.NamespacedTestClass</testClassName>\n   <testClassName>*</testClassName> <!-- Adds all local tests. -->\n   <testClassName>Namespace1.*</testClassName> <!-- Adds all tests in Namespace1. -->\n   <testClassName>Namespace2.*</testClassName> <!-- Adds all tests in Namespace2. -->\n</ApexTestSuite>"
+    }
+  ]
+}

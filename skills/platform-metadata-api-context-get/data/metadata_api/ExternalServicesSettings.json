@@ -1,0 +1,34 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExternalServicesSettings - Metadata API",
+  "description": "Represents settings for an External Services registration.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableIgnoreUnsupportedOperations": {
+      "type": "boolean",
+      "description": "Indicates whether your registration should ignore and filter out unsupported schema operations rather than fail the entire registration (true), or whether a specification with invalid schema operations can't be registered successfully (false). Detailed schema errors pertaining to unsupported operations are shown only if this flag is false."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ExternalServicesSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ExternalServicesSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <enableIgnoreUnsupportedOperations>true</enableIgnoreUnsupportedOperations>\n</ExternalServicesSettings>"
+    },
+    {
+      "description": "The following is an example package.xml that references the previous definition.",
+      "code": "<types>\n    <members>ExternalServices</members>\n    <name>Settings</name>\n  </types>"
+    }
+  ]
+}

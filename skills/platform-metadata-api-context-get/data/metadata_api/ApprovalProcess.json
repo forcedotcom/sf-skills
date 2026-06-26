@@ -1,0 +1,234 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ApprovalProcess - Metadata API",
+  "description": "Represents the metadata associated with an approval process. An approval process automates how records are approved in Salesforce. An approval process specifies each step of approval, including who to request approval from and what to do at each point of the process.",
+  "file_information": ".approvalProcess",
+  "directory_location": "approvalProcesses",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "Whether the approval process is active. After an approval process is activated, you can’t add, delete, or change the order of the steps or change its reject or skip behavior, even if the process is inactive.",
+      "required": true
+    },
+    "allowRecall": {
+      "type": "boolean",
+      "description": "Whether to allow submitters to recall approval requests. If set to false, only administrators can recall approval requests."
+    },
+    "allowedSubmitters": {
+      "type": "ApprovalSubmitter[]",
+      "description": "An array of users who are allowed to submit records for approval.",
+      "required": true
+    },
+    "approvalPageFields": {
+      "type": "ApprovalPageField",
+      "description": "Specifies which fields to display on the approval page, where the approver goes to approve or reject the record. By default, the approval page displays the following: Name field Owner field (except for child objects) If you enable notifications in the Salesforce mobile app, keep in mind that approvers can view this list of fields on a mobile device. Select only the fields necessary for users to decide whether to approve or reject records."
+    },
+    "approvalStep": {
+      "type": "ApprovalStep[]",
+      "description": "An array of approval step definitions."
+    },
+    "description": {
+      "type": "string",
+      "description": "Describes the approval process."
+    },
+    "emailTemplate": {
+      "type": "string",
+      "description": "Specifies which Classic email template to use for approval requests. If not specified, the default email template is used. Lightning email templates aren’t packageable. We recommend using a Classic email template. When an approval process assigns an approval request to a user, Salesforce sends the user an approval request email."
+    },
+    "enableMobileDeviceAccess": {
+      "type": "boolean",
+      "description": "Whether users can access an external version of the approval page from any browser, including browsers on mobile devices, without logging in to Salesforce. Corresponds to Security Settings in the user interface. If set to true, approval steps can’t have approvers of type adhoc. If set to false, approvers must log in to Salesforce to access the approval page."
+    },
+    "entryCriteria": {
+      "type": "ApprovalEntryCriteria",
+      "description": "Determines which records can enter the approval process. Exclude this field to allow all records to enter the approval process. When you deploy an approval process with no entry criteria to overwrite an existing approval process with entry criteria, then the entry criteria from the existing process are applied to the deployed process."
+    },
+    "finalApprovalActions": {
+      "type": "ApprovalAction",
+      "description": "Specifies which workflow actions to execute when all required approvals have been given for a record."
+    },
+    "finalApprovalRecordLock": {
+      "type": "boolean",
+      "description": "Whether to keep the record locked after it receives all necessary approvals. Default: false."
+    },
+    "finalRejectionActions": {
+      "type": "ApprovalAction",
+      "description": "Specifies which workflow actions to execute after a record enters the final rejection state."
+    },
+    "finalRejectionRecordLock": {
+      "type": "boolean",
+      "description": "Whether to keep the record locked after it’s finally rejected. Default: false."
+    },
+    "initialSubmissionActions": {
+      "type": "ApprovalAction",
+      "description": "Specifies which workflow actions to execute when a record is initially submitted for approval."
+    },
+    "label": {
+      "type": "string",
+      "description": "Name of the approval process.",
+      "required": true
+    },
+    "nextAutomatedApprover": {
+      "type": "NextAutomatedApprover",
+      "description": "Specifies a standard or custom user hierarchy field that can be used to automatically assign the approver for an approval step. If you exclude this field, then no approval step can use a user hierarchy field to automatically assign the approver."
+    },
+    "postTemplate": {
+      "type": "string",
+      "description": "Post template to use for Approvals in Chatter. Chatter post approval notifications are only available for approval processes associated with an object that has been enabled for feed tracking."
+    },
+    "recallActions": {
+      "type": "ApprovalAction",
+      "description": "Specifies which workflow actions to execute when a pending approval request is withdrawn."
+    },
+    "recordEditability": {
+      "type": "RecordEditabilityType (enumeration of type string)",
+      "description": "Specifies which users can edit records that are pending approval. When a record is submitted for approval, it’s automatically locked to prevent other users from editing it during the approval process. Valid values are: AdminOnly—Records pending approval can be edited by: Users with the “Modify All Data” permission Users with the “Modify All Records” object-level permission for the given object AdminOrCurrentApprover—Records pending approval can be edited by: Users with the “Modify All Data” permission Users with the “Modify All Records” object-level permission for the given object The assigned approver, who must have edit access to the record through user permissions and the organization-wide sharing defaults for the given object"
+    },
+    "showApprovalHistory": {
+      "type": "boolean",
+      "description": "Whether to add the Approval History related list to the approval page, which is where the approver can view the approval request details and approve or reject the record. The Approval History related list tracks a record through the approval process. If you also want to add the Approval History related list to record detail and edit pages, use the Salesforce user interface to customize the page layouts for the given object."
+    }
+  },
+  "sub_types": {
+    "ApprovalSubmitter": {
+      "submitter": {
+        "type": "string",
+        "description": "Identifies a specific user or set of users who can submit records for approval. This field is required, except when the following types are specified and the submitter field is ignored: owner creator allInternalUsers Example:<allowedSubmitters> <type>allInternalUsers</type> </allowedSubmitters> <allowedSubmitters> <submitter>myGroup</submitter> <type>group</type> </allowedSubmitters>"
+      },
+      "type": {
+        "type": "ProcessSubmitterType (enumeration of type string)",
+        "description": "Type of user or set of users who can submit records for approval. Valid values are: group role user roleSubordinates roleSubordinatesInternal owner creator partnerUser customerPortalUser portalRole portalRoleSubordinates allInternalUsers—all Salesforce users in the organization",
+        "required": true
+      }
+    },
+    "ApprovalPageField": {
+      "field": {
+        "type": "string[]",
+        "description": "An array of fields that are displayed on the page for the approver to approve or reject the record."
+      }
+    },
+    "ApprovalStep": {
+      "allowDelegate": {
+        "type": "boolean",
+        "description": "Whether to allow delegated approvers in this step of the approval process. A delegated approver is a user appointed by an assigned approver as an alternate for approval requests."
+      },
+      "approvalActions": {
+        "type": "ApprovalAction",
+        "description": "Specifies which workflow actions to execute when a record is approved in this step of the approval process."
+      },
+      "assignedApprover": {
+        "type": "ApprovalStepApprover",
+        "description": "Specifies the assigned approvers for this step of the approval process."
+      },
+      "description": {
+        "type": "string",
+        "description": "Describes the approval step."
+      },
+      "entryCriteria": {
+        "type": "ApprovalEntryCriteria",
+        "description": "Determines which records can enter this step of the approval process."
+      },
+      "ifCriteriaNotMet": {
+        "type": "StepCriteriaNotMetType (enumeration of type string)",
+        "description": "Specifies what to do for records that don't meet the entry criteria. Valid values are: ApproveRecord—Approve the request and execute all final approval actions. RejectRecord—Reject the request and execute all final rejection actions. This option is available only for the first step in the approval process. GotoNextStep—Skip to the next approval step. If you select this option for the first approval step, and a record doesn’t meet the entry criteria for any other step, the record is rejected."
+      },
+      "label": {
+        "type": "string",
+        "description": "Name of the approval step.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Unique name of the approval step. It must contain only underscores and alphanumeric characters, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. The requirement for uniqueness is only within the specific approval process.",
+        "required": true
+      },
+      "rejectBehavior": {
+        "type": "ApprovalStepRejectBehavior",
+        "description": "Required, except for the first step in the approval process. Specifies what happens if the approver rejects the request during this approval step, unless it's the first step in the approval process. If the approver rejects the request in the first step in the approval process, the reject behavior is determined by the finalRejectionActions.",
+        "required": true
+      },
+      "rejectionActions": {
+        "type": "ApprovalAction",
+        "description": "Specifies which workflow actions to execute when a record is rejected in this step of the approval process."
+      }
+    },
+    "ApprovalAction": {
+      "action": {
+        "type": "WorkflowActionReference[]",
+        "description": "An array of workflow actions to execute."
+      }
+    },
+    "ApprovalStepApprover": {
+      "approver": {
+        "type": "Approver[]",
+        "description": "An array of assigned approvers for this step of the approval process."
+      },
+      "whenMultipleApprovers": {
+        "type": "RoutingType (enumeration of type string)",
+        "description": "Specifies how to handle approval or rejection when multiple approvers are assigned to the step. Valid values are: Unanimous—(Default) Require unanimous approval from all approvers for this step. If any of the approvers reject the request, the approval request for this step is rejected. FirstResponse—Approve or reject based on the first response."
+      }
+    },
+    "Approver": {
+      "name": {
+        "type": "string",
+        "description": "Identifies an assigned approver. This field is required, except when the type is one of the following and the name is ignored: adhoc userHierarchyField"
+      },
+      "type": {
+        "type": "NextOwnerType (enumeration of type string)",
+        "description": "Combined with the specified name, type identifies an assigned approver. Valid values are: adhoc—The approver for the step must be selected manually. For the first step, the submitter selects the approver. For the second and later steps, the approver for the previous step selects the approver. For this value, exclude the name field. user—A user in your organization. For this value, enter a username for the name field. userHierarchyField—A user specified in a standard or custom user hierarchy field, such as the standard Manager field. For this value, exclude the name field. The user hierarchy field must be defined in the nextAutomatedApprovers for the approval process. relatedUserField—A user specified in a user lookup field on the submitted record, such as the Last Modified By field. For this value, enter the name of the user lookup field for the name field. queue—Automatically assign to a queue. For this value, enter the name of the queue for the name field."
+      }
+    },
+    "ApprovalEntryCriteria": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "Filter logic for criteriaItems. Exclude this field if you enter a formula."
+      },
+      "criteriaItems": {
+        "type": "FilterItem[]",
+        "description": "Filter criteria that a record must meet to enter the approval process or approval step. Approval processes don’t support valueField entries in filter criteria."
+      },
+      "formula": {
+        "type": "string",
+        "description": "Formula that must evaluate to true for a record to enter the approval process or approval step."
+      }
+    },
+    "ApprovalStepRejectBehavior": {
+      "type": {
+        "type": "StepRejectBehaviorType (enumeration of type string)",
+        "description": "Not allowed in the first step of the approval process. Valid values are: RejectRequest—Rejects the request even if previous steps were approved. Salesforce performs all rejection actions specified for this step and all final rejection actions. BackToPrevious—Rejects the request, and returns the approval request to the previous approver. Salesforce performs all rejection actions specified for this step."
+      }
+    },
+    "NextAutomatedApprover": {
+      "useApproverFieldOfRecordOwner": {
+        "type": "boolean",
+        "description": "Whether the first executed approval step uses the specified userHierarchyField in the record owner’s user record—instead of the submitter’s user record—as the approver. All remaining steps use the specified userHierarchyField in the user record of the preceding step’s approver.",
+        "required": true
+      },
+      "userHierarchyField": {
+        "type": "string",
+        "description": "Standard or custom user hierarchy field whose value specifies which user to assign as the approver. For example, the standard Manager hierarchy field can be used to assign approvers for employee PTO (paid time off) requests.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ApprovalAction\">\n  <xsd:sequence>\n    <xsd:element name=\"action\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowActionReference\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ApprovalEntryCriteria\">\n  <xsd:sequence>\n    <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"criteriaItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n    <xsd:element name=\"formula\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ApprovalPageField\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ApprovalProcess\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"allowRecall\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"allowedSubmitters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ApprovalSubmitter\"/>\n        <xsd:element name=\"approvalPageFields\" minOccurs=\"0\" type=\"tns:ApprovalPageField\"/>\n        <xsd:element name=\"approvalStep\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ApprovalStep\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"emailTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableMobileDeviceAccess\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"entryCriteria\" minOccurs=\"0\" type=\"tns:ApprovalEntryCriteria\"/>\n        <xsd:element name=\"finalApprovalActions\" minOccurs=\"0\" type=\"tns:ApprovalAction\"/>\n        <xsd:element name=\"finalApprovalRecordLock\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"finalRejectionActions\" minOccurs=\"0\" type=\"tns:ApprovalAction\"/>\n        <xsd:element name=\"finalRejectionRecordLock\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"initialSubmissionActions\" minOccurs=\"0\" type=\"tns:ApprovalAction\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"nextAutomatedApprover\" minOccurs=\"0\" type=\"tns:NextAutomatedApprover\"/>\n        <xsd:element name=\"postTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"processOrder\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"recallActions\" minOccurs=\"0\" type=\"tns:ApprovalAction\"/>\n        <xsd:element name=\"recordEditability\" type=\"tns:RecordEditabilityType\"/>\n        <xsd:element name=\"showApprovalHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ApprovalStep\">\n  <xsd:sequence>\n    <xsd:element name=\"allowDelegate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"approvalActions\" minOccurs=\"0\" type=\"tns:ApprovalAction\"/>\n    <xsd:element name=\"assignedApprover\" type=\"tns:ApprovalStepApprover\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"entryCriteria\" minOccurs=\"0\" type=\"tns:ApprovalEntryCriteria\"/>\n    <xsd:element name=\"ifCriteriaNotMet\" minOccurs=\"0\" type=\"tns:StepCriteriaNotMetType\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"rejectBehavior\" minOccurs=\"0\" type=\"tns:ApprovalStepRejectBehavior\"/>\n    <xsd:element name=\"rejectionActions\" minOccurs=\"0\" type=\"tns:ApprovalAction\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ApprovalStepApprover\">\n  <xsd:sequence>\n    <xsd:element name=\"approver\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Approver\"/>\n    <xsd:element name=\"whenMultipleApprovers\" minOccurs=\"0\" type=\"tns:RoutingType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ApprovalStepRejectBehavior\">\n  <xsd:sequence>\n    <xsd:element name=\"type\" type=\"tns:StepRejectBehaviorType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ApprovalSubmitter\">\n  <xsd:sequence>\n    <xsd:element name=\"submitter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:ProcessSubmitterType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Approver\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:NextOwnerType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FilterItem\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"operation\" type=\"tns:FilterOperation\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueField\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FilterOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"equals\"/>\n    <xsd:enumeration value=\"notEqual\"/>\n    <xsd:enumeration value=\"lessThan\"/>\n    <xsd:enumeration value=\"greaterThan\"/>\n    <xsd:enumeration value=\"lessOrEqual\"/>\n    <xsd:enumeration value=\"greaterOrEqual\"/>\n    <xsd:enumeration value=\"contains\"/>\n    <xsd:enumeration value=\"notContain\"/>\n    <xsd:enumeration value=\"startsWith\"/>\n    <xsd:enumeration value=\"includes\"/>\n    <xsd:enumeration value=\"excludes\"/>\n    <xsd:enumeration value=\"within\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NextAutomatedApprover\">\n  <xsd:sequence>\n    <xsd:element name=\"useApproverFieldOfRecordOwner\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"userHierarchyField\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"NextOwnerType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"adhoc\"/>\n    <xsd:enumeration value=\"user\"/>\n    <xsd:enumeration value=\"userHierarchyField\"/>\n    <xsd:enumeration value=\"relatedUserField\"/>\n    <xsd:enumeration value=\"queue\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ProcessSubmitterType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"group\"/>\n    <xsd:enumeration value=\"role\"/>\n    <xsd:enumeration value=\"user\"/>\n    <xsd:enumeration value=\"roleSubordinates\"/>\n    <xsd:enumeration value=\"roleSubordinatesInternal\"/>\n    <xsd:enumeration value=\"owner\"/>\n    <xsd:enumeration value=\"creator\"/>\n    <xsd:enumeration value=\"partnerUser\"/>\n    <xsd:enumeration value=\"customerPortalUser\"/>\n    <xsd:enumeration value=\"portalRole\"/>\n    <xsd:enumeration value=\"portalRoleSubordinates\"/>\n    <xsd:enumeration value=\"allInternalUsers\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"RecordEditabilityType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AdminOnly\"/>\n    <xsd:enumeration value=\"AdminOrCurrentApprover\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"RoutingType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Unanimous\"/>\n    <xsd:enumeration value=\"FirstResponse\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"StepCriteriaNotMetType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ApproveRecord\"/>\n    <xsd:enumeration value=\"RejectRecord\"/>\n    <xsd:enumeration value=\"GotoNextStep\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"StepRejectBehaviorType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"RejectRequest\"/>\n    <xsd:enumeration value=\"BackToPrevious\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"WorkflowActionReference\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:WorkflowActionType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"WorkflowActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"FieldUpdate\"/>\n    <xsd:enumeration value=\"KnowledgePublish\"/>\n    <xsd:enumeration value=\"Task\"/>\n    <xsd:enumeration value=\"Alert\"/>\n    <xsd:enumeration value=\"Send\"/>\n    <xsd:enumeration value=\"OutboundMessage\"/>\n    <xsd:enumeration value=\"FlowAction\"/>\n    <xsd:enumeration value=\"FlowAutomation\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ApprovalProcess component:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ApprovalProcess xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <active>false</active>\n    <allowRecall>false</allowRecall>\n    <allowedSubmitters>\n        <type>owner</type>\n    </allowedSubmitters>\n    <allowedSubmitters>\n        <submitter>USSalesRep</submitter>\n        <type>role</type>\n    </allowedSubmitters>\n    <allowedSubmitters>\n        <submitter>MarketingGroup</submitter>\n        <type>group</type>\n    </allowedSubmitters>\n    <allowedSubmitters>\n        <submitter>kcooper@example.com</submitter>\n        <type>user</type>\n    </allowedSubmitters>\n    <approvalPageFields>\n        <field>Name</field>\n        <field>Owner</field>\n        <field>MyLeadCustomField__c</field>\n        <field>Address</field>\n    </approvalPageFields>\n    <approvalStep>\n        <allowDelegate>false</allowDelegate>\n        <approvalActions>\n            <action>\n                <name>LeadApprovedTask1</name>\n                <type>Task</type>\n            </action>\n            <action>\n                <name>LeadApprovedTask2</name>\n                <type>Task</type>\n            </action>\n        </approvalActions>\n        <assignedApprover>\n            <approver>\n                <type>adhoc</type>\n            </approver>\n        </assignedApprover>\n        <label>Step1</label>\n        <name>Step1</name>\n        <rejectionActions>\n            <action>\n                <name>LeadRejectedTask</name>\n                <type>Task</type>\n            </action>\n        </rejectionActions>\n    </approvalStep>\n    <approvalStep>\n        <allowDelegate>false</allowDelegate>\n        <assignedApprover>\n            <approver>\n                <type>userHierarchyField</type>\n            </approver>\n        </assignedApprover>\n        <entryCriteria>\n            <criteriaItems>\n                <field>Lead.CreatedDate</field>\n                <operation>greaterThan</operation>\n                <value>3/25/2013</value>\n            </criteriaItems>\n            <criteriaItems>\n                <field>User.IsActive</field>\n                <operation>notEqual</operation>\n                <value>true</value>\n            </criteriaItems>\n        </entryCriteria>\n        <ifCriteriaNotMet>ApproveRecord</ifCriteriaNotMet>\n        <label>Step2</label>\n        <name>Step2</name>\n        <rejectBehavior>\n            <type>RejectRequest</type>\n        </rejectBehavior>\n    </approvalStep>\n    <approvalStep>\n        <allowDelegate>true</allowDelegate>\n        <assignedApprover>\n            <approver>\n                <name>MarketingTeamQueue</name>\n                <type>queue</type>\n            </approver>\n            <approver>\n                <name>LastModifiedBy</name>\n                <type>relatedUserField</type>\n            </approver>\n            <approver>\n                <name>awheeler@example.com</name>\n                <type>user</type>\n            </approver>\n            <whenMultipleApprovers>FirstResponse</whenMultipleApprovers>\n        </assignedApprover>\n        <entryCriteria>\n            <formula>CONTAINS( MyLeadCustomField__c , 'Salesforce')</formula>\n        </entryCriteria>\n        <label>Step3</label>\n        <name>Step3</name>\n        <rejectBehavior>\n            <type>BackToPrevious</type>\n        </rejectBehavior>\n    </approvalStep>\n    <emailTemplate>MyFolder/LeadsNewassignmentnotification</emailTemplate>\n    <enableMobileDeviceAccess>false</enableMobileDeviceAccess>\n    <entryCriteria>\n        <criteriaItems>\n            <field>Lead.AnnualRevenue</field>\n            <operation>greaterThan</operation>\n            <value>10500</value>\n        </criteriaItems>\n        <criteriaItems>\n            <field>Lead.MyLeadCustomField__c</field>\n            <operation>equals</operation>\n            <value>Salesforce</value>\n        </criteriaItems>\n    </entryCriteria>\n    <finalApprovalActions>\n        <action>\n            <name>LeadEmailContacted</name>\n            <type>Alert</type>\n        </action>\n    </finalApprovalActions>\n    <finalApprovalRecordLock>true</finalApprovalRecordLock>\n    <finalRejectionActions>\n        <action>\n            <name>ProcessRejectedMessageAction</name>\n            <type>OutboundMessage</type>\n        </action>\n    </finalRejectionActions>\n    <finalRejectionRecordLock>false</finalRejectionRecordLock>\n    <initialSubmissionActions>\n        <action>\n            <name>LeadFieldUpdate</name>\n            <type>FieldUpdate</type>\n        </action>\n        <action>\n            <name>NewLeadEmail</name>\n            <type>Alert</type>\n        </action>\n    </initialSubmissionActions>\n    <label>SampleProcess</label>\n    <nextAutomatedApprover>\n        <useApproverFieldOfRecordOwner>false</useApproverFieldOfRecordOwner>\n        <userHierarchyField>customlookupuserfield__c</userHierarchyField>\n    </nextAutomatedApprover>\n    <postTemplate>MyPostTemplate</postTemplate>\n    <recallActions>\n        <action>\n            <name>ProcessRecalledMessageAction</name>\n            <type>OutboundMessage</type>\n        </action>\n    </recallActions>\n    <recordEditability>AdminOnly</recordEditability>\n    <showApprovalHistory>false</showApprovalHistory>\n</ApprovalProcess>"
+    }
+  ]
+}

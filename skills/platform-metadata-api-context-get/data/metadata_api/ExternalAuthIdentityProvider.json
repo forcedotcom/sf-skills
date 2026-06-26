@@ -1,0 +1,79 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExternalAuthIdentityProvider - Metadata API",
+  "description": "Represents an external authentication (auth) identity provider. An external auth identity provider links to an external credential and obtains OAuth tokens for outbound callouts to external systems.",
+  "file_information": ".externalAuthIdentityProvider",
+  "directory_location": "externalAuthIdentityProviders",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "authenticationFlow": {
+      "type": "IdentityProviderAuthFlow (enumeration of type string)",
+      "required": true,
+      "description": "Authentication flow to get tokens to call protected APIs. Values are: AuthorizationCode ClientCredentials SalesforceDefined"
+    },
+    "authenticationProtocol": {
+      "type": "IdentityProviderAuthProtocol (enumeration of type string)",
+      "required": true,
+      "description": "The authentication protocol that’s required to access the external system. Values are: OAuth SalesforceDefined"
+    },
+    "description": {
+      "type": "string",
+      "description": "A meaningful description of the external auth identity provider."
+    },
+    "externalAuthIdentityProviderParameters": {
+      "type": "ExternalAuthIdentityProviderParameter[]",
+      "description": "One or more sets of parameters that further configure the external auth identity provider."
+    },
+    "label": {
+      "type": "string",
+      "required": true,
+      "description": "Name of the external auth identity provider."
+    }
+  },
+  "sub_types": {
+    "ExternalAuthIdentityProviderParameter": {
+      "description": {
+        "type": "string",
+        "description": "A human-readable description of this external auth identity provider parameter."
+      },
+      "parameterName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the external auth identity provider parameter."
+      },
+      "parameterType": {
+        "type": "ExtlIdentityProviderParmType (enumeration of type string)",
+        "required": true,
+        "description": "The type of external auth identity provider parameter. The value of this field drives the behavior of the parameter. Values are: AuthorizeRequestQueryParameter AuthorizeUrl ClientAuthentication CreatedByNamespace IdentityProviderOptions ManagedByComponent ManagedByFeature RefreshRequestBodyParameter RefreshRequestHttpHeader RefreshRequestQueryParameter StandardExternalIdentityProvider TokenRequestBodyParameter TokenRequestHttpHeader TokenRequestQueryParameter TokenUrl UserInfoUrl"
+      },
+      "parameterValue": {
+        "type": "string",
+        "description": "If the parameterType field describes a literal value, then this field stores the literal value."
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "description": "Specifies the order of parameters to apply when an external auth identity provider has more than one parameter. Priority is from lower to higher numbers (for example, 1 is the highest priority)."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ExternalAuthIdentityProvider\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"authenticationFlow\" type=\"tns:IdentityProviderAuthFlow\"/>\n        <xsd:element name=\"authenticationProtocol\" type=\"tns:IdentityProviderAuthProtocol\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalAuthIdentityProviderParameters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ExternalAuthIdentityProviderParameter\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ExternalAuthIdentityProviderParameter\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"parameterName\" type=\"xsd:string\"/>\n    <xsd:element name=\"parameterType\" type=\"tns:ExtlIdentityProviderParmType\"/>\n    <xsd:element name=\"parameterValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sequenceNumber\" minOccurs=\"0\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ExtlIdentityProviderParmType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AuthorizeUrl\"/>\n    <xsd:enumeration value=\"TokenUrl\"/>\n    <xsd:enumeration value=\"CreatedByNamespace\"/>\n    <xsd:enumeration value=\"UserInfoUrl\"/>\n    <xsd:enumeration value=\"ClientAuthentication\"/>\n    <xsd:enumeration value=\"IdentityProviderOptions\"/>\n    <xsd:enumeration value=\"AuthorizeRequestQueryParameter\"/>\n    <xsd:enumeration value=\"TokenRequestQueryParameter\"/>\n    <xsd:enumeration value=\"TokenRequestBodyParameter\"/>\n    <xsd:enumeration value=\"TokenRequestHttpHeader\"/>\n    <xsd:enumeration value=\"RefreshRequestQueryParameter\"/>\n    <xsd:enumeration value=\"RefreshRequestBodyParameter\"/>\n    <xsd:enumeration value=\"RefreshRequestHttpHeader\"/>\n    <xsd:enumeration value=\"StandardExternalIdentityProvider\"/>\n    <xsd:enumeration value=\"ManagedByFeature\"/>\n    <xsd:enumeration value=\"ManagedByComponent\"/>\n    <xsd:enumeration value=\"SfHttpRequestExtensionName\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"IdentityProviderAuthFlow\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AuthorizationCode\"/>\n    <xsd:enumeration value=\"ClientCredentials\"/>\n    <xsd:enumeration value=\"SalesforceDefined\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"IdentityProviderAuthProtocol\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"OAuth\"/>\n    <xsd:enumeration value=\"SalesforceDefined\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ExternalAuthIdentityProvider component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ExternalAuthIdentityProvider xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <authenticationFlow>AuthorizationCode</authenticationFlow>\n    <authenticationProtocol>OAuth</authenticationProtocol>\n    <description>OAuth Browser flow for connected app</description>\n    <externalAuthIdentityProviderParameter>\n        <parameterName>TokenUrl</parameterName>\n        <parameterType>TokenUrl</parameterType>\n        <parameterValue>https://localhost:6101/services/oauth2/token</parameterValue>\n        <sequenceNumber>1</sequenceNumber>\n    </externalAuthIdentityProviderParameter>\n    <externalAuthIdentityProviderParameter>\n        <parameterName>AuthorizeUrl</parameterName>\n        <parameterType>AuthorizeUrl</parameterType>\n        <parameterValue>https://localhost:6101/services/oauth2/authorize</parameterValue>\n        <sequenceNumber>2</sequenceNumber>\n    </externalAuthIdentityProviderParameter>\n    <label>exampleExtlIdp</label>\n</ExternalAuthIdentityProvider>"
+    }
+  ]
+}

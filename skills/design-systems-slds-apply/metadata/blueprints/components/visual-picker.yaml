@@ -1,0 +1,150 @@
+name: Visual Picker
+description: A selection interface that presents options as visual cards or tiles, allowing users to choose from alternatives
+  using images, icons, and descriptive text rather than traditional form controls.
+category: Input
+slds_classes:
+  root: slds-visual-picker
+  elements:
+  - class: slds-visual-picker__figure
+    description: Container for visual content (icon, image)
+    purpose: Holds the primary visual representation
+  - class: slds-visual-picker__body
+    description: Container for text content
+    purpose: Contains title, description, and other text
+  - class: slds-visual-picker__text
+    description: Primary text/title for the option
+    purpose: Main label or title for the visual option
+  - class: slds-visual-picker__icon
+    description: Icon within the visual picker
+    purpose: Visual icon representation
+  modifiers:
+  - class: slds-visual-picker_medium
+    description: Medium-sized visual picker
+    usage: Standard size for most use cases
+  - class: slds-visual-picker_large
+    description: Large-sized visual picker
+    usage: When more visual prominence is needed
+  - class: slds-visual-picker_small
+    description: Small-sized visual picker
+    usage: For compact layouts or secondary options
+  - class: slds-visual-picker_vertical
+    description: Vertical layout orientation
+    usage: When vertical stacking is preferred
+  states:
+  - class: slds-is-selected
+    description: Selected visual picker state
+    trigger: Applied when option is selected
+  - class: slds-has-error
+    description: Error state for visual picker
+    trigger: Applied when validation fails
+variants:
+- name: Base
+  description: Standard visual picker with icon and text
+  classes:
+  - slds-visual-picker
+  usage_context: Default implementation for visual selection
+  differences: Card-like interface with visual and text content
+- name: Coverable Content
+  description: Visual picker with coverable content area
+  classes:
+  - slds-visual-picker
+  usage_context: When content should be covered by selection state
+  differences: Selection state covers the entire content area
+- name: Non-coverable Content
+  description: Visual picker with always-visible content
+  classes:
+  - slds-visual-picker
+  usage_context: When content should remain visible when selected
+  differences: Content remains visible in all states
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component equivalent - can be implemented using lightning-radio-group or lightning-checkbox-group
+    with custom styling
+accessibility:
+  keyboard_support:
+  - Tab navigation between visual picker options
+  - Space to select/deselect options
+  - Arrow keys for radio group navigation
+  - Enter to activate selections
+  screen_reader:
+  - Option content and state announced
+  - Selection changes communicated
+  - Group structure and labels conveyed
+  aria_attributes:
+  - role='radio' or 'checkbox' for input elements
+  - role='radiogroup' or 'group' for containers
+  - aria-checked for selection state
+  - aria-labelledby for option labeling
+  - aria-describedby for additional descriptions
+usage_guidelines:
+  when_to_use:
+  - For visually-driven selection scenarios
+  - When options benefit from visual representation
+  - For product selection or configuration
+  - When traditional form controls feel inadequate
+  when_not_to_use:
+  - For simple text-only options (use radio/checkbox)
+  - When visual content is not meaningful
+  - In data-heavy or technical contexts
+  best_practices:
+  - Use clear, meaningful visual representations
+  - Provide descriptive text alongside visuals
+  - Ensure adequate contrast for selection states
+  - Make the entire card clickable
+  - Group related options logically
+  common_mistakes:
+  - Using unclear or confusing visuals
+  - Making selection areas too small
+  - Poor contrast in selection states
+  - Inconsistent visual picker sizes
+code_examples:
+- title: Basic Visual Picker Radio Group
+  description: Compact visual picker options for space-constrained layouts
+  code: "<fieldset class=\"slds-form-element\">\n      <legend class=\"slds-form-element__legend slds-form-element__label\"\
+    >Choose color</legend>\n      <div class=\"slds-form-element__control\">\n        <div class=\"slds-grid slds-wrap slds-grid_pull-padded\"\
+    >\n          <div class=\"slds-p-around_x-small\">\n            <div class=\"slds-visual-picker slds-visual-picker_small\"\
+    >\n              <input type=\"radio\" id=\"color-red\" value=\"red\" name=\"color\" />\n              <label for=\"color-red\"\
+    >\n                <span class=\"slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center\">\n \
+    \                 <span class=\"slds-visual-picker__icon\" style=\"background-color: #e74c3c; width: 2rem; height: 2rem;\
+    \ border-radius: 50%;\"></span>\n                </span>\n                <span class=\"slds-visual-picker__body\">\n\
+    \                  <span class=\"slds-visual-picker__text\">Red</span>\n                </span>\n              </label>\n\
+    \            </div>\n          </div>\n          <div class=\"slds-p-around_x-small\">\n            <div class=\"slds-visual-picker\
+    \ slds-visual-picker_small\">\n              <input type=\"radio\" id=\"color-blue\" value=\"blue\" name=\"color\" />\n\
+    \              <label for=\"color-blue\">\n                <span class=\"slds-visual-picker__figure slds-visual-picker__text\
+    \ slds-align_absolute-center\">\n                  <span class=\"slds-visual-picker__icon\" style=\"background-color:\
+    \ #3498db; width: 2rem; height: 2rem; border-radius: 50%;\"></span>\n                </span>\n                <span class=\"\
+    slds-visual-picker__body\">\n                  <span class=\"slds-visual-picker__text\">Blue</span>\n                </span>\n\
+    \              </label>\n            </div>\n          </div>\n        </div>\n      </div>\n      </fieldset>\n"
+dependencies:
+  css_files:
+  - visual-picker.css
+  - form-element.css
+  - radio.css
+  - checkbox.css
+  javascript:
+  - visual-picker.js
+  icons:
+  - standard-sprite.svg
+  - utility-sprite.svg
+  other_components:
+  - radio
+  - checkbox
+  - form-element
+related_components:
+- name: Radio Group
+  relationship: alternative
+  description: Alternative for single selection scenarios
+- name: Checkbox Group
+  relationship: alternative
+  description: Alternative for multiple selection scenarios
+- name: Cards
+  relationship: similar
+  description: Similar card-based interface concept
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/visual-picker/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

@@ -1,0 +1,66 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "HomePageComponent - Metadata API",
+  "description": "Represents the metadata associated with a home page component. You can customize the Home tab in Salesforce Classic to include components such as sidebar links, a company logo, a dashboard snapshot, or custom components that you create. Use to create, update, or delete home page component definitions.",
+  "file_information": ".homePageComponent",
+  "directory_location": "homepagecomponents",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "body": {
+      "type": "string",
+      "description": "The text body inside the HTML page component."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The name can only contain characters, letters, and the underscore (_) character. The name must start with a letter, and can’t end with an underscore or contain two consecutive underscore characters. Inherited from the Metadata component, this field isn’t defined in the WSDL for this component. It must be specified when creating, updating, or deleting. See create() to see an example of this field specified for a call."
+    },
+    "height": {
+      "type": "int",
+      "description": "Required for Visualforce Area components. Indicates the height (in pixels) of the component. This field is available in API version 31.0 and later.",
+      "required": true
+    },
+    "links": {
+      "type": "string[]",
+      "description": "If the pageComponentType is links, then zero or more names of custom page links can be specified. ObjectWebLink CustomPageWebLink"
+    },
+    "page": {
+      "type": "string",
+      "description": "This field is only available for Visualforce Area components and indicates the API name of the Visualforce page that is associated with the component. This field is available in API version 31.0 and later."
+    },
+    "pageComponentType": {
+      "type": "PageComponentType (enumeration of type string)",
+      "description": "Valid values are: links htmlArea imageOrNote visualforcePage (This value is available in API version 31.0 and later.)",
+      "required": true
+    },
+    "showLabel": {
+      "type": "boolean",
+      "description": "This field is only available for Visualforce Area components and specifies whether the component displays with a label (true) or not (false). This field is available in API version 31.0 and later."
+    },
+    "showScrollbars": {
+      "type": "boolean",
+      "description": "This field is only available for Visualforce Area components and specifies whether the component displays with scrollbars (true) or not (false). This field is available in API version 31.0 and later."
+    },
+    "width": {
+      "type": "PageComponentWidth (enumeration of type string)",
+      "description": "This field is only available for HTML and Visualforce Area components, and indicates whether it’s a narrow or wide home page component. Valid values are: narrowComponents wideComponents"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"HomePageComponent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"body\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"height\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"links\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"page\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"pageComponentType\" type=\"tns:PageComponentType\"/>\n        <xsd:element name=\"showLabel\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showScrollbars\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"width\" minOccurs=\"0\" type=\"tns:PageComponentWidth\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"PageComponentType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"links\"/>\n    <xsd:enumeration value=\"htmlArea\"/>\n    <xsd:enumeration value=\"imageOrNote\"/>\n    <xsd:enumeration value=\"visualforcePage\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PageComponentWidth\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"narrow\"/>\n    <xsd:enumeration value=\"wide\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is the definition of a home page component. See Declarative Metadata Sample Definition and Declarative Metadata Sample Definition for related samples.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<HomePageComponent xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <height>200</height>\n  <page>MyVisualforcePage</page>\n  <pageComponentType>visualforcePage</pageComponentType>\n  <showLabel>true</showLabel>\n  <showScrollbars>true</showScrollbars>\n  <width>wideComponents</width>\n</HomePageComponent>"
+    }
+  ]
+}

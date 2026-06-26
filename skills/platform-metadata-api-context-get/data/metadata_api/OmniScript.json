@@ -1,0 +1,204 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "# OmniScript - Metadata API",
+  "description": "## Description\n\nRepresents an OmniScript for the Discovery Framework, which guides users through sales, service, and other business processes. For Discovery Framework, the customization type is discoveryframework.",
+  "file_information": "## File Information\n\n- **File Suffix**: `.omniScript`\n",
+  "directory_location": "## Directory Location\n\n- **Directory Location**: `omniScripts`\n",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "assessmentDefinitionMetadata": {
+      "type": "AssessmentDefinitionMetadata[]",
+      "description": "Metadata associated with an assessment definition. Available in API version 64.0 and later."
+    },
+    "customHtmlTemplates": {
+      "type": "string",
+      "description": "The angular OmniScript template definitions."
+    },
+    "customJavaScript": {
+      "type": "string",
+      "description": "The custom JavaScript used for an OmniScript."
+    },
+    "designerCustomizationType": {
+      "type": "string",
+      "description": "The Omnistudio designer customization type. NoteTo create assessment questions using the Discovery Framework feature, use the customization type as discoveryframework."
+    },
+    "elementTypeComponentMapping": {
+      "type": "string",
+      "description": "Overrides all elements of one type with a custom Lightning web component by mapping the element type to the Custom LWC."
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether the status of the OmniProcessElement is active (true) or not (false)."
+    },
+    "isIntegrationProcedure": {
+      "type": "boolean",
+      "description": "Indicates whether OmniScript is an Integration Procedure (true) or OmniScript metadata (false). The default value is false."
+    },
+    "isManagedUsingStdDesigner": {
+      "type": "boolean",
+      "description": "Indicates whether Omniscript is managed using standard designer (true) or not (false). Available in API version 64.0 and later."
+    },
+    "isMetadataCacheDisabled": {
+      "type": "boolean",
+      "description": "Indicates whether metadata cache for the integration procedure is disabled (true) or not (false). The default value is false."
+    },
+    "isOmniScriptEmbeddable": {
+      "type": "boolean",
+      "description": "Indicates whether the OmniScript with the OmniProcessElement can be embedded in other OmniScripts (true) or not (false)."
+    },
+    "isTestProcedure": {
+      "type": "boolean",
+      "description": "Indicates whether OmniScript is a test procedure setting (true) or not (false). The default value is false"
+    },
+    "isWebCompEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether web component OmniScript (not Angular) is enabled (true) or not (false). The default value is false"
+    },
+    "language": {
+      "type": "string",
+      "required": true,
+      "description": "The language of the OmniScript."
+    },
+    "lastPreviewPage": {
+      "type": "string",
+      "description": "The last page previewed in the OmniScript designer."
+    },
+    "name": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the OmniProcessElement."
+    },
+    "namespace": {
+      "type": "string",
+      "description": "The namespace associated with this OmniScript record."
+    },
+    "omniAssessmentTasks": {
+      "type": "OmniAssessmentTaskMetadata[]",
+      "description": "The omniAssessmentTasks associated with the OmniScript. Available in API version 63.0 and later. This field is available only if the Dynamic Assessment Access license is enabled."
+    },
+    "omniProcessElements": {
+      "type": "OmniProcessElement[]",
+      "description": "The OmniProcessElements associated with the OmniScript."
+    },
+    "omniProcessKey": {
+      "type": "string",
+      "description": "The integration procedure Type_SubType value."
+    },
+    "omniProcessType": {
+      "type": "OmniProcessType (enumeration of type string)",
+      "required": true,
+      "description": "Integration Procedure or OmniScript. Possible value is: OmniScript"
+    },
+    "overrideKey": {
+      "type": "string",
+      "description": "Reserved for future use."
+    },
+    "propertySetConfig": {
+      "type": "textarea",
+      "description": "The property set of the OmniProcessElement."
+    },
+    "questionDevName": {
+      "type": "string",
+      "description": "The developer name of the assessment question in the OmniScript. NoteThis field is relevant only for OmniScripts with designerCustomizationType as discoveryframework."
+    },
+    "requiredPermission": {
+      "type": "string",
+      "description": "The required permissions to execute the integration procedure."
+    },
+    "responseCacheType": {
+      "type": "string",
+      "description": "Response cache used for the integration procedure (session or Org)."
+    },
+    "subType": {
+      "type": "string",
+      "required": true,
+      "description": "The OmniScript sub type value."
+    },
+    "type": {
+      "type": "string",
+      "description": "The OmniProcessElement type. For example, Text and TextArea."
+    },
+    "uniqueName": {
+      "type": "string",
+      "description": "A unique name for the omni assessment task."
+    },
+    "versionNumber": {
+      "type": "string",
+      "required": true,
+      "description": "The OmniScript version number."
+    },
+    "webComponentKey": {
+      "type": "string",
+      "description": "Internal unique key for the generated Lightning Web Components (LWC)."
+    }
+  },
+  "sub_types": {
+    "AssessmentDefinitionMetadata": {
+      "approvalDateTime": {
+        "type": "dateTime",
+        "description": "The date and time when the assessment definition was approved."
+      },
+      "displayType": {
+        "type": "string",
+        "description": "The display type of the assessment definition."
+      },
+      "effectiveFromDate": {
+        "type": "dateTime",
+        "description": "The date and time from which the assessment definition is effective."
+      },
+      "effectiveToDate": {
+        "type": "dateTime",
+        "description": "The date and time until which the assessment definition is effective."
+      },
+      "lastRevisedDateTime": {
+        "type": "dateTime",
+        "description": "The date and time when the assessment definition was last revised."
+      },
+      "performerType": {
+        "type": "string",
+        "description": "The performer type of the assessment definition."
+      },
+      "purpose": {
+        "type": "string",
+        "description": "The purpose of the assessment definition."
+      }
+    },
+    "OmniAssessmentTaskMetadata": {
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the omni assessment task."
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "description": "The status of the omni assessment task."
+      },
+      "uniqueName": {
+        "type": "string",
+        "required": true,
+        "description": "A unique name for the omni assessment task."
+      }
+    }
+  },
+  "wsdl_segment": "\n\n## WSDL Segment\n\nThe following WSDL Segment shows the complete structure of this metadata type:\n\n```xml\n<xsd:complexType name=\"AssessmentDefinitionMetadata\">\n  <xsd:sequence>\n    <xsd:element name=\"approvalDateTime\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n    <xsd:element name=\"displayType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"effectiveFromDate\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n    <xsd:element name=\"effectiveToDate\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n    <xsd:element name=\"lastRevisedDateTime\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n    <xsd:element name=\"performerType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"purpose\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OmniAssessmentTaskMetadata\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"status\" type=\"xsd:string\"/>\n    <xsd:element name=\"uniqueName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OmniProcessElement\">\n  <xsd:sequence>\n    <xsd:element name=\"childElements\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OmniProcessElement\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"designerCustomizationType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"discoveryFrameworkUsageType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"embeddedOmniScriptKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isOmniScriptEmbeddable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"level\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"omniProcessVersionNumber\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"parentElementName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"parentElementType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"propertySetConfig\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sequenceNumber\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"type\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"uniqueIndex\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"OmniProcessType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"OmniScript\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"OmniScript\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"assessmentDefinitionMetadata\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AssessmentDefinitionMetadata\"/>\n        <xsd:element name=\"customHtmlTemplates\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customJavaScript\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"designerCustomizationType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"elementTypeComponentMapping\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isIntegrationProcedure\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isManagedUsingStdDesigner\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isMetadataCacheDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isOmniScriptEmbeddable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isTestProcedure\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isWebCompEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"language\" type=\"xsd:string\"/>\n        <xsd:element name=\"lastPreviewPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"nameSpace\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"omniAssessmentTasks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OmniAssessmentTaskMetadata\"/>\n        <xsd:element name=\"omniProcessElements\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OmniProcessElement\"/>\n        <xsd:element name=\"omniProcessKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"omniProcessType\" type=\"tns:OmniProcessType\"/>\n        <xsd:element name=\"overrideKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"propertySetConfig\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"requiredPermission\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"responseCacheType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"subType\" type=\"xsd:string\"/>\n        <xsd:element name=\"type\" type=\"xsd:string\"/>\n        <xsd:element name=\"uniqueName\" type=\"xsd:string\"/>\n        <xsd:element name=\"versionNumber\" type=\"xsd:double\"/>\n        <xsd:element name=\"webComponentKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```\n",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a OmniScript component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OmniScript\n\txmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<elementTypeComponentMapping>{&quot;ElementTypeToHTMLTemplateList&quot;:[]}</elementTypeComponentMapping>\n\t<isActive>false</isActive>\n\t<isIntegrationProcedure>false</isIntegrationProcedure>\n\t<isMetadataCacheDisabled>false</isMetadataCacheDisabled>\n\t<isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>\n\t<isTestProcedure>false</isTestProcedure>\n\t<isWebCompEnabled>true</isWebCompEnabled>\n\t<language>English</language>\n\t<name>OS5</name>\n\t<omniProcessType>OmniScript</omniProcessType>\n\t<subType>SBT5</subType>\n\t<type>Type5</type>\n\t<omniProcessKey>Type5_SBT5</omniProcessKey>\n\t<uniqueName>Type5_SBT5_English_1</uniqueName>\n\t<versionNumber>1.0</versionNumber>\n</OmniScript>"
+    }
+  ]
+}

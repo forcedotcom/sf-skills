@@ -1,0 +1,165 @@
+<!--
+    FORM LWC COMPONENT TEMPLATE - HTML
+
+    This template shows two approaches:
+    1. lightning-record-edit-form (standard, recommended)
+    2. Custom form with lightning-input (for complex scenarios)
+
+    Choose based on your requirements.
+-->
+<template>
+    <lightning-card title={cardTitle} icon-name="standard:account">
+        <!-- Loading Overlay -->
+        <template if:true={isLoading}>
+            <lightning-spinner
+                alternative-text="Loading"
+                size="medium"
+                class="slds-is-absolute">
+            </lightning-spinner>
+        </template>
+
+        <!--
+        ═══════════════════════════════════════════════════════════════════════
+        OPTION 1: LIGHTNING-RECORD-EDIT-FORM (Recommended)
+
+        Pros:
+        - Automatic FLS enforcement
+        - Built-in validation
+        - Handles record types
+        - Less code
+
+        Cons:
+        - Less control over layout
+        - Limited custom validation
+        ═══════════════════════════════════════════════════════════════════════
+        -->
+        <lightning-record-edit-form
+            object-api-name={objectApiName}
+            record-id={recordId}
+            record-type-id={recordTypeId}
+            onload={handleLoad}
+            onsubmit={handleSubmit}
+            onsuccess={handleSuccess}
+            onerror={handleError}>
+
+            <!-- Error Messages Display -->
+            <lightning-messages></lightning-messages>
+
+            <div class="slds-p-around_medium">
+                <!-- Form Fields -->
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-input-field
+                            field-name={nameField}
+                            required>
+                        </lightning-input-field>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-input-field
+                            field-name={industryField}>
+                        </lightning-input-field>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-input-field
+                            field-name={phoneField}>
+                        </lightning-input-field>
+                    </div>
+                </div>
+
+                <!-- Form Buttons -->
+                <div class="slds-m-top_medium">
+                    <lightning-button
+                        variant="neutral"
+                        label="Cancel"
+                        onclick={handleCancel}
+                        class="slds-m-right_x-small">
+                    </lightning-button>
+
+                    <lightning-button
+                        variant="neutral"
+                        label="Reset"
+                        onclick={handleReset}
+                        class="slds-m-right_x-small">
+                    </lightning-button>
+
+                    <lightning-button
+                        variant="brand"
+                        type="submit"
+                        label={submitButtonLabel}>
+                    </lightning-button>
+                </div>
+            </div>
+        </lightning-record-edit-form>
+
+        <!--
+        ═══════════════════════════════════════════════════════════════════════
+        OPTION 2: CUSTOM FORM (Alternative - uncomment to use)
+
+        Pros:
+        - Full control over layout
+        - Complex validation logic
+        - Multiple objects in one form
+
+        Cons:
+        - Manual FLS checking
+        - More code to maintain
+        ═══════════════════════════════════════════════════════════════════════
+        -->
+        <!--
+        <div class="slds-p-around_medium custom-form">
+            <div class="slds-grid slds-wrap slds-gutters">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <lightning-input
+                        type="text"
+                        label="Account Name"
+                        name="Name"
+                        value={formData.Name}
+                        onchange={handleInputChange}
+                        required
+                        message-when-value-missing="Account name is required">
+                    </lightning-input>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <lightning-combobox
+                        label="Industry"
+                        name="Industry"
+                        value={formData.Industry}
+                        options={industryOptions}
+                        onchange={handleInputChange}>
+                    </lightning-combobox>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <lightning-input
+                        type="tel"
+                        label="Phone"
+                        name="Phone"
+                        value={formData.Phone}
+                        onchange={handleInputChange}
+                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                        message-when-pattern-mismatch="Enter phone as: 123-456-7890">
+                    </lightning-input>
+                </div>
+            </div>
+
+            <div class="slds-m-top_medium">
+                <lightning-button
+                    variant="neutral"
+                    label="Cancel"
+                    onclick={handleCancel}
+                    class="slds-m-right_x-small">
+                </lightning-button>
+
+                <lightning-button
+                    variant="brand"
+                    label={submitButtonLabel}
+                    onclick={handleCustomSubmit}>
+                </lightning-button>
+            </div>
+        </div>
+        -->
+    </lightning-card>
+</template>

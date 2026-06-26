@@ -1,0 +1,147 @@
+name: "Counter"
+
+description: "A number input field with increment and decrement buttons, allowing users to adjust numeric values using buttons or direct input. Commonly used for quantity selection, age input, or any numeric field where step-wise adjustment is helpful."
+
+category: "Input"
+
+slds_classes:
+  root: "slds-input_counter"
+  elements:
+    - class: "slds-input_counter"
+      description: "Variant for number input with increment and decrement buttons"
+      purpose: "Creates a centered number input field with padding for button placement"
+    - class: "slds-input__button_decrement"
+      description: "Decrement button within counter input field"
+      purpose: "Positions the minus/decrement button on the left side of the input"
+    - class: "slds-input__button_increment"
+      description: "Increment button within counter input field"
+      purpose: "Positions the plus/increment button on the right side of the input"
+  modifiers: []
+  states: []
+
+variants:
+  - name: "Base"
+    description: "Standard number input with increment/decrement buttons"
+    classes: ["slds-input_counter"]
+    usage_context: "Default implementation for numeric input with buttons"
+    differences: "Input field centered with buttons on left and right"
+
+lightning_component:
+  name: "lightning-input"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-input"
+  mapping_notes: "Use type='number' with lightning-input, counter styling is applied automatically"
+
+accessibility:
+  keyboard_support:
+    - "Tab to navigate to the input field"
+    - "Arrow keys or direct typing to change value"
+    - "Enter to submit if in a form"
+    - "Click or Space on increment/decrement buttons"
+  screen_reader:
+    - "Input field should have a descriptive label"
+    - "Current value should be announced when changed"
+    - "Min and max values should be communicated"
+  aria_attributes:
+    - "aria-label or associated <label> for the input"
+    - "aria-valuemin and aria-valuemax for valid range"
+    - "aria-valuenow for current value"
+
+usage_guidelines:
+  when_to_use:
+    - "For quantity selection (e.g., product quantity in shopping cart)"
+    - "For age or year input where step-wise adjustment is helpful"
+    - "When users benefit from visual increment/decrement controls"
+    - "For numeric fields where keyboard-only input may be difficult"
+  when_not_to_use:
+    - "For large ranges where buttons are impractical (use slider instead)"
+    - "For displaying metrics (use different display components)"
+    - "When precision typing is critical (use standard number input)"
+  best_practices:
+    - "Set appropriate min, max, and step attributes"
+    - "Provide clear labels indicating the unit or context"
+    - "Ensure buttons are touch-friendly on mobile devices"
+    - "Consider showing the valid range in help text"
+  common_mistakes:
+    - "Forgetting to set min/max constraints"
+    - "Making the step value too large or too small for the use case"
+    - "Poor button sizing making them hard to interact with"
+
+code_examples:
+  - title: "Basic Counter Input"
+    description: "Number input with increment and decrement buttons"
+    code: |
+      <div class="slds-form-element">
+        <label class="slds-form-element__label" for="counter-input-01">
+          Quantity
+        </label>
+        <div class="slds-form-element__control">
+          <div class="slds-input-has-icon slds-input-has-icon_left-right">
+            <button class="slds-button slds-button_icon slds-input__button_decrement" title="Decrease" tabindex="-1">
+              <svg class="slds-button__icon" aria-hidden="true">
+                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#dash"></use>
+              </svg>
+              <span class="slds-assistive-text">Decrease</span>
+            </button>
+            <input type="number" id="counter-input-01" min="1" max="100" step="1" value="1" class="slds-input slds-input_counter" />
+            <button class="slds-button slds-button_icon slds-input__button_increment" title="Increase" tabindex="-1">
+              <svg class="slds-button__icon" aria-hidden="true">
+                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+              </svg>
+              <span class="slds-assistive-text">Increase</span>
+            </button>
+          </div>
+        </div>
+      </div>
+  - title: "Counter with Help Text"
+    description: "Counter input with additional context"
+    code: |
+      <div class="slds-form-element">
+        <label class="slds-form-element__label" for="counter-input-02">
+          Number of Attendees
+        </label>
+        <div class="slds-form-element__control">
+          <div class="slds-input-has-icon slds-input-has-icon_left-right">
+            <button class="slds-button slds-button_icon slds-input__button_decrement" title="Decrease">
+              <svg class="slds-button__icon" aria-hidden="true">
+                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#dash"></use>
+              </svg>
+              <span class="slds-assistive-text">Decrease</span>
+            </button>
+            <input type="number" id="counter-input-02" min="0" max="500" step="5" value="10" class="slds-input slds-input_counter" aria-describedby="help-text-02" />
+            <button class="slds-button slds-button_icon slds-input__button_increment" title="Increase">
+              <svg class="slds-button__icon" aria-hidden="true">
+                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+              </svg>
+              <span class="slds-assistive-text">Increase</span>
+            </button>
+          </div>
+        </div>
+        <div class="slds-form-element__help" id="help-text-02">Maximum 500 attendees</div>
+      </div>
+styling_hooks: []
+
+dependencies:
+  css_files: ["input.css", "button.css", "form-element.css"]
+  javascript: ["counter-input-behavior.js"]
+  icons: ["utility:dash", "utility:add"]
+  other_components: ["input", "button", "form-element"]
+
+related_components:
+  - name: "Input"
+    relationship: "parent"
+    description: "Counter is a variant of the standard input component"
+  - name: "Slider"
+    relationship: "alternative"
+    description: "Alternative for numeric input with visual feedback"
+  - name: "Spinner"
+    relationship: "alternative"
+    description: "Alternative numeric input with vertical buttons"
+
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/counter/"
+
+metadata:
+  version: "2.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: "Corrected to match actual SLDS implementation as input counter (number input with +/- buttons), not metric display counter"

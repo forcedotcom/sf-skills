@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Prompt Template: Record-Grounded Template
+
+    Use Case: Prompts that use Salesforce record data for context
+    - Ground responses in actual CRM data
+    - Summarize records intelligently
+    - Generate record-specific content
+
+    Key Feature: Variables bound to record fields provide real data
+    to the prompt, ensuring accuracy and relevance.
+
+    Setup Steps:
+    1. Replace all {{placeholder}} values
+    2. Configure record field bindings
+    3. Deploy to org
+
+    File Location: force-app/main/default/promptTemplates/{{TemplateName}}.promptTemplate-meta.xml
+-->
+<PromptTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>{{TemplateName}}</fullName>
+    <masterLabel>{{TemplateLabel}}</masterLabel>
+    <description>{{TemplateDescription}}</description>
+
+    <!-- Record summary type for record-grounded prompts -->
+    <type>recordSummary</type>
+
+    <isActive>true</isActive>
+
+    <!--
+    Primary Object:
+    The main object this template operates on.
+    -->
+    <objectType>{{ObjectApiName}}</objectType>
+
+    <!--
+    Prompt with record field references:
+    Use {!variableName} syntax for bound fields.
+    -->
+    <promptContent>
+You are summarizing a {{ObjectLabel}} record for a sales representative.
+
+Record Information:
+- Name: {!recordName}
+- Status: {!recordStatus}
+- Owner: {!ownerName}
+- Created Date: {!createdDate}
+- Last Activity: {!lastActivityDate}
+
+Additional Context:
+{!additionalNotes}
+
+Related Information:
+{!relatedRecords}
+
+Please provide a concise summary that highlights:
+1. Current status and recent activity
+2. Key metrics or important values
+3. Recommended next steps
+4. Any risks or concerns
+
+Keep the summary under 200 words and focus on actionable insights.
+    </promptContent>
+
+    <!-- Record Name Field -->
+    <promptTemplateVariables>
+        <developerName>recordName</developerName>
+        <promptTemplateVariableType>recordField</promptTemplateVariableType>
+        <objectType>{{ObjectApiName}}</objectType>
+        <fieldName>Name</fieldName>
+        <isRequired>true</isRequired>
+    </promptTemplateVariables>
+
+    <!-- Status Field -->
+    <promptTemplateVariables>
+        <developerName>recordStatus</developerName>
+        <promptTemplateVariableType>recordField</promptTemplateVariableType>
+        <objectType>{{ObjectApiName}}</objectType>
+        <fieldName>{{StatusFieldApiName}}</fieldName>
+        <isRequired>false</isRequired>
+    </promptTemplateVariables>
+
+    <!-- Owner Name -->
+    <promptTemplateVariables>
+        <developerName>ownerName</developerName>
+        <promptTemplateVariableType>recordField</promptTemplateVariableType>
+        <objectType>{{ObjectApiName}}</objectType>
+        <fieldName>Owner.Name</fieldName>
+        <isRequired>false</isRequired>
+    </promptTemplateVariables>
+
+    <!-- Created Date -->
+    <promptTemplateVariables>
+        <developerName>createdDate</developerName>
+        <promptTemplateVariableType>recordField</promptTemplateVariableType>
+        <objectType>{{ObjectApiName}}</objectType>
+        <fieldName>CreatedDate</fieldName>
+        <isRequired>false</isRequired>
+    </promptTemplateVariables>
+
+    <!-- Last Activity Date -->
+    <promptTemplateVariables>
+        <developerName>lastActivityDate</developerName>
+        <promptTemplateVariableType>recordField</promptTemplateVariableType>
+        <objectType>{{ObjectApiName}}</objectType>
+        <fieldName>LastActivityDate</fieldName>
+        <isRequired>false</isRequired>
+    </promptTemplateVariables>
+
+    <!-- Free text for additional context -->
+    <promptTemplateVariables>
+        <developerName>additionalNotes</developerName>
+        <promptTemplateVariableType>freeText</promptTemplateVariableType>
+        <isRequired>false</isRequired>
+    </promptTemplateVariables>
+
+    <!-- Related records (could be from related list) -->
+    <promptTemplateVariables>
+        <developerName>relatedRecords</developerName>
+        <promptTemplateVariableType>freeText</promptTemplateVariableType>
+        <isRequired>false</isRequired>
+    </promptTemplateVariables>
+
+    <!--
+    DATA CLOUD GROUNDING (Optional):
+
+    For Data Cloud integration, add:
+    <dataCloudConfig>
+        <dataCloudObjectName>{{DataCloudObjectName}}</dataCloudObjectName>
+        <retrievalStrategy>semantic</retrievalStrategy>
+    </dataCloudConfig>
+
+    This enables RAG (Retrieval Augmented Generation) with
+    Data Cloud data for more contextual responses.
+    -->
+</PromptTemplate>

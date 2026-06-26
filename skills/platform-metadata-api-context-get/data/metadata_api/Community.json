@@ -1,0 +1,121 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Community (Zone) - Metadata API",
+  "description": "Represents a zone that contains Ideas or Chatter Answers objects. Zones are shared by the Ideas, Answers, and Chatter Answers features, allowing you to view and create zones from those locations.This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".community",
+  "directory_location": "communities",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "Indicates whether the zone is active (true) or not (false)."
+    },
+    "chatterAnswersFacebookSsoUrl": {
+      "type": "string",
+      "description": "(Read only) The Facebook sign-on URL, which is based on the Facebook authentication provider selected in your Chatter Answers settings. This field is available only if Chatter Answers and Facebook Single Sign-On for Chatter Answers are enabled."
+    },
+    "communityFeedPage": {
+      "type": "string",
+      "description": "The Visualforce page that hosts the zone’s feeds. This field is available when Chatter Answers is enabled in the organization."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the zone."
+    },
+    "emailFooterDocument": {
+      "type": "string",
+      "description": "The text or HTML file that incorporates your organization’s branding into the footer of email notifications. This field is available when Chatter Answers is enabled in the organization."
+    },
+    "emailHeaderDocument": {
+      "type": "string",
+      "description": "The text or HTML file that incorporates your organization’s branding into the header of email notifications. This field is available when Chatter Answers is enabled in the organization."
+    },
+    "emailNotificationUrl": {
+      "type": "string",
+      "description": "The URL that’s included in email notifications. This field is available when Chatter Answers is enabled in the organization. This field replaces portalEmailNotificationUrl in API version 28.0 and later."
+    },
+    "enableChatterAnswers": {
+      "type": "boolean",
+      "description": "Indicates whether the zone has Chatter Answers enabled (true) or not (false). This field is available when Chatter Answers is enabled in the organization."
+    },
+    "enablePrivateQuestions": {
+      "type": "boolean",
+      "description": "Indicates whether Chatter Answers questions can be escalated to cases (true) or not (false). This field is available when Chatter Answers is enabled in the organization."
+    },
+    "expertsGroup": {
+      "type": "string",
+      "description": "The name of the public group that act as experts in the zone. This field is available when eitherIdeas or Answers are enabled in the organization."
+    },
+    "portal": {
+      "type": "string",
+      "description": "The name of the portal in which to display the zone."
+    },
+    "portalEmailNotificationUrl": {
+      "type": "string",
+      "description": "The portal URL that’s included in email notifications. This field is available when Chatter Answers is enabled in the organization. This field has been replaced by emailNotificationUrl in API version 28.0 and later."
+    },
+    "reputationLevels": {
+      "type": "ReputationLevels",
+      "description": "The fields that define the points and name of each reputation level you define. You can create up to 25 reputation levels per zone."
+    },
+    "showInPortal": {
+      "type": "boolean",
+      "description": "Indicates whether the zone is available to all portals (true) or not available to any portals (false)."
+    },
+    "site": {
+      "type": "string",
+      "description": "The name of the site for the zone. This field is available when Chatter Answers is enabled in the organization."
+    }
+  },
+  "sub_types": {
+    "ReputationLevels": {
+      "chatterAnswersReputationLevels": {
+        "type": "ChatterAnswersReputationLevel []",
+        "description": "Contains the name and value pair that describes the reputation level for Chatter Answers. Available in API version 28.0 and later."
+      },
+      "ideaReputationLevels": {
+        "type": "IdeaReputationLevel",
+        "description": "Contains the name and value pair that describes the reputation for Ideas. Available in API version 28.0 and later."
+      }
+    },
+    "ChatterAnswersReputationLevel": {
+      "name": {
+        "type": "string",
+        "description": "The name of the reputation level, for example, “Expert.”"
+      },
+      "value": {
+        "type": "int",
+        "description": "The minimum number of points for the reputation level."
+      }
+    },
+    "IdeaReputationLevel": {
+      "name": {
+        "type": "string",
+        "description": "The name of the reputation level, for example, “Expert.”"
+      },
+      "value": {
+        "type": "int",
+        "description": "The minimum number of points for the reputation level."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ChatterAnswersReputationLevel\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Community\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"chatterAnswersFacebookSsoUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"communityFeedPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"dataCategoryName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"emailFooterDocument\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"emailHeaderDocument\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"emailNotificationUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableChatterAnswers\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePrivateQuestions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"expertsGroup\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"portal\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"reputationLevels\" minOccurs=\"0\" type=\"tns:ReputationLevels\"/>\n        <xsd:element name=\"showInPortal\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"site\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"IdeaReputationLevel\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReputationLevels\">\n  <xsd:sequence>\n    <xsd:element name=\"chatterAnswersReputationLevels\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ChatterAnswersReputationLevel\"/>\n    <xsd:element name=\"ideaReputationLevels\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:IdeaReputationLevel\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is the definition of a community (zone) component:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Community xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <active>true</active>\n    <communityFeedPage>communityWithHeaderAndFooter_main</communityFeedPage>\n    <description>Metadata Test</description>\n    <emailFooterDocument>sampleFolder/emailFooter.html</emailFooterDocument>\n    <emailHeaderDocument>sampleFolder/emailHeader.html</emailHeaderDocument>\n    <enableChatterAnswers>true</enableChatterAnswers>\n    <enablePrivateQuestions>true</enablePrivateQuestions>\n    <expertsGroup>CommunityExperts</expertsGroup>\n    <portal>Customer Portal</portal>\n    <emailNotificationUrl>http://yourURL</emailNotificationUrl>\n<reputationLevels>\n        <chatterAnswersReputationLevels>\n            <name>Newbie</name>\n            <value>0</value>\n        </chatterAnswersReputationLevels>\n        <chatterAnswersReputationLevels>\n            <name>Smartie</name>\n            <value>500</value>\n        </chatterAnswersReputationLevels>\n        <chatterAnswersReputationLevels>\n            <name>Pro</name>\n            <value>2000</value>\n        </chatterAnswersReputationLevels>\n        <chatterAnswersReputationLevels>\n            <name>All Star</name>\n            <value>5000</value>\n        </chatterAnswersReputationLevels>\n        <ideaReputationLevels>\n            <name>Observer</name>\n            <value>0</value>\n        </ideaReputationLevels>\n        <ideaReputationLevels>\n            <name>Contributor</name>\n            <value>100</value>\n        </ideaReputationLevels>\n        <ideaReputationLevels>\n            <name>Influencer</name>\n            <value>400</value>\n        </ideaReputationLevels>\n        <ideaReputationLevels>\n            <name>Thought Leader</name>\n            <value>1500</value>\n        </ideaReputationLevels>\n    </reputationLevels>\n    <showInPortal>true</showInPortal>\n    <site>ChatterAnswersSite</site>\n</Community>"
+    }
+  ]
+}

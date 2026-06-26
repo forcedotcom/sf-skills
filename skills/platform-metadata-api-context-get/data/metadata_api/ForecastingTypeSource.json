@@ -1,0 +1,60 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ForecastingTypeSource - Metadata API",
+  "description": "Represents the mapping of a forecasting source definition to a forecast type.",
+  "file_information": ".forecastingTypeSource",
+  "directory_location": "ForecastingTypeSources",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "forecastingSourceDefinition": {
+      "type": "string",
+      "description": "ID of the forecasting source definition.",
+      "required": true
+    },
+    "forecastingType": {
+      "type": "string",
+      "description": "ID of the forecast type. Can be linked only to forecast types created in Summer ’21 and later.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Controlling label for this forecasting type source.",
+      "required": true
+    },
+    "parentSourceDefinition": {
+      "type": "string",
+      "description": "For forecast types not based on the Opportunity object and not based on a custom measure, this value represents the parent ForecastingSourceDefinition of the linked ForecastingSourceDefinition. Opportunity Product is the parent of Opportunity. Opportunity Split is the parent of Opportunity. Line Item Schedule is the parent of Opportunity Product."
+    },
+    "relationField": {
+      "type": "string",
+      "description": "Represents the field that links the source objects of the parent ForecastingSourceDefinition to the child ForecastingSourceDefinition. Possible values are: OpportunityLineItem.OpportunityId OpportunityLineItem.Product2Id OpportunityLineItemSchedule.OpportunityLineItemId OpportunitySplit.OpportunityId"
+    },
+    "sourceGroup": {
+      "type": "int",
+      "description": "Represents a grouping of forecasting source definitions.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ForecastingTypeSource\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"forecastingSourceDefinition\" type=\"xsd:string\"/>\n        <xsd:element name=\"forecastingType\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"parentSourceDefinition\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relationField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sourceGroup\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following are two examples of a ForecastingTypeSource component. The first bases forecasts on the Opportunity Product object. The second bases forecasts on the Line Item Schedule object.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ForecastingTypeSource xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <forecastingSourceDefinition>FSD_OpportunityLineItem</forecastingSourceDefinition>\n    <forecastingType>d</forecastingType>\n    <masterLabel>ForecastingTypeSource_d7</masterLabel>\n    <parentSourceDefinition>FSD_OpportunityLineItemSchedule1</parentSourceDefinition>\n    <relationField>OpportunityLineItemSchedule.OpportunityLineItemId</relationField>\n    <sourceGroup>1</sourceGroup>\n</ForecastingTypeSource>"
+    },
+    {
+      "description": "The following are two examples of a ForecastingTypeSource component. The first bases forecasts on the Opportunity Product object. The second bases forecasts on the Line Item Schedule object.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ForecastingTypeSource xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n<forecastingSourceDefinition>FSDOpportunityLineItemSchedule</forecastingSourceDefinition>\n    <forecastingType>c3</forecastingType>\n    <masterLabel>ForecastingTypeSource_c37syR</masterLabel>\n    <sourceGroup>1</sourceGroup>\n</ForecastingTypeSource>"
+    }
+  ]
+}

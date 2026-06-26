@@ -1,0 +1,59 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CampaignInfluenceModel - Metadata API",
+  "description": "Represents a campaign influence model used by Customizable Campaign Influence. You can’t configure Customizable Campaign Influence via the Metadata API, but you can add a campaign influence model.",
+  "file_information": ".campaignInfluenceModel",
+  "directory_location": "campaignInfluenceModels",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether the model is active. Active models can generate campaign influence records. Deactivating a model deletes its campaign influence records. Custom models are always active and this field is ignored. This field is available beginning with API version 40.0."
+    },
+    "isDefaultModel": {
+      "type": "boolean",
+      "description": "Indicates if the model is the default model or not. Only campaign influence records associated with the default model appear on campaigns and opportunities. You can only have one default model at a time. A model must be active to become the default model. Activating or deactivating custom models does not automatically generate or delete campaign influence records.",
+      "required": true
+    },
+    "isModelLocked": {
+      "type": "boolean",
+      "description": "Indicates if the model is locked or not. Campaign Influence records for locked models can be manipulated only via the API.",
+      "required": true
+    },
+    "modelDescription": {
+      "type": "string",
+      "description": "A description of the influence model."
+    },
+    "name": {
+      "type": "string",
+      "description": "A unique name for the model.",
+      "required": true
+    },
+    "recordPreference": {
+      "type": "picklist",
+      "description": "The value of this field determines when to create campaign influence records. AllRecords: Creates records regardless of the revenue attribution percentage. RecordsWithAttribution: Creates records only when the revenue attribution is greater than 0%. This field is available In API version 41.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CampaignInfluenceModel\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isDefaultModel\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isModelLocked\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"modelDescription\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"recordPreference\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CampaignInfluenceModel component that represents the default Salesforce campaign influence attribution model. The default isDefaultModel value of true can be changed if another model is created and set as the default model. The isModelLocked value of true means that Campaign Influence records for this model can be seen in the UI, but not created, updated, or deleted.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CampaignInfluenceModel xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <isActive>true</isActive>\n    <isDefaultModel>true</isDefaultModel>\n    <isModelLocked>true</isModelLocked>    <recordPreference>AllRecords</recordPreference>   \n    <modelDescription>Primary Campaign gets 100% of the revenue share</modelDescription>\n    <name>Salesforce Model</name>\n</CampaignInfluenceModel>"
+    },
+    {
+      "description": "The following is an example of a CampaignInfluenceModel component that creates an influence model called Last Touch, which will not be the default model.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CampaignInfluenceModel xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <isActive>true</isActive>\n    <isDefaultModel>false</isDefaultModel>\n    <isModelLocked>true</isModelLocked>\n    <modelDescription>This model gives 100% influence attribution to the last campaign that touched the contact.</modelDescription>\n    <name>Last Touch</name>\n    <recordPreference>RecordsWithAttribution</recordPreference>\n</CampaignInfluenceModel>"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "VoiceSettings - Metadata API",
+  "description": "Represents an org’s Sales Dialer settings, such as call recording, conferencing, and voicemail.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableCallDisposition": {
+      "type": "boolean",
+      "description": "Indicates whether call disposition is enabled (true) or not (false). With call disposition, also called Call Result, sales reps can track whether a call was connected and how it went. Default value is false. To use this feature, enable Dialer in Lightning Experience."
+    },
+    "enableConsentReminder": {
+      "type": "boolean",
+      "description": "Indicates whether the consent reminder is enabled (true) or not (false). With the consent reminder, prior to recording a call, users see a prompt reminding them not to record phone calls without consent. Default value is false. To use this feature, enable Dialer in Lightning Experience."
+    },
+    "enableDefaultRecording": {
+      "type": "boolean",
+      "description": "Indicates whether the default recording is enabled (true) or not (false). With default recording, sales reps can record calls automatically in the Sales Dialer. Default value is false. This field is available in API version 54.0 and later."
+    },
+    "enableVoiceCallList": {
+      "type": "boolean",
+      "description": "Indicates whether Call List is enabled (true) or not (false). Sales reps can use call list to keep a running list of the calls they want to make. Default value is false. To use this feature, enable Dialer in Lightning Experience."
+    },
+    "enableVoiceCallRecording": {
+      "type": "boolean",
+      "description": "Indicates whether Call Recording is enabled (true) or not (false). Sales reps can record important calls directly from the call panel in Sales Dialer. Default value is false. To use this feature, enable Dialer in Lightning Experience."
+    },
+    "enableVoiceCoaching": {
+      "type": "boolean",
+      "description": "Indicates whether Call Monitoring is enabled (true) or not (false). Using the Monitor tab in the call panel, managers can listen to the calls of their sales reps for personalized coaching. Default value is false. To use this feature, enable Dialer in Lightning Experience."
+    },
+    "enableVoiceConferencing": {
+      "type": "boolean",
+      "description": "Reserved for future use."
+    },
+    "enableVoiceLocalPresence": {
+      "type": "boolean",
+      "description": "Indicates whether Local Presence is enabled (true) or not (false). Local Presence displays phone numbers with the same area code as the prospects your reps are calling, so more calls are answered. Default value is false. To use this feature, enable Dialer in Lightning Experience."
+    },
+    "enableVoiceMail": {
+      "type": "boolean",
+      "description": "Indicates whether voicemail is enabled (true) or not (false). Sales reps can receive and store up to 20 personal voicemail messages in Salesforce. Default value is false. To use this feature, enable Dialer in Lightning Experience."
+    },
+    "enableVoiceMailDrop": {
+      "type": "boolean",
+      "description": "Indicates whether Voicemail Drop is enabled (true) or not (false). Sales reps can “drop” (or send) prerecorded messages to recipients’ voicemail boxes. Default value is false. To use this feature, enable Dialer in Lightning Experience."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"VoiceSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableCallDisposition\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableConsentReminder\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDefaultRecording\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableVoiceCallList\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableVoiceCallRecording\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableVoiceCoaching\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableVoiceConferencing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableVoiceLocalPresence\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableVoiceMail\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableVoiceMailDrop\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The package file references the following Voice.settings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<VoiceSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableCallDisposition>true</enableCallDisposition>\n    <enableVoiceCallList>true</enableVoiceCallList>\n    <enableVoiceCallRecording>true</enableVoiceCallRecording>\n    <enableVoiceCoaching>true</enableVoiceCoaching>\n    <enableVoiceConferencing>true</enableVoiceConferencing>\n    <enableVoiceLocalPresence>true</enableVoiceLocalPresence>\n    <enableVoiceMail>true</enableVoiceMail>\n    <enableVoiceMailDrop>true</enableVoiceMailDrop>\n</VoiceSettings>"
+    }
+  ]
+}

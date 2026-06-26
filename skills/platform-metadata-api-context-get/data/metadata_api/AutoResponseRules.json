@@ -1,0 +1,79 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AutoResponseRules - Metadata API",
+  "description": "Represents an auto-response rule that sets conditions for sending automatic email responses to lead or case submissions based on the attributes of the submitted record. You can access rules metadata for all applicable objects, for a specific object, or for a specific rule on a specific object.",
+  "file_information": ".autoResponseRules",
+  "directory_location": "autoResponseRules",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "autoresponseRule": {
+      "type": "AutoResponseRule[]",
+      "description": "Represents the definitions of the named auto-response rules."
+    }
+  },
+  "sub_types": {
+    "AutoResponseRule": {
+      "active": {
+        "type": "boolean",
+        "description": "Indicates whether the autoresponse rule is active (true) or not (false)."
+      },
+      "fullname": {
+        "type": "string",
+        "description": "Inherited from Metadata, this field is defined in the WSDL for this metadata type. It must be specified when creating, updating, or deleting. See createMetadata() to see an example of this field specified for a call. This value can't be null."
+      },
+      "ruleEntry": {
+        "type": "RuleEntry[]",
+        "description": "Represents the type and description for the auto-response rule."
+      }
+    },
+    "RuleEntry": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "Advanced filter conditions that were specified for the rule."
+      },
+      "criteriaItems": {
+        "type": "FilterItem[]",
+        "description": "The items in the list that define the assignment criteria."
+      },
+      "formula": {
+        "type": "string",
+        "description": "The validation formula. Specify either formula or criteriaItems, but not both fields."
+      },
+      "replyToEmail": {
+        "type": "string",
+        "description": "The email address that appears in the reply-to header."
+      },
+      "senderEmail": {
+        "type": "string",
+        "description": "The email address of the person or queue sending the email notification."
+      },
+      "senderName": {
+        "type": "string",
+        "description": "The name of the person or queue sending the email notification."
+      },
+      "template": {
+        "type": "string",
+        "description": "Specifies the template to use for the email that is automatically sent to the designated recipient. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"AssignToLookupValueType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"User\"/>\n    <xsd:enumeration value=\"Queue\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"AutoResponseRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"ruleEntry\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RuleEntry\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"AutoResponseRules\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"autoResponseRule\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AutoResponseRule\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"BusinessHoursSourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"Case\"/>\n    <xsd:enumeration value=\"Static\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EscalationAction\">\n  <xsd:sequence>\n    <xsd:element name=\"assignedTo\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"assignedToTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"assignedToType\" minOccurs=\"0\" type=\"tns:AssignToLookupValueType\"/>\n    <xsd:element name=\"minutesToEscalation\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"notifyCaseOwner\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"notifyEmail\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"notifyTo\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"notifyToTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"EscalationStartTimeType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"CaseCreation\"/>\n    <xsd:enumeration value=\"CaseLastModified\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FilterItem\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"operation\" type=\"tns:FilterOperation\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueField\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FilterOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"equals\"/>\n    <xsd:enumeration value=\"notEqual\"/>\n    <xsd:enumeration value=\"lessThan\"/>\n    <xsd:enumeration value=\"greaterThan\"/>\n    <xsd:enumeration value=\"lessOrEqual\"/>\n    <xsd:enumeration value=\"greaterOrEqual\"/>\n    <xsd:enumeration value=\"contains\"/>\n    <xsd:enumeration value=\"notContain\"/>\n    <xsd:enumeration value=\"startsWith\"/>\n    <xsd:enumeration value=\"includes\"/>\n    <xsd:enumeration value=\"excludes\"/>\n    <xsd:enumeration value=\"within\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RuleEntry\">\n  <xsd:sequence>\n    <xsd:element name=\"assignedTo\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"assignedToType\" minOccurs=\"0\" type=\"tns:AssignToLookupValueType\"/>\n    <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"businessHours\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"businessHoursSource\" minOccurs=\"0\" type=\"tns:BusinessHoursSourceType\"/>\n    <xsd:element name=\"criteriaItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n    <xsd:element name=\"disableEscalationWhenModified\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"escalationAction\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EscalationAction\"/>\n    <xsd:element name=\"escalationStartTime\" minOccurs=\"0\" type=\"tns:EscalationStartTimeType\"/>\n    <xsd:element name=\"formula\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"notifyCcRecipients\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"overrideExistingTeams\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"replyToEmail\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"senderEmail\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"senderName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"team\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"template\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example AutoResponseRules component:",
+      "code": "<AutoResponseRules xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <autoResponseRule>\n        <fullName>ajbdeploytest2</fullName>\n        <active>false</active>\n        <ruleEntry>\n            <criteriaItems>\n                <field>Case.Description</field>\n                <operation>contains</operation>\n                <value>testing</value>\n            </criteriaItems>\n            <senderEmail>test@test.org</senderEmail>\n            <senderName>tester name j</senderName>\n            <replyToEmail>test@@test.org</replyToEmail>\n            <template>emailtemplate</template>\n        </ruleEntry>\n    </autoResponseRule>\n</AutoResponseRules>"
+    }
+  ]
+}

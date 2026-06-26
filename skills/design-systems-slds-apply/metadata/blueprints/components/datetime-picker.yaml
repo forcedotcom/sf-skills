@@ -1,0 +1,155 @@
+name: Datetime Picker
+description: A datetime picker is used to select a day and a time. It combines a datepicker and timepicker into a single component
+  with two form elements, each containing a label and text input, and a dropdown menu containing a grid-based calendar and
+  time filters.
+category: Input
+slds_classes:
+  root: ''
+  elements:
+  - class: slds-dropdown-trigger
+    description: Container that triggers the dropdown menu
+    purpose: Wraps the date input and controls dropdown visibility
+  - class: slds-form-element__icon
+    description: Icon element within the form element
+    purpose: Contains icon for the datetime picker input
+  modifiers:
+  - class: slds-datetimepicker_has-tooltip
+    description: Modifier for datetime picker with tooltip
+    usage: Applied when tooltip is present on the datetime picker
+  - class: slds-is-open
+    description: State modifier for open dropdown
+    usage: Applied to dropdown-trigger when dropdown is visible
+  states:
+  - class: slds-has-focus
+    description: Focus state on timepicker listbox option
+    trigger: When a time option receives focus
+  - class: slds-is-selected
+    description: Selected state for date or time option
+    trigger: When a date or time option is selected
+  - class: slds-is-today
+    description: Today indicator for datepicker
+    trigger: Applied to the current day in the calendar
+variants:
+- name: Base
+  description: Standard datetime picker with date and time selection
+  classes: []
+  usage_context: Default datetime picker implementation combining datepicker and timepicker
+  differences: Two form elements - one for date, one for time, with dropdown menus
+lightning_component:
+  name: ''
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component - use lightning-input with type='datetime-local' or custom implementation
+accessibility:
+  keyboard_support:
+  - Tab to navigate between date and time inputs
+  - Enter or Space to open dropdown menus
+  - Arrow keys to navigate calendar dates or time options
+  - Escape to close dropdown menus
+  screen_reader:
+  - Date format message announced when date field receives focus
+  - Selected date and time announced
+  - Calendar navigation announced
+  - Time options announced when navigating
+  aria_attributes:
+  - role='combobox' on combobox element (desktop only)
+  - aria-expanded on dropdown trigger
+  - aria-haspopup on combobox
+  - aria-controls on input (desktop only)
+  - aria-autocomplete on input (desktop only)
+  - role='textbox' on input (desktop only)
+  - aria-describedby for date format messages
+  - Remove ARIA attributes on mobile when using datetime-local input type
+usage_guidelines:
+  when_to_use:
+  - When users need to select both a date and time
+  - For scheduling appointments or events
+  - When precise datetime selection is required
+  - For form inputs requiring date and time together
+  when_not_to_use:
+  - When only date is needed (use datepicker)
+  - When only time is needed (use timepicker)
+  - In data table cells (use popover instead)
+  - When space is very limited
+  best_practices:
+  - Use native datetime-local input on mobile devices
+  - Provide clear date format guidance
+  - Use required indicators with legends for required fields
+  - Ensure proper ARIA attributes for desktop, remove for mobile native inputs
+  - Provide visual feedback for selected date and time
+  - Handle timezone considerations appropriately
+  common_mistakes:
+  - Using in data table cells without popover
+  - Not removing ARIA attributes on mobile native inputs
+  - Missing date format guidance
+  - Not handling timezone correctly
+  - Inadequate keyboard navigation support
+code_examples:
+- title: Basic Datetime Picker
+  code: "<div class=\"\">\n  <div class=\"slds-form-element\">\n    <label class=\"slds-form-element__label\" for=\"date-input\"\
+    >\n      <abbr class=\"slds-required\" title=\"required\">*</abbr> Date\n    </label>\n    <div class=\"slds-form-element__control\"\
+    >\n      <div class=\"slds-dropdown-trigger slds-dropdown-trigger_click\">\n        <div class=\"slds-combobox_container\"\
+    >\n          <div class=\"slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click\" role=\"combobox\" aria-expanded=\"\
+    false\" aria-haspopup=\"listbox\">\n            <div class=\"slds-form-element__icon\">\n              <svg class=\"slds-icon\
+    \ slds-icon-text-default\" aria-hidden=\"true\">\n                <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#event\"\
+    ></use>\n              </svg>\n            </div>\n            <input type=\"text\" class=\"slds-input slds-combobox__input\"\
+    \ id=\"date-input\" aria-controls=\"date-listbox\" aria-autocomplete=\"list\" role=\"textbox\" placeholder=\"Select a\
+    \ date\" />\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div class=\"slds-form-element\"\
+    >\n    <label class=\"slds-form-element__label\" for=\"time-input\">\n      <abbr class=\"slds-required\" title=\"required\"\
+    >*</abbr> Time\n    </label>\n    <div class=\"slds-form-element__control\">\n      <div class=\"slds-combobox_container\"\
+    >\n        <div class=\"slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click\" role=\"combobox\" aria-expanded=\"\
+    false\" aria-haspopup=\"listbox\">\n          <input type=\"text\" class=\"slds-input slds-combobox__input\" id=\"time-input\"\
+    \ aria-controls=\"time-listbox\" aria-autocomplete=\"list\" role=\"textbox\" placeholder=\"Select a time\" />\n      \
+    \  </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+  description: Basic datetime picker with date and time inputs
+- title: Mobile Datetime Picker (Native)
+  code: "<div class=\"\">\n  <div class=\"slds-form-element\">\n    <label class=\"slds-form-element__label\" for=\"datetime-mobile\"\
+    >\n      <abbr class=\"slds-required\" title=\"required\">*</abbr> Date and Time\n    </label>\n    <div class=\"slds-form-element__control\"\
+    >\n      <input type=\"datetime-local\" class=\"slds-input\" id=\"datetime-mobile\" />\n    </div>\n  </div>\n</div>\n"
+  description: Mobile datetime picker using native datetime-local input (ARIA attributes removed)
+styling_hooks: []
+dependencies:
+  css_files:
+  - datetime-picker.css
+  - form-element.css
+  - input.css
+  - datepicker.css
+  - timepicker.css
+  - combobox.css
+  - dropdown.css
+  javascript:
+  - Dropdown trigger functionality
+  - Calendar navigation
+  - Time option selection
+  - Date/time validation
+  icons:
+  - utility:event (for date icon)
+  other_components:
+  - form-element
+  - input
+  - datepicker
+  - timepicker
+  - combobox
+  - dropdown
+  - menus
+related_components:
+- name: Datepicker
+  relationship: depends-on
+  description: Date selection component used within datetime picker
+- name: Timepicker
+  relationship: depends-on
+  description: Time selection component used within datetime picker
+- name: Input
+  relationship: similar
+  description: Text input component used for date and time display
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/datetime-picker/
+  design_guidelines: https://v1.lightningdesignsystem.com/components/datetime-picker/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-01-15'
+  author: SLDS Documentation Team
+  slds_version: 2.27.2
+  review_status: complete
+  source: official-slds
+  notes: Created from official SLDS documentation and design-system-internal source code. Combines datepicker and timepicker
+    components. Mobile implementation uses native datetime-local input.

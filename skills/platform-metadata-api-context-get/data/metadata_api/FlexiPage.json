@@ -1,0 +1,355 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "FlexiPage - Metadata API",
+  "description": "Represents the metadata associated with a Lightning page. A Lightning page represents a customizable screen made up of regions containing Lightning components.",
+  "file_information": ".flexipage",
+  "directory_location": "flexipages",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The optional description text of the Lightning page."
+    },
+    "events": {
+      "type": "FlexiPageEvent[]",
+      "description": "The list of events associated with the Lightning page. This field is available in API version 53.0 and later."
+    },
+    "flexiPageRegions": {
+      "type": "FlexiPageRegion[]",
+      "description": "The list of regions of a page."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label for the Lightning page, which displays in Setup.",
+      "required": true
+    },
+    "pageTemplate": {
+      "type": "string",
+      "description": "Deprecated. Use this field in API versions 33.0 to 38.0 only. In later versions, use template. Required. The template associated with the Lightning page."
+    },
+    "parentFlexiPage": {
+      "type": "string",
+      "description": "The name of the Lightning page that this page inherits behavior from. This field is available in API version 37.0 or later."
+    },
+    "platformActionlist": {
+      "type": "PlatformActionList",
+      "description": "The list of all actions, and their order, that display on a Lightning app page. In the Salesforce mobile app, the actions appear in the action bar. This field is available in API version 34.0 and later."
+    },
+    "quickActionList": {
+      "type": "QuickActionList",
+      "description": "The list of quick actions associated with the Lightning page."
+    },
+    "sobjectType": {
+      "type": "string",
+      "description": "The object the Lightning page is associated with. For Lightning pages of type AppPage or HomePage, this field is null. After the value of this field is set, it can’t be changed. This field is available in API version 37.0 or later."
+    },
+    "template": {
+      "type": "FlexiPageTemplateInstance",
+      "description": "The template associated with the Lightning page. This field is available in API version 39.0 and later.",
+      "required": true
+    },
+    "type": {
+      "type": "FlexiPageType (enumeration of type string)",
+      "description": "The type of a page. In API versions 32.0 through 36.0, this field can only have a value of AppPage. Valid values are: CdpRecordPage—A Lightning page that is used to override a CDPNearCoreObject record page in Lightning Experience. This value is available in API version 54.0 and later for orgs that have Data 360 enabled. AppPage—A Lightning page that is used as the home page for a custom app. CommAppPage—A Lightning page that is used to represent a custom page, as created in the Experience Builder. This value is available in API version 37.0 and later. CommContractDetailViewPage—This value is available in API version 64.0 and later. CommCheckoutPage—A Lightning page that is used to create a B2B Commerce checkout, as created in the Experience Builder. This value is available in API version 46.0 and later. CommFlowPage A Lightning page used to override a flow page, as created in the Experience Builder. This value is available in API version 45.0 and later. CommForgotPasswordPage—A Lightning page that’s used to override a forgot-password page, as created in Experience Builder. This value is available in API version 39.0 and later. CommFlowPage—An out-of-the-box flow page, as created in Experience Builder. This value is available in API version 45.0 and later. CommGlobalSearchResultPage A Lightning page used to override the global search result page, as created in Experience Builder. This value is available in API version 41.0 and later. CommLoginPage—A Lightning page that’s used to override the login page, as created in Experience Builder. This value is available in API version 39.0 and later. CommNoSearchResultsPage—An Experience Builder site page for B2B searches that return no results. The URL for this page is no-results/:term. The page starts out empty. You can add any component to it that accepts parameters to achieve the desired “no results” experience. For example, you can place an HTML Editor component or CMS components for recommendations, banners, help, and support. This value is available in API version 48.0 and later. CommObjectPage—A Lightning page used to override an object page, as created in Experience Builder. This value is available in API version 38.0 and later. CommOrderComfirmationPage—A Lightning page that is used to create a B2B Commerce order confirmation page in checkout, as created in the Experience Builder. This value is available in API version 46.0 and later. CommQuickActionCreatePage—A Lightning page used to override the create record page, as created in Experience Builder. This value is available in API version 38.0 and later. CommRecordPage—A Lightning page used to override a record page, as created in the Experience Builder. This value is available in API version 38.0 and later. CommRelatedListPage—A Lightning page used to override a related list page, as created in the Experience Builder. This value is available in API version 38.0 and later. CommSearchResultPage—A Lightning page used to override the search result page, as created in Experience Builder. This value is available in API version 38.0 and later. CommSelfRegisterPage—A Lightning page used to override the self-registration page, as created in Experience Builder. This value is available in API version 39.0 and later. CommThemeLayoutPage—A Lightning page used to override a theme layout page, as created in the Experience Builder. This value is available in API version 38.0 and later. EmbeddedServicePage This value is available in API version 45.0 and later. EmailContentPage — A page that contains the builder markup for your email content. When you edit email content in the builder, the FlexiPage object remembers where you put the components. Because they include builder markup, you can't retrieve or deploy FlexiPages when type is EmailContentPage. EmailTemplatePage — A page that contains the builder markup for your email template. When you edit an email template in the builder, the FlexiPage object remembers where you put the components. Because they include builder markup, you can't retrieve or deploy FlexiPages when type is EmailTemplatePage or EmailContentPage. ForecastingPage —A Lightning page that is used to override the default forecasts page in Lightning Experience. This value is available in API version 57.0 and later. HomePage—A Lightning page that is used to override the Home page in Lightning Experience. This value is available in API version 37.0 and later. MailAppAppPage—An email application pane used to override the default layout in the Outlook and Gmail integrations. This value is available in API version 38.0 and later. OmniSupervisorPageType—A Lightning page used to customize the user interface on the Omni-Channel Supervisor page. This value is available in API version 60.0 and later. RecordPage—A Lightning page used to override an object record page in Lightning Experience. This value is available in API version 37.0 and later. RecordPreview A Lightning page used to override standard lookup previews when hovering over previewable records in Lightning Experience.This value is available in API version 45.0 and later. UtilityBar—A Lightning page used as the utility bar in Lightning Experience apps. This value is available in API version 38.0 and later. VoiceExtension—A Lightning page used to customize user interfaces and agent actions in the Omni-Channel widget for Service Cloud Voice. This value is available in API version 57.0 and later. This field is available in API version 32.0 and later.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "FlexiPageEvent": {
+      "sourceName": {
+        "type": "string",
+        "description": "The name of the event source item. If the source is a custom Lightning web component, this field is the name of the component. In API 53.0, a source can be only a Lightning web component.",
+        "required": true
+      },
+      "sourceProperties": {
+        "type": "FlexiPageEventSourceProperty[]",
+        "description": "The list of properties associated with the event source."
+      },
+      "sourceType": {
+        "type": "FlexipageEventSourceTypeEnum (enumeration of type string)",
+        "description": "The type of item assigned as the event source. In API version 53.0, this field can have only a value of Component.",
+        "required": true
+      },
+      "targets": {
+        "type": "FlexiPageEventTarget[]",
+        "description": "The list of targets associated with the event source."
+      }
+    },
+    "FlexiPageEventSourceProperty": {
+      "name": {
+        "type": "string",
+        "description": "In API version 53.0 and later, the value of this field can be only eventName.",
+        "required": true
+      },
+      "value": {
+        "type": "string",
+        "description": "If the name field value is eventName, this field is the name of the event. If the event source is a Lightning web component, this value must be the same as the event name defined in the source component’s js-meta.xml file.",
+        "required": true
+      }
+    },
+    "FlexiPageEventTarget": {
+      "mappings": {
+        "type": "FlexiPageEventPropertyMapping[]",
+        "description": "A list of key-value pairs for an event’s source-to-target bindings."
+      },
+      "method": {
+        "type": "string",
+        "description": "The only valid value is updateProperties.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the event target. Valid values are: flexipage:componentService",
+        "required": true
+      },
+      "properties": {
+        "type": "FlexiPageEventTargetProperty[]",
+        "description": "List of properties of the event target."
+      },
+      "type": {
+        "type": "FlexiPageEventTargetTypeEnum (enumeration of type string)",
+        "description": "The type of item assigned as the event target. Valid values are: FlexipageServices—A component on the Lightning page.",
+        "required": true
+      }
+    },
+    "FlexiPageEventPropertyMapping": {
+      "name": {
+        "type": "string",
+        "description": "Name of the target property that changes when the event is triggered.",
+        "required": true
+      },
+      "value": {
+        "type": "string",
+        "description": "Value of the target property when the event occurs. For properties of type string, integer, and boolean, you can use an expression to define their value. Valid expression format is {!Event.eventPropertyName}. Event is the only context supported for expressions in interactions."
+      }
+    },
+    "FlexiPageEventTargetProperty": {
+      "name": {
+        "type": "string",
+        "description": "In API version 53.0 and later, the value of this field can be only componentIdentifier",
+        "required": true
+      },
+      "value": {
+        "type": "string",
+        "description": "The ComponentInstance identifier value for the component.",
+        "required": true
+      }
+    },
+    "FlexiPageRegion": {
+      "appendable": {
+        "type": "RegionFlagStatus (enumeration of type string)",
+        "description": "This field is available in Digital Experiences in API 45.0 or later, but is reserved for future use for all other areas. Valid values are: disabled enabled This field is assessed in combination with replaceable and prependable If all the properties are set to enabled, the region is unlocked If all the properties are set to disabled, the region is locked If none of the properties are specified OR any of these three properties are missing, the region is unlocked. This field is available in API version 35.0 or later."
+      },
+      "componentInstances": {
+        "type": "ComponentInstance[]",
+        "description": "Properties and name of the component instance. This field was removed in API version 49.0. In API version 49.0 and later, use the itemInstances field instead."
+      },
+      "itemInstances": {
+        "type": "ItemInstance[]",
+        "description": "Array of item instances, which can contain components and fields. This field is available in API version 49.0 or later."
+      },
+      "mode": {
+        "type": "FlexiPageRegionMode (enumeration of type string)",
+        "description": "This field is reserved for future use. Valid values are: Append Prepend Replace This field is available in API version 35.0 or later."
+      },
+      "name": {
+        "type": "string",
+        "description": "Unique name of the FlexiPage region.",
+        "required": true
+      },
+      "prependable": {
+        "type": "RegionFlagStatus (enumeration of type string)",
+        "description": "This field is available in Digital Experiences in API 45.0 or later, but is reserved for future use for all other areas. Valid values are: disabled enabled This field is assessed in combination with appendable and replaceable. If all the properties are set to enabled, the region is unlocked If all the properties are set to disabled, the region is locked If none of the properties are specified OR any of these three properties are missing, the region is unlocked. This field is available in API version 35.0 or later."
+      },
+      "replaceable": {
+        "type": "RegionFlagStatus (enumeration of type string)",
+        "description": "This field is available in Digital Experiences in API 45.0 or later, but is reserved for future use for all other areas. Valid values are: disabled enabled This field is assessed in combination with appendable and prependable. If all the properties are set to enabled, the region is unlocked If all the properties are set to disabled, the region is locked If none of the properties are specified OR any of these three properties are missing, the region is unlocked. This field is available in API version 35.0 or later."
+      },
+      "type": {
+        "type": "FlexiPageRegionType (enumeration of type string)",
+        "description": "The type of FlexiPage region. Valid values are: Background—Represents a region for background utility items, which aren’t visible in the UI. Supported for utility bars only. Facet Region This field is available in API version 35.0 or later.",
+        "required": true
+      }
+    },
+    "ItemInstance": {
+      "componentInstance": {
+        "type": "ComponentInstance",
+        "description": "Properties and name of the component instance."
+      },
+      "fieldInstance": {
+        "type": "FieldInstance",
+        "description": "API name, label, and visibility rule information of the field component. This field is available only on Lightning pages that use Dynamic Forms."
+      }
+    },
+    "ComponentInstance": {
+      "componentInstanceProperties": {
+        "type": "ComponentInstanceProperty[]",
+        "description": "The value of a single property in a component instance."
+      },
+      "componentName": {
+        "type": "string",
+        "description": "The name of a single instance of a component.",
+        "required": true
+      },
+      "identifier": {
+        "type": "string",
+        "description": "The unique name of the ComponentInstance. Provides a way to uniquely identify an individual instance of a component on a Lightning page. This field has a maximum limit of 120 characters. This field is available in API version 53.0 and later.",
+        "required": true
+      },
+      "visibilityRule": {
+        "type": "UiFormulaRule",
+        "description": "A set of one or more filters that define the conditions under which the component displays on the page. If the rule evaluates to true, the component displays on the page. If false, it doesn't display. If this field is null, the component displays by default. This field is available in API version 41.0 and later."
+      }
+    },
+    "ComponentInstanceProperty": {
+      "name": {
+        "type": "string",
+        "description": "Name of the property, unique within the component instance. For Lightning components, this value is the <aura:attribute> as defined in the.cmp file."
+      },
+      "type": {
+        "type": "ComponentInstancePropertyTypeEnum (enumeration of type string)",
+        "description": "If this field value is null, then the ComponentInstanceProperty values apply to the Lightning component. If this field value is decorator, then the ComponentInstanceProperty values apply to the component decorator for the Lightning component. The component decorator is a wrapper around a Lightning component. The decorator can apply more capabilities to the component when it renders on a specific page in Lightning Experience. For example, you can configure a component decorator around a component on the Lightning Experience utility bar to set the component’s height or width when opened. The UtilityBar is the only page type that supports component decorators. Valid values are: decorator This field is available in API version 38.0 or later."
+      },
+      "value": {
+        "type": "string",
+        "description": "Reference or value of the property. When defining a Related List component, to use a parent record set the parentFieldApiName value to object.field_name. If you don’t want to use a parent record, set the value to object.Id."
+      },
+      "valueList": {
+        "type": "ComponentInstancePropertyList",
+        "description": "An array of values in a component instance. Available in API version 49.0 and later."
+      }
+    },
+    "ComponentInstancePropertyList": {
+      "valueListItems": {
+        "type": "ComponentInstancePropertyListItem[]",
+        "description": "An array of elements in a component instance."
+      }
+    },
+    "ComponentInstancePropertyListItem": {
+      "value": {
+        "type": "string",
+        "description": "Name of an element in an array in a component instance."
+      }
+    },
+    "UiFormulaRule": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "Specifies advanced filter conditions such as 1 AND 2."
+      },
+      "criteria": {
+        "type": "UiFormulaCriterion[]",
+        "description": "List of one or more filters that, when evaluated, determine component visibility."
+      }
+    },
+    "UiFormulaCriterion": {
+      "leftValue": {
+        "type": "string",
+        "description": "The field upon which the filter is based. For example, AMOUNT.",
+        "required": true
+      },
+      "operator": {
+        "type": "string",
+        "description": "Defines the operator used to filter the data. Valid values are: CONTAINS EQUAL NE—not equal GT—greater than GE—greater than or equal LE—less than or equal LT—less than",
+        "required": true
+      },
+      "rightValue": {
+        "type": "string",
+        "description": "The value by which you want to evaluate the component’s visibility. For example, 1000000."
+      }
+    },
+    "FieldInstance": {
+      "fieldInstanceProperties": {
+        "type": "FieldInstanceProperty[]",
+        "description": "Properties of the field instance. Contains a name and value pair for each property associated with the field."
+      },
+      "fieldItem": {
+        "type": "string",
+        "description": "The API name of the field, prefixed with its context. For example, record fields are prefixed with Record.."
+      },
+      "identifier": {
+        "type": "string",
+        "description": "The unique name of the FieldInstance. Provides a way to uniquely identify an individual instance of a field on a Dynamic Forms-enabled Lightning page. This field has a maximum limit of 120 characters. This field is available in API version 53.0 and later.",
+        "required": true
+      },
+      "visibilityRule": {
+        "type": "UiFormulaRule",
+        "description": "A set of one or more filters that define the conditions under which the component displays on the page. If the rule evaluates to true, the component displays on the page. If false, it doesn't display. If this field is null, the component displays by default."
+      }
+    },
+    "FieldInstanceProperty": {
+      "name": {
+        "type": "string",
+        "description": "Name of the property, unique within the field instance. Valid values are: conditionalFormatRulesetAvailable in API version 62.0 and later. uiBehaviorAvailable in API version 49.0 and later."
+      },
+      "value": {
+        "type": "string",
+        "description": "Reference or value of the property. When the name value is uiBehavior, valid values for this field are: None Readonly Required"
+      }
+    },
+    "FlexiPageTemplateInstance": {
+      "name": {
+        "type": "string",
+        "description": "The name of a single instance of a template.",
+        "required": true
+      },
+      "properties": {
+        "type": "ComponentInstanceProperty[]",
+        "description": "The value of a single property in a template instance. Valid only for: CommThemeLayoutPage Dynamic Forms-enabled pages of type RecordPage that are associated with account, case, or lead objects Contains a name and value pair for each theme layout property associated with the page template. In Experience Builder, the theme layout and its properties appear in the Theme area."
+      }
+    },
+    "PlatformActionList": {
+      "actionListContext": {
+        "type": "PlatformActionListContext (enumeration of type string)",
+        "description": "The context of the action list. Valid values are: Assistant BannerPhoto Chatter Dockable FeedElement Flexipage Global ListView ListViewDefinition ListViewRecord Lookup MruList MruRow ObjectHomeChart Photo Record RecordEdit RelatedList RelatedListRecord",
+        "required": true
+      },
+      "platformActionListItems": {
+        "type": "PlatformActionListItem[]",
+        "description": "The actions in the PlatformActionList."
+      },
+      "relatedSourceEntity": {
+        "type": "string",
+        "description": "When the ActionListContext is RelatedList or RelatedListRecord, this field represents the API name of the related list to which the action belongs."
+      }
+    },
+    "PlatformActionListItem": {
+      "actionName": {
+        "type": "string",
+        "description": "The API name for the action in the list.",
+        "required": true
+      },
+      "actionType": {
+        "type": "PlatformActionType (enumeration of type string)",
+        "description": "The type of action. Valid values are: ActionLink—An indicator on a feed element that targets an API, a web page, or a file, represented by a button in the Salesforce Chatter feed UI. CustomButton—When clicked, opens a URL or a Visualforce page in a window or executes JavaScript. InvocableAction ProductivityAction—Productivity actions are predefined and attached to a limited set of objects. Productivity actions include Send Email, Call, Map, View Website, and Read News. Except for the Call action, you can’t edit productivity actions. QuickAction—A global or object-specific action. StandardButton—A predefined Salesforce button such as New, Edit, and Delete.",
+        "required": true
+      },
+      "sortOrder": {
+        "type": "int",
+        "description": "The placement of the action in the list.",
+        "required": true
+      },
+      "subtype": {
+        "type": "string",
+        "description": "The subtype of the action. For quick actions, the subtype is QuickActionType. For custom buttons, the subtype is WebLinkTypeEnum. For action links, subtypes are Api, ApiAsync, Download, and Ui. Standard buttons and productivity actions have no subtype."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ComponentInstance\">\n  <xsd:sequence>\n    <xsd:element name=\"componentInstanceProperties\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ComponentInstanceProperty\"/>\n    <xsd:element name=\"componentName\" type=\"xsd:string\"/>\n    <xsd:element name=\"identifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"visibilityRule\" minOccurs=\"0\" type=\"tns:UiFormulaRule\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ComponentInstanceProperty\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" minOccurs=\"0\" type=\"tns:ComponentInstancePropertyTypeEnum\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueList\" minOccurs=\"0\" type=\"tns:ComponentInstancePropertyList\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ComponentInstancePropertyList\">\n  <xsd:sequence>\n    <xsd:element name=\"valueListItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ComponentInstancePropertyListItem\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ComponentInstancePropertyListItem\">\n  <xsd:sequence>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"visibilityRule\" minOccurs=\"0\" type=\"tns:UiFormulaRule\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ComponentInstancePropertyTypeEnum\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"decorator\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FieldInstance\">\n  <xsd:sequence>\n    <xsd:element name=\"fieldInstanceProperties\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FieldInstanceProperty\"/>\n    <xsd:element name=\"fieldItem\" type=\"xsd:string\"/>\n    <xsd:element name=\"identifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"visibilityRule\" minOccurs=\"0\" type=\"tns:UiFormulaRule\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FieldInstanceProperty\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlexiPage\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"events\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlexiPageEvent\"/>\n        <xsd:element name=\"flexiPageRegions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlexiPageRegion\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"parentFlexiPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"platformActionlist\" minOccurs=\"0\" type=\"tns:PlatformActionList\"/>\n        <xsd:element name=\"quickActionList\" minOccurs=\"0\" type=\"tns:QuickActionList\"/>\n        <xsd:element name=\"sobjectType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"template\" type=\"tns:FlexiPageTemplateInstance\"/>\n        <xsd:element name=\"type\" type=\"tns:FlexiPageType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"FlexiPageEvent\">\n  <xsd:sequence>\n    <xsd:element name=\"sourceName\" type=\"xsd:string\"/>\n    <xsd:element name=\"sourceProperties\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlexiPageEventSourceProperty\"/>\n    <xsd:element name=\"sourceType\" type=\"tns:FlexipageEventSourceTypeEnum\"/>\n    <xsd:element name=\"targets\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlexiPageEventTarget\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlexiPageEventPropertyMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlexiPageEventSourceProperty\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlexiPageEventTarget\">\n  <xsd:sequence>\n    <xsd:element name=\"mappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlexiPageEventPropertyMapping\"/>\n    <xsd:element name=\"method\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"properties\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlexiPageEventTargetProperty\"/>\n    <xsd:element name=\"type\" type=\"tns:FlexipageEventTargetTypeEnum\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlexiPageEventTargetProperty\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlexiPageRegion\">\n  <xsd:sequence>\n    <xsd:element name=\"appendable\" minOccurs=\"0\" type=\"tns:RegionFlagStatus\"/>\n    <xsd:element name=\"itemInstances\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ItemInstance\"/>\n    <xsd:element name=\"mode\" minOccurs=\"0\" type=\"tns:FlexiPageRegionMode\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"prependable\" minOccurs=\"0\" type=\"tns:RegionFlagStatus\"/>\n    <xsd:element name=\"replaceable\" minOccurs=\"0\" type=\"tns:RegionFlagStatus\"/>\n    <xsd:element name=\"type\" type=\"tns:FlexiPageRegionType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FlexiPageRegionMode\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Append\"/>\n    <xsd:enumeration value=\"Prepend\"/>\n    <xsd:enumeration value=\"Replace\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FlexiPageRegionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Region\"/>\n    <xsd:enumeration value=\"Facet\"/>\n    <xsd:enumeration value=\"Background\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FlexiPageTemplateInstance\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"properties\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ComponentInstanceProperty\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FlexiPageType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AppPage\"/>\n    <xsd:enumeration value=\"ObjectPage\"/>\n    <xsd:enumeration value=\"RecordPage\"/>\n    <xsd:enumeration value=\"HomePage\"/>\n    <xsd:enumeration value=\"ForecastingPage\"/>\n    <xsd:enumeration value=\"MailAppAppPage\"/>\n    <xsd:enumeration value=\"CommAppPage\"/>\n    <xsd:enumeration value=\"CommForgotPasswordPage\"/>\n    <xsd:enumeration value=\"CommLoginPage\"/>\n    <xsd:enumeration value=\"CommObjectPage\"/>\n    <xsd:enumeration value=\"CommQuickActionCreatePage\"/>\n    <xsd:enumeration value=\"CommRecordPage\"/>\n    <xsd:enumeration value=\"CommRelatedListPage\"/>\n    <xsd:enumeration value=\"CommSearchResultPage\"/>\n    <xsd:enumeration value=\"CommGlobalSearchResultPage\"/>\n    <xsd:enumeration value=\"CommSelfRegisterPage\"/>\n    <xsd:enumeration value=\"CommThemeLayoutPage\"/>\n    <xsd:enumeration value=\"UtilityBar\"/>\n    <xsd:enumeration value=\"RecordPreview\"/>\n    <xsd:enumeration value=\"EmbeddedServicePage\"/>\n    <xsd:enumeration value=\"CommCheckoutPage\"/>\n    <xsd:enumeration value=\"CommOrderConfirmationPage\"/>\n    <xsd:enumeration value=\"CommFlowPage\"/>\n    <xsd:enumeration value=\"EmailTemplatePage\"/>\n    <xsd:enumeration value=\"ApplicationLayout\"/>\n    <xsd:enumeration value=\"CommNoSearchResultsPage\"/>\n    <xsd:enumeration value=\"CommElectronicSignaturePage\"/>\n    <xsd:enumeration value=\"CommContractDocumentsPage\"/>\n    <xsd:enumeration value=\"CommContractDetailViewPage\"/>\n    <xsd:enumeration value=\"EmailContentPage\"/>\n    <xsd:enumeration value=\"ServiceDocument\"/>\n    <xsd:enumeration value=\"LandingPage\"/>\n    <xsd:enumeration value=\"CdpRecordPage\"/>\n    <xsd:enumeration value=\"SlackAppHome\"/>\n    <xsd:enumeration value=\"SlackMessage\"/>\n    <xsd:enumeration value=\"SlackModal\"/>\n    <xsd:enumeration value=\"SlackNotification\"/>\n    <xsd:enumeration value=\"EasyHomePage\"/>\n    <xsd:enumeration value=\"CardPage\"/>\n    <xsd:enumeration value=\"VoiceExtension\"/>\n    <xsd:enumeration value=\"ConfiguratorAppPage\"/>\n    <xsd:enumeration value=\"OmniSupervisorPage\"/>\n    <xsd:enumeration value=\"MobileAppPage\"/>\n    <xsd:enumeration value=\"CCShellPage\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FlexipageEventSourceTypeEnum\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Component\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FlexipageEventTargetTypeEnum\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"FlexipageServices\"/>\n    <xsd:enumeration value=\"LwcServices\"/>\n    <xsd:enumeration value=\"InvocableApexServices\"/>\n    <xsd:enumeration value=\"InvocableExternalServices\"/>\n    <xsd:enumeration value=\"ActionServices\"/>\n    <xsd:enumeration value=\"ViewServices\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ItemInstance\">\n  <xsd:sequence>\n    <xsd:element name=\"componentInstance\" minOccurs=\"0\" type=\"tns:ComponentInstance\"/>\n    <xsd:element name=\"fieldInstance\" minOccurs=\"0\" type=\"tns:FieldInstance\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PlatformActionList\">\n  <xsd:sequence>\n    <xsd:element name=\"actionListContext\" type=\"tns:PlatformActionListContext\"/>\n    <xsd:element name=\"platformActionListItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PlatformActionListItem\"/>\n    <xsd:element name=\"relatedSourceEntity\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"PlatformActionListContext\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ListView\"/>\n    <xsd:enumeration value=\"RelatedList\"/>\n    <xsd:enumeration value=\"ListViewRecord\"/>\n    <xsd:enumeration value=\"RelatedListRecord\"/>\n    <xsd:enumeration value=\"Record\"/>\n    <xsd:enumeration value=\"FeedElement\"/>\n    <xsd:enumeration value=\"Chatter\"/>\n    <xsd:enumeration value=\"Global\"/>\n    <xsd:enumeration value=\"Flexipage\"/>\n    <xsd:enumeration value=\"MruList\"/>\n    <xsd:enumeration value=\"MruRow\"/>\n    <xsd:enumeration value=\"RecordEdit\"/>\n    <xsd:enumeration value=\"Photo\"/>\n    <xsd:enumeration value=\"BannerPhoto\"/>\n    <xsd:enumeration value=\"ObjectHomeChart\"/>\n    <xsd:enumeration value=\"ListViewDefinition\"/>\n    <xsd:enumeration value=\"Dockable\"/>\n    <xsd:enumeration value=\"Lookup\"/>\n    <xsd:enumeration value=\"Assistant\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"PlatformActionListItem\">\n  <xsd:sequence>\n    <xsd:element name=\"actionName\" type=\"xsd:string\"/>\n    <xsd:element name=\"actionType\" type=\"tns:PlatformActionType\"/>\n    <xsd:element name=\"sortOrder\" type=\"xsd:int\"/>\n    <xsd:element name=\"subtype\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"PlatformActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"QuickAction\"/>\n    <xsd:enumeration value=\"StandardButton\"/>\n    <xsd:enumeration value=\"CustomButton\"/>\n    <xsd:enumeration value=\"ProductivityAction\"/>\n    <xsd:enumeration value=\"ActionLink\"/>\n    <xsd:enumeration value=\"InvocableAction\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"QuickActionList\">\n  <xsd:sequence>\n    <xsd:element name=\"quickActionListItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:QuickActionListItem\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"QuickActionListItem\">\n  <xsd:sequence>\n    <xsd:element name=\"quickActionName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"RegionFlagStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"disabled\"/>\n    <xsd:enumeration value=\"enabled\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"UiFormulaCriterion\">\n  <xsd:sequence>\n    <xsd:element name=\"leftValue\" type=\"xsd:string\"/>\n    <xsd:element name=\"operator\" type=\"xsd:string\"/>\n    <xsd:element name=\"rightValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"UiFormulaRule\">\n  <xsd:sequence>\n    <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"criteria\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:UiFormulaCriterion\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<FlexiPage xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <flexiPageRegions>\n        <itemInstances>\n            <componentInstance>\n                <componentInstanceProperties>\n                    <name>collapsed</name>\n                    <value>false</value>\n                </componentInstanceProperties>\n                <componentInstanceProperties>\n                    <name>hideChatterActions</name>\n                    <value>false</value>\n                </componentInstanceProperties>\n                <componentInstanceProperties>\n                    <name>numVisibleActions</name>\n                    <value>3</value>\n                </componentInstanceProperties>\n                <componentName>force:highlightsPanel</componentName>\n            </componentInstance>\n        </itemInstances>\n        <name>header</name>\n        <type>Region</type>\n    </flexiPageRegions>\n    <flexiPageRegions>\n        <itemInstances>\n            <componentInstance>\n                <componentInstanceProperties>\n                    <name>hideUpdateButton</name>\n                    <value>false</value>\n                </componentInstanceProperties>\n                <componentInstanceProperties>\n                    <name>variant</name>\n                    <value>linear</value>\n                </componentInstanceProperties>\n                <componentName>runtime_sales_pathassistant:pathAssistant</componentName>\n            </componentInstance>\n        </itemInstances>\n        <name>subheader</name>\n        <type>Region</type>\n    </flexiPageRegions>\n    <flexiPageRegions>\n        <itemInstances>\n            <componentInstance>\n                <componentInstanceProperties>\n                    <name>entityNames</name>\n                    <valueList>\n                        <valueListItems>\n                            <value>Opportunity</value>\n                        </valueListItems>\n                    </valueList>\n                </componentInstanceProperties>\n                <componentInstanceProperties>\n                    <name>maxRecords</name>\n                    <value>3</value>\n                </componentInstanceProperties>\n                <componentName>flexipage:recentItems</componentName>\n            </componentInstance>\n        </itemInstances>\n        <name>Facet-afbed70e-277a-41f5-9919-34651ff97773</name>\n        <type>Facet</type>\n    </flexiPageRegions>\n    <flexiPageRegions>\n        <itemInstances>\n            <componentInstance>\n                <componentInstanceProperties>\n                    <name>relatedListComponentOverride</name>\n                    <value>NONE</value>\n                </componentInstanceProperties>\n                <componentName>force:relatedListContainer</componentName>\n            </componentInstance>\n        </itemInstances>\n        <name>facet-77f21b6f-ad73-4d79-838a-79e0df27cc63</name>\n        <type>Facet</type>\n    </flexiPageRegions>\n    <flexiPageRegions>\n        <itemInstances>\n            <componentInstance>\n                <componentName>force:detailPanel</componentName>\n            </componentInstance>\n        </itemInstances>\n        <name>facet-c22fcfa7-d6f2-46ab-ac03-6c92e7398da1</name>\n        <type>Facet</type>\n    </flexiPageRegions>\n    <flexiPageRegions>\n        <itemInstances>\n            <componentInstance>\n                <componentName>runtime_sales_activities:activityPanel</componentName>\n            </componentInstance>\n        </itemInstances>\n        <name>Facet-u9v2x6h8u4k</name>\n        <type>Facet</type>\n    </flexiPageRegions>\n    <flexiPageRegions>\n        <itemInstances>\n            <componentInstance>\n                <componentInstanceProperties>\n                    <name>body</name>\n                    <value>Facet-afbed70e-277a-41f5-9919-34651ff97773</value>\n                </componentInstanceProperties>\n                <componentInstanceProperties>\n                    <name>title</name>\n                    <value>Recent Items</value>\n                </componentInstanceProperties>\n                <componentName>flexipage:tab</componentName>\n            </componentInstance>\n        </itemInstances>\n        <itemInstances>\n            <componentInstance>\n                <componentInstanceProperties>\n                    <name>active</name>\n                    <value>true</value>\n                </componentInstanceProperties>\n                <componentInstanceProperties>\n                    <name>body</name>\n                    <value>facet-77f21b6f-ad73-4d79-838a-79e0df27cc63</value>\n                </componentInstanceProperties>\n                <componentInstanceProperties>\n                    <name>title</name>\n                    <value>Standard.Tab.relatedLists</value>\n                </componentInstanceProperties>\n                <componentName>flexipage:tab</componentName>\n            </componentInstance>\n        </itemInstances>\n        <itemInstances>\n            <componentInstance>\n                <componentInstanceProperties>\n                    <name>body</name>\n                    <value>facet-c22fcfa7-d6f2-46ab-ac03-6c92e7398da1</value>\n                </componentInstanceProperties>\n                <componentInstanceProperties>\n                    <name>title</name>\n                    <value>Standard.Tab.detail</value>\n                </componentInstanceProperties>\n                <componentName>flexipage:tab</componentName>\n            </componentInstance>\n        </itemInstances>\n        <itemInstances>\n            <componentInstance>\n                <componentInstanceProperties>\n                    <name>body</name>\n                    <value>Facet-u9v2x6h8u4k</value>\n                </componentInstanceProperties>\n                <componentInstanceProperties>\n                    <name>title</name>\n                    <value>Standard.Tab.activity</value>\n                </componentInstanceProperties>\n                <componentName>flexipage:tab</componentName>\n            </componentInstance>\n        </itemInstances>\n        <name>facet-27334405-c871-463f-bc20-b3713bbb4884</name>\n        <type>Facet</type>\n    </flexiPageRegions>\n    <flexiPageRegions>\n        <itemInstances>\n            <componentInstance>\n                <componentInstanceProperties>\n                    <name>tabs</name>\n                    <value>facet-27334405-c871-463f-bc20-b3713bbb4884</value>\n                </componentInstanceProperties>\n                <componentName>flexipage:tabset</componentName>\n            </componentInstance>\n        </itemInstances>\n        <name>main</name>\n        <type>Region</type>\n    </flexiPageRegions>\n    <flexiPageRegions>\n        <itemInstances>\n            <componentInstance>\n                <componentInstanceProperties>\n                    <name>decorate</name>\n                    <value>true</value>\n                </componentInstanceProperties>\n                <componentInstanceProperties>\n                    <name>richTextValue</name>\n                    <value>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 18px; color: rgb(11, 11, 11);&quot;&gt;A million dollar opportunity closed! Oh yeah!&lt;/span&gt;&lt;/p&gt;</value>\n                </componentInstanceProperties>\n                <componentName>flexipage:richText</componentName>\n                <visibilityRule>\n                    <booleanFilter>1 AND 2</booleanFilter>\n                    <criteria>\n                        <leftValue>{!Record.Amount}</leftValue>\n                        <operator>GE</operator>\n                        <rightValue>1000000</rightValue>\n                    </criteria>\n                    <criteria>\n                        <leftValue>{!Record.StageName}</leftValue>\n                        <operator>EQUAL</operator>\n                        <rightValue>Closed Won</rightValue>\n                    </criteria>\n                </visibilityRule>\n            </componentInstance>\n        </itemInstances>\n        <itemInstances>\n            <componentInstance>\n                <componentInstanceProperties>\n                    <name>decorate</name>\n                    <value>true</value>\n                </componentInstanceProperties>\n                <componentInstanceProperties>\n                    <name>richTextValue</name>\n                    <value>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 16px; color: rgb(244, 0, 0);&quot;&gt;This component is for mobile users only.&lt;/span&gt;&lt;/p&gt;</value>\n                </componentInstanceProperties>\n                <componentName>flexipage:richText</componentName>\n                <visibilityRule>\n                    <criteria>\n                        <leftValue>{!$Client.formFactor}</leftValue>\n                        <operator>EQUAL</operator>\n                        <rightValue>Small</rightValue>\n                    </criteria>\n                </visibilityRule>\n            </componentInstance>\n        </itemInstances>\n        <itemInstances>\n            <componentInstance>\n                <componentName>forceChatter:recordFeedContainer</componentName>\n            </componentInstance>\n        </itemInstances>\n        <name>sidebar</name>\n        <type>Region</type>\n    </flexiPageRegions>\n    <masterLabel>New Opportunity Page</masterLabel>\n    <sobjectType>Opportunity</sobjectType>\n    <template>\n        <name>flexipage:recordHomeWithSubheaderTemplateDesktop</name>\n    </template>\n    <type>RecordPage</type>\n</FlexiPage>"
+    }
+  ]
+}

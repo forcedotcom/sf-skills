@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "UserProvisioningConfig - Metadata API",
+  "description": "Represents information to use during a user provisioning request flow, such as the attributes for an update. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".userProvisioningConfig",
+  "directory_location": "UserProvisioningConfigs",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "approvalRequired": {
+      "type": "string",
+      "description": "Indicates whether approvals are required for provisioning users for the associated connected app. If the value is null, no approval is required."
+    },
+    "connectedApp": {
+      "type": "string",
+      "description": "The ID of the connected app for which users are being provisioned."
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "Indicates whether user provisioning is enabled for the associated connected app (true) or not (false). Default setting is false."
+    },
+    "enabledOperations": {
+      "type": "string",
+      "description": "Lists the operations, as comma-separated values, that create a user provisioning request for the associated connected app. Allowed values are: Create Update EnableAndDisable (activation and deactivation) SuspendAndRestore (freeze and unfreeze)"
+    },
+    "flow": {
+      "type": "string",
+      "description": "User Provisioning flow type which includes a reference to the Apex UserProvisioningPlugin class. The flow calls the third-party service’s API to manage user account provisioning on that system."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The primary label for this object. This value is the internal label that doesn’t get translated."
+    },
+    "namedCredential": {
+      "type": "string",
+      "description": "The Salesforce ID of the named credential that’s used for a request. The named credential identifies the third-party system and the third-party authentication settings."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Serves as a place for admins to add any additional information about the configuration. This field is for internal reference only, and is not used by any process."
+    },
+    "onUpdateAttributes": {
+      "type": "string",
+      "description": "Lists the user attributes, as comma-separated values, that generate a user provisioning request during an update."
+    },
+    "reconFilter": {
+      "type": "string",
+      "description": "When collecting and analyzing users on a third-party system, the plug-in uses this filter to limit the scope of the collection."
+    },
+    "userAccountMapping": {
+      "type": "string",
+      "description": "Stores the attributes used to link the Salesforce user to the account on the third-party system, in JSON format. For example: {\"linkingSalesforceUserAttribute\":\"Username\", \"linkingTargetUserAttribute\":\"Email\"}"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"UserProvisioningConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"approvalRequired\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"connectedApp\" type=\"xsd:string\"/>\n        <xsd:element name=\"enabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enabledOperations\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"flow\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"namedCredential\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"notes\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"onUpdateAttributes\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"reconFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"userAccountMapping\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a UserProvisioningConfig component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<UserProvisioningConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <approvalRequired>True</approvalRequired>\n    <enabled>true</enabled>\n    <enabledOperations>NA</enabledOperations>\n    <connectedApp>ExampleApp</connectedApp>\n    <masterLabel>label</masterLabel>\n    <notes>note</notes>\n    <onUpdateAttributes>attri</onUpdateAttributes>\n    <reconFilter>filter</reconFilter>\n    <userAccountMapping>mapping</userAccountMapping>\n</UserProvisioningConfig>"
+    }
+  ]
+}

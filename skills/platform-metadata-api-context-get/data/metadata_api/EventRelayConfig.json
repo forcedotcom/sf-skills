@@ -1,0 +1,55 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EventRelayConfig - Metadata API",
+  "description": "Represents the configuration of an event relay, which relays platform events and change data capture events from Salesforce to Amazon EventBridge.",
+  "file_information": ".eventRelay",
+  "directory_location": "eventRelays",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "destinationResourceName": {
+      "type": "string",
+      "required": true,
+      "description": "The developer name of the named credential, which stores the AWS account information. The destinationResourceName value contains the callout: prefix. For example: callout:MyRelayNamedCredential"
+    },
+    "eventChannel": {
+      "type": "string",
+      "required": true,
+      "description": "The full name of the event channel used in the event relay. For example: MyRelayChannel__chn"
+    },
+    "label": {
+      "type": "string",
+      "description": "The label for the event relay. The label is displayed in the user interface. Make sure you use a meaningful label that describes your event relay and try to make it unique."
+    },
+    "relayOption": {
+      "type": "string",
+      "description": "A JSON-encoded string that contains an option for resuming an event relay after the system recovers from an error. This option is used if the event relay can't resume after the last relayed event. The options available are: {\\\"ReplayRecovery\\\":\\\"LATEST\\\"}—(Default) Start relaying events from new events received in the event bus. Use this option if you aren’t interested in missed events while the relay was down. {\\\"ReplayRecovery\\\":\\\"EARLIEST\\\"}—Resend all events stored in the event bus and relay new events thereafter. The event bus stores events for up to three days. Use this option if you want to reprocess all stored events and catch up on missed events."
+    },
+    "state": {
+      "type": "EventRelayAdminState (enumeration of type string)",
+      "description": "The execution state of the event relay. Possible values are: RUN—The event relay is running and actively relaying event messages from Salesforce to Amazon EventBridge. PAUSE—An administrator paused the event relay. No events are relayed to Amazon EventBridge during this status. All current state information is saved. STOP—(Default) The event relay is stopped and no events are relayed to Amazon EventBridge. All current state information is deleted. The event relay is created with a default state of STOP if you don't specify this field. If you specify this field when creating an event relay, the only valid value you can set is STOP. DELETE—Reserved for future use."
+    },
+    "usageType": {
+      "type": "string",
+      "description": "Reserved for future use."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"EventRelayAdminState\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"RUN\"/>\n    <xsd:enumeration value=\"STOP\"/>\n    <xsd:enumeration value=\"PAUSE\"/>\n    <xsd:enumeration value=\"DELETE\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EventRelayConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"destinationResourceName\" type=\"xsd:string\"/>\n        <xsd:element name=\"eventChannel\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relayOption\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"state\" minOccurs=\"0\" type=\"tns:EventRelayAdminState\"/>\n        <xsd:element name=\"usageType\" minOccurs=\"0\" type=\"tns:EventRelayUsageType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"EventRelayUsageType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AMAZON_EVENTBRIDGE\"/>\n    <xsd:enumeration value=\"INTERNAL_MANAGED_SUBSCRIPTIONS\"/>\n    <xsd:enumeration value=\"INTERNAL_REPLICATION\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an EventRelayConfig component with the file name Carbon_Comparison_Relay.eventRelay.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EventRelayConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <destinationResourceName>callout:AWS_Account</destinationResourceName>\n    <eventChannel>Carbon_Comparison_Channel__chn</eventChannel>\n    <label>Carbon Comparison Relay</label>\n    <relayOption>{\\\"ReplayRecovery\\\":\\\"LATEST\\\"}</relayOption>\n    <state>STOP</state>\n</EventRelayConfig>"
+    }
+  ]
+}

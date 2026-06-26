@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Template: Connected App - Full OAuth
+  Use Case: Web application with complete OAuth 2.0 configuration
+
+  Replace placeholders:
+  - {{APP_NAME}}: Application name (no spaces, alphanumeric + underscore)
+  - {{CONTACT_EMAIL}}: Administrator contact email
+  - {{DESCRIPTION}}: Brief description of the app's purpose
+  - {{CALLBACK_URL}}: OAuth callback URL (must be HTTPS)
+  - {{LOGOUT_URL}}: URL to redirect after logout (optional)
+
+  OAuth Scopes (uncomment as needed):
+  - Api: REST/SOAP API access
+  - RefreshToken: Offline access via refresh token
+  - Full: Complete access (use sparingly)
+  - OpenID: OpenID Connect
+  - Web: Web browser access
+  - ChatterApi: Chatter REST API
+  - CustomPermissions: Custom permission access
+-->
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>{{APP_NAME}}</label>
+    <contactEmail>{{CONTACT_EMAIL}}</contactEmail>
+    <description>{{DESCRIPTION}}</description>
+
+    <oauthConfig>
+        <callbackUrl>{{CALLBACK_URL}}</callbackUrl>
+        <isAdminApproved>true</isAdminApproved>
+        <isConsumerSecretOptional>false</isConsumerSecretOptional>
+        <isIntrospectAllTokens>false</isIntrospectAllTokens>
+
+        <!-- Core API Access -->
+        <scopes>Api</scopes>
+        <scopes>RefreshToken</scopes>
+
+        <!-- OpenID Connect (for user identity) -->
+        <scopes>OpenID</scopes>
+        <scopes>Profile</scopes>
+        <scopes>Email</scopes>
+
+        <!-- Uncomment additional scopes as needed -->
+        <!-- <scopes>Web</scopes> -->
+        <!-- <scopes>ChatterApi</scopes> -->
+        <!-- <scopes>CustomPermissions</scopes> -->
+        <!-- <scopes>Wave</scopes> -->
+    </oauthConfig>
+
+    <oauthPolicy>
+        <ipRelaxation>ENFORCE</ipRelaxation>
+        <refreshTokenPolicy>infinite</refreshTokenPolicy>
+        <singleLogoutUrl>{{LOGOUT_URL}}</singleLogoutUrl>
+    </oauthPolicy>
+
+    <!--
+      NOTE: refreshTokenValidityPeriod requires specific element ordering per XSD.
+      For custom token lifetimes, configure via Setup UI after deployment.
+      Using refreshTokenPolicy=infinite is the safest metadata-deployable option.
+    -->
+
+    <!-- Session Policy -->
+    <sessionPolicy>
+        <sessionTimeout>120</sessionTimeout>
+    </sessionPolicy>
+</ConnectedApp>

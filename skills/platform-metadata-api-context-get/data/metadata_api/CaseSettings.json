@@ -1,0 +1,423 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CaseSettings - Metadata API",
+  "description": "Represents an organization’s case settings, such as the default case owner, which case-related features are enabled, and which Classic email templates are used for various case activities. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "caseAssignNotificationTemplate": {
+      "type": "string",
+      "description": "Specifies the email template used for case assignment notifications. The format must be folderName/emailTemplateName. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "caseAutoProcUser": {
+      "type": "boolean",
+      "description": "Indicates whether to create an automated response record after a customer’s initial email (true) or not (false)."
+    },
+    "caseCloseNotificationTemplate": {
+      "type": "string",
+      "description": "Specifies the email template used for case close notifications. The format must be folderName / emailTemplateName. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "caseCommentNotificationTemplate": {
+      "type": "string",
+      "description": "Specifies the email template used for case comment notifications. The format must be folderName / emailTemplateName. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "caseCreateNotificationTemplate": {
+      "type": "string",
+      "description": "Specifies the email template used for case create notifications. The format must be folderName / emailTemplateName. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "caseFeedItemSettings": {
+      "type": "FeedItemSettings[]",
+      "description": "Specifies the settings for feed items in feed-based case page layouts. This field is available in API version 32.0 and later."
+    },
+    "caseFeedReadUnreadLtng": {
+      "type": "boolean",
+      "description": "Indicates whether unread feed items are shown in bold in Lightning Experience (true) or not (false)."
+    },
+    "caseMergeInLightning": {
+      "type": "boolean",
+      "description": "Indicates whether Case Merge is enabled in Lightning Experience (true) or not (false)."
+    },
+    "closeCaseThroughStatusChange": {
+      "type": "boolean",
+      "description": "Indicates whether Closed is included in the Case Status field on case edit pages (true) or not (false)."
+    },
+    "defaultCaseFeedLayoutOn": {
+      "type": "boolean",
+      "description": "Indicates whether the default Case Feed layout is used in the org (true) or not (false)."
+    },
+    "defaultCaseOwner": {
+      "type": "string",
+      "description": "Specifies the default owner of a case when assignment rules fail to locate an owner."
+    },
+    "defaultCaseOwnerType": {
+      "type": "string",
+      "description": "Specifies whether the default case owner is a user or a queue."
+    },
+    "defaultCaseUser": {
+      "type": "string",
+      "description": "Specifies the user listed in the Case History related list for automated case changes from: Assignment rules Escalation rules On-Demand Email-to-Case Cases logged in the Self-Service portal Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "emailActionDefaultsHandlerClass": {
+      "type": "string",
+      "description": "Use this Apex class name to provide default values for the email action."
+    },
+    "emailToCase": {
+      "type": "EmailToCaseSettings",
+      "description": "The organization's Email-to-Case settings."
+    },
+    "enableCaseFeed": {
+      "type": "boolean",
+      "description": "Indicates whether Case Feed is enabled (true) or not (false)."
+    },
+    "enableCollapseEmailThread": {
+      "type": "boolean",
+      "description": "Indicates whether earlier messages in an email thread are removed from email feed items (true) or not (false). Available in API version 47.0 and later."
+    },
+    "enableDraftEmails": {
+      "type": "boolean",
+      "description": "Indicates whether draft emails are enabled (true) or not (false). Enabling email drafts requires that Case Feed and Email-to-Case are also enabled."
+    },
+    "enableEarlyEscalationRuleTriggers": {
+      "type": "boolean",
+      "description": "Indicates whether early triggers on escalation rules are enabled (true) or not (false)."
+    },
+    "enableEmailActionDefaultsHandler": {
+      "type": "boolean",
+      "description": "Indicates whether the Email Action Default Handler setting is enabled (true) or not (false). Use this setting to select an Apex class to load a default template or to specify the default target fields for the email action."
+    },
+    "enableEmailContactOnCasePost": {
+      "type": "boolean",
+      "description": "If true, the case contact is notified by email when someone makes an externally visible post on a case in an Experience Builder site."
+    },
+    "enableEscalateQfiToCaseInternal": {
+      "type": "boolean",
+      "description": "If true, moderators can create cases from Question feed items in Chatter in your organization."
+    },
+    "enableEscalateQfiToCaseNetworks": {
+      "type": "boolean",
+      "description": "If true, moderators can create cases from Question feed items in Chatter in all Experience Builder sites where Chatter Questions is enabled."
+    },
+    "enableExtNetworksCaseFeedEnabled": {
+      "type": "boolean",
+      "description": "If true, site members can see case-related emails, comments, and updates in the case feed."
+    },
+    "enableMultiLangSolnSrchCSS": {
+      "type": "boolean",
+      "description": "Indicates whether multilingual searching for Solutions in self-service portals is enabled (true) or not (false)."
+    },
+    "enableMultiLangSolnSrchPKB": {
+      "type": "boolean",
+      "description": "Indicates whether multilingual searching for public Solutions is enabled (true) or not (false)."
+    },
+    "enableMultiLangSolution": {
+      "type": "boolean",
+      "description": "Indicates whether multilingual Solutions are enabled (true) or not (false)."
+    },
+    "enableNewEmailDefaultTemplate": {
+      "type": "boolean",
+      "description": "Indicates whether default email templates are enabled (true) or not (false). Default email templates are available only if draft emails are enabled. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "enableSolutionCategory": {
+      "type": "boolean",
+      "description": "Indicates whether browsing for Solutions is enabled (true) or not (false)."
+    },
+    "enableSolutionInlineCategory": {
+      "type": "boolean",
+      "description": "Indicates whether using inline Solutions category breadcrumbs is enabled (true) or not (false)."
+    },
+    "enableSolutionShortSummary": {
+      "type": "boolean",
+      "description": "Indicates whether Solutions summaries are enabled (true) or not (false)."
+    },
+    "enableSuggestedArticlesApplication": {
+      "type": "boolean",
+      "description": "Indicates whether the Suggested Articles list appears on case pages. (true) or not (false). Is only valid if enableSuggestedSolutions=false."
+    },
+    "enableSuggestedArticlesCustomerPortal": {
+      "type": "boolean",
+      "description": "Indicates whether the Suggested Articles list appears on customer portal pages (true) or not (false). Is only valid if enableSuggestedSolutions = false."
+    },
+    "enableSuggestedArticlesPartnerPortal": {
+      "type": "boolean",
+      "description": "Indicates whether the Suggested Articles list appears on partner portal pages (true) or not (false). Is only valid if enableSuggestedSolutions = false."
+    },
+    "enableSuggestedSolutions": {
+      "type": "boolean",
+      "description": "Indicates whether the View Suggested Solutions or Find Articles button appears on case detail pages (true) or not (false). Is only valid if enableSuggestedArticlesApplication, enableSuggestedArticlesCustomerPortal, and enableSuggestedArticlesPartnerPortal = false."
+    },
+    "escalateCaseBefore": {
+      "type": "boolean",
+      "description": "Indicates whether early triggers are enabled to escalate a case (true) or not (false)."
+    },
+    "genericMessageEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether generic messages are enabled (true) or not (false)."
+    },
+    "keepCaseMergeRecords": {
+      "type": "boolean",
+      "description": "If true, duplicate cases aren’t deleted after a case merge."
+    },
+    "keepRecordTypeOnAssignmentRule": {
+      "type": "boolean",
+      "description": "When applying assignment rules to manually created records, indicates whether to keep the existing record type (true) or to override the existing record type with the assignee’s default record type (false)."
+    },
+    "newEmailDefaultTemplateClass": {
+      "type": "string",
+      "description": "Specifies the Apex class that defines the default email template for new email messages in Case Feed. This field appears only when enableNewEmailDefaultTemplate =true. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "notifyContactOnCaseComment": {
+      "type": "boolean",
+      "description": "Indicates whether contacts who aren’t members of your Self-Service portal can be notified when a new comment is added to a case (true) or not (false)."
+    },
+    "notifyDefaultCaseOwner": {
+      "type": "boolean",
+      "description": "Indicates whether the default case owner is notified when assigned a new case (true) or not (false)."
+    },
+    "notifyOwnerOnCaseComment": {
+      "type": "boolean",
+      "description": "Indicates whether the case owner is notified when a comment is added to a case (true) or not (false)."
+    },
+    "notifyOwnerOnCaseOwnerChange": {
+      "type": "boolean",
+      "description": "Indicates whether the Send Notification Email checkbox on cases is automatically selected when users change a case owner to another user (true)."
+    },
+    "predictiveSupportEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether predictive support is enabled (true) or not (false)."
+    },
+    "showEmailAttachmentsInCaseAttachmentsRL": {
+      "type": "boolean",
+      "description": "Indicates whether the case Attachments related list shows email attachments. If true, the page displays an email icon next to each attachment from an email in the Attachments related list for cases. The related list’s list view also includes a Source column that identifies the attachment’s origin. If false, email attachments aren’t displayed in the Attachments related list for cases. This field is available in API version 40.0 and later."
+    },
+    "showFewerCloseActions": {
+      "type": "boolean",
+      "description": "Indicates whether the Save & Close button on case edit pages and the Cls link on Cases related lists are hidden (true) or shown (false)."
+    },
+    "systemUserEmail": {
+      "type": "string",
+      "description": "Specifies the email address used when the default case user is the system user."
+    },
+    "useSystemEmailAddress": {
+      "type": "boolean",
+      "description": "Indicates whom case comment, case attachment, and case assignment email notifications appear to be sent from. Use true to show notifications as sent from a system address. Use false to show notifications as sent from the user or contact who is updating the case."
+    },
+    "useSystemUserAsDefaultCaseUser": {
+      "type": "boolean",
+      "description": "Indicates whether the system user is used as the automated case user (true) or not (false). If false, then you must specify a value for the defaultCaseUser field."
+    },
+    "visibleInCssCheckbox": {
+      "type": "boolean",
+      "description": "Sets the default visibility of a case as indicated by the Visible in CSS option on the case edit page. If false, the case is visible in CSS by default. If true, CSS visibility is off."
+    },
+    "webToCase": {
+      "type": "WebToCaseSettings",
+      "description": "The organization's Web-to-Case settings."
+    }
+  },
+  "sub_types": {
+    "EmailToCaseSettings": {
+      "enableEmailToCase": {
+        "type": "boolean",
+        "description": "Indicates whether Email-to-Case is enabled (true) or not (false). Note: After Email-to-Case is enabled, it can't be disabled."
+      },
+      "enableE2CAttachmentAsFile": {
+        "type": "boolean",
+        "description": "Indicates whether to save attachments sent using Email-to-Case as Salesforce Files (true) or not (false)."
+      },
+      "enableE2CDeduplicateAttachments": {
+        "type": "boolean",
+        "description": "When Email-to-Case receives an inbound email to thread to an existing case, attachments in the email that already exist on the case are not saved as new records and are instead linked to the new email (true)."
+      },
+      "enableE2CExternalServer": {
+        "type": "boolean",
+        "description": "Indicates whether emails can be sent via an external service such as Gmail or Outlook, rather than the Salesforce email service (true). External outbound email services are available in Lightning Experience only."
+      },
+      "enableE2CSourceTracking": {
+        "type": "boolean",
+        "description": "Indicates whether Set Case Source to Email is enabled (true) or not (false). After you enable this setting, the Case Source field is updated to Email for all cases that originate from Email-to-Case. Associated emails are marked as Read when the agent opens the case."
+      },
+      "enableHtmlEmail": {
+        "type": "boolean",
+        "description": "Indicates whether HTML email is enabled (true) or not (false)."
+      },
+      "enableNewtoReadTriggers": {
+        "type": "boolean",
+        "description": "Indicates whether the email status change invokes triggers when emails open in Case feeds or from Email Message records in Lightning (true) or not (false)."
+      },
+      "enableOnDemandEmailToCase": {
+        "type": "boolean",
+        "description": "Indicates whether On-Demand Email-to-Case is enabled (true) or not (false)."
+      },
+      "enableThreadIDInBody": {
+        "type": "boolean",
+        "description": "Indicates whether the Thread ID for a case is inserted in the body of an email (true) or not (false). This is applicable only to orgs that do not use Lightning Threading."
+      },
+      "enableThreadIDInSubject": {
+        "type": "boolean",
+        "description": "Indicates whether the Thread ID for a case is inserted in the subject line of an email (true) or not (false). This is applicable only to orgs that do not use Lightning Threading."
+      },
+      "enableThreadTokenInBody": {
+        "type": "boolean",
+        "description": "Indicates whether a threading token is appended in the email body when agents send an email from a Lightning email composer (true) or not (false). This is applicable only to orgs using Lightning Threading."
+      },
+      "enableThreadTokenInSubject": {
+        "type": "boolean",
+        "description": "Indicates whether a threading token is appended in the email subject when agents send an email from a Lightning email composer (true) or not (false). This is applicable only to orgs using Lightning Threading."
+      },
+      "notifyOwnerOnNewCaseEmail": {
+        "type": "boolean",
+        "description": "Indicates whether the owner of a case receives a notification when a new email related to the case is received (true) or not (false)."
+      },
+      "overEmailLimitAction": {
+        "type": "EmailToCaseOnFailureActionType (enumeration of type string)",
+        "description": "Specifies what happens to email messages that are received after an organization exceeds its daily Email-to-Case limits. Valid values are: Bounce Discard Requeue"
+      },
+      "preQuoteSignature": {
+        "type": "boolean",
+        "description": "Indicates whether the user signature is inserted after the reply but before the email thread in an outbound email (true) or at the end of the email (false)."
+      },
+      "routingAddresses": {
+        "type": "EmailToCaseRoutingAddress[]",
+        "description": "The organization's Email-to-Case routing addresses and their attributes. Removing an address from this list deletes it from the target org."
+      },
+      "replyWithNewContentOnly": {
+        "type": "boolean",
+        "description": "Indicates whether previous thread content in excluded from replies, to reduce the size of outgoing emails (true) or not (false)."
+      },
+      "showGeneratedEmailCheckbox": {
+        "type": "boolean",
+        "description": "Indicates whether senders are required to confirm that they reviewed emails written by Einstein (true) or not (false)."
+      },
+      "unauthorizedSenderAction": {
+        "type": "EmailToCaseOnFailureActionType (enumeration of type string)",
+        "description": "Specifies what happens to email messages received from invalid senders. Valid values are: Bounce Discard"
+      },
+      "useEmailHeadersForThreading": {
+        "type": "boolean",
+        "description": "Indicates whether metadata from incoming emails is used to match replies with cases if token-based threading doesn't produce a match (true) or not (false)."
+      }
+    },
+    "EmailToCaseRoutingAddress": {
+      "addressType": {
+        "type": "EmailToCaseRoutingAddressType (enumeration of type string)",
+        "description": "Specifies the type of Email-to-Case routing address. Valid values are: EmailToCase—A routing address used with Email-to-Case or On-Demand Email-to-Case. Outlook—A routing address used with Salesforce for Outlook to create cases from Outlook. Requires that On-Demand Email-to-Case is enabled."
+      },
+      "authorizedSenders": {
+        "type": "string",
+        "description": "Specifies the email addresses or domains from which On-Demand Email-to-Case can receive email. Include multiple entries in a comma-separated list."
+      },
+      "caseOrigin": {
+        "type": "string",
+        "description": "Specifies the default case origin for cases created through this routing address."
+      },
+      "caseOwner": {
+        "type": "string",
+        "description": "Specifies the default owner of cases created through this routing address. The case owner can be either a user or a queue. Specify the case owner using a Salesforce username. Specifying a case owner here in the routing address sets a value of defaultCaseOwner in CaseSettings."
+      },
+      "caseOwnerType": {
+        "type": "string",
+        "description": "Specifies whether the default case owner is a user or a queue."
+      },
+      "casePriority": {
+        "type": "string",
+        "description": "Specifies the default case priority for cases created through this routing address."
+      },
+      "createTask": {
+        "type": "boolean",
+        "description": "Indicates whether a task is automatically assigned to the case owner when a case is created through an email (true) or not (false)."
+      },
+      "emailAddress": {
+        "type": "string",
+        "description": "Specifies the email address used to route email messages that are submitted as cases."
+      },
+      "emailServicesAddress": {
+        "type": "string",
+        "description": "Specifies the Salesforce-generated routing address used for setting up Email-to-Case forwarding. This field value is read-only and can't be modified."
+      },
+      "fallbackQueue": {
+        "type": "string",
+        "description": "Defines which queue to use when emails can’t be routed with the specified Omni-Channel flow. This queue must use Case as the service channel object. Available in API version 56.0 and later."
+      },
+      "isPermsetControlled": {
+        "type": "boolean",
+        "description": "Indicates whether users’ access to the email routing address is controlled by a permission set. If true, only users with access via a permission set can use the routing address to send emails. Available in API version 61.0 and later."
+      },
+      "isVerified": {
+        "type": "boolean",
+        "description": "Indicates whether the customer has verified the routing address (typically by clicking a confirmation email). This field value is read-only and can't be modified."
+      },
+      "newEntityRecordType": {
+        "type": "string",
+        "description": "Sets the Case Record Type used for new Cases that are created from emails sent to that specific routing address. If not provided, Salesforce uses the org’s default Case Record Type for the user/context handling Email-to-Case. Ensure the record type exists and is active on Case."
+      },
+      "routingFlow": {
+        "type": "string",
+        "description": "Specifies the name of an Omni-Channel flow that routes cases generated in Email-to-Case. Available in API version 56.0 and later."
+      },
+      "routingName": {
+        "type": "string",
+        "description": "Specifies the name of the Email-to-Case routing address."
+      },
+      "saveEmailHeaders": {
+        "type": "boolean",
+        "description": "Indicates whether email routing and envelope information are saved (true) or not (false)."
+      },
+      "taskStatus": {
+        "type": "string",
+        "description": "Specifies the default status on tasks automatically assigned to the case owner when email is submitted as a case. Only applies if createTask is set to true."
+      }
+    },
+    "FeedItemSettings": {
+      "characterLimit": {
+        "type": "int",
+        "description": "Specifies the maximum number of characters displayed for each feed item."
+      },
+      "collapseThread": {
+        "type": "boolean",
+        "description": "Removed. Indicates whether earlier messages in an email thread are removed from email feed items (true) or not (false). Available in API versions 27.0 to 46.0."
+      },
+      "displayFormat": {
+        "type": "FeedItemDisplayFormat (enumeration of type string)",
+        "description": "Indicates how email feed items are displayed. Valid values are: Default—Blank lines in email feed items are displayed. HideBlankLines—Blank lines in email feed items aren’t displayed."
+      },
+      "feedItemType": {
+        "type": "FeedItemType (enumeration of type string)",
+        "description": "The type of feed item to which the settings apply. For FeedItemSettings, the only valid feedItemType value is EmailMessageEvent."
+      }
+    },
+    "WebToCaseSettings": {
+      "caseOrigin": {
+        "type": "string",
+        "description": "Specifies the default case origin for cases created through this web form. Applies only if enableWebToCase is set to true."
+      },
+      "defaultResponseTemplate": {
+        "type": "string",
+        "description": "Specifies the default template used for email responses to cases that are submitted through a Self-Service portal. Applies only if enableWebToCase is set to true. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+      },
+      "enableWebToCase": {
+        "type": "boolean",
+        "description": "Indicates whether Web-to-Case is enabled (true) or not (false)."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CaseSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"caseAssignNotificationTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"caseAssignRuleCommunity\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"caseAutoProcUser\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"caseCloseNotificationTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"caseCommentNotificationTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"caseCreateNotificationTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"caseDescAttachments\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"caseFeedItemSettings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FeedItemSettings\"/>\n        <xsd:element name=\"caseFeedReadUnreadLtng\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"caseMergeInLightning\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"caseTimelineConfigs\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"closeCaseThroughStatusChange\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"defaultCaseFeedLayoutOn\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"defaultCaseOwner\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"defaultCaseOwnerType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"defaultCaseUser\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"emailActionDefaultsHandlerClass\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"emailToCase\" minOccurs=\"0\" type=\"tns:EmailToCaseSettings\"/>\n        <xsd:element name=\"enableCaseCommentTranslation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCaseFeed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCaseSwarming\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCollapseEmailThread\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDraftEmails\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEarlyEscalationRuleTriggers\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEmailActionDefaultsHandler\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEmailContactOnCasePost\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEscalateQfiToCaseInternal\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEscalateQfiToCaseNetworks\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableExtNetworksCaseFeedEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMultiLangSolnSrchCSS\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMultiLangSolnSrchPKB\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMultiLangSolution\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSolutionCategory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSolutionInlineCategory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSolutionShortSummary\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSuggestedArticlesApplication\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSuggestedArticlesCustomerPortal\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSuggestedArticlesPartnerPortal\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSuggestedSolutions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enhancedCaseMerge\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"escalateCaseBefore\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"genericMessageEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hidePublicInCaseComment\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"keepCaseMergeRecords\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"keepRecordTypeOnAssignmentRule\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"notifyContactOnCaseComment\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"notifyDefaultCaseOwner\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"notifyOwnerOnCaseComment\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"notifyOwnerOnCaseOwnerChange\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"omniChnlCaseMrgFix\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"predictiveSupportEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"rtaCaseComment\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"rtaCaseDescFieldAccess\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"rtaCaseDescription\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showEmailAttachmentsInCaseAttachmentsRL\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showFewerCloseActions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"systemUserEmail\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"useSystemEmailAddress\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"useSystemUserAsDefaultCaseUser\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"visibleInCssCheckbox\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"webToCase\" minOccurs=\"0\" type=\"tns:WebToCaseSettings\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"EmailToCaseOnFailureActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Bounce\"/>\n    <xsd:enumeration value=\"Discard\"/>\n    <xsd:enumeration value=\"Requeue\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EmailToCaseRoutingAddress\">\n  <xsd:sequence>\n    <xsd:element name=\"addressType\" minOccurs=\"0\" type=\"tns:EmailToCaseRoutingAddressType\"/>\n    <xsd:element name=\"authorizedSenders\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"caseOrigin\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"caseOwner\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"caseOwnerType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"casePriority\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"createTask\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"emailAddress\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"emailServicesAddress\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"fallbackQueue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isPermsetControlled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isVerified\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"newEntityRecordType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"routingFlow\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"routingName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"saveEmailHeaders\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"taskStatus\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"EmailToCaseRoutingAddressType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"EmailToCase\"/>\n    <xsd:enumeration value=\"Outlook\"/>\n    <xsd:enumeration value=\"GmailOAuth\"/>\n    <xsd:enumeration value=\"E2cEasy\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EmailToCaseSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"enableE2CAttachmentAsFile\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"enableE2CDeduplicateAttachments\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"enableE2CExternalServer\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"enableE2CSourceTracking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"enableEmailToCase\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"enableHtmlEmail\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"enableNewToReadTriggers\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"enableOnDemandEmailToCase\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"enableThreadIDInBody\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"enableThreadIDInSubject\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"enableThreadTokenInBody\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"enableThreadTokenInSubject\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"movingEmailEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"notifyOwnerOnNewCaseEmail\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"notifySenderE2CError\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"overEmailLimitAction\" minOccurs=\"0\" type=\"tns:EmailToCaseOnFailureActionType\"/>\n    <xsd:element name=\"preQuoteSignature\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"replyWithNewContentOnly\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"routingAddresses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EmailToCaseRoutingAddress\"/>\n    <xsd:element name=\"showServiceEmailOpenPrompt\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showWordCountInComposer\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"unauthorizedSenderAction\" minOccurs=\"0\" type=\"tns:EmailToCaseOnFailureActionType\"/>\n    <xsd:element name=\"useEmailHeadersForThreading\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FeedItemDisplayFormat\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Default\"/>\n    <xsd:enumeration value=\"HideBlankLines\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FeedItemSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"characterLimit\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"displayFormat\" minOccurs=\"0\" type=\"tns:FeedItemDisplayFormat\"/>\n    <xsd:element name=\"feedItemType\" type=\"tns:FeedItemType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FeedItemType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TrackedChange\"/>\n    <xsd:enumeration value=\"UserStatus\"/>\n    <xsd:enumeration value=\"TextPost\"/>\n    <xsd:enumeration value=\"AdvancedTextPost\"/>\n    <xsd:enumeration value=\"LinkPost\"/>\n    <xsd:enumeration value=\"ContentPost\"/>\n    <xsd:enumeration value=\"PollPost\"/>\n    <xsd:enumeration value=\"RypplePost\"/>\n    <xsd:enumeration value=\"ProfileSkillPost\"/>\n    <xsd:enumeration value=\"DashboardComponentSnapshot\"/>\n    <xsd:enumeration value=\"ApprovalPost\"/>\n    <xsd:enumeration value=\"CaseCommentPost\"/>\n    <xsd:enumeration value=\"ReplyPost\"/>\n    <xsd:enumeration value=\"EmailMessageEvent\"/>\n    <xsd:enumeration value=\"CallLogPost\"/>\n    <xsd:enumeration value=\"ChangeStatusPost\"/>\n    <xsd:enumeration value=\"AttachArticleEvent\"/>\n    <xsd:enumeration value=\"MilestoneEvent\"/>\n    <xsd:enumeration value=\"ActivityEvent\"/>\n    <xsd:enumeration value=\"ChatTranscriptPost\"/>\n    <xsd:enumeration value=\"CollaborationGroupCreated\"/>\n    <xsd:enumeration value=\"CollaborationGroupUnarchived\"/>\n    <xsd:enumeration value=\"SocialPost\"/>\n    <xsd:enumeration value=\"QuestionPost\"/>\n    <xsd:enumeration value=\"FacebookPost\"/>\n    <xsd:enumeration value=\"BasicTemplateFeedItem\"/>\n    <xsd:enumeration value=\"CreateRecordEvent\"/>\n    <xsd:enumeration value=\"CanvasPost\"/>\n    <xsd:enumeration value=\"AnnouncementPost\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"WebToCaseSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"caseOrigin\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"defaultResponseTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"enableWebToCase\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This code sample is an example of a case settings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CaseSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <caseAssignNotificationTemplate>\n        unfiled$public/SupportCaseAssignmentNotification\n    </caseAssignNotificationTemplate>\n    <caseCloseNotificationTemplate>\n        unfiled$public/SupportCaseCloseNotification\n    </caseCloseNotificationTemplate>\n    <caseCommentNotificationTemplate>\n        unfiled$public/SupportCaseCommentNotification\n    </caseCommentNotificationTemplate>\n    <caseCreateNotificationTemplate>\n        unfiled$public/SupportCaseCreateNotification\n    </caseCreateNotificationTemplate>\n    <closeCaseThroughStatusChange>true</closeCaseThroughStatusChange>\n    <defaultCaseOwner>admin@acme.com</defaultCaseOwner>\n    <defaultCaseOwnerType>User</defaultCaseOwnerType>\n    <defaultCaseUser>admin@acme.com</defaultCaseUser>\n    <emailToCase>\n        <enableEmailToCase>true</enableEmailToCase>\n        <enableHtmlEmail>false</enableHtmlEmail>\n        <enableOnDemandEmailToCase>true</enableOnDemandEmailToCase>\n        <enableThreadIDInBody>true</enableThreadIDInBody>\n        <enableThreadIDInSubject>true</enableThreadIDInSubject>\n        <notifyOwnerOnNewCaseEmail>false</notifyOwnerOnNewCaseEmail>\n        <overEmailLimitAction>Bounce</overEmailLimitAction>\n        <preQuoteSignature>true</preQuoteSignature>\n        <routingAddresses>\n            <addressType>EmailToCase</addressType>\n            <authorizedSenders>user@acme.com</authorizedSenders>\n            <caseOrigin>Email</caseOrigin>\n            <casePriority>Medium</casePriority>\n            <createTask>true</createTask>\n            <emailAddress>support@acme.com</emailAddress>\n            <routingName>EmailToCaseRoutingAddress1</routingName>\n            <saveEmailHeaders>true</saveEmailHeaders>\n            <taskStatus>Not Started</taskStatus>\n        </routingAddresses>\n        <routingAddresses>\n            <addressType>Outlook</addressType>\n            <authorizedSenders>user@acme.com</authorizedSenders>\n            <caseOrigin>Email</caseOrigin>\n            <caseOwner>admin@acme.com</caseOwner>\n            <caseOwnerType>User</caseOwnerType>\n            <casePriority>High</casePriority>\n            <routingName>OutlookRoutingAddress1</routingName>\n        </routingAddresses>\n        <unauthorizedSenderAction>Discard</unauthorizedSenderAction>\n    </emailToCase>\n    <enableCaseFeed>true</enableCaseFeed>\n    <enableDraftEmails>true</enableDraftEmails>\n    <enableEarlyEscalationRuleTriggers>true</enableEarlyEscalationRuleTriggers>\n    <enableNewEmailDefaultTemplate>true</enableNewEmailDefaultTemplate>\n    <enableSuggestedArticlesApplication>true</enableSuggestedArticlesApplication>\n    <enableSuggestedArticlesCustomerPortal>true</enableSuggestedArticlesCustomerPortal>\n    <enableSuggestedArticlesPartnerPortal>false</enableSuggestedArticlesPartnerPortal>\n    <enableSuggestedSolutions>false</enableSuggestedSolutions>\n    <keepRecordTypeOnAssignmentRule>true</keepRecordTypeOnAssignmentRule>\n    <newEmailDefaultTemplateClass>CaseTemplateController</newEmailDefaultTemplateClass>\n    <notifyContactOnCaseComment>true</notifyContactOnCaseComment>\n    <notifyDefaultCaseOwner>true</notifyDefaultCaseOwner>\n    <notifyOwnerOnCaseComment>true</notifyOwnerOnCaseComment>\n    <notifyOwnerOnCaseOwnerChange>false</notifyOwnerOnCaseOwnerChange>\n    <showFewerCloseActions>false</showFewerCloseActions>\n    <useSystemEmailAddress>true</useSystemEmailAddress>\n    <webToCase>\n        <caseOrigin>Web</caseOrigin>\n        <defaultResponseTemplate>unfiled$public/SupportCaseResponse</defaultResponseTemplate>\n        <enableWebToCase>true</enableWebToCase>\n    </webToCase>\n</CaseSettings>"
+    }
+  ]
+}

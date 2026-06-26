@@ -1,0 +1,384 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ConnectedApp - Metadata API",
+  "description": "Represents a connected app configuration. A connected app enables an external application to integrate with Salesforce using APIs and standard protocols, such as SAML, OAuth, and OpenID Connect. Connected apps use these protocols to authenticate, authorize, and provide single sign-on (SSO) for external apps. The external apps that are integrated with Salesforce can run on the customer success platform, other platforms, devices, or SaaS subscriptions.",
+  "file_information": ".connectedApp",
+  "directory_location": "connectedApps",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "attributes": {
+      "type": "canvasConfig",
+      "description": "A custom attribute of the connected app."
+    },
+    "contactEmail": {
+      "type": "string",
+      "description": "The email address that Salesforce uses to contact you or your support team.",
+      "required": true
+    },
+    "contactPhone": {
+      "type": "string",
+      "description": "The phone number for Salesforce to use to contact you."
+    },
+    "description": {
+      "type": "string",
+      "description": "An optional description for your app."
+    },
+    "iconUrl": {
+      "type": "string",
+      "description": "Reserved for future use."
+    },
+    "infoUrl": {
+      "type": "string",
+      "description": "An optional URL for a web page with more information about your app."
+    },
+    "ipRanges": {
+      "type": "ConnectedAppIpRange[]",
+      "description": "Specifies the ranges of IP addresses that can access the app without requiring the user to authenticate with the connected app."
+    },
+    "label": {
+      "type": "string",
+      "description": "The name of the app.",
+      "required": true
+    },
+    "logoUrl": {
+      "type": "string",
+      "description": "An optional logo for the app. The logo appears with the app’s entry in the list of apps and on the consent page the user sees when authenticating. The URL must use HTTPS, and the logo can't be larger than 125 pixels high or 200 pixels wide. The default logo is a cloud."
+    },
+    "mobileStartUrl": {
+      "type": "string",
+      "description": "Users are directed to this URL after they've authenticated when the app is accessed from a mobile device. If you don't give a URL, the user is sent to the app’s default start page after authentication completes. If the connected app that you’re creating is a canvas app, then you can leave this field blank. The Canvas App URL field contains the URL that gets called for the connected app."
+    },
+    "oauthConfig": {
+      "type": "connectedAppOauthConfig",
+      "description": "Specifies how your app communicates with Salesforce."
+    },
+    "oauthPolicy": {
+      "type": "ConnectedAppOauthPolicy",
+      "description": "Specifies OAuth access policies associated with your connected app. Available in API version 49.0 and later."
+    },
+    "permissionSetName": {
+      "type": "string",
+      "description": "Specifies the permissions required to perform different functions with the connected app. Available in API version 46.0 and later. You can assign multiple permission sets to the connected app, but you must enter each permission set name on a separate line. You can’t enter the same permission set name more than one time for each connected app. You can also change a permission set by replacing the current permission set with a new permission set. Make sure that each permission set name assigned to the connected app is unique. You can delete individual permission sets or remove all permission sets from a connected app by entering an empty permissionSetName string on deployment of the connected app: (<permissionSetName></permissionSetName>). To use this field, the isAdminApproved field on the ConnectedAppOauthConfig subtype must be set to true."
+    },
+    "plugin": {
+      "type": "string",
+      "description": "The name of a custom Apex class that extends Auth.ConnectedAppPlugin to customize the behavior of the app."
+    },
+    "pluginExecutionUser": {
+      "type": "string",
+      "description": "Specifies the user to run the plugin as. If the user isn’t authorized to use the connected app, use the authorize method. See the ConnectedAppPlugin class in the Apex Developer Guide. Available in API version 46.0 and later. Enter a user that is part of your org. Otherwise, the user is removed from this field when you deploy the connected app. If you don’t want to specify a user, you can leave this field empty. To use this field in an org, the ConAppPluginExecuteAsUser setting must be enabled."
+    },
+    "profileName": {
+      "type": "string[]",
+      "description": "Specifies the profile (base-level user permissions) required to perform different functions with the connected app. Available in API version 46.0 and later. You can assign multiple profiles to the connected app, but you must enter each profile name on a separate line. You can’t enter the same profile name more than one time for each connected app. You can also change profiles by replacing the current profiles with new profiles. Make sure that each profile name assigned to the connected app is unique. You can also delete individual profiles or remove all profiles from a connected app by entering an empty profileName string on deployment of the connected app: (<profileName></profileName>). To use this field, the isAdminApproved field on the ConnectedAppOauthConfig subtype must be set to true."
+    },
+    "samlConfig": {
+      "type": "ConnectedAppSamlConfig",
+      "description": "Controls how the app uses single sign-on."
+    },
+    "sessionPolicy": {
+      "type": "ConnectedAppSessionPolicy",
+      "description": "Specifies a connected app’s session policies. Available in API version 49.0 and later."
+    },
+    "startUrl": {
+      "type": "string",
+      "description": "If the app isn’t accessed from a mobile device, users are directed to this URL after they've authenticated. If you don't give a URL, the user is sent to the app’s default start page after authentication completes. Whether you give a URL or not, the start URL can be updated later by managing the connected app. If the app is accessed from a mobile device, see mobileStartUrl. If the connected app that you’re creating is a canvas app, then you can leave this field empty. The Canvas App URL field contains the URL that gets called for the connected app."
+    }
+  },
+  "sub_types": {
+    "ConnectedAppAttribute": {
+      "formula": {
+        "type": "string",
+        "description": "The value of the attribute.",
+        "required": true
+      },
+      "key": {
+        "type": "string",
+        "description": "The attribute's identifier.",
+        "required": true
+      }
+    },
+    "ConnectedAppCanvasConfig": {
+      "accessMethod": {
+        "type": "AccessMethod (enumeration of type string)",
+        "description": "Indicates how the canvas app initiates the OAuth authentication flow. The valid values are: Get—OAuth authentication is used, and the user is prompted to allow the third-party application to access their information. When you use this access method, the canvas app must initiate the OAuth authentication flow. Post—OAuth authentication is used, but when the administrator installs the canvas app, they implicitly allow access for users. Therefore, the user isn’t prompted to allow the third party to access their user information. When you use this access method, the authentication is posted directly to the canvas app URL.",
+        "required": true
+      },
+      "canvasUrl": {
+        "type": "string",
+        "description": "The URL of the third-party app that's exposed as a canvas app.",
+        "required": true
+      },
+      "lifecycleClass": {
+        "type": "string",
+        "description": "The name of the Canvas.CanvasLifecycleHandler Apex class, if you've implemented this class for custom parameters. Available in API version 31.0 and later."
+      },
+      "locations": {
+        "type": "CanvasLocationOptions (enumeration of type string)[]",
+        "description": "Indicates where the canvas app can appear to the user. The valid values are: Aura—The canvas app can appear in a custom Lightning component. AppLauncher—Reserved for future use. Chatter—The canvas app can appear in the app navigation list on the Chatter tab in Salesforce Classic. ChatterFeed—The canvas app can appear as a Chatter feed item. MobileNav—The canvas app can appear in a mobile card in the Salesforce mobile app. Available in API version 31.0 and later. None—The canvas app can appear only in the Canvas App Previewer. OpenCTI—The canvas app can appear in the call control tool in Salesforce Classic. PageLayout—The canvas app can appear on a page layout. When viewed in the Salesforce mobile app, the canvas app appears in the record detail page. Available in API version 31.0 and later. Publisher—The canvas app can appear as a global action. ServiceDesk—The canvas app can appear in the footer or sidebars of a console in Salesforce Classic. UserProfile—Reserved for future use. Visualforce—The canvas app can appear on a Visualforce page."
+      },
+      "options": {
+        "type": "CanvasOptions (enumeration of type string)[]",
+        "description": "Indicates whether to hide the Share button and header in the publisher for your canvas app and whether the app is a canvas personal app. Valid values are: HideShare—The Share button is hidden in the publisher for the related canvas app. Available in API version 30.0 and later. HideHeader—The header is hidden in the publisher for the related canvas app. Available in API version 30.0 and later. PersonalEnabled—End users can install the app as a canvas personal app. Available in API version 32.0 and later."
+      },
+      "samlInitiationMethod": {
+        "type": "SamlInitiationMethod (enumeration of type string)",
+        "description": "If you're using SAML single sign-on (SSO), indicates which provider initiates the SSO flow. IdpInitiated—Identity provider initiated. Salesforce makes the initial request to start the SSO flow. SpInitiated—Service provider initiated. The canvas app starts the SSO flow after it's invoked. None—The canvas app isn't using SAML SSO. Available in API version 31.0 and later."
+      }
+    },
+    "ConnectedAppIpRange": {
+      "description": {
+        "type": "string",
+        "description": "Identifies the purpose of the range, such as which part of a network corresponds to this range. Available in API version 31.0 and later."
+      },
+      "end": {
+        "type": "string",
+        "description": "The last address in the IP range, inclusive.",
+        "required": true
+      },
+      "start": {
+        "type": "string",
+        "description": "The first address in the IP range, inclusive.",
+        "required": true
+      }
+    },
+    "ConnectedAppOauthConfig": {
+      "assetTokenConfig": {
+        "type": "connectedAppOauthAssetToken",
+        "description": "The OAuth asset token configuration for the connected app OAuth settings. Available in API version 49.0 and later."
+      },
+      "callbackUrl": {
+        "type": "string",
+        "description": "The endpoint that Salesforce calls back to your connected app during OAuth. It’s the OAuth redirect_uri.",
+        "required": true
+      },
+      "certificate": {
+        "type": "string",
+        "description": "The PEM-encoded certificate string, if the app uses a certificate."
+      },
+      "consumerKey": {
+        "type": "string",
+        "description": "A value used by the consumer for identification to Salesforce. Referred to as client_id in OAuth 2.0. In API version 32.0 and later, you can set this field’s value only during creation. After you define and save the value, it can’t be edited. The value must be alphanumeric, can’t contain special characters or spaces, and must be between 8–256 characters. Consumer keys must be globally unique."
+      },
+      "consumerSecret": {
+        "type": "string",
+        "description": "A value that is combined with the consumerKey and used by the consumer for identification to Salesforce. Referred to as client_secret in OAuth 2.0. Typically, Salesforce generates this value when you create the connected app. However, you can customize the shared secret value during creation. After you save the value, it can’t be edited. When set, the value isn’t returned in Metadata API requests. The value must be alphanumeric (no special characters and no spaces) and a minimum of 8 characters (maximum of 256 characters). If you specify a secret already in use for another connected app in the organization, an error occurs. Available in API version 32.0 and later."
+      },
+      "idTokenConfig": {
+        "type": "ConnectedAppOauthIdToken",
+        "description": "Specifies the ID token configuration for the connected app OAuth settings. Available in API version 43.0 and later."
+      },
+      "isAdminApproved": {
+        "type": "boolean",
+        "description": "If set to false (default), anyone in the org can authorize the app. Users must approve the app the first time they access it. If set to true, only users with the appropriate profile or permission set can access the app. These users don’t have to approve the app before they can access it. Manage profiles for the app by editing each profile’s Connected App Access list. Manage permission sets for the app by editing each permission set’s Assigned Connected App list. This setting isn’t available in Group Edition. Available in API version 46.0 and later. Connected app consumers can edit this setting when deploying a connected app in their org."
+      },
+      "isClientCredentialEnabled": {
+        "type": "boolean",
+        "description": "If set to true, the connected app can use the OAuth 2.0 client credentials flow. To use the client credentials flow, you must also specify a user for oauthClientCredentialUser. If set to false (default), the connected app can’t use the client credentials flow. Available in API version 56.0 and later."
+      },
+      "isCodeCredentialEnabled": {
+        "type": "boolean",
+        "description": "Determines whether the app can use the Authorization Code and Credentials Flow to provide identity services to headless, off-platform apps. The Authorization Code and Credentials Flow is the foundation of headless login, headless registration, headless passwordless login, and headless guest identity. If set to true, the connected app can use the Authorization Code and Credentials Flow and all associated Headless Identity features. The default value is false. This field is available in API version 57.0 and later."
+      },
+      "isCodeCredentialPostOnly": {
+        "type": "boolean",
+        "description": "For the Authorization Code and Credentials Flow, determines whether the user’s credentials must be sent in the body of the initial HTTPS POST request to the Salesforce authorization endpoint. Requiring the credentials in the POST body instead of in the header improves security. If set to true, the user’s credentials must be included in the POST body. The default value is false. This field is available in API version 57.0 and later."
+      },
+      "isConsumerSecretOptional": {
+        "type": "boolean",
+        "description": "If set to false (default), the connected app’s client secret is required in exchange for an access token in the OAuth 2.0 web server flow. If the client app can’t keep the client secret confidential and it must use the web server flow, set to true. A client secret is still generated for the connected app, but this setting instructs the web server flow not to require the client_secret parameter in the access token request. We recommend the user agent flow as a more secure option than web server flow without the secret. Available in API version 49.0 and later."
+      },
+      "isIntrospectAllTokens": {
+        "type": "boolean",
+        "description": "If set to true, authorizes the connected app to introspect all access and refresh tokens within the entire org. If set to false (default), the connected app can introspect its own tokens. In addition, an OAuth client that directly registers OAuth 2.0 connected apps through the dynamic client registration endpoint can check the tokens for itself and its registered apps. Available in API version 49.0 and later."
+      },
+      "isNamedUserJwtEnabled": {
+        "type": "boolean",
+        "description": "If set to true, the connected app is enabled to issue JSON Web Token (JWT)-based access tokens. This field is generally available in API version 59.0 and later."
+      },
+      "isPkceRequired": {
+        "type": "boolean",
+        "description": "Determines whether the Proof Key for Code Exchange (PKCE) extension is required for variations of the OAuth 2.0 authorization code flow configured for the connected app, including the web server flow and Authorization Code and Credentials Flow. For public client apps that can’t keep the consumer secret confidential, such as mobile apps, the PKCE extension helps ensure that the client that initiates an authorization flow is the same client that completes it. For this reason, we always recommend implementing PKCE for public clients. We also strongly recommend that you implement PKCE for private clients. If set to true, the PKCE extension is required and any authorization code flow variations that don’t implement it fail. If set to false, you can still implement PKCE but it isn’t required. The default value is false. This field is available in API version 59.0 and later."
+      },
+      "isRefreshTokenRotationEnabled": {
+        "type": "boolean",
+        "description": "If set to true, the connected app issues a new refresh token each time the OAuth refresh token flow is invoked. The old refresh token is automatically invalidated. If a user tries to use a previous refresh token that’s been invalidated, the current refresh token and its associated access tokens get deleted. If set to false, the refresh token can be used to obtain multiple access tokens. This field is available in API version 60.0 and later."
+      },
+      "isSecretRequiredForRefreshToken": {
+        "type": "boolean",
+        "description": "If set to true (default), the app’s client secret is required in the authorization request of a refresh token and hybrid refresh token flow. If set to false and an app sends the client secret in the authorization request, Salesforce still validates it. Select this option for web-server based apps that can protect client secrets. For apps that can’t protect client secrets, such as mobile apps or apps installed on a user’s computer, we recommend against selecting this option. Available in API version 51.0 and later."
+      },
+      "isSecretRequiredForTokenExchange": {
+        "type": "boolean",
+        "description": "If set to true, the connected app must include its consumer secret ( client_secret ) in the token request during the OAuth 2.0 token exchange flow. For security, set this field to true only if your app has a private client backend where it can keep the secret safe. For public client apps, such as single-page apps and mobile apps, set this field to false and don’t include the consumer secret. This field is available in API version 60.0 and later."
+      },
+      "isTokenExchangeEnabled": {
+        "type": "boolean",
+        "description": "If set to true, the connected app can use the OAuth 2.0 token exchange flow to exchange tokens from an external identity provider for Salesforce tokens. This field is available in API version 60.0 and later."
+      },
+      "oauthClientCredentialUser": {
+        "type": "string",
+        "description": "The execution user for the OAuth 2.0 client credentials flow. Salesforce returns access tokens on behalf of this user. This user must have the API Only permission. To use this field, set isClientCredentialEnabled to true and specify a consumerKey. Available in API version 56.0 and later."
+      },
+      "scopes": {
+        "type": "ConnectedAppOauthAccessScope (enumeration of type string)[]",
+        "description": "The permissions given by the user running the connected app. When deploying metadata, valid values are: Basic—Allows access to your identity URL service (the same behavior as deploying Address, Email, Phone, and Profile). Api—Allows access to the logged-in user's account over the APIs. Web—Allows use of the access_token on the web. This usage also includes visualforce, allowing access to Visualforce pages. Full—Allows access to all data accessible by the logged-in user. Chatter—Allows access to only the Connect REST API resources. CustomApplications—Provides access to custom applications, such as those using Visualforce. RefreshToken—Allows a refresh token to be returned if you’re eligible to receive one (the same behavior as deploying OfflineAccess). OpenID—Allows access to the logged-in user's unique identifier for OpenID Connect apps. Profile—Allows access to the logged-in user's profile (the same behavior as deploying Basic). Email—Allows access to the logged-in user's email address (the same behavior as deploying Basic). Address—Allows access to the logged-in user's street address (the same behavior as deploying Basic). Phone—Allows access to the logged-in user's phone number value (the same behavior as deploying Basic). OfflineAccess—Allows the app to interact with the user's data while the user is offline and get a refresh token (the same behavior as deploying RefreshToken). CustomPermissions—Allows access to the custom permissions in an organization associated with the connected app and shows whether the current user has each permission enabled. Wave—Allows access to the Analytics REST API resources. Available in API version 35.0 and later. Eclair—Allows access to the Analytics REST API Charts Geodata resource. Available in API version 35.0 and later. Pardot—Allows access to Pardot API services on behalf of the user. The full extent of accessible services is managed by the Pardot account. Available in API version 49.0 and later. Lightning—Allows hybrid apps to directly obtain Lightning child sessions through the OAuth 2.0 hybrid app token flow and hybrid app refresh token flow. Available in API version 51.0 and later. Content—Allows hybrid apps to directly obtain content child sessions through the OAuth 2.0 hybrid app token flow and hybrid app refresh token flow. Available in API version 51.0 and later. CDPIngest—Allows access to Data Cloud ingest API services. Customers use these API services to upload and maintain external datasets in the Data 360. Available in API version 52.0 and later. Chatbot—Allows access to Einstein Bot API services. Available in API version 54.0 and later. ForgotPassword—Allows access to Headless Forgot Password API. Assign to an internal integration user to get an access token for authenticated requests to this API. Available in API version 57.0 and later. UserRegistration—Allows access to Headless Registration API. Assign to an internal integration user to get an access token for authenticated requests to this API. Available in API version 58.0 and later. PwdlessLogin—Allows access to Headless Passwordless Login API. Assign to an internal integration user to get an access token for authenticated requests to this API. Available in API version 59.0 and later. When retrieving metadata, valid values are: Api—Allows access to the logged-in user’s account over the APIs. Basic—Allows access to the user’s identity URL service, and includes Address, Email, Phone, and Profile. Chatter—Allows access to only the Connect REST API resources. CustomApplications—Allows access to custom applications, such as those using Visualforce. Full—Allows access to all data accessible by the logged-in user. OpenID—Allows access to the logged-in user's unique identifier for OpenID Connect apps. CDPIngest—Allows access to Data Cloud ingest API services. Customers use these API services to upload and maintain external datasets in the Data 360. Available in API version 52.0 and later. Pardot—Allows access to Pardot API services on behalf of the user. The full extent of accessible services is managed by the Pardot account. Available in API version 49.0 and later. Lightning—Allows hybrid apps to directly obtain Lightning child sessions through the OAuth 2.0 hybrid app token flow and hybrid app refresh token flow. Available in API version 51.0 and later. Content—Allows hybrid apps to directly obtain content child sessions through the OAuth 2.0 hybrid app token flow and hybrid app refresh token flow. Available in API version 51.0 and later. RefreshToken—Allows a refresh token to be returned if you’re eligible to receive one and is synonymous with allowing OfflineAccess. Wave—Allows access to the Analytics REST API resources. Available in API version 35.0 and later. Eclair—Allows access to the Analytics REST API Charts Geodata resource. Available in API version 35.0 and later. Web—Allows usage of the access_token on the web. This usage also includes visualforce, allowing access to Visualforce pages. Chatbot—Allows access to Einstein Bot API services. Available in API version 54.0 and later. ForgotPassword—Allows access to Headless Forgot Password API. Assign to an internal integration user to get an access token for authenticated requests to this API. Available in API version 57.0 and later. UserRegistration—Allows access to Headless Registration API. Assign to an internal integration user to get an access token for authenticated requests to this API. Available in API version 58.0 and later. PwdlessLogin—Allows access to Headless Passwordless Login API. Assign to an internal integration user to get an access token for authenticated requests to this API. Available in API version 59.0 and later."
+      },
+      "singleLogoutUrl": {
+        "type": "string",
+        "description": "The single logout endpoint. This URL is the endpoint where Salesforce sends a logout request when users log out of Salesforce."
+      }
+    },
+    "ConnectedAppOauthAssetToken": {
+      "assetAudiences": {
+        "type": "string",
+        "description": "The audience claim associated with the asset token payload. This claim identifies who the JWT is intended for. Value is an array of case-sensitive strings, each containing a StringOrURI value. An audience is specified for each intended consumer of the asset token.",
+        "required": true
+      },
+      "assetIncludeAttributes": {
+        "type": "boolean",
+        "description": "If set to true (default), custom attributes associated with the connected app are included in the asset token payload. If set to false, these attributes aren’t included.",
+        "required": true
+      },
+      "assetIncludeCustomPerms": {
+        "type": "boolean",
+        "description": "If set to true (default), custom permissions associated with the connected app are included in the asset token payload. If set to false, these permissions aren’t included.",
+        "required": true
+      },
+      "assetSigningCertId": {
+        "type": "string",
+        "description": "The ID of the JWT certificate’s signing secret. The certificate size can’t exceed 4 KB. If it does, try using a DER encoded file to reduce the size.",
+        "required": true
+      },
+      "assetValidityPeriod": {
+        "type": "int",
+        "description": "The asset token’s validity period. The validity must be the expiration time of the assertion within 3 minutes, expressed as the number of seconds from 1970-01-01T0:0:0Z measured in UTC.",
+        "required": true
+      }
+    },
+    "ConnectedAppOauthIdToken": {
+      "idTokenAudience": {
+        "type": "string",
+        "description": "The audiences that this ID token is intended for. The value is an array of case-sensitive strings. If no audiences are specified, the OAuth 2.0 client_id of the relying party is returned as the default audience. Otherwise, the other audiences are returned with the client_id in the aud value."
+      },
+      "idTokenIncludeAttributes": {
+        "type": "boolean",
+        "description": "Indicates whether attributes are included in the ID token."
+      },
+      "idTokenIncludeCustomPerms": {
+        "type": "boolean",
+        "description": "Indicates whether custom permissions are included in the ID token."
+      },
+      "idTokenIncludeStandardClaims": {
+        "type": "boolean",
+        "description": "Indicates whether standard claims about the authentication event are included in the ID token."
+      },
+      "idTokenValidity": {
+        "type": "int",
+        "description": "The length of time that the ID token is valid for after it’s issued. The value can be from 1 to 720 minutes. The default is 2 minutes."
+      }
+    },
+    "ConnectedAppOauthPolicy": {
+      "ipRelaxation": {
+        "type": "string",
+        "description": "Specifies whether a user’s access to the connected app is restricted by IP ranges. Valid options are: ENFORCE (default)—Enforces the IP restrictions configured for the org, such as the IP ranges assigned to a user profile. BYPASS_2FACTOR—Allows a user running the app to bypass the org’s IP restrictions when either of these conditions is true. The app has a list of allowed IP ranges and is using the web server OAuth authorization flow. Requests coming from only these IPs are allowed. The app doesn’t have a list of allowed IP ranges, but it uses the web server authentication flow. And the user successfully completes identity verification if accessing Salesforce from a new browser or device. BYPASS—Allows a user to run this app without org IP restrictions. ENFORCE_RELAXREFRESH—Enforces the IP restrictions configured for the org, such as the IP ranges assigned to a user profile. However, this option bypasses these restrictions when the connected app uses refresh tokens to get access tokens.",
+        "required": true
+      },
+      "refreshTokenPolicy": {
+        "type": "string",
+        "description": "Specifies how long a refresh token is valid for. If refresh tokens are provided, users can continue to access the OAuth-enabled connected app without having to reauthorize when the access token expires, as defined by the session timeout value. The connected app exchanges the refresh token with an access token to start a new session. The Refresh Token policy is evaluated only during usage of the issued refresh token and doesn’t affect a user’s current session. Refresh tokens are required only when a user’s session has expired or isn’t available. For example, you set a refresh token policy to expire the token after 1 hour. If a user uses the app for 2 hours, the user isn’t forced to reauthenticate after 1 hour. However, the user is required to authenticate again when the session expires and the client attempts to exchange its refresh token for a new session. Valid options are: zero—The refresh token is invalid immediately. The user can use the current session (access token) already issued, but can’t obtain a new session when the access token expires. infinite—The refresh token is used indefinitely, unless revoked by the user or Salesforce admin. Default setting. specific_lifetime:number:HOURS, DAYS, MONTHS—The refresh token is valid for a fixed amount of time. For example, if the policy states specific_lifetime:1:DAYS, the user can obtain new sessions for only 24 hours. specific_inactivity:number:HOURS, DAYS, MONTHS—The refresh token is valid as long as it’s been used within the specified amount of time. For example, if set to specific_inactivity:7:DAYS, and the refresh token isn’t exchanged for a new session within seven days, the next attempt to use the token fails. The expired token can’t generate new sessions. If the refresh token is exchanged within seven days, the token is valid for another seven days. The monitoring period of inactivity also resets.",
+        "required": true
+      },
+      "singleLogoutUrl": {
+        "type": "string",
+        "description": "If single logout is enabled, specify the single logout URL. Salesforce sends logout requests to this URL when users log out of Salesforce. The single logout URL must be an absolute URL starting with https://."
+      }
+    },
+    "ConnectedAppSamlConfig": {
+      "acsUrl": {
+        "type": "string",
+        "description": "The assertion consumer service URL from the service provider.",
+        "required": true
+      },
+      "certificate": {
+        "type": "string",
+        "description": "The PEM-encoded certificate string, if the app uses a certificate."
+      },
+      "encryptionCertificate": {
+        "type": "string",
+        "description": "The name of the certificate to use for encrypting SAML assertions to the service provider. This certificate is saved in the organization's Certificate and Key Management list. Available in API version 30.0 and later."
+      },
+      "encryptionType": {
+        "type": "SamlEncryptionType (enumeration of type string)",
+        "description": "When Salesforce is the identity provider, the SAML configuration can specify the encryption method used for encrypting SAML assertions to the service provider. The service provider detects the encryption method in the SAML assertion for decryption. Valid values are: AES_128—128–bit key AES_256—256–bit key Available in API version 30.0 and later."
+      },
+      "entityUrl": {
+        "type": "string",
+        "description": "The entity ID from your service provider.",
+        "required": true
+      },
+      "issuer": {
+        "type": "string",
+        "description": "A URI that sends the SAML response. A service provider can use this URI to determine which identity provider sent the response. Available in API version 29.0 and later."
+      },
+      "samlIdpSLOBindingEnum": {
+        "type": "SamlIdpSLOBinding (enumeration of type string)",
+        "description": "The SAML HTTP binding type from the service provider used for single logout. Available in API version 40.0 and later. Valid values are: PostBinding RedirectBinding"
+      },
+      "samlNameIdFormat": {
+        "type": "SamlNameIdFormatType (enumeration of type string)",
+        "description": "Indicates the format the service provider (SP) requires for the user's single sign-on identifier. Available in API version 29.0 and later. Valid values are: Unspecified (default)—No format given. EmailAddress—Used if the subject type is the user's name or a federation ID (an ID internal to the SP). Persistent—Used with the user ID and persistent ID subject types. Transient—Used when the subject type is a custom attribute and can change every time the user logs in."
+      },
+      "samlSigningAlgoType": {
+        "type": "SamlSigningAlgoType (enumeration of type string)",
+        "description": "Indicates the signing algorithm applied to SAML requests and responses when Salesforce is the identity provider. The selected signing algorithm is applied to both single sign-on and single logout responses from your org. Available in API version 50.0 and later. Valid values are: SHA1 SHA256"
+      },
+      "samlSloUrl": {
+        "type": "string",
+        "description": "The SAML single-logout endpoint of the connected app service provider (SP). This endpoint is where SAML LogoutRequests and LogoutResponses are sent when users log out of Salesforce. The SP provides this endpoint. Available in API version 40.0 and later."
+      },
+      "samlSubjectCustomAttr": {
+        "type": "string",
+        "description": "If the samlSubjectType is CustomAttr, include that custom value here; otherwise, leave empty. Available in API version 29.0 and later."
+      },
+      "samlSubjectType": {
+        "type": "SamlSubjectType (enumeration of type string)",
+        "description": "The single sign-on identifier for the user. Valid values are: Username—The user's Salesforce name. FederationId—The user's identifier at the service provider. Get this value from the service provider. UserId—The user's 15-character Salesforce identifier. PersistentID—A persistent opaque identifier that is specific to the identity provider and a service provider. CustomAttr—The identifier is taken from a custom field value in samlSubjectCustomAttr.",
+        "required": true
+      }
+    },
+    "ConnectedAppSessionPolicy": {
+      "policyAction": {
+        "type": "string",
+        "description": "If the High Assurance session security level is applied to the connected app, specify associated high assurance action. Valid values are: Block—Makes the connected app inaccessible to your org’s users. Blocking an app ends all current user sessions with the connected app and prevents all new sessions. RaiseSessionLevel—Requires users to verify their identity with multi-factor authentication when they log in to the connected app. This setting applies to authorization flows that include a user approval step for API logins. These flows are the OAuth 2.0 refresh token flow, web server flow, and user-agent flow. All other flows, such as the JSON Web Token (JWT) bearer token flow, don’t include a user approval step. For flows without a user approval step, API logins with the High Assurance session security level are blocked."
+      },
+      "sessionLevel": {
+        "type": "string",
+        "description": "Applies the High Assurance session security level to the connected app. This session level requires users to verify their identity with multi-factor authentication when they log in to the connected app."
+      },
+      "sessionTimeout": {
+        "type": "int",
+        "description": "The length of time the connected app’s session lasts. If you don’t set a value, Salesforce uses the timeout value in the connected app user’s profile. If the user’s profile doesn’t specify a timeout value, Salesforce uses the timeout value in the org’s Session Settings."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"AccessMethod\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Get\"/>\n    <xsd:enumeration value=\"Post\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"CanvasLocationOptions\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"Chatter\"/>\n    <xsd:enumeration value=\"UserProfile\"/>\n    <xsd:enumeration value=\"Visualforce\"/>\n    <xsd:enumeration value=\"Aura\"/>\n    <xsd:enumeration value=\"Publisher\"/>\n    <xsd:enumeration value=\"ChatterFeed\"/>\n    <xsd:enumeration value=\"ServiceDesk\"/>\n    <xsd:enumeration value=\"OpenCTI\"/>\n    <xsd:enumeration value=\"AppLauncher\"/>\n    <xsd:enumeration value=\"MobileNav\"/>\n    <xsd:enumeration value=\"PageLayout\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"CanvasMetadata\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"accessMethod\" type=\"xsd:string\"/>\n        <xsd:element name=\"canvasOptions\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"canvasUrl\" type=\"xsd:string\"/>\n        <xsd:element name=\"lifecycleClass\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"locationOptions\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"samlInitiationMethod\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"CanvasOptions\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"HideShare\"/>\n    <xsd:enumeration value=\"HideHeader\"/>\n    <xsd:enumeration value=\"PersonalEnabled\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConnectedApp\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"attributes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConnectedAppAttribute\"/>\n        <xsd:element name=\"canvas\" minOccurs=\"0\" type=\"tns:CanvasMetadata\"/>\n        <xsd:element name=\"canvasConfig\" minOccurs=\"0\" type=\"tns:ConnectedAppCanvasConfig\"/>\n        <xsd:element name=\"contactEmail\" type=\"xsd:string\"/>\n        <xsd:element name=\"contactPhone\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"iconUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"infoUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"ipRanges\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConnectedAppIpRange\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"logoUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"mobileAppConfig\" minOccurs=\"0\" type=\"tns:ConnectedAppMobileDetailConfig\"/>\n        <xsd:element name=\"mobileStartUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"oauthConfig\" minOccurs=\"0\" type=\"tns:ConnectedAppOauthConfig\"/>\n        <xsd:element name=\"oauthPolicy\" minOccurs=\"0\" type=\"tns:ConnectedAppOauthPolicy\"/>\n        <xsd:element name=\"permissionSetName\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"plugin\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"profileName\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"samlConfig\" minOccurs=\"0\" type=\"tns:ConnectedAppSamlConfig\"/>\n        <xsd:element name=\"sessionPolicy\" minOccurs=\"0\" type=\"tns:ConnectedAppSessionPolicy\"/>\n        <xsd:element name=\"startUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ConnectedAppAttribute\">\n  <xsd:sequence>\n    <xsd:element name=\"formula\" type=\"xsd:string\"/>\n    <xsd:element name=\"key\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConnectedAppCanvasConfig\">\n  <xsd:sequence>\n    <xsd:element name=\"accessMethod\" type=\"tns:AccessMethod\"/>\n    <xsd:element name=\"canvasUrl\" type=\"xsd:string\"/>\n    <xsd:element name=\"lifecycleClass\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"locations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CanvasLocationOptions\"/>\n    <xsd:element name=\"options\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CanvasOptions\"/>\n    <xsd:element name=\"samlInitiationMethod\" minOccurs=\"0\" type=\"tns:SamlInitiationMethod\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConnectedAppIpRange\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"end\" type=\"xsd:string\"/>\n    <xsd:element name=\"start\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConnectedAppMobileDetailConfig\">\n  <xsd:sequence>\n    <xsd:element name=\"applicationBinaryFile\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n    <xsd:element name=\"applicationBinaryFileName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"applicationBundleIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"applicationFileLength\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"applicationIconFile\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"applicationIconFileName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"applicationInstallUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"devicePlatform\" type=\"tns:DevicePlatformType\"/>\n    <xsd:element name=\"deviceType\" minOccurs=\"0\" type=\"tns:DeviceType\"/>\n    <xsd:element name=\"minimumOsVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"privateApp\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"version\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ConnectedAppOauthAccessScope\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Basic\"/>\n    <xsd:enumeration value=\"Api\"/>\n    <xsd:enumeration value=\"Web\"/>\n    <xsd:enumeration value=\"Full\"/>\n    <xsd:enumeration value=\"Chatter\"/>\n    <xsd:enumeration value=\"CustomApplications\"/>\n    <xsd:enumeration value=\"RefreshToken\"/>\n    <xsd:enumeration value=\"OpenID\"/>\n    <xsd:enumeration value=\"Profile\"/>\n    <xsd:enumeration value=\"Email\"/>\n    <xsd:enumeration value=\"Address\"/>\n    <xsd:enumeration value=\"Phone\"/>\n    <xsd:enumeration value=\"OfflineAccess\"/>\n    <xsd:enumeration value=\"CustomPermissions\"/>\n    <xsd:enumeration value=\"Wave\"/>\n    <xsd:enumeration value=\"Eclair\"/>\n    <xsd:enumeration value=\"Pardot\"/>\n    <xsd:enumeration value=\"Lightning\"/>\n    <xsd:enumeration value=\"Content\"/>\n    <xsd:enumeration value=\"CDPIngest\"/>\n    <xsd:enumeration value=\"CDPProfile\"/>\n    <xsd:enumeration value=\"CDPQuery\"/>\n    <xsd:enumeration value=\"Chatbot\"/>\n    <xsd:enumeration value=\"CDPSegment\"/>\n    <xsd:enumeration value=\"CDPIdentityResolution\"/>\n    <xsd:enumeration value=\"CDPCalculatedInsight\"/>\n    <xsd:enumeration value=\"ForgotPassword\"/>\n    <xsd:enumeration value=\"UserRegistration\"/>\n    <xsd:enumeration value=\"SFAP\"/>\n    <xsd:enumeration value=\"Interaction\"/>\n    <xsd:enumeration value=\"CDP\"/>\n    <xsd:enumeration value=\"EinsteinGPT\"/>\n    <xsd:enumeration value=\"PwdlessLogin\"/>\n    <xsd:enumeration value=\"MCP\"/>\n    <xsd:enumeration value=\"SCRT\"/>\n    <xsd:enumeration value=\"DataCloudUserClaims\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConnectedAppOauthAssetToken\">\n  <xsd:sequence>\n    <xsd:element name=\"assetAudiences\" type=\"xsd:string\"/>\n    <xsd:element name=\"assetIncludeAttributes\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"assetIncludeCustomPerms\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"assetSigningCertId\" type=\"xsd:string\"/>\n    <xsd:element name=\"assetValidityPeriod\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConnectedAppOauthConfig\">\n  <xsd:sequence>\n    <xsd:element name=\"assetTokenConfig\" minOccurs=\"0\" type=\"tns:ConnectedAppOauthAssetToken\"/>\n    <xsd:element name=\"callbackUrl\" type=\"xsd:string\"/>\n    <xsd:element name=\"certificate\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"consumerKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"consumerSecret\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"idTokenConfig\" minOccurs=\"0\" type=\"tns:ConnectedAppOauthIdToken\"/>\n    <xsd:element name=\"isAdminApproved\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isClientCredentialEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isCodeCredentialEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isCodeCredentialPostOnly\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isConsumerSecretOptional\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isIntrospectAllTokens\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isNamedUserJwtEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isPkceRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isRefreshTokenRotationEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isSecretRequiredForRefreshToken\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isSecretRequiredForTokenExchange\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isTokenExchangeEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"oauthClientCredentialUser\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"scopes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConnectedAppOauthAccessScope\"/>\n    <xsd:element name=\"singleLogoutUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConnectedAppOauthIdToken\">\n  <xsd:sequence>\n    <xsd:element name=\"idTokenAudience\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"idTokenIncludeAttributes\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"idTokenIncludeCustomPerms\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"idTokenIncludeStandardClaims\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"idTokenValidity\" minOccurs=\"0\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConnectedAppOauthPolicy\">\n  <xsd:sequence>\n    <xsd:element name=\"ipRelaxation\" type=\"xsd:string\"/>\n    <xsd:element name=\"isTokenExchangeFlowEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"refreshTokenPolicy\" type=\"xsd:string\"/>\n    <xsd:element name=\"singleLogoutUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConnectedAppSamlConfig\">\n  <xsd:sequence>\n    <xsd:element name=\"acsUrl\" type=\"xsd:string\"/>\n    <xsd:element name=\"certificate\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"encryptionCertificate\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"encryptionType\" minOccurs=\"0\" type=\"tns:SamlEncryptionType\"/>\n    <xsd:element name=\"entityUrl\" type=\"xsd:string\"/>\n    <xsd:element name=\"issuer\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"samlIdpSLOBindingEnum\" minOccurs=\"0\" type=\"tns:SamlIdpSLOBinding\"/>\n    <xsd:element name=\"samlNameIdFormat\" minOccurs=\"0\" type=\"tns:SamlNameIdFormatType\"/>\n    <xsd:element name=\"samlSigningAlgoType\" minOccurs=\"0\" type=\"tns:SamlSigningAlgoType\"/>\n    <xsd:element name=\"samlSloUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"samlSubjectCustomAttr\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"samlSubjectType\" type=\"tns:SamlSubjectType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConnectedAppSessionPolicy\">\n  <xsd:sequence>\n    <xsd:element name=\"policyAction\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sessionLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sessionTimeout\" minOccurs=\"0\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"DevicePlatformType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ios\"/>\n    <xsd:enumeration value=\"android\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"DeviceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"phone\"/>\n    <xsd:enumeration value=\"tablet\"/>\n    <xsd:enumeration value=\"minitablet\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SamlEncryptionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AES_128\"/>\n    <xsd:enumeration value=\"AES_256\"/>\n    <xsd:enumeration value=\"Triple_Des\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"SamlIdpSLOBinding\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"RedirectBinding\"/>\n    <xsd:enumeration value=\"PostBinding\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"SamlInitiationMethod\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"IdpInitiated\"/>\n    <xsd:enumeration value=\"SpInitiated\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"SamlNameIdFormatType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Unspecified\"/>\n    <xsd:enumeration value=\"EmailAddress\"/>\n    <xsd:enumeration value=\"Persistent\"/>\n    <xsd:enumeration value=\"Transient\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"SamlSigningAlgoType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"SHA1\"/>\n    <xsd:enumeration value=\"SHA256\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"SamlSubjectType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Username\"/>\n    <xsd:enumeration value=\"FederationId\"/>\n    <xsd:enumeration value=\"UserId\"/>\n    <xsd:enumeration value=\"SpokeId\"/>\n    <xsd:enumeration value=\"CustomAttribute\"/>\n    <xsd:enumeration value=\"PersistentId\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ConnectedApp component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ConnectedApp xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <attributes>\n        <formula>$Api.Enterprise_Server_URL_100</formula>\n        <key>test</key>\n    </attributes>\n    <attributes>\n        <formula>$Api.Partner_Server_URL_60</formula>\n        <key>test1</key>\n    </attributes>\n   <canvasConfig>\n        <accessMethod>Get</accessMethod>\n        <canvasUrl>https://salesforce.com</canvasUrl>\n        <lifecycleClass>MyCanvasListener</lifecycleClass>\n        <locations>Chatter</locations>\n        <locations>Visualforce</locations>\n        <locations>Aura</locations>\n        <locations>Publisher</locations>\n        <locations>ChatterFeed</locations>\n        <locations>OpenCTI</locations>\n        <locations>MobileNav</locations>\n        <locations>PageLayout</locations>\n        <options>HideShare</options>\n        <options>HideHeader</options>\n        <options>PersonalEnabled</options>\n        <samlInitiationMethod>None</samlInitiationMethod>\n    </canvasConfig>\n    <canvas>\n    \t<locationOptions>NONE</locationOptions>\n    \t<samlInitiationMethod>None</samlInitiationMethod>\n    \t<accessMethod>Get</accessMethod>\n    \t<canvasOptions>PE</canvasOptions>\n    \t<lifecycleClass>MyCanvasListener</lifecycleClass>\n    \t<canvasUrl>https://salesforce.com</canvasUrl>\n\t</canvas>\n    <contactEmail>example@domain.com</contactEmail>\n    <contactPhone>1231231234</contactPhone>\n    <description>Test App</description>\n    <iconUrl>https://c1.sfdcstatic.com/content/dam/sfdc-docs/www/logos/salesforce-logo-cloud.png</iconUrl>\n    <infoUrl>https://c1.sfdcstatic.com/content/dam/sfdc-docs/www/logos/salesforce-logo-cloud.png</infoUrl>\n    <startUrl>https://www.salesforce.com</startUrl>\n    <ipRanges>\n        <end>000.0.0.1</end>\n        <start>000.0.0.2</start>\n\t<description>Test</description>\n    </ipRanges>\n    <ipRanges>\n        <end>000.0.0.1</end>\n        <start>000.0.0.2</start>\n\t<description>Test1</description>\n    </ipRanges>\n    <label>TestApp</label>\n    <logoUrl>https://c1.sfdcstatic.com/content/dam/sfdc-docs/www/logos/salesforce-logo-cloud.png</logoUrl>\n    <profileName>Test</profileName>\n    <permissionSetName>TestPermission</permissionSetName>\n    <mobileStartUrl>http://www.mobile.com</mobileStartUrl>\n    <mobileAppConfig>\n        <applicationBinaryFile></applicationBinaryFile>\n        <applicationBinaryFileName>test</applicationBinaryFileName>\n        <applicationBundleIdentifier>testtest</applicationBundleIdentifier>\n        <applicationIconFileName>test</applicationIconFileName>\n\t<applicationIconFile>test</applicationIconFile>\n\t<applicationFileLength>5</applicationFileLength>\n        <applicationInstallUrl>https://salesforce.com</applicationInstallUrl>\n        <devicePlatform>ios</devicePlatform>\n        <deviceType>minitablet</deviceType>\n        <minimumOsVersion>2</minimumOsVersion>\n        <privateApp>true</privateApp>\n        <version>2</version>\n    </mobileAppConfig>\n    <oauthConfig>\n        <assetTokenConfig>\n            <assetAudiences>http://asset.audience.com</assetAudiences>\n            <assetIncludeAttributes>true</assetIncludeAttributes>\n            <assetIncludeCustomPerms>true</assetIncludeCustomPerms>\n            <assetSigningCertId>${cert.id}</assetSigningCertId>\n            <assetValidityPeriod>1440</assetValidityPeriod>\n        </assetTokenConfig>\n        <callbackUrl>https://www.callback.com</callbackUrl>\n        <!--  NOTE, TEST.orgId will get replaced with the org ID of the context org, so we will have a unique consumer key in every scratch org.  -->\n        <consumerKey>3MVG9AOp4kbriZOcnmoLmTrguy9ryzcLbBjoNY...${TEST.orgId}</consumerKey>\n\t\t<consumerSecret>3MVG9AOp4k...</consumerSecret>\n\t\t<certificate>3MVG9AOp4kbriZOInmoLmTrguy9ryzcLbBjoNY...</certificate>\n        <scopes>Basic</scopes>\n        <scopes>Chatter</scopes>\n        <scopes>OpenID</scopes>\n        <scopes>CustomPermissions</scopes>\n\t\t<singleLogoutUrl>https://www.logout.com</singleLogoutUrl>\n        <isAdminApproved>false</isAdminApproved>\n        <isConsumerSecretOptional>false</isConsumerSecretOptional>\n        <isIntrospectAllTokens>false</isIntrospectAllTokens>\n\t\t<idTokenConfig>\n\t\t\t<idTokenAudience>https://idtoken.audience.com</idTokenAudience>\n\t\t\t<idTokenIncludeAttributes>true</idTokenIncludeAttributes>\n\t\t\t<idTokenIncludeCustomPerms>true</idTokenIncludeCustomPerms>\n\t\t\t<idTokenIncludeStandardClaims>true</idTokenIncludeStandardClaims>\n\t\t\t<idTokenValidity>20</idTokenValidity>\n\t\t</idTokenConfig>\n    </oauthConfig>\n    <oauthPolicy>\n        <ipRelaxation>ENFORCE</ipRelaxation>\n        <refreshTokenPolicy>infinite</refreshTokenPolicy>\n        <singleLogoutUrl>https://www.logout.com</singleLogoutUrl>\n    </oauthPolicy>\n    <plugin>ConnectedAppPluginTest</plugin>\n    <pluginExecutionUser>testuser@domain.com</pluginExecutionUser>\n    <samlConfig>\n        <acsUrl>http://www.acs.com</acsUrl>\n        <encryptionType>AES_128</encryptionType>\n\t<encryptionCertificate>3MVG9AOp4kbriZOInmoLmTrguy9ryzcLbBjoNY...</encryptionCertificate>\n\t<certificate>3MVG9AOp4kbriZOInmoLmTrguy9ryzcLbBjoNY...</certificate>\n\t<samlSubjectCustomAttr>test</samlSubjectCustomAttr>\n        <entityUrl>http://www.entity.com</entityUrl>\n        <issuer>https://salesforce.com</issuer>\n        <samlIdpSLOBindingEnum>RedirectBinding</samlIdpSLOBindingEnum>\n        <samlNameIdFormat>Unspecified</samlNameIdFormat>\n        <samlSloUrl>https://www.salesforce.com</samlSloUrl>\n        <samlSubjectType>CustomAttribute</samlSubjectType>\n    </samlConfig>\n    <sessionPolicy>\n        <policyAction>RaiseSessionLevel</policyAction>\n        <sessionLevel>HIGH_ASSURANCE</sessionLevel>\n        <sessionTimeout>720</sessionTimeout>\n    </sessionPolicy>\n</ConnectedApp>"
+    }
+  ]
+}

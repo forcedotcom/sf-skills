@@ -1,0 +1,77 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "# OmniTrackingGroup - Metadata API",
+  "description": "## Description\n\nRepresents a group of FlexCard and OmniScript components that have their user interactions tracked together in OmniAnalytics.",
+  "file_information": "## File Information\n\n- **File Suffix**: `.OmniTrackingGroup`\n",
+  "directory_location": "## Directory Location\n\n- **Directory Location**: `OmniTrackingGroups`\n",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "A description of the OmniTrackingGroup."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "The unique name of the OmniTrackingComponentDef in the API."
+    },
+    "endDate": {
+      "type": "date",
+      "description": "The date when the OmniTrackingGroup became inactive."
+    },
+    "groupType": {
+      "type": "OmniTrackingGroupType (enumeration of type string)",
+      "required": true,
+      "description": "Specifies whether this OmniTrackingGroup sends tracking data to a third-party Analytics system. Values are: External—A third-party Analytics system is used. Internal—No third-party Analytics system is used."
+    },
+    "isActive": {
+      "type": "boolean",
+      "required": true,
+      "description": "Specifies whether the OmniTrackingGroup is active."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The unique master label of the OmniTrackingComponentDef. This internal label doesn't get translated."
+    },
+    "maxAgeInDays": {
+      "type": "int",
+      "description": "The maximum number of days the group and its analytics data is active beyond which the data is deleted."
+    },
+    "omniExtTrackingDef": {
+      "type": "string",
+      "description": "The ID of the related OmniExtTrackingDef object. Required if GroupType is set to External."
+    },
+    "omniTrackingComponentDefs": {
+      "type": "OmniTrackingComponentDef[]",
+      "description": "The OmniTrackingComponentDef objects related to this OmniTrackingGroup."
+    },
+    "omniTrackingGroupKey": {
+      "type": "string",
+      "description": "A UUID generated internally by Salesforce to uniquely identify an OmniTrackingGroup record across all orgs."
+    },
+    "startDate": {
+      "type": "date",
+      "description": "The date when the OmniTrackingGroup became active."
+    }
+  },
+  "wsdl_segment": "\n\n## WSDL Segment\n\nThe following WSDL Segment shows the complete structure of this metadata type:\n\n```xml\n<xsd:simpleType name=\"OmniAnalyticsComponentType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Omniscript\"/>\n    <xsd:enumeration value=\"Flexcard\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"OmniTrackingComponentDef\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"componentType\" type=\"tns:OmniAnalyticsComponentType\"/>\n        <xsd:element name=\"componentVersion\" type=\"xsd:double\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"omniTrackingComponentDefKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"omniTrackingGroup\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"OmniTrackingGroup\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"endDate\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <xsd:element name=\"groupType\" type=\"tns:OmniTrackingGroupType\"/>\n        <xsd:element name=\"isActive\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"maxAgeInDays\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"omniExtTrackingDef\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"omniTrackingComponentDefs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OmniTrackingComponentDef\"/>\n        <xsd:element name=\"omniTrackingGroupKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"startDate\" minOccurs=\"0\" type=\"xsd:date\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"OmniTrackingGroupType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Internal\"/>\n    <xsd:enumeration value=\"External\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```\n",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an OmniTrackingGroup component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OmniTrackingGroup xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <developerName>Purchase_Tracking</developerName>\n    <groupType>Internal</groupType>\n    <isActive>true</isActive>\n    <masterLabel>Purchase_Tracking</masterLabel>\n    <omniTrackingComponentDefs>\n        <componentType>Omniscript</componentType>\n        <componentVersion>2</componentVersion>\n        <developerName>Purchase_Funnel</developerName>\n        <masterLabel>Purchase_Funnel</masterLabel>\n    </omniTrackingComponentDefs>\n</OmniTrackingGroup>"
+    }
+  ]
+}

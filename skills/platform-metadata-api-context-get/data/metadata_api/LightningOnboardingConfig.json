@@ -1,0 +1,62 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LightningOnboardingConfig - Metadata API",
+  "description": "Represents the feedback provided when users switch from Lightning Experience to Salesforce Classic. Admins can customize the question, how frequently the form appears, and where the feedback is stored in Chatter from the Adoption Assistance page in Lightning Experience Setup. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".lightningOnboardingConfig",
+  "directory_location": "LightningOnboardingConfigs",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "collaborationGroup": {
+      "type": "string",
+      "description": "The ID of the Chatter Group where the user feedback is posted.",
+      "required": true
+    },
+    "customQuestion": {
+      "type": "string",
+      "description": "Text of the custom question added by the admin. Maximum of 1,000 characters."
+    },
+    "feedbackFormDaysFrequency": {
+      "type": "int",
+      "description": "The number of days between showing the feedback form when a user switches between Lightning Experience and Salesforce Classic. A value of 0 indicates that the form is shown for every switch. Maximum of 30.",
+      "required": true
+    },
+    "isCustom": {
+      "type": "boolean",
+      "description": "Indicates if a feedback form includes a custom question (true) or not (false).",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label of the in-app guidance. Maximum of 80 characters.",
+      "required": true
+    },
+    "promptDelayTime": {
+      "type": "int",
+      "description": "Indicates the amount of time, in seconds, to delay between instances of all in-app content, both custom content created by org and standard content created by Salesforce. Minimum of 0 hours and 0 minutes. Maximum of 99 hours and 59 minutes.",
+      "required": true
+    },
+    "sendFeedbackToSalesforce": {
+      "type": "boolean",
+      "description": "Indicates if the user feedback can be shared with Salesforce (true) or not (false). Even if the feedback isn’t shared with Salesforce, the feedback is shared in the Chatter Group chosen when customizing the feedback form. The default is false.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"LightningOnboardingConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"collaborationGroup\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"customQuestion\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"feedbackFormDaysFrequency\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"isCustom\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"promptDelayTime\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"sendFeedbackToSalesforce\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a LightningOnboardingConfig component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningOnboardingConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <collaborationGroup>{Org ID}</collaborationGroup>\n    <customQuestion>Please take a minute to tell us why you’re switching.</customQuestion>\n    <feedbackFormDaysFrequency>0</feedbackFormDaysFrequency>\n    <isCustom>true</isCustom>\n    <masterLabel>Feedback Form</masterLabel>\n    <promptDelayTime>3600</promptDelayTime>\n    <sendFeedbackToSalesforce>true</sendFeedbackToSalesforce>\n</LightningOnboardingConfig>"
+    }
+  ]
+}

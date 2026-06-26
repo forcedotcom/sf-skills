@@ -1,0 +1,206 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CriteriaBasedSharingRule - Metadata API",
+  "description": "This component is removed as of API version 33.0 and is available in earlier versions only. Use SharingRules instead. Represents a criteria-based sharing rule. CriteriaBasedSharingRule enables you to share records based on specific criteria.",
+  "directory_location": "SharingRules",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "criteriaItems": {
+      "type": "FilterItem[]",
+      "description": "List that represents the criteria for the sharing rule. The possible values are: field operation value"
+    }
+  },
+  "sub_types": {
+    "AccountCriteriaBasedSharingRule": {
+      "accountAccessLevel": {
+        "type": "ShareAccessLevelNoNone (enumeration of type string)",
+        "description": "A value that represents the level of access that the user or group has to the account. The possible values are: Read Edit All",
+        "required": true
+      },
+      "booleanFilter": {
+        "type": "string",
+        "description": "Represents the filter logic of the sharing rule."
+      },
+      "caseAccessLevel": {
+        "type": "ShareAccessLevelNoAll (enumeration of type string)",
+        "description": "A value that represents the level of access that the user or group has to cases associated with the account. The possible values are: None Read Edit",
+        "required": true
+      },
+      "contactAccessLevel": {
+        "type": "ShareAccessLevelNoAll (enumeration of type string)",
+        "description": "A value that represents the level of access that the user or group has to contacts associated with the account. The possible values are: None Read Edit",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters. This field is available in API version 29.0 and later."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name for the sharing rule. Corresponds to Label in the user interface.",
+        "required": true
+      },
+      "opportunityAccessLevel": {
+        "type": "ShareAccessLevelNoAll (enumeration of type string)",
+        "description": "A value that represents the level of access that a target group is granted for any associated opportunity. The possible values are: None Read Edit",
+        "required": true
+      }
+    },
+    "CampaignCriteriaBasedSharingRule": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "Represents the filter logic of the sharing rule."
+      },
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters. This field is available in API version 29.0 and later."
+      },
+      "campaignAccessLevel": {
+        "type": "ShareAccessLevelNoNone (enumeration of type string)",
+        "description": "A value that represents the level of access that a target group is granted for a campaign. The possible values are: Read Edit All",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Name for the sharing rule. Corresponds to Label in the user interface.",
+        "required": true
+      }
+    },
+    "CaseCriteriaBasedSharingRule": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "Represents the filter logic of the sharing rule."
+      },
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters. This field is available in API version 29.0 and later."
+      },
+      "caseAccessLevel": {
+        "type": "ShareAccessLevelReadEdit (enumeration of type string)",
+        "description": "A value that represents the level of access being granted for a case. The possible values are: Read Edit",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Name for the sharing rule. Corresponds to Label in the user interface.",
+        "required": true
+      }
+    },
+    "ContactCriteriaBasedSharingRule": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "Represents the filter logic of the sharing rule."
+      },
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters. This field is available in API version 29.0 and later."
+      },
+      "contactAccessLevel": {
+        "type": "ShareAccessLevelReadEdit (enumeration of type string)",
+        "description": "A value that represents the level of access being granted to the target group, role, or user for a contact. The possible values are: Read Edit",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Name for the sharing rule. Corresponds to Label in the user interface.",
+        "required": true
+      }
+    },
+    "LeadCriteriaBasedSharingRule": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "Represents the filter logic of the sharing rule."
+      },
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters. This field is available in API version 29.0 and later."
+      },
+      "leadAccessLevel": {
+        "type": "ShareAccessLevelReadEdit (enumeration of type string)",
+        "description": "A value that represents the level of allowed access. The possible values are: Read Edit",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Name for the sharing rule. Corresponds to Label in the user interface.",
+        "required": true
+      }
+    },
+    "OpportunityCriteriaBasedSharingRule": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "Represents the filter logic of the sharing rule."
+      },
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters. This field is available in API version 29.0 and later."
+      },
+      "opportunityAccessLevel": {
+        "type": "ShareAccessLevelReadEdit (enumeration of type string)",
+        "description": "A value that represents the level of allowed access. The possible values are: Read Edit",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Name for the sharing rule. Corresponds to Label in the user interface.",
+        "required": true
+      }
+    },
+    "CustomObjectCriteriaBasedSharingRule": {
+      "accessLevel": {
+        "type": "string",
+        "description": "A value that represents the type of allowed sharing. The possible values are: Read Edit All",
+        "required": true
+      },
+      "booleanFilter": {
+        "type": "string",
+        "description": "Represents the filter logic of the sharing rule."
+      },
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters. This field is available in API version 29.0 and later."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name for the sharing rule. Corresponds to Label in the user interface.",
+        "required": true
+      }
+    },
+    "UserCriteriaBasedSharingRule": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "Represents the filter logic of the sharing rule."
+      },
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters. This field is available in API version 29.0 and later."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name for the sharing rule. Corresponds to Label in the user interface.",
+        "required": true
+      },
+      "userAccessLevel": {
+        "type": "ShareAccessLevelReadEdit (enumeration of type string)",
+        "description": "A value that represents the type of allowed sharing. The possible values are: Read Edit",
+        "required": true
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is the definition of two owner-based sharing rules and one criteria-based sharing rule containing two criteria items. The file name corresponds to the Account.sharingRules file under the accountSharingRules directory.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AccountSharingRules xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <ownerRules>\n    <fullName>G1Dev_G2New</fullName>\n    <sharedTo>\n      <group>G2New</group>\n    </sharedTo>\n    <sharedFrom>\n      <group>G1Dev</group>\n    </sharedFrom>\n    <accountAccessLevel>Read</accountAccessLevel>\n    <caseAccessLevel>None</caseAccessLevel>\n    <contactAccessLevel>Read</contactAccessLevel>\n  </ownerRules>\n    <fullName>G2New_R1New</fullName>\n    <sharedTo>\n      <roleAndSubordinates>R1New</roleAndSubordinates>\n    </sharedTo>\n    <sharedFrom>\n      <group>G2New</group>\n    </sharedFrom>\n    <accountAccessLevel>Edit</accountAccessLevel>\n    <caseAccessLevel>Read</caseAccessLevel>\n    <contactAccessLevel>Edit</contactAccessLevel>\n    <name>G2New_R1New</name>\n    <opportunityAccessLevel>None</opportunityAccessLevel>\n  </ownerRules>\n  <criteriaBasedRules>\n    <fullName>AccountCriteria</fullName>\n    <sharedTo>\n      <group>G1</group>\n    </sharedTo>\n    <criteriaItems>\n      <field>BillingCity</field>\n      <operation>equals</operation>\n      <value>San Francisco</value>\n    </criteriaItems>\n    <criteriaItems>\n      <field>MyChkBox__c</field>\n      <operation>notEqual</operation>\n      <value>False</value>\n    </criteriaItems>\n    <accountAccessLevel>Read</accountAccessLevel>\n    <booleanFilter>1 OR 2</booleanFilter>\n    <caseAccessLevel>None</caseAccessLevel>\n    <contactAccessLevel>Read</contactAccessLevel>\n    <name>AccountCriteria</name>\n    <opportunityAccessLevel>None</opportunityAccessLevel>\n  </criteriaBasedRules>\n</AccountSharingRules>"
+    }
+  ]
+}

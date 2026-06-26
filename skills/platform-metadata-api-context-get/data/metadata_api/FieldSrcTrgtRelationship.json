@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields"
+  ],
+  "title": "FieldSrcTrgtRelationship - Metadata API",
+  "description": "Stores the relationships between a data model object (DMO) and its fields. For example, the Individual.Id field has a one-to-many relationship (1:M) with the ContactPointEmail.PartyId field.",
+  "file_information": ".fieldSrcTrgtRelationship",
+  "directory_location": "fieldSrcTrgtRelationships",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "definitionCreationType": {
+      "type": "DefinitionCreationType (enumeration of type string)",
+      "description": "Describes whether this object was added by the user or as part of a standard taxonomy. Values are: ADG Activation_Audience Bridge Calculated_Insight Chunk Curated Custom Derived Directory_Table External Ml_Prediction Segment_Membership Semantic Standard System Transform Vector_Embedding",
+      "required": true
+    },
+    "lookupFieldName": {
+      "type": "string",
+      "description": "Reference to the DMO lookup field."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The UI name for the field relationship.",
+      "required": true
+    },
+    "owner": {
+      "type": "FieldSrcTrgtRelationshipOwner (enumeration of type string)",
+      "description": "Optional. The type of relationship that exists between the source and the target. Values are: SObject - The source of the relationship is a DMO and the target is a standard or custom SObject. DataCloud - Both the source and the target of the relationship are DMOs. The field is needed only when the target is an SObject. The system can infer the value when the target is a DMO."
+    },
+    "relationshipCardinality": {
+      "type": "RelationshipCardinality (enumeration of type string)",
+      "description": "Cardinality of the relationship between the source and target fields. Values are: ManyToOne OneToOne",
+      "required": true
+    },
+    "sourceFieldName": {
+      "type": "string",
+      "description": "Name of the field that represents the source side of the relationship.",
+      "required": true
+    },
+    "targetEntity": {
+      "type": "string",
+      "description": "Optional. Name of the entity that represents the target side of the relationship. The target entity can be a DMO or a standard or custom SObject. The field is needed only when the target entity is an SObject. The system can infer the value when the target entity is a DMO."
+    },
+    "targetFieldName": {
+      "type": "string",
+      "description": "Name of the field that represents the target side of the relationship.",
+      "required": true
+    }
+  }
+}

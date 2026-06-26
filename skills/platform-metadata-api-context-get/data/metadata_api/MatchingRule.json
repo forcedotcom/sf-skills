@@ -1,0 +1,69 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "MatchingRule - Metadata API",
+  "description": "Represents a matching rule that is used to identify duplicate records.",
+  "file_information": ".matchingRule",
+  "directory_location": "matchingRules",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "booleanFilter": {
+      "type": "string",
+      "description": "Specifies filter logic conditions."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the matching rule."
+    },
+    "label": {
+      "type": "string",
+      "description": "The name of the matching rule.",
+      "required": true
+    },
+    "matchingRuleItems": {
+      "type": "MatchingRuleItem",
+      "description": "The criteria that make up a matching rule."
+    },
+    "ruleStatus": {
+      "type": "MatchingRuleStatus (enumeration of type string)",
+      "description": "The activation status of the matching rule. Values are: Inactive Deactivating DeactivationFailed Active Activating ActivationFailed Important: The only valid values you can declare when deploying a package are Active and Inactive.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "MatchingRuleItem": {
+      "blankValueBehavior": {
+        "type": "BlankValueBehavior (enumeration of type string)",
+        "description": "Specifies how blank fields affect whether the fields being compared are considered matches. Valid values are: MatchBlanks NullNotAllowed (default)"
+      },
+      "fieldName": {
+        "type": "string",
+        "description": "Indicates which field to compare when determining if a record is similar enough to an existing record to be considered a match.",
+        "required": true
+      },
+      "matchingMethod": {
+        "type": "MatchingMethod (enumeration of type string)",
+        "description": "Defines how the fields are compared. Choose between the exact matching method and various fuzzy matching methods. Valid values are: Exact FirstName LastName CompanyName Phone City Street Zip Title For details on each matching method, see “Matching Methods Used with Matching Rules” in the Salesforce Help.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"BlankValueBehavior\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"MatchBlanks\"/>\n    <xsd:enumeration value=\"NullNotAllowed\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"MatchingMethod\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Exact\"/>\n    <xsd:enumeration value=\"FirstName\"/>\n    <xsd:enumeration value=\"LastName\"/>\n    <xsd:enumeration value=\"CompanyName\"/>\n    <xsd:enumeration value=\"Phone\"/>\n    <xsd:enumeration value=\"City\"/>\n    <xsd:enumeration value=\"Street\"/>\n    <xsd:enumeration value=\"Zip\"/>\n    <xsd:enumeration value=\"Title\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"MatchingRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"matchingRuleItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:MatchingRuleItem\"/>\n        <xsd:element name=\"ruleStatus\" type=\"tns:MatchingRuleStatus\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"MatchingRuleItem\">\n  <xsd:sequence>\n    <xsd:element name=\"blankValueBehavior\" minOccurs=\"0\" type=\"tns:BlankValueBehavior\"/>\n    <xsd:element name=\"fieldName\" type=\"xsd:string\"/>\n    <xsd:element name=\"matchingMethod\" type=\"tns:MatchingMethod\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"MatchingRuleStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Inactive\"/>\n    <xsd:enumeration value=\"DeactivationFailed\"/>\n    <xsd:enumeration value=\"Activating\"/>\n    <xsd:enumeration value=\"Deactivating\"/>\n    <xsd:enumeration value=\"Active\"/>\n    <xsd:enumeration value=\"ActivationFailed\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"MatchingRules\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"matchingRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:MatchingRule\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is a sample XML definition of a matching rule. A matching rule can be associated with either a standard or a custom object.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MatchingRules xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n<matchingRules>\n<fullName>AccountMatchingRule</fullName>\n<label>Matching rule for accounts</label>\n<description>this is sample rule description</description>\n<matchingRuleItems>\n<blankValueBehavior>NullNotAllowed</blankValueBehavior>\n<fieldName>BillingCity</fieldName>\n<matchingMethod>City</matchingMethod>\n</matchingRuleItems>\n\n<matchingRuleItems>\n<blankValueBehavior>NullNotAllowed</blankValueBehavior>\n<fieldName>Name</fieldName>\n<matchingMethod>CompanyName</matchingMethod>\n</matchingRuleItems>\n\n<ruleStatus>Inactive</ruleStatus>\n</matchingRules>\n</MatchingRules>"
+    }
+  ]
+}

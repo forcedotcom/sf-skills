@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LiveChatSensitiveDataRule - Metadata API",
+  "description": "Represents a rule for masking or deleting data of a specified pattern. Written as a regular expression (regex).",
+  "file_information": ".liveChatSensitiveDataRule",
+  "directory_location": "liveChatSensitiveDataRule",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "actionType": {
+      "type": "SensitiveDataActionType (enumeration of type string)",
+      "description": "The action to take on the text when the sensitive data rule is triggered. Possbile values are: Remove Replace",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the sensitive data rule—for example, “Block social security numbers.”"
+    },
+    "enforceOn": {
+      "type": "int",
+      "description": "Determines the roles on which the rule is enforced. The value is determined using bitwise OR operation. There are seven possible values: Rule enforced on Agent Rule enforced on Visitor Rule enforced on Agent and Visitor Rule enforced on Supervisor Rule enforced on Agent and Supervisor Rule enforced on Visitor and Supervisor Rule enforced on Agent, Visitor, and Supervisor",
+      "required": true
+    },
+    "isEnabled": {
+      "type": "boolean",
+      "description": "Specifies whether a sensitive data rule is active (true) or not (false). Default value (if none is provided) is false.",
+      "required": true
+    },
+    "pattern": {
+      "type": "string",
+      "description": "The pattern of text blocked by the rule. Written as a JavaScript regular expression (regex).",
+      "required": true
+    },
+    "replacement": {
+      "type": "string",
+      "description": "The string of characters that replaces the blocked text (if ActionType Replace is selected)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"LiveChatSensitiveDataRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionType\" type=\"tns:SensitiveDataActionType\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"enforceOn\" type=\"xsd:int\"/>\n        <xsd:element name=\"isEnabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"pattern\" type=\"xsd:string\"/>\n        <xsd:element name=\"priority\" type=\"xsd:int\"/>\n        <xsd:element name=\"processingType\" type=\"tns:SensitiveDataRuleProcessing\"/>\n        <xsd:element name=\"replacement\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"version\" type=\"tns:SensitiveDataRuleVersion\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SensitiveDataActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Remove\"/>\n    <xsd:enumeration value=\"Replace\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"SensitiveDataRuleProcessing\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Persist\"/>\n    <xsd:enumeration value=\"RealTime\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"SensitiveDataRuleVersion\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ONE\"/>\n    <xsd:enumeration value=\"TWO\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a LiveChatSensitiveDataRule component.",
+      "code": "<LiveChatSensitiveDataRule xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <actionType>REPLACE</actionType>\n    <enforceOn>7</enforceOn> \n    <isEnabled>true</isEnabled> \n    <pattern>[aeiou]</pattern> \n    <replacement>œ</replacement>\n</LiveChatSensitiveDataRule>"
+    }
+  ]
+}

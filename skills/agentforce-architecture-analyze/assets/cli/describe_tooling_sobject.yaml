@@ -1,0 +1,17 @@
+name: describe_tooling_sobject
+argv:
+  - sf
+  - sobject
+  - describe
+  - --sobject
+  - "{{SOBJECT}}"
+  - --use-tooling-api
+  - --target-org
+  - "{{ORG_ALIAS}}"
+  - --json
+timeout_seconds: 300
+required_params: [ORG_ALIAS, SOBJECT]
+success_check: stdout_json_status_zero
+auth_required_stderr_patterns:
+  - NoOrgAuthenticationError
+  - AuthInfoError

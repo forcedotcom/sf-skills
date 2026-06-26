@@ -1,0 +1,121 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CustomPageWebLink - Metadata API",
+  "description": "Represents a custom link defined in a home page component.",
+  "file_information": ".weblink",
+  "directory_location": "weblinks",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "availability": {
+      "type": "WebLinkAvailability (enumeration of type string)",
+      "description": "Indicates whether the link is only available online ( online, or if it is also available offline ( offline ).",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the link."
+    },
+    "displayType": {
+      "type": "WebLinkDisplayType (enumeration of type string)",
+      "description": "Represents how this link is rendered. Valid values: link for a hyperlink button for a button massActionButton for a button attached to a related list"
+    },
+    "encodingKey": {
+      "type": "Encoding (enumeration of type string)",
+      "description": "The default encoding setting is Unicode: UTF-8. Change it if your template requires data in a different format. This is available if your content source is URL. Valid values include: UTF-8—Unicode (UTF-8) ISO-8859-1—General US & Western Europe (ISO-8859–1, ISO-LATIN-1) Shift_JIS—Japanese (Shift-JIS) ISO-2022-JP—Japanese (JIS) EUC-JP—Japanese (EUC-JP) x-SJIS_0213—Japanese (Shift-JIS_2004) ks_c_5601-1987—Korean (ks_c_5601-1987) Big5—Traditional Chinese (Big5) GB2312—Simplified Chinese (GB2312) Big5-HKSCS—Traditional Chinese Hong Kong (Big5–HKSCS)",
+      "required": true
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The name used as a unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+    },
+    "hasMenubar": {
+      "type": "boolean",
+      "description": "If the openType is newWindow, this field indicates whether to show the browser menu bar for the window ( true or not (false). Otherwise, leave this field empty."
+    },
+    "hasScrollbars": {
+      "type": "boolean",
+      "description": "If the openType is newWindow, this field indicates whether to show the scroll bars for the window (true) or not (false). Otherwise, leave this field empty."
+    },
+    "hasToolbar": {
+      "type": "boolean",
+      "description": "If the openType is newWindow, this field indicates whether to show the browser toolbar for the window (true) or not (false). Otherwise, leave this field empty."
+    },
+    "height": {
+      "type": "int",
+      "description": "Height in pixels of the window opened by the link. Required if the openType is newWindow. Otherwise, leave this field empty."
+    },
+    "isResizable": {
+      "type": "boolean",
+      "description": "If the openType is newWindow, this field indicates whether to allow resizing of the window (true) or not (false). Otherwise, leave this field empty."
+    },
+    "linkType": {
+      "type": "WebLinkType (enumeration of type string)",
+      "description": "Represents whether the content of the button or link is specified by a URL, an sControl, a JavaScript code block, or a Visualforce page. url sControl javascript page flow—Reserved for future use.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label for the link."
+    },
+    "openType": {
+      "type": "WebLinkWindowType (enumeration of type string)",
+      "description": "When the link is clicked, this field specifies the window style used to display the content. Valid values are: newWindow sidebar noSidebar replace onClickJavaScript",
+      "required": true
+    },
+    "page": {
+      "type": "string",
+      "description": "If the value of linkType is page, this field represents the Visualforce page. Otherwise, leave this field empty."
+    },
+    "position": {
+      "type": "WebLinkPosition (enumeration of type string)",
+      "description": "If the openType is newWindow, this field indicates how the new window should be displayed. Otherwise, leave this field empty. Valid values are: fullScreen none topLeft"
+    },
+    "protected": {
+      "type": "boolean",
+      "description": "Indicates whether this component is protected (true) or not (false). Protected components cannot be linked to or referenced by components created in the installing organization.",
+      "required": true
+    },
+    "requireRowSelection": {
+      "type": "boolean",
+      "description": "If the openType is massAction, this field indicates whether to require individual row selection to execute the action for this button (true) or not (false). Otherwise, leave this field empty."
+    },
+    "scontrol": {
+      "type": "string",
+      "description": "If the value of linkType is sControl, this field represents the name of the sControl. Otherwise, leave this field empty."
+    },
+    "showsLocation": {
+      "type": "boolean",
+      "description": "If the openType is newWindow, this field indicates whether or not to show the browser location bar for the window. Otherwise, leave this field empty."
+    },
+    "showsStatus": {
+      "type": "boolean",
+      "description": "If the openType is newWindow, this field indicates whether or not to show the browser status bar for the window. Otherwise, leave this field empty."
+    },
+    "url": {
+      "type": "string",
+      "description": "If the value of linkType is url, this field represents the URL value. If the value of linkType is javascript, this field represents the JavaScript content. If the value is neither of these, leave this field empty. Content must be escaped in a manner consistent with XML parsing rules."
+    },
+    "width": {
+      "type": "int",
+      "description": "Width in pixels of the window opened by the link. Required if the openType is newWindow. Otherwise, leave this field empty."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomPageWebLink\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"availability\" type=\"tns:WebLinkAvailability\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"displayType\" type=\"tns:WebLinkDisplayType\"/>\n        <xsd:element name=\"encodingKey\" minOccurs=\"0\" type=\"tns:Encoding\"/>\n        <xsd:element name=\"hasMenubar\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hasScrollbars\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hasToolbar\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"height\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"isResizable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"linkType\" type=\"tns:WebLinkType\"/>\n        <xsd:element name=\"masterLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"openType\" type=\"tns:WebLinkWindowType\"/>\n        <xsd:element name=\"page\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"position\" minOccurs=\"0\" type=\"tns:WebLinkPosition\"/>\n        <xsd:element name=\"protected\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"requireRowSelection\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"scontrol\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"showsLocation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showsStatus\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"url\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"width\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"Encoding\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"UTF-8\"/>\n    <xsd:enumeration value=\"ISO-8859-1\"/>\n    <xsd:enumeration value=\"Shift_JIS\"/>\n    <xsd:enumeration value=\"ISO-2022-JP\"/>\n    <xsd:enumeration value=\"EUC-JP\"/>\n    <xsd:enumeration value=\"ks_c_5601-1987\"/>\n    <xsd:enumeration value=\"Big5\"/>\n    <xsd:enumeration value=\"GB2312\"/>\n    <xsd:enumeration value=\"Big5-HKSCS\"/>\n    <xsd:enumeration value=\"x-SJIS_0213\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"WebLinkAvailability\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"online\"/>\n    <xsd:enumeration value=\"offline\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"WebLinkDisplayType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"link\"/>\n    <xsd:enumeration value=\"button\"/>\n    <xsd:enumeration value=\"massActionButton\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"WebLinkPosition\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"fullScreen\"/>\n    <xsd:enumeration value=\"none\"/>\n    <xsd:enumeration value=\"topLeft\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"WebLinkType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"url\"/>\n    <xsd:enumeration value=\"sControl\"/>\n    <xsd:enumeration value=\"javascript\"/>\n    <xsd:enumeration value=\"page\"/>\n    <xsd:enumeration value=\"flow\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"WebLinkWindowType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"newWindow\"/>\n    <xsd:enumeration value=\"sidebar\"/>\n    <xsd:enumeration value=\"noSidebar\"/>\n    <xsd:enumeration value=\"replace\"/>\n    <xsd:enumeration value=\"onClickJavaScript\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is the definition of a Weblink. For related samples, see HomePageComponent and HomePageLayout.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomPageWebLink xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <availability>online</availability>\n    <displayType>button</displayType>\n    <encodingKey>UTF-8</encodingKey\n    <hasMenubar>false</hasMenubar>\n    <hasScrollbars>true</hasScrollbars>\n    <hasToolbar>false</hasToolbar>\n    <height>600</height>\n    <isResizable>true</isResizable>\n    <linkType>url</linkType>\n    <masterLabel>detailPageButon</masterLabel>\n    <openType>newWindow</openType>\n    <position>none</position>\n    <protected>false</protected>\n    <showsLocation>false</showsLocation>\n    <showsStatus>false</showsStatus>\n    <url>http://google.com</url>\n</CustomPageWebLink>"
+    }
+  ]
+}

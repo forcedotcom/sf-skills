@@ -1,0 +1,137 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Portal - Metadata API",
+  "description": "The Portal metadata type represents a partner portal.",
+  "file_information": ".portal",
+  "directory_location": "portals",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "Denotes whether this portal is active.",
+      "required": true
+    },
+    "admin": {
+      "type": "string",
+      "description": "The full name of the user designated to administer the portal."
+    },
+    "defaultLanguage": {
+      "type": "string",
+      "description": "The default language for HTML messages for the portal. Use the abbreviation for the language, for example, en_US for United States English."
+    },
+    "description": {
+      "type": "string",
+      "description": "The portal description."
+    },
+    "emailSenderAddress": {
+      "type": "string",
+      "description": "The email address used when sending emails using templates configured from the portal (for example, for resetting the password).",
+      "required": true
+    },
+    "emailSenderName": {
+      "type": "string",
+      "description": "The name to display when sending emails using templates configured from the portal (for example, for resetting the password).",
+      "required": true
+    },
+    "enableSelfCloseCase": {
+      "type": "boolean",
+      "description": "For the Customer Portal, allows portal users to close their own cases."
+    },
+    "footerDocument": {
+      "type": "string",
+      "description": "The file to be used as the footer for this portal."
+    },
+    "forgotPassTemplate": {
+      "type": "string",
+      "description": "The email template to use when a user clicks the Forgot Password link. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The name of the portal. Inherited from Metadata, this field is defined in the WSDL for this metadata type. It must be specified when creating, updating, or deleting. See createMetadata() to see an example of this field specified for a call.",
+      "required": true
+    },
+    "headerDocument": {
+      "type": "string",
+      "description": "The file to be used as the header for this portal."
+    },
+    "isSelfRegistrationActivated": {
+      "type": "boolean",
+      "description": "Determines whether self-registration is active or not for this portal."
+    },
+    "loginHeaderDocument": {
+      "type": "string",
+      "description": "The file to be used as the header for this portal's login page."
+    },
+    "logoDocument": {
+      "type": "string",
+      "description": "The file to be used as the logo for this portal."
+    },
+    "logoutUrl": {
+      "type": "string",
+      "description": "The URL that the user is redirected to on logout."
+    },
+    "newCommentTemplate": {
+      "type": "string",
+      "description": "The email template to be used for auto-notifications on new case comments."
+    },
+    "newPassTemplate": {
+      "type": "string",
+      "description": "The email template to be used for auto-notifications on password reset. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "newUserTemplate": {
+      "type": "string",
+      "description": "The email template to be used for auto-notifications on new user creation. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "ownerNotifyTemplate": {
+      "type": "string",
+      "description": "The email template to be used for auto-notifications on owner change. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "selfRegNewUserUrl": {
+      "type": "string",
+      "description": "The URL of the self-registration page."
+    },
+    "selfRegUserDefaultProfile": {
+      "type": "string",
+      "description": "The default profile for self-registered users."
+    },
+    "selfRegUserDefaultRole": {
+      "type": "PortalRoles (enumeration of type string)",
+      "description": "The default role for self-registered users. The valid values are: Executive Manager User PersonAccount"
+    },
+    "selfRegUserTemplate": {
+      "type": "string",
+      "description": "The email template to be used for auto-notifications on self-registration. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "showActionConfirmation": {
+      "type": "boolean",
+      "description": "Determines whether confirmation messages are displayed for actions in the portal."
+    },
+    "stylesheetDocument": {
+      "type": "string",
+      "description": "The Document object to be used as the CSS style sheet for this portal."
+    },
+    "type": {
+      "type": "PortalType (enumeration of type string)",
+      "description": "The type for this portal. The valid values are: CustomerSuccess Partner",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Portal\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"admin\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"defaultLanguage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"emailSenderAddress\" type=\"xsd:string\"/>\n        <xsd:element name=\"emailSenderName\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableSelfCloseCase\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"footerDocument\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"forgotPassTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"headerDocument\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isSelfRegistrationActivated\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"loginHeaderDocument\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"logoDocument\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"logoutUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"newCommentTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"newPassTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"newUserTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"ownerNotifyTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"selfRegNewUserUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"selfRegUserDefaultProfile\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"selfRegUserDefaultRole\" minOccurs=\"0\" type=\"tns:PortalRoles\"/>\n        <xsd:element name=\"selfRegUserTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"showActionConfirmation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"stylesheetDocument\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"type\" type=\"tns:PortalType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"PortalRoles\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Executive\"/>\n    <xsd:enumeration value=\"Manager\"/>\n    <xsd:enumeration value=\"Worker\"/>\n    <xsd:enumeration value=\"PersonAccount\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PortalType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"CustomerSuccess\"/>\n    <xsd:enumeration value=\"Partner\"/>\n    <xsd:enumeration value=\"Network\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here’s a sample XML definition of a portal.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Portal xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <active>true</active>\n    <description>Customer Portal</description>\n    <emailSenderName>rguest@albany.com</emailSenderName>\n    <enableSelfCloseCase>false</enableSelfCloseCase>\n    <forgotPassTemplate>unfiled$public/ChangePwdEmail</forgotPassTemplate>\n    <isSelfRegistrationActivated>false</isSelfRegistrationActivated>\n    <newPassTemplate>unfiled$public/ChangePwdEmail</newPassTemplate>\n    <newUserTemplate>unfiled$public/NewUserEmail</newUserTemplate>\n    <selfRegUserTemplate>unfiled$public/SelfRegUserEmail</selfRegUserTemplate>\n    <showActionConfirmation>false</showActionConfirmation>\n    <type>CustomerSuccess</type>\n</Portal>"
+    }
+  ]
+}

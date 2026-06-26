@@ -1,0 +1,48 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "InboundCertificate - Metadata API",
+  "description": "Represents a mutual authentication certificate that is imported to your Salesforce org.",
+  "file_information": ".inboundCertificate",
+  "directory_location": "inboundCertificates",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "expirationDate": {
+      "type": "date",
+      "description": "The date on which the certificate expires.",
+      "required": true
+    },
+    "issuer": {
+      "type": "string",
+      "description": "The certificate’s issuer.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "A friendly name that you create for the certificate. Limited to 64 characters.",
+      "required": true
+    },
+    "serialId": {
+      "type": "string",
+      "description": "The serial number for the certificate.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"InboundCertificate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"expirationDate\" type=\"xsd:date\"/>\n        <xsd:element name=\"issuer\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"serialId\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an InboundCertificate component.",
+      "code": "<InboundCertificate xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <expirationDate>2021-02-04</expirationDate>\n    <issuer>C=USA,ST=CA,L=San Francisco,O=Salesforce.com,OU=00Dxx0000006Jm7,CN=newTestCert</issuer>\n    <masterLabel>TestMutualAuthCert2</masterLabel>\n    <serialId>29161320252531323757470546071624</serialId>\n</InboundCertificate>"
+    }
+  ]
+}

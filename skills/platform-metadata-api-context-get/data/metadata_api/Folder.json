@@ -1,0 +1,50 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition",
+    "child_metadata_types"
+  ],
+  "title": "Folder - Metadata API",
+  "description": "Represents a folder. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": "Folders are stored in the corresponding component directory of the package. These directories are named documents, email, emailTemplates, reports, and dashboards. Folders don’t have a text file representation—they’re containers for files. For each folder, an accompanying metadata file named FolderName.folderType-meta.xml is created at the same directory level. The FolderName.folderType-meta.xml metadata file contains the metadata information for that folder, such as the accessType. For example, for a documents folder named sampleFolder, there’s a sampleFolder.documentFolder-meta.xml within the documents folder of the package.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "accessType": {
+      "type": "FolderAccessTypes (enumeration of type string)",
+      "description": "The type of access for this folder. Valid values are: Shared. This folder is accessible only by the specified set of users. Public. This folder is accessible by all users, including portal users. PublicInternal. This folder is accessible by all users, excluding portal users. This setting is available for report and dashboard folders in organizations with a partner portal or Customer Portal enabled. Hidden. This folder is hidden from all users.",
+      "required": true
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The name used as a unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from the Metadata component."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the document folder.",
+      "required": true
+    },
+    "publicFolderAccess": {
+      "type": "PublicFolderAccess (enumeration of type string)",
+      "description": "If Public is the value for accessType, this field indicates the type of access all users have to the contents of the folder. Valid values include: ReadOnly. All users can read the contents of the folder, but no user can change the contents. ReadWrite. All users can read or change the contents of the folder."
+    },
+    "sharedTo": {
+      "type": "SharedTo",
+      "description": "Sharing access for the folder. See Sharing Considerations in Salesforce Help."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DashboardFolder\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Folder\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"DocumentFolder\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Folder\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"EmailFolder\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Folder\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"EmailTemplateFolder\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Folder\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Folder\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"accessType\" minOccurs=\"0\" type=\"tns:FolderAccessTypes\"/>\n        <xsd:element name=\"folderShares\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FolderShare\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"publicFolderAccess\" minOccurs=\"0\" type=\"tns:PublicFolderAccess\"/>\n        <xsd:element name=\"sharedTo\" minOccurs=\"0\" type=\"tns:SharedTo\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"FolderAccessTypes\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Shared\"/>\n    <xsd:enumeration value=\"Public\"/>\n    <xsd:enumeration value=\"Hidden\"/>\n    <xsd:enumeration value=\"PublicInternal\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FolderShare\">\n  <xsd:sequence>\n    <xsd:element name=\"accessLevel\" type=\"tns:FolderShareAccessLevel\"/>\n    <xsd:element name=\"sharedTo\" type=\"xsd:string\"/>\n    <xsd:element name=\"sharedToType\" type=\"tns:FolderSharedToType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FolderShareAccessLevel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"View\"/>\n    <xsd:enumeration value=\"EditAllContents\"/>\n    <xsd:enumeration value=\"Manage\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FolderSharedToType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Group\"/>\n    <xsd:enumeration value=\"Role\"/>\n    <xsd:enumeration value=\"RoleAndSubordinates\"/>\n    <xsd:enumeration value=\"RoleAndSubordinatesInternal\"/>\n    <xsd:enumeration value=\"Manager\"/>\n    <xsd:enumeration value=\"ManagerAndSubordinatesInternal\"/>\n    <xsd:enumeration value=\"Organization\"/>\n    <xsd:enumeration value=\"Territory\"/>\n    <xsd:enumeration value=\"TerritoryAndSubordinates\"/>\n    <xsd:enumeration value=\"AllPrmUsers\"/>\n    <xsd:enumeration value=\"User\"/>\n    <xsd:enumeration value=\"PartnerUser\"/>\n    <xsd:enumeration value=\"AllCspUsers\"/>\n    <xsd:enumeration value=\"CustomerPortalUser\"/>\n    <xsd:enumeration value=\"PortalRole\"/>\n    <xsd:enumeration value=\"PortalRoleAndSubordinates\"/>\n    <xsd:enumeration value=\"ChannelProgramGroup\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"PublicFolderAccess\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ReadOnly\"/>\n    <xsd:enumeration value=\"ReadWrite\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ReportFolder\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Folder\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharedTo\">\n  <xsd:sequence>\n    <xsd:element name=\"allCustomerPortalUsers\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"allInternalUsers\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"allPartnerUsers\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"channelProgramGroup\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"channelProgramGroups\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"group\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"groups\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"guestUser\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"managerSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"managers\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"portalRole\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"portalRoleAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"queue\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"role\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"roleAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"roleAndSubordinatesInternal\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"roles\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"rolesAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territories\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territoriesAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territory\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territoryAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is the package manifest definition of a document folder that contains a document: <?xml version=\"1.0\" encoding=\"UTF-8\"?> <Package xmlns=\"http://soap.sforce.com/2006/04/metadata\"> <fullName>basic</fullName> <types> <members>sampleFolder</members> <members>sampleFolder/TestDocument.txt</members> <name>Document</name> </types> <version>66.0</version> </Package> sampleFolder-meta.xml",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DocumentFolder xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <accessType>Public</accessType>\n    <name>sampleFolder</name>\n    <publicFolderAccess>ReadWrite</publicFolderAccess>\n</DocumentFolder>"
+    }
+  ],
+  "child_metadata_types": "This entity contains the following child metadata types:\n\n- FolderShare"
+}

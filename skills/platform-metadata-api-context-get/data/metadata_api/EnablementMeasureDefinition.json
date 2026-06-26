@@ -1,0 +1,139 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EnablementMeasureDefinition - Metadata API",
+  "description": "Represents an Enablement measure, which specifies the job-related activity that a user performs to complete a milestone or outcome in an Enablement program. A measure identifies a source object and optional related objects, with optional field filters and filter logic, for tracking the activity. To avoid deployment errors, deploy measures before you deploy programs.",
+  "file_information": ".enablementMeasureDefinition",
+  "directory_location": "enablementMeasureDefinitions",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "An internal description for the measure to help Enablement admins understand the activity that’s tracked."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "The unique programmatic name for the measure record."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for the measure, which is defined when the measure is created."
+    },
+    "sourceMeasureObject": {
+      "type": "EnablementMeasureSourceObjectDefinition",
+      "required": true,
+      "description": "The source object that tracks the activity you're measuring."
+    },
+    "status": {
+      "type": "EnblProgramMeasureStatus (enumeration of type string)",
+      "required": true,
+      "description": "Indicates whether the measure is published for use in Enablement programs. Values are: Draft—The measure is saved, but not activated for use in programs. Published—The measure is activated for use in programs. In Lightning Experience, this value is Active."
+    }
+  },
+  "sub_types": {
+    "EnablementMeasureSourceObjectDefinition": {
+      "aggregateFieldApiName": {
+        "type": "string",
+        "description": "The unique programmatic name for the field that the aggregateFunction uses for calculating. For example, if you’re measuring how much revenue a sales rep has won, the value of aggregateFunction is Sum and the value of aggregateFieldApiName is Amount, which is the programmatic name of the Amount field on the Opportunity object."
+      },
+      "aggregateFunction": {
+        "type": "EnablementAggregationType (enumeration of type string)",
+        "required": true,
+        "description": "The method for calculating progress towards the milestone or outcome from records that qualify for the measure’s criteria. Values are: Average Count Sum For example, if you’re measuring the number of deals won, the function is Count. If the function is Average or Sum, aggregateFieldApiName is required."
+      },
+      "dateFieldApiName": {
+        "type": "string",
+        "required": true,
+        "description": "The unique programmatic name for the field that defines when users get credit for the activity you’re measuring. For example, if you’re measuring the number of deals won, this value can be ClosedDate, the programmatic name of the Close Date field on the Opportunity object."
+      },
+      "displayFieldApiName": {
+        "type": "string",
+        "required": true,
+        "description": "The unique programmatic name for the field that primarily identifies records that qualify for the activity you’re measuring. For example, if you’re measuring the number of deals won, you’re tracking the Opportunity object, and maybe you want to identify opportunities by their name. In this case, this field can be Name, the programmatic name of the Opportunity Name field on the Opportunity object."
+      },
+      "filterLogic": {
+        "type": "string",
+        "description": "An expression that determines how to evaluate the optional field filters for the object."
+      },
+      "filters": {
+        "type": "EnablementMeasureFilterDefinition[]",
+        "description": "The fields on the object and corresponding field values that further specify criteria for the activity you’re measuring."
+      },
+      "objectApiName": {
+        "type": "string",
+        "required": true,
+        "description": "The unique programmatic name for the source object that tracks the activity you’re measuring. For example, if you’re measuring the number of deals won, this value is Opportunity, the programmatic name of the Opportunity object."
+      },
+      "relatedMeasureObjects": {
+        "type": "EnablementMeasureRelatedObjectDefinition[]",
+        "description": "The optional related objects that further specify criteria for the activity you’re measuring. Related objects can also specify additional filters."
+      },
+      "userFieldApiName": {
+        "type": "string",
+        "required": true,
+        "description": "The unique programmatic name for the field that defines who gets credit for the activity you’re measuring. For example, if you’re measuring the number of deals won by a sales rep, this value can be OwnerId, the developer name of the Opportunity Owner field on the Opportunity object."
+      }
+    },
+    "EnablementMeasureFilterDefinition": {
+      "fieldApiName": {
+        "type": "string",
+        "required": true,
+        "description": "The unique programmatic name for the field that you’re filtering by. For example, if you’re tracking activity on the Opportunity object and want to filter by the Stage field, this value can be StageName."
+      },
+      "fieldValue": {
+        "type": "string",
+        "required": true,
+        "description": "The field value to filter by. For example, if you’re tracking activity on the Opportunity object and want to filter by the Stage field, this value can be Closed Won."
+      },
+      "operator": {
+        "type": "EnablementFilterOperator (enumeration of type string)",
+        "required": true,
+        "description": "The logic for evaluating the specified field and field value. Values are: Contains DoesNotContain DoesNotEqual EndsWith Equals GreaterThan GreaterThanOrEqual In IsNull LessThan LessThanOrEqual NotIn StartsWith"
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "required": true,
+        "description": "A number that specifies the order of the filter, relative to other filters, starting at 1."
+      }
+    },
+    "EnablementMeasureRelatedObjectDefinition": {
+      "filterLogic": {
+        "type": "string",
+        "description": "An expression that determines how to evaluate the optional field filters for the object."
+      },
+      "filters": {
+        "type": "EnablementMeasureFilterDefinition[]",
+        "description": "The fields on the related object and the corresponding field values that further specify criteria for the activity you’re measuring."
+      },
+      "idFieldApiName": {
+        "type": "string",
+        "required": true,
+        "description": "The programmatic name of the field that links the related object to the primary object. For example, if the primary object is Opportunity and the related object is Opportunity Product, this value is OpportunityId, the developer name of the Opportunity field on the Opportunity Product object."
+      },
+      "objectApiName": {
+        "type": "string",
+        "required": true,
+        "description": "The unique programmatic name for the related object. For example, if the related object is Opportunity Product, this value is OpportunityLineItem."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an EnablementMeasureDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EnablementMeasureDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>Total amount in pipeline measure</description>\n    <developerName>TotalAmountInPipeline</developerName>\n    <masterLabel>Total Amount in Pipeline</masterLabel>\n    <status>Draft</status>\n    <sourceMeasureObject>\n        <aggregateFieldApiName>Amount</aggregateFieldApiName>\n        <aggregateFunction>Sum</aggregateFunction>\n        <dateFieldApiName>CreatedDate</dateFieldApiName>\n        <displayFieldApiName>Name</displayFieldApiName>\n        <objectApiName>Opportunity</objectApiName>\n        <userFieldApiName>OwnerId</userFieldApiName>\n        <filters>\n            <fieldApiName>StageName</fieldApiName>\n            <fieldValue>Closed Won</fieldValue>\n            <operator>Equals</operator>\n            <sequenceNumber>1</sequenceNumber>\n        </filters>\n        <relatedMeasureObjects>\n            <objectApiName>OpportunityLineItem</objectApiName>\n            <idFieldApiName>OpportunityId</idFieldApiName>\n            <filterLogic>1 OR 2</filterLogic>\n            <filters>\n                <fieldApiName>UnitPrice</fieldApiName>\n                <fieldValue>10000</fieldValue>\n                <operator>GreaterThan</operator>\n                <sequenceNumber>1</sequenceNumber>\n            </filters>\n            <filters>\n                <fieldApiName>TotalPrice</fieldApiName>\n                <fieldValue>10000</fieldValue>\n                <operator>GreaterThan</operator>\n                <sequenceNumber>2</sequenceNumber>\n            </filters>\n        </relatedMeasureObjects>\n    </sourceMeasureObject>\n</EnablementMeasureDefinition>"
+    }
+  ]
+}

@@ -1,0 +1,261 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AdvAccountForecastSet - Metadata API",
+  "description": "Represents the forecast sets that define the forecast configurations for each business unit or different groups of accounts. With separate forecast sets at account or business unit level, you can focus on account-specific data and manage configuration updates for one business unit without impacting any other business unit’s data.",
+  "file_information": ".advAccountForecastSet",
+  "directory_location": "AdvAccountForecastSet",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "accountFieldName": {
+      "type": "string",
+      "description": "The field name for the account in the advanced account forecast fact record."
+    },
+    "calculationFrequency": {
+      "type": "AdvAcctFcstCalcFrequency (enumeration of type string)",
+      "description": "The frequency at which the forecast set is recalculated automatically.Possible values are: Monthly Quarterly Weekly Yearly The default value is Monthly."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the advanced account forecast set record."
+    },
+    "dimensions": {
+      "type": "AdvAcctForecastDimension[]",
+      "description": "The dimensions selected for an advanced account forecast set to categorize the forecast data."
+    },
+    "displayGroups": {
+      "type": "AdvAcctFrcstDisplayGroup[]",
+      "description": "The information about the groups for the advanced account forecast set measures or dimensions."
+    },
+    "forecastAdjPeriods": {
+      "type": "AdvAcctForecastAdjPeriod[]",
+      "description": "The details about the adjustment period of the advanced account forecast values."
+    },
+    "forecastFactObjectName": {
+      "type": "string",
+      "required": true,
+      "description": "The API name of the object that contains the advanced forecast fact records."
+    },
+    "forecastFormulas": {
+      "type": "AdvAccountForecastFormula[]",
+      "description": "The formulas based on which forecast values are calculated."
+    },
+    "forecastPeriodGroupName": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the advanced account forecast period group record."
+    },
+    "forecastQuantityFieldName": {
+      "type": "string",
+      "description": "The field name for the forecast quantity in the advanced account forecast fact record."
+    },
+    "forecastRevenueFieldName": {
+      "type": "string",
+      "description": "The field name for the forecast revenue in the advanced account forecast record."
+    },
+    "forecastSetFieldName": {
+      "type": "string",
+      "description": "The field name for the Forecast Set ID in the advanced account forecast fact record."
+    },
+    "forecastSetName": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the advanced account forecast set record."
+    },
+    "forecastStatusFieldName": {
+      "type": "string",
+      "description": "The field name for the status in the advanced account forecast fact record."
+    },
+    "generationDpeDefName": {
+      "type": "string",
+      "description": "The name of the data processing engine (DPE) definition that’s used to generate advanced account forecast fact records."
+    },
+    "measureDefinitions": {
+      "type": "AdvAcctForecastMeasureDef[]",
+      "description": "The measures to display in the advanced account forecasts grid for the forecast set."
+    },
+    "periodFieldName": {
+      "type": "string",
+      "description": "The field name for the period in the advanced account forecast fact record."
+    },
+    "recalculateDpeDefName": {
+      "type": "string",
+      "description": "The name of the data processing engine definition that’s used to recalculate the advanced account forecast fact records."
+    },
+    "regenerationDpeDefName": {
+      "type": "string",
+      "description": "The name of the data processing engine definition that’s used to regenerate the advanced account forecast fact records."
+    },
+    "rolloverDpeDefName": {
+      "type": "string",
+      "description": "The data processing engine definition that’s used to generate the rollover advanced account forecast fact records."
+    },
+    "rolloverFrequency": {
+      "type": "AdvAcctFcstCalcFrequency (enumeration of type string)",
+      "description": "The frequency of rollover of the advanced account forecast records.Possible values are: Monthly Quarterly Weekly Yearly The default value is Monthly."
+    },
+    "status": {
+      "type": "AdvAccForecastSetStatus (enumeration of type string)",
+      "required": true,
+      "description": "The status of the advanced account forecast set.Possible values are: Active Inactive"
+    }
+  },
+  "sub_types": {
+    "AdvAccountForecastFormula": {
+      "endPeriod": {
+        "type": "int",
+        "required": true,
+        "description": "The period until when the forecast formula is applicable."
+      },
+      "formulaExpression": {
+        "type": "string",
+        "required": true,
+        "description": "The formula based on which forecast values are calculated."
+      },
+      "formulaType": {
+        "type": "AdvAcctFcstFormulaType (enumeration of type string)",
+        "required": true,
+        "description": "Specifies the calculation type for the formula.Possible values are: QUANTITY REVENUE The default value is QUANTITY."
+      },
+      "startPeriod": {
+        "type": "int",
+        "required": true,
+        "description": "The period from when the forecast formula is applicable."
+      }
+    },
+    "AdvAcctForecastAdjPeriod": {
+      "adjustmentDayCount": {
+        "type": "int",
+        "required": true,
+        "description": "The number of days during which you can make forecast adjustments."
+      },
+      "frequency": {
+        "type": "PeriodTypes (enumeration of type string)",
+        "required": true,
+        "description": "The frequency that’s applicable to make any forecast adjustments.Possible values are: Month Quarter Week Year The default value is Month."
+      },
+      "profileName": {
+        "type": "string",
+        "description": "The name of the profile with which you can adjust the forecast set."
+      },
+      "startDay": {
+        "type": "int",
+        "required": true,
+        "description": "The start date for forecast adjustments."
+      }
+    },
+    "AdvAcctForecastDimension": {
+      "advAcctForecastDimName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the advanced account forecast dimension."
+      },
+      "dimensionFieldName": {
+        "type": "string",
+        "required": true,
+        "description": "The API name of the field for the dimension in the custom object that contains the generated advanced account forecast records."
+      },
+      "dimensionSourceName": {
+        "type": "string",
+        "description": "The name of the dimension source associated with the advanced account forecast set dimension record."
+      },
+      "hierarchySequenceNumber": {
+        "type": "int",
+        "required": true,
+        "description": "The sequence number of the dimension source associated with the forecast set."
+      }
+    },
+    "AdvAcctForecastMeasureDef": {
+      "advAcctForecastMeasureDefName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the definition for the advanced account forecast measure."
+      },
+      "aggregationType": {
+        "type": "AdvAcctFcstAggregationType (enumeration of type string)",
+        "required": true,
+        "description": "The type of aggregation that’s used for calculating the advanced account forecast values.Possible values are: AVERAGE MAXIMUM MINIMUM SUM The default value is SUM."
+      },
+      "computationMethod": {
+        "type": "AdvAcctFcstComputationMethod (enumeration of type string)",
+        "required": true,
+        "description": "The method that’s used for calculating the advanced account forecast values.Values are: CUSTOM DATA_PROCESSING_ENGINE_DEFINITION FORMULA The default value is DATA_PROCESSING_ENGINE_DEFINITION."
+      },
+      "forecastDataMeasureName": {
+        "type": "string",
+        "required": true,
+        "description": "The field of the facts object used for the advanced account forecast measure."
+      },
+      "forecastMeasureName": {
+        "type": "string",
+        "required": true,
+        "description": "The name for the advanced account forecast measure to show on UI."
+      },
+      "forecastMeasureType": {
+        "type": "AdvAcctFcstMeasureType (enumeration of type string)",
+        "required": true,
+        "description": "The measure type that’s used for the generated advanced forecast values.Possible values are: QUANTITY REVENUE The default value is QUANTITY."
+      },
+      "isAdjustmentTracked": {
+        "type": "boolean",
+        "description": "Indicates whether the adjustments made to the advanced account forecast values for this metric are tracked (true) or not (false)."
+      }
+    },
+    "AdvAcctFrcstDisplayGroup": {
+      "advAcctFrcstDisplayGroupName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the advanced account forecast display group."
+      },
+      "displayGroupItems": {
+        "type": "AdvAcctFrcstDplyGroupItem[]",
+        "description": "The items associated with a display group for an advanced account forecast set."
+      },
+      "displayGroupType": {
+        "type": "AdvAcctFrcstDisplayGroupType (enumeration of type string)",
+        "description": "The category of the display group.Possible value is: MEASURE"
+      },
+      "isDefault": {
+        "type": "boolean",
+        "description": "Indicates whether the display group is the default group (true) or not (false)."
+      },
+      "userProfileName": {
+        "type": "string",
+        "description": "The name of the profile for which the display group is applicable."
+      }
+    },
+    "AdvAcctFrcstDplyGroupItem": {
+      "advAcctFrcstDplyGroupItemName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the advanced account forecast display group that’s associated with the group item."
+      },
+      "displayOrder": {
+        "type": "int",
+        "required": true,
+        "description": "The display order of the display group item."
+      },
+      "measureReferenceName": {
+        "type": "string",
+        "description": "The ID of the measure associated with the display group item."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an AdvAccountForecastSet component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AdvAccountForecastSet xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n    <calculationFrequency>Quarterly</calculationFrequency>\n    <forecastAdjPeriods>\n        <adjustmentDayCount>5</adjustmentDayCount>\n        <frequency>Quarter</frequency>\n        <profileName xsi:nil=\"true\"/>\n        <startDay>1</startDay>\n    </forecastAdjPeriods>\n    <forecastFormulas>\n        <endPeriod>12</endPeriod>\n        <formulaExpression>6</formulaExpression>\n        <startPeriod>2</startPeriod>\n        <formulaType>QUANTITY</formulaType>\n    </forecastFormulas>\n    <forecastPeriodGroupName>PeriodGroup1</forecastPeriodGroupName>\n    <accountFieldName>Account</accountFieldName>\n    <periodFieldName>Period</periodFieldName>\n    <forecastQuantityFieldName>ForecastedQuantity</forecastQuantityFieldName>\n    <forecastRevenueFieldName>ForecastedRevenue</forecastRevenueFieldName>\n    <forecastFactObjectName>AdvAccountForecastFact</forecastFactObjectName>\n    <forecastSetFieldName>AdvAcctForecastSetPartner</forecastSetFieldName>\n    <rolloverFrequency>Monthly</rolloverFrequency>\n    <forecastStatusFieldName>Status</forecastStatusFieldName>\n    <description>sample forecast set</description>\n    <regenerationDpeDefName xsi:nil=\"true\"/>\n    <rolloverDpeDefName xsi:nil=\"true\"/>\n    <recalculateDpeDefName xsi:nil=\"true\"/>\n    <generationDpeDefName xsi:nil=\"true\"/>\n    <status>Inactive</status>\n    <forecastSetName>Forecast Set 1</forecastSetName>\n    <dimensions>\n        <dimensionFieldName>Account</dimensionFieldName>\n        <dimensionSourceName>DimSource1</dimensionSourceName>\n        <hierarchySequenceNumber>1</hierarchySequenceNumber>\n        <advAcctForecastDimName>DimensionName</advAcctForecastDimName>\n    </dimensions>\n    <measureDefinitions>\n        <forecastDataMeasureName>MeasureName</forecastDataMeasureName>\n        <advAcctForecastMeasureDefName>Sample Def Name</advAcctForecastMeasureDefName>\n        <isAdjustmentTracked>true</isAdjustmentTracked>\n        <forecastMeasureName>Samplemeasure name</forecastMeasureName>\n        <aggregationType>MINIMUM</aggregationType>\n        <computationMethod>DATA_PROCESSING_ENGINE_DEFINITION</computationMethod>\n        <forecastMeasureType>QUANTITY</forecastMeasureType>\n    </measureDefinitions>\n    <displayGroups>\n        <advAcctFrcstDisplayGroupName>Sample Measure Group</advAcctFrcstDisplayGroupName>\n        <displayGroupType>MEASURE</displayGroupType>\n        <isDefault>false</isDefault>\n        <userProfileName xsi:nil=\"true\"/>\n        <displayGroupItems>\n            <advAcctFrcstDplyGroupItemName>Sample Quantity</advAcctFrcstDplyGroupItemName>\n            <measureReferenceName>Sample Def Name</measureReferenceName>\n            <displayOrder>1</displayOrder>\n        </displayGroupItems>\n    </displayGroups>\n</AdvAccountForecastSet>"
+    }
+  ]
+}

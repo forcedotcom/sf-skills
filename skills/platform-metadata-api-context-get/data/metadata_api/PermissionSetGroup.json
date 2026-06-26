@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PermissionSetGroup - Metadata API",
+  "description": "Represents a group of permission sets and the permissions within them. Use permission set groups to organize permissions based on job functions or tasks. Then, you can package the groups as needed.",
+  "file_information": ".permissionsetgroup",
+  "directory_location": "permissionsetgroups",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The permission set group description provided by the permission set group creator."
+    },
+    "hasActivationRequired": {
+      "type": "boolean",
+      "description": "Indicates whether the permission set group requires an associated active session (true) or not (false). The default value is false. This field is available in API version 53.0 and later."
+    },
+    "label": {
+      "type": "string",
+      "description": "The permission set group label.",
+      "required": true
+    },
+    "mutingPermissionSets": {
+      "type": "string",
+      "description": "A permission set containing permissions to disable in the permission set group. This field is available in API version 46.0 and later."
+    },
+    "permissionSets": {
+      "type": "string",
+      "description": "A permission set or permission sets included in the permission set group."
+    },
+    "status": {
+      "type": "string",
+      "description": "Indicates permission set group recalculation status. Valid values are: Updated—The group is current. Outdated—The group requires recalculation. Updating—The group is in recalculation mode. Failed—The group recalculation failed."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PermissionSetGroup\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"hasActivationRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"mutingPermissionSets\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"permissionSets\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"status\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "When adding a permission set group, you can do something like this. Individual permissions are included in the permission set referenced, not in the permission set group.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PermissionSetGroup xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n     <fullName>Finance_Mgmt_PermSetGroup</fullName>\n     <description>Finance_Mgmt_PermSetGroup desc</description>\n     <label>Finance_Mgmt_PermSetGroup</label>\n     <permissionSets>Billing_PS</permissionSets>\n</PermissionSetGroup>"
+    },
+    {
+      "description": "The permission set Billing_PS contains the individual permissions included in Finance_Mgmt_PermSetGroup.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PermissionSet xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n     <fullName>Billing_PS</fullName>\n     <description>Billing_PS</description>\n     <label>Billing_PS</label>\n     <hasActivationRequired>false</hasActivationRequired>\n     <license>Salesforce</license>\n     <userPermissions>\n          <enabled>true</enabled>\n          <name>ViewSetup</name>\n     </userPermissions>\n     <userPermissions>\n          <enabled>true</enabled>\n          <name>ViewRoles</name>\n     </userPermissions>\n     <userPermissions>\n          <enabled>true</enabled>\n          <name>EditBillingInfo</name>\n    </userPermissions>\n</PermissionSet>"
+    }
+  ]
+}

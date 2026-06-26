@@ -1,0 +1,125 @@
+name: Picklist
+description: A dropdown selection component that presents users with a list of predefined options, similar to select but with
+  enhanced styling and functionality.
+category: Input
+slds_classes:
+  root: slds-picklist
+  elements:
+  - class: slds-picklist__label
+    description: Label for the picklist
+    purpose: Describes the purpose of the selection
+  - class: slds-picklist__item
+    description: Individual option item
+    purpose: Represents a single selectable option
+  modifiers:
+  - class: slds-picklist_fluid
+    description: Full-width picklist variant
+    usage: Picklist that expands to container width
+  states:
+  - class: slds-is-open
+    description: Open dropdown state
+    trigger: When options dropdown is visible
+  - class: slds-is-selected
+    description: Selected option state
+    trigger: Currently selected option(s)
+variants:
+- name: Base
+  description: Standard single-select picklist
+  classes:
+  - slds-picklist
+  usage_context: Default picklist for option selection
+  differences: Dropdown button with selectable options list
+- name: Multi-select
+  description: Picklist allowing multiple selections
+  classes:
+  - slds-picklist
+  usage_context: When users can select multiple options
+  differences: Supports multiple selection with checkboxes
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component - similar functionality through lightning-combobox or custom implementation
+accessibility:
+  keyboard_support:
+  - Tab to focus picklist trigger
+  - Enter/Space to open dropdown
+  - Arrow keys to navigate options
+  - Enter/Space to select options
+  - Escape to close dropdown
+  screen_reader:
+  - Picklist purpose and current selection announced
+  - Option list and navigation communicated
+  - Selection changes announced
+  - Multi-select state indicated when applicable
+  aria_attributes:
+  - aria-haspopup='listbox' for dropdown trigger
+  - aria-expanded for dropdown state
+  - role='listbox' for options container
+  - role='option' for individual choices
+  - aria-selected for chosen options
+  - aria-multiselectable for multi-select variant
+usage_guidelines:
+  when_to_use:
+  - For selecting from predefined option lists
+  - When enhanced styling over native select is needed
+  - For multi-select scenarios
+  - When custom option formatting is required
+  when_not_to_use:
+  - For simple cases where native select suffices
+  - When search functionality is needed (use combobox)
+  - For very large option lists (consider combobox)
+  best_practices:
+  - Use clear, descriptive option labels
+  - Order options logically
+  - Provide appropriate default selections
+  - Handle empty states gracefully
+  - Support keyboard navigation fully
+  common_mistakes:
+  - Poor option ordering or grouping
+  - Unclear or ambiguous option labels
+  - Missing keyboard navigation support
+  - Inadequate multi-select feedback
+code_examples:
+- title: Basic Picklist
+  description: Basic picklist with three options
+  code: "<div class=\"slds-picklist\">\n      <button class=\"slds-button slds-button_neutral slds-picklist__label\" aria-haspopup=\"\
+    listbox\" aria-expanded=\"false\">\n        <span class=\"slds-truncate\" title=\"Choose an option\">Choose an option</span>\n\
+    \        <svg class=\"slds-button__icon slds-button__icon_right\" aria-hidden=\"true\">\n          <use xlink:href=\"\
+    /assets/icons/utility-sprite/svg/symbols.svg#down\"></use>\n        </svg>\n      </button>\n      <div class=\"slds-dropdown\
+    \ slds-dropdown_left\">\n        <ul class=\"\" role=\"listbox\">\n          <li class=\"slds-dropdown__item slds-picklist__item\"\
+    \ role=\"option\">\n            <a href=\"#\" role=\"menuitem\">\n              <span class=\"slds-truncate\" title=\"\
+    Option One\">Option One</span>\n            </a>\n          </li>\n          <li class=\"slds-dropdown__item slds-picklist__item\"\
+    \ role=\"option\">\n            <a href=\"#\" role=\"menuitem\">\n              <span class=\"slds-truncate\" title=\"\
+    Option Two\">Option Two</span>\n            </a>\n          </li>\n          <li class=\"slds-dropdown__item slds-picklist__item\"\
+    \ role=\"option\">\n            <a href=\"#\" role=\"menuitem\">\n              <span class=\"slds-truncate\" title=\"\
+    Option Three\">Option Three</span>\n            </a>\n          </li>\n        </ul>\n      </div>\n      </div>\n"
+dependencies:
+  css_files:
+  - picklist.css
+  - dropdown.css
+  - button.css
+  javascript:
+  - picklist.js
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - dropdown
+  - button
+  - truncate
+related_components:
+- name: Select
+  relationship: alternative
+  description: Native alternative for simple option selection
+- name: Combobox
+  relationship: alternative
+  description: Enhanced version with search capabilities
+- name: Radio Group
+  relationship: alternative
+  description: Alternative for mutually exclusive options
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/picklist/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

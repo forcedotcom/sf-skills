@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "BotSettings - Metadata API",
+  "description": "Represents an organization’s Einstein Bot settings, such as whether or not Einstein Bots is enabled. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".bot",
+  "directory_location": "bot",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableBots": {
+      "type": "boolean",
+      "description": "Indicates whether Einstein Bots is enabled (true) or not (false)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"BotSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableBots\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a BotSetting. This example has been trimmed to make it easier to read.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<BotSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableBots>true</enableBots>\n</BotSettings>"
+    }
+  ]
+}

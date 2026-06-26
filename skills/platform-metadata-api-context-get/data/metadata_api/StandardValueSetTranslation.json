@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "StandardValueSetTranslation - Metadata API",
+  "description": "Contains details for a standard picklist translation. It returns a translated standard value set.This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".standardValueSetTranslation",
+  "directory_location": "standardValueSetTranslations",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "valueTranslation": {
+      "type": "ValueTranslation[]",
+      "description": "A list of values from global value sets to be translated."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"StandardValueSetTranslation\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"valueTranslation\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ValueTranslation\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ValueTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"translation\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a StandardValueSetTranslation component. When a value isn’t translated, its translation becomes a comment that’s paired with its label.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<StandardValueSetTranslation xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <valueTranslation>\n        <masterLabel>Cold</masterLabel>\n        <translation><!-- Cold --></translation>\n    </valueTranslation>\n    <valueTranslation>\n        <masterLabel>Hot</masterLabel>\n        <translation><!-- Hot --></translation>\n    </valueTranslation>\n    <valueTranslation>\n        <masterLabel>Warm</masterLabel>\n        <translation><!-- Warm --></translation>\n    </valueTranslation>\n</StandardValueSetTranslation>"
+    }
+  ]
+}

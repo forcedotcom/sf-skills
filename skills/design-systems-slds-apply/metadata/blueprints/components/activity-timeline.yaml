@@ -1,0 +1,92 @@
+name: Activity Timeline
+description: A visual representation of events arranged in chronological order, used to display a sequence of activities or
+  milestones with associated metadata.
+category: Display
+slds_classes:
+  root: ''
+  elements:
+  - class: slds-timeline__date
+    description: Date/time display for timeline item
+    purpose: Shows when the timeline event occurred
+  - class: slds-timeline__actions
+    description: Actions container for timeline item
+    purpose: Contains interactive elements like buttons or links
+  modifiers: []
+  states: []
+variants:
+- name: Base
+  description: Standard activity timeline with chronological events
+  classes: []
+  usage_context: Default implementation for showing activity history
+  differences: Vertical timeline with media objects for each event
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component equivalent - SLDS-only pattern
+accessibility:
+  keyboard_support:
+  - Tab navigation through interactive elements
+  - Focus management for embedded actions
+  screen_reader:
+  - Chronological order conveyed through markup structure
+  - Event details properly associated with headings
+  - Time/date information announced with events
+  aria_attributes:
+  - aria-labelledby for timeline item titles
+  - role='list' and role='listitem' for semantic structure
+  - aria-describedby for additional event details
+usage_guidelines:
+  when_to_use:
+  - To display chronological sequence of events or activities
+  - For showing audit trails or activity logs
+  - When temporal relationship between events is important
+  - To provide historical context for records or objects
+  when_not_to_use:
+  - For non-chronological lists (use regular lists instead)
+  - When temporal order is not relevant
+  - For simple status updates (use feeds instead)
+  - When space is extremely constrained
+  best_practices:
+  - Order events chronologically (newest first or oldest first consistently)
+  - Use meaningful icons to categorize different event types
+  - Keep event descriptions concise but informative
+  - Include relevant timestamps
+  - Group related events when appropriate
+  common_mistakes:
+  - Mixing chronological orders inconsistently
+  - Using unclear or non-descriptive event labels
+  - Omitting important temporal information
+  - Making timeline items too dense with information
+code_examples:
+- title: Basic Timeline Item
+  code: "<div class=\"\">\n      <div class=\"\">\n        <span class=\"\">\n          <span class=\"\">\n            <svg\
+    \ class=\"slds-icon slds-icon_x-small\" aria-hidden=\"true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#email\"\
+    ></use>\n            </svg>\n          </span>\n          <div class=\"\">\n            <h3 class=\"\">Email sent</h3>\n\
+    \            <p class=\"slds-timeline__date\">Today at 2:30 PM</p>\n            <div class=\"\">\n              <p>Follow-up\
+    \ email sent to customer regarding their inquiry.</p>\n            </div>\n          </div>\n        </span>\n      </div>\n\
+    \      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - timeline.css
+  - media-objects.css
+  javascript: []
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - media-objects
+  - icons
+related_components:
+- name: Feeds
+  relationship: alternative
+  description: Alternative for activity streams with less temporal emphasis
+- name: Path
+  relationship: similar
+  description: Similar concept for process progression
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/activity-timeline/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

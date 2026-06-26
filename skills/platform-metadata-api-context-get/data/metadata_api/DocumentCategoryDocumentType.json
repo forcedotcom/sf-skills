@@ -1,0 +1,48 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DocumentCategoryDocumentType - Metadata API",
+  "description": "Represents the junction between a DocumentCategory and a DocumentType. Puts a DocumentType in a DocumentCategory.",
+  "file_information": ".documentCategoryDocumentType",
+  "directory_location": "documentCategoryDocumentTypes",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "documentCategory": {
+      "type": "string",
+      "required": true,
+      "description": "The master label of the related DocumentCategory."
+    },
+    "documentType": {
+      "type": "string",
+      "required": true,
+      "description": "The master label of the related DocumentType."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type. The default value is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The master label of the DocumentCategoryDocumentType. This internal label doesn’t get translated."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DocumentCategoryDocumentType\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"documentCategory\" type=\"xsd:string\"/>\n        <xsd:element name=\"documentType\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DocumentCategoryDocumentType component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DocumentCategoryDocumentType xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <documentCategory>Address_Proof</documentCategory>\n    <documentType>Utility_Bill</documentType>\n    <masterLabel>junction1</masterLabel>\n</DocumentCategoryDocumentType>"
+    }
+  ]
+}

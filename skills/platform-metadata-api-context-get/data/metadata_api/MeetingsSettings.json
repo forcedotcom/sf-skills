@@ -1,0 +1,36 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "MeetingsSettings - Metadata API",
+  "description": "Represents the settings to enable Salesforce Meetings and the integration with Zoom video conferencing.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableSalesforceMeetings": {
+      "type": "boolean",
+      "description": "Indicates whether the Salesforce Meetings feature is enabled (true) or not (false). When set to true, Salesforce admins can assign the Salesforce Meetings user permission to grant users access to the Meeting Digest and other Salesforce Meetings features. The default value is false."
+    },
+    "enableSalesforceMeetingsSyncCheck": {
+      "type": "boolean",
+      "description": "Indicates whether your company uses an activity sync solution (true) or hasn’t made that indication (false). Indicating your company uses an activity solution such as Einstein Activity Capture is required to enable Salesforce Meetings. The default value is false."
+    },
+    "enableZoomVideoConference": {
+      "type": "boolean",
+      "description": "Indicates whether users can connect their company Zoom accounts to Salesforce (true) or not (false). When set to true, Zoom can be added as a recording in Einstein Conversation Insights. The default value is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"MeetingsSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableSalesforceMeetings\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSalesforceMeetingsSyncCheck\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableZoomVideoConference\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a MeetingsSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MeetingsSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n        <enableSalesforceMeetings>true</enableSalesforceMeetings>\n        <enableSalesforceMeetingsSyncCheck>true</enableSalesforceMeetingsSyncCheck>\n        <enableZoomVideoConference>false</enableZoomVideoConference>\n</MeetingsSettings>"
+    }
+  ]
+}

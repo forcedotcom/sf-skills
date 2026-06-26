@@ -1,0 +1,71 @@
+<template>
+    <lightning-card title="Workspace Tab Manager" icon-name="utility:tabset">
+        <div class="slds-p-horizontal_medium">
+            <!-- Console Detection -->
+            <template lwc:if={isNotConsole}>
+                <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+                    <span class="slds-assistive-text">Warning</span>
+                    <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                    <h2>Not in Console App</h2>
+                    <p class="slds-m-top_x-small">
+                        This component requires a Console App (Service Console or Sales Console) to function.
+                        Tab management APIs are not available in standard Lightning pages.
+                    </p>
+                </div>
+            </template>
+
+            <!-- Console Context UI -->
+            <template lwc:if={isConsole}>
+                <!-- Current Tab Info -->
+                <div class="slds-box slds-m-bottom_medium">
+                    <h3 class="slds-text-heading_small slds-m-bottom_small">Current Tab</h3>
+                    <dl class="slds-list_horizontal">
+                        <dt class="slds-item_label">Tab ID:</dt>
+                        <dd class="slds-item_detail">{currentTabId}</dd>
+                        <dt class="slds-item_label">Label:</dt>
+                        <dd class="slds-item_detail">{currentTabLabel}</dd>
+                    </dl>
+                </div>
+
+                <!-- Tab Actions -->
+                <div class="slds-button-group" role="group">
+                    <lightning-button
+                        label="Refresh Tab"
+                        onclick={handleRefresh}
+                        icon-name="utility:refresh">
+                    </lightning-button>
+                    <lightning-button
+                        label="Get All Tabs"
+                        onclick={handleGetAllTabs}
+                        icon-name="utility:list">
+                    </lightning-button>
+                </div>
+
+                <!-- All Tabs List -->
+                <template lwc:if={allTabs.length}>
+                    <h3 class="slds-text-heading_small slds-m-top_medium slds-m-bottom_small">
+                        Open Tabs ({allTabs.length})
+                    </h3>
+                    <ul class="slds-has-dividers_bottom-space">
+                        <template for:each={allTabs} for:item="tab">
+                            <li key={tab.tabId} class="slds-item">
+                                <div class="slds-grid slds-grid_align-spread">
+                                    <span class="slds-truncate">{tab.title}</span>
+                                    <span class="slds-text-color_weak slds-text-body_small">{tab.tabId}</span>
+                                </div>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+
+                <!-- Error Display -->
+                <template lwc:if={error}>
+                    <div class="slds-notify slds-notify_alert slds-alert_error slds-m-top_medium" role="alert">
+                        <span class="slds-assistive-text">Error</span>
+                        <h2>{error}</h2>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

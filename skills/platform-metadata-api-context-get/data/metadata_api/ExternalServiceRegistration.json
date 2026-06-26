@@ -1,0 +1,121 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExternalServiceRegistration - Metadata API",
+  "description": "Represents the external service configuration for an org.",
+  "file_information": ".externalServiceRegistration",
+  "directory_location": "externalServiceRegistrations",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "catalogedApiVersion": {
+      "type": "string",
+      "description": "A version of an API brought into API Catalog from an external source and managed for consumption in Salesforce. Available in API version 65.0 and later."
+    },
+    "description": {
+      "type": "string",
+      "description": "The external service description defined when the service is created."
+    },
+    "label": {
+      "type": "string",
+      "description": "The service name as it appears on the External Services wizard.",
+      "required": true
+    },
+    "namedCredential": {
+      "type": "string",
+      "description": "The reference by name to be used for the service."
+    },
+    "namedCredentialReferenceId": {
+      "type": "reference",
+      "description": "The reference by ID to be used for the named credential. When used, supersedes namedCredential. Available in API version 57.0 and later."
+    },
+    "operations": {
+      "type": "ExternalServiceOperation[]",
+      "description": "Items defined for this operation."
+    },
+    "registrationProvider": {
+      "type": "string",
+      "description": "A reference to the registration provider. If the registrationProviderType is ExternalConnector, this field contains the external connector name. If the registrationProviderType is Heroku, this field contains the HerokuAppLink ID. For any other registrationProviderType value, this field is blank and reserved for future use."
+    },
+    "registrationProviderAsset": {
+      "type": "string",
+      "description": "A polymorphic foreign key field that contains the name of the asset related to the external service registration. For an external service registration created for a named query, this field contains the named query API name. For an external service registration created for an Apex class that has methods exposed as REST resources or methods that are Aura-enabled. This field contains the Apex class name. Available in API version 66.0 and later."
+    },
+    "registrationProviderType": {
+      "type": "ExternalServiceRegistrationProviderType (enumeration of type string)",
+      "description": "Indicates the source of the API specification registered with the External Services wizard. Valid values include: AgentActionOutputs—Reserved for internal use. AgentToAgent—The API specification represents the external service schemas that enable communication between AI agents. Available in API version 66.0 and later. Anypoint—The API specification is managed in the MuleSoft Anypoint Platform. Available in API version 63.0 and later. AnypointPublic—Reserved for internal use. ApexRest—The API specification was created from an Apex REST class. Available in API version 63.0 and later. AuraEnabled—The API specification was created from an Apex class that has AuraEnabled methods. Available in API version 65.0 and later. CodeExtension—Reserved for internal use. ContextDef—The API specification used to create dynamic Apex classes for the related context definition structure. Available in API version 66.0 and later. Custom—The API specification was manually configured. CustomExternalConnector—The API specification represents a custom partner-created version of an external connection. Available in API version 66.0 and later. DocumentProcessing—Reserved for internal use. ExternalConnector—The API specification represents an external connection. Heroku—The API specification represents a Heroku app. MuleSoft—The API specification was selected from MuleSoft. Use Anypoint for MuleSoft for Agentforce: API Catalog MuleSoft sources. NamedQuery—The API specification represents a named query REST endpoint. Available in API version 64.0 and later. SchemaInferred—The API specification was provided during the HTTP Callout configuration process. Available in API version 57.0 and later. Standard—The API specification was defined when an external service was created."
+    },
+    "schema": {
+      "type": "string",
+      "description": "The content of the OpenAPI 2.0.x or OpenAPI 3.0.x schema in JSON or YAML format. Nillable."
+    },
+    "schemaAbsoluteUrl": {
+      "type": "string",
+      "description": "The full, absolute URL to the schema. Populated when a user selects Absolute URL during registration."
+    },
+    "schemaType": {
+      "type": "string",
+      "description": "The schema format. OpenAPI for Open API 2.0.x or Open API 3.0.x. If not specified, schema type is derived based on the schema content. Nillable."
+    },
+    "schemaUploadFileExtension": {
+      "type": "string",
+      "description": "The file’s extension. Populated when a user selects Upload from local during registration."
+    },
+    "schemaUploadFileName": {
+      "type": "string",
+      "description": "The file’s name without the file extension. Populated when a user selects Upload from local during registration."
+    },
+    "schemaUrl": {
+      "type": "string",
+      "description": "The path must begin with \"/\" and be relative to the named credential endpoint."
+    },
+    "serviceBinding": {
+      "type": "string",
+      "description": "Used to map non-supported media types for this external service registration to supported media types. Nillable. Available in API version 53.0 and later."
+    },
+    "serviceName": {
+      "type": "string",
+      "description": "The name of the cataloged API service that this external service registration belongs to. Available in API version 63.0 and later. This field was removed in API version 65.0."
+    },
+    "status": {
+      "type": "string",
+      "description": "Indicates service registration status. Valid values include: complete—The API spec is valid and the registration is ready to use. incomplete—The service registration hasn’t completed.",
+      "required": true
+    },
+    "systemVersion": {
+      "type": "int",
+      "description": "The internal version of External Services that is used to register the API specification. Available in API version 55.0 and later. The system versions are independent of API versions. 1—Retired legacy External Services. 2—External Services with limitations on object and operation name length. 3—External Services automatically derives developer names fitting within 80 characters. 4—Removed the default character set when making a callout to an external service. To specify a character set, include it in the OpenAPI specification, for example: contentType: application/xml; charset=utf-8. 5—Introduced asynchronous callouts with callbacks from Apex. 6—Added support for OpenAPI Specification (OAS) discriminator mapping. 7—Added support for property names that begin with a number. For input parameters on invocable actions, encodes the keyword connection as reconnection. 8—Current version. This field is read-only. You can’t upgrade an external service to a newer system version. To take advantage of functionality in a newer system version, you must create an external service using the same OpenAPI spec and then replace any references to the old external service. See Register an External Service in Salesforce Help."
+    }
+  },
+  "sub_types": {
+    "ExternalServiceOperation": {
+      "active": {
+        "type": "boolean",
+        "description": "Indicates whether the operation is active (true), or inactive (false).",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The operation’s name.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ExternalServiceOperation\">\n  <xsd:sequence>\n    <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ExternalServiceRegistration\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"catalogedApiVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"namedCredential\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"namedCredentialReference\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"operations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ExternalServiceOperation\"/>\n        <xsd:element name=\"providerAssetEndpoint\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"registrationProvider\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"registrationProviderAsset\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"registrationProviderType\" minOccurs=\"0\" type=\"tns:ExternalServiceRegistrationProviderType\"/>\n        <xsd:element name=\"schema\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"schemaAbsoluteUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"schemaType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"schemaUploadFileExtension\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"schemaUploadFileName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"schemaUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"serviceBinding\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"serviceDescriptor\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"status\" type=\"xsd:string\"/>\n        <xsd:element name=\"systemVersion\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ExternalServiceRegistrationProviderType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"MuleSoft\"/>\n    <xsd:enumeration value=\"Custom\"/>\n    <xsd:enumeration value=\"SchemaInferred\"/>\n    <xsd:enumeration value=\"Standard\"/>\n    <xsd:enumeration value=\"ExternalConnector\"/>\n    <xsd:enumeration value=\"CustomExternalConnector\"/>\n    <xsd:enumeration value=\"Heroku\"/>\n    <xsd:enumeration value=\"Anypoint\"/>\n    <xsd:enumeration value=\"ApexRest\"/>\n    <xsd:enumeration value=\"AgentActionOutputs\"/>\n    <xsd:enumeration value=\"IntegProcd\"/>\n    <xsd:enumeration value=\"DocumentProcessing\"/>\n    <xsd:enumeration value=\"NamedQuery\"/>\n    <xsd:enumeration value=\"ModelContextProtocol\"/>\n    <xsd:enumeration value=\"AuraEnabled\"/>\n    <xsd:enumeration value=\"ContextDef\"/>\n    <xsd:enumeration value=\"AgentToAgent\"/>\n    <xsd:enumeration value=\"AnypointPublic\"/>\n    <xsd:enumeration value=\"CodeExtension\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ExternalServiceRegistration component that references an external credit service.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ExternalServiceRegistration xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <label>BankService</label>\n  <namedCredential>Bank</namedCredential>\n  <schema>{\n  \"swagger\": \"2.0\",\n  \"basePath\": \"/\",\n  \"info\": {\n    \"version\": \"1.0\",\n    \"title\": \"External Service for demo bank\",\n    \"description\": \"### External Service for demo bank\",\n    \"x-vcap-service-name\": \"DemoBankRestServices\"\n  },\n  ...\n  \"paths\": {\n  \"/accounts/{accountName}\": {\n      ...\n    }\n  },\n  \"definitions\": {\n    \"accountDetails\": {\n      ...\n    },\n    \"errorModel\": {\n      ...\n    }\n  }\n}</schema>\n  <schemaType>OpenApi</schemaType>\n  <schemaUrl>/accounts/schema</schemaUrl>\n  <status>Complete</status>\n</ExternalServiceRegistration>"
+    }
+  ]
+}

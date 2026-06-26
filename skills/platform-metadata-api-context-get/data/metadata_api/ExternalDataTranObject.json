@@ -1,0 +1,191 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExternalDataTranObject - Metadata API",
+  "description": "Represents a definition of a Data 360 schema object. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".externalDataTranObject",
+  "directory_location": "externalDataTranObjects",
+  "fields_columns": [
+    "type",
+    "required",
+    "description",
+    "reserved_for_internal_use",
+    "optional"
+  ],
+  "fields": {
+    "availabilityStatus": {
+      "type": "AvailabilityStatus (enumeration of type string)",
+      "required": true,
+      "description": "Represents the availability of the object. Valid values are: Available In_Use"
+    },
+    "creationType": {
+      "type": "DefinitionCreationType (enumeration of type string)",
+      "required": true,
+      "description": "Describes whether this object was added by the Customer or as part of a Standard Taxonomy or by the System. Valid values are: Segment_Membership Activation_Audience (Reserved for internal use only) Custom Standard System Derived Bridge Curated Standard Valid values available in API version 62.0 and later are: ADG Calculated_Insight CG_Audience Chunk Directory_Table External Semantic Transform Vector_Embedding"
+    },
+    "extDataTranObjectTemplate": {
+      "type": "string",
+      "reserved_for_internal_use": true,
+      "description": "and read-only. Reference to the associated ExtDataTranObjectTemplate data kit object. The system populates this field when a data kit that contains a data stream is deployed."
+    },
+    "externalDataTranFields": {
+      "type": "ExternalDataTranField",
+      "optional": true,
+      "description": "Stores the fields related to that schema object."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The UI name for the object."
+    },
+    "mktDataTranObject": {
+      "type": "MktDataTranObject",
+      "optional": true,
+      "description": "An entity that is used to transport information from the source to a target."
+    },
+    "objectCategory": {
+      "type": "string",
+      "required": true,
+      "description": "Reference to the Object Category. For Transport, they're Profile, Engagement, or Other."
+    }
+  },
+  "sub_types": {
+    "ExternalDataTranField": {
+      "creationType": {
+        "type": "DefinitionCreationType (enumeration of type string).",
+        "required": true,
+        "description": "Describes whether this object was added by the Customer or as part of a Standard Taxonomy or by the System. Valid values are: Segment_Membership Custom Standard System Derived Bridge Curated"
+      },
+      "datatype": {
+        "type": "string",
+        "required": true,
+        "description": "Phone, currency, number, or other assigned type."
+      },
+      "dateFormat": {
+        "type": "string",
+        "optional": true,
+        "description": "The Date format of date, time, date/time fields in this Transport field."
+      },
+      "extDataTranFieldTemplate": {
+        "type": "string",
+        "reserved_for_internal_use": true,
+        "description": "and read-only. Reference to the associated ExtDataTranFieldTemplate data kit object. The system populates this field when a data kit that contains a data stream is deployed."
+      },
+      "externalName": {
+        "type": "string",
+        "optional": true,
+        "description": "Name of the object in the external system (different from Developer Name)."
+      },
+      "isCurrencyIsoCode": {
+        "type": "boolean",
+        "optional": true,
+        "description": "If true, this field is a currency ISO code."
+      },
+      "isDataRequired": {
+        "type": "boolean",
+        "optional": true,
+        "description": "If true, data is required for this field."
+      },
+      "length": {
+        "type": "int",
+        "optional": true,
+        "description": "Length of a string column."
+      },
+      "masterLabel": {
+        "description": "Optional. Field label."
+      },
+      "mktDataTranField": {
+        "type": "mktDataTranFieldType",
+        "description": "Optional."
+      },
+      "precision": {
+        "type": "int",
+        "optional": true,
+        "description": "Used for currency and numeric accuracy."
+      },
+      "primaryIndexOrder": {
+        "type": "int",
+        "optional": true,
+        "description": "If supplied, indicates this field is part of the primary key where the number value (starting at 1) indicates the order of attributes if it's a compound primary key. Missing value means this field isn’t part of the primary key."
+      },
+      "scale": {
+        "type": "int",
+        "optional": true,
+        "description": "Used for currency and numbers."
+      },
+      "sequence": {
+        "type": "int",
+        "optional": true,
+        "description": "The sequence of this source schema."
+      }
+    },
+    "MktDataTranField": {
+      "creationType": {
+        "type": "DefinitionCreationType (enumeration of type string).",
+        "required": true,
+        "description": "Describes whether this object was added by the Customer or as part of a Standard Taxonomy or by the System. Valid values are: Segment_Membership Custom Standard System Derived Bridge Curated Valid values available in API version 62.0 and later are: ADG Calculated_Insight CG_Audience Chunk Directory_Table External Semantic Transform Vector_Embedding"
+      },
+      "datatype": {
+        "type": "string",
+        "required": true,
+        "description": "Phone, currency, number, or other assigned type."
+      },
+      "dateFormat": {
+        "type": "string",
+        "optional": true,
+        "description": "The Date format of date, time, date/time fields in this Transport field."
+      },
+      "externalName": {
+        "type": "string",
+        "optional": true,
+        "description": "Name of the object in the external system (different from Developer Name)."
+      },
+      "isDataRequired": {
+        "type": "boolean",
+        "optional": true,
+        "description": "If true, data is required for this field."
+      },
+      "length": {
+        "type": "int",
+        "optional": true,
+        "description": "Length of a string column."
+      },
+      "masterLabel": {
+        "description": "Optional. Field label."
+      },
+      "precision": {
+        "type": "int",
+        "optional": true,
+        "description": "Used for currency and numeric accuracy."
+      },
+      "primaryIndexOrder": {
+        "type": "int",
+        "optional": true,
+        "description": "If supplied, indicates this field is part of the primary key where the number value (starting at 1) indicates the order of attributes if it's a compound primary key. Missing value means this field isn’t part of the primary key."
+      },
+      "scale": {
+        "type": "int",
+        "optional": true,
+        "description": "Used for currency and numbers."
+      },
+      "sequence": {
+        "type": "int",
+        "optional": true,
+        "description": "The sequence of this source schema."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ExternalDataTranObject component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ExternalDataTranObject xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n        <fullName>PlatformTraces</fullName>\n        <availabilityStatus>Available</availabilityStatus>\n        <creationType>Custom</creationType>\n        <masterLabel>PlatformTraces</masterLabel>\n        <objectCategory>Salesforce_SFDCReferenceModel_0_93.Engagement</objectCategory>\n</ExternalDataTranObject>"
+    }
+  ]
+}

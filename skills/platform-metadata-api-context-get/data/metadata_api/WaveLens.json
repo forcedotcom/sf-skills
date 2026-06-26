@@ -1,0 +1,59 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "WaveLens - Metadata API",
+  "description": "Represents the WaveLens object in the Analytics application.",
+  "file_information": ".wlens",
+  "directory_location": "wave",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "application": {
+      "type": "string",
+      "description": "The internal name of the application.",
+      "required": true
+    },
+    "datasets": {
+      "type": "string",
+      "description": "A reference to the dataset used to create this lens."
+    },
+    "dateVersion": {
+      "type": "int",
+      "description": "The date version used for this lens."
+    },
+    "description": {
+      "type": "string",
+      "description": "The dashboard description that appears in the user interface."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The user interface label name of the dashboard.",
+      "required": true
+    },
+    "templateAssetSourceName": {
+      "type": "string",
+      "description": "Links the lens to the template used to create it. Null for assets not created from a template."
+    },
+    "visualizationType": {
+      "type": "string",
+      "description": "The visualization type to be used for this lens. Valid values are: calheatmap—Calendar heat map comparisontable—Comparison table heatmap—Heat map hbar—Horizontal bar hbarhdot—Horizontal dot plot matrix—Matrix parallelcoords—Parallel coordinates pie—Donut pivottable—Pivot table scatter—Scatter plot stackhbar—Stacked horizontal bar stackvbar—Stacked vertical bar time—Time line valuestable—Values table vbar—Vertical bar vdot—Vertical dot plot",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WaveLens\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"application\" type=\"xsd:string\"/>\n        <xsd:element name=\"datasets\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"dateVersion\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"templateAssetSourceName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"visualizationType\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a WaveLens component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<WaveLens xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n  <content xsi:nil=\"true\"/>\n  <application>dev__app</application>\n  <datasets>dev__abc</datasets>\n  <masterLabel>lens1</masterLabel>\n  <description>lens in shared app</description>\n  <visualizationType>hbar</visualizationType>\n</WaveLens>"
+    }
+  ]
+}

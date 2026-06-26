@@ -1,0 +1,58 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ServiceAISetupField - Metadata API",
+  "description": "Represents a field on cases or knowledge articles that Einstein uses to identify relevant articles in Einstein Article Recommendations. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".serviceAiSetupField",
+  "directory_location": "serviceAiSetupFields",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "entity": {
+      "type": "string",
+      "description": "The Case or KnowledgeArticle object for the field.",
+      "required": true
+    },
+    "field": {
+      "type": "string",
+      "description": "The API name of the field.",
+      "required": true
+    },
+    "fieldMappingType": {
+      "type": "ServiceAISetupFieldType (enumeration of type string)",
+      "description": "The field type. Valid values are: CASE_DESC CASE_SUBJ ARTICLE_TITLE ARTICLE_CONTENT ARTICLE_SUMMARY",
+      "required": true
+    },
+    "fieldPosition": {
+      "type": "int",
+      "description": "A positive number used to rank the field’s importance. The value 1 is most important; higher numbers indicate less important fields. Einstein considers fields in the order of importance.",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "description": "A reference to the field.",
+      "required": true
+    },
+    "setupDefinition": {
+      "type": "string",
+      "description": "A reference to the parent ServiceAISetupDefinition.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ServiceAISetupField\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"entity\" type=\"xsd:string\"/>\n        <xsd:element name=\"field\" type=\"xsd:string\"/>\n        <xsd:element name=\"fieldMappingType\" type=\"tns:ServiceAISetupFieldType\"/>\n        <xsd:element name=\"fieldPosition\" type=\"xsd:int\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"setupDefinition\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ServiceAISetupFieldType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"CASE_DESC\"/>\n    <xsd:enumeration value=\"CASE_SUBJ\"/>\n    <xsd:enumeration value=\"ARTICLE_TITLE\"/>\n    <xsd:enumeration value=\"ARTICLE_CONTENT\"/>\n    <xsd:enumeration value=\"ARTICLE_SUMMARY\"/>\n    <xsd:enumeration value=\"ARTICLE_ANSWER\"/>\n    <xsd:enumeration value=\"ARTICLE_QUESTION\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ServiceAISetupField component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ServiceAISetupField xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <entity>Case</entity>\n    <field>Subject</field>\n    <fieldMappingType>CASE_SUBJ</fieldMappingType>\n    <fieldPosition>1</fieldPosition>\n    <name>SF16039900475920</name>\n    <setupDefinition>4hQRM0000004CDK</setupDefinition>\n</ServiceAISetupField>"
+    }
+  ]
+}

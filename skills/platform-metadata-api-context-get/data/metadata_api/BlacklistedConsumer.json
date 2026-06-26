@@ -1,0 +1,47 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "BlacklistedConsumer - Metadata API",
+  "description": "Represents a connected app that is inaccessible to your Salesforce org’s users. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".blacklistedConsumer",
+  "directory_location": "blacklistedConsumers",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "blockedByApiWhitelisting": {
+      "type": "boolean",
+      "description": "Set to true to apply the Permitted Users policy, Admin approved users are pre-authorized to all connected apps in the org. This policy limits access to only users with the associated profile or permission set assigned to the app. Set to false to allow access to the connected app. False is the default value."
+    },
+    "consumerKey": {
+      "type": "string",
+      "description": "A value used by the consumer for identification of the connected app to Salesforce. Referred to as client_id in OAuth 2.0. After you define and save the value, it can’t be edited. The value must be alphanumeric, can’t contain special characters or spaces, and must be between 8–256 characters. Consumer keys must be globally unique.",
+      "required": true
+    },
+    "consumerName": {
+      "type": "string",
+      "description": "The name of the connected app being blocked.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The primary label for the connected app record.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"BlacklistedConsumer\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"blockedByApiWhitelisting\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"consumerKey\" type=\"xsd:string\"/>\n        <xsd:element name=\"consumerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a component.",
+      "code": "<BlacklistedConsumer xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <consumerKey>testConsumerKey</consumerKey>\n    <consumerName>testName</consumerName>\n    <blockedByApiWhitelisting>false</blockedByApiWhitelisting>\n    <masterLabel>myTest</masterLabel>\n</BlacklistedConsumer>"
+    }
+  ]
+}

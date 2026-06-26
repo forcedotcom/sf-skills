@@ -1,0 +1,52 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ApexTrigger - Metadata API",
+  "description": "Represents an Apex trigger. A trigger is Apex code that executes before or after specific data manipulation language (DML) events occur, such as before object records are inserted into the database, or after records have been deleted.",
+  "file_information": "The file suffix is .trigger for the trigger file. The accompanying metadata file is named TriggerName-meta.xml.\n\nApex triggers are stored in the triggers folder in the corresponding package directory.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "apiVersion": {
+      "type": "double",
+      "description": "The API version for this trigger. Every trigger has an API version specified at creation.",
+      "required": true
+    },
+    "content": {
+      "type": "base64",
+      "description": "The Apex trigger definition. This field is inherited from the MetadataWithContent component."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The Apex trigger name. The name can only contain characters, letters, and the underscore (_) character, must start with a letter, and can’t end with an underscore or contain two consecutive underscore characters. This field is inherited from the Metadata component."
+    },
+    "packageVersions": {
+      "type": "PackageVersion[]",
+      "description": "The list of installed managed package versions that are referenced by this Apex trigger. For more information about managed packages, see the Second-Generation Managed Packaging Developer Guide. This field is available in API version 16.0 and later."
+    },
+    "status": {
+      "type": "ApexCodeUnitStatus (enumeration of type string)",
+      "description": "The status of the Apex trigger. The following string values are valid: Active - The trigger is active. Inactive - The trigger is inactive, but not deleted. Deleted - The trigger is marked for deletion. Useful for managed packages, because it allows a trigger to be deleted when a managed package is updated.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ApexCodeUnitStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Inactive\"/>\n    <xsd:enumeration value=\"Active\"/>\n    <xsd:enumeration value=\"Deleted\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ApexTrigger\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"apiVersion\" type=\"xsd:double\"/>\n        <xsd:element name=\"packageVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PackageVersion\"/>\n        <xsd:element name=\"status\" type=\"tns:ApexCodeUnitStatus\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"PackageVersion\">\n  <xsd:sequence>\n    <xsd:element name=\"majorNumber\" type=\"xsd:int\"/>\n    <xsd:element name=\"minorNumber\" type=\"xsd:int\"/>\n    <xsd:element name=\"namespace\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"packageId\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "MyHelloWorld.trigger file:",
+      "code": "trigger helloWorldAccountTrigger on Account (before insert) {\n\n  Account[] accs = Trigger.new;\n\n   MyHelloWorld.addHelloWorld(accs);\n}"
+    },
+    {
+      "description": "MyHelloWorld.trigger-meta.xml:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ApexTrigger xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>66.0</apiVersion>\n</ApexTrigger>"
+    }
+  ]
+}

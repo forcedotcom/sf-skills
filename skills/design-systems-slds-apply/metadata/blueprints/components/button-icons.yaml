@@ -1,0 +1,295 @@
+name: "Button Icons"
+description: "Icon-only buttons that provide visual actions without text labels. Available in multiple variants including transparent, bordered, filled, and inverse styles for use on different backgrounds."
+category: "Actions"
+slds_classes:
+  root: "slds-button_icon"
+  elements:
+    - class: "slds-button__icon"
+      description: "Icon element within the button"
+      purpose: "SVG icon that represents the button action"
+    - class: "slds-button__icon_hint"
+      description: "Hint styling for icon that changes on hover"
+      purpose: "Subdued icon color that becomes more visible on hover"
+    - class: "slds-button__icon_inverse-hint"
+      description: "Hint styling for icon on dark backgrounds"
+      purpose: "Subdued inverse icon color for dark backgrounds"
+  modifiers:
+    - class: "slds-button_icon-container"
+      description: "Container-styled button icon with standard dimensions"
+      purpose: "Default 32x32px button icon container"
+    - class: "slds-button_icon-border"
+      description: "Button icon with transparent background and border"
+      purpose: "Bordered button icon for light backgrounds"
+    - class: "slds-button_icon-border-filled"
+      description: "Button icon with filled white background and border"
+      purpose: "Bordered button with solid background"
+    - class: "slds-button_icon-border-inverse"
+      description: "Button icon with border for dark backgrounds"
+      purpose: "Bordered button icon for inverse/dark backgrounds"
+    - class: "slds-button_icon-inverse"
+      description: "Bare button icon for dark backgrounds"
+      purpose: "Button icon without border for dark backgrounds"
+    - class: "slds-button_icon-brand"
+      description: "Button icon with brand color background"
+      purpose: "Branded, filled button icon"
+    - class: "slds-button_icon-more"
+      description: "Button icon for overflow menus with borders"
+      purpose: "Typically used for three-dot menu buttons"
+    - class: "slds-button_icon-container-more"
+      description: "Button icon for overflow menus without borders"
+      purpose: "Borderless overflow menu button"
+    - class: "slds-button_icon-error"
+      description: "Error state styling for button icon"
+      purpose: "Indicates error or destructive action"
+    - class: "slds-button_icon-warning"
+      description: "Warning state styling for button icon"
+      purpose: "Indicates caution or warning"
+    - class: "slds-button_icon-current-color"
+      description: "Applies current text color to icon"
+      purpose: "Inherits color from parent context"
+    - class: "slds-button_icon-xx-small"
+      description: "Extra extra small button icon (16x16px)"
+      purpose: "Smallest button icon size"
+    - class: "slds-button_icon-x-small"
+      description: "Extra small button icon (20x20px)"
+      purpose: "Very small button icon size"
+    - class: "slds-button_icon-small"
+      description: "Small button icon (24x24px)"
+      purpose: "Small button icon size"
+    - class: "slds-button_icon-large"
+      description: "Large button icon (48x48px)"
+      purpose: "Large button icon size"
+  states:
+    - class: "slds-is-selected"
+      description: "Selected/active state for button icon"
+      trigger: "When button represents active state"
+variants:
+  - name: "Bare"
+    description: "Icon button with no background or border"
+    classes:
+      - "slds-button_icon"
+    usage_context: "Minimal button style for light backgrounds"
+    differences: "Transparent with icon only, no visual container"
+  - name: "Container"
+    description: "Icon button with container sizing"
+    classes:
+      - "slds-button_icon"
+      - "slds-button_icon-container"
+    usage_context: "Standard icon button with defined boundaries"
+    differences: "32x32px container for consistent sizing"
+  - name: "Border"
+    description: "Icon button with border and transparent background"
+    classes:
+      - "slds-button_icon"
+      - "slds-button_icon-border"
+    usage_context: "When button needs more visual weight"
+    differences: "Border with transparent background"
+  - name: "Border Filled"
+    description: "Icon button with border and filled background"
+    classes:
+      - "slds-button_icon"
+      - "slds-button_icon-border-filled"
+    usage_context: "Maximum visual emphasis for icon button"
+    differences: "Border with solid white background"
+  - name: "Inverse"
+    description: "Icon button for dark backgrounds"
+    classes:
+      - "slds-button_icon"
+      - "slds-button_icon-inverse"
+    usage_context: "Use on dark or colored backgrounds"
+    differences: "Light colored icon for dark backgrounds"
+  - name: "Border Inverse"
+    description: "Bordered icon button for dark backgrounds"
+    classes:
+      - "slds-button_icon"
+      - "slds-button_icon-border-inverse"
+    usage_context: "Bordered button on dark backgrounds"
+    differences: "Border with inverse colors"
+  - name: "Brand"
+    description: "Icon button with brand color background"
+    classes:
+      - "slds-button_icon"
+      - "slds-button_icon-brand"
+    usage_context: "Primary action icon button"
+    differences: "Filled with brand blue background"
+lightning_component:
+  name: "lightning-button-icon"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-button-icon"
+  mapping_notes: "lightning-button-icon provides icon-only buttons with variant support"
+accessibility:
+  keyboard_support:
+    - "Tab to focus button"
+    - "Enter or Space to activate button"
+  screen_reader:
+    - "Button role announced"
+    - "Accessible label must be provided (aria-label or slds-assistive-text)"
+    - "Button state announced (pressed, disabled)"
+  aria_attributes:
+    - "aria-label required for icon-only buttons"
+    - "aria-pressed for toggle buttons"
+    - "aria-disabled for disabled state"
+    - "title attribute for tooltip text"
+usage_guidelines:
+  when_to_use:
+    - "For actions where icon clearly conveys meaning"
+    - "To save space in compact interfaces"
+    - "For common, well-understood actions (edit, delete, close)"
+    - "In toolbars and action bars"
+  when_not_to_use:
+    - "For actions that aren't universally understood"
+    - "When text label would significantly improve clarity"
+    - "As primary call-to-action (use full button instead)"
+    - "For complex or ambiguous actions"
+  best_practices:
+    - "Always provide accessible text via aria-label or assistive text"
+    - "Use consistent icons for same actions throughout app"
+    - "Provide tooltip on hover for additional context"
+    - "Ensure adequate touch target size (minimum 44x44px)"
+    - "Choose appropriate variant for background context"
+    - "Use hint variant for less important actions"
+  common_mistakes:
+    - "Missing accessible text label"
+    - "Using unclear or ambiguous icons"
+    - "Touch targets too small on mobile"
+    - "Wrong variant for background color"
+    - "Inconsistent icon usage across application"
+code_examples:
+  - title: "Basic Icon Button"
+    code: |
+      <button class="slds-button slds-button_icon" aria-label="Settings" title="Settings">
+            <svg class="slds-button__icon" aria-hidden="true">
+              <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#settings"></use>
+            </svg>
+            </button>
+  - title: "Bordered Icon Button"
+    code: |
+      <button class="slds-button slds-button_icon slds-button_icon-border" aria-label="Edit" title="Edit">
+            <svg class="slds-button__icon" aria-hidden="true">
+              <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+            </svg>
+            <span class="slds-assistive-text">Edit</span>
+            </button>
+  - title: "Filled Bordered Icon Button"
+    code: |
+      <button class="slds-button slds-button_icon slds-button_icon-border-filled" aria-label="Search" title="Search">
+            <svg class="slds-button__icon" aria-hidden="true">
+              <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#search"></use>
+            </svg>
+            <span class="slds-assistive-text">Search</span>
+            </button>
+  - title: "Brand Icon Button"
+    code: |
+      <button class="slds-button slds-button_icon slds-button_icon-brand" aria-label="Add" title="Add">
+            <svg class="slds-button__icon" aria-hidden="true">
+              <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+            </svg>
+            <span class="slds-assistive-text">Add</span>
+            </button>
+  - title: "Inverse Icon Button"
+    code: |
+      <div class="slds-box" style="background: #16325c; padding: 1rem;">
+            <button class="slds-button slds-button_icon slds-button_icon-inverse" aria-label="Close" title="Close">
+              <svg class="slds-button__icon" aria-hidden="true">
+                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+              </svg>
+              <span class="slds-assistive-text">Close</span>
+            </button>
+            </div>
+  - title: "Icon Button with Hint"
+    code: |
+      <div class="slds-hint-parent">
+            <button class="slds-button slds-button_icon slds-button_icon-border-filled" aria-label="Help" title="Help">
+              <svg class="slds-button__icon slds-button__icon_hint" aria-hidden="true">
+                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#help"></use>
+              </svg>
+              <span class="slds-assistive-text">Help</span>
+            </button>
+            </div>
+  - title: "Size Variants"
+    code: |
+      <div class="slds-grid slds-grid_vertical-align-center slds-gutters_small">
+            <div class="slds-col">
+              <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-xx-small" aria-label="Extra Extra Small">
+                <svg class="slds-button__icon" aria-hidden="true">
+                  <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#settings"></use>
+                </svg>
+              </button>
+            </div>
+            <div class="slds-col">
+              <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-x-small" aria-label="Extra Small">
+                <svg class="slds-button__icon" aria-hidden="true">
+                  <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#settings"></use>
+                </svg>
+              </button>
+            </div>
+            <div class="slds-col">
+              <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small" aria-label="Small">
+                <svg class="slds-button__icon" aria-hidden="true">
+                  <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#settings"></use>
+                </svg>
+              </button>
+            </div>
+            <div class="slds-col">
+              <button class="slds-button slds-button_icon slds-button_icon-border" aria-label="Medium (default)">
+                <svg class="slds-button__icon" aria-hidden="true">
+                  <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#settings"></use>
+                </svg>
+              </button>
+            </div>
+            <div class="slds-col">
+              <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-large" aria-label="Large">
+                <svg class="slds-button__icon" aria-hidden="true">
+                  <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#settings"></use>
+                </svg>
+              </button>
+            </div>
+            </div>
+styling_hooks:
+  - name: "--slds-g-color-neutral-base-50"
+    description: "Default icon color"
+    css_property: "color"
+  - name: "--slds-g-color-neutral-base-100"
+    description: "Background color for filled variants"
+    css_property: "background-color"
+  - name: "--slds-g-shadow-outset-focus-1"
+    description: "Focus shadow for buttons"
+    css_property: "box-shadow"
+  - name: "--slds-g-color-error-base-40"
+    description: "Color for error state"
+    css_property: "color"
+  - name: "--slds-g-color-warning-base-50"
+    description: "Color for warning state"
+    css_property: "color"
+dependencies:
+  css_files:
+    - "button-icons.css"
+    - "button.css"
+    - "icon.css"
+  javascript:
+    - "Click handlers"
+    - "Tooltip functionality"
+  icons:
+    - "Various utility icons"
+  other_components:
+    - "icon"
+    - "tooltip"
+related_components:
+  - name: "Button"
+    relationship: "parent"
+    description: "Base button component"
+  - name: "Button Group"
+    relationship: "complementary"
+    description: "Groups multiple button icons together"
+  - name: "Icon"
+    relationship: "contains"
+    description: "Icon element within button"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/button-icons/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  author: "SLDS Documentation Team"
+  slds_version: "2.27.2"
+  review_status: "complete"
+  source: "official-slds"
+  notes: "Created from official SLDS documentation and design-system-internal source code Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

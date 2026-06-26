@@ -1,0 +1,48 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ForecastingFilter - Metadata API",
+  "description": "Represents the custom filter for including or excluding data from opportunity forecasts.",
+  "file_information": ".forecastingFilter",
+  "directory_location": "forecastingFilters",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "filterLogic": {
+      "type": "string",
+      "description": "The logic that controls the evaluation of conditions. Only AND is supported. For example, 1 AND 2 AND 3."
+    },
+    "forecastingType": {
+      "type": "string",
+      "required": true,
+      "description": "The ID of the forecast type. Can be linked only to forecast types created in Summer ’21 and later."
+    },
+    "forecastingTypeSource": {
+      "type": "string",
+      "required": true,
+      "description": "The ID of the forecast type source. Can be linked only to forecast type sources created in Summer ’21 or later and with a forecast source definition with source object of 'Opportunity.'"
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label for this object, which displays in Setup. The label is in the default language locale for the organization. If there’s no default language locale, the label is in en_US."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ForecastingFilter\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"filterLogic\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"forecastingCustomCategory\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"forecastingType\" type=\"xsd:string\"/>\n        <xsd:element name=\"forecastingTypeSource\" type=\"xsd:string\"/>\n        <xsd:element name=\"forecastingTypeSourceCategory\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ForecastingFilter component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ForecastingFilter xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <filterLogic>1 AND 2</filterLogic>\n    <forecastingType>d</forecastingType>\n    <forecastingTypeSource>d7</forecastingTypeSource>\n    <masterLabel>FF_OpportunityLineItem</masterLabel>\n</ForecastingFilter>"
+    }
+  ]
+}

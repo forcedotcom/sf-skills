@@ -1,0 +1,41 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AssessmentQuestionSet - Metadata API",
+  "description": "Represents the container object for Assessment Questions.",
+  "file_information": ".AssessmentQuestionSet",
+  "directory_location": "AssessmentQuestionSets",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "assessmentQuestionDeveloperNames": {
+      "type": "string[]",
+      "description": "The developer names for the assessment question. Can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "The developer name for the assessment question set. Can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+    },
+    "name": {
+      "type": "string",
+      "required": true,
+      "description": "The question set name."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an AssessmentQuestionSet component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AssessmentQuestionSet\n\txmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<developerName>QuestionSetDevName</developerName>\n\t<name>QuestionSetName</name>\n\t<assessmentQuestionDeveloperNames>QuestionDevName</assessmentQuestionDeveloperNames>\n</AssessmentQuestionSet>"
+    }
+  ]
+}

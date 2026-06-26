@@ -1,0 +1,201 @@
+name: Docked Composer
+description: A persistent composition interface that remains docked at the bottom of the screen, allowing users to create
+  content (emails, messages, posts) while maintaining context of their current workflow.
+category: Overlay
+slds_classes:
+  root: slds-docked-composer
+  elements:
+  - class: slds-docked-composer__header
+    description: Header section of the docked composer
+    purpose: Contains title, status indicators, and header controls
+  - class: slds-docked-composer__body
+    description: Main content area of the composer
+    purpose: Contains the primary composition interface and controls
+  - class: slds-docked-composer__footer
+    description: Footer section with action buttons
+    purpose: Contains send, save, and other action buttons
+  - class: slds-docked-composer__lead
+    description: Lead content area within composer
+    purpose: Primary content or recipient information
+  - class: slds-docked-composer__toolbar
+    description: Toolbar for composer actions
+    purpose: Contains formatting and composition tools
+  modifiers: []
+  states:
+  - class: slds-is-open
+    description: Expanded composer state
+    trigger: Applied when composer is expanded and active
+  - class: slds-is-closed
+    description: Minimized composer state
+    trigger: Applied when composer is minimized
+variants:
+- name: Base
+  description: Standard docked composer for general composition
+  classes:
+  - slds-docked-composer
+  usage_context: Default implementation for content composition
+  differences: Basic composer with header, body, and footer
+- name: Email
+  description: Email-specific docked composer
+  classes:
+  - slds-docked-composer
+  usage_context: For email composition workflows
+  differences: Email-specific fields and formatting options
+- name: Task
+  description: Task creation docked composer
+  classes:
+  - slds-docked-composer
+  usage_context: For task and reminder creation
+  differences: Task-specific fields and controls
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component equivalent - typically implemented using custom components with lightning-modal
+    or lightning-card patterns
+accessibility:
+  keyboard_support:
+  - Tab navigation through composer elements
+  - Enter/Space to activate buttons and controls
+  - Escape to minimize or close composer
+  - Arrow keys for toolbar navigation
+  screen_reader:
+  - Composer purpose and state announced
+  - Form fields and labels properly associated
+  - Action buttons clearly described
+  - Status updates communicated
+  aria_attributes:
+  - role='dialog' for composer container
+  - aria-labelledby for composer title
+  - aria-describedby for composer content
+  - aria-expanded for minimize/expand state
+  - aria-live for status updates
+usage_guidelines:
+  when_to_use:
+  - For content composition that shouldn't interrupt workflow
+  - When users need to reference other content while composing
+  - For email, message, or document creation
+  - When composition is a secondary task
+  when_not_to_use:
+  - For simple, quick inputs (use modal instead)
+  - When composition is the primary task
+  - On small screens with limited space
+  best_practices:
+  - Provide clear minimize/maximize controls
+  - Save draft content automatically
+  - Allow multiple composers when appropriate
+  - Maintain scroll position when minimized
+  - Provide clear send/save actions
+  common_mistakes:
+  - Blocking user interaction with underlying content
+  - Not saving drafts automatically
+  - Poor mobile responsive behavior
+  - Unclear composer state indicators
+code_examples:
+- title: Basic Docked Composer
+  description: Standard docked composer for general content creation
+  code: "<section class=\"slds-docked-composer slds-is-open\" role=\"dialog\" aria-labelledby=\"composer-title\" aria-describedby=\"\
+    composer-body\">\n      <header class=\"slds-docked-composer__header\">\n        <div class=\"slds-media slds-media_center\"\
+    >\n          <div class=\"slds-media__figure\">\n            <span class=\"slds-icon_container slds-icon-standard-email\"\
+    >\n              <svg class=\"slds-icon slds-icon_small\" aria-hidden=\"true\">\n                <use xlink:href=\"/assets/icons/standard-sprite/svg/symbols.svg#email\"\
+    ></use>\n              </svg>\n            </span>\n          </div>\n          <div class=\"slds-media__body\">\n   \
+    \         <h2 id=\"composer-title\" class=\"slds-truncate slds-text-heading_small\">New Email</h2>\n          </div>\n\
+    \          <div class=\"slds-media__figure slds-media__figure_reverse\">\n            <div class=\"slds-button-group\"\
+    >\n              <button class=\"slds-button slds-button_icon slds-button_icon-border\" title=\"Minimize\">\n        \
+    \        <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n                  <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#minimize_window\"\
+    ></use>\n                </svg>\n                <span class=\"slds-assistive-text\">Minimize composer</span>\n      \
+    \        </button>\n              <button class=\"slds-button slds-button_icon slds-button_icon-border\" title=\"Expand\"\
+    >\n                <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n                  <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#expand\"\
+    ></use>\n                </svg>\n                <span class=\"slds-assistive-text\">Expand composer</span>\n        \
+    \      </button>\n              <button class=\"slds-button slds-button_icon slds-button_icon-border\" title=\"Close\"\
+    >\n                <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n                  <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#close\"\
+    ></use>\n                </svg>\n                <span class=\"slds-assistive-text\">Close composer</span>\n         \
+    \     </button>\n            </div>\n          </div>\n        </div>\n      </header>\n      <div class=\"slds-docked-composer__body\"\
+    \ id=\"composer-body\">\n        <div class=\"slds-form-element slds-m-bottom_small\">\n          <label class=\"slds-form-element__label\"\
+    \ for=\"composer-to\">To</label>\n          <div class=\"slds-form-element__control\">\n            <input type=\"email\"\
+    \ id=\"composer-to\" class=\"slds-input\" placeholder=\"Enter recipient email\">\n          </div>\n        </div>\n \
+    \       <div class=\"slds-form-element slds-m-bottom_small\">\n          <label class=\"slds-form-element__label\" for=\"\
+    composer-subject\">Subject</label>\n          <div class=\"slds-form-element__control\">\n            <input type=\"text\"\
+    \ id=\"composer-subject\" class=\"slds-input\" placeholder=\"Enter subject\">\n          </div>\n        </div>\n    \
+    \    <div class=\"slds-form-element\">\n          <label class=\"slds-form-element__label\" for=\"composer-message\">Message</label>\n\
+    \          <div class=\"slds-form-element__control\">\n            <textarea id=\"composer-message\" class=\"slds-textarea\"\
+    \ rows=\"10\" placeholder=\"Enter your message\"></textarea>\n          </div>\n        </div>\n      </div>\n      <footer\
+    \ class=\"slds-docked-composer__footer\">\n        <div class=\"slds-grid slds-grid_align-spread\">\n          <div class=\"\
+    slds-col\">\n            <button class=\"slds-button slds-button_icon slds-button_icon-border\" title=\"Attach file\"\
+    >\n              <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n                <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#attach\"\
+    ></use>\n              </svg>\n              <span class=\"slds-assistive-text\">Attach file</span>\n            </button>\n\
+    \          </div>\n          <div class=\"slds-col slds-no-flex\">\n            <div class=\"slds-button-group\">\n  \
+    \            <button class=\"slds-button slds-button_neutral\">Save Draft</button>\n              <button class=\"slds-button\
+    \ slds-button_brand\">Send</button>\n            </div>\n          </div>\n        </div>\n      </footer>\n      </section>\n"
+- title: Minimized Docked Composer
+  description: Docked composer in minimized state
+  code: "<section class=\"slds-docked-composer slds-is-closed\" role=\"dialog\" aria-labelledby=\"composer-min-title\">\n\
+    \      <header class=\"slds-docked-composer__header\">\n        <div class=\"slds-media slds-media_center\">\n       \
+    \   <div class=\"slds-media__figure\">\n            <span class=\"slds-icon_container slds-icon-standard-email\">\n  \
+    \            <svg class=\"slds-icon slds-icon_small\" aria-hidden=\"true\">\n                <use xlink:href=\"/assets/icons/standard-sprite/svg/symbols.svg#email\"\
+    ></use>\n              </svg>\n            </span>\n          </div>\n          <div class=\"slds-media__body\">\n   \
+    \         <h2 id=\"composer-min-title\" class=\"slds-truncate slds-text-heading_small\">Draft - New Email</h2>\n     \
+    \     </div>\n          <div class=\"slds-media__figure slds-media__figure_reverse\">\n            <button class=\"slds-button\
+    \ slds-button_icon slds-button_icon-border\" title=\"Expand\">\n              <svg class=\"slds-button__icon\" aria-hidden=\"\
+    true\">\n                <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#expand\"></use>\n            \
+    \  </svg>\n              <span class=\"slds-assistive-text\">Expand composer</span>\n            </button>\n         \
+    \ </div>\n        </div>\n      </header>\n      </section>\n"
+- title: Task Composer
+  description: Docked composer configured for task creation
+  code: "<section class=\"slds-docked-composer slds-is-open\" role=\"dialog\" aria-labelledby=\"task-composer-title\">\n \
+    \     <header class=\"slds-docked-composer__header\">\n        <div class=\"slds-media slds-media_center\">\n        \
+    \  <div class=\"slds-media__figure\">\n            <span class=\"slds-icon_container slds-icon-standard-task\">\n    \
+    \          <svg class=\"slds-icon slds-icon_small\" aria-hidden=\"true\">\n                <use xlink:href=\"/assets/icons/standard-sprite/svg/symbols.svg#task\"\
+    ></use>\n              </svg>\n            </span>\n          </div>\n          <div class=\"slds-media__body\">\n   \
+    \         <h2 id=\"task-composer-title\" class=\"slds-truncate slds-text-heading_small\">New Task</h2>\n          </div>\n\
+    \          <div class=\"slds-media__figure slds-media__figure_reverse\">\n            <button class=\"slds-button slds-button_icon\
+    \ slds-button_icon-border\" title=\"Close\">\n              <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n \
+    \               <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#close\"></use>\n              </svg>\n\
+    \              <span class=\"slds-assistive-text\">Close composer</span>\n            </button>\n          </div>\n  \
+    \      </div>\n      </header>\n      <div class=\"slds-docked-composer__body\">\n        <div class=\"slds-form-element\
+    \ slds-m-bottom_small\">\n          <label class=\"slds-form-element__label\" for=\"task-subject\">Task Subject</label>\n\
+    \          <div class=\"slds-form-element__control\">\n            <input type=\"text\" id=\"task-subject\" class=\"slds-input\"\
+    \ placeholder=\"Enter task subject\">\n          </div>\n        </div>\n        <div class=\"slds-form-element slds-m-bottom_small\"\
+    >\n          <label class=\"slds-form-element__label\" for=\"task-due-date\">Due Date</label>\n          <div class=\"\
+    slds-form-element__control\">\n            <input type=\"date\" id=\"task-due-date\" class=\"slds-input\">\n         \
+    \ </div>\n        </div>\n        <div class=\"slds-form-element\">\n          <label class=\"slds-form-element__label\"\
+    \ for=\"task-description\">Description</label>\n          <div class=\"slds-form-element__control\">\n            <textarea\
+    \ id=\"task-description\" class=\"slds-textarea\" rows=\"6\" placeholder=\"Enter task description\"></textarea>\n    \
+    \      </div>\n        </div>\n      </div>\n      <footer class=\"slds-docked-composer__footer\">\n        <div class=\"\
+    slds-grid slds-grid_align-end\">\n          <div class=\"slds-col slds-no-flex\">\n            <div class=\"slds-button-group\"\
+    >\n              <button class=\"slds-button slds-button_neutral\">Save Draft</button>\n              <button class=\"\
+    slds-button slds-button_brand\">Create Task</button>\n            </div>\n          </div>\n        </div>\n      </footer>\n\
+    \      </section>\n"
+dependencies:
+  css_files:
+  - docked-composer.css
+  - form-element.css
+  - button.css
+  - input.css
+  - textarea.css
+  javascript:
+  - docked-composer.js
+  icons:
+  - standard-sprite.svg
+  - utility-sprite.svg
+  other_components:
+  - form-element
+  - button
+  - input
+  - textarea
+related_components:
+- name: Modal
+  relationship: alternative
+  description: Alternative for full-screen composition
+- name: Rich Text Editor
+  relationship: depends-on
+  description: Often includes rich text editing capabilities
+- name: Form Element
+  relationship: container
+  description: Contains form elements for data input
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/docked-composer/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

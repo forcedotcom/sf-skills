@@ -1,0 +1,116 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment"
+  ],
+  "title": "EmailServicesFunction - Metadata API",
+  "description": "Represents an email service. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".xml",
+  "directory_location": "emailservices",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "apexClass": {
+      "type": "string",
+      "description": "The name of the Apex class that the email service uses to process inbound messages.",
+      "required": true
+    },
+    "attachmentOption": {
+      "type": "EmailServicesAttOptions (enumeration of type string)",
+      "description": "Indicates the types of attachments the email service accepts. One of the following values: None—The email service accepts the message but discards any attachment. NoContent—The attachment metadata (filename, MIME type, and so on) is provided to the Apex class, but the body is set to null. TextOnly—The email service only accepts the following types of attachments: Attachments with a Multipurpose Internet Mail Extension (MIME) type of text. Attachments with a MIME type of application/octet-stream and a file name that ends with either a.vcf or.vcs extension. These are saved as text/x-vcard and text/calendar MIME types, respectively. BinaryOnly—The email service only accepts binary attachments, such as image, audio, application, and video files. All—The email service accepts any type of attachment.",
+      "required": true
+    },
+    "authenticationFailureAction": {
+      "type": "EmailServicesErrorAction (enumeration of type string)",
+      "description": "Indicates what the email service does with messages that fail or do not support any of the authentication protocols if the isAuthenticationRequired field is true.",
+      "required": true
+    },
+    "authorizationFailureAction": {
+      "type": "EmailServicesErrorAction (enumeration of type string)",
+      "description": "Indicates what the email service does with messages received from senders who are not listed in the authorizedSenders field on either the email service or email service address.",
+      "required": true
+    },
+    "authorizedSenders": {
+      "type": "string",
+      "description": "Configures the email service to only accept messages from the email addresses or domains listed in this field. If the email service receives a message from an unlisted email address or domain, the email service performs the action specified in the authorizationFailureAction field. Leave this field blank if you want the email service to receive email from any email address."
+    },
+    "emailServicesAddresses": {
+      "type": "EmailServicesAddress",
+      "description": "A list of EmailServiceAddress records."
+    },
+    "errorRoutingAddress": {
+      "type": "email",
+      "description": "The destination email address for error notification email messages when isErrorRoutingEnabled is true."
+    },
+    "functionInactiveAction": {
+      "type": "EmailServicesErrorAction (enumeration of type string)",
+      "description": "Indicates what the email service does with messages it receives when the email service itself is inactive. One of the following values: UseSystemDefault—The system default is used. Bounce—The email service returns the message to the sender with a notification that explains why the message was rejected. Discard—The email service deletes the message without notifying the sender. Requeue—The email service queues the message for processing in the next 24 hours. If the message is not processed within 24 hours, the email service returns the message to the sender with a notification that explains why the message was rejected.",
+      "required": true
+    },
+    "functionName": {
+      "type": "string",
+      "description": "The name of the email service in the API. This name can contain only underscores and alphanumeric characters and must be unique in your org. The value in this 64-character field must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. This field is automatically generated, but you can supply your own value if you create the record using the API. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Note: When creating large sets of data, always specify a unique functionName for each record. If no functionName is specified, performance may slow while Salesforce generates one for each record.",
+      "required": true
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether this object is active (true) or not (false)."
+    },
+    "isAuthenticationRequired": {
+      "type": "boolean",
+      "description": "Configures the email service to verify the legitimacy of the sending server before processing a message. The email service uses the SPF, SenderId, and DomainKeys protocols to verify the sender's legitimacy: If the sending server passes at least one of these protocols and does not fail any, the email service accepts the email. If the server fails a protocol or does not support any of the protocols, the email service performs the action specified in the authenticationFailureAction field."
+    },
+    "isErrorRoutingEnabled": {
+      "type": "boolean",
+      "description": "When incoming email messages can’t be processed, indicates whether error notification email messages are routed to a chosen address or to the senders."
+    },
+    "isTextAttachmentsAsBinary": {
+      "type": "boolean",
+      "description": "If true, text attachments are supplied to the Apex code as a Messaging.BinaryAttachment instead of as a Messaging.TextAttachment. This means that the body is supplied as an Apex Blob instead of as an Apex String."
+    },
+    "isTlsRequired": {
+      "type": "boolean",
+      "description": "Not currently in use."
+    },
+    "overLimitAction": {
+      "type": "EmailServicesErrorAction (enumeration of type string)",
+      "description": "Indicates what the email service does with messages if the total number of messages processed by all email services combined has reached the daily limit for your organization. One of the following values: UseSystemDefault—The system default is used. Bounce—The email service returns the message to the sender with a notification that explains why the message was rejected. Discard—The email service deletes the message without notifying the sender. Requeue—The email service queues the message for processing in the next 24 hours. If the message is not processed within 24 hours, the email service returns the message to the sender with a notification that explains why the message was rejected. The system calculates the limit by multiplying the number of user licenses by 1,000.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "EmailServicesAddress": {
+      "authorizedSenders": {
+        "type": "string",
+        "description": "Configures the email service address to only accept messages from the email addresses or domains listed in this field. If the email service address receives a message from an unlisted email address or domain, the email service performs the action specified in the authorizationFailureAction field of its associated email service. Leave this field blank if you want the email service address to receive email from any email address."
+      },
+      "developerName": {
+        "type": "string",
+        "description": "The name of the object in the API. This name can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This 25-character field must be unique among other EmailServicesAddress records under the same EmailServiceFunction parent. In managed packages, this field prevents naming conflicts on package installations. This field is automatically generated, but you can supply your own value if you create the record using the API. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Note: When creating large sets of data, always specify a unique developerName for each record. If no developerName is specified, performance might be slow while Salesforce generates one for each record.",
+        "required": true
+      },
+      "isActive": {
+        "type": "boolean",
+        "description": "Indicates whether this object is active (true) or not (false)."
+      },
+      "localPart": {
+        "type": "string",
+        "description": "The local-part of the email service address, which is the string that comes before the @ symbol. For the local-part of a Salesforce email address, all alphanumeric characters are valid, plus the following special characters: ! # $ % & amp; ' * / = ? ^ _ + - ` { | } ~, The dot character (.) is also valid as long as it's not the first or last character. Email addresses aren’t case sensitive.",
+        "required": true
+      },
+      "runAsUser": {
+        "type": "string",
+        "description": "The username of the user whose permissions the email service assumes when processing messages sent to this address.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EmailServicesAddress\">\n  <xsd:sequence>\n    <xsd:element name=\"authorizedSenders\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"localPart\" type=\"xsd:string\"/>\n    <xsd:element name=\"runAsUser\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"EmailServicesAttOptions\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"TextOnly\"/>\n    <xsd:enumeration value=\"BinaryOnly\"/>\n    <xsd:enumeration value=\"All\"/>\n    <xsd:enumeration value=\"NoContent\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EmailServicesErrorAction\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"UseSystemDefault\"/>\n    <xsd:enumeration value=\"Bounce\"/>\n    <xsd:enumeration value=\"Discard\"/>\n    <xsd:enumeration value=\"Requeue\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EmailServicesFunction\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"apexClass\" type=\"xsd:string\"/>\n        <xsd:element name=\"attachmentOption\" type=\"tns:EmailServicesAttOptions\"/>\n        <xsd:element name=\"authenticationFailureAction\" type=\"tns:EmailServicesErrorAction\"/>\n        <xsd:element name=\"authorizationFailureAction\" type=\"tns:EmailServicesErrorAction\"/>\n        <xsd:element name=\"authorizedSenders\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"emailServicesAddresses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EmailServicesAddress\"/>\n        <xsd:element name=\"errorRoutingAddress\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"functionInactiveAction\" type=\"tns:EmailServicesErrorAction\"/>\n        <xsd:element name=\"functionName\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isAuthenticationRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isErrorRoutingEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isTextAttachmentsAsBinary\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isTlsRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"overLimitAction\" type=\"tns:EmailServicesErrorAction\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

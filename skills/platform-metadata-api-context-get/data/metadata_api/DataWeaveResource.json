@@ -1,0 +1,46 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DataWeaveResource - Metadata API",
+  "description": "Represents the DataWeaveScriptResource class that is generated for all DataWeave scripts. DataWeave scripts can be directly invoked from Apex.",
+  "file_information": ".dwl",
+  "directory_location": "dw",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "apiVersion": {
+      "type": "double",
+      "required": true,
+      "description": "The API version for this component."
+    },
+    "isGlobal": {
+      "type": "boolean",
+      "description": "When set to true, the generated DataWeaveScriptResource class is global."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "Not used."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DataWeaveResource\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"apiVersion\" type=\"xsd:double\"/>\n        <xsd:element name=\"isGlobal\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "csvToContacts.dwl",
+      "code": "%dw 2.0\ninput records application/csv\noutput application/apex\n---\nrecords map(record) -> {\n FirstName: record.first_name,\n LastName: record.last_name,\n Email: record.email\n} as Object {class: \"Contact\"}"
+    },
+    {
+      "description": "csvToContacts.dwl-meta.xml",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DataWeaveResource xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>58.0</apiVersion>\n    <isGlobal>true</isGlobal>\n</DataWeaveResource>"
+    }
+  ]
+}

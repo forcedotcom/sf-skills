@@ -1,0 +1,55 @@
+{
+  "name": "Customer_Stream",
+  "label": "Customer Stream",
+  "datasource": "SalesforceDotCom_Home",
+  "datastreamType": "CONNECTORSFRAMEWORK",
+  "connectorInfo": {
+    "connectorType": "SalesforceDotCom",
+    "connectorDetails": {
+      "name": "SalesforceDotCom_Home",
+      "sourceObject": "Custom_Object__c"
+    }
+  },
+  "dataLakeObjectInfo": {
+    "label": "Customer",
+    "name": "Customer__dll",
+    "category": "Profile",
+    "dataspaceInfo": [
+      {
+        "name": "Default"
+      }
+    ],
+    "dataLakeFieldInputRepresentations": [
+      {
+        "name": "Id",
+        "label": "Record ID",
+        "dataType": "Text",
+        "isPrimaryKey": true
+      },
+      {
+        "name": "External_Id_c",
+        "label": "External ID",
+        "dataType": "Text",
+        "isPrimaryKey": false
+      }
+    ]
+  },
+  "sourceFields": [
+    {
+      "name": "Id",
+      "dataType": "Text"
+    },
+    {
+      "name": "External_Id__c",
+      "dataType": "Text"
+    }
+  ],
+  "mappings": [],
+  "refreshConfig": {
+    "isAccelerationEnabled": true,
+    "refreshMode": "UPSERT",
+    "frequency": {
+      "frequencyType": "HOURLY"
+    }
+  }
+}

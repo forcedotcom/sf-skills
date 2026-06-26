@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Certificate - Metadata API",
+  "description": "Represents a certificate used for digital signatures that verify that requests are coming from your org. Certificates are used for either authenticated single sign-on with an external website, or when using your org as an identity provider. This type extends the Metadata With Content metadata type and inherits its content and fullName fields.",
+  "file_information": ".crt",
+  "directory_location": "certs",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "caSigned": {
+      "type": "boolean",
+      "description": "Indicates whether this certificate is signed by the issuer (true) or not (false).",
+      "required": true
+    },
+    "encryptedWithPlatformEncryption": {
+      "type": "boolean",
+      "description": "Indicates whether this certificate is encrypted with Platform Encryption."
+    },
+    "expirationDate": {
+      "type": "dateTime",
+      "description": "The date that this certificate expires and is no longer usable. For self-signed certificates, if keySize is 2048 bits, the expiration date is automatically 1 year after you create the certificate. If keySize is 4096 bits, the expiration date is automatically 2 years after you create the certificate. For CA-signed certificates, expirationDate is automatically updated to the signed certificate’s expiration date when a signed certificate chain is uploaded. The date format is YYYY-MM-DD."
+    },
+    "keySize": {
+      "type": "int",
+      "description": "Certificate keys can be either 2048 bits or 4096 bits. A certificate with 4096-bit keys lasts 2 years, and a certificate with 2048-bit keys lasts 1 year. Certificates with 2048-bit keys are faster than certificates with 4096-bit keys. If keySize isn’t specified when you create a certificate, the key size defaults to 2048 bits."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "A user-friendly name for the certificate that appears in the Salesforce user interface, such as in Certificate and Key Management. Limit: 64 characters.",
+      "required": true
+    },
+    "privateKeyExportable": {
+      "type": "boolean",
+      "description": "Indicates whether this certificate’s private key is exportable. If privateKeyExportable isn’t specified when you create a certificate, its default value is true."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Certificate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"caSigned\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"encryptedWithPlatformEncryption\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"expirationDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"keySize\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"privateKeyExportable\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a Certificate component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Certificate xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <caSigned>true</caSigned>\n    <encryptedWithPlatformEncryption>true</encryptedWithPlatformEncryption>\n    <expirationDate>2017-03-19</expirationDate>\n    <keySize>4096</keySize>\n    <masterLabel>My Certificate Name</masterLabel>\n    <privateKeyExportable>true</privateKeyExportable>\n</Certificate>"
+    }
+  ]
+}

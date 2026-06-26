@@ -1,0 +1,68 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Territory2Rule - Metadata API",
+  "description": "Represents the metadata associated with a territory assignment rule associated with an object, such as Account. Available if Sales Territories has been enabled.",
+  "file_information": ".territory2Rule",
+  "directory_location": "rules",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "Indicates whether the rule is active (true) or inactive (false). Via the API, active rules run automatically when object records are created and edited. The exception is when the value of the IsExcludedFromRealign field on an object record is true, which prevents record assignment rules from evaluating that record.",
+      "required": true
+    },
+    "booleanFilter": {
+      "type": "string",
+      "description": "An advanced filter condition. For example: (1 AND 2) OR 3. Numbering must start at 1 and must be contiguous."
+    },
+    "name": {
+      "type": "string",
+      "description": "The user interface label for the rule.",
+      "required": true
+    },
+    "objectType": {
+      "type": "string",
+      "description": "The object that the rule is defined for. For API version 32.0, the only available object is Account.",
+      "required": true
+    },
+    "ruleItems": {
+      "type": "Territory2RuleItem",
+      "description": "The items that define a rule’s the selection criteria, such as Billing State equals California."
+    }
+  },
+  "sub_types": {
+    "Territory2RuleItem": {
+      "field": {
+        "type": "string",
+        "description": "The standard or custom object field that the rule item operates on."
+      },
+      "operation": {
+        "type": "FilterOperation (enumeration of type string)",
+        "description": "The criterion to apply for the rule item. For example: equals or starts with. Valid values are: equals notEqual lessThan greaterThan lessOrEqual greaterOrEqual contains notContain startsWith includes excludes within (DISTANCE criteria only)"
+      },
+      "value": {
+        "type": "string",
+        "description": "The field value or values to evaluate. For example: if the field is Billing ZIP/Postal Code, a value could be 94105."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"FilterOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"equals\"/>\n    <xsd:enumeration value=\"notEqual\"/>\n    <xsd:enumeration value=\"lessThan\"/>\n    <xsd:enumeration value=\"greaterThan\"/>\n    <xsd:enumeration value=\"lessOrEqual\"/>\n    <xsd:enumeration value=\"greaterOrEqual\"/>\n    <xsd:enumeration value=\"contains\"/>\n    <xsd:enumeration value=\"notContain\"/>\n    <xsd:enumeration value=\"startsWith\"/>\n    <xsd:enumeration value=\"includes\"/>\n    <xsd:enumeration value=\"excludes\"/>\n    <xsd:enumeration value=\"within\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Territory2Rule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"objectType\" type=\"xsd:string\"/>\n        <xsd:element name=\"ruleItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Territory2RuleItem\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Territory2RuleItem\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"operation\" type=\"tns:FilterOperation\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following example shows the definition of a Territory2RuleItem component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Territory2Rule xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <label>Northern CA</label>\n    <description>To capture northern CA based accounts</description>\n    <objectType>Account</objectType>\n    <active>True</active>\n    <ruleItems>\n        <field>BillingZip</field>\n        <operation>contains</operation>\n        <value><94105,94404,94536/value>\n    </ruleItems>\n    <ruleItems>\n        <field>Industry</field>\n        <operation>equals</operation>\n        <value>IT</value>\n    </ruleItems>\n    <ruleItems>\n        <field>someCustomField__c</field>\n        <operation>greater_than</operation>\n        <value>50000</value>\n    </ruleItems>\n    <booleanFilter>(1 OR 2) AND 3</booleanFilter>\n</Territory2Rule>"
+    }
+  ]
+}

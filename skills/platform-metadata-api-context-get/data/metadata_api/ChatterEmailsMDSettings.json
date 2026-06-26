@@ -1,0 +1,68 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ChatterEmailsMDSettings - Metadata API",
+  "description": "Represents an org’s settings for Chatter email when Chatter is enabled. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableChatterDigestEmailsApiOnly": {
+      "type": "boolean",
+      "description": "Indicates whether Chatter digests can be sent via the API, rather than according to the regular schedule, for your org (true) or not (false)."
+    },
+    "enableChatterEmailAttachment": {
+      "type": "boolean",
+      "description": "Indicates whether attachments can be included on posts to chatter feeds via email replies (true) or not (false)."
+    },
+    "enableCollaborationEmail": {
+      "type": "boolean",
+      "description": "Indicates whether collaboration email notifications can be sent (true) or not (false)."
+    },
+    "enableDisplayAppDownloadBadges": {
+      "type": "boolean",
+      "description": "Indicates whether iOS and Android app download badges display in Chatter notifications (true) or not (false)."
+    },
+    "enableEmailReplyToChatter": {
+      "type": "boolean",
+      "description": "Indicates whether users can reply to chatter notifications through an email response (true) or not (false)."
+    },
+    "enableEmailToChatter": {
+      "type": "boolean",
+      "description": "Indicates whether users can post to chatter feeds via email (true) or not (false)."
+    },
+    "noQnOwnNotifyOnCaseCmt": {
+      "type": "boolean",
+      "description": "Indicates whether a user is notified when a question is posted on their case comment (false) or not (true)."
+    },
+    "noQnOwnNotifyOnRep": {
+      "type": "boolean",
+      "description": "Indicates whether a user is notified when a reply is posted on their question (false) or not true."
+    },
+    "noQnSubNotifyOnBestR": {
+      "type": "boolean",
+      "description": "Indicates whether a user is notified when a best reply is selected on a question they follow (false) or not (true)."
+    },
+    "noQnSubNotifyOnRep": {
+      "type": "boolean",
+      "description": "Indicates whether a user is notified when a reply is posted on a question they follow (false) or not (true)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ChatterEmailsMDSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableChatterDigestEmailsApiOnly\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableChatterEmailAttachment\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCollaborationEmail\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDisplayAppDownloadBadges\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEmailReplyToChatter\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEmailToChatter\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"noQnOwnNotifyOnCaseCmt\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"noQnOwnNotifyOnRep\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"noQnSubNotifyOnBestR\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"noQnSubNotifyOnRep\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a chatteremailmd.settings metadata file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ChatterEmailsMDSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableChatterDigestEmailsApiOnly>false</enableChatterDigestEmailsApiOnly>\n    <enableChatterEmailAttachment>false</enableChatterEmailAttachment>\n    <enableCollaborationEmail>true</enableCollaborationEmail>\n    <enableDisplayAppDownloadBadges>true</enableDisplayAppDownloadBadges>\n    <enableEmailReplyToChatter>false</enableEmailReplyToChatter>\n    <enableEmailToChatter>true</enableEmailToChatter>\n    <noQnOwnNotifyOnCaseCmt>false</noQnOwnNotifyOnCaseCmt>\n    <noQnOwnNotifyOnRep>false</noQnOwnNotifyOnRep>\n    <noQnSubNotifyOnBestR>false</noQnSubNotifyOnBestR>\n    <noQnSubNotifyOnRep>false</noQnSubNotifyOnRep>\n\n</ChatterEmailsMDSettings>"
+    }
+  ]
+}

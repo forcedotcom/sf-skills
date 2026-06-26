@@ -1,0 +1,30 @@
+{
+  "label": "Main",
+  "description": "Generic identity resolution ruleset using customer identifiers and contact points",
+  "configurationType": "individual",
+  "rulesetId": "main",
+  "doesRunAutomatically": false,
+  "matchRules": [
+    {
+      "label": "Exact Email",
+      "criteria": [
+        {
+          "entityName": "ssot__ContactPointEmail__dlm",
+          "fieldName": "ssot__EmailAddress__c",
+          "matchMethodType": "exactnormalized",
+          "caseSensitiveMatch": false,
+          "shouldMatchOnBlank": false
+        }
+      ]
+    }
+  ],
+  "reconciliationRules": [
+    {
+      "entityName": "ssot__Individual__dlm",
+      "ruleType": "lastupdated",
+      "shouldIgnoreEmptyValue": true,
+      "sources": [],
+      "fields": []
+    }
+  ]
+}

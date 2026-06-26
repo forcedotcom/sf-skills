@@ -1,0 +1,74 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PathAssistant - Metadata API",
+  "description": "Represents Path records.This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".pathAssistant",
+  "directory_location": "pathAssistants",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "Indicates whether the path is active (true) or not (false)."
+    },
+    "entityName": {
+      "type": "string",
+      "description": "The entity name. This is hard coded for Opportunity, Lead, and Quote. For a custom object, this field must be specified and should be the name of the custom object. This field is not updateable.",
+      "required": true
+    },
+    "fieldName": {
+      "type": "string",
+      "description": "The field name. This is hard coded for StageName and Status. For a custom object, this field must be specified and should be the name of the picklist field that determines the steps in the path. This field is not updateable.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label of the path.",
+      "required": true
+    },
+    "pathAssistantSteps": {
+      "type": "PathAssistantStep",
+      "description": "List of all the steps that have been configured with fields and guidance information. Note that a missing step in the.xml file means it has not been configured, not that it doesn’t exist."
+    },
+    "recordTypeName": {
+      "type": "string",
+      "description": "The name of the record type associated with the path. This field is not updateable.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "PathAssistantStep": {
+      "fieldNames": {
+        "type": "string",
+        "description": "All the fields in entityName that will display in this step."
+      },
+      "info": {
+        "type": "string",
+        "description": "The guidance information displayed in this step."
+      },
+      "picklistValueName": {
+        "type": "string",
+        "description": "The picklist value associated with the step.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PathAssistant\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"entityName\" type=\"xsd:string\"/>\n        <xsd:element name=\"fieldName\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"pathAssistantSteps\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PathAssistantStep\"/>\n        <xsd:element name=\"recordTypeName\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"PathAssistantStep\">\n  <xsd:sequence>\n    <xsd:element name=\"fieldNames\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"info\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"picklistValueName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PathAssistant component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PathAssistant xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <active>true</active>\n    <entityName>Opportunity</entityName>\n    <fieldName>StageName</fieldName>\n    <masterLabel>Test Path</masterLabel>\n    <pathAssistantSteps>\n        <fieldNames>Amount</fieldNames>\n        <fieldNames>CloseDate</fieldNames>\n        <info>Some Text</info>\n        <picklistValueName>Id. Decision Makers</picklistValueName>\n    </pathAssistantSteps>\n    <pathAssistantSteps>\n        <fieldNames>Amount</fieldNames>\n        <fieldNames>CloseDate</fieldNames>\n        <info>Some Text</info>\n        <picklistValueName>Proposal/Price Quote</picklistValueName>\n    </pathAssistantSteps>\n    <recordTypeName>Test_Record_Type</recordTypeName>\n</PathAssistant>"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "IdentityProviderSettings - Metadata API",
+  "description": "Represents the settings used to enable or disable Salesforce as a SAML identity provider for single sign-on (SSO).",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "certificateName": {
+      "type": "string",
+      "required": true,
+      "description": "The certificate that Salesforce uses to communicate with SAML SSO service providers, such as third-party service providers or another Salesforce org acting as a service provider. You can enter the name of a self-signed certificate or a certificate signed by a certificate authority."
+    },
+    "enableIdentityProvider": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether Salesforce can be used as a SAML identity provider (true) or not (false)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"IdentityProviderSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"certificateName\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableIdentityProvider\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an IdentityProviderSettings component. In this example, Salesforce is enabled as a SAML identity provider.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<IdentityProviderSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <certificateName>Certificate Name</certificateName>\n    <enableIdentityProvider>true</enableIdentityProvider>\n</IdentityProviderSettings>"
+    }
+  ]
+}

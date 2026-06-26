@@ -1,0 +1,112 @@
+name: Radio Group
+description: A collection of radio button options that allows users to select exactly one choice from a set of mutually exclusive
+  options.
+category: Input
+slds_classes:
+  root: slds-radio_button-group
+  elements:
+  - class: slds-radio_button
+    description: Individual radio button wrapper
+    purpose: Contains a single radio button and its label
+  - class: slds-radio_button__label
+    description: Label element for the radio button
+    purpose: Provides clickable area and describes the option
+  modifiers: []
+  states:
+  - class: slds-has-error
+    description: Error state styling
+    trigger: When radio group validation fails
+  - class: slds-is-disabled
+    description: Disabled state styling
+    trigger: When radio group is not interactive
+variants:
+- name: Base
+  description: Standard radio button group
+  classes:
+  - slds-radio_button-group
+  usage_context: Default radio group implementation
+  differences: Standard radio buttons with labels arranged vertically
+lightning_component:
+  name: lightning-radio-group
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-radio-group
+  mapping_notes: Direct mapping - Lightning component implements SLDS radio group blueprint
+accessibility:
+  keyboard_support:
+  - Tab to enter the radio group
+  - Arrow keys to navigate between options
+  - Space to select highlighted option
+  - Tab to exit the radio group
+  screen_reader:
+  - Group purpose and current selection announced
+  - Individual option labels read clearly
+  - Required state communicated when applicable
+  aria_attributes:
+  - role='radiogroup' for the container
+  - aria-labelledby for group labeling
+  - aria-describedby for group help text
+  - aria-required when selection is mandatory
+  - aria-invalid when validation fails
+usage_guidelines:
+  when_to_use:
+  - For mutually exclusive options (only one selection allowed)
+  - When users must choose exactly one option
+  - For small sets of related options (2-7 choices)
+  - When all options should be visible simultaneously
+  when_not_to_use:
+  - For multiple selections (use checkbox group instead)
+  - For large sets of options (use select or combobox)
+  - When no selection is a valid choice initially
+  best_practices:
+  - Use clear, distinct option labels
+  - Arrange options in logical order
+  - Provide a default selection when appropriate
+  - Keep option labels concise
+  - Group related options together
+  common_mistakes:
+  - Using radio groups for multiple selections
+  - Too many options making selection difficult
+  - Unclear or ambiguous option labels
+  - Not providing a sensible default selection
+code_examples:
+- title: Basic Radio Group
+  code: "<fieldset class=\"slds-form-element\">\n      <legend class=\"slds-form-element__legend slds-form-element__label\"\
+    >\n        <abbr class=\"slds-required\" title=\"required\">* </abbr>Radio Group Label\n      </legend>\n      <div class=\"\
+    slds-form-element__control\">\n        <div class=\"slds-radio_button-group\">\n          <span class=\"slds-radio_button\"\
+    >\n            <input type=\"radio\" id=\"radio-1\" value=\"option1\" name=\"options\" />\n            <label class=\"\
+    slds-radio_button__label\" for=\"radio-1\">\n              <span class=\"\"></span>\n              <span class=\"slds-form-element__label\"\
+    >Option One</span>\n            </label>\n          </span>\n          <span class=\"slds-radio_button\">\n          \
+    \  <input type=\"radio\" id=\"radio-2\" value=\"option2\" name=\"options\" />\n            <label class=\"slds-radio_button__label\"\
+    \ for=\"radio-2\">\n              <span class=\"\"></span>\n              <span class=\"slds-form-element__label\">Option\
+    \ Two</span>\n            </label>\n          </span>\n          <span class=\"slds-radio_button\">\n            <input\
+    \ type=\"radio\" id=\"radio-3\" value=\"option3\" name=\"options\" />\n            <label class=\"slds-radio_button__label\"\
+    \ for=\"radio-3\">\n              <span class=\"\"></span>\n              <span class=\"slds-form-element__label\">Option\
+    \ Three</span>\n            </label>\n          </span>\n        </div>\n      </div>\n      </fieldset>\n"
+styling_hooks:
+- name: --slds-c-radio-color-border
+  description: Border color for radio buttons
+  category: color
+dependencies:
+  css_files:
+  - radio-group.css
+  - form-element.css
+  javascript: []
+  icons: []
+  other_components:
+  - form-element
+related_components:
+- name: Checkbox Group
+  relationship: alternative
+  description: For multiple selection scenarios
+- name: Select
+  relationship: alternative
+  description: For larger sets of mutually exclusive options
+- name: Button Group
+  relationship: alternative
+  description: Alternative visual treatment for option selection
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/radio-group/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

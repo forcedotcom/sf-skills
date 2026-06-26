@@ -1,0 +1,19 @@
+%% dependency_graph.mmd - conditional section (graph LR)
+%%
+%% Rendered ONLY when `_unresolved[]` is non-empty OR cycles exist in the
+%% action tree. Otherwise render_architecture skips this template entirely.
+%%
+%% Placeholders (substituted by render_architecture.load_mermaid):
+%%   NODES placeholder: node declarations: `<id>[<label>]`. Unresolved refs
+%%                      use a `:::unresolved` class marker for CSS styling.
+%%   EDGES placeholder: cross-artifact dependency edges harvested from the
+%%                      tree. Cycle-back edges render as `A -.->|cycle| B`.
+%%
+%% placeholder names are written as bare tokens (no double-curly)
+%% so load_mermaid's single-pass str.replace cannot corrupt this header.
+graph LR
+    {{NODES}}
+
+    {{EDGES}}
+
+    classDef unresolved stroke-dasharray: 5 5

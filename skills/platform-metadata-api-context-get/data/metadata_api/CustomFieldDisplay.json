@@ -1,0 +1,45 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CustomFieldDisplay - Metadata API",
+  "description": "Represents the view type assigned to product attribute custom fields. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".customFieldDisplay",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "displayType": {
+      "type": "CustomFieldDisplayType (enumeration of type string)",
+      "description": "The view type of the product attribute custom fields. Values are: ColorSwatch Dropdown Pill",
+      "required": true
+    },
+    "fieldApiName": {
+      "type": "string",
+      "description": "The unique name of the product attribute, for example, color_c.",
+      "required": true
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "Optional. An auto-generated value that doesn’t impact the behavior of the metadata type. The default value is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The primary label for this object.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomFieldDisplay\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"displayType\" type=\"tns:CustomFieldDisplayType\"/>\n        <xsd:element name=\"fieldApiName\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"CustomFieldDisplayType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Dropdown\"/>\n    <xsd:enumeration value=\"ColorSwatch\"/>\n    <xsd:enumeration value=\"Pill\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CustomFieldDisplay component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomFieldDisplay xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<masterLabel>cfd1</masterLabel>\n\t<fieldApiName>Color__c</fieldApiName>\n\t<displayType>Pill</displayType>\n\t<isProtected>false</isProtected>\n</CustomFieldDisplay>"
+    }
+  ]
+}

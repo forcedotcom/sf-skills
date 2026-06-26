@@ -1,0 +1,202 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SvcCatalogItemDef - Metadata API",
+  "description": "Represents the entity associated with a specific, individual service available in the Service Catalog.",
+  "file_information": ".catalogItem",
+  "directory_location": "svcCatalogItems",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "apiVersion": {
+      "type": "double",
+      "description": "The API version in which this catalog item was created. The value for this field updates based on the value of fulfillmentFlow. For catalog items created before version 57.0, the value for this field is null. Available in version 57.0 and later."
+    },
+    "catalogFilterCriteria": {
+      "type": "SvcCatalogItemDefFiltrCrit[]",
+      "description": "The eligibility rule associated with a catalog item. Eligibility rules customize access to catalog items for different audiences, based on the User object. Available in API version 59.0 and later."
+    },
+    "categories": {
+      "type": "SvcCatalogCategoryItem[]",
+      "description": "A list of catalog categories that contain this catalog item."
+    },
+    "dataCategories": {
+      "type": "SvcCatalogItemDefDataCategorySelection[]",
+      "description": "A list of data categories for this catalog item. Available in API version 59.0 and later."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the catalog item."
+    },
+    "flow": {
+      "type": "string",
+      "description": "The screen flow associated with the catalog item. Available in API version 53.0 to 58.0."
+    },
+    "fulfillmentFlow": {
+      "type": "string",
+      "description": "Name of the related SvcCatalogFulfillmentFlow, which represents the flow associated with a specific catalog item in the Service Catalog. Available in API version 56.0 and later."
+    },
+    "image": {
+      "type": "string",
+      "description": "The developer name of a content document to be displayed in the Service Catalog for this item."
+    },
+    "inputs": {
+      "type": "SvcCatalogItemAttribute[]",
+      "description": "Represents attributes of a catalog item version. Available in API version 57.0 and later."
+    },
+    "internalNotes": {
+      "type": "string",
+      "description": "Intended to describe what the catalog item does and its implementation. That value is meant for other catalog builders."
+    },
+    "isAvailableToAllCustomers": {
+      "type": "boolean",
+      "required": true,
+      "description": "Controls catalog item access for internal users. To share with all internal users, set the value to True. This value corresponds to the Allow Access for All Users option for Internal Access in the Catalog Item Builder. Available in API version 61.0 and later."
+    },
+    "isFeatured": {
+      "type": "boolean",
+      "description": "Determines if the catalog item is part of the featured catalog items."
+    },
+    "isGuestAccessible": {
+      "type": "boolean",
+      "required": true,
+      "description": "Controls catalog item access for guest users. To share with guests, set the value to True. This value corresponds to Guest Visibility option for External Access in the Catalog Item Builder. Available in API version 61.0 and later."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value. This value has no impact."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The primary label for the catalog item record."
+    },
+    "sharedTo": {
+      "type": "SharedTo",
+      "description": "Describes how the catalog item is shared across multiple catalog categories. SvcCatalogItemDef only supports sharing with groups."
+    },
+    "status": {
+      "type": "PublishStatusType (enumeration of type string)",
+      "required": true,
+      "description": "Displays the publishing status of a catalog item. Values are: Deprecated Draft PendingChanges Published"
+    }
+  },
+  "sub_types": {
+    "SvcCatalogItemDefFiltrCrit": {
+      "svcCatalogFilterCriteria": {
+        "type": "string",
+        "description": "The name of the associated catalogFilerCriteria eligibility filter."
+      }
+    },
+    "SvcCatalogCategoryItem": {
+      "isPrimaryCategory": {
+        "type": "boolean",
+        "description": "Determines if the catalog category (svcCatalogCategory) is the primary category for this catalog item. Exactly one category per SvcCatalogItemDef component must set this attribute to true."
+      },
+      "sortOrder": {
+        "type": "int",
+        "description": "The position of the catalog item relative to other catalog items in the catalog category."
+      },
+      "svcCatalogCategory": {
+        "type": "string",
+        "required": true,
+        "description": "The catalog category the catalog item is assigned to."
+      }
+    },
+    "SvcCatalogItemDefDataCategorySelection": {
+      "category": {
+        "type": "string",
+        "description": "API name of a data category."
+      },
+      "categoryGroup": {
+        "type": "string",
+        "description": "API Name of a data category group."
+      }
+    },
+    "SvcCatalogItemAttribute": {
+      "field": {
+        "type": "string",
+        "description": "Applicable when the display type is Lookup/Reference."
+      },
+      "inputType": {
+        "type": "SvcCatalogItemAttrDataType (enumeration of type string)",
+        "required": true,
+        "description": "Values are: Attachment Checkbox Currency Date Datetime DisplayText Email IPAddress Integer ListOfAttachment(available in API version 65.0 and later) ListOfBoolean ListOfDouble ListOfInteger ListOfMaps ListOfString Lookup Map MultilineText MultiSelectPicklist(available in API version 65.0 and later) Number NumericScale Password(available in API version 65.0 and later) Percentage Picklist Queue RadioButton(available in API version 65.0 and later) SingleCheckbox (available in API version 59.0 and later) SinglelineText Text Toggle (available in API version 59.0 and later) Url"
+      },
+      "inputVariable": {
+        "type": "string",
+        "description": "References the input variable to which the attribute value is forwarded."
+      },
+      "isRequired": {
+        "type": "boolean",
+        "description": "Determines if an answer is required for this question."
+      },
+      "label": {
+        "type": "string",
+        "description": "A translatable label for rendering the attribute to users."
+      },
+      "maxValue": {
+        "type": "double",
+        "description": "Applicable when the display type is slider."
+      },
+      "minValue": {
+        "type": "double",
+        "description": "Applicable when the display type is slider."
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "Applicable when the display type is Lookup/Reference."
+      },
+      "object": {
+        "type": "string",
+        "description": "A picklist object’s custom API Name. Applies when inputType is set to Picklist."
+      },
+      "options": {
+        "type": "SvcCatalogItemAttrDetail",
+        "description": "The values attached to an attribute of an item version."
+      },
+      "type": {
+        "type": "SvcCatalogItemAttrType (enumeration of type string)",
+        "required": true,
+        "description": "Type of the attribute; used to determine if it's a pre-filled input or questions to ask users. Values are: FulfillmentInput UserQuestion"
+      },
+      "value": {
+        "type": "string",
+        "description": "Attribute value defined by the catalog builder."
+      }
+    },
+    "SvcCatalogItemAttrDetail": {
+      "isDefault": {
+        "type": "boolean",
+        "required": true,
+        "description": "Marks the attribute detail as the default. Applicable when the input display type is picklist or checkbox."
+      },
+      "label": {
+        "type": "string",
+        "required": true,
+        "description": "Picklist option label when the input type is picklist or checkbox."
+      },
+      "value": {
+        "type": "string",
+        "description": "Attribute value defined by the catalog builder."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a SvcCatalogItemDef component.",
+      "code": "<SvcCatalogItemDef xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>57.0</apiVersion>\n    <categories>\n        <isPrimaryCategory>true</isPrimaryCategory>\n        <sortOrder>3</sortOrder>\n        <svcCatalogCategory>Category1</svcCatalogCategory>\n    </categories>\n    <dataCategories>\n        <category>France</category>\n        <categoryGroup>World</categoryGroup>\n    </dataCategories>\n    <masterLabel>Item Draft Update</masterLabel>\n    <description>Item with a Draft state</description>\n    <fulfillmentFlow>TestQuestions</fulfillmentFlow>\n    <isFeatured>false</isFeatured>\n    <isProtected>false</isProtected>\n    <status>Published</status>\n    <inputs>\n        <name>Input1</name>\n        <type>FulfillmentInput</type>\n        <inputVariable>input1</inputVariable>\n        <label>Input Static</label>\n        <inputType>Text</inputType>\n        <isRequired>false</isRequired>\n    </inputs>\n    <inputs>\n        <type>UserQuestion</type>\n        <inputType>Picklist</inputType>\n        <isRequired>false</isRequired>\n        <label>My First Question</label>\n        <name>first_question</name>\n        <options>\n            <label>Option 1</label>\n            <value>option_1</value>\n            <isDefault>true</isDefault>\n        </options>\n        <options>\n            <label>Option 2</label>\n            <value>option_2</value>\n            <isDefault>false</isDefault>\n        </options>\n        <options>\n            <label>Option 3</label>\n            <value>option_3</value>\n            <isDefault>false</isDefault>\n        </options>\n    </inputs>\n</SvcCatalogItemDef>"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "UserAuthCertificate - Metadata API",
+  "description": "Represents a PEM-encoded user certificate. These certificates are associated with a user, and externally uploaded. The uploaded certificate is used to authenticate the user.",
+  "file_information": ".userAuthCertificate",
+  "directory_location": "userAuthCertificates",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "developerName": {
+      "type": "string",
+      "description": "The name of the certificate with an underscore between words. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field.",
+      "required": true
+    },
+    "expirationDate": {
+      "type": "dateTime",
+      "description": "The date on which the certificate expires.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "A user-friendly name that you create for the certificate. Limited to 64 characters.",
+      "required": true
+    },
+    "serialNumber": {
+      "type": "string",
+      "description": "The serial number for the certificate.",
+      "required": true
+    },
+    "user": {
+      "type": "string",
+      "description": "The user’s name.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"UserAuthCertificate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"expirationDate\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"serialNumber\" type=\"xsd:string\"/>\n        <xsd:element name=\"user\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a UserAuthCertificate component.",
+      "code": "<UserAuthCertificate xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n    <content xsi:nil=\"true\"/>\n    <developerName>ND_user_cert</developerName>\n    <expirationDate>2030-10-01T08:30:00.000Z</expirationDate>\n    <masterLabel>ND user cert</masterLabel>\n    <serialNumber>1401</serialNumber>\n    <user>005RM000001Zn1E</user>\n</UserAuthCertificate>"
+    },
+    {
+      "description": "The following is an example package.xml that references the previous definition.",
+      "code": "Package xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <types>\n        <members>*</members>\n        <name>UserAuthCertificate</name>\n    </types>\n    <version>50.0</version>\n</Package>"
+    }
+  ]
+}

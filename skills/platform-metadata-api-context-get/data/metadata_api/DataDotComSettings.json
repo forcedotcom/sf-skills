@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DataDotComSettings - Metadata API",
+  "description": "Represents the org's Data.com settings. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableAccountExportButtonOff": {
+      "type": "boolean",
+      "description": "Indicates whether Account Export to Excel is enabled for Prospector (true) or not (false). Default value is false."
+    },
+    "enableAccountImportButtonOff": {
+      "type": "boolean",
+      "description": "Indicates whether Account Import to CRM is enabled for Prospector (true) or not (false). Default value is false."
+    },
+    "enableAllowDupeContactFromLead": {
+      "type": "boolean",
+      "description": "Indicates whether Prospector Lead Import Duplicate Check is enabled (true) or not (false). Default value is false."
+    },
+    "enableAllowDupeLeadFromContact": {
+      "type": "boolean",
+      "description": "Indicates whether Prospector Contact Import Duplicate Check is enabled (true) or not (false). Default value is false."
+    },
+    "enableCleanUpgradeRequested": {
+      "type": "boolean",
+      "description": "This field is no longer in use."
+    },
+    "enableContactExportButtonOff": {
+      "type": "boolean",
+      "description": "Indicates whether Contact Export to Excel is enabled for Prospector (true) or not (false). Default value is false."
+    },
+    "enableContactImportButtonOff": {
+      "type": "boolean",
+      "description": "Indicates whether Contact Import to CRM is enabled for Prospector (true) or not (false). Default value is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DataDotComSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableAccountExportButtonOff\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAccountImportButtonOff\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAllowDupeContactFromLead\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAllowDupeLeadFromContact\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContactExportButtonOff\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContactImportButtonOff\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDDCSocialKeyEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDataDotComCleanEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDataDotComOptOutsEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDatacloudAPIEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DataDotComSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DataDotComSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<enableAccountExportButtonOff>true</enableAccountExportButtonOff>\n\t<enableAccountImportButtonOff>true</enableAccountImportButtonOff>\n\t<enableAllowDupeContactFromLead>true</enableAllowDupeContactFromLead>\n\t<enableAllowDupeLeadFromContact>true</enableAllowDupeLeadFromContact>\n\t<enableContactExportButtonOff>true</enableContactExportButtonOff>\n\t<enableContactImportButtonOff>true</enableContactImportButtonOff>\n</DataDotComSettings>"
+    }
+  ]
+}

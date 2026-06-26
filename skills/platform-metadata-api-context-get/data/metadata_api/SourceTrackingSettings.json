@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SourceTrackingSettings (Beta) - Metadata API",
+  "description": "Represents settings for source tracking, so that changes you make in your Developer and Developer Pro sandboxes or local workspace can be tracked. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableSourceTrackingSandboxes": {
+      "type": "boolean",
+      "description": "Indicates whether to enable source tracking automatically when Developer or Developer Pro sandboxes are created or refreshed (true) or not (false). The default value is false. If you set enableSourceTrackingSandboxes back to false after it was enabled, a sandbox that is tracking source changes continues to do so until it is refreshed. Note: You don't need to have the Developer Hub (DevHub) enabled in the same org to enable source tracking. This field applies to production orgs only; in other orgs, this field is ignored."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"SourceTrackingSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableSourceTrackingSandboxes\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a SourceTrackingSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SourceTrackingSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableSourceTrackingSandboxes>true</enableSourceTrackingSandboxes>\n</SourceTrackingSettings>"
+    }
+  ]
+}

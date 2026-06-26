@@ -1,0 +1,304 @@
+name: "Accordion"
+description: "A vertically stacked list of items where only one item is shown at a time. When a new item is clicked, it expands to reveal its content and the previously open item closes. Each accordion consists of multiple sections with collapsible content areas and clickable headers."
+category: "Layout"
+slds_classes:
+  root: "slds-accordion"
+  elements:
+    - class: "slds-accordion__list-item"
+      description: "Container for each accordion section"
+      purpose: "Wraps individual accordion items"
+    - class: "slds-accordion__section"
+      description: "Individual section within the accordion"
+      purpose: "Contains a single collapsible section with header and content"
+    - class: "slds-accordion__summary"
+      description: "Clickable header area for each accordion section"
+      purpose: "Contains the accordion toggle button and summary content"
+    - class: "slds-accordion__summary-heading"
+      description: "Heading container within the summary"
+      purpose: "Contains the text heading for the accordion section"
+    - class: "slds-accordion__summary-content"
+      description: "Content area within the summary"
+      purpose: "Contains the section title and description"
+    - class: "slds-accordion__summary-action"
+      description: "Action area within the summary"
+      purpose: "Contains buttons or interactive elements in the summary"
+    - class: "slds-accordion__summary-action-icon"
+      description: "Icon for expand/collapse action"
+      purpose: "Visual indicator for section state and interaction"
+    - class: "slds-accordion__content"
+      description: "Collapsible content area of each accordion section"
+      purpose: "Contains the main content that expands/collapses"
+  modifiers:
+    - class: "slds-is-open"
+      description: "Applied to accordion section when expanded"
+      usage: "Toggle on/off to control accordion section state"
+  states:
+    - class: "slds-is-open"
+      description: "Expanded state for accordion sections"
+      trigger: "User interaction with summary button"
+    - class: "slds-is-closed"
+      description: "Collapsed section state"
+      trigger: "Applied when accordion section is collapsed"
+variants:
+  - name: "Base"
+    description: "Standard accordion with expandable sections"
+    classes:
+      - "slds-accordion"
+    usage_context: "Default implementation for collapsible content sections"
+    differences: "Single accordion with multiple collapsible sections"
+lightning_component:
+  name: "lightning-accordion"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-accordion"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS accordion blueprint. Individual sections map to lightning-accordion-section components."
+accessibility:
+  keyboard_support:
+    - "Tab to navigate between accordion sections"
+    - "Enter/Space to expand/collapse sections"
+    - "Arrow keys may be used for section navigation"
+    - "Focus management within expanded content"
+  screen_reader:
+    - "Announces section state (expanded/collapsed)"
+    - "Provides context about accordion content"
+    - "Section purpose and state announced"
+    - "Expansion state changes communicated"
+    - "Content structure properly conveyed"
+  aria_attributes:
+    - "aria-expanded on summary elements"
+    - "aria-controls linking summary to content"
+    - "role='button' on interactive summary elements"
+    - "aria-labelledby for content labeling"
+    - "role='region' for content areas"
+usage_guidelines:
+  when_to_use:
+    - "When you have multiple sections of content that users might not need to see all at once"
+    - "To save vertical space on a page"
+    - "For FAQ sections or help documentation"
+    - "When content can be logically grouped into sections"
+    - "For organizing related content that can be shown/hidden"
+    - "When content hierarchy needs progressive disclosure"
+  when_not_to_use:
+    - "When all content should be visible simultaneously"
+    - "For navigation menus (use navigation components instead)"
+    - "When sections are very small and wouldn't benefit from collapsing"
+    - "For unrelated content groupings"
+  best_practices:
+    - "Use clear, descriptive headings for each section"
+    - "Keep section headings concise"
+    - "Ensure content within sections is meaningful when collapsed"
+    - "Provide visual indicators for expanded/collapsed states"
+    - "Group related content logically"
+    - "Provide meaningful content in each section"
+    - "Consider default expanded/collapsed states"
+    - "Maintain consistent section behavior"
+  common_mistakes:
+    - "Making section headings too vague"
+    - "Overusing accordions where tabbed interfaces would be better"
+    - "Not providing proper ARIA attributes for accessibility"
+    - "Using unclear or generic section titles"
+    - "Putting too much content in individual sections"
+    - "Inconsistent section behavior"
+    - "Poor content organization within sections"
+code_examples:
+  - title: "Basic Accordion"
+    description: "Standard accordion with single section"
+    code: |
+      <div class="slds-accordion">
+            <section class="slds-accordion__list-item">
+              <div class="slds-accordion__summary" id="accordion-summary-01">
+                <h3 class="slds-accordion__summary-heading">
+                  <button class="slds-button slds-button_reset slds-accordion__summary-action" aria-controls="accordion-content-01" aria-expanded="true">
+                    <span class="slds-accordion__summary-content">Accordion summary</span>
+                  </button>
+                </h3>
+              </div>
+              <div class="slds-accordion__content slds-is-open" id="accordion-content-01">
+                <p>Accordion content</p>
+              </div>
+            </section>
+            </div>
+  - title: "Multi-Section Accordion"
+    description: "Complete accordion with multiple expandable sections"
+    code: |
+      <div class="slds-accordion">
+            <section class="slds-accordion__section slds-is-open">
+              <div class="slds-accordion__summary">
+                <h3 class="slds-accordion__summary-heading">
+                  <button class="slds-accordion__summary-action slds-button slds-button_reset" aria-controls="accordion-details-01" aria-expanded="true">
+                    <svg class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left" aria-hidden="true">
+                      <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#switch"></use>
+                    </svg>
+                    <span class="slds-accordion__summary-content">
+                      Getting Started
+                    </span>
+                  </button>
+                </h3>
+              </div>
+              <div class="slds-accordion__content" id="accordion-details-01">
+                <p>This section contains information about getting started with our platform. You'll find step-by-step instructions, helpful tips, and links to additional resources.</p>
+                <ul class="slds-list_dotted">
+                  <li>Create your account</li>
+                  <li>Complete your profile</li>
+                  <li>Explore the dashboard</li>
+                  <li>Take the guided tour</li>
+                </ul>
+              </div>
+            </section>
+            <section class="slds-accordion__section slds-is-closed">
+              <div class="slds-accordion__summary">
+                <h3 class="slds-accordion__summary-heading">
+                  <button class="slds-accordion__summary-action slds-button slds-button_reset" aria-controls="accordion-details-02" aria-expanded="false">
+                    <svg class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left" aria-hidden="true">
+                      <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#switch"></use>
+                    </svg>
+                    <span class="slds-accordion__summary-content">
+                      Advanced Features
+                    </span>
+                  </button>
+                </h3>
+              </div>
+              <div class="slds-accordion__content slds-hide" id="accordion-details-02">
+                <p>Learn about our advanced features and how to use them effectively in your workflow.</p>
+              </div>
+            </section>
+            <section class="slds-accordion__section slds-is-open">
+              <div class="slds-accordion__summary">
+                <h3 class="slds-accordion__summary-heading">
+                  <button class="slds-accordion__summary-action slds-button slds-button_reset" aria-controls="accordion-details-03" aria-expanded="true">
+                    <svg class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left" aria-hidden="true">
+                      <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#switch"></use>
+                    </svg>
+                    <span class="slds-accordion__summary-content">
+                      Account Settings
+                    </span>
+                  </button>
+                </h3>
+              </div>
+              <div class="slds-accordion__content" id="accordion-details-03">
+                <div class="slds-grid slds-wrap">
+                  <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <h4 class="slds-text-heading_small slds-m-bottom_small">Profile Information</h4>
+                    <ul class="slds-list_vertical">
+                      <li class="slds-list__item">Update your name and contact details</li>
+                      <li class="slds-list__item">Change your profile picture</li>
+                      <li class="slds-list__item">Manage privacy settings</li>
+                    </ul>
+                  </div>
+                  <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <h4 class="slds-text-heading_small slds-m-bottom_small">Security</h4>
+                    <ul class="slds-list_vertical">
+                      <li class="slds-list__item">Change your password</li>
+                      <li class="slds-list__item">Enable two-factor authentication</li>
+                      <li class="slds-list__item">Review login activity</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </section>
+            </div>
+  - title: "FAQ Accordion"
+    description: "Accordion optimized for frequently asked questions"
+    code: |
+      <div class="slds-accordion">
+            <section class="slds-accordion__section slds-is-closed">
+              <div class="slds-accordion__summary">
+                <h3 class="slds-accordion__summary-heading">
+                  <button class="slds-accordion__summary-action slds-button slds-button_reset" aria-controls="faq-01" aria-expanded="false">
+                    <svg class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left" aria-hidden="true">
+                      <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#switch"></use>
+                    </svg>
+                    <span class="slds-accordion__summary-content">
+                      How do I reset my password?
+                    </span>
+                  </button>
+                </h3>
+              </div>
+              <div class="slds-accordion__content slds-hide" id="faq-01">
+                <p>To reset your password:</p>
+                <ol class="slds-list_ordered">
+                  <li>Click the "Forgot Password" link on the login page</li>
+                  <li>Enter your email address</li>
+                  <li>Check your email for reset instructions</li>
+                  <li>Follow the link and create a new password</li>
+                </ol>
+              </div>
+            </section>
+            <section class="slds-accordion__section slds-is-closed">
+              <div class="slds-accordion__summary">
+                <h3 class="slds-accordion__summary-heading">
+                  <button class="slds-accordion__summary-action slds-button slds-button_reset" aria-controls="faq-02" aria-expanded="false">
+                    <svg class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left" aria-hidden="true">
+                      <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#switch"></use>
+                    </svg>
+                    <span class="slds-accordion__summary-content">
+                      Where can I find my billing information?
+                    </span>
+                  </button>
+                </h3>
+              </div>
+              <div class="slds-accordion__content slds-hide" id="faq-02">
+                <p>Your billing information can be found in the Account Settings section under "Billing & Payments". From there you can:</p>
+                <ul class="slds-list_dotted">
+                  <li>View current charges</li>
+                  <li>Download invoices</li>
+                  <li>Update payment methods</li>
+                  <li>Change billing addresses</li>
+                </ul>
+              </div>
+            </section>
+            </div>
+styling_hooks:
+  - name: "--slds-c-accordion-heading-color"
+    description: "Text color for accordion headings"
+    category: "color"
+  - name: "--slds-c-accordion-heading-font-size"
+    description: "Font size for accordion headings"
+    category: "typography"
+  - name: "--slds-c-accordion-section-color-border"
+    description: "Border color for accordion sections"
+    category: "color"
+  - name: "--slds-c-accordion-section-sizing-border"
+    description: "Border width for accordion sections"
+    category: "sizing"
+  - name: "--slds-c-accordion-section-spacing-block-end"
+    description: "Bottom spacing for accordion sections"
+    category: "spacing"
+  - name: "--slds-c-accordion-section-spacing-block-start"
+    description: "Top spacing for accordion sections"
+    category: "spacing"
+  - name: "--slds-c-accordion-section-spacing-inline-end"
+    description: "Right spacing for accordion sections"
+    category: "spacing"
+  - name: "--slds-c-accordion-section-spacing-inline-start"
+    description: "Left spacing for accordion sections"
+    category: "spacing"
+  - name: "--slds-c-accordion-summary-color-background"
+    description: "Background color for accordion summary"
+    category: "color"
+dependencies:
+  css_files:
+    - "accordion.css"
+    - "button.css"
+  javascript:
+    - "accordion.js"
+  icons:
+    - "utility-sprite.svg"
+  other_components:
+    - "button"
+related_components:
+  - name: "Expandable Section"
+    relationship: "similar"
+    description: "Single expandable section, simpler alternative"
+  - name: "Tabs"
+    relationship: "alternative"
+    description: "Alternative for organizing content sections"
+  - name: "Summary Detail"
+    relationship: "similar"
+    description: "Similar progressive disclosure pattern"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/accordion/"
+metadata:
+  version: "2.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  merge_notes: "Merged accordion-section.yaml into unified accordion blueprint for SLDS architectural accuracy"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

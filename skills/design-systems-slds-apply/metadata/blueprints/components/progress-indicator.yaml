@@ -1,0 +1,133 @@
+name: Progress Indicator
+description: A visual component that shows the user's progress through a multi-step process or workflow, indicating current
+  position and completed steps.
+category: Feedback
+slds_classes:
+  root: slds-progress
+  elements:
+  - class: slds-progress__list
+    description: Container for progress steps
+    purpose: Holds the list of process steps
+  - class: slds-progress__item
+    description: Individual progress step
+    purpose: Represents a single step in the process
+  - class: slds-progress__marker
+    description: Visual marker for step
+    purpose: Provides visual indicator for step state
+  modifiers:
+  - class: slds-progress_vertical
+    description: Vertical progress indicator
+    usage: When vertical layout is preferred
+  - class: slds-progress_shade
+    description: Progress indicator with shaded background
+    usage: Enhanced visual emphasis
+  states:
+  - class: slds-is-completed
+    description: Completed step state
+    trigger: Steps that have been finished
+  - class: slds-is-current
+    description: Current step state
+    trigger: The active step being worked on
+  - class: slds-is-incomplete
+    description: Incomplete step state
+    trigger: Steps not yet started
+  - class: slds-has-error
+    description: Error step state
+    trigger: Steps with validation errors
+variants:
+- name: Base
+  description: Standard horizontal progress indicator
+  classes:
+  - slds-progress
+  usage_context: Default progress display for multi-step processes
+  differences: Horizontal layout with step markers and labels
+- name: Vertical
+  description: Vertical progress indicator
+  classes:
+  - slds-progress
+  - slds-progress_vertical
+  usage_context: When vertical space is available and preferred
+  differences: Vertical layout with step progression
+lightning_component:
+  name: lightning-progress-indicator
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-progress-indicator
+  mapping_notes: Direct mapping - Lightning component implements SLDS progress indicator blueprint
+accessibility:
+  keyboard_support:
+  - Tab navigation through interactive steps
+  - Enter/Space to activate clickable steps
+  - Arrow keys for step navigation when appropriate
+  screen_reader:
+  - Progress state and current position announced
+  - Step labels and completion status communicated
+  - Total steps and current step number provided
+  aria_attributes:
+  - role='progressbar' for overall progress
+  - aria-valuenow, aria-valuemin, aria-valuemax for progress values
+  - aria-label describing the process
+  - aria-current for the current step
+usage_guidelines:
+  when_to_use:
+  - For multi-step processes or workflows
+  - When users need to understand their progress
+  - To show completion status of a sequence
+  - For guided setup or onboarding flows
+  when_not_to_use:
+  - For single-step processes
+  - When steps are not sequential
+  - For simple loading states (use spinners instead)
+  best_practices:
+  - Use clear, descriptive step labels
+  - Show current position prominently
+  - Allow navigation to completed steps when appropriate
+  - Provide estimated time or completion percentage
+  - Handle error states gracefully
+  common_mistakes:
+  - Too many steps making progress unclear
+  - Unclear or inconsistent step labeling
+  - Not indicating current position clearly
+  - Poor error state handling
+code_examples:
+- title: Three-Step Progress Indicator
+  code: "<div class=\"slds-progress\">\n      <ol class=\"slds-progress__list\">\n        <li class=\"slds-progress__item\
+    \ slds-is-completed\">\n          <button class=\"slds-button slds-progress__marker\">\n            <span class=\"slds-assistive-text\"\
+    >Step 1 - Completed</span>\n          </button>\n          <div class=\"slds-progress__item_content slds-grid slds-grid_align-spread\"\
+    >\n            <div class=\"slds-size_1-of-2\">\n              <h3 class=\"\">Contact Information</h3>\n            </div>\n\
+    \          </div>\n        </li>\n        <li class=\"slds-progress__item slds-is-current\">\n          <button class=\"\
+    slds-button slds-progress__marker\">\n            <span class=\"slds-assistive-text\">Step 2 - Current</span>\n      \
+    \    </button>\n          <div class=\"slds-progress__item_content slds-grid slds-grid_align-spread\">\n            <div\
+    \ class=\"slds-size_1-of-2\">\n              <h3 class=\"\">Account Details</h3>\n            </div>\n          </div>\n\
+    \        </li>\n        <li class=\"slds-progress__item slds-is-incomplete\">\n          <button class=\"slds-button slds-progress__marker\"\
+    >\n            <span class=\"slds-assistive-text\">Step 3 - Incomplete</span>\n          </button>\n          <div class=\"\
+    slds-progress__item_content slds-grid slds-grid_align-spread\">\n            <div class=\"slds-size_1-of-2\">\n      \
+    \        <h3 class=\"\">Review & Submit</h3>\n            </div>\n          </div>\n        </li>\n      </ol>\n     \
+    \ </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - progress.css
+  - grid.css
+  - button.css
+  javascript:
+  - progress.js
+  icons: []
+  other_components:
+  - button
+  - grid
+related_components:
+- name: Progress Bar
+  relationship: similar
+  description: Alternative progress visualization
+- name: Progress Ring
+  relationship: similar
+  description: Circular progress indicator
+- name: Path
+  relationship: similar
+  description: Similar step-based navigation
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/progress-indicator/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

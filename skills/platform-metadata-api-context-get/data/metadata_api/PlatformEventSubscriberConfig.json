@@ -1,0 +1,58 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PlatformEventSubscriberConfig - Metadata API",
+  "description": "Represents configuration settings for a platform event Apex trigger, including the batch size and the trigger’s running user.",
+  "file_information": ".platformEventSubscriberConfig",
+  "directory_location": "PlatformEventSubscriberConfigs",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "batchSize": {
+      "type": "int",
+      "description": "A custom batch size, from 1 through 2,000, for the platform event Apex trigger. The batch size corresponds to the maximum number of event messages that can be sent to a trigger in one execution. The default batch size is 2,000 for platform event triggers. We don't recommend setting the batch size to 1 to process one event at a time. Small batch sizes can slow down the processing of event messages."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "(Inherited field.) Indicates whether this component is protected (true) or not (false). Protected components can’t be linked to or referenced by components created in a subscriber org. A developer can delete a protected component in a future release without worrying about failing installations. However, once a component is marked as unprotected and is released globally, the developer can’t delete it."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label for the PlatformEventSubscriberConfig component.",
+      "required": true
+    },
+    "numPartitions": {
+      "type": "int",
+      "description": "Specifies the number of parallel subscriptions, or partitions, that are created internally for an Apex trigger. Use this field to set up parallel subscriptions for the platform event Apex trigger. It can be an integer from 1 through 10. See Platform Event Processing at Scale with Parallel Subscriptions for Apex Triggers in the Platform Events Developer Guide. The default value is 1. This field is available in API version 62.0 and later."
+    },
+    "partitionKey": {
+      "type": "string",
+      "description": "Can be the standard EventUuid field or a required custom field of the custom platform event that the Apex trigger subscribes to. For the standard EventUuid field, the partition key format is the field name without the event name: EventUuid. For a custom field, the partition key includes the event name as a prefix in this format: EventName__e.FieldName__c. Based on the field’s generated hash value, the system determines which partition to send the event to. Use this field to specify the platform event field that is used as a partition key for parallel subscriptions. See Platform Event Processing at Scale with Parallel Subscriptions for Apex Triggers in the Platform Events Developer Guide. The default value is EventUuid. This field is available in API version 62.0 and later."
+    },
+    "platformEventConsumer": {
+      "type": "string",
+      "description": "The full name of the platform event Apex trigger to configure.",
+      "required": true
+    },
+    "user": {
+      "type": "string",
+      "description": "The username of the user that the platform event Apex trigger runs as. By default, the platform event trigger runs as the Automated Process entity. Setting the running user to a specific user has these benefits: Records are created or modified as this user. Records with OwnerId fields have their OwnerId fields populated to this user when created or modified. Debug logs for the trigger execution are created by this user. You can send email from the trigger, which isn’t supported with the default Automated Process user."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PlatformEventSubscriberConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"batchSize\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"numPartitions\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"partitionKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"platformEventConsumer\" type=\"xsd:string\"/>\n        <xsd:element name=\"user\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This PlatformEventSubscriberConfig component has the label OrderEventTriggerConfig. It contains the configuration of a platform event trigger, OrderEventTrigger, and specifies the batch size and user.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PlatformEventSubscriberConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <platformEventConsumer>OrderEventTrigger</platformEventConsumer>\n    <batchSize>200</batchSize>\n    <masterLabel>OrderEventTriggerConfig</masterLabel>\n    <user>user@example.com</user>\n    <isProtected>false</isProtected>\n</PlatformEventSubscriberConfig>"
+    }
+  ]
+}

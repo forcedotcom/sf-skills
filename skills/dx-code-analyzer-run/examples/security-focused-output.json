@@ -1,0 +1,95 @@
+{
+  "metadata": {
+    "engine": "all:Security:(1,2)",
+    "executedAt": "2026-05-19T16:45:12.456Z",
+    "filesAnalyzed": 156,
+    "violationCount": 43
+  },
+  "violations": [
+    {
+      "rule": "ApexCRUDViolation",
+      "engine": "pmd",
+      "severity": 2,
+      "message": "Validate CRUD permission before SOQL/DML operation",
+      "file": "force-app/main/default/classes/AccountService.cls",
+      "line": 42,
+      "column": 9,
+      "fix": null
+    },
+    {
+      "rule": "ApexSOQLInjection",
+      "engine": "pmd",
+      "severity": 1,
+      "message": "Avoid untrusted/unescaped variables in DML query",
+      "file": "force-app/main/default/classes/SearchController.cls",
+      "line": 18,
+      "column": 24,
+      "fix": null
+    },
+    {
+      "rule": "@lwc/lwc/no-inner-html",
+      "engine": "eslint",
+      "severity": 2,
+      "message": "Disallow use of innerHTML (XSS risk)",
+      "file": "force-app/main/default/lwc/riskComponent/riskComponent.js",
+      "line": 28,
+      "column": 9,
+      "fix": null
+    },
+    {
+      "rule": "ApexInsecureEndpoint",
+      "engine": "pmd",
+      "severity": 2,
+      "message": "Endpoint protocol should be https",
+      "file": "force-app/main/default/classes/ExternalApiClient.cls",
+      "line": 56,
+      "column": 20,
+      "fix": null
+    },
+    {
+      "rule": "ApexOpenRedirect",
+      "engine": "pmd",
+      "severity": 2,
+      "message": "Potential open redirect from user-controlled input",
+      "file": "force-app/main/default/classes/RedirectController.cls",
+      "line": 34,
+      "column": 16,
+      "fix": null
+    },
+    {
+      "rule": "ApexXSSFromEscapeFalse",
+      "engine": "pmd",
+      "severity": 2,
+      "message": "Avoid using escape=false in Visualforce pages",
+      "file": "force-app/main/default/pages/AccountDetail.page",
+      "line": 23,
+      "column": 45,
+      "fix": null
+    }
+  ],
+  "summary": {
+    "bySeverity": {
+      "1": 8,
+      "2": 35,
+      "3": 0,
+      "4": 0,
+      "5": 0
+    },
+    "byEngine": {
+      "pmd": 38,
+      "eslint": 5
+    },
+    "topRules": [
+      {"rule": "ApexCRUDViolation", "count": 18},
+      {"rule": "ApexInsecureEndpoint", "count": 9},
+      {"rule": "ApexSOQLInjection", "count": 8},
+      {"rule": "@lwc/lwc/no-inner-html", "count": 5},
+      {"rule": "ApexOpenRedirect", "count": 3}
+    ],
+    "topFiles": [
+      {"file": "force-app/main/default/classes/AccountService.cls", "count": 12},
+      {"file": "force-app/main/default/classes/SearchController.cls", "count": 8},
+      {"file": "force-app/main/default/classes/ExternalApiClient.cls", "count": 7}
+    ]
+  }
+}

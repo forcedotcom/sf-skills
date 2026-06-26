@@ -1,0 +1,131 @@
+/**
+<<<<<<< Updated upstream
+ * @description Abstract base class for {describe the family of classes this serves}.
+=======
+ * Abstract base class for {describe the family of classes this serves}.
+>>>>>>> Stashed changes
+ *              Provides common behavior and defines extension points for subclasses.
+ *              Subclasses must implement the abstract methods to provide specific behavior.
+ *
+ * @example
+ * // Extending this abstract class:
+ * public class SalesforceIntegrationService extends {ClassName} {
+ *     protected override String getEndpoint() {
+ *         return 'callout:Salesforce_API/services/data/v62.0';
+ *     }
+ *
+ *     protected override Map<String, String> getHeaders() {
+ *         return new Map<String, String>{
+ *             'Content-Type' => 'application/json'
+ *         };
+ *     }
+ * }
+ */
+public abstract with sharing class {ClassName} {
+
+    // ─── Constants ───────────────────────────────────────────────────────
+    private static final Integer DEFAULT_TIMEOUT_MS = 30000;
+
+    // ─── Protected State ─────────────────────────────────────────────────
+    protected Integer timeoutMs;
+
+    // ─── Constructor ─────────────────────────────────────────────────────
+
+    /**
+     * Initializes the base class with default configuration
+     */
+    protected {ClassName}() {
+        this.timeoutMs = DEFAULT_TIMEOUT_MS;
+    }
+
+    // ─── Abstract Methods (must be implemented by subclasses) ────────────
+
+    /**
+     * Returns the endpoint URL for this integration.
+     *              Subclasses must provide their specific endpoint.
+     * @return The endpoint URL as a String
+     */
+    protected abstract String getEndpoint();
+
+    /**
+     * Returns the HTTP headers for this integration.
+     *              Subclasses define their own required headers.
+     * @return Map of header name to header value
+     */
+    protected abstract Map<String, String> getHeaders();
+
+    // ─── Virtual Methods (can be overridden by subclasses) ───────────────
+
+    /**
+     * Hook called before the main operation executes.
+     *              Override to add pre-processing logic.
+     *              Default implementation does nothing.
+     * @param context Map of contextual data
+     */
+    protected virtual void beforeExecute(Map<String, Object> context) {
+        // Default: no-op — override in subclass if needed
+    }
+
+    /**
+     * Hook called after the main operation completes.
+     *              Override to add post-processing logic.
+     *              Default implementation does nothing.
+     * @param context Map of contextual data
+     * @param result The result from the operation
+     */
+    protected virtual void afterExecute(Map<String, Object> context, Object result) {
+        // Default: no-op — override in subclass if needed
+    }
+
+    // ─── Template Method (common workflow) ───────────────────────────────
+
+    /**
+     * Executes the operation using the template method pattern.
+     *              Calls beforeExecute → doExecute → afterExecute in sequence.
+     * @param context Map of data needed for the operation
+     * @return The result of the operation
+     */
+    public Object execute(Map<String, Object> context) {
+        beforeExecute(context);
+
+        Object result;
+        try {
+            result = doExecute(context);
+        } catch (Exception e) {
+            handleError(e);
+            throw e;
+        }
+
+        afterExecute(context, result);
+        return result;
+    }
+
+    // ─── Protected Helpers ───────────────────────────────────────────────
+
+    /**
+     * Core execution logic — override this for the main operation.
+     *              Default implementation throws — subclass must provide implementation.
+     * @param context Map of data needed for the operation
+     * @return The result of the operation
+     */
+    protected virtual Object doExecute(Map<String, Object> context) {
+        throw new UnsupportedOperationException(
+            'Subclass must override doExecute()'
+        );
+    }
+
+    /**
+     * Error handler called when doExecute throws.
+     *              Override to customize error handling (e.g., logging, retry).
+     * @param e The exception that was thrown
+     */
+    protected virtual void handleError(Exception e) {
+        System.debug(LoggingLevel.ERROR,
+            this.toString() + ' error: ' + e.getMessage() + '\n' + e.getStackTraceString()
+        );
+    }
+
+    // ─── Exception ───────────────────────────────────────────────────────
+
+    public class UnsupportedOperationException extends Exception {}
+}

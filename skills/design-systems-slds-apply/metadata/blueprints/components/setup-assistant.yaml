@@ -1,0 +1,152 @@
+name: Setup Assistant
+description: A guided setup component that helps users complete onboarding or configuration tasks. Displays a list of steps
+  with progress indicators and expandable details for each step.
+category: Complex Components
+slds_classes:
+  root: slds-setup-assistant
+  elements:
+  - class: slds-setup-assistant__item
+    description: Individual setup item in the list
+    purpose: Wraps each setup step
+  - class: slds-setup-assistant__step-summary
+    description: Summary portion of setup step
+    purpose: Displays step title and status
+  - class: slds-setup-assistant__step-summary-content
+    description: Content area of step summary
+    purpose: Contains step text and description
+  modifiers: []
+  states: []
+variants:
+- name: Base
+  description: Standard setup assistant with steps
+  classes:
+  - slds-setup-assistant
+  usage_context: Default guided setup implementation
+  differences: List of setup steps with expand/collapse
+lightning_component:
+  name: ''
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component - typically built with custom components and lightning-accordion
+accessibility:
+  keyboard_support:
+  - Tab to navigate between steps
+  - Enter or Space to expand/collapse steps
+  - Arrow keys to move through steps
+  screen_reader:
+  - List structure announced
+  - Step count announced
+  - Completion status announced
+  - Expanded/collapsed state announced
+  aria_attributes:
+  - role='list' on assistant container
+  - role='listitem' on steps
+  - aria-expanded on expandable steps
+  - aria-label describing setup purpose
+  - Progress indicators accessible
+usage_guidelines:
+  when_to_use:
+  - For onboarding new users
+  - For setup and configuration wizards
+  - When guiding through multi-step processes
+  - For progressive disclosure of setup tasks
+  when_not_to_use:
+  - For simple single-step processes
+  - When steps don't have logical sequence
+  - For navigation (use tabs or menu)
+  - When all information should be visible at once
+  best_practices:
+  - Show progress clearly (steps completed/total)
+  - Allow non-linear completion when possible
+  - Mark completed steps visually
+  - Provide clear next action for each step
+  - Keep step descriptions concise
+  - Allow users to skip optional steps
+  common_mistakes:
+  - Forcing linear progression when unnecessary
+  - Unclear completion status
+  - Too many steps overwhelming users
+  - Missing progress indication
+  - No way to skip optional steps
+code_examples:
+- title: Basic Setup Assistant
+  code: "<div class=\"slds-setup-assistant\" role=\"list\" aria-label=\"Setup steps\">\n      <ul class=\"\">\n        <li\
+    \ class=\"slds-setup-assistant__item\" role=\"listitem\">\n          <article class=\"\">\n            <div class=\"slds-setup-assistant__step-summary\"\
+    \ role=\"button\" aria-expanded=\"false\" aria-controls=\"step-1-details\">\n              <div class=\"slds-media\">\n\
+    \                <div class=\"slds-media__figure\">\n                  <span class=\"slds-icon_container slds-icon-utility-success\"\
+    \ title=\"Complete\">\n                    <svg class=\"slds-icon slds-icon_small slds-icon-text-success\" aria-hidden=\"\
+    true\">\n                      <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#success\"></use>\n     \
+    \               </svg>\n                    <span class=\"slds-assistive-text\">Complete</span>\n                  </span>\n\
+    \                </div>\n                <div class=\"slds-media__body\">\n                  <div class=\"slds-setup-assistant__step-summary-content\"\
+    >\n                    <h3 class=\"slds-setup-assistant__step-summary-title slds-text-heading_small\">\n             \
+    \         Verify Your Email\n                    </h3>\n                    <p>Check your inbox and click the verification\
+    \ link.</p>\n                  </div>\n                </div>\n              </div>\n            </div>\n            <div\
+    \ class=\"slds-setup-assistant__step-detail slds-hide\" id=\"step-1-details\">\n              <div class=\"slds-text-longform\"\
+    >\n                <p>You've successfully verified your email address!</p>\n              </div>\n            </div>\n\
+    \          </article>\n        </li>\n        <li class=\"slds-setup-assistant__item\" role=\"listitem\">\n          <article\
+    \ class=\"\">\n            <div class=\"slds-setup-assistant__step-summary\" role=\"button\" aria-expanded=\"true\" aria-controls=\"\
+    step-2-details\">\n              <div class=\"slds-media\">\n                <div class=\"slds-media__figure\">\n    \
+    \              <span class=\"slds-icon_container slds-icon-utility-info\" title=\"In Progress\">\n                   \
+    \ <svg class=\"slds-icon slds-icon_small slds-icon-text-default\" aria-hidden=\"true\">\n                      <use xlink:href=\"\
+    /assets/icons/utility-sprite/svg/symbols.svg#info\"></use>\n                    </svg>\n                    <span class=\"\
+    slds-assistive-text\">In Progress</span>\n                  </span>\n                </div>\n                <div class=\"\
+    slds-media__body\">\n                  <div class=\"slds-setup-assistant__step-summary-content\">\n                  \
+    \  <h3 class=\"slds-setup-assistant__step-summary-title slds-text-heading_small\">\n                      Complete Your\
+    \ Profile\n                    </h3>\n                    <p>Add your name, photo, and contact information.</p>\n    \
+    \              </div>\n                </div>\n              </div>\n            </div>\n            <div class=\"slds-setup-assistant__step-detail\"\
+    \ id=\"step-2-details\">\n              <div class=\"slds-text-longform\">\n                <p>Complete your profile to\
+    \ personalize your experience.</p>\n                <button class=\"slds-button slds-button_brand slds-m-top_medium\"\
+    >\n                  Edit Profile\n                </button>\n              </div>\n            </div>\n          </article>\n\
+    \        </li>\n        <li class=\"slds-setup-assistant__item\" role=\"listitem\">\n          <article class=\"\">\n\
+    \            <div class=\"slds-setup-assistant__step-summary\" role=\"button\" aria-expanded=\"false\" aria-controls=\"\
+    step-3-details\">\n              <div class=\"slds-media\">\n                <div class=\"slds-media__figure\">\n    \
+    \              <span class=\"slds-icon_container\" title=\"Not Started\">\n                    <svg class=\"slds-icon\
+    \ slds-icon_small slds-icon-text-default\" aria-hidden=\"true\">\n                      <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#check\"\
+    ></use>\n                    </svg>\n                    <span class=\"slds-assistive-text\">Not Started</span>\n    \
+    \              </span>\n                </div>\n                <div class=\"slds-media__body\">\n                  <div\
+    \ class=\"slds-setup-assistant__step-summary-content\">\n                    <h3 class=\"slds-setup-assistant__step-summary-title\
+    \ slds-text-heading_small\">\n                      Connect Your Accounts\n                    </h3>\n               \
+    \     <p>Link your social media and other accounts.</p>\n                  </div>\n                </div>\n          \
+    \    </div>\n            </div>\n            <div class=\"slds-setup-assistant__step-detail slds-hide\" id=\"step-3-details\"\
+    >\n              <div class=\"slds-text-longform\">\n                <p>Connect your accounts to import contacts and share\
+    \ content.</p>\n                <button class=\"slds-button slds-button_neutral slds-m-top_medium\">\n               \
+    \   Connect Accounts\n                </button>\n              </div>\n            </div>\n          </article>\n    \
+    \    </li>\n      </ul>\n      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - setup-assistant.css
+  - media-object.css
+  - icon.css
+  javascript:
+  - Step expand/collapse
+  - Progress tracking
+  - Step completion management
+  icons:
+  - utility:success
+  - utility:info
+  - utility:check
+  other_components:
+  - media-object
+  - icon
+  - button
+related_components:
+- name: Accordion
+  relationship: similar
+  description: Similar expand/collapse pattern
+- name: Progress Indicator
+  relationship: complementary
+  description: Alternative progress display
+- name: Path
+  relationship: similar
+  description: Alternative guided process pattern
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/setup-assistant/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  author: SLDS Documentation Team
+  slds_version: 2.27.2
+  review_status: complete
+  source: official-slds
+  notes: Created from official SLDS documentation and design-system-internal source code Cleaned invalid classes and CSS variables
+    on 2025-11-12 using slds-plus.css as source of truth.

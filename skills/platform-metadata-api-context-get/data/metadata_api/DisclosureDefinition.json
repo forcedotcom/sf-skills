@@ -1,0 +1,45 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DisclosureDefinition - Metadata API",
+  "description": "Represents information that defines a disclosure type, such as details of the publisher or vendor who created or implemented the report.",
+  "file_information": ".disclosureDefinition",
+  "directory_location": "disclosureDefinitions",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The description about the disclosure definition."
+    },
+    "disclosureType": {
+      "type": "string",
+      "required": true,
+      "description": "The API name of the disclosure type associated with this definition."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type. The default is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for DisclosureDefinition, which is defined when the DisclosureDefinition is created."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DisclosureDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DisclosureDefinition\n\txmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<description>This is GRI Disclosure Definition</description>\n\t<disclosureType>disclstype10</disclosureType>\n\t<isProtected>false</isProtected>\n\t<masterLabel>GRI</masterLabel>\n</DisclosureDefinition>"
+    }
+  ]
+}

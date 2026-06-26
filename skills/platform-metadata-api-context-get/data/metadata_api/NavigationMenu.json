@@ -1,0 +1,101 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "NavigationMenu - Metadata API",
+  "description": "Represents the navigation menu in an Experience Builder site. A navigation menu consists of items that users can click to go to other parts of the site. This type replaces the NavigationLinkSet subtype on Network. NavigationMenu is available in API version 47.0 and later. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".navigationMenu",
+  "directory_location": "navigationMenus",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "container": {
+      "type": "string",
+      "description": "The name of the navigation menu container."
+    },
+    "containerType": {
+      "type": "string",
+      "description": "The container type. The options are Network or CommunityTemplateDefinition."
+    },
+    "label": {
+      "type": "string",
+      "description": "The navigation menu label as it appears in the Experience Builder UI."
+    },
+    "navigationMenuItem": {
+      "type": "NavigationMenuItem[]",
+      "description": "A list of menu items in a NavigationMenu. Use this object to create, delete, or update menu items in your site’s navigation menu."
+    }
+  },
+  "sub_types": {
+    "NavigationMenuItem": {
+      "defaultListViewId": {
+        "type": "string",
+        "description": "If the value of the type field is SalesforceObject, the value is the ID of the default list view for the object."
+      },
+      "label": {
+        "type": "string",
+        "description": "The text that appears in the navigation menu for this item.",
+        "required": true
+      },
+      "menuItemBranding": {
+        "type": "NavigationMenuItemBranding",
+        "description": "Branding for the navigation menu item. Available in API version 47.0 and later."
+      },
+      "position": {
+        "type": "int",
+        "description": "The location of the menu item in the navigation menu.",
+        "required": true
+      },
+      "publiclyAvailable": {
+        "type": "boolean",
+        "description": "When set to true, gives access to guest users."
+      },
+      "subMenu": {
+        "type": "NavigationSubMenu",
+        "description": "A list of child menu items. This field is available in API 39.0 and later."
+      },
+      "target": {
+        "type": "string",
+        "description": "Required if type is ExternalLink, InternalLink, or SalesforceObject. If type is ExternalLink or InternalLink, the target is the URL that the link points to. For ExternalLink, your entry looks like this: https://salesforce.com. For InternalLink, use a relative URL, such as /contactsupport. If type is MenuLabel or NavigationalTopic, target isn’t used.",
+        "required": true
+      },
+      "targetPreference": {
+        "type": "string",
+        "description": "Backed by a picklist that includes preferences for the target field. Valid values are: None OpenInExternalTab—Used for external links to determine whether to open in an external tab."
+      },
+      "type": {
+        "type": "string",
+        "description": "The type of navigation menu item. Valid values are: SalesforceObject—Available objects include accounts, cases, contacts, and custom objects. ExternalLink—Links to a URL outside of your site. For example, https://salesforce.com. InternalLink—Links to a relative URL inside your site. For example, /contactsupport. MenuLabel—A parent heading for your navigation menu. See NavigationSubMenu for how to nest items underneath the menu label. This value is available in API 39.0 and later. NavigationalTopic—A dropdown list with links to the navigational topics in your site. You can’t nest other items of type MenuLabel or NavigationalTopic under MenuLabel.",
+        "required": true
+      }
+    },
+    "NavigationMenuItemBranding": {
+      "tileImage": {
+        "type": "string",
+        "description": "Name of the ContentAsset to use for the navigation menu item."
+      }
+    },
+    "NavigationSubMenu": {
+      "navigationMenuItem": {
+        "type": "NavigationMenuItem[]",
+        "description": "A list of menu items in a NavigationSubMenu. Use navigationMenuItem to create, delete, or update child items under a parent heading."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NavigationMenu\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"container\" type=\"xsd:string\"/>\n        <xsd:element name=\"containerType\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"navigationMenuItem\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:NavigationMenuItem\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"NavigationMenuItem\">\n  <xsd:sequence>\n    <xsd:element name=\"defaultListViewId\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"menuItemBranding\" minOccurs=\"0\" type=\"tns:NavigationMenuItemBranding\"/>\n    <xsd:element name=\"position\" type=\"xsd:int\"/>\n    <xsd:element name=\"publiclyAvailable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"subMenu\" minOccurs=\"0\" type=\"tns:NavigationSubMenu\"/>\n    <xsd:element name=\"target\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetPreference\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NavigationMenuItemBranding\">\n  <xsd:sequence>\n    <xsd:element name=\"tileImage\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NavigationSubMenu\">\n  <xsd:sequence>\n    <xsd:element name=\"navigationMenuItem\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:NavigationMenuItem\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a NavigationMenu component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<NavigationMenu xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <container>Service</container>\n    <containerType>Network</containerType>\n    <label>Test Navigation</label>\n    <navigationMenuItem>\n        <label>Accounts</label>\n        <position>1</position>\n        <publiclyAvailable>false</publiclyAvailable>\n        <target>Account</target>\n        <type>SalesforceObject</type>\n    </navigationMenuItem>\n    <navigationMenuItem>\n        <label>External Link</label>\n        <menuItemBranding>\n            <tileImage>google_image</tileImage> \n        </menuItemBranding>\n        <position>2</position>\n        <publiclyAvailable>false</publiclyAvailable>\n        <target>http://google.com</target>\n        <targetPreference>OpenExternalLinkInSameTab</targetPreference>\n        <type>ExternalLink</type>\n    </navigationMenuItem>\n    <navigationMenuItem>\n        <label>All Objects</label>\n        <position>3</position>\n        <publiclyAvailable>false</publiclyAvailable>\n        <subMenu>\n            <navigationMenuItem>\n                <label>Leads</label>\n                <position>0</position>\n                <publiclyAvailable>false</publiclyAvailable>\n                <target>Account</target>\n                <type>SalesforceObject</type>\n            </navigationMenuItem>\n        </subMenu>\n        <type>MenuLabel</type>\n    </navigationMenuItem>\n</NavigationMenu>"
+    }
+  ]
+}

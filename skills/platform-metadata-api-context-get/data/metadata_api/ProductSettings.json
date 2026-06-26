@@ -1,0 +1,44 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ProductSettings - Metadata API",
+  "description": "Represents organization preferences for quantity schedules, revenue schedules, and active flag interaction with prices. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableCascadeActivateToRelatedPrices": {
+      "type": "boolean",
+      "description": "When changing active flag on a product record, automatically updates active flag on related prices."
+    },
+    "enableMySettings": {
+      "type": "boolean",
+      "description": "Moves users’ personal settings pages from Setup to a separate My Settings pane (true) or not (false). When set to (true), Salesforce makes a reorganized Setup pane accessible to admins via one click in the header. This setting affects all users in your organization. The default is true. Available in API version 47.0 and later."
+    },
+    "enableQuantitySchedule": {
+      "type": "boolean",
+      "description": "Enables quantity schedules for products."
+    },
+    "enableRevenueSchedule": {
+      "type": "boolean",
+      "description": "Enables revenue schedules for products."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ProductSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableCascadeActivateToRelatedPrices\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMySettings\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableQuantitySchedule\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRevenueSchedule\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The package file references the following Product.settings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ProductSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableCascadeActivateToRelatedPrices>true</enableCascadeActivateToRelatedPrices>\n    <enableQuantitySchedule>false</enableQuantitySchedule>\n    <enableRevenueSchedule>false</enableRevenueSchedule>\n</ProductSettings>"
+    }
+  ]
+}

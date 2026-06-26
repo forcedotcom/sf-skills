@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    CSP Trusted Site Template
+
+    Use this template when creating integration skills that make HTTP callouts
+    to external APIs.
+
+    RECOMMENDED: This is the MODERN approach (API 48+ / Spring '20+)
+    that replaces Remote Site Settings.
+
+    CSP (Content Security Policy) advantages:
+    - More granular control over security contexts
+    - Better alignment with web security standards
+    - Per-context security (Apex, Lightning, etc.)
+    - Future-proof
+
+    Setup:
+    1. Copy this file to your skill's assets/ directory
+    2. Replace {{placeholders}} with your values
+    3. Deploy to org OR let setup script deploy automatically
+
+    File Location: force-app/main/default/cspTrustedSites/{{APIName}}.cspTrustedSite-meta.xml
+-->
+<CspTrustedSite xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- API Name - must be unique, alphanumeric only -->
+    <fullName>{{APIName}}</fullName>
+
+    <!-- Description - what this endpoint is for -->
+    <description>{{Description}}</description>
+
+    <!-- Endpoint URL - the base domain (no trailing slash) -->
+    <!-- Examples:
+         - https://api.stripe.com
+         - https://api.twilio.com
+         - https://graph.microsoft.com
+    -->
+    <endpointUrl>{{BaseURL}}</endpointUrl>
+
+    <!-- Active - set to true to enable -->
+    <isActive>true</isActive>
+
+    <!--
+    Context: Where this trusted site applies
+
+    Available contexts:
+    - All: Apply to all contexts (recommended for most integrations)
+    - Connect: Apex HTTP callouts only
+    - Frame: iframe embedding
+    - Img: Image resources
+    - Script: JavaScript resources
+    - Style: CSS resources
+
+    For Apex HTTP callouts (most common), use either:
+    - "All" (simplest, covers everything)
+    - "Connect" (most specific, Apex callouts only)
+    -->
+    <context>{{Context}}</context>
+</CspTrustedSite>

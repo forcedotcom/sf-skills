@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LightningMessageChannel - Metadata API",
+  "description": "Represents the metadata associated with a Lightning Message Channel. A Lightning Message Channel represents a secure channel to communicate across UI technologies, such as Lightning Web Components, Aura Components, and Visualforce.",
+  "file_information": ".messageChannel",
+  "directory_location": "messageChannels",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The description of the Lightning Message Channel."
+    },
+    "isExposed": {
+      "type": "boolean",
+      "description": "Indicates whether a Lightning Message Channel is exposed to components in other namespaces (true) or not (false). The default value is false."
+    },
+    "lightningMessageFields": {
+      "type": "LightningMessageField[]",
+      "description": "A list of message payload fields for a given Lightning Message Channel."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label for a Lightning Message Channel.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "LightningMessageField": {
+      "description": {
+        "type": "string",
+        "description": "The description for a Lightning Message Field."
+      },
+      "fieldName": {
+        "type": "string",
+        "description": "Unique identifier of the Lightning Message Field.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"LightningMessageChannel\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isExposed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"lightningMessageFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LightningMessageField\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"LightningMessageField\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"fieldName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here’s a simple example of a LightningMessageChannel component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningMessageChannel xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <masterLabel>SampleMessageChannel</masterLabel>\n    <isExposed>true</isExposed>\n    <description>This is a sample Lightning Message Channel.</description>\n</LightningMessageChannel>"
+    },
+    {
+      "description": "Here’s an example of a LightningMessageChannel component with LightningMessageFields.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningMessageChannel xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <masterLabel>SampleMessageChannel</masterLabel>\n    <isExposed>true</isExposed>\n    <description>This is a sample Lightning Message Channel.</description>\n    <lightningMessageFields>\n        <fieldName>recordId</fieldName>\n        <description>This is the record Id that changed</description>\n    </lightningMessageFields>\n    <lightningMessageFields>\n        <fieldName>recordData</fieldName>\n        <description>The current data representing the record that changed</description>\n    </lightningMessageFields>\n</LightningMessageChannel>"
+    }
+  ]
+}

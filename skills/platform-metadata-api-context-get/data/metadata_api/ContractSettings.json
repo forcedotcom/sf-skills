@@ -1,0 +1,36 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ContractSettings - Metadata API",
+  "description": "Represents contract settings.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "autoCalculateEndDate": {
+      "type": "boolean",
+      "description": "Indicates whether the end date of a contract is automatically calculated (true) or not (false)."
+    },
+    "notifyOwnersOnContractExpiration": {
+      "type": "boolean",
+      "description": "Indicates whether account and contract owners are automatically sent email notifications when a contract expires (true) or not (false)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ContractSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"autoCalculateEndDate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"autoExpirationDelay\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"autoExpirationRecipient\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"autoExpireContracts\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContractHistoryTracking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"notifyOwnersOnContractExpiration\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is a sample contract settings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ContractSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <autoCalculateEndDate>true</autoCalculateEndDate>\n    <notifyOwnersOnContractExpiration>false</notifyOwnersOnContractExpiration>\n</ContractSettings>"
+    }
+  ]
+}

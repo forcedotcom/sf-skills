@@ -1,0 +1,68 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment"
+  ],
+  "title": "FlowValueMap - Metadata API",
+  "description": "Represents the metadata associated with creating a reusable entity for defining and managing mappings between source and target values used within a flow.",
+  "file_information": ".flowvaluemap",
+  "directory_location": "flowvaluemaps",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "defaultValue": {
+      "type": "text",
+      "description": "Specifies the default target value used when no source value is found in the value map. A value is required if the defaultValueStrategy field is set to FixedValue."
+    },
+    "defaultValueStrategy": {
+      "type": "FlowValueMapDefaultStrategy (enumeration of type string)",
+      "description": "Specifies the strategy used to apply the default target value if the source value is not found in the value map. Valid values are: PassThrough: Pass the original source value through if no mapping is found. FixedValue: Use the defined DefaultValue if no mapping is found. FailFlow: Fail the flow if no mapping is found.",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "description": "User-provided description for the value map."
+    },
+    "label": {
+      "type": "text",
+      "description": "Label for the value map.",
+      "required": true
+    },
+    "sourceType": {
+      "type": "FlowValueMapDataType (enumeration of type string)",
+      "description": "Specifies the supported data types for value map source data. Valid types are: Boolean Date DateTime Number String",
+      "required": true
+    },
+    "targetType": {
+      "type": "FlowValueMapDataType (enumeration of type string)",
+      "description": "Specifies the supported data types for value map target data. Valid types are: Boolean Date DateTime Number String",
+      "required": true
+    },
+    "valueMapEntries": {
+      "type": "FlowValueMapEntry[]",
+      "description": "List of source-target mappings in the value map."
+    }
+  },
+  "sub_types": {
+    "FlowValueMapEntry": {
+      "sourceValue": {
+        "type": "text",
+        "description": "Specifies the source value in this FlowValueMap definition.",
+        "required": true
+      },
+      "targetValue": {
+        "type": "text",
+        "description": "Specifies the target value in this FlowValueMap definition.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FlowValueMap\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"defaultValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"defaultValueStrategy\" type=\"tns:FlowValueMapDefaultStrategy\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"sourceType\" type=\"tns:FlowValueMapDataType\"/>\n        <xsd:element name=\"targetType\" type=\"tns:FlowValueMapDataType\"/>\n        <xsd:element name=\"valueMapEntries\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowValueMapEntry\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"FlowValueMapDataType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"String\"/>\n    <xsd:enumeration value=\"Boolean\"/>\n    <xsd:enumeration value=\"DateTime\"/>\n    <xsd:enumeration value=\"Date\"/>\n    <xsd:enumeration value=\"Number\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FlowValueMapDefaultStrategy\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"PassThrough\"/>\n    <xsd:enumeration value=\"FixedValue\"/>\n    <xsd:enumeration value=\"FailFlow\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FlowValueMapEntry\">\n  <xsd:sequence>\n    <xsd:element name=\"sourceValue\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetValue\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

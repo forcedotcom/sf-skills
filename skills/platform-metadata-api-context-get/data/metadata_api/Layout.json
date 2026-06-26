@@ -1,0 +1,659 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Layout - Metadata API",
+  "description": "Represents the metadata associated with a page layout. For more information, see Page Layouts in Salesforce Help.",
+  "file_information": ".layout",
+  "directory_location": "layouts",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "customButtons": {
+      "type": "string[]",
+      "description": "The custom buttons for this layout. Each button is a reference to a WebLink on the same object. For example, a ButtonLink refers to a Weblink on the same standard or custom object named ButtonLink."
+    },
+    "customConsoleComponents": {
+      "type": "CustomConsoleComponents",
+      "description": "Represents custom console components (Visualforce pages, lookup fields, or related lists; Canvas apps not available) on a page layout. Custom console components only display in the Salesforce console."
+    },
+    "emailDefault": {
+      "type": "boolean",
+      "description": "Only relevant if showEmailCheckbox is set; indicates the default value of that checkbox."
+    },
+    "excludeButtons": {
+      "type": "string[]",
+      "description": "List of standard buttons to exclude from this layout. For example, <excludeButtons>Delete</excludeButtons> excludes the Delete button from this layout."
+    },
+    "feedLayout": {
+      "type": "FeedLayout",
+      "description": "Represents the values that define the feed view of a feed-based page layout. Feed-based layouts are available on Account, Case, Contact, Lead, Opportunity, custom, and external objects. They include a feed view and a detail view."
+    },
+    "headers": {
+      "type": "LayoutHeader[] (enumeration of type string)",
+      "description": "Layout headers are currently only used for tagging, and only appear in the UI if tagging is enabled. Valid string values are: PersonalTagging—tag is private to user. PublicTagging—tag is viewable any other user who can access the record."
+    },
+    "layoutSections": {
+      "type": "LayoutSection[]",
+      "description": "The main sections of the layout containing fields, s-controls, and custom links. The order here determines the layout order."
+    },
+    "miniLayout": {
+      "type": "MiniLayout",
+      "description": "A mini layout is used in the mini view of a record in the Console tab, hover details, and event overlays."
+    },
+    "multilineLayoutFields": {
+      "type": "string[]",
+      "description": "Fields for the special multiline layout fields that appear in OpportunityProduct layouts. These fields are otherwise similar to miniLayoutFields."
+    },
+    "platformActionList": {
+      "type": "PlatformActionList",
+      "description": "The list of actions and their order that appear in the Salesforce mobile app action bar for the layout. This field is available in API version 34.0 and later."
+    },
+    "quickActionList": {
+      "type": "QuickActionList",
+      "description": "The list of quick actions that display in the full Salesforce site for the page layout. This field is available in API version 28.0 and later."
+    },
+    "relatedContent": {
+      "type": "RelatedContent",
+      "description": "The Related Content section of the page layout. This field is available in API version 29.0 and later."
+    },
+    "relatedLists": {
+      "type": "RelatedListItem[]",
+      "description": "The related lists for the layout, listed in the order they appear in the user interface."
+    },
+    "relatedObjects": {
+      "type": "string[]",
+      "description": "The list of related objects that appears in the mini view of the console. In database terms, these objects are foreign key fields on the object for the layout. For more information, see Choose Related Objects for the Agent Console’s Mini View in Salesforce Help."
+    },
+    "runAssignmentRulesDefault": {
+      "type": "boolean",
+      "description": "Only relevant if showRunAssignmentRulesCheckbox is set; indicates the default value of that checkbox."
+    },
+    "showEmailCheckbox": {
+      "type": "boolean",
+      "description": "Only allowed on Case, CaseClose, and Task layouts. If set, a checkbox appears to show email."
+    },
+    "showHighlightsPanel": {
+      "type": "boolean",
+      "description": "If set, the highlights panel displays on pages in the Salesforce console. This field is available in API version 22.0 and later."
+    },
+    "showInteractionLogPanel": {
+      "type": "boolean",
+      "description": "If set, the interaction log displays on pages in the Salesforce console. This field is available in API version 22.0 and later."
+    },
+    "showKnowledgeComponent": {
+      "type": "boolean",
+      "description": "Only allowed on Case layouts. If set, the Knowledge sidebar displays on cases in the Salesforce console. This field is available in API version 20.0 and later."
+    },
+    "showRunAssignmentRulesCheckbox": {
+      "type": "boolean",
+      "description": "Only allowed on Case, Lead, and Account objects. If set, a checkbox appears on the page to show assignment rules."
+    },
+    "showSolutionSection": {
+      "type": "boolean",
+      "description": "Only allowed on CaseClose layout. If set, the built-in solution information section shows up on the page."
+    },
+    "showSubmitAndAttachButton": {
+      "type": "boolean",
+      "description": "Only allowed on Case layout. If set, the Submit & Add Attachment button displays on case edit pages to portal users in the Customer Portal."
+    },
+    "summaryLayout": {
+      "type": "SummaryLayout",
+      "description": "Controls the appearance of the highlights panel in Salesforce Classic, which summarizes key fields in a grid at the top of a page layout, when Case Feed is enabled. This field is available in API version 18.0 and later."
+    }
+  },
+  "sub_types": {
+    "CustomConsoleComponents": {
+      "primaryTabComponents": {
+        "type": "PrimaryTabComponents",
+        "description": "Represents custom console components on primary tabs in the Salesforce console. Available in API version 25.0 and later."
+      },
+      "subtabComponents": {
+        "type": "SubtabComponents",
+        "description": "Represents custom console components on subtabs in the Salesforce console. Available in API version 25.0 and later."
+      }
+    },
+    "PrimaryTabComponents": {
+      "component": {
+        "type": "ConsoleComponent[]",
+        "description": "Represents a custom console component (Visualforce page, lookup field, or related lists; Canvas apps not available) on a section of a page layout. Custom console components only appear in the Salesforce console. This field is available in API version 29.0 and earlier."
+      },
+      "containers": {
+        "type": "Container[]",
+        "description": "Represents a location and style to display more than one custom console component on the sidebars of the Salesforce console. You can specify up to five components for each of the four locations (left, right, top, and bottom). This field is available in API version 30.0 and later."
+      }
+    },
+    "ConsoleComponent": {
+      "height": {
+        "type": "int",
+        "description": "Required for components with a location of top or bottom. The height of the custom console component. The value must be specified in pixels and be greater than 0 but less than 999.",
+        "required": true
+      },
+      "location": {
+        "type": "string",
+        "description": "The location of the custom console component on the page layout. Valid values are right, left, top, and bottom. A component can have one location for each page layout.",
+        "required": true
+      },
+      "visualforcePage": {
+        "type": "string",
+        "description": "The unique name of the custom console component. For example, ConsoleComponentPage.",
+        "required": true
+      },
+      "width": {
+        "type": "int",
+        "description": "Required for components with a location of left or right. The width of the custom console component. The value must be specified in pixels and be greater than 0 but less than 999.",
+        "required": true
+      }
+    },
+    "Container": {
+      "height": {
+        "type": "int",
+        "description": "Required for components with a location of top or bottom. The height of the components’ container. The unit field determines the unit of measurement, in pixels or percent.",
+        "required": true
+      },
+      "isContainerAutoSizeEnabled": {
+        "type": "boolean",
+        "description": "If set to true, stacked console components in the sidebars autosize vertically. Set to true by default for newly created console components. Available in API version 32.0 and later.",
+        "required": true
+      },
+      "region": {
+        "type": "string",
+        "description": "The location of the components’ container. Valid values include: right left top bottom",
+        "required": true
+      },
+      "sidebarComponents": {
+        "type": "SidebarComponent[]",
+        "description": "Represents a specific custom console component to display in the components’ container."
+      },
+      "style": {
+        "type": "string",
+        "description": "The style of the container to display multiple components. Valid values include: stack—a content area with multiple frames. tabs—a single content area with a list of multiple panels. accordian—a collapsible content area.",
+        "required": true
+      },
+      "unit": {
+        "type": "string",
+        "description": "The unit of measurement, in pixels or percent, for the height or width of the components’ container. Pixel values are simply the number of pixels, for example, 500, and must be greater than 0 but less than 999. Percentage values must include the percent sign, for example, 20%, and must be greater than 0 but less than 100.",
+        "required": true
+      },
+      "width": {
+        "type": "int",
+        "description": "Required for components with a location of right or left. The width of the components’ container. The unit field determines the unit of measurement, in pixels or percent.",
+        "required": true
+      }
+    },
+    "SidebarComponent": {
+      "componentType": {
+        "type": "string",
+        "description": "Specifies the component type. Valid values are KnowledgeOne, Lookup, Milestones, RelatedList, Topics, Files, and CaseExperts. This field is available in API version 31.0 and later. The Files and CaseExperts values are available in API version 32.0 and later. Case Experts is available through a pilot program."
+      },
+      "createAction": {
+        "type": "string",
+        "description": "If the component is a lookup field, the name of the quick action used to create a record. This field is available in API version 42.0 and later."
+      },
+      "enableLinking": {
+        "type": "boolean",
+        "description": "If the component is a lookup field, lets users associate a record with this field. This field is available in API version 42.0 and later. If false, the createAction and updateAction can’t be retrieved."
+      },
+      "height": {
+        "type": "int",
+        "description": "Required for components with a location of top or bottom. The height of the component in the container. The unit field determines the unit of measurement, in pixels or percent.",
+        "required": true
+      },
+      "label": {
+        "type": "string",
+        "description": "The name of the component as it appears to console users. Available for components in a container with the style of tabs or accordion."
+      },
+      "lookup": {
+        "type": "string",
+        "description": "If the component is a lookup field, the name of the field."
+      },
+      "page": {
+        "type": "string",
+        "description": "If the component is a Visualforce page, the name of the Visualforce page."
+      },
+      "relatedlists": {
+        "type": "RelatedList[]",
+        "description": "If the component is a related list, the name of the list. This field is available in API version 31.0 and later."
+      },
+      "unit": {
+        "type": "string",
+        "description": "The unit of measurement, in pixels or percent, for the height or width of the component in the container. Pixel values are simply the number of pixels, for example, 500, and must be greater than 0 but less than 999. Percentage values must include the percent sign, for example, 20%, and must be greater than 0 but less than 100."
+      },
+      "updateAction": {
+        "type": "string",
+        "description": "If the component is a lookup field, the name of the quick action used to update a record. This field is available in API version 42.0 and later."
+      },
+      "width": {
+        "type": "int",
+        "description": "Required for components with a location of right or left. The width of the component in the container. The unit field determines the unit of measurement, in pixels or percent.",
+        "required": true
+      }
+    },
+    "RelatedList": {
+      "hideOnDetail": {
+        "type": "boolean",
+        "description": "If set to true, the related list is hidden from detail pages where it appears as a component to prevent duplicate information from showing."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the component as it appears to console users."
+      }
+    },
+    "SubtabComponents": {
+      "component": {
+        "type": "ConsoleComponent[]",
+        "description": "Represents a custom console component (Visualforce page, lookup field, or related lists; Canvas apps not available) on a section of a page layout. Custom console components only appear in the Salesforce console. This field is available in API version 29.0 and earlier."
+      },
+      "containers": {
+        "type": "Container[]",
+        "description": "Represents a location and style to display more than one custom console component on the sidebars of the Salesforce console. You can specify up to five components for each of the four locations (left, right, top, and bottom). This field is available in API version 30.0 and later."
+      }
+    },
+    "FeedLayout": {
+      "autocollapsePublisher": {
+        "type": "boolean",
+        "description": "Specifies whether the publisher is automatically collapsed when the page loads (true) or not (false)."
+      },
+      "compactFeed": {
+        "type": "boolean",
+        "description": "Specifies whether the feed-based page layout uses a compact feed (true) or not (false). If set to true, feed items on the page are collapsed by default, and the feed view has an updated design."
+      },
+      "feedFilterPosition": {
+        "type": "FeedLayoutFilterPosition (enumeration of type string)",
+        "description": "Where the feed filters list is included in the layout. Valid values are: centerDropDown—as a dropdown list in the center column. leftFixed—as a fixed list in the left column. leftFloat—as a floating list in the left column."
+      },
+      "feedFilters": {
+        "type": "FeedLayoutFilter[]",
+        "description": "The individual filters displayed in the feed filters list."
+      },
+      "fullWidthFeed": {
+        "type": "boolean",
+        "description": "Specifies whether the feed expands horizontally to take up all available space on the page (true) or not (false)."
+      },
+      "hideSidebar": {
+        "type": "boolean",
+        "description": "Specifies whether the sidebar is hidden (true) or not (false)."
+      },
+      "leftComponents": {
+        "type": "FeedLayoutComponent[]",
+        "description": "The individual components displayed in the left column of the feed view."
+      },
+      "rightComponents": {
+        "type": "FeedLayoutComponent[]",
+        "description": "The individual components displayed in the right column of the feed view."
+      }
+    },
+    "FeedLayoutComponent": {
+      "componentType": {
+        "type": "FeedLayoutComponentType (enumeration of type string)",
+        "description": "The type of component. Valid values are: HelpAndToolLinks—icons that link to the help topic for the page, the page layout, and, the printable view of the page. Available only on Case layouts. CustomButtons—a custom button. Following—an icon that toggles between a Follow button (if the user viewing a record doesn’t already follow it) and a Following indicator (if the user viewing a record does follow it). Followers—a list of users who follow the record. CustomLinks—a custom link. Milestones—the milestone tracker, which lets users see the status of a milestone on a case. Available only on Case layouts. Topics—a list of topics related to the record. CaseUnifiedFiles—a list of all files that are attached to the case. Visualforce—a custom Visualforce component.",
+        "required": true
+      },
+      "height": {
+        "type": "int",
+        "description": "The height, in pixels, of the component. Doesn’t apply to standardComponents"
+      },
+      "page": {
+        "type": "string",
+        "description": "The name of a Visualforce page being used as a custom component."
+      }
+    },
+    "FeedLayoutFilter": {
+      "feedFilterName": {
+        "type": "string",
+        "description": "The name of a CustomFeedFilter component. Names are prefixed with the name of the parent object. For example, Case.MyCustomFeedFilter."
+      },
+      "feedFilterType": {
+        "type": "FeedLayoutFilterType (enumeration of type string)",
+        "description": "The type of filter. Valid values are: AllUpdates—shows all feed items on a record. FeedItemType—shows feed items only for a particular type of activity on the record."
+      },
+      "feedItemType": {
+        "type": "FeedItemType (enumeration of type string)",
+        "description": "The type of feed item to display. Valid values are: ActivityEvent—feed items related to activity on tasks and events associated with a case. Available only on Case layouts. AdvancedTextPost–feed items related to group announcements posted on a feed. This value is available in API version 31.0 and later. AnnouncementPost–Not used. ApprovalPost—feed items related to approvals that are submitted on a feed. AttachArticleEvent—feed items for activity related to attaching articles to cases. Available only on Case layouts. BasicTemplateFeedItem—Not used. CallLogPost—feed items for activity from the Log a Call action. Available only on layouts for objects that support Activities (tasks and events). CanvasPost—feed items related to posts that a canvas app makes on a feed. CaseCommentPost—feed items for activity from the Case Note action. Available only on Case layouts. ChangeStatusPost—feed items for activity from the Change Status action. Available only on Case layouts. ChatTranscriptPost—feed items for activity related to attaching Chat transcripts to cases. Available only on Case layouts. CollaborationGroupCreated—feed items related to creating a public group. CollaborationGroupUnarchived—Not used. ContentPost—feed items related to attaching a file to a post. CreatedRecordEvent—feed items related to creating a record from the publisher. DashboardComponentSnapshot—feed items related to posting a dashboard snapshot on a feed. EmailMessageEvent—feed items for activity from the Email action. Available only on Case layouts. FacebookPost—Not used. LinkPost—feed items related to attaching a URL to a post. MilestoneEvent—feed items for changes to the milestone status on a case. Available only on Case layouts. PollPost—feed items related to posting a poll on a feed. ProfileSkillPost—feed items related to skills added to a user’s Chatter profile. This value is available in API version 31.0 and later. QuestionPost—feed items related to posting a question on a feed. This value is available in API version 31.0 and later. ReplyPost—feed items for activity from the Portal action. Available only on Case layouts. RypplePost—feed items related to creating a Thanks badge in WDC. SocialPost—feed items for activity on Twitter from the Social Post action. TextPost—feed items for creating a text post from the publisher. TrackedChange—feed items related to a change or group of changes to a tracked field. UserStatus—Not used."
+      }
+    },
+    "MiniLayout": {
+      "fields": {
+        "type": "string[]",
+        "description": "The fields for the mini-layout, listed in the order they appear in the UI. Fields that appear here must appear in the main layout."
+      },
+      "relatedLists": {
+        "type": "RelatedListItem[]",
+        "description": "The mini related list, listed in the order they appear in the UI. You can’t set sorting on mini related lists. Fields that appear here must appear in the main layout."
+      }
+    },
+    "LayoutSection": {
+      "customLabel": {
+        "type": "boolean",
+        "description": "Indicates if this section’s label is custom or standard (built-in). Custom labels can be any text, but must be translated. Standard labels have a predefined set of valid values, for example System Information, which are automatically translated."
+      },
+      "detailHeading": {
+        "type": "boolean",
+        "description": "Controls if this section appears in the detail page. In the UI, this setting corresponds to the checkbox in the section details dialog."
+      },
+      "editHeading": {
+        "type": "boolean",
+        "description": "Controls if this section appears in the edit page."
+      },
+      "label": {
+        "type": "string",
+        "description": "The label; either standard or custom, based on the customLabel flag."
+      },
+      "layoutColumns": {
+        "type": "LayoutColumn[]",
+        "description": "The columns of the layout, depending on the style. 1, 2, or 3 columns, ordered left to right, are possible."
+      },
+      "style": {
+        "type": "LayoutSectionStyle (enumeration of type string)",
+        "description": "The style of the layout: TwoColumnsTopToBottom - Two columns, tab goes top to bottom TwoColumnsLeftToRight - Two columns, tab goes left to right OneColumn - One column CustomLinks - Contains custom links only"
+      }
+    },
+    "LayoutColumn": {
+      "layoutItems": {
+        "type": "LayoutItem[]",
+        "description": "The individual items within a column (ordered from top to bottom)."
+      },
+      "reserved": {
+        "type": "string",
+        "description": "This field is reserved for Salesforce. The field resolves an issue with some SOAP libraries. Any value entered in the field is ignored."
+      }
+    },
+    "LayoutItem": {
+      "behavior": {
+        "type": "UiBehavior (enumeration of type string)",
+        "description": "Determines the field behavior. Valid string values: Edit—The layout field can be edited but isn’t required. Required—The layout field can be edited and is required. Readonly—The layout field is read-only. Explicitly specifying UiBehavior for Knowledge articles results in an exception."
+      },
+      "canvas": {
+        "type": "string",
+        "description": "Reference to a canvas app. This field is available in API version 31.0 and later."
+      },
+      "component": {
+        "type": "string",
+        "description": "Reference to a component. Value must be sfa:socialCard. This field is available in API version 30.0 and later. This field is allowed only inside a RelatedContentItem. sfa:socialCard is supported only on page layouts for contacts, accounts, and leads."
+      },
+      "customLink": {
+        "type": "string",
+        "description": "The customLink reference. This field is allowed only inside a CustomLink layoutSection."
+      },
+      "emptySpace": {
+        "type": "boolean",
+        "description": "Controls if this layout item is a blank space."
+      },
+      "field": {
+        "type": "string",
+        "description": "The field name reference, relative to the layout object, for example Description or MyField__c."
+      },
+      "height": {
+        "type": "int",
+        "description": "For s-control and pages only, the height in pixels."
+      },
+      "page": {
+        "type": "string",
+        "description": "Reference to a Visualforce page."
+      },
+      "analyticsCloudComponent": {
+        "type": "AnalyticsCloudComponentLayoutItem",
+        "description": "Refers to a CRM Analytics dashboard that you can add to a standard or custom object page. This field is available in API version 34.0 and later."
+      },
+      "reportChartComponent": {
+        "type": "ReportChartComponentLayoutItem",
+        "description": "Refers to a report chart that you can add to a standard or custom object page."
+      },
+      "scontrol": {
+        "type": "string",
+        "description": "Reference to an s-control."
+      },
+      "showLabel": {
+        "type": "boolean",
+        "description": "For s-control and pages only, whether to show the label."
+      },
+      "showScrollbars": {
+        "type": "boolean",
+        "description": "For s-control and pages only, whether to show scrollbars."
+      },
+      "width": {
+        "type": "string",
+        "description": "For s-control and pages only, the width in pixels or percent. Pixel values are simply the number of pixels, for example, 500. Percentage values must include the percent sign, for example, 20%."
+      }
+    },
+    "AnalyticsCloudComponentLayoutItem": {
+      "assetType": {
+        "type": "string",
+        "description": "Specifies the type of CRM Analytics asset to add. The available asset type is dashboard.",
+        "required": true
+      },
+      "devName": {
+        "type": "string",
+        "description": "Unique development name of the dashboard to add.",
+        "required": true
+      },
+      "error": {
+        "type": "string",
+        "description": "Error string; only populated if an error occurred in the underlying dashboard."
+      },
+      "filter": {
+        "type": "string",
+        "description": "Communicates initial dashboard filters for mapping data fields in the dashboard to the object’s fields, so that the dashboard shows only the data that’s relevant for the record being viewed."
+      },
+      "height": {
+        "type": "int",
+        "description": "Specifies the height of the dashboard, in pixels. The default is 400."
+      },
+      "hideOnError": {
+        "type": "boolean",
+        "description": "Controls whether users see a dashboard that has an error. When this attribute is set to true, if the dashboard has an error, the dashboard doesn’t appear on the page. When set to false, the dashboard appears but doesn’t show any data except the error. An error can happen when a user doesn’t have access to CRM Analytics or to the dashboard. The default is true."
+      },
+      "showSharing": {
+        "type": "boolean",
+        "description": "If set to true, and the dashboard is shareable, then the dashboard shows the Share icon. Users can click the icon to open the Share dialog and post or download from the dashboard. If set to false, the dashboard doesn’t show the Share icon. This field is available in API version 37.0 and later."
+      },
+      "showTitle": {
+        "type": "boolean",
+        "description": "If true, includes the dashboard’s title above the dashboard. If false, the dashboard appears without a title. The default is true."
+      },
+      "width": {
+        "type": "string",
+        "description": "Specifies the width of the dashboard, in pixels or percent. Pixel values are simply the number of pixels, for example, 500. Percentage values must include the percent sign, for example, 20%. The default is 100%."
+      }
+    },
+    "ReportChartComponentLayoutItem": {
+      "cacheData": {
+        "type": "boolean",
+        "description": "Indicates whether to use cached data when displaying the chart. When the attribute is set to true, data is cached for 24 hours. If the attribute is set to false, the report isn’t run every time the page is refreshed. This field is available in API version 29.0 and later."
+      },
+      "contextFilterableField": {
+        "type": "string",
+        "description": "Unique development name of the field by which a report chart is filtered to return data relevant to the page. If set, the ID field for the parent object of the page or report type is the chart data filter. The parent object for the report type and the page must match for a chart to return relevant data."
+      },
+      "error": {
+        "type": "string",
+        "description": "Error string; only populated if an error occurred in the underlying report. This field is available in API version 31.0 and later."
+      },
+      "hideOnError": {
+        "type": "boolean",
+        "description": "Controls whether users see a chart that has an error. When there’s an error and this attribute is set, the chart doesn’t show any data except the error. An error can happen for many reasons, such as when a user doesn’t have access to fields used by the chart or a chart has been removed from the report. Set the attribute to true to hide the chart from a page on error. This field is available in API version 29.0 and later."
+      },
+      "includeContext": {
+        "type": "boolean",
+        "description": "If true, filters the report chart to return data that’s relevant to the page."
+      },
+      "reportName": {
+        "type": "string",
+        "description": "Unique development name of a report that includes a chart."
+      },
+      "showTitle": {
+        "type": "boolean",
+        "description": "If true, applies the title from the report to the chart."
+      },
+      "size": {
+        "type": "ReportChartComponentSize (enumeration of type string)",
+        "description": "The chart size is medium when no value is specified. Valid values: SMALL MEDIUM LARGE"
+      }
+    },
+    "PlatformActionList": {
+      "actionListContext": {
+        "type": "PlatformActionListContext (enumeration of type string)",
+        "description": "The context of the action list. Valid values are: Assistant BannerPhoto Chatter Dockable FeedElement Flexipage Global ListView ListViewDefinition ListViewRecord Lookup MruList MruRow ObjectHomeChart Photo Record RecordEdit RelatedList RelatedListRecord",
+        "required": true
+      },
+      "platformActionListItems": {
+        "type": "PlatformActionListItem[]",
+        "description": "The actions in the PlatformActionList."
+      },
+      "relatedSourceEntity": {
+        "type": "string",
+        "description": "When the ActionListContext is RelatedList or RelatedListRecord, this field represents the API name of the related list to which the action belongs."
+      }
+    },
+    "PlatformActionListItem": {
+      "actionName": {
+        "type": "string",
+        "description": "The API name for the action in the list."
+      },
+      "actionType": {
+        "type": "PlatformActionType (enumeration of type string)",
+        "description": "The type of action. Valid values are: ActionLink—An indicator on a feed element that targets an API, a web page, or a file, represented by a button in the Salesforce Chatter feed UI. CustomButton—When clicked, opens a URL or a Visualforce page in a window or executes JavaScript. InvocableAction ProductivityAction—Productivity actions are predefined and attached to a limited set of objects. Productivity actions include Send Email, Call, Map, View Website, and Read News. Except for the Call action, you can’t edit productivity actions. QuickAction—A global or object-specific action. StandardButton—A predefined Salesforce button such as New, Edit, and Delete."
+      },
+      "sortOrder": {
+        "type": "int",
+        "description": "The placement of the action in the list."
+      },
+      "subtype": {
+        "type": "string",
+        "description": "The subtype of the action. For quick actions, the subtype is QuickActionType. For custom buttons, the subtype is WebLinkTypeEnum. For action links, subtypes are Api, ApiAsync, Download, and Ui. Standard buttons and productivity actions have no subtype."
+      }
+    },
+    "QuickActionList": {
+      "quickActionListItems": {
+        "type": "QuickActionListItem[]",
+        "description": "Array of zero or more QuickActionList objects."
+      }
+    },
+    "QuickActionListItem": {
+      "quickActionName": {
+        "type": "string",
+        "description": "The API name of the action."
+      }
+    },
+    "RelatedContent": {
+      "relatedContentItems": {
+        "type": "RelatedContentItem[]",
+        "description": "A list of layout items in the Mobile Cards section of the page layout."
+      }
+    },
+    "RelatedContentItem": {
+      "layoutItem": {
+        "type": "LayoutItem",
+        "description": "An individual LayoutItem in the Mobile Cards section."
+      }
+    },
+    "RelatedListItem": {
+      "customButtons": {
+        "type": "string[]",
+        "description": "A list of custom buttons that are used on the related list."
+      },
+      "excludeButtons": {
+        "type": "string[]",
+        "description": "A list of buttons that are excluded from the related list."
+      },
+      "fields": {
+        "type": "string[]",
+        "description": "A list of fields that are displayed in the related list. Retrieval of standard fields on related lists uses aliases instead of field or API names. For example, the Fax, Mobile, and Home Phone fields are retrieved as Phone2, Phone3, and Phone4, respectively."
+      },
+      "quickActions": {
+        "type": "string[]",
+        "description": "A list of quick actions that are used on the related list."
+      },
+      "relatedList": {
+        "type": "string",
+        "description": "The name of the related list.",
+        "required": true
+      },
+      "sortField": {
+        "type": "string",
+        "description": "The name of the field that is used for sorting."
+      },
+      "sortOrder": {
+        "type": "SortOrder (enumeration of type string)",
+        "description": "If the sortField is set, the sortOrder field determines the sort order. Asc - Sort in ascending order Desc - Sort in descending order"
+      }
+    },
+    "SummaryLayout": {
+      "masterLabel": {
+        "type": "string",
+        "description": "The name of the layout label.",
+        "required": true
+      },
+      "sizeX": {
+        "type": "int",
+        "description": "Number of columns in the highlights pane, from 1 through 4 (inclusive).",
+        "required": true
+      },
+      "sizeY": {
+        "type": "int",
+        "description": "Number of rows in each column, either 1 or 2.",
+        "required": true
+      },
+      "sizeZ": {
+        "type": "int",
+        "description": "Reserved for future use. If provided, the setting is visible to users."
+      },
+      "summaryLayoutItems": {
+        "type": "SummaryLayoutItem[]",
+        "description": "Controls the appearance of an individual field and its column and row position within the highlights panel grid, when Case Feed is enabled. At least one is required."
+      },
+      "summaryLayoutStyle": {
+        "type": "SummaryLayoutStyle (enumeration of type string)",
+        "description": "Highlights panel style. Valid string values are: Default QuoteTemplate DefaultQuoteTemplate CaseInteraction QuickActionLayoutLeftRight (Available in API version 28.0 and later.) QuickActionLayoutTopDown (Available in API version 28.0 and later.)"
+      }
+    },
+    "SummaryLayoutItem": {
+      "customLink": {
+        "type": "string",
+        "description": "The customLink reference, if the item is a custom link."
+      },
+      "field": {
+        "type": "string",
+        "description": "The field name reference, relative to the page layout. Must be a standard or custom field that also exists on the detail page."
+      },
+      "posX": {
+        "type": "int",
+        "description": "The item’s column position in the highlights panel grid. Must be within the range of sizeX.",
+        "required": true
+      },
+      "posY": {
+        "type": "int",
+        "description": "The item’s row position in the highlights panel grid. Must be within the range of sizeY.",
+        "required": true
+      },
+      "posZ": {
+        "type": "int",
+        "description": "Reserved for future use. If provided, the setting is visible to users."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AnalyticsCloudComponentLayoutItem\">\n  <xsd:sequence>\n    <xsd:element name=\"assetType\" type=\"xsd:string\"/>\n    <xsd:element name=\"devName\" type=\"xsd:string\"/>\n    <xsd:element name=\"error\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"filter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"height\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"hideOnError\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showHeader\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showSharing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showTitle\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"width\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Container\">\n  <xsd:sequence>\n    <xsd:element name=\"height\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"isContainerAutoSizeEnabled\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"region\" type=\"xsd:string\"/>\n    <xsd:element name=\"sidebarComponents\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SidebarComponent\"/>\n    <xsd:element name=\"style\" type=\"xsd:string\"/>\n    <xsd:element name=\"unit\" type=\"xsd:string\"/>\n    <xsd:element name=\"width\" minOccurs=\"0\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CustomConsoleComponents\">\n  <xsd:sequence>\n    <xsd:element name=\"primaryTabComponents\" minOccurs=\"0\" type=\"tns:PrimaryTabComponents\"/>\n    <xsd:element name=\"subtabComponents\" minOccurs=\"0\" type=\"tns:SubtabComponents\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FeedItemType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TrackedChange\"/>\n    <xsd:enumeration value=\"UserStatus\"/>\n    <xsd:enumeration value=\"TextPost\"/>\n    <xsd:enumeration value=\"AdvancedTextPost\"/>\n    <xsd:enumeration value=\"LinkPost\"/>\n    <xsd:enumeration value=\"ContentPost\"/>\n    <xsd:enumeration value=\"PollPost\"/>\n    <xsd:enumeration value=\"RypplePost\"/>\n    <xsd:enumeration value=\"ProfileSkillPost\"/>\n    <xsd:enumeration value=\"DashboardComponentSnapshot\"/>\n    <xsd:enumeration value=\"ApprovalPost\"/>\n    <xsd:enumeration value=\"CaseCommentPost\"/>\n    <xsd:enumeration value=\"ReplyPost\"/>\n    <xsd:enumeration value=\"EmailMessageEvent\"/>\n    <xsd:enumeration value=\"CallLogPost\"/>\n    <xsd:enumeration value=\"ChangeStatusPost\"/>\n    <xsd:enumeration value=\"AttachArticleEvent\"/>\n    <xsd:enumeration value=\"MilestoneEvent\"/>\n    <xsd:enumeration value=\"ActivityEvent\"/>\n    <xsd:enumeration value=\"ChatTranscriptPost\"/>\n    <xsd:enumeration value=\"CollaborationGroupCreated\"/>\n    <xsd:enumeration value=\"CollaborationGroupUnarchived\"/>\n    <xsd:enumeration value=\"SocialPost\"/>\n    <xsd:enumeration value=\"QuestionPost\"/>\n    <xsd:enumeration value=\"FacebookPost\"/>\n    <xsd:enumeration value=\"BasicTemplateFeedItem\"/>\n    <xsd:enumeration value=\"CreateRecordEvent\"/>\n    <xsd:enumeration value=\"CanvasPost\"/>\n    <xsd:enumeration value=\"AnnouncementPost\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FeedLayout\">\n  <xsd:sequence>\n    <xsd:element name=\"autocollapsePublisher\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"compactFeed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"feedFilterPosition\" minOccurs=\"0\" type=\"tns:FeedLayoutFilterPosition\"/>\n    <xsd:element name=\"feedFilters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FeedLayoutFilter\"/>\n    <xsd:element name=\"fullWidthFeed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"hideSidebar\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"highlightExternalFeedItems\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"leftComponents\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FeedLayoutComponent\"/>\n    <xsd:element name=\"rightComponents\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FeedLayoutComponent\"/>\n    <xsd:element name=\"useInlineFiltersInConsole\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FeedLayoutComponent\">\n  <xsd:sequence>\n    <xsd:element name=\"componentType\" type=\"tns:FeedLayoutComponentType\"/>\n    <xsd:element name=\"height\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"page\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FeedLayoutComponentType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"HelpAndToolLinks\"/>\n    <xsd:enumeration value=\"CustomButtons\"/>\n    <xsd:enumeration value=\"Following\"/>\n    <xsd:enumeration value=\"Followers\"/>\n    <xsd:enumeration value=\"CustomLinks\"/>\n    <xsd:enumeration value=\"Milestones\"/>\n    <xsd:enumeration value=\"Topics\"/>\n    <xsd:enumeration value=\"CaseUnifiedFiles\"/>\n    <xsd:enumeration value=\"Visualforce\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FeedLayoutFilter\">\n  <xsd:sequence>\n    <xsd:element name=\"feedFilterName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"feedFilterType\" type=\"tns:FeedLayoutFilterType\"/>\n    <xsd:element name=\"feedItemType\" minOccurs=\"0\" type=\"tns:FeedItemType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FeedLayoutFilterPosition\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"CenterDropDown\"/>\n    <xsd:enumeration value=\"LeftFixed\"/>\n    <xsd:enumeration value=\"LeftFloat\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FeedLayoutFilterType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AllUpdates\"/>\n    <xsd:enumeration value=\"FeedItemType\"/>\n    <xsd:enumeration value=\"Custom\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Layout\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"customButtons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"customConsoleComponents\" minOccurs=\"0\" type=\"tns:CustomConsoleComponents\"/>\n        <xsd:element name=\"emailDefault\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"excludeButtons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"feedLayout\" minOccurs=\"0\" type=\"tns:FeedLayout\"/>\n        <xsd:element name=\"headers\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LayoutHeader\"/>\n        <xsd:element name=\"layoutSections\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LayoutSection\"/>\n        <xsd:element name=\"miniLayout\" minOccurs=\"0\" type=\"tns:MiniLayout\"/>\n        <xsd:element name=\"multilineLayoutFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"platformActionList\" minOccurs=\"0\" type=\"tns:PlatformActionList\"/>\n        <xsd:element name=\"quickActionList\" minOccurs=\"0\" type=\"tns:QuickActionList\"/>\n        <xsd:element name=\"relatedContent\" minOccurs=\"0\" type=\"tns:RelatedContent\"/>\n        <xsd:element name=\"relatedLists\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RelatedListItem\"/>\n        <xsd:element name=\"relatedObjects\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"runAssignmentRulesDefault\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showEmailCheckbox\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showHighlightsPanel\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showInteractionLogPanel\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showKnowledgeComponent\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showRunAssignmentRulesCheckbox\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showSolutionSection\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showSubmitAndAttachButton\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"summaryLayout\" minOccurs=\"0\" type=\"tns:SummaryLayout\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"LayoutColumn\">\n  <xsd:sequence>\n    <xsd:element name=\"layoutItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LayoutItem\"/>\n    <xsd:element name=\"reserved\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"LayoutHeader\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"PersonalTagging\"/>\n    <xsd:enumeration value=\"PublicTagging\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"LayoutItem\">\n  <xsd:sequence>\n    <xsd:element name=\"analyticsCloudComponent\" minOccurs=\"0\" type=\"tns:AnalyticsCloudComponentLayoutItem\"/>\n    <xsd:element name=\"behavior\" minOccurs=\"0\" type=\"tns:UiBehavior\"/>\n    <xsd:element name=\"canvas\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"component\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"customLink\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"emptySpace\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"field\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"height\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"page\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"reportChartComponent\" minOccurs=\"0\" type=\"tns:ReportChartComponentLayoutItem\"/>\n    <xsd:element name=\"scontrol\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"showLabel\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showScrollbars\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"width\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"LayoutSection\">\n  <xsd:sequence>\n    <xsd:element name=\"customLabel\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"detailHeading\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"editHeading\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"layoutColumns\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LayoutColumn\"/>\n    <xsd:element name=\"style\" type=\"tns:LayoutSectionStyle\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"LayoutSectionStyle\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TwoColumnsTopToBottom\"/>\n    <xsd:enumeration value=\"TwoColumnsLeftToRight\"/>\n    <xsd:enumeration value=\"OneColumn\"/>\n    <xsd:enumeration value=\"CustomLinks\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MiniLayout\">\n  <xsd:sequence>\n    <xsd:element name=\"fields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"relatedLists\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RelatedListItem\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PlatformActionList\">\n  <xsd:sequence>\n    <xsd:element name=\"actionListContext\" type=\"tns:PlatformActionListContext\"/>\n    <xsd:element name=\"platformActionListItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PlatformActionListItem\"/>\n    <xsd:element name=\"relatedSourceEntity\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"PlatformActionListContext\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ListView\"/>\n    <xsd:enumeration value=\"RelatedList\"/>\n    <xsd:enumeration value=\"ListViewRecord\"/>\n    <xsd:enumeration value=\"RelatedListRecord\"/>\n    <xsd:enumeration value=\"Record\"/>\n    <xsd:enumeration value=\"FeedElement\"/>\n    <xsd:enumeration value=\"Chatter\"/>\n    <xsd:enumeration value=\"Global\"/>\n    <xsd:enumeration value=\"Flexipage\"/>\n    <xsd:enumeration value=\"MruList\"/>\n    <xsd:enumeration value=\"MruRow\"/>\n    <xsd:enumeration value=\"RecordEdit\"/>\n    <xsd:enumeration value=\"Photo\"/>\n    <xsd:enumeration value=\"BannerPhoto\"/>\n    <xsd:enumeration value=\"ObjectHomeChart\"/>\n    <xsd:enumeration value=\"ListViewDefinition\"/>\n    <xsd:enumeration value=\"Dockable\"/>\n    <xsd:enumeration value=\"Lookup\"/>\n    <xsd:enumeration value=\"Assistant\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"PlatformActionListItem\">\n  <xsd:sequence>\n    <xsd:element name=\"actionName\" type=\"xsd:string\"/>\n    <xsd:element name=\"actionType\" type=\"tns:PlatformActionType\"/>\n    <xsd:element name=\"sortOrder\" type=\"xsd:int\"/>\n    <xsd:element name=\"subtype\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"PlatformActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"QuickAction\"/>\n    <xsd:enumeration value=\"StandardButton\"/>\n    <xsd:enumeration value=\"CustomButton\"/>\n    <xsd:enumeration value=\"ProductivityAction\"/>\n    <xsd:enumeration value=\"ActionLink\"/>\n    <xsd:enumeration value=\"InvocableAction\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"PrimaryTabComponents\">\n  <xsd:sequence>\n    <xsd:element name=\"containers\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Container\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"QuickActionList\">\n  <xsd:sequence>\n    <xsd:element name=\"quickActionListItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:QuickActionListItem\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"QuickActionListItem\">\n  <xsd:sequence>\n    <xsd:element name=\"quickActionName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RelatedContent\">\n  <xsd:sequence>\n    <xsd:element name=\"relatedContentItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RelatedContentItem\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RelatedContentItem\">\n  <xsd:sequence>\n    <xsd:element name=\"layoutItem\" type=\"tns:LayoutItem\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RelatedList\">\n  <xsd:sequence>\n    <xsd:element name=\"hideOnDetail\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RelatedListItem\">\n  <xsd:sequence>\n    <xsd:element name=\"customButtons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"excludeButtons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"fields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"quickActions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"relatedList\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortField\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortOrder\" minOccurs=\"0\" type=\"tns:SortOrder\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportChartComponentLayoutItem\">\n  <xsd:sequence>\n    <xsd:element name=\"cacheData\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"contextFilterableField\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"error\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"hideOnError\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"includeContext\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"reportName\" type=\"xsd:string\"/>\n    <xsd:element name=\"showTitle\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"size\" minOccurs=\"0\" type=\"tns:ReportChartComponentSize\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ReportChartComponentSize\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"SMALL\"/>\n    <xsd:enumeration value=\"MEDIUM\"/>\n    <xsd:enumeration value=\"LARGE\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"SidebarComponent\">\n  <xsd:sequence>\n    <xsd:element name=\"componentType\" type=\"xsd:string\"/>\n    <xsd:element name=\"createAction\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"enableLinking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"height\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"lookup\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"page\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"relatedLists\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RelatedList\"/>\n    <xsd:element name=\"unit\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"updateAction\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"width\" minOccurs=\"0\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SortOrder\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Asc\"/>\n    <xsd:enumeration value=\"Desc\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"SubtabComponents\">\n  <xsd:sequence>\n    <xsd:element name=\"containers\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Container\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SummaryLayout\">\n  <xsd:sequence>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"sizeX\" type=\"xsd:int\"/>\n    <xsd:element name=\"sizeY\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"sizeZ\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"summaryLayoutItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SummaryLayoutItem\"/>\n    <xsd:element name=\"summaryLayoutStyle\" type=\"tns:SummaryLayoutStyle\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SummaryLayoutItem\">\n  <xsd:sequence>\n    <xsd:element name=\"customLink\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"field\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"posX\" type=\"xsd:int\"/>\n    <xsd:element name=\"posY\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"posZ\" minOccurs=\"0\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SummaryLayoutStyle\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Default\"/>\n    <xsd:enumeration value=\"QuoteTemplate\"/>\n    <xsd:enumeration value=\"DefaultQuoteTemplate\"/>\n    <xsd:enumeration value=\"ServiceReportTemplate\"/>\n    <xsd:enumeration value=\"ChildServiceReportTemplateStyle\"/>\n    <xsd:enumeration value=\"DefaultServiceReportTemplate\"/>\n    <xsd:enumeration value=\"CaseInteraction\"/>\n    <xsd:enumeration value=\"QuickActionLayoutLeftRight\"/>\n    <xsd:enumeration value=\"QuickActionLayoutTopDown\"/>\n    <xsd:enumeration value=\"PathAssistant\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"UiBehavior\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Edit\"/>\n    <xsd:enumeration value=\"Required\"/>\n    <xsd:enumeration value=\"Readonly\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This sample defines a page layout.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Layout xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <customConsoleComponents>\n    <primaryTabComponents>\n       <container>\n           <region>left</region>\n          <style>Stack</style>\n          <unit>Pixel</unit>\n          <width>101</width>\n          <sidebarComponent>\n                <width>60</width>\n                <page>simplepage1</page>\n                <unit>Percentage</unit>\n          </sidebarComponent>\n          <sidebarComponent>\n                <width>40</width>\n                <page>Hello_World</page>\n                <unit>Percentage</unit>\n          </sidebarComponent>\n       </container>\n    </primaryTabComponents>\n    <subtabComponents>\n       <component>\n          <location>top</location>\n          <visualforcePage>ConsoleComponentPage2</visualforcePage>\n          <height>200</height>\n       </component>\n    </subtabComponents>\n   </customConsoleComponents>\n    <customButtons>ButtonLink</customButtons>\n    <layoutSections>\n        <editHeading>true</editHeading>\n        <label>Information</label>\n        <layoutColumns>\n            <layoutItems>\n                <behavior>Required</behavior>\n                <field>Name</field>\n            </layoutItems>\n            <layoutItems>\n                <height>180</height>\n                <scontrol>LayoutSControl</scontrol>\n                <showLabel>true</showLabel>\n                <showScrollbars>true</showScrollbars>\n                <width>50%</width>\n            </layoutItems>\n            <layoutItems>\n                <reportChartComponent>\n                   <contextFilterableField>CUST_ID</contextFilterableField>\n                   <includeContext>true</includeContext>\n                   <reportName>Open_Accounts_by_Cases</reportName>\n                   <showTitle>false</showTitle>\n                   <size>LARGE</size>\n                <reportChartComponent>\n            </layoutItems>\n        </layoutColumns>\n        <layoutColumns>\n            <layoutItems>\n                <behavior>Edit</behavior>\n                <field>OwnerId</field>\n            </layoutItems>\n            <layoutItems>\n                <behavior>Edit</behavior>\n                <field>CurrencyIsoCode</field>\n            </layoutItems>\n        </layoutColumns>\n        <style>TwoColumnsTopToBottom</style>\n    </layoutSections>\n    <layoutSections>\n        <editHeading>true</editHeading>\n        <label>System Information</label>\n        <layoutColumns>\n            <layoutItems>\n                <behavior>Readonly</behavior>\n                <field>CreatedById</field>\n            </layoutItems>\n            <layoutItems>\n                <behavior>Readonly</behavior>\n                <field>Alpha1__c</field>\n            </layoutItems>\n            <layoutItems>\n                <height>200</height>\n                <page>mcanvasPage</page>\n                <showLabel>true</showLabel>\n                <showScrollbars>false</showScrollbars>\n                <width>100%</width>\n            </layoutItems>\n        </layoutColumns>\n        <layoutColumns>\n            <layoutItems>\n                <behavior>Readonly</behavior>\n                <field>LastModifiedById</field>\n            </layoutItems>\n            <layoutItems>\n                <behavior>Edit</behavior>\n                <field>TextArea__c</field>\n            </layoutItems>\n        </layoutColumns>\n        <style>TwoColumnsTopToBottom</style>\n    </layoutSections>\n    <layoutSections>\n        <customLabel>true</customLabel>\n        <detailHeading>true</detailHeading>\n        <label>Custom Links</label>\n        <layoutColumns>\n            <layoutItems>\n                <customLink>CustomWebLink</customLink>\n            </layoutItems>\n        </layoutColumns>\n        <style>CustomLinks</style>\n    </layoutSections>\n     <quickActionList>\n        <quickActionListItems>\n            <quickActionName>FeedItem.TextPost</quickActionName>\n        </quickActionListItems>\n        <quickActionListItems>\n            <quickActionName>FeedItem.ContentPost</quickActionName>\n        </quickActionListItems>\n        <quickActionListItems>\n            <quickActionName>FeedItem.LinkPost</quickActionName>\n        </quickActionListItems>\n        <quickActionListItems>\n            <quickActionName>FeedItem.PollPost</quickActionName>\n        </quickActionListItems>\n    </quickActionList>\n    <relatedContent>\n        <relatedContentItems>\n            <layoutItem>\n                <component>sfa:socialPanel</component>\n            </layoutItem>\n        <relatedContentItems>\n    </relatedContent>\n    <miniLayoutFields>Name</miniLayoutFields>\n    <miniLayoutFields>OwnerId</miniLayoutFields>\n    <miniLayoutFields>CurrencyIsoCode</miniLayoutFields>\n    <miniLayoutFields>Alpha1__c</miniLayoutFields>\n    <miniLayoutFields>TextArea__c</miniLayoutFields>\n    <miniRelatedLists>\n        <relatedList>RelatedNoteList</relatedList>\n    </miniRelatedLists>\n    <relatedLists>\n        <fields>StepStatus</fields>\n        <fields>CreatedDate</fields>\n        <fields>OriginalActor</fields>\n        <fields>Actor</fields>\n        <fields>Comments</fields>\n        <fields>Actor.Alias</fields>\n        <fields>OriginalActor.Alias</fields>\n        <relatedList>RelatedProcessHistoryList</relatedList>\n    </relatedLists>\n    <relatedLists>\n        <relatedList>RelatedNoteList</relatedList>\n    </relatedLists>\n</Layout>"
+    },
+    {
+      "description": "This example shows a layout using <summaryLayout>",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Layout xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <layoutSections>\n        <editHeading>true</editHeading>\n        <label>System Information</label>\n        <layoutColumns>\n            <layoutItems>\n                <behavior>Readonly</behavior>\n                <field>CreatedById</field>\n            </layoutItems>\n            <layoutItems>\n                <behavior>Required</behavior>\n                <field>Name</field>\n            </layoutItems>\n        </layoutColumns>\n        <layoutColumns>\n            <layoutItems>\n                <behavior>Readonly</behavior>\n                <field>LastModifiedById</field>\n            </layoutItems>\n        </layoutColumns>\n        <style>TwoColumnsTopToBottom</style>\n    </layoutSections>\n    <summaryLayout>\n        <masterLabel>Great Name</masterLabel>\n        <sizeX>4</sizeX>\n        <sizeY>2</sizeY>\n        <summaryLayoutItems>\n            <posX>0</posX>\n            <posY>0</posY>\n            <field>Name</field>\n        </summaryLayoutItems>\n    </summaryLayout>\n</Layout>"
+    },
+    {
+      "description": "This example shows a feed-based layout.",
+      "code": "<Layout>\n...\n    <feedLayout>\n        <leftComponents>\n            <componentType>customLinks</componentType>\n        </leftComponents>\n        <rightComponents>\n            <componentType>follow</componentType>\n        </rightComponents>\n        <rightComponents>\n            <componentType>followers</componentType>\n        </rightComponents>\n        <rightComponents>\n            <componentType>visualforce</componentType>\n            <page>accountCustomWidget</page>\n            <height>200</height>\n        </rightComponents>\n        <hideSidebar>true</hideSidebar>\n        <feedFilterPosition>centerDropDown</feedFilterPosition>\n        <feedFilters>\n    <feedFilerType>allUpdates</feedFilerType>\n        </feedFilters>\n        <feedFilters>\n    <feedFilerType>feedItemType</feedFilerType>\n    <feedItemType>CallLogPost</feedItemType>\n        </feedFilters>\n        <feedFilters>\n    <feedFilerType>feedItemType</feedFilerType>\n    <feedItemType>TextPost</feedItemType>\n        </feedFilters>\n    </feedLayout>\n...\n</Layout>"
+    }
+  ]
+}

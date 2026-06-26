@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CatalogedApiVersion - Metadata API",
+  "description": "Represents a version of an API that is consumable in Salesforce using API Catalog.",
+  "file_information": ".catalogedApiVersion",
+  "directory_location": "catalogedApiVersions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "catalogedApi": {
+      "type": "string",
+      "description": "An API managed for consumption in Salesforce using API Catalog.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "The description defined when the API is cataloged."
+    },
+    "externalSourceIdentifier": {
+      "type": "string",
+      "description": "The ID of the API in the external source that it's imported from."
+    },
+    "label": {
+      "type": "string",
+      "description": "The API name as it appears in API Catalog.",
+      "required": true
+    },
+    "version": {
+      "type": "string",
+      "description": "The ID of the API version information.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CatalogedApiVersion\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"catalogedApi\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalSourceIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"version\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This XML is an example of a CatalogedApiVersion component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CatalogedApiVersion xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <catalogedApi>PetstoreEngineeringv109C60C7C</catalogedApi>\n    <externalSourceIdentifier>urn:ms:03ff2c74-d0ea-4eba-a536-36dfd2d0fdbb:api-project::petstore-engineering/v1</externalSourceIdentifier>\n    <label>petstore-engineering</label>\n    <version>v1lwWZmDFyJYIFValk</version>\n</CatalogedApiVersion>"
+    }
+  ]
+}

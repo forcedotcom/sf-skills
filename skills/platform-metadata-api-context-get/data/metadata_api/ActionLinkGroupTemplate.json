@@ -1,0 +1,118 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ActionLinkGroupTemplate - Metadata API",
+  "description": "Represents the action link group template. Action link templates let you reuse action link definitions and package and distribute action links. An action link is a button on a feed element. Clicking on an action link can take a user to another Web page, initiate a file download, or invoke an API call to an external server or Salesforce. Use action links to integrate Salesforce and third-party services into the feed. Every action link belongs to an action link group and action links within the group are mutually exclusive.",
+  "file_information": ".actionLinkGroupTemplate",
+  "directory_location": "actionLinkGroupTemplates",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "actionLinkTemplates": {
+      "type": "ActionLinkTemplate[]",
+      "description": "Action link templates that are associated with the action link group template."
+    },
+    "category": {
+      "type": "PlatformActionGroupCategory (enumeration of type string)",
+      "description": "The location of the action link group within the feed element. Values are: Primary—The action link group is displayed in the body of the feed element. Overflow—The action link group is displayed in the overflow menu of the feed element.",
+      "required": true
+    },
+    "executionsAllowed": {
+      "type": "ActionLinkExecutionsAllowed (enumeration of type string)",
+      "description": "The number of times an action link can be executed. Values are: Once—An action link can be executed only once across all users. OncePerUser—An action link can be executed only once for each user. Unlimited—An action link can be executed an unlimited number of times by each user. If the action link’s actionType is Api or ApiAsync, you can’t use this value.",
+      "required": true
+    },
+    "hoursUntilExpiration": {
+      "type": "int",
+      "description": "The number of hours from when the action link group is created until it's removed from associated feed elements and can no longer be executed. The maximum value is 8,760.",
+      "required": true
+    },
+    "isPublished": {
+      "type": "boolean",
+      "description": "If true, the action link group template is published. Action link group templates shouldn’t be published until at least one action link template is associated with it.",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the action link group template to use in code.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "ActionLinkTemplate": {
+      "actionUrl": {
+        "type": "string",
+        "description": "The action link URL. For example, a Ui action link URL is a Web page. A Download action link URL is a link to the file to download. Ui and Download action link URLs are provided to clients. An Api or ApiAsync action link URL is a REST resource. Api and ApiAsync action link URLs aren’t provided to clients. Links to Salesforce can be relative. All other links must be absolute and start with https://.",
+        "required": true
+      },
+      "headers": {
+        "type": "string",
+        "description": "Template for the HTTP headers sent when corresponding action links are invoked. This field can be used only for Api and ApiAsync action links. This field can contain context variables and binding variables in the form {!Bindings.key}."
+      },
+      "isConfirmationRequired": {
+        "type": "boolean",
+        "description": "If true, a confirmation dialog appears before the action is executed.",
+        "required": true
+      },
+      "isGroupDefault": {
+        "type": "boolean",
+        "description": "If true, action links derived from this template are the default or primary action in their action groups. There can be only one default action per action group.",
+        "required": true
+      },
+      "label": {
+        "type": "string",
+        "description": "A custom label to display on the action link button. If none of the LabelKey values make sense for an action link, use a custom label. Set the LabelKey field to None and enter a label name in the Label field."
+      },
+      "labelKey": {
+        "type": "string",
+        "description": "Key for the set of labels to display for these action link states: new, pending, success, failed. For example, the Approve set contains these labels: Approve, Pending, Approved, Failed. For a complete list of keys and labels, see Action Link Labels in the Connect REST API Developer Guide.",
+        "required": true
+      },
+      "linkType": {
+        "type": "ActionLinkType (enumeration of type string)",
+        "description": "The type of action link. One of these values: Api—The action link calls a synchronous API at the action URL. Salesforce sets the status to SuccessfulStatus or FailedStatus based on the HTTP status code returned by your server. ApiAsync—The action link calls an asynchronous API at the action URL. The action remains in a PendingStatus state until a third party makes a request to /connect/action-links/actionLinkId to set the status to SuccessfulStatus or FailedStatus when the asynchronous operation is complete. Download—The action link downloads a file from the action URL. Ui—The action link takes the user to a web page at the action URL.",
+        "required": true
+      },
+      "method": {
+        "type": "ActionLinkHttpMethod (enumeration of type string)",
+        "description": "HTTP method for the action URL. One of these values: HttpDelete—Returns HTTP 204 on success. Response body or output class is empty. HttpGet—Returns HTTP 200 on success. HttpHead—Returns HTTP 200 on success. Response body or output class is empty. HttpPatch—Returns HTTP 200 on success or HTTP 204 if the response body or output class is empty. HttpPost—Returns HTTP 201 on success or HTTP 204 if the response body or output class is empty. Exceptions are the batch posting resources and methods, which return HTTP 200 on success. HttpPut—Return HTTP 200 on success or HTTP 204 if the response body or output class is empty. Ui and Download action links must use HttpGet.",
+        "required": true
+      },
+      "position": {
+        "type": "int",
+        "description": "An integer specifying the position of the action link template relative to other action links in the group. 0 is the first position.",
+        "required": true
+      },
+      "requestBody": {
+        "type": "string",
+        "description": "Template for the HTTP request body sent when corresponding action links are invoked. This field can be used only for Api and ApiAsync action links. This field can contain context variables and binding variables in the form {!Bindings.key}."
+      },
+      "userAlias": {
+        "type": "string",
+        "description": "If you selected CustomUser or CustomExcludedUser for UserVisibility, this field is the alias for the custom user. Use the alias in a template binding to specify the custom user when an action link group is created using the template."
+      },
+      "userVisibility": {
+        "type": "ActionLinkUserVisibility (enumeration of type string)",
+        "description": "Who can see the action link. This value is set per action link, not per action link group. Values are: Creator—Only the creator of the action link can see the action link. Everyone—Everyone can see the action link. EveryoneButCreator—Everyone but the creator of the action link can see the action link. Manager—Only the manager of the creator of the action link can see the action link. CustomUser—Only the custom user can see the action link. CustomExcludedUser—Everyone but the custom user can see the action link.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ActionLinkExecutionsAllowed\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Once\"/>\n    <xsd:enumeration value=\"OncePerUser\"/>\n    <xsd:enumeration value=\"Unlimited\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ActionLinkGroupTemplate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionLinkTemplates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ActionLinkTemplate\"/>\n        <xsd:element name=\"category\" type=\"tns:PlatformActionGroupCategory\"/>\n        <xsd:element name=\"executionsAllowed\" type=\"tns:ActionLinkExecutionsAllowed\"/>\n        <xsd:element name=\"hoursUntilExpiration\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"isPublished\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ActionLinkHttpMethod\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"HttpDelete\"/>\n    <xsd:enumeration value=\"HttpHead\"/>\n    <xsd:enumeration value=\"HttpGet\"/>\n    <xsd:enumeration value=\"HttpPatch\"/>\n    <xsd:enumeration value=\"HttpPost\"/>\n    <xsd:enumeration value=\"HttpPut\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ActionLinkTemplate\">\n  <xsd:sequence>\n    <xsd:element name=\"actionUrl\" type=\"xsd:string\"/>\n    <xsd:element name=\"headers\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isConfirmationRequired\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isGroupDefault\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"labelKey\" type=\"xsd:string\"/>\n    <xsd:element name=\"linkType\" type=\"tns:ActionLinkType\"/>\n    <xsd:element name=\"method\" type=\"tns:ActionLinkHttpMethod\"/>\n    <xsd:element name=\"position\" type=\"xsd:int\"/>\n    <xsd:element name=\"requestBody\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"userAlias\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"userVisibility\" type=\"tns:ActionLinkUserVisibility\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ActionLinkType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"API\"/>\n    <xsd:enumeration value=\"APIAsync\"/>\n    <xsd:enumeration value=\"Download\"/>\n    <xsd:enumeration value=\"UI\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ActionLinkUserVisibility\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Creator\"/>\n    <xsd:enumeration value=\"Everyone\"/>\n    <xsd:enumeration value=\"EveryoneButCreator\"/>\n    <xsd:enumeration value=\"Manager\"/>\n    <xsd:enumeration value=\"CustomUser\"/>\n    <xsd:enumeration value=\"CustomExcludedUser\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"PlatformActionGroupCategory\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Primary\"/>\n    <xsd:enumeration value=\"Overflow\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ActionLinkGroupTemplate component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ActionLinkGroupTemplate xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <actionLinkTemplates>\n      <actionUrl>/services/data/{!Bindings.word}/chatter/feed-elements</actionUrl>\n      <headers>Content-Type:{!Bindings.word3}</headers>\n      <isConfirmationRequired>true</isConfirmationRequired>\n      <isGroupDefault>true</isGroupDefault>\n      <labelKey>Add</labelKey>\n      <linkType>API</linkType>\n      <method>httpPost</method>\n      <position>0</position>\n      <requestBody>{\"body\":{\"messageSegments\":[{\"type\": \"Text\",\n      \"text\": \"{!Bindings.word1}\"}]},\"subjectId\": \"{!Bindings.word2}\",\n      \"feedElementType\": \"feedItem\"}</requestBody>\n      <userAlias>customExcludedUser</userAlias>\n      <userVisibility>CustomExcludedUser</userVisibility>\n   </actionLinkTemplates>\n   <category>Primary</category>\n   <executionsAllowed>OncePerUser</executionsAllowed>\n   <hoursUntilExpiration>10</hoursUntilExpiration>\n   <isPublished>true</isPublished>\n   <name>MyPackage</name>\n</ActionLinkGroupTemplate>"
+    }
+  ]
+}

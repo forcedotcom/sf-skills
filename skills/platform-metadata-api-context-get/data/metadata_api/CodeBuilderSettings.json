@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CodeBuilderSettings - Metadata API",
+  "description": "Represents Code Builder settings. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableCodeBuilder": {
+      "type": "boolean",
+      "description": "Indicates whether Code Builder is enabled (true) or not (false). When enabled, you can install and use the generally available (GA) Code Builder package in the org."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CodeBuilderSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableCodeBuilder\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of the CodeBuilder.settings file:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CodeBuilderSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableCodeBuilder>true</enableCodeBuilder>\n</CodeBuilderSettings>"
+    }
+  ]
+}

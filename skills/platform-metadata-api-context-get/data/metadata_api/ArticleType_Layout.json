@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ArticleType Layout - Metadata API",
+  "description": "Represents the metadata associated with an article type page layout. Article type layouts determine which fields users can view and edit when entering data for an article. Article type layouts also determine which sections appear when users view articles.",
+  "file_information": ".layout",
+  "directory_location": "layouts",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "layoutSections": {
+      "type": "LayoutSection[]",
+      "description": "The main sections of the layout containing the article fields. The order here determines the layout order."
+    }
+  },
+  "sub_types": {
+    "LayoutSection": {
+      "customLabel": {
+        "type": "boolean",
+        "description": "Indicates if this section's label is custom or standard (built-in). Custom labels can be any text, but must be translated. Standard labels have a predefined set of valid values, for example 'System Information', which are automatically translated."
+      },
+      "label": {
+        "type": "string",
+        "description": "The label; either standard or custom, based on the customLabel flag."
+      },
+      "layoutColumns": {
+        "type": "LayoutColumn[]",
+        "description": "The columns of the layout, depending on the style. Salesforce Knowledge only supports one column in article type layouts."
+      },
+      "style": {
+        "type": "LayoutSectionStyle (enumeration of type string)",
+        "description": "The style of the layout. Salesforce Knowledge only supports the value OneColumn, which displays a one-column page."
+      }
+    },
+    "LayoutColumn": {
+      "layoutItems": {
+        "type": "LayoutItem[]",
+        "description": "The individual items within a column (ordered from top to bottom)."
+      }
+    },
+    "LayoutItem": {
+      "field": {
+        "type": "string",
+        "description": "The field name reference, for example MyField__c."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is the definition of an ArticleType page layout:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Layout xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <layoutSections>\n        <customLabel>true</customLabel>\n        <label>Description</label>\n        <layoutColumns>\n            <layoutItems>\n                <field>description__c</field>\n            </layoutItems>\n            <layoutItems>\n                <field>dateTime__c</field>\n            </layoutItems>\n        </layoutColumns>\n        <style>OneColumn</style>\n    </layoutSections>\n    <layoutSections>\n        <label>Data Sheet</label>\n        <layoutColumns>\n            <layoutItems>\n                <field>file__c</field>\n            </layoutItems>\n        </layoutColumns>\n        <style>OneColumn</style>\n    </layoutSections>\n</Layout>"
+    }
+  ]
+}

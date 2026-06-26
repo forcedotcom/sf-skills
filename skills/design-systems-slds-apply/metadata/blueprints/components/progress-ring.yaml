@@ -1,0 +1,102 @@
+name: Progress Ring
+description: A circular progress indicator that shows completion status as a filled arc, providing an alternative visualization
+  to linear progress bars.
+category: Feedback
+slds_classes:
+  root: slds-progress-ring
+  elements:
+  - class: slds-progress-ring__progress
+    description: The progress arc element
+    purpose: SVG element that displays the completion arc
+  - class: slds-progress-ring__content
+    description: Content area in the center of the ring
+    purpose: Optional content displayed within the progress ring
+  modifiers:
+  - class: slds-progress-ring_large
+    description: Large progress ring size
+    usage: Prominent progress display
+  states:
+  - class: slds-progress-ring_complete
+    description: Completed progress state
+    trigger: When progress reaches 100%
+  - class: slds-progress-ring_warning
+    description: Warning progress state
+    trigger: When progress indicates a warning condition
+  - class: slds-progress-ring_expired
+    description: Expired progress state
+    trigger: When progress has expired or failed
+variants:
+- name: Base
+  description: Standard circular progress ring
+  classes:
+  - slds-progress-ring
+  usage_context: Default circular progress visualization
+  differences: Circular progress indicator with arc fill
+lightning_component:
+  name: lightning-progress-ring
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-progress-ring
+  mapping_notes: Direct mapping - Lightning component implements SLDS progress ring blueprint
+accessibility:
+  keyboard_support:
+  - No specific keyboard interactions required
+  screen_reader:
+  - Progress value announced as percentage
+  - Progress state changes communicated
+  - Ring purpose described through labeling
+  aria_attributes:
+  - role='progressbar' for progress semantic
+  - aria-valuenow for current progress value
+  - aria-valuemin='0' for minimum value
+  - aria-valuemax='100' for maximum value
+  - aria-label describing the progress task
+usage_guidelines:
+  when_to_use:
+  - For circular progress visualization
+  - When space constraints favor circular layout
+  - To show completion of circular processes
+  - For dashboard or metric displays
+  when_not_to_use:
+  - When linear progress is more intuitive
+  - For indeterminate loading (use spinner instead)
+  - When detailed progress steps are needed
+  best_practices:
+  - Use appropriate size for context and importance
+  - Include percentage or completion text when helpful
+  - Choose colors that convey appropriate meaning
+  - Update progress smoothly
+  - Consider animation for progress changes
+  common_mistakes:
+  - Making progress ring too small to read
+  - Using inappropriate colors for progress state
+  - Not providing progress value to assistive technology
+  - Poor contrast between ring and background
+code_examples:
+- title: Basic Progress Ring
+  code: "<div class=\"slds-progress-ring\" role=\"progressbar\" aria-valuenow=\"75\" aria-valuemin=\"0\" aria-valuemax=\"\
+    100\" aria-label=\"Progress: 75%\">\n      <svg viewBox=\"-1 -1 2 2\" class=\"slds-progress-ring__progress\">\n      \
+    \  <circle class=\"slds-progress-ring__path\" r=\"1\"></circle>\n        <circle class=\"\" r=\"1\" style=\"stroke-dasharray:\
+    \ 4.712, 6.283\"></circle>\n      </svg>\n      <div class=\"slds-progress-ring__content\">75%</div>\n      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - progress-ring.css
+  javascript: []
+  icons: []
+  other_components: []
+related_components:
+- name: Progress Bar
+  relationship: alternative
+  description: Linear alternative for progress visualization
+- name: Progress Indicator
+  relationship: similar
+  description: Step-based progress for multi-step processes
+- name: Spinner
+  relationship: alternative
+  description: Alternative for indeterminate loading states
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/progress-ring/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

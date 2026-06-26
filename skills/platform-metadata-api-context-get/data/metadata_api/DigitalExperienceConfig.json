@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DigitalExperienceConfig - Metadata API",
+  "description": "Represents details for your organization’s workspaces, such as the site label, site URL path prefix, and workspace type.",
+  "file_information": ".digitalExperienceConfig",
+  "directory_location": "digitalExperienceConfigs",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "label": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the site."
+    },
+    "site": {
+      "type": "Site",
+      "required": true,
+      "description": "Contains site-related settings, such as the site’s URL path prefix."
+    },
+    "space": {
+      "type": "string",
+      "required": true,
+      "description": "References the workspace that contains the site’s content items such as brandingSets, themes, views, and routes."
+    }
+  },
+  "sub_types": {
+    "Site": {
+      "urlPathPrefix": {
+        "type": "string",
+        "description": "The first part of the path on the site's URL that distinguishes this site from other sites. For example, if your site URL is MyDomainName.my.site.com/partners, then partners is the urlPathPrefix."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DigitalExperienceConfig component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DigitalExperienceConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <label>Capricorn_Coffee</label>\n    <site>\n        <urlPathPrefix>CapricornCoffee</urlPathPrefix>\n    </site>\n    <space>site/Capricorn_Coffee1</space>\n</DigitalExperienceConfig>"
+    }
+  ]
+}

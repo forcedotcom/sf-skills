@@ -1,0 +1,66 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "# OmniExtTrackingDef - Metadata API",
+  "description": "## Description\n\nRepresents a connection between an OmniTrackingGroup in OmniAnalytics and a third-party Analytics system such as Google Analytics.",
+  "file_information": "## File Information\n\n- **File Suffix**: `.OmniExtTrackingDef`\n",
+  "directory_location": "## Directory Location\n\n- **Directory Location**: `OmniExtTrackingDefs`\n",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "A description of the OmniExtTrackingEventDef."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "The unique name of the OmniExtTrackingEventDef in the API."
+    },
+    "isActive": {
+      "type": "boolean",
+      "required": true,
+      "description": "Specifies whether the OmniExtTrackingDef is active."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The unique master label of the OmniExtTrackingEventDef. This internal label doesn't get translated."
+    },
+    "omniExtTrackingDefKey": {
+      "type": "string",
+      "description": "A UUID generated internally by Salesforce to uniquely identify an OmniExtTrackingDef record across all orgs."
+    },
+    "omniExtTrackingEventDefs": {
+      "type": "OmniExtTrackingEventDef[]",
+      "description": "The OmniExtTrackingEventDef objects related to this OmniExtTrackingDef."
+    },
+    "trackingFrameworkInformation": {
+      "type": "string",
+      "required": true,
+      "description": "JSON data containing information about an external service, such as the API call and input parameter names."
+    },
+    "trackingServiceProvider": {
+      "type": "ExternalTrackingVendor (enumeration of type string)",
+      "required": true,
+      "description": "The third-party Analytics system to which user interaction data is sent. Values are: Google Mixpanel"
+    }
+  },
+  "wsdl_segment": "\n\n## WSDL Segment\n\nThe following WSDL Segment shows the complete structure of this metadata type:\n\n```xml\n<xsd:simpleType name=\"ExternalTrackingVendor\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Google\"/>\n    <xsd:enumeration value=\"Mixpanel\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"OmniAnalyticsComponentType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Omniscript\"/>\n    <xsd:enumeration value=\"Flexcard\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"OmniExtTrackingDef\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"omniExtTrackingDefKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"omniExtTrackingEventDefs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OmniExtTrackingEventDef\"/>\n        <xsd:element name=\"trackingFrameworkInformation\" type=\"xsd:string\"/>\n        <xsd:element name=\"trackingServiceProvider\" type=\"tns:ExternalTrackingVendor\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"OmniExtTrackingEventDef\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"componentType\" type=\"tns:OmniAnalyticsComponentType\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"inclusionRule\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"omniExtTrackingDef\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"omniExtTrackingEventDefKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"payloadTemplate\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```\n",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an OmniExtTrackingDef component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OmniExtTrackingDef xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <developerName>Purchase_Tracking_Google</developerName>\n    <isActive>true</isActive>\n    <masterLabel>Purchase_Tracking_Google</masterLabel>\n    <trackingFrameworkInformation>{ \"id\": \"GTM-XXXXXXX\" }</trackingFrameworkInformation>\n    <trackingServiceProvider>Google</trackingServiceProvider>\n    <omniExtTrackingEventDefs>\n        <componentType>Omniscript</componentType>\n        <developerName>Purchase_Funnel_Google</developerName>\n        <inclusionRule></inclusionRule>\n        <masterLabel>Purchase_Funnel_Google</masterLabel>\n        <payloadTemplate>\n{\n  \"event\": \"promotionClick\"\n}\n        </payloadTemplate>\n    </omniExtTrackingEventDefs>\n</OmniExtTrackingDef>"
+    }
+  ]
+}

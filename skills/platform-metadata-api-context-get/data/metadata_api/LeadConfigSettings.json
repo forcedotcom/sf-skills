@@ -1,0 +1,64 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LeadConfigSettings - Metadata API",
+  "description": "Represents configuration settings for Leads that control how they are converted and displayed, and what actions are available. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "doesEnableLeadConvertDefaultSubjectBlankTaskCreation": {
+      "type": "boolean",
+      "description": "Configures whether tasks without a subject are created during lead conversion. If true, tasks are created when the default subject field has no value. If false, only tasks with a subject are created."
+    },
+    "doesHideOpportunityInConvertLeadWindow": {
+      "type": "boolean",
+      "description": "Hides the opportunity section of the Convert Lead window during the conversion of a lead. Default value is false."
+    },
+    "doesPreserveLeadStatus": {
+      "type": "boolean",
+      "description": "If your organization uses record types, the lead status changes to the lead status value of the new owner's record type during conversion. Set doesPreserveLeadStatus to true to preserve the value of the lead status during conversion. Orgs that use record types can create a lead process that allows different lead status values for different record types. If doesPreserveLeadStatus is false, the lead status might change during lead conversion if the new owner's record type has a different default value for lead status. Default value is true."
+    },
+    "doesSelectNoOpportunityOnConvertLead": {
+      "type": "boolean",
+      "description": "Prevents an opportunity from being created when the lead is converted. Default value is false."
+    },
+    "doesTrackHistory": {
+      "type": "boolean",
+      "description": "Enables field history tracking for leads. When field history tracking is enabled, users can choose the fields they want to track. Default value is false."
+    },
+    "enableConversionsOnMobile": {
+      "type": "boolean",
+      "description": "Lets a user convert leads on their mobile devices. The Convert Lead action converts qualified leads to contacts. Default value is true."
+    },
+    "enableOrgWideMergeAndDelete": {
+      "type": "boolean",
+      "description": "Lets a user merge and delete leads. The user must also have the Public Read/Write/Transfer permission. Default value is false."
+    },
+    "shouldLeadConvertRequireValidation": {
+      "type": "boolean",
+      "description": "Enforces validation rules when converting leads. Default value is true."
+    },
+    "shouldSendNotificationEmailWhenLeadOwnerUpdatesViaApexInLEX": {
+      "type": "boolean",
+      "description": "Indicates whether an email notification is sent when the lead owner is updated through Apex in Lightning Experience. Default value is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"LeadConfigSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"doesEnableLeadConvertDefaultSubjectBlankTaskCreation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesHideOpportunityInConvertLeadWindow\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesPreserveLeadStatus\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesSelectNoOpportunityOnConvertLead\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesTrackHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableConversionsOnMobile\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOrgWideMergeAndDelete\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"relateEmailsToContactOnConvert\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"shouldLeadConvertRequireValidation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"shouldSendNotificationEmailWhenLeadOwnerUpdatesViaApexInLEX\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of the LeadConfigSettings type:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LeadConfigSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n<doesEnableLeadConvertDefaultSubjectBlankTaskCreation>false</doesEnableLeadConvertDefaultSubjectBlankTaskCreation>\n<doesHideOpportunityInConvertLeadWindow>false</doesHideOpportunityInConvertLeadWindow>\n<doesPreserveLeadStatus>true</doesPreserveLeadStatus>\n<doesSelectNoOpportunityOnConvertLead>false</doesSelectNoOpportunityOnConvertLead>\n<doesTrackHistory>false</doesTrackHistory>\n<enableConversionsOnMobile>true</enableConversionsOnMobile>\n<enableOrgWideMergeAndDelete>false</enableOrgWideMergeAndDelete>\n<shouldLeadConvertRequireValidation>true</shouldLeadConvertRequireValidation>\n<shouldSendNotificationEmailWhenLeadOwnerUpdatesViaApexInLEX>false</shouldSendNotificationEmailWhenLeadOwnerUpdatesViaApexInLEX>\n</LeadConfigSettings>"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment"
+  ],
+  "title": "ExtlClntAppNotificationSettings - Metadata API",
+  "description": "Represents an external client app’s notification subscriptions for mobile.",
+  "file_information": ".ecaNotifications",
+  "directory_location": "extlClntAppNotifSettings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "externalClientApplication": {
+      "type": "string",
+      "description": "The name of the associated external client app.",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "description": "Label for the external client app’s notification settings configuration."
+    },
+    "notificationTypes": {
+      "type": "ExtlClntAppNotificationType[]",
+      "description": "A list of notification types the external client app is subscribed to. Only notifications of these types are returned to the associated external client app via API or sent as push notifications."
+    }
+  },
+  "sub_types": {
+    "ExtlClntAppNotificationType": {
+      "notificationType": {
+        "type": "string",
+        "description": "The API name of the notification type.",
+        "required": true
+      },
+      "pushByDefault": {
+        "type": "boolean",
+        "description": "Indicates whether the notification type is sent as a push notification on mobile devices. To send a notification type as a push notification, you must also configure the ExtlClntAppPushSettings metadata type.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ExtlClntAppNotificationSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"externalClientApplication\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"notificationTypes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ExtlClntAppNotificationType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ExtlClntAppNotificationType\">\n  <xsd:sequence>\n    <xsd:element name=\"notificationType\" type=\"xsd:string\"/>\n    <xsd:element name=\"pushByDefault\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

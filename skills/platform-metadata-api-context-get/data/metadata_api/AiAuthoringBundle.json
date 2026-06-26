@@ -1,0 +1,44 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AiAuthoringBundle - Metadata API",
+  "description": "Represents an AI authoring bundle, which is a container for AI-related authoring content. For example, an AI authoring bundle for an Agentforce agent contains an Agent Script file and the associated metadata content.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "bundleType": {
+      "type": "AiAuthoringBundleType (enumeration of type string)",
+      "description": "Specifies the type or category of the AI authoring bundle, indicating the kind of AI authoring content contained within the bundle. Currently, this value must be AGENT, which represents an Agent Script agent. See Agent Script in the Agentforce Developer Guide for details."
+    },
+    "target": {
+      "type": "string",
+      "description": "Specifies the context or destination for the AI authoring bundle, defining how the bundle content should be applied or deployed. To commit an agent version, Agentforce agents must specify the developerName for the Bot and BotVersion components, separated by a period: {Bot}.{BotVersion}. For example, Agentforce_Service_Agent.v2. These two components tie the AI authoring bundle to a specific agent and a specific agent version. This field is automatically populated when you publish an agent with Agentforce DX. Publishing an agent with this field present is the equivalent to committing the agent in Agentforce Builder with the Commit Version button. If you want to deploy an agent to your org in draft state, omit this field."
+    },
+    "versionDescription": {
+      "type": "string",
+      "description": "Provides a human-readable description of the bundle version, documenting what changes or features are included in this version of the AI authoring bundle."
+    },
+    "versionTag": {
+      "type": "string",
+      "description": "Defines a version identifier or tag for the AI authoring bundle. This value can be used for version tracking and management of different bundle iterations."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AiAuthoringBundle\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"bundleType\" type=\"tns:AiAuthoringBundleType\"/>\n        <xsd:element name=\"target\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"versionDescription\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"versionTag\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"AiAuthoringBundleType\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "In the .zip file for this bundle, each agent is nested in the aiAuthoringBundles folder. This example shows the directory structure in the .zip file for an agent named New_Agent. Each agent bundle folder must contain an agent file and a metadata file.",
+      "code": "+--aiAuthoringBundles\n    +--New_Agent\n        +--New_Agent.agent\n        +--New_Agent.bundle-meta.xml"
+    },
+    {
+      "description": "This example shows the metadata XML for the agent in the file New_Agent.bundle-meta.xml. The example commits the agent version because it contains a target value. Uncommitted versions don't contain this field.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AiAuthoringBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <bundleType>AGENT</bundleType>\n    <target>Agentforce_Service_Agent.v2</target>\n    <versionTag>DF 2026.3</versionTag>\n</AiAuthoringBundle>"
+    }
+  ]
+}

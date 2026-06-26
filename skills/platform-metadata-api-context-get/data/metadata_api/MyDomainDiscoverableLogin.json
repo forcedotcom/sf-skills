@@ -1,0 +1,41 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "MyDomainDiscoverableLogin - Metadata API",
+  "description": "Represents the configuration settings when the My Domain login page type is Discovery. Login Discovery provides an identity-first login experience, where the login page contains the identifier field only. Based on the identifier entered, a handler determines how to authenticate the user. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".myDomainDiscoverableLogin",
+  "directory_location": "myDomainDiscoverableLogins",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "apexHandler": {
+      "type": "string",
+      "description": "The Apex handler class that contains the Discovery authentication logic.",
+      "required": true
+    },
+    "executeApexHandlerAs": {
+      "type": "string",
+      "description": "The user who is executing the handler. Requires the Manage User permission."
+    },
+    "usernameLabel": {
+      "type": "string",
+      "description": "The login prompt when the My Domain login page type is Discovery. This label supports localization with custom labels."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MyDomainDiscoverableLogin\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"apexHandler\" type=\"xsd:string\"/>\n        <xsd:element name=\"executeApexHandlerAs\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"usernameLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a MyDomainDiscoverableLogin component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MyDomainDiscoverableLogin xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apexHandler>MyDomainDiscLoginHandler</apexHandler>\n    <executeApexHandlerAs>executeUser@example.com</executeApexHandlerAs>\n    <usernameLabel>Enter your email</usernameLabel>\n</MyDomainDiscoverableLogin>"
+    }
+  ]
+}

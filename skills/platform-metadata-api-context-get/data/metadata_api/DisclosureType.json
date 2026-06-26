@@ -1,0 +1,53 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DisclosureType - Metadata API",
+  "description": "Represents the types of disclosures that are done by an individual or an organization and the associated metadata.",
+  "file_information": ".disclosureType",
+  "directory_location": "disclosureTypes",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The description about the disclosure type."
+    },
+    "disclosureBodyLogo": {
+      "type": "string",
+      "description": "The logo ID of the standard body to which an individual or a company is making a disclosure."
+    },
+    "disclosureBodyUrl": {
+      "type": "string",
+      "description": "The URL of the disclosure standard body."
+    },
+    "disclosureCategory": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the clause category that's used for disclosure."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type. The default is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for DisclosureType, which is defined when the DisclosureType is created."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DisclosureType component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DisclosureType\n\txmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<description>This is ESG Disclosure Type</description>\n\t<disclosureBodyLogo>asdf</disclosureBodyLogo>\n\t<disclosureCategory>EnvSocGvnc</disclosureCategory>\n\t<disclosureBodyUrl>disclosure body url</disclosureBodyUrl>\n\t<isProtected>false</isProtected>\n\t<masterLabel>ESG</masterLabel>\n</DisclosureType>"
+    }
+  ]
+}

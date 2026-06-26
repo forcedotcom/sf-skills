@@ -1,0 +1,111 @@
+<!--
+    DATATABLE LWC COMPONENT TEMPLATE - HTML
+
+    Features demonstrated:
+    - Column sorting
+    - Row selection
+    - Inline editing
+    - Row actions
+    - Infinite scrolling
+    - Bulk actions
+-->
+<template>
+    <lightning-card title={tableTitle} icon-name="standard:account">
+        <!-- Card Actions -->
+        <div slot="actions">
+            <!-- Bulk Delete Button (shown when rows selected) -->
+            <template if:true={hasSelection}>
+                <lightning-button
+                    variant="destructive"
+                    label={selectedCount}
+                    icon-name="utility:delete"
+                    onclick={handleBulkDelete}
+                    class="slds-m-right_x-small">
+                </lightning-button>
+            </template>
+
+            <!-- Refresh Button -->
+            <lightning-button-icon
+                icon-name="utility:refresh"
+                alternative-text="Refresh"
+                onclick={handleRefresh}>
+            </lightning-button-icon>
+        </div>
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="slds-is-relative" style="height: 100px;">
+                <lightning-spinner
+                    alternative-text="Loading"
+                    size="medium">
+                </lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error State -->
+        <template if:true={error}>
+            <div class="slds-p-around_medium">
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>{error}</h2>
+                </div>
+            </div>
+        </template>
+
+        <!-- Data Table -->
+        <template if:true={hasData}>
+            <div class="slds-p-around_small">
+                <lightning-datatable
+                    key-field="Id"
+                    data={data}
+                    columns={columns}
+                    sorted-by={sortBy}
+                    sorted-direction={sortDirection}
+                    onsort={handleSort}
+                    onrowselection={handleRowSelection}
+                    onrowaction={handleRowAction}
+                    oncellchange={handleCellChange}
+                    onsave={handleSave}
+                    oncancel={handleCancel}
+                    draft-values={draftValues}
+                    show-row-number-column={showRowNumbers}
+                    enable-infinite-loading={enableInfiniteScroll}
+                    onloadmore={loadMoreData}
+                    max-row-selection="100"
+                    hide-checkbox-column="false">
+                </lightning-datatable>
+
+                <!-- Load More Status -->
+                <template if:true={loadMoreStatus}>
+                    <div class="slds-text-align_center slds-p-top_small">
+                        <span class="slds-text-color_weak">{loadMoreStatus}</span>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <!-- Empty State -->
+        <template if:false={hasData}>
+            <template if:false={isLoading}>
+                <template if:false={error}>
+                    <div class="slds-p-around_medium slds-text-align_center">
+                        <div class="slds-illustration slds-illustration_small">
+                            <lightning-icon
+                                icon-name="utility:info"
+                                size="large"
+                                alternative-text="No data"
+                                class="slds-m-bottom_small">
+                            </lightning-icon>
+                            <div class="slds-text-longform">
+                                <h3 class="slds-text-heading_medium">No Records Found</h3>
+                                <p class="slds-text-body_regular slds-text-color_weak">
+                                    There are no records to display.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </template>
+    </lightning-card>
+</template>

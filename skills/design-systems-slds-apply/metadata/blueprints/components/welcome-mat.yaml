@@ -1,0 +1,136 @@
+name: Welcome Mat
+description: An introductory overlay that provides onboarding guidance, feature highlights, or welcome messaging for new users,
+  typically displayed as a full-screen or prominent modal experience.
+category: Overlay
+slds_classes:
+  root: slds-welcome-mat
+  elements:
+  - class: slds-welcome-mat__content
+    description: Content area for welcome messaging
+    purpose: Contains the primary welcome content and messaging
+  - class: slds-welcome-mat__tile
+    description: Individual content tile within welcome mat
+    purpose: Represents a single feature or benefit highlight
+  - class: slds-welcome-mat__tile-figure
+    description: Visual area within a welcome mat tile
+    purpose: Contains icon or image for individual tiles
+  - class: slds-welcome-mat__tile-body
+    description: Text content area within a tile
+    purpose: Contains title and description for tiles
+  modifiers:
+  - class: slds-welcome-mat_splash
+    description: Full-screen splash style welcome mat
+    usage: For prominent full-screen welcome experiences
+  states:
+  - class: slds-is-open
+    description: Visible welcome mat state
+    trigger: Applied when welcome mat is displayed
+  - class: slds-is-closed
+    description: Hidden welcome mat state
+    trigger: Applied when welcome mat is dismissed
+variants:
+- name: Base
+  description: Standard welcome mat with content and actions
+  classes:
+  - slds-welcome-mat
+  usage_context: Default implementation for welcome experiences
+  differences: Basic welcome mat with flexible content layout
+- name: Splash
+  description: Full-screen splash welcome mat
+  classes:
+  - slds-welcome-mat
+  - slds-welcome-mat_splash
+  usage_context: For prominent first-time user experiences
+  differences: Full-screen overlay with prominent welcome content
+- name: Modal
+  description: Modal-style welcome mat
+  classes:
+  - slds-welcome-mat
+  usage_context: For focused welcome messaging in modal format
+  differences: Centered modal with welcome content
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component equivalent - typically implemented using custom components or lightning-modal
+    with welcome content
+accessibility:
+  keyboard_support:
+  - Tab navigation through welcome mat content
+  - Enter/Space to activate action buttons
+  - Escape to close if dismissible
+  - Focus management for modal behavior
+  screen_reader:
+  - Welcome mat purpose and content announced
+  - Navigation and action options described
+  - Progress through welcome flow communicated
+  aria_attributes:
+  - role='dialog' for modal welcome mats
+  - aria-modal='true' for overlay behavior
+  - aria-labelledby for welcome mat title
+  - aria-describedby for welcome content
+  - aria-live for dynamic content updates
+usage_guidelines:
+  when_to_use:
+  - For first-time user onboarding
+  - When introducing new features
+  - For welcome messaging and orientation
+  - To highlight key benefits or capabilities
+  when_not_to_use:
+  - For returning user experiences
+  - When users are familiar with the interface
+  - For critical workflow interruptions
+  best_practices:
+  - Keep welcome content concise and valuable
+  - Provide clear next steps or actions
+  - Allow easy dismissal or skipping
+  - Use progressive disclosure for complex onboarding
+  - Test with real users for effectiveness
+  common_mistakes:
+  - Overwhelming users with too much information
+  - Blocking critical functionality
+  - Poor mobile experience
+  - Not allowing users to skip or dismiss
+code_examples:
+- title: Basic Welcome Mat
+  description: Full-screen splash style welcome experience
+  code: "<div class=\"slds-welcome-mat slds-welcome-mat_splash slds-is-open\">\n      <div class=\"\">\n        <div class=\"\
+    slds-welcome-mat__content slds-text-align_center\">\n          <div class=\"slds-m-bottom_large\">\n            <img src=\"\
+    /assets/images/splash-hero.svg\" alt=\"Platform illustration\" style=\"max-width: 300px;\" />\n          </div>\n    \
+    \      <div class=\"slds-m-bottom_large\">\n            <h1 class=\"slds-text-heading_large\">Welcome to Your New Workspace</h1>\n\
+    \            <p class=\"slds-text-body_regular slds-m-top_medium\">\n              Everything you need to manage your\
+    \ projects, collaborate with your team, and achieve your goals.\n            </p>\n          </div>\n          <div class=\"\
+    \">\n            <button class=\"slds-button slds-button_brand slds-button_stretch\">\n              Start Your Journey\n\
+    \            </button>\n            <button class=\"slds-button slds-button_neutral slds-m-top_small\">\n            \
+    \  I'll explore on my own\n            </button>\n          </div>\n        </div>\n      </div>\n      </div>\n"
+dependencies:
+  css_files:
+  - welcome-mat.css
+  - modal.css
+  - button.css
+  - grid.css
+  javascript:
+  - welcome-mat.js
+  icons:
+  - utility-sprite.svg
+  - standard-sprite.svg
+  other_components:
+  - button
+  - modal
+  - grid
+related_components:
+- name: Modal
+  relationship: similar
+  description: Similar overlay concept for different purposes
+- name: Walkthrough
+  relationship: similar
+  description: Similar onboarding concept
+- name: Toast
+  relationship: alternative
+  description: Alternative for brief welcome messages
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/welcome-mat/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

@@ -1,0 +1,148 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "RecordAggregationDefinition - Metadata API",
+  "description": "Represents a data aggregation from one object to another object to which it is connected by other objects in the data model.",
+  "file_information": ".RecordAggregationDefinition",
+  "directory_location": "RecordAggregationDefinitions",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "aggregateFromObject": {
+      "type": "string",
+      "required": true,
+      "description": "API name of the object from which data is aggregated."
+    },
+    "aggregateToObject": {
+      "type": "string",
+      "required": true,
+      "description": "API name of the object to which data is aggregated."
+    },
+    "aggregationType": {
+      "type": "RecordAggregationDefinitionAggregationType (enumeration of type string)",
+      "required": true,
+      "description": "Type of the data aggregation. Valid value is: Record"
+    },
+    "batchProcessingDefinition": {
+      "type": "string",
+      "description": "Data Processing Engine definition that aggregates data from one record to another."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description for this record aggregation definition."
+    },
+    "displayName": {
+      "type": "string",
+      "required": true,
+      "description": "Name of the record aggregation definition that's displayed in the record page."
+    },
+    "onDemandProcDefinition": {
+      "type": "string",
+      "description": "Data Processing Engine definition that aggregates data from one record to another on demand. Available in API version 63.0 and later."
+    },
+    "recordAggregationObject": {
+      "type": "RecordAggregationObject[]",
+      "description": "List of record aggregation objects in the record aggregation join sequence."
+    },
+    "status": {
+      "type": "RecordAggregationDefinitionStatus (enumeration of type string)",
+      "required": true,
+      "description": "Status of this record aggregation definition. Values are: Active Draft Inactive"
+    }
+  },
+  "sub_types": {
+    "RecordAggregationObject": {
+      "associatedObject": {
+        "type": "string",
+        "required": true,
+        "description": "API name of the object associated with this record aggregation object."
+      },
+      "developerName": {
+        "type": "string",
+        "description": "Developer name of the record aggregation object. May contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+      },
+      "filterLogic": {
+        "type": "string",
+        "description": "Logical sequence in which the record aggregation object filters associated with this record aggregation object are applied to the associated object's records. If you define two or more record aggregation object filters, but don’t specify the sequence in which to apply the filters, the filters are applied by using a logical AND expression. Available in API version 60.0 and later."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "A user-friendly name for RecordAggregationDefinition, which is defined when the RecordAggregationDefinition is created."
+      },
+      "recordAggregationJoinCondition": {
+        "type": "RecordAggregationJoinCondition[]",
+        "description": "List of join conditions that apply to this record aggregation object."
+      },
+      "recordAggregationObjectFilter": {
+        "type": "RecordAggregationObjectFilter[]",
+        "description": "List of filters that are applied to the records of this record aggregation object. Available in API version 60.0 and later."
+      }
+    },
+    "RecordAggregationJoinCondition": {
+      "joinField": {
+        "type": "string",
+        "required": true,
+        "description": "API name of the field on the record aggregation object's associated object that is used in the join condition."
+      },
+      "navigationSequenceNumber": {
+        "type": "int",
+        "required": true,
+        "description": "Sequence number corresponding to this join in the join sequence from the object to which the data is aggregated to the object that contains the data being aggregated."
+      },
+      "relatedJoinField": {
+        "type": "string",
+        "required": true,
+        "description": "API name of the field on the related record aggregation object's associated object that is used in the join condition."
+      },
+      "relatedRecordAggregationObject": {
+        "type": "string",
+        "required": true,
+        "description": "Second record aggregation object in the join condition."
+      },
+      "type": {
+        "type": "RecordAggregationJoinConditionType (enumeration of type string)",
+        "required": true,
+        "description": "Type of this record aggregation join in the join path from the object to which the data is aggregated to the object that contains the data being aggregated. Valid values are: AggregateFrom AggregateTo Intermediate"
+      }
+    },
+    "RecordAggregationObjectFilter": {
+      "associatedObjectField": {
+        "type": "string",
+        "required": true,
+        "description": "API name of the associated object's field whose value is used to filter the object's records. The associated object is specified in the record aggregation object."
+      },
+      "operator": {
+        "type": "RecordAggregationObjectFilterOperator (enumeration of type string)",
+        "required": true,
+        "description": "Operator used in the filter expression. Values are: Contains Equals GreaterThan GreaterThanOrEquals In LessThan LessThanOrEquals NotEquals NotIn"
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "required": true,
+        "description": "Sequence number of this record aggregation object filter."
+      },
+      "value": {
+        "type": "string",
+        "required": true,
+        "description": "Reference value with which the designated field's values are compared when the filter is applied on the associated object's records."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a RecordAggregationDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<RecordAggregationDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <aggregateToObject>PartyRelationshipGroup</aggregateToObject>\n    <aggregateFromObject>PartyIncome</aggregateFromObject>\n    <status>Active</status>\n    <aggregationType>Record</aggregationType>\n    <description>Aggregate head of household's income to household</description>\n    <displayName>Party Income to Party Relationship Group</displayName>\n    <recordAggregationObject>\n        <associatedObject>PartyRelationshipGroup</associatedObject>\n        <masterLabel>Party Relationship Group Object</masterLabel>\n        <developerName>PartyRelationshipGroupObject</developerName>\n        <recordAggregationJoinCondition>\n            <joinField>Account</joinField>\n            <navigationSequenceNumber>1</navigationSequenceNumber>\n            <relatedJoinField>Account</relatedJoinField>\n            <relatedRecordAggregationObject>AccountContactrelationObject</relatedRecordAggregationObject>\n            <type>Intermediate</type>\n        </recordAggregationJoinCondition>\n        <recordAggregationObjectFilter>\n          <associatedObjectField>Type</associatedObjectField>\n          <operator>Equals</operator>\n          <value>Household</value>\n          <sequenceNumber>1</sequenceNumber>\n        </recordAggregationObjectFilter>\n    </recordAggregationObject>\n    <recordAggregationObject>\n        <associatedObject>AccountContactRelation</associatedObject>\n        <masterLabel>Account Contact Relation Object</masterLabel>\n        <developerName>AccountContactRelationObject</developerName>\n        <recordAggregationJoinCondition>\n            <joinField>Contact</joinField>\n            <navigationSequenceNumber>2</navigationSequenceNumber>\n            <relatedJoinField>Party</relatedJoinField>\n            <relatedRecordAggregationObject>PartyIncomeObject</relatedRecordAggregationObject>\n            <type>Intermediate</type>\n        </recordAggregationJoinCondition>\n        <recordAggregationObjectFilter>\n          <associatedObjectField>IsPrimaryMember</associatedObjectField>\n          <operator>Equals</operator>\n          <value>true</value>\n          <sequenceNumber>1</sequenceNumber>\n        </recordAggregationObjectFilter>\n    </recordAggregationObject>\n    <recordAggregationObject>\n        <associatedObject>PartyIncome</associatedObject>\n        <masterLabel>Party Income Object</masterLabel>\n        <developerName>PartyIncomeObject</developerName>\n        <filterLogic>1 AND 2</filterLogic>\n        <recordAggregationObjectFilter>\n          <associatedObjectField>IncomeFrequency</associatedObjectField>\n          <operator>Equals</operator>\n          <value>Monthly</value>\n          <sequenceNumber>1</sequenceNumber>\n        </recordAggregationObjectFilter>\n        <recordAggregationObjectFilter>\n          <associatedObjectField>IncomeStatus</associatedObjectField>\n          <operator>Equals</operator>\n          <value>Active</value>\n          <sequenceNumber>2</sequenceNumber>\n        </recordAggregationObjectFilter>\n    </recordAggregationObject>\n</RecordAggregationDefinition>"
+    }
+  ]
+}

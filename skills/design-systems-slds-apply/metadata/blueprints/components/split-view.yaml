@@ -1,0 +1,112 @@
+name: Split View
+description: A layout component that divides the interface into two or more resizable panes, allowing users to view and interact
+  with multiple content areas simultaneously.
+category: Layout
+slds_classes:
+  root: slds-split-view
+  elements:
+  - class: slds-split-view_container
+    description: Overall container for split view layout
+    purpose: Provides structural container for split panes
+  modifiers: []
+  states:
+  - class: slds-is-open
+    description: Open pane state
+    trigger: Applied when a pane is expanded/visible
+  - class: slds-is-closed
+    description: Closed pane state
+    trigger: Applied when a pane is collapsed/hidden
+variants:
+- name: Base
+  description: Standard split view with two panes
+  classes:
+  - slds-split-view
+  usage_context: Default implementation for dual-pane layouts
+  differences: Horizontal split with resizable divider
+- name: Vertical
+  description: Vertical split view layout
+  classes:
+  - slds-split-view
+  usage_context: When vertical splitting is preferred
+  differences: Vertical split with top/bottom panes
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component equivalent - typically implemented using lightning-layout or custom components
+accessibility:
+  keyboard_support:
+  - Tab navigation between panes
+  - Arrow keys for resizing when splitter is focused
+  - Enter/Space to toggle pane visibility
+  - Escape to reset to default sizes
+  screen_reader:
+  - Split view structure announced
+  - Pane labels and content described
+  - Resize functionality communicated
+  aria_attributes:
+  - role='main' for primary content pane
+  - role='complementary' for secondary pane
+  - aria-label describing each pane's purpose
+  - aria-expanded for collapsible panes
+  - aria-controls for splitter interactions
+usage_guidelines:
+  when_to_use:
+  - For master-detail interfaces
+  - When users need to view multiple content areas simultaneously
+  - For comparing or relating content between panes
+  - In data-heavy applications requiring context switching
+  when_not_to_use:
+  - On small screens where space is limited
+  - When content areas are unrelated
+  - For simple single-focus interfaces
+  best_practices:
+  - Provide clear visual separation between panes
+  - Make splitters obvious and interactive
+  - Handle responsive behavior gracefully
+  - Preserve pane sizes across sessions when appropriate
+  - Provide keyboard navigation for accessibility
+  common_mistakes:
+  - Making splitters too thin or hard to interact with
+  - Not handling mobile/responsive layouts properly
+  - Failing to provide keyboard navigation
+  - Not preserving user's preferred pane sizes
+code_examples:
+- title: Basic Split View
+  description: Split view with collapsible left pane
+  code: "<div class=\"slds-split-view\">\n      <div class=\"slds-split-view_container\">\n        <div class=\"slds-is-closed\"\
+    \ role=\"complementary\">\n          <button class=\"slds-button slds-button_icon\" aria-expanded=\"false\" aria-controls=\"\
+    split-view-list\">\n            <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n              <use xlink:href=\"\
+    /assets/icons/utility-sprite/svg/symbols.svg#chevronright\"></use>\n            </svg>\n            <span class=\"slds-assistive-text\"\
+    >Expand list view</span>\n          </button>\n        </div>\n        <div class=\"\" role=\"main\">\n          <div\
+    \ class=\"slds-panel slds-panel_docked\">\n            <div class=\"slds-panel__body\">\n              <p>Full width detail\
+    \ content</p>\n            </div>\n          </div>\n        </div>\n      </div>\n      </div>\n"
+dependencies:
+  css_files:
+  - split-view.css
+  - panel.css
+  - grid.css
+  javascript:
+  - split-view.js
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - panel
+  - grid
+  - button
+related_components:
+- name: Layout
+  relationship: similar
+  description: Similar layout structuring concept
+- name: Panel
+  relationship: depends-on
+  description: Uses panels for pane content containers
+- name: Grid
+  relationship: alternative
+  description: Alternative layout approach for structured content
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/split-view/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

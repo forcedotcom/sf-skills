@@ -1,0 +1,50 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "GatewayProviderPaymentMethodType - Metadata API",
+  "description": "Represents an entity that allows integrators and payment providers to choose an active payment to receive an order's payment data rather than allowing the Salesforce Order Management platform to select a default payment method. This object is available in API version 51 and later.",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "comment": {
+      "type": "textarea",
+      "description": "Additional details about the gateway provider payment method type record. Max length is 1000 characters."
+    },
+    "gtwyProvPaymentMethodType": {
+      "type": "string",
+      "description": "Links the Salesforce payment method to the payment method used in the Salesforce Order Management storefront. Your payment gateway integration uses this field when finding a payment method to link to a payment. The value of GtwyProviderPaymentMethodType must match the payment method value sent to the order's Payment Instrument in Salesforce Order Management. Here are examples of payment method values that Salesforce could receive from Salesforce Order Management. CREDIT_CARD BASIC_CREDIT CreditCard GooglePay ApplePay"
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The gateway provider payment method type name that appears in the user interface."
+    },
+    "paymentGatewayProvider": {
+      "type": "reference",
+      "description": "Specifies the payment gateway provider that Salesforce Order Management should use when processing payments. One payment gateway provider can be related to multiple payment method types."
+    },
+    "paymentMethodType": {
+      "type": "picklist",
+      "description": "Specifies the type of payment method used on an order in Salesforce Order Management. Possible values are: AlternativePaymentMethod CardPaymentMethod DigitalWallet"
+    },
+    "recordType": {
+      "type": "reference",
+      "description": "ID of the record type entity related to the gateway provider payment method type. This is a relationship field."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"GatewayProviderPaymentMethodType\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"comments\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"gtwyProviderPaymentMethodType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"paymentGatewayProvider\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"paymentMethodType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"recordType\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a GatewayProviderPaymentMethodType component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<GatewayProviderPaymentMethodType xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <gtwyProviderPaymentMethodType>Klarna</gtwyProviderPaymentMethodType>\n    <masterLabel>Test</masterLabel>\n    <paymentGatewayProvider>adyen__Adyen</paymentGatewayProvider>\n    <paymentMethodType>AlternativePaymentMethod</paymentMethodType>\n    <recordType>AlternativePaymentMethod.Klarna</recordType>\n</GatewayProviderPaymentMethodType>"
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+name: Rich Text Editor
+description: A comprehensive text editing interface that provides formatting tools, allowing users to create and edit rich
+  content with styles, links, lists, and other formatting options.
+category: Input
+slds_classes:
+  root: slds-rich-text-editor
+  elements:
+  - class: slds-rich-text-editor__toolbar
+    description: Container for formatting toolbar
+    purpose: Contains all formatting buttons and controls
+  - class: slds-rich-text-editor__textarea
+    description: Main text editing area
+    purpose: Editable content area for rich text input
+  - class: slds-rich-text-editor__output
+    description: Rendered output area
+    purpose: Displays formatted rich text content
+  modifiers: []
+  states:
+  - class: slds-is-active
+    description: Active formatting button state
+    trigger: Applied to currently active formatting options
+  - class: slds-has-focus
+    description: Focused editor state
+    trigger: Applied when editor has keyboard focus
+variants:
+- name: Base
+  description: Standard rich text editor with full toolbar
+  classes:
+  - slds-rich-text-editor
+  usage_context: Default implementation for rich text editing
+  differences: Complete formatting toolbar with all standard options
+- name: Email
+  description: Email-optimized rich text editor
+  classes:
+  - slds-rich-text-editor
+  usage_context: Specifically for email composition and editing
+  differences: Email-specific formatting options and constraints
+- name: Minimal
+  description: Simplified rich text editor with basic formatting
+  classes:
+  - slds-rich-text-editor
+  usage_context: When only basic formatting is needed
+  differences: Reduced toolbar with essential formatting only
+lightning_component:
+  name: lightning-input-rich-text
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-input-rich-text
+  mapping_notes: Direct mapping - Lightning component implements SLDS rich text editor blueprint
+accessibility:
+  keyboard_support:
+  - Tab navigation through toolbar buttons
+  - Enter/Space to activate formatting buttons
+  - Standard text editing shortcuts (Ctrl+B, Ctrl+I, etc.)
+  - Arrow keys for text navigation
+  - Escape to exit formatting modes
+  screen_reader:
+  - Toolbar structure and groups announced
+  - Formatting state changes communicated
+  - Content changes announced appropriately
+  - Rich text content structure conveyed
+  aria_attributes:
+  - role='toolbar' for formatting toolbar
+  - role='group' for toolbar sections
+  - aria-pressed for toggle buttons
+  - aria-label for formatting buttons
+  - aria-describedby for editor instructions
+usage_guidelines:
+  when_to_use:
+  - For content that requires text formatting
+  - When users need to create rich documents
+  - For email composition with formatting
+  - In content management scenarios
+  when_not_to_use:
+  - For simple text input (use textarea)
+  - When formatting is not needed
+  - In constrained mobile interfaces
+  best_practices:
+  - Provide clear formatting button labels
+  - Group related formatting options logically
+  - Support standard keyboard shortcuts
+  - Provide undo/redo functionality
+  - Handle paste operations gracefully
+  common_mistakes:
+  - Overwhelming users with too many options
+  - Poor keyboard accessibility
+  - Inconsistent formatting behavior
+  - Not handling paste from external sources
+code_examples:
+- title: Basic Rich Text Editor
+  description: Rich text editor optimized for email composition
+  code: "<div class=\"slds-rich-text-editor slds-grid slds-grid_vertical\">\n      <div class=\"slds-rich-text-editor__toolbar\"\
+    \ role=\"toolbar\" aria-label=\"Email formatting\">\n        <div class=\"\">\n          <select class=\"slds-select\"\
+    \ aria-label=\"Font family\">\n            <option>Arial</option>\n            <option>Times New Roman</option>\n    \
+    \        <option>Helvetica</option>\n          </select>\n          <select class=\"slds-select\" aria-label=\"Font size\"\
+    >\n            <option>12px</option>\n            <option>14px</option>\n            <option>16px</option>\n         \
+    \   <option>18px</option>\n          </select>\n        </div>\n        <div class=\"\">\n          <button class=\"slds-button\
+    \ slds-button_icon slds-button_icon-border slds-is-active\" aria-pressed=\"true\" title=\"Bold\">\n            <svg class=\"\
+    slds-button__icon\" aria-hidden=\"true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#bold\"\
+    ></use>\n            </svg>\n            <span class=\"slds-assistive-text\">Bold</span>\n          </button>\n      \
+    \    <button class=\"slds-button slds-button_icon slds-button_icon-border\" title=\"Text Color\">\n            <svg class=\"\
+    slds-button__icon\" aria-hidden=\"true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#text_color\"\
+    ></use>\n            </svg>\n            <span class=\"slds-assistive-text\">Text Color</span>\n          </button>\n\
+    \        </div>\n      </div>\n      <div class=\"slds-rich-text-editor__textarea\">\n        <div contenteditable=\"\
+    true\" class=\"slds-rich-text-area__content\" aria-label=\"Email content\">\n          <p><strong>Dear Customer,</strong></p>\n\
+    \          <p>Thank you for your inquiry...</p>\n        </div>\n      </div>\n      </div>\n"
+dependencies:
+  css_files:
+  - rich-text-editor.css
+  - button.css
+  - select.css
+  - textarea.css
+  javascript:
+  - rich-text-editor.js
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - button
+  - select
+  - textarea
+related_components:
+- name: Textarea
+  relationship: alternative
+  description: Alternative for plain text input
+- name: Input
+  relationship: similar
+  description: Similar form input concept
+- name: Combobox
+  relationship: depends-on
+  description: Used for formatting option selection
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/rich-text-editor/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

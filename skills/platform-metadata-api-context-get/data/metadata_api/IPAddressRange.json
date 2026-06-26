@@ -1,0 +1,60 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "IPAddressRange - Metadata API",
+  "description": "Represents a range of IP addresses to include in or exclude from the specified feature.",
+  "file_information": ".IPAddressRange",
+  "directory_location": "IPAddressRanges",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "string",
+      "description": "Not required. The description of the IP address range. For example, the name of the company that owns the IP address range."
+    },
+    "developerName": {
+      "type": "string",
+      "description": "Not required. Gives you a way to distinguish ipAddressRange entries among developers in your org."
+    },
+    "endIpAddress": {
+      "type": "string",
+      "description": "The end of the IP address range. Must be an IPv4 or IPv6 Internet address and equal to or greater than the startIpAddress."
+    },
+    "ipAddressFeature": {
+      "type": "picklist",
+      "description": "The feature that uses the range of IP addresses. Possible values are: EmailIpFiltering (default) —Filter email engagement activities such as email opens and email clicks."
+    },
+    "ipAddressUsageScope": {
+      "type": "picklist",
+      "description": "Whether the specified IP addresses are included or excluded. Possible values are: Exclusion Inclusion"
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "Whether the specified IP address range is protected. The default is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Master label for the IP address range. This internal label doesn’t get translated."
+    },
+    "startIpAddress": {
+      "type": "string",
+      "description": "The start of the IP address range. Must be an IPv4 or IPv6 Internet address and equal to or smaller than the endIpAddress."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"IPAddressFeature\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"EmailIpFiltering\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"IPAddressRange\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"endIpAddress\" type=\"xsd:string\"/>\n        <xsd:element name=\"ipAddressFeature\" type=\"tns:IPAddressFeature\"/>\n        <xsd:element name=\"ipAddressUsageScope\" type=\"tns:IPAddressUsageScope\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"startIpAddress\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"IPAddressUsageScope\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Exclusion\"/>\n    <xsd:enumeration value=\"Inclusion\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ipAddressName component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<IPAddressRange xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>Filter emails from google.com</description>\n    <endIpAddress>221.224.222.158</endIpAddress>\n    <ipAddressFeature>EmailIpFiltering</ipAddressFeature>\n    <ipAddressUsageScope>Exclusion</ipAddressUsageScope>\n    <masterLabel>MasterLabelValue</masterLabel>\n    <startIpAddress>221.224.0.158</startIpAddress>\n    <isProtected>false</isProtected>\n</IPAddressRange>"
+    }
+  ]
+}

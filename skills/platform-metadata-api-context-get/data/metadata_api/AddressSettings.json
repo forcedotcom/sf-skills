@@ -1,0 +1,90 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "countriesandstates",
+    "country",
+    "state",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AddressSettings - Metadata API",
+  "description": "Represents the configuration of country/territory and state picklists. Use the AddressSettings component type to configure state and country/territory data in your organization so that you can convert text-based values into standard picklist values. To convert your state and country/territory values, from Setup, enter State and Country/Territory Picklists in the Quick Find box, then select State and Country/Territory Picklists.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "countriesandstates": {
+    "countries": {
+      "type": "Country[]",
+      "description": "The countries and territories available in picklists."
+    }
+  },
+  "country": {
+    "active": {
+      "type": "boolean",
+      "description": "Determines whether the value is available in the API. Important: After you enable state and country/territory picklists in your Salesforce organization, you can’t set the active status to false."
+    },
+    "integrationValue": {
+      "type": "string",
+      "description": "A customizable text value that is linked to a state or country/territory code. Integration values for standard states, countries, and territories default to the full ISO-standard state, country, and territory names. Integration values function similarly to the API names of custom fields and objects. Configuring integration values allows integrations that you set up before enabling state and country/territory picklists to continue to work. Important: If you don’t specify integration values before enabling state and country/territory picklists in your organization, records use the default value provided by Salesforce. If you change integration values later, records created or updated from that point on use your edited values."
+    },
+    "isoCode": {
+      "type": "string",
+      "description": "The ISO-standard code populates this field when you issue a retrieve() call. This field is read only in the API but you can edit the label in Setup. You can’t edit the isoCode of standard states, countries, and territories."
+    },
+    "label": {
+      "type": "string",
+      "description": "The label is what users see in picklists in Salesforce. This field is read only in the API but you can edit the label in Setup."
+    },
+    "orgDefault": {
+      "type": "boolean",
+      "description": "Sets a country or territory as the default value for new records in the Salesforce organization."
+    },
+    "standard": {
+      "type": "boolean",
+      "description": "Standard states and countries are states and countries that are included with Salesforce. You can’t edit the standard attribute."
+    },
+    "states": {
+      "type": "State[]",
+      "description": "The states or provinces that are part of the country or territory."
+    },
+    "visible": {
+      "type": "boolean",
+      "description": "Makes the state, country, or territory available to users in Salesforce. States, countries, or territories that are visible must also be active."
+    }
+  },
+  "state": {
+    "active": {
+      "type": "boolean",
+      "description": "Determines whether the value is available in the API. Important: After you enable state and country/territory picklists in your Salesforce organization, you can’t set the active status to false."
+    },
+    "integrationValue": {
+      "type": "string",
+      "description": "A customizable text value that is linked to a state or country/territory code. Integration values for standard states, countries, and territories default to the full ISO-standard state, country, and territory names. Integration values function similarly to the API names of custom fields and objects. Configuring integration values allows integrations that you set up before enabling state and country/territory picklists to continue to work. Important: If you don’t specify integration values before enabling state and country/territory picklists in your organization, records use the default value provided by Salesforce. If you change integration values later, records created or updated from that point on use your edited values."
+    },
+    "isoCode": {
+      "type": "string",
+      "description": "The ISO-standard code populates this field when you issue a retrieve() call. This field is read only in the API but you can edit the label in Setup."
+    },
+    "label": {
+      "type": "string",
+      "description": "The label is what users see in picklists in Salesforce. This field is read only in the API but you can edit the label in Setup."
+    },
+    "standard": {
+      "type": "boolean",
+      "description": "Standard states and countries are states and countries that are included with Salesforce. You can’t edit the standard attribute."
+    },
+    "visible": {
+      "type": "boolean",
+      "description": "Makes the state, country, or territory available to users in Salesforce. States, countries, or territories that are visible must also be active."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AddressSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"countriesAndStates\" type=\"tns:CountriesAndStates\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"CountriesAndStates\">\n  <xsd:sequence>\n    <xsd:element name=\"countries\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Country\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Country\">\n  <xsd:sequence>\n    <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"integrationValue\" type=\"xsd:string\"/>\n    <xsd:element name=\"isoCode\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"orgDefault\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"standard\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"states\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:State\"/>\n    <xsd:element name=\"visible\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"State\">\n  <xsd:sequence>\n    <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"integrationValue\" type=\"xsd:string\"/>\n    <xsd:element name=\"isoCode\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"standard\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"visible\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is sample XML that configures state and country picklists for the United States and Canada for use in an organization. It also makes the country of Greenland available only in the API. This example is supported in API version 66.0.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AddressSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <countriesAndStates>\n    <countries>\n      <country>\n        <active>true</active>\n        <integrationValue>United States</integrationValue>\n        <isoCode>US</isoCode>\n        <label>United States</label>\n        <orgDefault>true</orgDefault>\n        <standard>true</standard>\n        <states>\n          <state>\n            <active>true</active>\n            <integrationValue>Alabama</integrationValue>\n            <isoCode>AL</isoCode>\n            <label>Alabama</label>\n            <standard>true</standard>\n            <visible>true</visible>\n          </state>\n          <state>\n            <active>true</active>\n            <integrationValue>Alaska</integrationValue>\n            <isoCode>AK</isoCode>\n            <label>Alaska</label>\n            <standard>true</standard>\n            <visible>true</visible>\n          </state>\n        </states>\n        <visible>true</visible>\n      </country>\n      <country>\n        <active>true</active>\n        <integrationValue>Canada</integrationValue>\n        <isoCode>CA</isoCode>\n        <label>Canada</label>\n        <orgDefault>false</orgDefault>\n        <states>\n          <state>\n            <active>true</active>\n            <integrationValue>Alberta</integrationValue>\n            <isoCode>AB</isoCode>\n            <label>Alberta</label>\n             <standard>true</standard>\n             <visible>true</visible>\n          </state>\n          <state>\n            <active>true</active>\n            <integrationValue>British Columbia</integrationValue>\n            <isoCode>BC</isoCode>\n            <label>British Columbia</label>\n            <standard>true</standard>\n            <visible>true</visible>\n          </state>\n        </states>\n        <visible>true</visible>\n      </country>\n      <country>\n        <active>true</active>\n        <integrationValue>Greenland</integrationValue>\n        <isoCode>GL</isoCode>\n        <label>Greenland</label>\n        <standard>true</standard>\n        <visible>false</visible>\n      </country>\n    </countries>\n  </countriesAndStates>\n</AddressSettings>"
+    }
+  ]
+}

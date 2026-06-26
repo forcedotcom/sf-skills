@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "RestrictionRule - Metadata API",
+  "description": "Represents a restriction rule or a scoping rule. A restriction rule has enforcementType set to Restrict and controls the access that specified users have to designated records. A scoping rule has enforcementType set to Scoping and controls the default records that your users see without restricting access. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".rule",
+  "directory_location": "restrictionRules",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "Indicates whether the rule is active (true) or not (false). The default value is false."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the rule.",
+      "required": true
+    },
+    "enforcementType": {
+      "type": "EnforcementType (enumeration of type string)",
+      "description": "The type of rule. Valid values are: FieldRestrict—Don’t use. Restrict—Restriction rule. Scoping—Scoping rule.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The name of the rule.",
+      "required": true
+    },
+    "recordFilter": {
+      "type": "string",
+      "description": "The criteria that determine which records are accessible via the rule.",
+      "required": true
+    },
+    "targetEntity": {
+      "type": "string",
+      "description": "The object for which you're creating the rule. We recommend that you don’t edit this field after the rule is created. If enforcementType is set to Restrict, custom objects, external objects, and these objects are supported: Contract Event Quote Task TimeSheet TimeSheetEntry If enforcementType is set to Scoping, custom objects and these objects are supported: Account Case Contact Event Lead Opportunity Task",
+      "required": true
+    },
+    "userCriteria": {
+      "type": "string",
+      "description": "The users that this rule applies to, such as all active users or users with a specified role or profile.",
+      "required": true
+    },
+    "version": {
+      "type": "int",
+      "description": "The rule's version number.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"EnforcementType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Scoping\"/>\n    <xsd:enumeration value=\"Restrict\"/>\n    <xsd:enumeration value=\"FieldRestrict\"/>\n    <xsd:enumeration value=\"D360_Restrict\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RestrictionRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"dataspaceScope\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"enforcementType\" type=\"tns:EnforcementType\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"recordFilter\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetEntity\" type=\"xsd:string\"/>\n        <xsd:element name=\"userCriteria\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"version\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a RestrictionRule component representing a restriction rule.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<RestrictionRule xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <active>true</active>\n    <description>Allows users with a specific profile to see only tasks that they own.</description>\n    <enforcementType>Restrict</enforcementType>\n    <masterLabel>Tasks You Own</masterLabel>\n    <recordFilter>OwnerId = $User.Id</recordFilter>\n    <targetEntity>Task</targetEntity>\n    <userCriteria>$User.ProfileId = '00exxxxxxxxxxxx'</userCriteria>\n    <version>1</version>\n</RestrictionRule>"
+    },
+    {
+      "description": "The following is an example of a RestrictionRule component representing a scoping rule.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<RestrictionRule xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <active>true</active>\n    <description>View tasks contacts from Department A.</description>\n    <enforcementType>Scoping</enforcementType>\n    <masterLabel>SR for Department A contacts</masterLabel>\n    <recordFilter>Department=$User.Department</recordFilter>\n    <targetEntity>Contact</targetEntity>\n    <userCriteria>$User.UserRoleId = '00Exxxxxxxxxxxx'</userCriteria>\n    <version>1</version>\n</RestrictionRule>"
+    }
+  ]
+}

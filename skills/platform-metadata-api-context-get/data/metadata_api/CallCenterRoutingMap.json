@@ -1,0 +1,58 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CallCenterRoutingMap - Metadata API",
+  "description": "Represents the mapping between a user or queue in a Salesforce org to a user or queue in an external system’s call center.",
+  "file_information": ".callCenterRoutingMap",
+  "directory_location": "callCenterRoutingMaps",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "callCenter": {
+      "type": "string",
+      "required": true,
+      "description": "Reference to a call center."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "The developer name is a combination of the Salesforce user ID or queue name, and the callCenter value, with an underscore between these two values. [SALESFORCE_USER_ID]_[CALL_CENTER] [SALESFORCE_QUEUE_NAME]_[CALL_CENTER]"
+    },
+    "externalId": {
+      "type": "string",
+      "required": true,
+      "description": "Unique identifier for the external system’s user or queue."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The master label of the CallCenterRoutingMap."
+    },
+    "quickConnect": {
+      "type": "string",
+      "description": "The Amazon Connect QuickConnectId ARN used to determine agent availability for Omni-Channel call transfers. Available in API version 56.0 and later."
+    },
+    "referenceRecord": {
+      "type": "string",
+      "required": true,
+      "description": "Lookup field to a Salesforce user or queue."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CallCenterRoutingMap\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"callCenter\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalId\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"quickConnect\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"referenceRecord\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CallCenterRoutingMap component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CallCenterRoutingMap xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <callCenter>ExampleCallCenter</callCenter>\n<developerName>User_001ABC00000FjYIIA0_04vZ6000000Cagl</developerName>\n<externalId>arn:aws:connect:ap-northeast-1:484907484500:instance/examplestring-9c18-4aa5-b5fe-cda6f34d99a0/agent/a69f7afe-5b04-4aa8-b5ee-108a84d0f504</externalId>\n    <masterLabel>001ABC00000FjYIIA0</masterLabel>\n    <referenceRecord>example.d2b87b8182fa@domain.com</referenceRecord>\n</CallCenterRoutingMap>"
+    }
+  ]
+}

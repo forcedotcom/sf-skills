@@ -1,0 +1,42 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "RecordAlertCategory - Metadata API",
+  "description": "Represents a category to group and present record alerts.",
+  "file_information": ".recordAlertCategory",
+  "directory_location": "recordAlertCategories",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The description of the record alert category."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The user-interface name of the record alert category."
+    },
+    "severity": {
+      "type": "string",
+      "description": "Indicates the degree of impact that an alert in this category can have. Possible Education Cloud values are: High Low Medium Possible Financial Service Cloud values are: Error Info Minor Warning"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RecordAlertCategory\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"severity\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a RecordAlertCategory component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<RecordAlertCategory xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>Tracks Financial Account Fraud Alerts</description>\n    <masterLabel>Fraud</masterLabel>\n    <severity>Error</severity>\n</RecordAlertCategory>"
+    }
+  ]
+}

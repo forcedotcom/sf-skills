@@ -1,0 +1,120 @@
+name: "Popovers"
+description: "Contextual overlays that display additional information or controls related to a specific trigger element, positioned dynamically based on available space."
+category: "Overlay"
+slds_classes:
+  root: "slds-popover"
+  elements:
+    - class: "slds-popover__body"
+      description: "Main content area of the popover"
+      purpose: "Contains the popover's primary content"
+    - class: "slds-popover__header"
+      description: "Header section of the popover"
+      purpose: "Optional header with title or controls"
+    - class: "slds-popover__footer"
+      description: "Footer section of the popover"
+      purpose: "Optional footer with actions or additional info"
+    - class: "slds-nubbin_top"
+      description: "Top-pointing nubbin (arrow)"
+      purpose: "Visual pointer indicating trigger relationship"
+    - class: "slds-nubbin_bottom"
+      description: "Bottom-pointing nubbin"
+      purpose: "Visual pointer for bottom positioning"
+    - class: "slds-nubbin_left"
+      description: "Left-pointing nubbin"
+      purpose: "Visual pointer for left positioning"
+    - class: "slds-nubbin_right"
+      description: "Right-pointing nubbin"
+      purpose: "Visual pointer for right positioning"
+  modifiers:
+    - class: "slds-popover_small"
+      description: "Small popover size"
+      usage: "For minimal content or compact spaces"
+    - class: "slds-popover_medium"
+      description: "Medium popover size"
+      usage: "Default size for most use cases"
+    - class: "slds-popover_large"
+      description: "Large popover size"
+      usage: "For complex content or detailed information"
+  states: []
+variants:
+  - name: "Base"
+    description: "Standard popover with content"
+    classes:
+      - "slds-popover"
+    usage_context: "Default popover for contextual information"
+    differences: "Basic popover with body content and directional nubbin"
+lightning_component:
+  name: "No direct component"
+  url: "https://developer.salesforce.com/docs/component-library/overview/components"
+  mapping_notes: "No direct Lightning Base Component - typically implemented through custom components or third-party libraries"
+accessibility:
+  keyboard_support:
+    - "Tab to focus trigger element"
+    - "Enter/Space to activate popover"
+    - "Escape to close popover"
+    - "Tab navigation within popover content"
+  screen_reader:
+    - "Popover content announced when displayed"
+    - "Relationship to trigger element communicated"
+    - "Close action clearly identified"
+  aria_attributes:
+    - "aria-describedby linking trigger to popover"
+    - "role='tooltip' for informational popovers"
+    - "role='dialog' for interactive popovers"
+    - "aria-labelledby for popover titles"
+usage_guidelines:
+  when_to_use:
+    - "For contextual help or additional information"
+    - "To display details without leaving current context"
+    - "For secondary actions related to specific elements"
+    - "When space is limited for inline content"
+  when_not_to_use:
+    - "For critical information (use modals instead)"
+    - "For primary navigation"
+    - "When content should always be visible"
+    - "For complex forms or workflows"
+  best_practices:
+    - "Keep popover content concise and focused"
+    - "Position popover to avoid obscuring important content"
+    - "Provide clear trigger indication"
+    - "Use appropriate popover size for content"
+    - "Implement proper dismissal behavior"
+  common_mistakes:
+    - "Making popover content too long or complex"
+    - "Poor positioning that blocks important content"
+    - "Unclear trigger-popover relationship"
+    - "Missing dismissal methods"
+code_examples:
+  - title: "Basic Popover"
+    code: |
+      <div class="slds-popover slds-nubbin_left" role="tooltip">
+            <div class="slds-popover__body">
+              <p>This is helpful contextual information about the element.</p>
+            </div>
+            </div>
+styling_hooks: []
+dependencies:
+  css_files:
+    - "popover.css"
+    - "nubbins.css"
+  javascript:
+    - "popover.js"
+  icons: []
+  other_components: []
+related_components:
+  - name: "Tooltip"
+    relationship: "similar"
+    description: "Similar overlay for simple informational content"
+  - name: "Modal"
+    relationship: "alternative"
+    description: "Alternative for more complex or critical content"
+  - name: "Dropdown"
+    relationship: "similar"
+    description: "Similar positioning concept for menu content"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/popovers/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

@@ -1,0 +1,103 @@
+name: Summary Detail
+description: A layout pattern that displays a condensed summary view with an expandable detail section, allowing users to
+  quickly scan information and dive deeper when needed.
+category: Layout
+slds_classes:
+  root: slds-summary-detail
+  elements:
+  - class: slds-summary-detail__content
+    description: Container for the summary content
+    purpose: Holds the condensed summary information
+  modifiers: []
+  states:
+  - class: slds-is-open
+    description: Open detail state
+    trigger: Applied when detail section is expanded
+  - class: slds-is-closed
+    description: Closed detail state
+    trigger: Applied when detail section is collapsed
+variants:
+- name: Base
+  description: Standard summary detail with expandable content
+  classes:
+  - slds-summary-detail
+  usage_context: Default implementation for summary/detail patterns
+  differences: Collapsible detail section with summary always visible
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component equivalent - can be implemented using lightning-accordion or custom components
+accessibility:
+  keyboard_support:
+  - Tab to focus expand/collapse button
+  - Enter/Space to toggle detail visibility
+  - Tab navigation through detail content when expanded
+  screen_reader:
+  - Summary content always announced
+  - Expand/collapse state clearly communicated
+  - Detail content announced when expanded
+  aria_attributes:
+  - aria-expanded on toggle button
+  - aria-controls linking button to detail content
+  - aria-labelledby for detail section
+  - role='button' for interactive elements
+usage_guidelines:
+  when_to_use:
+  - For progressive disclosure of information
+  - When space is limited but detail is important
+  - To reduce cognitive load with scannable summaries
+  - For optional detailed information
+  when_not_to_use:
+  - When all information is equally important
+  - For critical information that shouldn't be hidden
+  - In contexts where expansion isn't expected
+  best_practices:
+  - Make summaries meaningful and self-contained
+  - Provide clear expand/collapse indicators
+  - Ensure smooth transitions between states
+  - Keep summary content concise but informative
+  - Use consistent expand/collapse patterns
+  common_mistakes:
+  - Making summaries too vague or incomplete
+  - Hiding critical information in details
+  - Poor visual indicators for expand/collapse state
+  - Inconsistent interaction patterns
+code_examples:
+- title: Basic Summary Detail
+  description: Summary detail in collapsed state
+  code: "<div class=\"slds-summary-detail slds-is-closed\">\n      <div class=\"\">\n        <h3>Contact Information</h3>\n\
+    \      </div>\n      <div class=\"slds-summary-detail__content\">\n        <p>John Smith - Primary Contact</p>\n     \
+    \   <button class=\"slds-button slds-button_neutral\" aria-expanded=\"false\" aria-controls=\"summary-detail-02\">\n \
+    \         <svg class=\"slds-button__icon slds-button__icon_left\" aria-hidden=\"true\">\n            <use xlink:href=\"\
+    /assets/icons/utility-sprite/svg/symbols.svg#chevronright\"></use>\n          </svg>\n          Show Details\n       \
+    \ </button>\n      </div>\n      <div id=\"summary-detail-02\" class=\"slds-hide\">\n        <p>Detailed contact information\
+    \ would appear here when expanded.</p>\n      </div>\n      </div>\n"
+dependencies:
+  css_files:
+  - summary-detail.css
+  - grid.css
+  - button.css
+  javascript:
+  - summary-detail.js
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - button
+  - grid
+related_components:
+- name: Accordion
+  relationship: similar
+  description: Similar expandable content pattern
+- name: Expandable Section
+  relationship: similar
+  description: Similar progressive disclosure concept
+- name: Cards
+  relationship: container
+  description: Often used within card containers
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/summary-detail/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

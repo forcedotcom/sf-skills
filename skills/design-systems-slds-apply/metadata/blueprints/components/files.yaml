@@ -1,0 +1,119 @@
+name: Files
+description: Components for displaying and interacting with file attachments, uploads, and document management, including
+  file previews and actions.
+category: Display
+slds_classes:
+  root: slds-file
+  elements:
+  - class: slds-file__figure
+    description: Container for file icon or preview
+    purpose: Holds visual representation of the file
+  - class: slds-file__title
+    description: File name or title
+    purpose: Primary label for the file
+  - class: slds-file__text
+    description: Additional file information
+    purpose: Secondary details like size, type, or date
+  modifiers:
+  - class: slds-file_card
+    description: Card-style file display
+    usage: File representation in card format
+  - class: slds-file_overlay
+    description: Overlay-style file display
+    usage: File with overlay information
+  states:
+  - class: slds-file_loading
+    description: Loading state for file operations
+    trigger: When file is being uploaded or processed
+  - class: slds-has-error
+    description: Error state for file operations
+    trigger: When file operation has failed
+variants:
+- name: Base
+  description: Standard file display component
+  classes:
+  - slds-file
+  usage_context: Default file representation with icon and metadata
+  differences: Basic file display with icon, name, and actions
+lightning_component:
+  name: lightning-file-download
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-file-download
+  mapping_notes: Partially mapped through lightning-file-download - full file management requires custom implementation
+accessibility:
+  keyboard_support:
+  - Tab navigation through file actions
+  - Enter/Space to activate file actions
+  - Focus management for file interactions
+  screen_reader:
+  - File name and type announced
+  - File size and metadata communicated
+  - Available actions clearly described
+  - File status and state changes announced
+  aria_attributes:
+  - aria-label for file containers
+  - aria-describedby for file metadata
+  - role='button' for interactive file elements
+  - aria-live for status updates
+usage_guidelines:
+  when_to_use:
+  - For displaying file attachments or uploads
+  - In document management interfaces
+  - For file download or sharing functionality
+  - When users need to interact with files
+  when_not_to_use:
+  - For decorative images (use image components)
+  - For functional icons (use icon components)
+  - When file interaction is not needed
+  best_practices:
+  - Show clear file type indicators
+  - Display relevant file metadata (size, date)
+  - Provide appropriate actions for file type
+  - Handle loading and error states gracefully
+  - Use recognizable file type icons
+  common_mistakes:
+  - Not showing file type or size
+  - Poor error handling for file operations
+  - Unclear file action buttons
+  - Missing loading states for file operations
+code_examples:
+- title: File Card
+  code: "<div class=\"slds-file slds-file_card\">\n      <figure class=\"slds-file__figure\">\n        <a href=\"#\">\n  \
+    \        <span class=\"slds-icon_container slds-icon-doctype-pdf\">\n            <svg class=\"slds-icon\" aria-hidden=\"\
+    true\">\n              <use xlink:href=\"/assets/icons/doctype-sprite/svg/symbols.svg#pdf\"></use>\n            </svg>\n\
+    \          </span>\n        </a>\n      </figure>\n      <div class=\"\">\n        <div class=\"slds-file__title\">\n\
+    \          <a href=\"#\" title=\"Proposal_2024.pdf\">Proposal_2024.pdf</a>\n        </div>\n        <div class=\"slds-file__text\
+    \ slds-text-body_small\">\n          PDF • 1.2 MB\n        </div>\n      </div>\n      <div class=\"\">\n        <button\
+    \ class=\"slds-button slds-button_icon slds-button_icon-border-filled\" title=\"Download\">\n          <svg class=\"slds-button__icon\"\
+    \ aria-hidden=\"true\">\n            <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#download\"></use>\n\
+    \          </svg>\n          <span class=\"slds-assistive-text\">Download</span>\n        </button>\n      </div>\n  \
+    \    </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - files.css
+  - media-objects.css
+  javascript: []
+  icons:
+  - doctype-sprite.svg
+  - utility-sprite.svg
+  other_components:
+  - icons
+  - button-icon
+  - media-objects
+related_components:
+- name: Cards
+  relationship: container
+  description: Often used as container for file components
+- name: Media Objects
+  relationship: similar
+  description: Similar layout pattern for content with media
+- name: Icons
+  relationship: depends-on
+  description: File type icons enhance file recognition
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/files/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

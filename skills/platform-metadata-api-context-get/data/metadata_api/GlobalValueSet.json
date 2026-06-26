@@ -1,0 +1,46 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "GlobalValueSet - Metadata API",
+  "description": "Represents the metadata for a global picklist value set, which is the set of shared values that custom picklist fields can use. A global value set isn’t a field itself. In contrast, the custom picklist fields that are based on a global picklist are of type ValueSet. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".globalValueSet",
+  "directory_location": "globalValueSets",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "customValue": {
+      "type": "CustomValue[]",
+      "description": "Requires at least one value. The list of values, or “global value set,” that’s defined for a global picklist. The global value set is inherited by any custom picklist field that uses that value set. Each value is of type customValue. A global value set can have up to 1,000 total values, including inactive values."
+    },
+    "description": {
+      "type": "string",
+      "description": "It’s useful to state the global value set’s purpose and which objects it’s intended for. Limit: 255 characters."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "A global value set’s name, which is defined when the global value set is created. Appears as Label in the user interface.",
+      "required": true
+    },
+    "sorted": {
+      "type": "boolean",
+      "description": "Indicates whether a global value set is sorted in alphabetical order. By default this value is false.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomValue\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"color\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"default\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"GlobalValueSet\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"customValue\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomValue\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"sorted\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This UpsellGlobal.globalValueSet is an example of a GlobalValueSet component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<GlobalValueSet xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <description>Updated:This is a basic global value set.</description>\n   <masterLabel>UpsellGlobal</masterLabel>\n   <customValue>\n      <fullName>Maybe</fullName>\n      <default>false</default>\n      <label>Maybe</label>\n   </customValue>\n   <customValue>\n      <fullName>No</fullName>\n      <default>false</default>\n      <label>No</label>\n   </customValue>\n   <customValue>\n      <fullName>Yes</fullName>\n      <default>false</default>\n      <label>Yes</label>\n   </customValue>\n   <sorted>false</sorted>\n</GlobalValueSet>"
+    }
+  ]
+}

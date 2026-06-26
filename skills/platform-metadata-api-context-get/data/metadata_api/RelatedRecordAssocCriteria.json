@@ -1,0 +1,75 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "RelatedRecordAssocCriteria - Metadata API",
+  "description": "Represents criteria for automatically linking records like accounts, leads, opportunities, and cases with the branches that work with them.",
+  "file_information": ".relatedRecordAssocCriteria",
+  "directory_location": "relatedRecordAssocCriteria",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "associationHandlerApexClass": {
+      "type": "string",
+      "description": "The name of a custom Apex class that handles the creation of association records for specific association criteria. This class must: Apply to an object that the Record Association Builder doesn't directly support Implement the fscwmgen.BranchManagementAssociationHandler interface Return a list of Branch Unit Related Records Populate at least the minimum required fields in each Branch Unit Related Record: BranchUnitId: Represents the current branch unit of the user or contact BusinessUnitMemberId: The Banker ID of the user or contact RelatedRecordId: The ID of the custom object to be related This field is a relationship field."
+    },
+    "associationType": {
+      "type": "AssociationType (enumeration of type string)",
+      "required": true,
+      "description": "The association type. Values are: BranchManagement"
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the association criteria."
+    },
+    "eventType": {
+      "type": "AssociationEventType (enumeration of type string)",
+      "required": true,
+      "description": "The type of reference object event that triggers creation of the association. Values are: Create Update"
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type. The default value is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The master label of the association criteria. This internal label doesn’t get translated."
+    },
+    "preCondition": {
+      "type": "string",
+      "required": true,
+      "description": "A formula that, when true, causes a new association to be created."
+    },
+    "referenceObject": {
+      "type": "string",
+      "required": true,
+      "description": "The reference object for the association criteria."
+    },
+    "selectedOwnerField": {
+      "type": "string",
+      "description": "A field to use instead of the default Owner ID."
+    },
+    "status": {
+      "type": "AssociationStatusType (enumeration of type string)",
+      "required": true,
+      "description": "The status of the association criteria. Values are: Active Draft Inactive"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"AssociationEventType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Create\"/>\n    <xsd:enumeration value=\"Update\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"AssociationStatusType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Draft\"/>\n    <xsd:enumeration value=\"Active\"/>\n    <xsd:enumeration value=\"Inactive\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"AssociationType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"BranchManagement\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RelatedRecordAssocCriteria\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"associationHandlerApexClass\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"associationType\" type=\"tns:AssociationType\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"eventType\" type=\"tns:AssociationEventType\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"preCondition\" type=\"xsd:string\"/>\n        <xsd:element name=\"referenceObject\" type=\"xsd:string\"/>\n        <xsd:element name=\"selectedOwnerField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"status\" type=\"tns:AssociationStatusType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a RelatedRecordAssocCriteria component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<RelatedRecordAssocCriteria xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <associationType>BranchManagement</associationType>\n   <eventType>Create</eventType>\n   <masterLabel>RevenueThreeMillion</masterLabel>\n   <preCondition>[Account].AnnualRevenue > 3000000</preCondition>\n   <referenceObject>Account</referenceObject>\n   <status>Active</status>\n</RelatedRecordAssocCriteria>"
+    }
+  ]
+}

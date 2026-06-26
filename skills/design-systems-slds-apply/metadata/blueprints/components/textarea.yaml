@@ -1,0 +1,116 @@
+name: "Textarea"
+description: "A multi-line text input control that allows users to enter longer text content with automatic line wrapping and resize capabilities."
+category: "Input"
+slds_classes:
+  root: "slds-textarea"
+  elements: []
+  modifiers: []
+  states:
+    - class: "slds-has-error"
+      description: "Error state styling"
+      trigger: "When textarea validation fails"
+    - class: "slds-is-disabled"
+      description: "Disabled state styling"
+      trigger: "When textarea is not interactive"
+variants:
+  - name: "Base"
+    description: "Standard multi-line textarea"
+    classes:
+      - "slds-textarea"
+    usage_context: "Default textarea implementation for multi-line text input"
+    differences: "Multi-line text input with resizable height"
+lightning_component:
+  name: "lightning-textarea"
+  url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-textarea"
+  mapping_notes: "Direct mapping - Lightning component implements SLDS textarea blueprint"
+accessibility:
+  keyboard_support:
+    - "Tab to focus the textarea"
+    - "Standard text editing keyboard shortcuts"
+    - "Enter for new lines within the textarea"
+    - "Scroll navigation for long content"
+  screen_reader:
+    - "Label text announced with the textarea"
+    - "Character and line limits communicated"
+    - "Error messages associated and announced"
+    - "Current content length when relevant"
+  aria_attributes:
+    - "aria-describedby for help text and error messages"
+    - "aria-invalid when validation fails"
+    - "aria-required for required textareas"
+    - "aria-label when no visible label present"
+usage_guidelines:
+  when_to_use:
+    - "For multi-line text input (comments, descriptions, notes)"
+    - "When users need to enter paragraphs of text"
+    - "For content where line breaks are important"
+    - "When single-line input is insufficient"
+  when_not_to_use:
+    - "For single-line text (use input instead)"
+    - "For rich text editing (use rich text editor)"
+    - "For selecting from options (use select or combobox)"
+  best_practices:
+    - "Set appropriate initial size for expected content"
+    - "Allow resizing when users might need more space"
+    - "Provide character limits when appropriate"
+    - "Use placeholder text to guide input"
+    - "Show character count for length-limited content"
+  common_mistakes:
+    - "Making textarea too small for expected content"
+    - "Not allowing resize when users need more space"
+    - "Poor validation feedback for character limits"
+    - "Missing or unclear labels"
+code_examples:
+  - title: "Basic Textarea"
+    code: |
+      <div class="slds-form-element">
+            <label class="slds-form-element__label" for="textarea-id-01">
+              <abbr class="slds-required" title="required">* </abbr>Textarea Label
+            </label>
+            <div class="slds-form-element__control">
+              <textarea id="textarea-id-01" class="slds-textarea" placeholder="Enter your comments..." required></textarea>
+            </div>
+            </div>
+  - title: "Textarea with Error"
+    code: |
+      <div class="slds-form-element slds-has-error">
+            <label class="slds-form-element__label" for="textarea-error">
+              <abbr class="slds-required" title="required">* </abbr>Textarea Label
+            </label>
+            <div class="slds-form-element__control">
+              <textarea id="textarea-error" class="slds-textarea" aria-describedby="textarea-error-message" required></textarea>
+            </div>
+            <div id="textarea-error-message" class="slds-form-element__help">This field is required</div>
+            </div>
+styling_hooks:
+  - name: "--slds-c-textarea-color-background"
+    description: "Background color for textarea"
+    category: "color"
+  - name: "--slds-c-textarea-color-border"
+    description: "Border color for textarea"
+    category: "color"
+dependencies:
+  css_files:
+    - "textarea.css"
+    - "form-element.css"
+  javascript: []
+  icons: []
+  other_components:
+    - "form-element"
+related_components:
+  - name: "Input"
+    relationship: "alternative"
+    description: "For single-line text input"
+  - name: "Rich Text Editor"
+    relationship: "alternative"
+    description: "Enhanced textarea with formatting capabilities"
+  - name: "Form Element"
+    relationship: "container"
+    description: "Form wrapper providing structure and validation"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/textarea/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

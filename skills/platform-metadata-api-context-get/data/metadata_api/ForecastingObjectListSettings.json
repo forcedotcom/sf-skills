@@ -1,0 +1,77 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "forecastingobjectlistselectedsettings",
+    "forecastingobjectlistunselectedsettings",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ForecastingObjectListSettings - Metadata API",
+  "description": "Represents an org’s forecasting object list settings. Use these settings to control which object types and field types appear in the list of object details on the forecasts page. For example, pipeline forecasts use the Opportunity object, and the object list settings specify which fields from that object are available in the opportunity list section of the forecasts page. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "forecastingTypeObjectListSettings": {
+      "type": "ForecastingTypeObjectListSettings",
+      "description": "For each forecast type, specifies the information that is displayed in the list of object details that roll up into the forecasts. For example, the list of opportunities rolls up into opportunity-based forecasts."
+    }
+  },
+  "forecastingobjectlistselectedsettings": {
+    "field": {
+      "type": "string",
+      "description": "Object field’s API name."
+    }
+  },
+  "forecastingobjectlistunselectedsettings": {
+    "field": {
+      "type": "string",
+      "description": "Object field’s API name."
+    }
+  },
+  "sub_types": {
+    "ForecastingTypeObjectListSettings": {
+      "forecastingObjectListLabelMappings": {
+        "type": "ForecastingObjectListLabelMapping",
+        "description": "Mapping of labels with each field displayed as a column in the object detail list on the forecasts page."
+      },
+      "forecastingObjectListSelectedSettings": {
+        "type": "forecastingObjectListSelectedSettings",
+        "description": "Specifies the object fields that are used as columns in the object detail list on the forecasts page."
+      },
+      "forecastingObjectListUnselectedSettings": {
+        "type": "forecastingObjectListUnselectedSettings",
+        "description": "Lists the object fields that are available but not currently used as columns in the object detail list on the forecasts page. Changes to forecastingObjectListSelectedSettings field are reflected in this field."
+      },
+      "forecastingTypeDeveloperName": {
+        "type": "string",
+        "description": "Developer name of the forecast type that these object list settings apply to."
+      }
+    },
+    "ForecastingObjectListLabelMapping": {
+      "field": {
+        "type": "string",
+        "description": "Object field’s API name."
+      },
+      "label": {
+        "type": "string",
+        "description": "Object field’s name in the object detail list on the forecasts page."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ForecastingObjectListLabelMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ForecastingObjectListSelectedSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ForecastingObjectListSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"forecastingTypeObjectListSettings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ForecastingTypeObjectListSettings\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ForecastingObjectListUnselectedSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ForecastingTypeObjectListSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"forecastingObjectListLabelMappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ForecastingObjectListLabelMapping\"/>\n    <xsd:element name=\"forecastingObjectListSelectedSettings\" type=\"tns:ForecastingObjectListSelectedSettings\"/>\n    <xsd:element name=\"forecastingObjectListUnselectedSettings\" type=\"tns:ForecastingObjectListUnselectedSettings\"/>\n    <xsd:element name=\"forecastingTypeDeveloperName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of the ForecastingObjectListSettings.settings file:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ForecastingObjectListSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <forecastingTypeObjectListSettings>\n        <forecastingObjectListLabelMappings>\n            <field>CREATEDBY_USER.ALIAS</field>\n            <label>Created By Alias</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.AMOUNT</field>\n            <label>Amount</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.CLOSE_DATE</field>\n            <label>Close Date</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.TYPE</field>\n            <label>Type</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.CREATED_DATE</field>\n            <label>Created Date</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.LAST_UPDATE</field>\n            <label>Last Modified Date</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.LEAD_SOURCE</field>\n            <label>Lead Source</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.EXP_AMOUNT</field>\n            <label>Expected Revenue</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.CLOSED</field>\n            <label>Closed</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.WON</field>\n            <label>Won</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>00Nxx000001G2W0</field>\n            <label>CustomOppCurr</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>CORE.USERS.ALIAS</field>\n            <label>Opportunity Owner Alias</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.PROBABILITY</field>\n            <label>Probability (%)</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.LAST_ACTIVITY</field>\n            <label>Last Activity</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.FISCAL_QUARTER</field>\n            <label>Fiscal Quarter</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>00Nxx000001G8GS</field>\n            <label>TaraTestOppCurr</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>DESCRIPTION</field>\n            <label>Description</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.FISCAL_PERIOD</field>\n            <label>Fiscal Period</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>FULL_NAME</field>\n            <label>Owner Full Name</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.NEXT_STEP</field>\n            <label>Next Step</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>UPDATEDBY_USER.ALIAS</field>\n            <label>Last Modified By Alias</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.STAGE_NAME</field>\n            <label>Stage</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>CONTRACT.NAME</field>\n            <label>Contract Name</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.QUANTITY</field>\n            <label>Quantity</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>SPLITAMOUNT</field>\n            <label>Forecasted Amount</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.NAME</field>\n            <label>Opportunity Name</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>CORE.USERS.LAST_NAME</field>\n            <label>Owner Last Name</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.FISCAL_YEAR</field>\n            <label>Fiscal Year</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>TERR2_NAME</field>\n            <label>Territory Name</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>CORE.USERS.FIRST_NAME</field>\n            <label>Owner First Name</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>ACCOUNT.SITE</field>\n            <label>Account Site</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>ACCOUNT.NAME</field>\n            <label>Account Name</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>OPPORTUNITY.PRIVATE</field>\n            <label>Private</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>TERR2_DESC</field>\n            <label>Territory Description</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>CONTRACT.CONTRACT_NUMBER</field>\n            <label>Contract Number</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListLabelMappings>\n            <field>FORECAST_CATEGORY</field>\n            <label>Forecast Category</label>\n        </forecastingObjectListLabelMappings>\n        <forecastingObjectListSelectedSettings>\n            <field>OPPORTUNITY.NAME</field>\n        </forecastingObjectListSelectedSettings>\n        <forecastingObjectListUnselectedSettings>\n            <field>ACCOUNT.NAME</field>\n            <field>CONTRACT.CONTRACT_NUMBER</field>\n            <field>CONTRACT.NAME</field>\n            <field>OPPORTUNITY.STAGE_NAME</field>\n            <field>FORECAST_CATEGORY</field>\n            <field>OPPORTUNITY.CLOSE_DATE</field>\n            <field>OPPORTUNITY.AMOUNT</field>\n            <field>CORE.USERS.ALIAS</field>\n            <field>CORE.USERS.FIRST_NAME</field>\n            <field>CORE.USERS.LAST_NAME</field>\n            <field>FULL_NAME</field>\n            <field>OPPORTUNITY.PROBABILITY</field>\n            <field>DESCRIPTION</field>\n            <field>OPPORTUNITY.EXP_AMOUNT</field>\n            <field>OPPORTUNITY.LEAD_SOURCE</field>\n            <field>OPPORTUNITY.NEXT_STEP</field>\n            <field>OPPORTUNITY.PRIVATE</field>\n            <field>OPPORTUNITY.QUANTITY</field>\n            <field>OPPORTUNITY.TYPE</field>\n            <field>UPDATEDBY_USER.ALIAS</field>\n            <field>CREATEDBY_USER.ALIAS</field>\n            <field>OPPORTUNITY.CLOSED</field>\n            <field>OPPORTUNITY.WON</field>\n            <field>ACCOUNT.SITE</field>\n            <field>OPPORTUNITY.FISCAL_YEAR</field>\n            <field>OPPORTUNITY.FISCAL_QUARTER</field>\n            <field>OPPORTUNITY.FISCAL_PERIOD</field>\n            <field>OPPORTUNITY.LAST_ACTIVITY</field>\n            <field>OPPORTUNITY.CREATED_DATE</field>\n            <field>OPPORTUNITY.LAST_UPDATE</field>\n            <field>SPLITAMOUNT</field>\n            <field>00Nxx000001G2W0</field>\n            <field>00Nxx000001G8GS</field>\n            <field>TERR2_NAME</field>\n            <field>TERR2_DESC</field>\n        </forecastingObjectListUnselectedSettings>\n        <forecastingTypeDeveloperName>OpportunityLineItemRevenue</forecastingTypeDeveloperName>\n    </forecastingTypeObjectListSettings>"
+    }
+  ]
+}

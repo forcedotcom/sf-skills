@@ -1,0 +1,135 @@
+name: Page Headers
+description: Header components that provide consistent page structure with titles, actions, and navigation context for application
+  pages.
+category: Layout
+slds_classes:
+  root: slds-page-header
+  elements:
+  - class: slds-page-header__row
+    description: Horizontal row container within header
+    purpose: Organizes header content in rows
+  - class: slds-page-header__title
+    description: Main page title container
+    purpose: Contains the primary page heading
+  - class: slds-page-header__name
+    description: Page name element
+    purpose: Displays the specific page or record name
+  - class: slds-page-header__controls
+    description: Action controls container
+    purpose: Holds primary page actions and buttons
+  - class: slds-page-header__detail-row
+    description: Secondary row for additional details
+    purpose: Contains secondary information below main header
+  modifiers:
+  - class: slds-page-header_object-home
+    description: Object home page header variant
+    usage: For object list/home pages
+  states: []
+variants:
+- name: Base
+  description: Standard page header
+  classes:
+  - slds-page-header
+  usage_context: Default page header for application pages
+  differences: Basic header with title and optional actions
+- name: Record Home
+  description: Header for record detail pages
+  classes:
+  - slds-page-header
+  usage_context: Record detail and edit pages
+  differences: Enhanced header with record-specific layout and actions
+- name: Object Home
+  description: Header for object list pages
+  classes:
+  - slds-page-header
+  - slds-page-header_object-home
+  usage_context: Object list views and home pages
+  differences: Header optimized for list view contexts
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component equivalent - typically implemented through page layout templates
+accessibility:
+  keyboard_support:
+  - Tab navigation through header actions
+  - Enter/Space to activate header controls
+  - Proper heading hierarchy for page structure
+  screen_reader:
+  - Page title and context announced
+  - Header actions clearly described
+  - Page metadata appropriately communicated
+  - Heading hierarchy provides page structure
+  aria_attributes:
+  - aria-labelledby for page header sections
+  - role='banner' for main page header
+  - aria-describedby for additional page context
+  - proper heading levels (h1, h2, etc.)
+usage_guidelines:
+  when_to_use:
+  - For consistent page structure across application
+  - To provide page context and primary actions
+  - When pages need clear titles and navigation
+  - For record and object-specific page layouts
+  when_not_to_use:
+  - For simple pages without complex structure
+  - When custom header layouts are more appropriate
+  - For modal dialogs or overlay content
+  best_practices:
+  - Use clear, descriptive page titles
+  - Place primary actions prominently
+  - Maintain consistent header structure
+  - Provide appropriate page context and metadata
+  - Use proper heading hierarchy
+  common_mistakes:
+  - Inconsistent header layouts across pages
+  - Poor action button placement or labeling
+  - Missing or unclear page context
+  - Improper heading hierarchy
+code_examples:
+- title: Basic Page Header
+  code: "<div class=\"slds-page-header\">\n      <div class=\"slds-page-header__row\">\n        <div class=\"slds-has-flexi-truncate\"\
+    >\n          <div class=\"slds-page-header__name\">\n            <div class=\"slds-page-header__name-title\">\n      \
+    \        <h1>\n                <span class=\"slds-page-header__title slds-truncate\" title=\"Accounts\">Accounts</span>\n\
+    \              </h1>\n            </div>\n          </div>\n        </div>\n        <div class=\"slds-no-flex slds-grid\
+    \ slds-align-top\">\n          <div class=\"slds-page-header__controls\">\n            <div class=\"slds-page-header__control\"\
+    >\n              <button class=\"slds-button slds-button_neutral\">New</button>\n            </div>\n          </div>\n\
+    \        </div>\n      </div>\n      <div class=\"slds-page-header__detail-row\">\n        <div class=\"\">\n        \
+    \  <p class=\"slds-text-body_small\">10 items • Updated 2 hours ago</p>\n        </div>\n      </div>\n      </div>\n"
+- title: Record Home Header
+  code: "<div class=\"slds-page-header\">\n      <div class=\"slds-page-header__row\">\n        <div class=\"slds-has-flexi-truncate\"\
+    >\n          <div class=\"slds-page-header__name\">\n            <div class=\"slds-page-header__name-title\">\n      \
+    \        <h1>\n                <span>Account</span>\n                <span class=\"slds-page-header__title slds-truncate\"\
+    \ title=\"Acme Corporation\">Acme Corporation</span>\n              </h1>\n            </div>\n            <div class=\"\
+    slds-page-header__name-meta\">Account • Customer</div>\n          </div>\n        </div>\n        <div class=\"slds-no-flex\
+    \ slds-grid slds-align-top\">\n          <div class=\"slds-page-header__controls\">\n            <button class=\"slds-button\
+    \ slds-button_neutral\">Edit</button>\n            <button class=\"slds-button slds-button_brand\">Follow</button>\n \
+    \         </div>\n        </div>\n      </div>\n      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - page-header.css
+  - grid.css
+  - truncate.css
+  javascript: []
+  icons: []
+  other_components:
+  - grid
+  - truncate
+  - button
+related_components:
+- name: Global Navigation
+  relationship: similar
+  description: Works together for complete page navigation
+- name: Breadcrumbs
+  relationship: depends-on
+  description: Often included in page headers for navigation context
+- name: Cards
+  relationship: alternative
+  description: Alternative container for page content
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/page-headers/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

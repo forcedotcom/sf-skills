@@ -1,0 +1,61 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SearchOrgWideObjectConfig - Metadata API",
+  "description": "Represents an object in the search index. The search index contains org-wide search settings created in Search Manager. Each object in the search index includes searchable fields and fields protected by field-level security in search.",
+  "file_information": ".searchOrgWideObjectConfig",
+  "directory_location": "searchOrgWideConfiguration",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the configuration."
+    },
+    "objectReference": {
+      "type": "string",
+      "required": true,
+      "description": "The API name of the object."
+    },
+    "searchOrgWideFieldConfig": {
+      "type": "SearchOrgWideFieldConfig[]",
+      "description": "A list of field configurations."
+    }
+  },
+  "sub_types": {
+    "SearchOrgWideFieldConfig": {
+      "fieldReference": {
+        "type": "string",
+        "required": true,
+        "description": "The API name of the field."
+      },
+      "isSearchable": {
+        "type": "boolean",
+        "description": "Indicates if the field is searchable (true) or not (false). If true, the field is shown in search results and used to match results."
+      },
+      "isSecure": {
+        "type": "boolean",
+        "description": "Indicates if the field is protected by field-level security in search (true) or not (false). If true, the search engine uses this field to match results only for users with permissions. If false, the search engine uses this field to match results even if the user doesn’t have permissions to view this field."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SearchOrgWideFieldConfig\">\n  <xsd:sequence>\n    <xsd:element name=\"fieldReference\" type=\"xsd:string\"/>\n    <xsd:element name=\"isSearchable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isSecure\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SearchOrgWideObjectConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"objectReference\" type=\"xsd:string\"/>\n        <xsd:element name=\"searchOrgWideFieldConfig\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SearchOrgWideFieldConfig\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a SearchOrgWideObjectConfig component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SearchOrgWideObjectConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <masterLabel>CustomerLabel</masterLabel>\n    <objectReference>Customer</objectReference>\n    <searchOrgWideFieldConfig>\n        <fieldReference>Custom_Field_1__c</fieldReference>\n        <isSearchable>false</isSearchable>\n        <isSecure>false</isSecure>\n    </searchOrgWideFieldConfig>\n    <searchOrgWideFieldConfig>\n        <fieldReference>Custom_Field_2__c</fieldReference>\n        <isSearchable>true</isSearchable>\n        <isSecure>true</isSecure>\n    </searchOrgWideFieldConfig>\n</SearchOrgWideObjectConfig>"
+    }
+  ]
+}

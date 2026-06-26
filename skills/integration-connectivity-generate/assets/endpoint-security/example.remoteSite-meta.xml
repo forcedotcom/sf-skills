@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Remote Site Setting Template
+
+    Use this template when creating integration skills that make HTTP callouts
+    to external APIs.
+
+    IMPORTANT:
+    - This is the LEGACY approach (still works in all API versions)
+    - For API 48+ (Spring '20+), prefer CSP Trusted Sites (see example.cspTrustedSite-meta.xml)
+
+    Setup:
+    1. Copy this file to your skill's assets/ directory
+    2. Replace {{placeholders}} with your values
+    3. Deploy to org OR let setup script deploy automatically
+
+    File Location: force-app/main/default/remoteSiteSettings/{{APIName}}.remoteSite-meta.xml
+-->
+<RemoteSiteSetting xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- API Name - must be unique, alphanumeric only -->
+    <fullName>{{APIName}}</fullName>
+
+    <!-- Description - what this endpoint is for -->
+    <description>{{Description}}</description>
+
+    <!-- Security - ALWAYS keep this false (don't allow HTTP, only HTTPS) -->
+    <disableProtocolSecurity>false</disableProtocolSecurity>
+
+    <!-- Active - set to true to enable -->
+    <isActive>true</isActive>
+
+    <!-- URL - the base domain (no path, no trailing slash) -->
+    <!-- Examples:
+         - https://api.stripe.com
+         - https://api.twilio.com
+         - https://graph.microsoft.com
+    -->
+    <url>{{BaseURL}}</url>
+</RemoteSiteSetting>

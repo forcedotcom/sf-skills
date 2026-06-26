@@ -1,0 +1,46 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "IframeWhiteListUrlSettings - Metadata API",
+  "description": "Represents settings related to the list of trusted external domains that you allow to frame your Visualforce pages or surveys. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "iframeWhiteListUrlSettings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "iframeWhiteListUrls": {
+      "type": "IframeWhiteListUrl[]",
+      "description": "The list of external domains that you allow to frame your Visualforce pages or surveys."
+    }
+  },
+  "sub_types": {
+    "IframeWhiteListUrl": {
+      "context": {
+        "type": "IFrameWhitelistContext (enumeration of type string)",
+        "description": "The type of content in the iframe. Valid values are: LightningOut—Reserved for future use. Available in API version 60.0 and later Surveys VisualforcePages DisclosureAndComplianceHubConnector",
+        "required": true
+      },
+      "url": {
+        "type": "string",
+        "description": "The unique domain that is allowed to frame your Visualforce pages, surveys, or Disclosure and Compliance Hub Connector. Accepts these formats: example.com, *example.com, and https://example.com."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"IFrameWhitelistContext\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"VisualforcePages\"/>\n    <xsd:enumeration value=\"LightningOut\"/>\n    <xsd:enumeration value=\"Surveys\"/>\n    <xsd:enumeration value=\"DCH_ADDIN_APP\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"IframeWhiteListUrl\">\n  <xsd:sequence>\n    <xsd:element name=\"context\" type=\"tns:IFrameWhitelistContext\"/>\n    <xsd:element name=\"url\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"IframeWhiteListUrlSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"iframeWhiteListUrls\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:IframeWhiteListUrl\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a IframeWhiteListUrlSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<IframeWhiteListUrlSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <iframeWhiteListUrl>\n      <context>Surveys></context>\n      <url>example1.com</url>\n    </iframeWhiteListUrl>\n    <iframeWhiteListUrl>\n      <context>VisualforcePages</context>\n      <url>example2.com</url>\n     </iframeWhiteListUrl>\n     <iframeWhiteListUrl>\n        <context>DisclosureAndComplianceHubConnector</context>\n        <url>example3.com</url>\n     </iframeWhiteListUrl>\n</IframeWhiteListUrlSettings>"
+    }
+  ]
+}

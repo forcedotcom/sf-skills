@@ -1,0 +1,45 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ClauseCatgConfiguration - Metadata API",
+  "description": "Represents the configuration about the clause category that can be used to categorize your disclosure and compliance reports from standardized disclosure templates in a response document.",
+  "file_information": ".clauseCatgConfiguration",
+  "directory_location": "clauseCatgConfigurations",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The description about the clause category configuration."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type. The default is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for ClauseCatgConfiguration, which is defined when the ClauseCatgConfiguration is created."
+    },
+    "usageType": {
+      "type": "ClmCategoryUsageType",
+      "required": true,
+      "description": "The usage type of the clause category configuration.Possible values are: ContractClauseCategory DisclosureCategory"
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ClauseCatgConfiguration component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ClauseCatgConfiguration\n\txmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<description>This is to add description for Contract Clause Category.</description>\n\t<usageType>ContractClauseCategory</usageType>\n\t<isProtected>false</isProtected>\n\t<masterLabel>Contract Clause Cat</masterLabel>\n</ClauseCatgConfiguration>"
+    }
+  ]
+}

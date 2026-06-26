@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SubscriptionManagementSettings - Metadata API",
+  "description": "Represents the settings used to manage recurring subscriptions.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableBillingDocGen": {
+      "type": "boolean",
+      "description": "Indicates whether document generation is enabled in the org (true) or not (false). The default value is false."
+    },
+    "enableConvertNegativeInvoiceLinesToCreditMemoAndApply": {
+      "type": "boolean",
+      "description": "Indicates whether to convert negative invoice lines into a credit note (true) or not (false). This credit note holds a positive balance that you can later use to apply against future invoices. The default value is false."
+    },
+    "enableInvHeaderLvlSettlement": {
+      "type": "boolean",
+      "description": "Indicates whether payments can be applied on the whole invoice (true) or only on invoice lines (false). The default value is false."
+    },
+    "enablePaymentScheduleAutomation": {
+      "type": "boolean",
+      "description": "Indicates whether the payment schedule and payment schedule item are created automatically (true) or not (false). The default value is false."
+    },
+    "enableRefundAutomation": {
+      "type": "boolean",
+      "description": "Indicates whether refunds are processed automatically (true) or not (false). The default value is false."
+    },
+    "enableRevSubMgmtBlngOptOut": {
+      "type": "boolean",
+      "description": "Indicates whether the billing schedules in Subscription Management are disabled (true) or not (false). The default value is false."
+    },
+    "enableSubscriptionManagement": {
+      "type": "boolean",
+      "description": "Indicates whether Subscription Management is enabled (true) or not (false). The default value is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"SubscriptionManagementSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableConvertNegativeInvoiceLinesToCreditMemoAndApply\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePaymentScheduleAutomation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRefundAutomation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRevSubMgmtBlngOptOut\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSubscriptionManagement\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This example shows a sample SubscriptionManagementSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SubscriptionManagementSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableSubscriptionManagement>true</enableSubscriptionManagement>\n</SubscriptionManagementSettings>"
+    }
+  ]
+}

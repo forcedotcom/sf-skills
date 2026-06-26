@@ -1,0 +1,103 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LightningBolt - Metadata API",
+  "description": "Represents the definition of a Lightning Bolt Solution, which can include custom apps, flow categories, and Experience Builder templates. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".lightningBolt",
+  "directory_location": "lightningBolts",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "category": {
+      "type": "LightningBoltCategory (enumeration of type string)",
+      "description": "The primary industry that the Lightning Bolt Solution is aimed at. Valid values are: Communications Education FinancialServices GeneralBusiness Government HealthcareLifeSciences HighTech Manufacturing Media Nonprofits ProfessionalServices RealEstate Retail TravelTransportationHospitality",
+      "required": true
+    },
+    "lightningBoltFeatures": {
+      "type": "LightningBoltFeatures[]",
+      "description": "The list of feature descriptions of this Lightning Bolt Solution."
+    },
+    "lightningBoltImages": {
+      "type": "LightningBoltImages[]",
+      "description": "The list of images of this Lightning Bolt Solution."
+    },
+    "lightningBoltItems": {
+      "type": "LightningBoltItems[]",
+      "description": "The list of items (custom apps, flow categories, and Experience Builder templates) that comprise this Lightning Bolt Solution."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label of the Lightning Bolt Solution, which appears on the solution detail page.",
+      "required": true
+    },
+    "publisher": {
+      "type": "string",
+      "description": "The name of the partner org associated with this Lightning Bolt Solution.",
+      "required": true
+    },
+    "summary": {
+      "type": "string",
+      "description": "The summary description of the Lightning Bolt Solution.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "LightningBoltFeatures": {
+      "description": {
+        "type": "string",
+        "description": "A description of the feature of the Lightning Bolt Solution."
+      },
+      "order": {
+        "type": "int",
+        "description": "An integer specifying the position of this feature relative to others in the list. 1 is the first position, and 4 is the max position.",
+        "required": true
+      },
+      "title": {
+        "type": "string",
+        "description": "The title of the feature, which appears on the solution detail page.",
+        "required": true
+      }
+    },
+    "LightningBoltImages": {
+      "image": {
+        "type": "string",
+        "description": "The developer name of the ContentAsset type, which is used as a preview image for this Lightning Bolt Solution.",
+        "required": true
+      },
+      "order": {
+        "type": "int",
+        "description": "An integer specifying the position of this image relative to others in the list. 1 is the first position, and 3 is the max position.",
+        "required": true
+      }
+    },
+    "LightningBoltItems": {
+      "name": {
+        "type": "string",
+        "description": "The name of the item, which appears on the solution detail page.",
+        "required": true
+      },
+      "type": {
+        "type": "string",
+        "description": "The type of the item included in the Lightning Bolt Solution. Valid values are: CommunityTemplateDefinition CustomApplication FlowCategory",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"LightningBolt\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"category\" type=\"tns:LightningBoltCategory\"/>\n        <xsd:element name=\"lightningBoltFeatures\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LightningBoltFeatures\"/>\n        <xsd:element name=\"lightningBoltImages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LightningBoltImages\"/>\n        <xsd:element name=\"lightningBoltItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LightningBoltItems\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"publisher\" type=\"xsd:string\"/>\n        <xsd:element name=\"summary\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"LightningBoltCategory\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Communications\"/>\n    <xsd:enumeration value=\"Education\"/>\n    <xsd:enumeration value=\"FinancialServices\"/>\n    <xsd:enumeration value=\"Government\"/>\n    <xsd:enumeration value=\"HealthcareLifeSciences\"/>\n    <xsd:enumeration value=\"Manufacturing\"/>\n    <xsd:enumeration value=\"Media\"/>\n    <xsd:enumeration value=\"Nonprofits\"/>\n    <xsd:enumeration value=\"ProfessionalServices\"/>\n    <xsd:enumeration value=\"RealEstate\"/>\n    <xsd:enumeration value=\"Retail\"/>\n    <xsd:enumeration value=\"TravelTransportationHospitality\"/>\n    <xsd:enumeration value=\"HighTech\"/>\n    <xsd:enumeration value=\"GeneralBusiness\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"LightningBoltFeatures\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"order\" type=\"xsd:int\"/>\n    <xsd:element name=\"title\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"LightningBoltImages\">\n  <xsd:sequence>\n    <xsd:element name=\"image\" type=\"xsd:string\"/>\n    <xsd:element name=\"order\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"LightningBoltItems\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a LightningBolt component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningBolt xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n    <category>Sales</category>\n    <lightningBoltFeatures>\n        <description>bb</description>\n        <order>1</order>\n        <title>aa</title>\n    </lightningBoltFeatures>\n    <lightningBoltImages>\n        <image>prm1</image>\n        <order>1</order>\n    </lightningBoltImages>\n    <lightningBoltItems>\n        <name>PolaConsole</name>\n        <type>CustomApplication</type>\n    </lightningBoltItems>\n    <lightningBoltItems>\n        <name>Banking_Service_Console</name>\n        <type>CustomApplication</type>\n    </lightningBoltItems>\n    <lightningBoltItems>\n        <name>Banking_Service_Portal</name>\n        <type>CommunityTemplateDefinition</type>\n    </lightningBoltItems>\n    <lightningBoltItems>\n        <name>Banking_Sales_Portal</name>\n        <type>CommunityTemplateDefinition</type>\n    </lightningBoltItems>\n    <lightningBoltItems>\n        <name>myorgdev__updatebenefits</name>\n        <type>FlowCategory</type>\n    </lightningBoltItems>\n    <masterLabel>BoltTe</masterLabel>\n    <publisher>aaaa</publisher>\n    <summary>This is a summary.</summary>\n\n</LightningBolt>"
+    }
+  ]
+}

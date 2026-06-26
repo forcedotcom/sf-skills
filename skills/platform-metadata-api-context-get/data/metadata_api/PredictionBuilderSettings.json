@@ -1,0 +1,36 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PredictionBuilderSettings - Metadata API",
+  "description": "Represents the settings that determine how a user can interact with Einstein Prediction Builder. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enablePredictionBuilder": {
+      "type": "boolean",
+      "description": "Indicates whether Einstein Prediction Builder is enabled (true) or not (false)."
+    },
+    "isPredictionBuilderStarted": {
+      "type": "boolean",
+      "description": "Indicates whether to display the predictions list view to the user (true) or not (false)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"PredictionBuilderSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enablePredictionBuilder\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isPredictionBuilderStarted\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is a sample Prediction Builder settings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PredictionBuilderSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <isPredictionBuilderStarted>false</isPredictionBuilderStarted>\n    <enablePredictionBuilder>false</enablePredictionBuilder>\n</PredictionBuilderSettings>"
+    }
+  ]
+}

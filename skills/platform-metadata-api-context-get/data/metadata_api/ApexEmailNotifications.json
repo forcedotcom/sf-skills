@@ -1,0 +1,49 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ApexEmailNotifications - Metadata API",
+  "description": "The ApexEmailNotifications type allows you to define users and email addresses that receive email for unhandled Apex errors. Flow errors can also use this metadata type.",
+  "file_information": ".notifications",
+  "directory_location": "apexEmailNotifications",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "apexEmailNotification": {
+      "type": "ApexEmailNotification",
+      "description": "A specific Apex email notification. You can specify multiple notifications."
+    }
+  },
+  "sub_types": {
+    "ApexEmailNotification": {
+      "email": {
+        "type": "string",
+        "description": "The external email address to which the notification is sent. Mutually exclusive with the user field."
+      },
+      "user": {
+        "type": "string",
+        "description": "The username of the Salesforce user to be notified. Mutually exclusive with the email field."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ApexEmailNotification\">\n  <xsd:sequence>\n    <xsd:element name=\"email\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"user\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ApexEmailNotifications\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"apexEmailNotification\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ApexEmailNotification\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This sample deploys an Apex email notification that notifies a Salesforce user in the org.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ApexEmailNotifications xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apexEmailNotification>\n        <user>user1@example.com</user>\n    </apexEmailNotification>\n</ApexEmailNotifications>"
+    },
+    {
+      "description": "This sample deploys an Apex email notification that notifies an external email address.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ApexEmailNotifications xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apexEmailNotification>\n        <email>test@example.com</email>\n    </apexEmailNotification>\n</ApexEmailNotifications>"
+    }
+  ]
+}

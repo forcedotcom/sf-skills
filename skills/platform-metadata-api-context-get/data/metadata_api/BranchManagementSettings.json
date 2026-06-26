@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "BranchManagementSettings - Metadata API",
+  "description": "Represents the branch management settings for an org. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "associateAccountWithBranch": {
+      "type": "boolean",
+      "description": "Automatically associates new accounts with the user’s current branch by creating branch unit customer records. The default value is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"BranchManagementSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"associateAccountWithBranch\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a BranchManagementSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<BranchManagementSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <associateAccountWithBranch>true</associateAccountWithBranch>\n</BranchManagementSettings>"
+    }
+  ]
+}

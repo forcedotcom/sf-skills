@@ -1,0 +1,64 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ContentTypeBundle - Metadata API",
+  "description": "Represents the definition of enhanced custom content types for use with enhanced CMS workspaces. When you create an enhanced custom content type, deploy this bundle to your org. Enhanced custom content types are displayed as forms with defined fields. When deployed, enhanced custom content types are available for use with enhanced LWR site channels. To use enhanced custom content types with Aura and non-enhanced LWR site channels, use enhanced CMS workspaces resources.",
+  "file_information": "ContentTypeBundle components are stored in the contentTypes folder. Here’s an example of how the folder is structured.\n\n```\n+--myMetadataPackage\n    +--contentTypes (1)\n        +--bbHost (2)\n           +--schema.json (3)\n```\n\n- The contentTypes folder (1) contains a folder for each enhanced custom content type.\n- Each enhanced custom content type folder is named in the format contentTypeName. In this example (2), the name is bbHost.\n- Each contentTypeName folder contains a JSON file, schema.json (3), that defines the enhanced custom content type. The JSON file contains a title and one or more Lightning property types. Use this file to edit the properties of the enhanced custom content type on your local machine or scratch org and then deploy it.",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "Explanatory text about the content type."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A name for ContentTypeBundle, which is defined when the ContentTypeBundle is created."
+    },
+    "resources": {
+      "type": "ContentTypeBundleResource[]",
+      "description": "A list of source files in the ContentTypeBundle folder."
+    }
+  },
+  "sub_types": {
+    "ContentTypeBundleResource": {
+      "fileName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the resource file."
+      },
+      "filePath": {
+        "type": "string",
+        "required": true,
+        "description": "The path to the resource."
+      },
+      "source": {
+        "type": "base64Binary",
+        "required": true,
+        "description": "The content of the resource."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ContentTypeBundle\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"resources\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ContentTypeBundleResource\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ContentTypeBundleResource\">\n  <xsd:sequence>\n    <xsd:element name=\"fileName\" type=\"xsd:string\"/>\n    <xsd:element name=\"filePath\" type=\"xsd:string\"/>\n    <xsd:element name=\"fileType\" type=\"xsd:string\"/>\n    <xsd:element name=\"source\" type=\"xsd:base64Binary\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This example shows the directory structure in the .zip file of an enhanced custom content type. The enhaced custom content type is named bbHost and in this example it represents the profile of a bed and breakfast host.",
+      "code": "contentTypes\n    bbHost\n        schema.json"
+    },
+    {
+      "description": "Here are the example contents of the schema.json file in the contentTypes directory. The bbHost is a complex type that includes subproperties for fullName, aboutMe, interests, profilePicture, dateOfBirth, lastModified, personalWebsite, hostIdentityVerified, hostingExperienceInYears, rating, residenceCountry, and preferredModeOfContact. Each subproperty is a primitive type. The subproperty types included in the schema.json file are completely configurable and must include a lightning:type for each property.",
+      "code": "{\n  \"title\": \"Bed & Breakfast Host\",\n  \"description\": \"Schema for capturing B&B host details\",\n  \"lightning:type\": \"lightning__objectType\",\n  \"lightning:mixinTypes\": {\n    \"sfdc_cms:metadataContent\": {}\n  },\n  \"properties\": {\n    \"fullName\": {\n      \"title\": \"Full Name\",\n      \"lightning:type\": \"lightning__textType\",\n      \"lightning:textIndexed\": true,\n      \"minLength\": 5,\n      \"maxLength\": 50,\n      \"lightning:uiOptions\": {\n        \"placeholderText\": \"Enter your full name (e.g., John Doe)\"\n      },\n      \"lightning:localizable\": false\n    },\n    \"aboutMe\": {\n      \"title\": \"About Me\",\n      \"lightning:type\": \"lightning__richTextType\",\n      \"minLength\": 10,\n      \"maxLength\": 3000,\n      \"lightning:textIndexed\": false,\n      \"lightning:uiOptions\": {\n        \"placeholderText\": \"Write something about yourself\"\n      },\n      \"lightning:localizable\": true\n    },\n    \"interests\": {\n      \"title\": \"Interests and Hobbies\",\n      \"lightning:type\": \"lightning__multilineTextType\",\n      \"lightning:textIndexed\": true,\n      \"minLength\": 10,\n      \"maxLength\": 500,\n      \"lightning:uiOptions\": {\n        \"placeholderText\": \"Summarize your interests and hobbies in a few lines\"\n      },\n      \"lightning:localizable\": true\n    },\n    \"profilePicture\": {\n      \"title\": \"Profile Picture\",\n      \"lightning:type\": \"lightning__imageType\",\n      \"lightning:uiOptions\": {\n        \"placeholderText\": \"Upload a professional headshot\"\n      },\n      \"lightning:localizable\": false\n    },\n    \"dateOfBirth\": {\n      \"title\": \"Date of Birth\",\n      \"lightning:type\": \"lightning__dateType\",\n      \"lightning:localizable\": true,\n      \"lightning:uiOptions\": {\n        \"placeholderText\": \"Select your date of birth\"\n      }\n    },\n    \"lastModified\": {\n      \"title\": \"Last Profile Update\",\n      \"lightning:type\": \"lightning__dateTimeType\",\n      \"lightning:localizable\": false,\n      \"lightning:uiOptions\": {\n        \"placeholderText\": \"Auto-filled on profile update\"\n      }\n    },\n    \"personalWebsite\": {\n      \"title\": \"Personal Website\",\n      \"lightning:type\": \"lightning__urlType\",\n      \"lightning:localizable\": false,\n      \"lightning:uiOptions\": {\n        \"placeholderText\": \"https://yourwebsite.com\"\n      }\n    },\n    \"hostIdentityVerified\": {\n      \"title\": \"Host Identity Verified\",\n      \"lightning:type\": \"lightning__booleanType\",\n      \"lightning:uiOptions\": {\n        \"placeholderText\": \"Check if host identity is verified\"\n      }\n    },\n    \"hostingExperienceInYears\": {\n      \"title\": \"Years of Experience hosting B&B\",\n      \"lightning:type\": \"lightning__integerType\",\n      \"minimum\": 0,\n      \"maximum\": 50,\n      \"lightning:localizable\": false,\n      \"lightning:uiOptions\": {\n        \"placeholderText\": \"Enter total years of experience being a B&B host\"\n      }\n    },\n    \"rating\": {\n      \"title\": \"Rating\",\n      \"lightning:type\": \"lightning__numberType\",\n      \"minimum\": 0.0,\n      \"maximum\": 5.0,\n      \"lightning:localizable\": false,\n      \"lightning:uiOptions\": {\n        \"placeholderText\": \"e.g., 4.5\"\n      }\n    },\n    \"residenceCountry\": {\n      \"title\": \"Country of Residence\",\n      \"lightning:type\": \"lightning__textType\",\n      \"const\": [\"India\"]\n    },\n    \"preferredModeOfContact\": {\n      \"title\": \"Preferred Mode of Contact\",\n      \"lightning:type\": \"lightning__textType\",\n      \"enum\": [\"email\", \"SMS\", \"phone\"],\n      \"lightning:uiOptions\": {\n        \"placeholderText\": \"Choose your preferred mode of contact\"\n      }\n    }\n  },\n  \"required\": [\"fullName\", \"hostIdentityVerified\"]"
+    }
+  ]
+}

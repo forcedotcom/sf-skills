@@ -1,0 +1,59 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DataKitObjectTemplate - Metadata API",
+  "description": "Represents the object in Data Kit Object Template. These object templates are added inside the data kit.",
+  "file_information": ".DataKitObjectTemplate",
+  "directory_location": "DataKitObjectTemplate",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "Name of the data kit object template. This can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+    },
+    "entityPayload": {
+      "type": "string",
+      "description": "A string-based JSON payload containing the metadata of a data kit component. The payload is templatized to enable variable substitution during the deployment process."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label of the data kit object template."
+    },
+    "parentDataPackageKitDefinitionName": {
+      "type": "string",
+      "required": true,
+      "description": "The linked data kit package definition in the data kit."
+    },
+    "sourceObject": {
+      "type": "string",
+      "description": "The developer name of the source object for the data kit object template."
+    },
+    "sourceObjectType": {
+      "type": "string",
+      "required": true,
+      "description": "The object type of the metadata component in the data kit. Valid values are: MKT_DATA_TRANSFORM MKT_DATA_CONNECTION IDENTITY_RESOLUTION DATA_GRAPH EXT_DATA_SHARE SEMANTIC_SEARCH DATA_ACTION DATA_ACTION_TARGET MARKET_SEGMENT DATA_SPACE_MEMBER INTERNAL_DATA_CONNECTOR MARKET_SEGMENT_ACTIVATION STREAMING_APP_AND_INGESTION_CONNECTOR ML_CONFIGURED_MODEL ACTIVATION_TARGET SEMANTIC_MODEL PERSONALIZATION_RECOMMENDER PERSONALIZATION_POINT PERSONALIZATION_SCHEMA PERSONALIZATION_OBJECTIVE ENGAGEMENT_SIGNAL PERSONALIZATION_BATCH_DECISION MC_CONNECTOR ML_PREDICTION_JOB ML_RETRIEVER TUA_TEMPLATED_OBJECT IR_RELATED_LIST_ENRICHMENT TAG_METADATA DATA_CLEAN_ROOM_PROVIDER IDP_CONFIGURATION COPY_FIELD_ENRICHMENT DATA_CUSTOM_CODE ANALYTICS_VISUALIZATION ANALYTICS_DASHBOARD ANALYTICS_WORKSPACE SECONDARY_INDEX POLICY_RULE_DEFINITION_METADATA POLICY_RULE_DEFINITION_SET_METADATA"
+    },
+    "templateVersion": {
+      "type": "string",
+      "description": "The version number of the template."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DataKitObjectTemplate component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DataKitObjectTemplate xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <developerName xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n   <entityPayload>\n      {\n         \"dataSpaceName\": \"default\",\n         \"type\": \"DLO\",\n         \"developerName\": \"DLO_StaticCurrencyRates_Home\"\n      }\n   </entityPayload>\n   <masterLabel>StaticCurrencyRates_Home__dll</masterLabel>\n   <parentDataPackageKitDefinitionName xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n   <sourceObject>0viSB00000JzG05YAF</sourceObject>\n   <sourceObjectType>DataSpaceMember</sourceObjectType>\n   <templateVersion>1</templateVersion>\n</DataKitObjectTemplate>"
+    }
+  ]
+}

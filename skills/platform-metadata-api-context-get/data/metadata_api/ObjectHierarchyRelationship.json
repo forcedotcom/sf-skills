@@ -1,0 +1,108 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ObjectHierarchyRelationship - Metadata API",
+  "description": "Represents an organization’s custom field mappings for sales agreement conversion. Fields can be mapped from Opportunity and Quotes to SalesAgreement and SalesAgreementProduct.",
+  "file_information": ".settings",
+  "directory_location": "ObjectHierarchyRelationship",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "childObjectMapping": {
+      "type": "ObjectMapping",
+      "description": "Set of inputObject, mappingFields, and outputObject entries. For example, fields from the input object of OpportunityLineItem maps to fields of the output object of SalesAgreementProduct."
+    },
+    "childObjectMappingId": {
+      "type": "String",
+      "description": "The ID of the child object mapping record. This field is available in API version 56.0 and later."
+    },
+    "inputObjRecordsGrpFieldName": {
+      "type": "string",
+      "description": "The field name in the input object used to group the records. This field is available in API version 55.0 and later."
+    },
+    "mappingType": {
+      "type": "ObjHierarchyMappingType (enumeration of type string)",
+      "description": "Specifies the type of relationship between two objects. This field is available in API version 55.0 and later.Valid values are: ChildToChild ParentToChild ParentToParent Support"
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Label name of the mapping definition."
+    },
+    "outputPntRelationshipFieldName": {
+      "type": "string",
+      "description": "The field name that defines the relationship between a parent and child for the output object. This field is available in API version 55.0 and later."
+    },
+    "parentObjectMapping": {
+      "type": "ObjectMapping",
+      "required": true,
+      "description": "Set of inputObject, mappingFields, and outputObject entries. For example, fields from the input object of Opportunity maps to fields of the output object of SalesAgreement."
+    },
+    "parentObjectMappingId": {
+      "type": "string",
+      "description": "The ID of the parent object mapping record. This field is available in API version 56.0 and later."
+    },
+    "parentRecord": {
+      "type": "string",
+      "description": "The parent record for this object hierarchy relationship. This field is available in API version 55.0 and later."
+    },
+    "parentRelationshipFieldName": {
+      "type": "string",
+      "description": "Name of the field that defines the relationship between the parent and child."
+    },
+    "sourceReferenceRelaFieldName": {
+      "type": "string",
+      "description": "The field name in an object that's used to define the relationship between a source and reference object. This field is available in API version 56.0 and later."
+    },
+    "usageType": {
+      "type": "MappingUsageType (enumeration of type string)",
+      "required": true,
+      "description": "Name of the usage type of an object hierarchy relationship.Valid value is: ConvertToSalesAgreement CLMFieldMapping EligibleProgramRebateType MapJournalToMemberAggregate TransformationMapping"
+    }
+  },
+  "sub_types": {
+    "ObjectMapping": {
+      "inputObject": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the input object type containing the source fields for mapping. For example, Opportunity or OpportunityLineItem."
+      },
+      "mappingFields": {
+        "type": "ObjectMappingField",
+        "description": "Mapping of source object input fields to target object for SalesAgreement and SalesAgreementProduct."
+      },
+      "outputObject": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the output object type receiving data conversion. For example, SalesAgreement or SalesAgreementProduct."
+      }
+    },
+    "ObjectMappingField": {
+      "inputField": {
+        "type": "string",
+        "required": true,
+        "description": "Field in the object specified by the inputObject field in ObjectMapping. This field is mapped to the field in outputField, which is a field in the object specified by the outputObject field in ObjectMapping."
+      },
+      "outputField": {
+        "type": "string",
+        "required": true,
+        "description": "Field in the object specified by the outputObject field in ObjectMapping. This field is mapped to the field name in inputField, which is a field in the object specified by the inputObject field in ObjectMapping."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ObjectHierarchyRelationship component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ObjectHierarchyRelationship xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\n  <parentObjectMapping>\n    <inputObject>Opportunity</inputObject>\n    <mappingFields>\n      <inputField>Name</inputField>\n      <outputField>Name</outputField>\n    </mappingFields>\n    <mappingFields>\n      <inputField>CloseDate</inputField>\n      <outputField>StartDate</outputField>\n    </mappingFields>\n    <mappingFields>\n      <inputField>Account</inputField>\n      <outputField>Account</outputField>\n    </mappingFields>\n    <mappingFields>\n      <inputField>Pricebook2</inputField>\n      <outputField>Pricebook</outputField>\n    </mappingFields>\n    <outputObject>SalesAgreement</outputObject>\n  </parentObjectMapping>\n\n  <childObjectMapping>\n    <inputObject>OpportunityLineItem</inputObject>\n    <mappingFields>\n      <inputField>Id</inputField>\n      <outputField>Name</outputField>\n    </mappingFields>\n    <mappingFields>\n      <inputField>UnitPrice</inputField>\n      <outputField>SalesPrice</outputField>\n    </mappingFields>\n    <mappingFields>\n      <inputField>PricebookEntry</inputField>\n      <outputField>PricebookEntry</outputField>\n    </mappingFields>\n    <mappingFields>\n      <inputField>Quantity</inputField>\n      <outputField>InitialPlannedQuantity</outputField>\n    </mappingFields>\n    <outputObject>SalesAgreementProduct</outputObject>\n  </childObjectMapping>\n\n  <masterLabel>ObjectHierarchyRelationship</masterLabel>\n  <usageType>ConvertToSalesAgreement</usageType>\n  <parentRelationshipFieldName>Opportunity</parentRelationshipFieldName>\n  <outputPntRelationshipFieldName>SalesAgreement</outputPntRelationshipFieldName>\n  <parentRecord></parentRecord>\n  <inputObjRecordsGrpFieldName>Account</inputObjRecordsGrpFieldName>\n  <mappingType>ParentToParent</mappingType>\n\n</ObjectHierarchyRelationship>"
+    }
+  ]
+}

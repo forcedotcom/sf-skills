@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AccountRelationshipShareRule - Metadata API",
+  "description": "The rule that determines which object records are shared, how they’re shared, the account relationship type that shares the records, and the level of access granted to the records.",
+  "file_information": ".accountRelationshipShareRule",
+  "directory_location": "accountRelationshipShareRules",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "accessLevel": {
+      "type": "string",
+      "description": "Type of access granted by the share rule. Valid values are: Read Edit"
+    },
+    "accountToCriteriaField": {
+      "type": "string",
+      "description": "Criteria that must be met for the data to be shared. Valid values include any custom or standard lookup to Account or User on top-level objects. To get the full list for your org, do a Describe on the ARSR entity."
+    },
+    "description": {
+      "type": "string",
+      "description": "A meaningful explanation of the sharing rule."
+    },
+    "entityType": {
+      "type": "string",
+      "description": "The type of data shared by this share rule. Valid values are: Account Campaign Case Contact Custom Object Lead Opportunity Order Quote API names of top-level custom objects in the org can also be used, for example, CustomObject__c."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label assigned to the sharing rule to identify it."
+    },
+    "staticFormulaCriteria": {
+      "type": "string",
+      "description": "A way to further filter what data gets shared. This string must be a deterministic formula, and spanning isn’t allowed."
+    },
+    "type": {
+      "type": "string",
+      "description": "Match the type of an account relationship for data to be shared according to the accountToCriteriaField and the staticFormulaCriteria fields."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AccountRelationshipShareRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"accessLevel\" type=\"xsd:string\"/>\n        <xsd:element name=\"accountToCriteriaField\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"entityType\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"staticFormulaCriteria\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"type\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an AccountRelationshipShareRule component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AccountRelationshipShareRule xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <accessLevel>Edit</accessLevel>\n    <accountToCriteriaField>Account.OwnerId</accountToCriteriaField>\n    <description>TestDescription</description>\n    <entityType>Account</entityType>\n    <masterLabel>TestName</masterLabel>\n    <staticFormulaCriteria>YearStarted = &quot;1980&quot;</staticFormulaCriteria>\n    <type>Dealer</type>\n</AccountRelationshipShareRule>"
+    }
+  ]
+}

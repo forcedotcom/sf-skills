@@ -1,0 +1,278 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "MessagingChannel - Metadata API",
+  "description": "Represents the metadata associated with an Embedded Service Messaging channel.",
+  "file_information": ".messagingChannel",
+  "directory_location": "messagingChannels",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "automatedResponses": {
+      "type": "MessagingAutoResponse[]",
+      "description": "The auto-responses associated with the messaging channel."
+    },
+    "channelUsages": {
+      "type": "MessagingChannelUsage[]",
+      "description": "The deployment types and consent configuration for the messaging channel. Available in API version 62.0 and later."
+    },
+    "countryCode": {
+      "type": "string",
+      "description": "The ISO country code for the messaging channel. Available in API version 62.0 and later."
+    },
+    "customParameters": {
+      "type": "MessagingChannelCustomParameter[]",
+      "description": "The custom parameters associated with the messaging channel."
+    },
+    "description": {
+      "type": "string",
+      "description": "The channel description."
+    },
+    "embeddedConfig": {
+      "type": "EmbeddedConfig[]",
+      "description": "The settings associated with the messaging channel."
+    },
+    "externalAccountId": {
+      "type": "string",
+      "description": "The external account identifier for the messaging channel. Available in API version 62.0 and later."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The channel label."
+    },
+    "messagingChannelType": {
+      "type": "MessagingChannelType (enumeration of type string)",
+      "required": true,
+      "description": "Values are: AppleMessagesForBusiness—Apple Messages for Business. Available in API version 65.0 and later. Custom—Bring Your Own Channel for Messaging or Bring Your Own Channel for CCaaS. Available in API version 61.0 and later. EmbeddedMessaging—Enhanced Chat. Facebook—Facebook Messenger. Available in API version 65.0 and later. Line—Line. Available in API version 65.0 and later. PstnVoice—Agentforce Voice (PSTN). Available in API version 65.0 and later. Text—SMS. Available in API version 65.0 and later. SipVoice—Represents an Agentforce Voice channel that uses SIP. Available in API version 65.0 and later. Voice—Service Cloud Voice. Available in API version 58.0 and later. WhatsApp—WhatsApp. Available in API version 65.0 and later. WhatsAppVoice—Available in API version 65.0 and later. Third-party Messaging channels in Salesforce, such as WhatsApp and Facebook Messenger, don’t use this metadata type."
+    },
+    "messagingKeywords": {
+      "type": "MessagingKeyword[]",
+      "description": "Keywords associated with the messaging channel."
+    },
+    "platformKey": {
+      "type": "string",
+      "description": "The platform key for the messaging channel. Available in API version 62.0 and later."
+    },
+    "queueRoutingConfig": {
+      "type": "string",
+      "description": "The queue routing configuration for the messaging channel. Available in API version 64.0 and later."
+    },
+    "sessionHandlerFlow": {
+      "type": "string",
+      "description": "The Omni-Channel flow used to route the channel’s messaging sessions."
+    },
+    "sessionHandlerQueue": {
+      "type": "string",
+      "required": true,
+      "description": "The queue used to route messages. If a sessionHandlerFlow is also selected, sessionHandlerQueue is the fallback queue used if a message can’t be routed using the selected flow."
+    },
+    "sessionHandlerType": {
+      "type": "MessagingSessionHandlerType (enumeration of type string)",
+      "required": true,
+      "description": "The method used to route messages in the channel. Values are: AgentforceServiceAgent Flow Queue User"
+    },
+    "sessionHandlerUser": {
+      "type": "string",
+      "description": "The user to handle routing for the messaging channel. Available in API version 62.0 and later."
+    },
+    "standardParameters": {
+      "type": "MessagingChannelStandardParameter[]",
+      "description": "Parameters added to the messaging channel."
+    }
+  },
+  "sub_types": {
+    "EmbeddedConfig": {
+      "isEstimatedWaitTimeEnabled": {
+        "type": "Boolean",
+        "description": "Indicates whether estimated wait time is enabled. The default value is false."
+      },
+      "authMode": {
+        "type": "EmbeddedServiceAuthModeType (enumeration of type string)",
+        "required": true,
+        "description": "Auth/UnAuth Mode Types For Embedded Chat. Valid values are: Auth UnAuth"
+      },
+      "verifiedUserJwtExpirationTime": {
+        "type": "Integer",
+        "description": "If authMode is set to true, this value represents the JWT expiry value in minutes."
+      },
+      "anonymousUserJwtExpirationTime": {
+        "type": "Integer",
+        "description": "If authMode is set to false, this value represents the JWT expiry value in minutes."
+      },
+      "isAttachmentUploadEnabled": {
+        "type": "Boolean",
+        "description": "Indicates whether inbound file attachments are allowed. The default value is false."
+      },
+      "isSaveTranscriptEnabled": {
+        "type": "Boolean",
+        "description": "Indicates whether transcripts can be downloaded. The default value is false."
+      },
+      "messagingAuthorizations": {
+        "type": "MessagingAuthorization",
+        "description": "Represents authorization settings specific to a given MessagingChannel."
+      }
+    },
+    "MessagingAuthorization": {
+      "authIdentifier": {
+        "type": "String",
+        "required": true,
+        "description": "Represents an identifier for the MessagingAuthorization entity. The value must begin with a letter. Only alphanumeric characters and _ are allowed."
+      },
+      "authProviderName": {
+        "type": "String",
+        "description": "This field should never be set. Although this field is exposed, it isn't supported. The field represents the name of the AuthProvider that’s referenced in the MessagingAuthorization. It’s a required field if authorizationType is set to AuthProvider."
+      },
+      "authorizationType": {
+        "type": "MessagingAuthorizationType (enumeration of type string)",
+        "required": true,
+        "description": "Indicates whether MessagingAuthorization has been configured to reference a PublicKeyCertificateSet or an AuthProvider. Valid values are: PublicKeyCertificateSet - Indicates that a PublicKeyCertificateSet is referenced in the MessagingAuthorization entity. This is the only option that will lead to a fully functional User Verification setup. AuthProvider - This option should never be selected. It indicates that an AuthProvider is referenced in the MessagingAuthorization, but we don’t support it."
+      },
+      "enabled": {
+        "type": "Boolean",
+        "description": "Indicates whether messaging authorization is enabled. Defaults to false."
+      },
+      "publicKeyCertificateSetName": {
+        "type": "String",
+        "description": "Name of the public key certificate set that's referenced in the MessagingAuthorization entity. This is a required field if authorizationType is set to PublicKeyCertificateSet."
+      }
+    },
+    "MessagingAutoResponse": {
+      "autoResponseContentType": {
+        "type": "string",
+        "description": "The content type of the auto-response: TextResponse or MessageDefinition."
+      },
+      "language": {
+        "type": "string",
+        "description": "The language of the auto response."
+      },
+      "messageDefinitionName": {
+        "type": "string",
+        "description": "The name of the messaging component."
+      },
+      "response": {
+        "type": "string",
+        "description": "The text of the auto response."
+      },
+      "responseTimeoutInMins": {
+        "type": "integer",
+        "description": "The number of minutes after which a response can no longer be sent. The value can range from 5 to 60."
+      },
+      "type": {
+        "type": "MessagingAutoResponseType (enumeration of type string)",
+        "required": true,
+        "description": "The type of response, which determines when it’s used in a messaging session. Values are: AgentEndEngagementResponse AgentEngagedResponse CustomResponse (Available in API version 65.0 and later.) DoubleOptInPrompt (Available in API version 65.0 and later.) EndUserIdleResponse (Available in API version 65.0 and later.) EndUserInactiveResponse (Available in API version 65.0 and later.) HelpResponse (Available in API version 65.0 and later.) InitialResponse OptInConfirmation (Available in API version 65.0 and later.) OptInPrompt (Available in API version 65.0 and later.) OptOutConfirmation (Available in API version 65.0 and later.)"
+      }
+    },
+    "MessagingChannelCustomParameter": {
+      "actionParameterMappings": {
+        "type": "MessagingChannelActionParameterMapping[]",
+        "description": "The mapping used to map the parameter value to a flow or task."
+      },
+      "externalParameterName": {
+        "type": "string",
+        "required": true,
+        "description": "The external name of the parameter."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "The label of the parameter."
+      },
+      "maxLength": {
+        "type": "int",
+        "description": "The maximum length of the parameter value."
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the parameter."
+      },
+      "parameterDataType": {
+        "type": "FlowDataType (enumeration of type string)",
+        "required": true,
+        "description": "The format of the parameter. Values are: Apex Boolean Currency Date DateTime Multipicklist Number Picklist SObject String Time"
+      }
+    },
+    "MessagingChannelActionParameterMapping": {
+      "actionParameterName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the flow that the custom or standard parameters are mapped to."
+      }
+    },
+    "MessagingChannelStandardParameter": {
+      "actionParameterMappings": {
+        "type": "MessagingChannelActionParameterMapping[]",
+        "description": "The mapping associated with the parameter."
+      },
+      "externalInteractionId": {
+        "type": "MessagingChannelStandardParameterType (enumeration of type string)",
+        "description": "An ID assigned to the external interaction, such as a campaign ID."
+      },
+      "externalInteractionName": {
+        "type": "MessagingChannelStandardParameterType (enumeration of type string)",
+        "description": "The name of the external interaction, such as a campaign name."
+      },
+      "externalInteractionType": {
+        "type": "MessagingChannelStandardParameterType (enumeration of type string)",
+        "description": "The type of external interaction, such as MarketingCampaign."
+      },
+      "parameterType": {
+        "type": "MessagingChannelStandardParameterType (enumeration of type string)",
+        "required": true,
+        "description": "The type of parameter. Values are: Email FirstName LastName Subject"
+      }
+    },
+    "MessagingChannelUsage": {
+      "channelConsentType": {
+        "type": "MessagingChannelConsentType (enumeration of type string)",
+        "optional": true,
+        "description": "The consent type for the messaging channel. Values are: ImplicitOptIn ExplicitOptIn DoubleOptIn"
+      },
+      "deploymentType": {
+        "type": "MessagingChannelUsageDeploymentType (enumeration of type string)",
+        "required": true,
+        "description": "The deployment type for the messaging channel. Values are: DigitalEngagementConversation UnifiedConversation MessagingEngagement MarketingJourneyBuilder"
+      }
+    },
+    "MessagingKeyword": {
+      "keywordType": {
+        "type": "MessagingKeywordType (enumeration of type string)",
+        "required": true,
+        "description": "The type of messaging keyword for the auto response. Valid values are: OptIn DoubleOptIn OptOut Help Custom"
+      },
+      "language": {
+        "type": "String",
+        "required": true,
+        "description": "The language of the messaging keyword"
+      },
+      "keyword": {
+        "type": "String",
+        "description": "The messaging keyword value."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"AutoResponseContentType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TextResponse\"/>\n    <xsd:enumeration value=\"MessageDefinition\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EmbeddedMessagingChannel\">\n  <xsd:sequence>\n    <xsd:element name=\"allowedFileTypes\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"anonymousUserJwtExpirationTime\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"authMode\" type=\"tns:EmbeddedServiceAuthModeType\"/>\n    <xsd:element name=\"chatAbandonmentTimeout\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"connectedApp\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isAbandonedChatsEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isAgentAvlCheckEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isAttachmentUploadEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isEstimatedWaitTimeEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isFallbackMessageEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isFileAttachmentExtUnrestricted\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isSaveTranscriptEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"maxFileSize\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"messagingAuthorizations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:MessagingAuthorization\"/>\n    <xsd:element name=\"queueLimitType\" minOccurs=\"0\" type=\"tns:EmbeddedMsgQueueLimitType\"/>\n    <xsd:element name=\"queueThreshold\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"verifiedUserJwtExpirationTime\" minOccurs=\"0\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"EmbeddedMsgQueueLimitType\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:simpleType name=\"EmbeddedServiceAuthModeType\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:simpleType name=\"FlowDataType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Currency\"/>\n    <xsd:enumeration value=\"Date\"/>\n    <xsd:enumeration value=\"Number\"/>\n    <xsd:enumeration value=\"String\"/>\n    <xsd:enumeration value=\"Boolean\"/>\n    <xsd:enumeration value=\"SObject\"/>\n    <xsd:enumeration value=\"DateTime\"/>\n    <xsd:enumeration value=\"Time\"/>\n    <xsd:enumeration value=\"Picklist\"/>\n    <xsd:enumeration value=\"Multipicklist\"/>\n    <xsd:enumeration value=\"Apex\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"MessagingAuthorization\">\n  <xsd:sequence>\n    <xsd:element name=\"authIdentifier\" type=\"xsd:string\"/>\n    <xsd:element name=\"authProviderName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"authorizationType\" type=\"tns:MessagingAuthorizationType\"/>\n    <xsd:element name=\"enabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"publicKeyCertificateSetName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"MessagingAuthorizationType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"PublicKeyCertificateSet\"/>\n    <xsd:enumeration value=\"AuthProvider\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"MessagingAutoResponse\">\n  <xsd:sequence>\n    <xsd:element name=\"autoResponseContentType\" type=\"tns:AutoResponseContentType\"/>\n    <xsd:element name=\"language\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"messageDefinitionName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"response\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"responseTimeoutInMins\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"type\" type=\"tns:MessagingAutoResponseType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"MessagingAutoResponseType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"InitialResponse\"/>\n    <xsd:enumeration value=\"AgentEngagedResponse\"/>\n    <xsd:enumeration value=\"AgentEndEngagementResponse\"/>\n    <xsd:enumeration value=\"OptInPrompt\"/>\n    <xsd:enumeration value=\"DoubleOptInPrompt\"/>\n    <xsd:enumeration value=\"EndUserInactiveResponse\"/>\n    <xsd:enumeration value=\"EndUserIdleResponse\"/>\n    <xsd:enumeration value=\"OptOutConfirmation\"/>\n    <xsd:enumeration value=\"CustomResponse\"/>\n    <xsd:enumeration value=\"HelpResponse\"/>\n    <xsd:enumeration value=\"OptInConfirmation\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"MessagingChannel\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"automatedResponses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:MessagingAutoResponse\"/>\n        <xsd:element name=\"channelUsages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:MessagingChannelUsage\"/>\n        <xsd:element name=\"countryCode\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customParameters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:MessagingChannelCustomParameter\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"embeddedConfig\" minOccurs=\"0\" type=\"tns:EmbeddedMessagingChannel\"/>\n        <xsd:element name=\"endUserIdleTimeOut\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"externalAccountId\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isEstimatedWaitTimeEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isQueuePositionEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isSynchronousChatEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isVoiceModeEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"messagingChannelType\" type=\"tns:MessagingChannelType\"/>\n        <xsd:element name=\"messagingKeywords\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:MessagingKeyword\"/>\n        <xsd:element name=\"platformKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"queueRoutingConfig\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sessionHandlerAsa\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sessionHandlerFlow\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sessionHandlerQueue\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sessionHandlerType\" type=\"tns:MessagingSessionHandlerType\"/>\n        <xsd:element name=\"sessionHandlerUser\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"standardParameters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:MessagingChannelStandardParameter\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"MessagingChannelActionParameterMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"actionParameterName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"MessagingChannelConsentType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ImplicitOptIn\"/>\n    <xsd:enumeration value=\"ExplicitOptIn\"/>\n    <xsd:enumeration value=\"DoubleOptIn\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"MessagingChannelCustomParameter\">\n  <xsd:sequence>\n    <xsd:element name=\"actionParameterMappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:MessagingChannelActionParameterMapping\"/>\n    <xsd:element name=\"externalParameterName\" type=\"xsd:string\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"maxLength\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"parameterDataType\" type=\"tns:FlowDataType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MessagingChannelStandardParameter\">\n  <xsd:sequence>\n    <xsd:element name=\"actionParameterMappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:MessagingChannelActionParameterMapping\"/>\n    <xsd:element name=\"parameterType\" type=\"tns:MessagingChannelStandardParameterType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"MessagingChannelStandardParameterType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"FirstName\"/>\n    <xsd:enumeration value=\"LastName\"/>\n    <xsd:enumeration value=\"Email\"/>\n    <xsd:enumeration value=\"Subject\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"MessagingChannelType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"EmbeddedMessaging\"/>\n    <xsd:enumeration value=\"InternalCopilot\"/>\n    <xsd:enumeration value=\"Voice\"/>\n    <xsd:enumeration value=\"Custom\"/>\n    <xsd:enumeration value=\"Facebook\"/>\n    <xsd:enumeration value=\"Line\"/>\n    <xsd:enumeration value=\"WhatsApp\"/>\n    <xsd:enumeration value=\"AppleMessagesForBusiness\"/>\n    <xsd:enumeration value=\"VoiceIntegrationPilot\"/>\n    <xsd:enumeration value=\"Text\"/>\n    <xsd:enumeration value=\"PstnVoice\"/>\n    <xsd:enumeration value=\"WhatsAppVoice\"/>\n    <xsd:enumeration value=\"SipVoice\"/>\n    <xsd:enumeration value=\"Email\"/>\n    <xsd:enumeration value=\"Rcs\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"MessagingChannelUsage\">\n  <xsd:sequence>\n    <xsd:element name=\"channelConsentType\" minOccurs=\"0\" type=\"tns:MessagingChannelConsentType\"/>\n    <xsd:element name=\"deploymentType\" type=\"tns:MessagingChannelUsageDeploymentType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"MessagingChannelUsageDeploymentType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"DigitalEngagementConversation\"/>\n    <xsd:enumeration value=\"UnifiedConversation\"/>\n    <xsd:enumeration value=\"MessagingEngagement\"/>\n    <xsd:enumeration value=\"MarketingJourneyBuilder\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"MessagingKeyword\">\n  <xsd:sequence>\n    <xsd:element name=\"keyword\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"keywordType\" type=\"tns:MessagingKeywordType\"/>\n    <xsd:element name=\"language\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"MessagingKeywordType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"OptIn\"/>\n    <xsd:enumeration value=\"DoubleOptIn\"/>\n    <xsd:enumeration value=\"OptOut\"/>\n    <xsd:enumeration value=\"Help\"/>\n    <xsd:enumeration value=\"Custom\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"MessagingSessionHandlerType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Queue\"/>\n    <xsd:enumeration value=\"Flow\"/>\n    <xsd:enumeration value=\"User\"/>\n    <xsd:enumeration value=\"AgentforceServiceAgent\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a MessagingChannel component. This messaging channel passes custom and standard parameters from the messaging channel to a flow, and it routes to a flow with a fallback queue.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MessagingChannel xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>Test in-app messaging channel</description>\n    <masterLabel>TestInAppChannel</masterLabel>\n    <messagingChannelType>EmbeddedMessaging</messagingChannelType>\n    <sessionHandlerQueue>Demo_Queue</sessionHandlerQueue>\n    <sessionHandlerType>Queue</sessionHandlerType>\n    <embeddedConfig>\n        <authMode>Auth</authMode>\n        <isAttachmentUploadEnabled>true</isAttachmentUploadEnabled>\n        <isSaveTranscriptEnabled>false</isSaveTranscriptEnabled>\n        <isEstimatedWaitTimeEnabled>false</isEstimatedWaitTimeEnabled>\n        <verifiedUserJwtExpirationTime>360</verifiedUserJwtExpirationTime>\n        <messagingAuthorizations>\n            <authorizationType>PublicKeyCertificateSet</authorizationType>\n            <authProviderName></authProviderName>\n            <publicKeyCertificateSetName>pcks1</publicKeyCertificateSetName>\n            <enabled>false</enabled>\n            <authIdentifier>auth_identifier_one</authIdentifier>\n        </messagingAuthorizations>\n    </embeddedConfig>\n    <automatedResponses>\n        <autoResponseContentType>MessageDefinition</autoResponseContentType>\n        <messageDefinitionName>Sample</messageDefinitionName>\n        <type>EndUserInactiveResponse</type>\n        <responseTimeoutInMins>10</responseTimeoutInMins>\n    </automatedResponses>\n    <automatedResponses>\n        <autoResponseContentType>MessageDefinition</autoResponseContentType>\n        <messageDefinitionName>Sample</messageDefinitionName>\n        <type>InitialResponse</type>\n    </automatedResponses>\n    <automatedResponses>\n        <autoResponseContentType>MessageDefinition</autoResponseContentType>\n        <messageDefinitionName>Sample</messageDefinitionName>\n        <type>AgentEndEngagementResponse</type>\n    </automatedResponses>\n    <automatedResponses>\n        <autoResponseContentType>MessageDefinition</autoResponseContentType>\n        <messageDefinitionName>Sample</messageDefinitionName>\n        <type>AgentEngagedResponse</type>\n    </automatedResponses>\n    <automatedResponses>\n        <autoResponseContentType>TextResponse</autoResponseContentType>\n        <language>en_US</language>\n        <response>You've opted out of receiving messages from us, so we won't contact you again.</response>\n        <type>OptOutConfirmation</type>\n    </automatedResponses>\n    <automatedResponses>\n        <autoResponseContentType>TextResponse</autoResponseContentType>\n        <language>en_US</language>\n        <response>Custom response1</response>\n        <type>CustomResponse</type>\n    </automatedResponses>\n    <automatedResponses>\n        <autoResponseContentType>TextResponse</autoResponseContentType>\n        <language>en_US</language>\n        <response>Opt In Confirmation response</response>\n        <type>OptInConfirmation</type>\n    </automatedResponses>\n    <automatedResponses>\n        <autoResponseContentType>TextResponse</autoResponseContentType>\n        <language>en_US</language>\n        <response>Text STOP to opt out of further messages.</response>\n        <type>HelpResponse</type>\n    </automatedResponses>\n    <messagingKeywords>\n        <keyword>stopall</keyword>\n        <keyword>cancel</keyword>\n        <keyword>stop</keyword>\n        <keyword>unsubscribe</keyword>\n        <keyword>end</keyword>\n        <keyword>quit</keyword>\n        <keywordType>OptOut</keywordType>\n        <language>en_US</language>\n    </messagingKeywords>\n    <messagingKeywords>\n        <keyword>help</keyword>\n        <keywordType>Help</keywordType>\n        <language>en_US</language>\n    </messagingKeywords>\n    <messagingKeywords>\n        <keyword>customkeyword1</keyword>\n        <keywordType>Custom</keywordType>\n        <language>en_US</language>\n    </messagingKeywords>\n    <messagingKeywords>\n        <keyword>OptInkeyword1</keyword>\n        <keywordType>OptIn</keywordType>\n        <language>en_US</language>\n    </messagingKeywords>\n</MessagingChannel>"
+    },
+    {
+      "description": "If you route the messaging channel to a queue, there’s no fallback flow.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MessagingChannel xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <masterLabel>EmbeddedChannel2</masterLabel>\n    <messagingChannelType>EmbeddedMessaging</messagingChannelType>\n    <sessionHandlerQueue>DemoQueueName</sessionHandlerQueue>\n    <sessionHandlerType>Queue</sessionHandlerType>\n</MessagingChannel>"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ClaimFinancialSettings - Metadata API",
+  "description": "Represents the configuration settings for Insurance Claim Financial Services.",
+  "file_information": ".claimFinancialSettings",
+  "directory_location": "ClaimFinancialSettings",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "claimCovPendingAuthStatus": {
+      "type": "string",
+      "required": true,
+      "description": "The status of pending financial authority for claim coverage."
+    },
+    "claimPendingAuthorityStatus": {
+      "type": "string",
+      "required": true,
+      "description": "The status of pending financial authority for claim."
+    },
+    "clmCovPymtDtlPendAuthSts": {
+      "type": "string",
+      "required": true,
+      "description": "The status of pending financial authority for claim coverage payment detail."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The unique label that identifies the claim financial settings throughout the Salesforce user interface."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ClaimFinancialSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ClaimFinancialSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <claimCovPendingAuthStatus>Pending Authority</claimCovPendingAuthStatus>\n    <claimPendingAuthorityStatus>Pending Authority</claimPendingAuthorityStatus>\n    <clmCovPymtDtlPendAuthSts>Pending Authority</clmCovPymtDtlPendAuthSts>\n    <masterLabel>Claim Financial Settings</masterLabel>\n</ClaimFinancialSettings>"
+    },
+    {
+      "description": "The following is an example package.xml that references the previous definition.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--\n  ~ Copyright 2022 salesforce.com, inc.\n  ~ All Rights Reserved\n  ~ Company Confidential\n  -->\n<Package xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <types>\n        <members>*</members>\n        <name>ClaimFinancialSettings</name>\n    </types>\n    <version>57.0</version>\n</Package>"
+    }
+  ]
+}

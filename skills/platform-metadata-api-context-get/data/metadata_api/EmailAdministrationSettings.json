@@ -1,0 +1,104 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EmailAdministrationSettings - Metadata API",
+  "description": "Represents an organization’s email administration settings, including email deliverability, security compliance, relay configurations, and system notifications. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableComplianceBcc": {
+      "type": "boolean",
+      "description": "Indicates whether a copy of each outbound email message is sent to an email address you specify (true) or not (false). This field has a default value of false. Note: To use this feature, you must specify an email address in Compliance BCC Email in Setup."
+    },
+    "enableEmailConsentManagement": {
+      "type": "boolean",
+      "description": "Indicates whether Enforce Email Privacy Settings is enabled (true) or not (false). When enabled, Salesforce respects each recipient’s email privacy preferences. Default value is false."
+    },
+    "enableEmailSenderIdCompliance": {
+      "type": "boolean",
+      "description": "Indicates whether outgoing emails comply with Sender ID email protocols (true) or not (false). This field has a default value of false. To enable this preference, enableEmailSpfCompliance must be set to true. Note: Evaluate the multiple standard email security protocols (SPF, DKIM, and DMARC) supported by Salesforce before you enable this setting."
+    },
+    "enableEmailSpfCompliance": {
+      "type": "boolean",
+      "description": "Indicates whether outgoing emails comply with Sender Policy Framework (SPF) email authentication (true) or not (false). This field has a default value of true."
+    },
+    "enableEmailToSalesforce": {
+      "type": "boolean",
+      "description": "Indicates whether Email to Salesforce is enabled (true) or disabled (false). This field has a default value of false."
+    },
+    "enableEmailWorkflowApproval": {
+      "type": "boolean",
+      "description": "Indicates whether users can respond to email approval requests directly from their email (true) or not (false). This field has a default value of false. See Considerations for Email Approval before enabling this field."
+    },
+    "enableEnhancedEmailEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether Enhanced Email is enabled (true) or not (false). Default value is true."
+    },
+    "enableHandleBouncedEmails": {
+      "type": "boolean",
+      "description": "Indicates whether emails sent from Salesforce to an invalid email address bounce back to Salesforce (true) or not (false). This field has a default value of true. With bounce handling enabled, reps know which lead, contact, or person account has a bad email address, and they know which specific email wasn’t delivered."
+    },
+    "enableHtmlEmail": {
+      "type": "boolean",
+      "description": "Indicates whether users receive Email-To-Case emails in HTML format (true) or receive a text version instead (false). This field has a default value of false. When this field is set to true, users receive a warning message about potential malicious HTML before they view incoming HTML email content."
+    },
+    "enableInternationalEmailAddresses": {
+      "type": "boolean",
+      "description": "Indicates whether non-Latin-based characters are allowed in email addresses (true) or not (false) when sending emails to and from Salesforce. This field has a default value of true in orgs created in Summer '20 or later. In orgs created in Spring '20 or earlier, the default value is false. Available in API version 49.0 and later. Note: Review the Email Address Internationalization prerequisites and considerations in Salesforce Help before enabling this setting."
+    },
+    "enableListEmailLogActivities": {
+      "type": "boolean",
+      "description": "Indicates whether Salesforce logs sent list emails as activities (true) or not (false). Default value is true."
+    },
+    "enableResendBouncedEmails": {
+      "type": "boolean",
+      "description": "Indicates whether the system forwards a copy of each bounced email message to the sender (true) or only displays the bounce alert (false). This field has a default value of false. To enable this preference, enableHandleBouncedEmails must be set to true."
+    },
+    "enableRestrictTlsToDomains": {
+      "type": "boolean",
+      "description": "Indicates whether the selected Transport Layer Security (TLS) setting applies only to specific domains (true) or applies to all domains (false). This field has a default value of false. Note: To enable this preference, you must specify a TLS Setting other than Preferred and provide the comma-separated list of domains through Deliverability in Setup. When this field is set to true, any domains not in the list use the system default TLS Setting of Preferred."
+    },
+    "enableSendThroughGmailPref": {
+      "type": "boolean",
+      "description": "Deprecated."
+    },
+    "enableSendViaExchangePref": {
+      "type": "boolean",
+      "description": "Indicates whether users can use Office 365 to send emails (true) or not (false). Default value is false."
+    },
+    "enableSendViaGmailPref": {
+      "type": "boolean",
+      "description": "Indicates whether users can use Gmail to send emails (true) or not (false). Default value is false."
+    },
+    "enableUseOrgFootersForExtTrans": {
+      "type": "boolean",
+      "description": "Indicates whether emails sent through external email services (such as Gmail or Office 365) include the Salesforce footer (true) or not (false). This field has a default value of false."
+    },
+    "sendMassEmailNotification": {
+      "type": "boolean",
+      "description": "Indicates whether users receive an auto-generated status email from Salesforce for each mass email they send (true) or not (false). This field has a default value of true."
+    },
+    "sendTextOnlySystemEmails": {
+      "type": "boolean",
+      "description": "Indicates whether all system emails are sent via text only (true) or allow other formats (false). This field has a default value of false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EmailAdministrationSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableComplianceBcc\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEmailConsentManagement\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEmailSenderIdCompliance\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEmailSpfCompliance\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEmailToSalesforce\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEmailTrackingIPBlocklist\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEmailWorkflowApproval\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEnhancedEmailEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableHandleBouncedEmails\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableHtmlEmail\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableInternationalEmailAddresses\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableListEmailLogActivities\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableResendBouncedEmails\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRestrictTlsToDomains\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSendThroughGmailPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSendViaExchangePref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSendViaGmailPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableTinyMceSalesEmailEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableUseOrgFootersForExtTrans\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableVerifyEmailDomainByDkim\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"sendEmailsEvenWhenAutomationUpdatesSameRecord\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"sendMassEmailNotification\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"sendTextOnlySystemEmails\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an EmailAdministrationSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n                <EmailAdministrationSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n                <enableEmailWorkflowApproval>false</enableEmailWorkflowApproval>\n                <enableComplianceBcc>false</enableComplianceBcc>\n                <enableEmailSenderIdCompliance>false</enableEmailSenderIdCompliance>\n                <enableEmailSpfCompliance>true</enableEmailSpfCompliance>\n                <enableEmailToSalesforce>false</enableEmailToSalesforce>\n                <enableHandleBouncedEmails>true</enableHandleBouncedEmails>\n                <enableHtmlEmail>true</enableHtmlEmail>\n                <enableInternationalEmailAddresses>true</enableInternationalEmailAddresses>\n                <enableResendBouncedEmails>false</enableResendBouncedEmails>\n                <enableRestrictTlsToDomains>false</enableRestrictTlsToDomains>\n                <sendMassEmailNotification>true</sendMassEmailNotification>\n                <sendTextOnlySystemEmails>false</sendTextOnlySystemEmails>\n                <enableUseOrgFootersForExtTrans>false</enableUseOrgFootersForExtTrans>\n                <enableSendViaGmailPref>false</enableSendViaGmailPref>\n                <enableSendViaExchangePref>true</enableSendViaExchangePref>\n                <enableListEmailLogActivities>false</enableListEmailLogActivities>\n                <enableEnhancedEmailEnabled>false</enableEnhancedEmailEnabled>\n                <enableEmailConsentManagement>false</enableEmailConsentManagement>\n                </EmailAdministrationSettings>"
+    }
+  ]
+}

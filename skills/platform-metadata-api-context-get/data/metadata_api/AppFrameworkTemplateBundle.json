@@ -1,0 +1,52 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "AppFrameworkTemplateBundle - Metadata API",
+  "description": "Represents the app framework template bundle. Use these templates for Data 360 and Tableau Next assets.",
+  "file_information": "An app framework template bundle is a folder that contains definition files for a template. Unlike other metadata components, a AppFrameworkTemplateBundle component isn’t represented with a single component file, but instead by a collection of JSON and other definition files. Each definition file represents a resource in a template, such as semantic models, workspaces, visualizations, and dashboards. For example, this directory structure shows the hierarchy of the folders and files for one app framework template definition, myTemplate.\n\n```\nappTemplates\n  myTemplate\n    template-info.json\n    create-chain.json\n    rules.json\n    variables.json\n    layout.json\n    workspaces\n      myWorkspace.json\n    dashboards\n      myDashboard.json\n```\n\nApp framework template bundles must be under a top-level folder that’s named appTemplates. Each bundle must have its own subfolder under the appTemplate folder and named with the template's fully qualified API name. The bundle folder must contain a template-info.json file to specify the metadata about the template and the references to other definition files. An entire bundle doesn’t have a suffix and definition files can have one of the these suffixes.\n\nSuffix | Component Type\n--- | ---\n.json | JSON file\n.html | HTML file",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "assetVersion": {
+      "type": "double",
+      "description": "The API version of the template bundle."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description for the template."
+    },
+    "label": {
+      "type": "string",
+      "description": "The label for the template.",
+      "required": true
+    },
+    "maxAppCount": {
+      "type": "int",
+      "description": "The maximum number of apps that can be created from this template."
+    },
+    "templateBadgeIcon": {
+      "type": "string",
+      "description": "The badge icon for the template. This must be a .png file type."
+    },
+    "templateStatus": {
+      "type": "string",
+      "description": "The status of the template."
+    },
+    "templateSubtype": {
+      "type": "string",
+      "description": "The subtype of the template."
+    },
+    "templateType": {
+      "type": "string",
+      "description": "The type of the template."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AppFrameworkTemplateBundle\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"assetVersion\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"maxAppCount\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"templateBadgeIcon\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"templateStatus\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"templateSubtype\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"templateType\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

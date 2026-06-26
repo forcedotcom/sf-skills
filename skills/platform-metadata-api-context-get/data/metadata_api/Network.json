@@ -1,0 +1,606 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Network - Metadata API",
+  "description": "Represents an Experience Cloud site. Salesforce Experience Cloud lets you create branded spaces for your employees, customers, and partners. You can customize and create experiences, whether they’re communities, sites, or portals, to meet your business needs, then transition seamlessly between them. If you want to create zones that contain Chatter Answers and Ideas, use the Community (Zone) component.",
+  "file_information": ".network",
+  "directory_location": "networks",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "allowedExtensions": {
+      "type": "string",
+      "description": "Specifies the types of files allowed in your site. This list of file types lets you control what your members upload and also prevents spammers from polluting your site with inappropriate files. Available in API version 36.0 and later."
+    },
+    "allowInternalUserLogin": {
+      "type": "boolean",
+      "description": "Determines whether internal users can log in with their internal credentials on the site login page. Available in API version 40.0 and later."
+    },
+    "allowMembersToFlag": {
+      "type": "boolean",
+      "description": "Determines whether users in the site can flag posts or comments as inappropriate. Flagged items are sent to a moderator for review. Available in API version 29.0 and later."
+    },
+    "branding": {
+      "type": "Branding",
+      "description": "The color scheme, header, and footer used in the site. Deprecated in API version 41.0 and later. Replaced by the NetworkBranding type."
+    },
+    "caseCommentEmailTemplate": {
+      "type": "string",
+      "description": "Email template used when notifying members when a case comment has been modified or added to a case. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "changePasswordTemplate": {
+      "type": "string",
+      "description": "Email template used when notifying a user that their password has been reset. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "chgEmailVerNewTemplate": {
+      "type": "string",
+      "description": "Email template used to verify a user’s email address change. This email is sent to the new email address. Note: You can't update this template via Metadata API."
+    },
+    "chgEmailVerOldTemplate": {
+      "type": "string",
+      "description": "Email template used to verify a user’s email address change. This email is sent to the old email address. Note: You can't update this template via Metadata API."
+    },
+    "communityRoles": {
+      "type": "CommunityRoles",
+      "description": "Identifies users with Customer, Partner, or Employee roles in a site. Available in API version 41.0 and later."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the site."
+    },
+    "deviceActEmailTemplate": {
+      "type": "string",
+      "description": "The ID of the device activation email template. The template is used to customize the device activation email for community users. Available in API version 53.0 and later."
+    },
+    "disablePvtPagesForPwdResetInLWR": {
+      "type": "boolean",
+      "description": "Determines whether private pages in an LWR site are available to users who haven’t completed setting up or resetting their password. Set to (true) by default for all LWR sites except those that use custom Visualforce password-management pages. When set to (true), private pages are unavailable until password setup or reset is complete. In LWR sites that use custom Visualforce pages for password management, make these pages public. Otherwise, visitors can’t access them to set up or reset their password. Available in API version 67.0 and later."
+    },
+    "disableReputationRecordConversations": {
+      "type": "boolean",
+      "description": "When reputation levels are enabled for the site, determines whether to exclude contributions to records when counting points toward reputation levels. Available in API version 41.0 and later."
+    },
+    "emailFooterLogo": {
+      "type": "string",
+      "description": "The document name of the logo that appears in the footer of emails. Available in API version 41.0 and later."
+    },
+    "emailFooterText": {
+      "type": "string",
+      "description": "The text that appears in the footer of emails. Available in API version 41.0 and later."
+    },
+    "emailSenderAddress": {
+      "type": "string",
+      "description": "Email address from which emails are sent. Note: You can't update this field via Metadata API. Instead, you can edit the Email Address field on the Emails page of the site's Administration workspace.",
+      "required": true
+    },
+    "emailSenderName": {
+      "type": "string",
+      "description": "Name from which emails are sent.",
+      "required": true
+    },
+    "embeddedLoginEnabled": {
+      "type": "boolean",
+      "description": "Option to place Salesforce login form directly on an external website. This setting enables users to log in without being redirected to a separate Salesforce page."
+    },
+    "enableApexCDNCaching": {
+      "type": "boolean",
+      "description": "Determines whether public data from @wire calls to Apex methods is cached for guest users. This setting applies only to sites using Salesforce's CDN for Digital Experiences."
+    },
+    "enableCustomVFErrorPageOverrides": {
+      "type": "boolean",
+      "description": "Determines whether to use custom Visualforce error pages instead of the default Visualforce error pages. Available in API version 41.0 and later."
+    },
+    "enableDirectMessages": {
+      "type": "boolean",
+      "description": "Determines whether site users can send direct messages to start a private conversation with one or more members. Available in API version 41.0 and later."
+    },
+    "enableExperienceBundleBasedSnaOverrideEnabled": {
+      "type": "boolean",
+      "description": "Determines whether the Builder-based SNA page is used (true) or not (false) and overrides the existing SNA page when an experience is published. Available in API version 52.0 and later."
+    },
+    "enableGuestChatter": {
+      "type": "boolean",
+      "description": "Specifies whether guest users can access public Chatter groups in the site without logging in."
+    },
+    "enableGuestFileAccess": {
+      "type": "boolean",
+      "description": "Determines whether guest users view asset files shared with the site on publicly accessible pages and login pages. If public access is enabled in Experience Builder at the page or site level, this property is automatically enabled. Available in API version 41.0 and later."
+    },
+    "enableGuestMemberVisibility": {
+      "type": "boolean",
+      "description": "Determines if unauthenticated guest users can see the authenticated members (true) or not (false). Available in API version 47.0 and later."
+    },
+    "enableImageOptimizationCDN": {
+      "type": "boolean",
+      "description": "Determines whether to optimize cached images for guest users on all devices when a site uses Salesforce’s CDN for Digital Experiences. Available in API version 56.0 and later."
+    },
+    "enableInvitation": {
+      "type": "boolean",
+      "description": "Determines whether users can invite others to the site."
+    },
+    "enableKnowledgeable": {
+      "type": "boolean",
+      "description": "Determines if members can see who’s knowledgeable on topics and endorse people for their knowledge on a topic. Available in API version 30.0 and later."
+    },
+    "enableMemberVisibility": {
+      "type": "boolean",
+      "description": "Controls user visibility on a per-site basis. If true, the See other members of this site preference is enabled for the selected site. Available in API version 45.0 and later."
+    },
+    "enableNicknameDisplay": {
+      "type": "boolean",
+      "description": "Determines if user nicknames display instead of their first and last names in most places in the site. Set to false by default. Available in API version 32.0 and later."
+    },
+    "enablePrivateMessages": {
+      "type": "boolean",
+      "description": "Determines if members can send and receive private messages. Available in API version 30.0 and later."
+    },
+    "enableReputation": {
+      "type": "boolean",
+      "description": "Determines if reputation is calculated and displayed for members. Available in API version 31.0 and later. If enabled, reputationLevels and reputationPointsRules are used. If no reputationLevels or reputationPointsRules are defined in the data file, the default values are used."
+    },
+    "enableShowAllNetworkSettings": {
+      "type": "boolean",
+      "description": "Shows settings that are hidden by default based on how the site is set up. Available in API version 41.0 and later."
+    },
+    "enableSiteAsContainer": {
+      "type": "boolean",
+      "description": "Determines whether the site is an Experience Builder site (true) or a Salesforce Tabs + Visualforce site (false)."
+    },
+    "enableTalkingAboutStats": {
+      "type": "boolean",
+      "description": "Determines whether users see how many people are discussing a topic. The number of people discussing the topic appears as the user types the topic and the system gives topic suggestions. Available in API version 41.0 and later."
+    },
+    "enableTopicAssignmentRules": {
+      "type": "boolean",
+      "description": "Enables the org to use rules to automatically assign topics to articles in a site. After it’s enabled, admins set up rules to map topics to Salesforce Knowledge data categories. This field is available in API version 40.0 and later."
+    },
+    "enableTopicSuggestions": {
+      "type": "boolean",
+      "description": "Enables topic suggestions when users write posts. Available in API version 41.0 and later."
+    },
+    "enableUpDownVote": {
+      "type": "boolean",
+      "description": "Replaces the option to like a question or answer with the option to upvote or downvote. Available in API version 41.0 and later."
+    },
+    "expFriendlyUrlsAsDefault": {
+      "type": "boolean",
+      "description": "Determines whether URL slugs are enabled by default on Product and Category pages of LWR Commerce stores (available in API version 58.0 and later) Custom object pages on enhanced LWR sites (available in API version 60.0 and later) Account and contact pages on enhanced LWR sites (available in API version 61.0 and later)"
+    },
+    "feedChannel": {
+      "type": "string",
+      "description": "Displays the feed of all channel program record or group interactions, including posts, questions, and attachments. This field is available in API version 28.0 and later."
+    },
+    "forgotPasswordTemplate": {
+      "type": "string",
+      "description": "The email template used when a user forgets their password. Lightning email templates aren’t packageable. We recommend using a Classic email template.",
+      "required": true
+    },
+    "gatherCustomerSentimentData": {
+      "type": "boolean",
+      "description": "Gathers data when a customer looks at articles and cases in sites, for use in the Community 360 feature. This field is available in API version 40.0 and later."
+    },
+    "lockoutTemplate": {
+      "type": "string",
+      "description": "The email template used to communicate with users when they get locked out of their org because of too many failed login attempts. Available in API version 43.0 and later. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "logoutUrl": {
+      "type": "string",
+      "description": "Specifies the URL that members are redirected to when they log out from your site. This field is available in API version 28.0 and later."
+    },
+    "maxFileSizeKb": {
+      "type": "int",
+      "description": "Specifies the maximum file size (in KBs) that members can upload in your site. Available in API version 36.0 and later. Enter a number between 3072 KB and your org’s maximum file size. To use the default limit of 2 GB, leave this field empty."
+    },
+    "navigationLinkSet": {
+      "type": "NavigationLinkSet",
+      "description": "Represents the navigation menu in a site. A navigation menu consists of items that users can click to go to other parts of the site. This field is available in API versions 37.0 to 46.0. In API version 47.0 and later, use the NavigationMenu type instead."
+    },
+    "networkAuthApiSettings": {
+      "type": "NetworkAuthApiSettings",
+      "description": "The settings that control enablement, access, and security for the Headless Registration Flow, Headless Forgot Password Flow, Headless Passwordless Login Flow, and their associated APIs. Available in API version 60.0 and later."
+    },
+    "networkMemberGroups": {
+      "type": "NetworkMemberGroups",
+      "description": "The profiles and permission sets that have access to the site. Users with these profiles or permission sets are members of the site. Note: If a Chatter customer (from a customer group) is assigned a permission set that is also associated with a site, the Chatter customer isn’t added to the site."
+    },
+    "networkPageOverrides": {
+      "type": "NetworkPageOverride",
+      "description": "The settings in the Administration area (in Experience Management or Experience Workspaces) that control which page type Change Password, Forgot Password, Home, and Login each point to. Available in API version 40.0 and later."
+    },
+    "newSenderAddress": {
+      "type": "string",
+      "description": "Email address that has been entered as the new value for EmailSenderAddress but hasn’t been verified yet. After a user has requested to change the sender email address and has successfully responded to the verification email, the NewSenderAddress value overwrites the value in EmailSenderAddress. This value becomes the email address from which emails are sent."
+    },
+    "pwdlessRegEmailTemplate": {
+      "type": "string",
+      "description": "The email template used when a user registers without a password. Instead of a password,they use an identity verification method, such as a verification code or link, which the user completes to finalize the registration or login process. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "picassoSite": {
+      "type": "string",
+      "description": "Name of the site of ChatterNetworkPicasso type that's linked to the Experience Cloud site."
+    },
+    "recommendationAudience": {
+      "type": "RecommendationAudience",
+      "description": "Creates an audience of new members, or can be used to manage customized lists of audience members to organize and target recommendations. Available in API version 41.0 and later."
+    },
+    "recommendationDefinition": {
+      "type": "RecommendationDefinition",
+      "description": "Represents a custom recommendation to drive engagement. Targets a specific audience and uses channels to specify a location for the recommendation. Available in API version 41.0 and later."
+    },
+    "reputationLevels": {
+      "type": "ReputationLevelDefinitions",
+      "description": "The reputation levels assigned to members when they accrue points by performing certain actions."
+    },
+    "reputationPointsRules": {
+      "type": "ReputationPointsRules",
+      "description": "The points members accrue when they perform certain defined actions."
+    },
+    "selfRegMicroBatchSubErrorEmailTemplate": {
+      "type": "reference",
+      "description": "The email template used to communicate with users when their self-registration request, using micro-batching failed. Available in API version 54.0 and later."
+    },
+    "selfRegProfile": {
+      "type": "string",
+      "description": "The profile assigned to users who self-register. This value is used only if selfRegistration is enabled for the site. Available in API version 29.0 and later."
+    },
+    "selfRegistration": {
+      "type": "boolean",
+      "description": "Determines whether self-registration is available for the site."
+    },
+    "sendWelcomeEmail": {
+      "type": "boolean",
+      "description": "Determines whether a welcome email is sent when a new user is added to the site."
+    },
+    "site": {
+      "type": "string",
+      "description": "The CustomSite associated with the Experience Cloud site.",
+      "required": true
+    },
+    "siteArchiveStatus": {
+      "type": "SitesArchiveStatus",
+      "description": "Specifies whether the site has been archived. Available values are: NotArchived—The site hasn’t been archived. TemporarilyArchived—The site is archived, but can be unarchived in the future."
+    },
+    "status": {
+      "type": "NetworkStatus[]",
+      "description": "Status of the site. Available values are: Live—The site is online and members can access it. DownForMaintenance—The site was previously published but was taken offline. Members with the Create and Set Up Experiences permission can still access the setup for offline sites regardless of profile or membership. Members aren’t able to access offline sites, but they still appear in the user interface dropdown as SiteName (Offline). UnderConstruction—The site hasn’t yet been published. Users with the Create and Set Up Experiences permission can access sites in this status if their profile is associated with the site.After a site is published, it can never be in this status again.",
+      "required": true
+    },
+    "tabs": {
+      "type": "NetworkTabSet",
+      "description": "The tabs that are available in the site. The user that created the site selected these tabs.",
+      "required": true
+    },
+    "urlPathPrefix": {
+      "type": "string",
+      "description": "The first part of the path on the site's URL that distinguishes this site from other sites. For example, if your site URL is MyDomainName.my.site.com/partners, then partners is the urlPathPrefix."
+    },
+    "verificationTemplate": {
+      "type": "string",
+      "description": "The email template used to communicate with users when they must verify their identity, for example, when they log in without a password or from a new device. Available in API version 44.0 and later. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    },
+    "welcomeTemplate": {
+      "type": "string",
+      "description": "The email template used when sending welcome emails to new members. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+    }
+  },
+  "sub_types": {
+    "Branding": {
+      "loginFooterText": {
+        "type": "string",
+        "description": "The text that appears in the footer of the login page."
+      },
+      "loginLogo": {
+        "type": "string",
+        "description": "The logo that appears on the login page for external users."
+      },
+      "pageFooter": {
+        "type": "string",
+        "description": "An image that appears on the footer of the pages. Must be an.html file."
+      },
+      "pageHeader": {
+        "type": "string",
+        "description": "An image that appears on the header of the pages. Can be an.html,.gif,.jpg, or.png file."
+      },
+      "primaryColor": {
+        "type": "string",
+        "description": "The color used for the active tab."
+      },
+      "primaryComplementColor": {
+        "type": "string",
+        "description": "Font color used with primaryColor."
+      },
+      "quaternaryColor": {
+        "type": "string",
+        "description": "The background color for pages."
+      },
+      "quaternaryComplementColor": {
+        "type": "string",
+        "description": "Font color used with quaternaryColor."
+      },
+      "secondaryColor": {
+        "type": "string",
+        "description": "The color used for the top borders of lists and tables."
+      },
+      "tertiaryColor": {
+        "type": "string",
+        "description": "The background color for section headers on edit and detail pages."
+      },
+      "tertiaryComplementColor": {
+        "type": "string",
+        "description": "Font color used with tertiaryColor."
+      },
+      "zeronaryColor": {
+        "type": "string",
+        "description": "The background color for the header."
+      },
+      "zeronaryComplementColor": {
+        "type": "string",
+        "description": "Font color used with zeronaryColor."
+      }
+    },
+    "CommunityRoles": {
+      "customerUserRole": {
+        "type": "string",
+        "description": "The label for the Customer user role."
+      },
+      "employeeUserRole": {
+        "type": "string",
+        "description": "The label for the Employee user role."
+      },
+      "partnerUserRole": {
+        "type": "string",
+        "description": "The label for the Partner user role."
+      }
+    },
+    "NavigationLinkSet": {
+      "navigationMenuItem": {
+        "type": "NavigationMenuItem[]",
+        "description": "A list of menu items in a NavigationLinkSet. Use this object to create, delete, or update menu items in your site’s navigation menu."
+      }
+    },
+    "NavigationMenuItem": {
+      "defaultListViewId": {
+        "type": "string",
+        "description": "If the value of the type field is SalesforceObject, the value is the ID of the default list view for the object."
+      },
+      "label": {
+        "type": "string",
+        "description": "The text that appears in the navigation menu for this item.",
+        "required": true
+      },
+      "menuItemBranding": {
+        "type": "NavigationMenuItemBranding",
+        "description": "Branding for the navigation menu item. Available in API version 47.0 and later."
+      },
+      "position": {
+        "type": "int",
+        "description": "The location of the menu item in the navigation menu.",
+        "required": true
+      },
+      "publiclyAvailable": {
+        "type": "boolean",
+        "description": "When set to true, gives access to guest users."
+      },
+      "subMenu": {
+        "type": "NavigationSubMenu",
+        "description": "A list of child menu items. This field is available in API 39.0 and later."
+      },
+      "target": {
+        "type": "string",
+        "description": "Required if type is ExternalLink, InternalLink, or SalesforceObject. If type is ExternalLink or InternalLink, the target is the URL that the link points to. For ExternalLink, your entry looks like this: https://salesforce.com. For InternalLink, use a relative URL, such as /contactsupport. If type is MenuLabel or NavigationalTopic, target isn’t used.",
+        "required": true
+      },
+      "targetPreference": {
+        "type": "string",
+        "description": "Backed by a picklist that includes preferences for the target field. Valid values are: None OpenInExternalTab—Used for external links to determine whether to open in an external tab."
+      },
+      "type": {
+        "type": "string",
+        "description": "The type of navigation menu item. Valid values are: SalesforceObject—Available objects include accounts, cases, contacts, and custom objects. ExternalLink—Links to a URL outside of your site. For example, https://salesforce.com. InternalLink—Links to a relative URL inside your site. For example, /contactsupport. MenuLabel—A parent heading for your navigation menu. See NavigationSubMenu for how to nest items underneath the menu label. This value is available in API 39.0 and later. NavigationalTopic—A dropdown list with links to the navigational topics in your site. You can’t nest other items of type MenuLabel or NavigationalTopic under MenuLabel.",
+        "required": true
+      }
+    },
+    "NavigationSubMenu": {
+      "navigationMenuItem": {
+        "type": "NavigationMenuItem[]",
+        "description": "A list of menu items in a NavigationSubMenu. Use navigationMenuItem to create, delete, or update child items under a parent heading."
+      }
+    },
+    "NetworkEmailTmplAllowlist": {
+      "emailTemplate": {
+        "type": "string",
+        "description": "The email templates that can be sent to users during the headless authorization flows for registration, passwordless login, and forgot password. You can list multiple templates. When your app sends its initial request to Headless Registration API or Headless Passwordless Login API, the emailtemplate parameter can include only an email template ID from the allowlist. For Headless Forgot Password API, it works the same way, but only if the isForgotPwdEmailTemplateAllowlistingEnabled field on the NetworkAuthApiSettings metadata type is true.",
+        "required": true
+      }
+    },
+    "NetworkMemberGroup": {
+      "permissionSet": {
+        "type": "string",
+        "description": "A permission set that is assigned to the site. Note: If a Chatter customer (from a customer group) is assigned a permission set that is also associated with a site, the Chatter customer isn’t added to the site."
+      },
+      "profile": {
+        "type": "string",
+        "description": "A profile that is part of the site."
+      }
+    },
+    "NetworkPageOverride": {
+      "changePasswordPageOverrideSetting": {
+        "type": "NetworkPageOverrideSetting (enumeration of type string)",
+        "description": "Specifies the page type that the Change Password page setting applies to. The valid values are: Configurable—a configurable self-registration page Designer—an Experience Builder page Standard—the default page VisualForce—a Visualforce page",
+        "required": true
+      },
+      "forgotPasswordPageOverrideSetting": {
+        "type": "NetworkPageOverrideSetting (enumeration of type string)",
+        "description": "Specifies the page type that the Forgot Password page setting applies to. The valid values are: Configurable—a configurable self-registration page Designer—an Experience Builder page Standard—the default page VisualForce—a Visualforce page",
+        "required": true
+      },
+      "homePageOverrideSetting": {
+        "type": "NetworkPageOverrideSetting (enumeration of type string)",
+        "description": "Specifies the page type that the Experience Home page setting applies to. The valid values are: Configurable—a configurable self-registration page Designer—an Experience Builder page Standard—the default page VisualForce—a Visualforce page",
+        "required": true
+      },
+      "loginPageOverrideSetting": {
+        "type": "NetworkPageOverrideSetting (enumeration of type string)",
+        "description": "Specifies the page type that the Login page setting applies to. The valid values are: Configurable—a configurable self-registration page Designer—an Experience Builder page Standard—the default page VisualForce—a Visualforce page Note: To configure an Experience Builder page for your Home and Login pages, make sure you publish your site. Unpublished pages show up as Default Page from the dropdown menu in Admin settings.",
+        "required": true
+      },
+      "selfRegProfilePageOverrideSetting": {
+        "type": "NetworkPageOverrideSetting (enumeration of type string)",
+        "description": "Specifies the page type that the Self Registration page setting applies to. The valid values are: Configurable—a configurable self-registration page Designer—an Experience Builder page Standard—the default page VisualForce—a Visualforce page",
+        "required": true
+      }
+    },
+    "RecommendationAudience": {
+      "recommendationAudienceDetails": {
+        "type": "RecommendationAudienceDetail",
+        "description": "The specific details of an audience for recommendations."
+      }
+    },
+    "RecommendationAudienceDetail": {
+      "audienceCriteriaType": {
+        "type": "AudienceCriteriaType (enumeration of type string)",
+        "description": "The criteria for the recommendation audience type. Values are: CustomList MaxDaysInCommunity"
+      },
+      "audienceCriteriaValue": {
+        "type": "string",
+        "description": "For new member criteria, the maximum number of days since a user became a member. Null in case of custom list criteria."
+      },
+      "setupName": {
+        "type": "string",
+        "description": "Name of the recommendation audience."
+      }
+    },
+    "RecommendationDefinition": {
+      "recommendationDefinitionDetails": {
+        "type": "RecommendationDefinitionDetail[]",
+        "description": "A list of custom recommendations and their details."
+      }
+    },
+    "RecommendationDefinitionDetail": {
+      "actionUrl": {
+        "type": "string",
+        "description": "The URL for the button that lets users act on the recommendation."
+      },
+      "description": {
+        "type": "string",
+        "description": "An explanation of the recommendation that suggests what users can do."
+      },
+      "linkText": {
+        "type": "string",
+        "description": "The text label for the button."
+      },
+      "scheduledRecommendations": {
+        "type": "ScheduledRecommendation",
+        "description": "A list of scheduled recommendations."
+      },
+      "setupName": {
+        "type": "string",
+        "description": "The name of the recommendation, which appears in Setup."
+      },
+      "title": {
+        "type": "string",
+        "description": "The title of the recommendation."
+      }
+    },
+    "ReputationBranding": {
+      "smallImage": {
+        "type": "string",
+        "description": "Custom image associated with a reputation level. Use files with these extensions:.jpeg,.png, or.gif. Images are stored as documents. If not specified, the default reputation level image is used. Available in API version 32.0 and later."
+      }
+    },
+    "ReputationLevelDefinitions": {
+      "level": {
+        "type": "ReputationLevel[]",
+        "description": "Represents reputation levels."
+      }
+    },
+    "ReputationLevel": {
+      "branding": {
+        "type": "ReputationBranding[]",
+        "description": "Represents any branding associated with the reputation level, specifically, the custom image for the reputation level. This field is optional. If not specified, the default reputation level image is used. Available in API version 32.0 and later."
+      },
+      "label": {
+        "type": "string",
+        "description": "Name of the reputation level. This field is optional. If not specified, one of the 10 defaults is used. Level 1 Level 2 Level 3 Level 4 Level 5 Level 6 Level 7 Level 8 Level 9 Level 10"
+      },
+      "lowerThreshold": {
+        "type": "double",
+        "description": "The lower value in the range for this reputation level. For example, if this reputation level is for points 1–50, 1 is the lowerThreshold.",
+        "required": true
+      }
+    },
+    "ReputationPointsRules": {
+      "pointsRule": {
+        "type": "ReputationPointsRule[]",
+        "description": "Represents events and their associated points."
+      }
+    },
+    "ReputationPointsRule": {
+      "eventType": {
+        "type": "string",
+        "description": "The type of event a member has to perform to get points. The available values are: FeedItemWriteAPost FeedItemWriteAComment FeedItemReceiveAComment FeedItemLikeSomething FeedItemReceiveALike FeedItemMentionSomeone FeedItemSomeoneMentionsYou FeedItemShareAPost FeedItemSomeoneSharesYourPost FeedItemPostAQuestion FeedItemAnswerAQuestion FeedItemReceiveAnAnswer FeedItemMarkAnswerAsBest FeedItemYourAnswerMarkedBest FeedItemEndorseSomeoneForKnowledgeOnATopic FeedItemEndorsedForKnowledgeOnATopic",
+        "required": true
+      },
+      "points": {
+        "type": "int",
+        "description": "The number of points a member gets for performing the event. The default number of points per event is: FeedItemWriteAPost +1 FeedItemWriteAComment: +1 FeedItemReceiveAComment: +5 FeedItemLikeSomething: +1 FeedItemReceiveALike: +5 FeedItemMentionSomeone: +1 FeedItemSomeoneMentionsYou: +5 FeedItemShareAPost: +1 FeedItemSomeoneSharesYourPost: +5 FeedItemPostAQuestion: +1 FeedItemAnswerAQuestion: +5 FeedItemReceiveAnAnswer: +5 FeedItemMarkAnswerAsBest: +5 FeedItemYourAnswerMarkedBest: +20 FeedItemEndorseSomeoneForKnowledgeOnATopic: +5 FeedItemEndorsedForKnowledgeOnATopic: +20",
+        "required": true
+      }
+    },
+    "ScheduledRecommendation": {
+      "scheduledRecommendationDetails": {
+        "type": "ScheduledRecommendationDetail[]",
+        "description": "A list of scheduled recommendations."
+      }
+    },
+    "ScheduledRecommendationDetail": {
+      "channel": {
+        "type": "RecommendationChannel (enumeration of type string)",
+        "description": "A way to group recommendations together to determine where they show up in the site. The valid values are: DefaultChannel—The default recommendation channel. Recommendations in the default channel appear in predefined locations, such as directly in the feed in Salesforce mobile web and on the Home and Question Detail pages of the Customer Service (Napili) template. CustomChannel1—A custom recommendation channel. Choose where you want recommendations to appear by adding the Recommendations Carousel component to the page in Experience Builder. CustomChannel2—A custom recommendation channel. CustomChannel3—A custom recommendation channel. CustomChannel4—A custom recommendation channel. CustomChannel5—A custom recommendation channel."
+      },
+      "enabled": {
+        "type": "boolean",
+        "description": "Indicates whether scheduling is enabled. If true, the recommendation is enabled and appears in sites. If false, recommendations in feeds in Salesforce mobile web aren’t removed, but no new recommendations appear. In sites, disabled recommendations no longer appear."
+      },
+      "rank": {
+        "type": "int",
+        "description": "The rank of the recommendation within the channel, which determines the order in which it’s displayed. The scheduled recommendation is inserted into the position specified by the rank. The rank of all the scheduled recommendations after it is pushed down. If the specified rank is larger than the size of the list, the scheduled recommendation is put at the end of the list. If a rank isn’t specified, the scheduled recommendation is put at the end of the list."
+      },
+      "recommendationAudience": {
+        "type": "string",
+        "description": "The name of the audience for this scheduled recommendation."
+      }
+    },
+    "NetworkTabSet": {
+      "customTab": {
+        "type": "string",
+        "description": "Custom tab that is part of the site."
+      },
+      "defaultTab": {
+        "type": "string",
+        "description": "The Home tab for the site. When members log in, this tab is the first page they see."
+      },
+      "standardTab": {
+        "type": "string",
+        "description": "Standard tab that is part of the site."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"AudienceCriteriaType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"CustomList\"/>\n    <xsd:enumeration value=\"MaxDaysInCommunity\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"CommunityRoles\">\n  <xsd:sequence>\n    <xsd:element name=\"customerUserRole\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"employeeUserRole\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"partnerUserRole\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NavigationLinkSet\">\n  <xsd:sequence>\n    <xsd:element name=\"navigationMenuItem\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:NavigationMenuItem\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NavigationMenuItem\">\n  <xsd:sequence>\n    <xsd:element name=\"defaultListViewId\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"menuItemBranding\" minOccurs=\"0\" type=\"tns:NavigationMenuItemBranding\"/>\n    <xsd:element name=\"position\" type=\"xsd:int\"/>\n    <xsd:element name=\"publiclyAvailable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"subMenu\" minOccurs=\"0\" type=\"tns:NavigationSubMenu\"/>\n    <xsd:element name=\"target\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetPreference\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NavigationMenuItemBranding\">\n  <xsd:sequence>\n    <xsd:element name=\"tileImage\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NavigationSubMenu\">\n  <xsd:sequence>\n    <xsd:element name=\"navigationMenuItem\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:NavigationMenuItem\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Network\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"allowInternalUserLogin\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"allowMembersToFlag\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"allowedExtensions\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"caseCommentEmailTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"changePasswordTemplate\" type=\"xsd:string\"/>\n        <xsd:element name=\"chgEmailVerNewTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"chgEmailVerOldTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"communityRoles\" minOccurs=\"0\" type=\"tns:CommunityRoles\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"deviceActEmailTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"disablePvtPagesForPwdResetInLWR\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"disableReputationRecordConversations\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"emailFooterLogo\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"emailFooterText\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"emailSenderAddress\" type=\"xsd:string\"/>\n        <xsd:element name=\"emailSenderName\" type=\"xsd:string\"/>\n        <xsd:element name=\"embeddedLoginEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableApexCDNCaching\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCustomVFErrorPageOverrides\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDirectMessages\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableExpFriendlyUrlsAsDefault\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableExperienceBundleBasedSnaOverrideEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableGuestChatter\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableGuestFileAccess\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableGuestMemberVisibility\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableImageOptimizationCDN\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableInvitation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableKnowledgeable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLWRExperienceConnectedApp\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMemberVisibility\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableNicknameDisplay\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePrivateMessages\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableReputation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableShowAllNetworkSettings\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSiteAsContainer\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableTalkingAboutStats\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableTopicAssignmentRules\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableTopicSuggestions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableUpDownVote\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"feedChannel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"forgotPasswordTemplate\" type=\"xsd:string\"/>\n        <xsd:element name=\"gatherCustomerSentimentData\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"headlessForgotPasswordTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"headlessRegistrationTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"lockoutTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"logoutUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"maxFileSizeKb\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"navigationLinkSet\" minOccurs=\"0\" type=\"tns:NavigationLinkSet\"/>\n        <xsd:element name=\"networkAuthApiSettings\" minOccurs=\"0\" type=\"tns:NetworkAuthApiSettings\"/>\n        <xsd:element name=\"networkMemberGroups\" minOccurs=\"0\" type=\"tns:NetworkMemberGroup\"/>\n        <xsd:element name=\"networkPageOverrides\" minOccurs=\"0\" type=\"tns:NetworkPageOverride\"/>\n        <xsd:element name=\"newSenderAddress\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"picassoSite\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"pwdlessRegEmailTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"recommendationAudience\" minOccurs=\"0\" type=\"tns:RecommendationAudience\"/>\n        <xsd:element name=\"recommendationDefinition\" minOccurs=\"0\" type=\"tns:RecommendationDefinition\"/>\n        <xsd:element name=\"reputationLevels\" minOccurs=\"0\" type=\"tns:ReputationLevelDefinitions\"/>\n        <xsd:element name=\"reputationPointsRules\" minOccurs=\"0\" type=\"tns:ReputationPointsRules\"/>\n        <xsd:element name=\"selfRegMicroBatchSubErrorEmailTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"selfRegProfile\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"selfRegistration\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"sendWelcomeEmail\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"site\" type=\"xsd:string\"/>\n        <xsd:element name=\"siteArchiveStatus\" minOccurs=\"0\" type=\"tns:SitesArchiveStatus\"/>\n        <xsd:element name=\"status\" type=\"tns:NetworkStatus\"/>\n        <xsd:element name=\"tabs\" type=\"tns:NetworkTabSet\"/>\n        <xsd:element name=\"urlPathPrefix\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"verificationTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"welcomeTemplate\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"NetworkAuthApiSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"doesForgotPasswordRequireAuth\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"doesPasswordLoginRequireAuth\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"doesPwdlessLoginRequireAuth\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"doesRegistrationRequireAuth\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"emailTmplsAllowlist\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:NetworkEmailTmplAllowlist\"/>\n    <xsd:element name=\"headlessDiscoveryExecutionUser\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"headlessDiscoveryHandler\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isFirstPartyAppsAllowed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isForgotPwdAllowed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isForgotPwdEmailTemplateAllowlistingEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isHeadlessUserRegistrationAllowed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isPwdlessLoginAllowed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isRecaptchaRequiredForgotPwd\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isRecaptchaRequiredPwdlessLogin\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isRecaptchaRequiredRgstr\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isUniversalClientRgstrAllowed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isUserDisambiguationAllowedForgotPwd\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isUserDisambiguationAllowedUsernamePwd\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"maxPasswordResetAttempts\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"recaptchaScoreThreshold\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"recaptchaSecretKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"registrationExecutionUser\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"registrationHandler\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"registrationUserDefaultProfile\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NetworkEmailTmplAllowlist\">\n  <xsd:sequence>\n    <xsd:element name=\"emailTemplate\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NetworkMemberGroup\">\n  <xsd:sequence>\n    <xsd:element name=\"permissionSet\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"profile\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NetworkPageOverride\">\n  <xsd:sequence>\n    <xsd:element name=\"changePasswordPageOverrideSetting\" minOccurs=\"0\" type=\"tns:NetworkPageOverrideSetting\"/>\n    <xsd:element name=\"forgotPasswordPageOverrideSetting\" minOccurs=\"0\" type=\"tns:NetworkPageOverrideSetting\"/>\n    <xsd:element name=\"homePageOverrideSetting\" minOccurs=\"0\" type=\"tns:NetworkPageOverrideSetting\"/>\n    <xsd:element name=\"loginPageOverrideSetting\" minOccurs=\"0\" type=\"tns:NetworkPageOverrideSetting\"/>\n    <xsd:element name=\"selfRegProfilePageOverrideSetting\" minOccurs=\"0\" type=\"tns:NetworkPageOverrideSetting\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"NetworkPageOverrideSetting\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Designer\"/>\n    <xsd:enumeration value=\"VisualForce\"/>\n    <xsd:enumeration value=\"Standard\"/>\n    <xsd:enumeration value=\"Configurable\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"NetworkStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"UnderConstruction\"/>\n    <xsd:enumeration value=\"Live\"/>\n    <xsd:enumeration value=\"DownForMaintenance\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"NetworkTabSet\">\n  <xsd:sequence>\n    <xsd:element name=\"customTab\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"defaultTab\" type=\"xsd:string\"/>\n    <xsd:element name=\"standardTab\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RecommendationAudience\">\n  <xsd:sequence>\n    <xsd:element name=\"recommendationAudienceDetails\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecommendationAudienceDetail\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RecommendationAudienceDetail\">\n  <xsd:sequence>\n    <xsd:element name=\"audienceCriteriaType\" minOccurs=\"0\" type=\"tns:AudienceCriteriaType\"/>\n    <xsd:element name=\"audienceCriteriaValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"setupName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"RecommendationChannel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"DefaultChannel\"/>\n    <xsd:enumeration value=\"CustomChannel1\"/>\n    <xsd:enumeration value=\"CustomChannel2\"/>\n    <xsd:enumeration value=\"CustomChannel3\"/>\n    <xsd:enumeration value=\"CustomChannel4\"/>\n    <xsd:enumeration value=\"CustomChannel5\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"RecommendationDefinition\">\n  <xsd:sequence>\n    <xsd:element name=\"recommendationDefinitionDetails\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecommendationDefinitionDetail\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RecommendationDefinitionDetail\">\n  <xsd:sequence>\n    <xsd:element name=\"actionUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"linkText\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"scheduledRecommendations\" minOccurs=\"0\" type=\"tns:ScheduledRecommendation\"/>\n    <xsd:element name=\"setupName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"title\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReputationBranding\">\n  <xsd:sequence>\n    <xsd:element name=\"smallImage\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReputationLevel\">\n  <xsd:sequence>\n    <xsd:element name=\"branding\" minOccurs=\"0\" type=\"tns:ReputationBranding\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"lowerThreshold\" type=\"xsd:double\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReputationLevelDefinitions\">\n  <xsd:sequence>\n    <xsd:element name=\"level\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReputationLevel\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReputationPointsRule\">\n  <xsd:sequence>\n    <xsd:element name=\"eventType\" type=\"xsd:string\"/>\n    <xsd:element name=\"points\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReputationPointsRules\">\n  <xsd:sequence>\n    <xsd:element name=\"pointsRule\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReputationPointsRule\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ScheduledRecommendation\">\n  <xsd:sequence>\n    <xsd:element name=\"scheduledRecommendationDetails\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ScheduledRecommendationDetail\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ScheduledRecommendationDetail\">\n  <xsd:sequence>\n    <xsd:element name=\"channel\" minOccurs=\"0\" type=\"tns:RecommendationChannel\"/>\n    <xsd:element name=\"enabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"rank\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"recommendationAudience\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SitesArchiveStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TemporarilyArchived\"/>\n    <xsd:enumeration value=\"NotArchived\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "A sample XML definition of a network.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Network xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <allowMembersToFlag>true</allowMembersToFlag>\n    <changePasswordTemplate>unfiled$public/CommunityChangePasswordEmailTemplate</changePasswordTemplate>\n    <description>Metadata Community</description>\n    <emailSenderAddress>admin@networkMetadata.com</emailSenderAddress>\n    <emailSenderName>Admin User</emailSenderName>\n    <enableInvitation>false</enableInvitation>\n    <enableKnowledgeable>true</enableKnowledgeable>\n    <enableNicknameDisplay>false</enableNicknameDisplay>\n    <enablePrivateMessages>true</enablePrivateMessages>\n    <enableReputation>true</enableReputation>\n    <enableUpDownVote>true</enableUpDownVote>\n    <forgotPasswordTemplate>unfiled$public/CommunityForgotPasswordEmailTemplate</forgotPasswordTemplate>\n    <networkMemberGroups>\n        <permissionSet>Admin</permissionSet>\n        <permissionSet>Standard</permissionSet>\n        <permissionSet>ReadOnly</permissionSet>\n        <profile>Admin</profile>\n        <profile>Standard</profile>\n        <profile>ReadOnly</profile>\n    </networkMemberGroups>\n    <recommendationDefinition>\n        <recommendationDefinitionDetails>\n            <actionUrl>https://www.apple.com/iphone</actionUrl>\n            <description>Better specs and high performance for iPhones</description>\n            <linkText>iPhone 7</linkText>\n            <scheduledRecommendations>\n                <scheduledRecommendationDetails>\n                    <channel>DefaultChannel</channel>\n                    <enabled>false</enabled>\n                    <rank>1</rank>\n                    <recommendationAudience>New Member Audience</recommendationAudience>\n                </scheduledRecommendationDetails>\n            </scheduledRecommendations>\n            <setupName>Apple iPhone</setupName>\n            <title>iPhone7</title>\n        </recommendationDefinitionDetails>\n        <recommendationDefinitionDetails>\n            <actionUrl>https://www.bose.com/qc35</actionUrl>\n            <description>New Amazing Noise cancellation Headphones</description>\n            <linkText>Bose QC35</linkText>\n            <scheduledRecommendations>\n                <scheduledRecommendationDetails>\n                    <channel>DefaultChannel</channel>\n                    <enabled>true</enabled>\n                    <rank>2</rank>\n                    <recommendationAudience>Custom Audience</recommendationAudience>\n                </scheduledRecommendationDetails>\n            </scheduledRecommendations>\n            <setupName>Bose Headphones</setupName>\n            <title>Bose QC35</title>\n        </recommendationDefinitionDetails>\n    </recommendationDefinition>\n    <reputationLevels>\n        <level>\n            <branding> \n                <smallImage>communities_shared _document_folder/replevel_beginner.png</smallImage>\n            </branding>\n            <label>Beginner</label>\n            <lowerThreshold>0</lowerThreshold>\n        </level>\n        <level>\n            <branding> \n                <smallImage>communities_shared _document_folder/replevel_apprentice.png</smallImage>\n            </branding>\n            <label>Apprentice</label>\n            <lowerThreshold>51</lowerThreshold>\n        </level>\n        <level>\n            <branding> \n                <smallImage>communities_shared _document_folder/replevel_gettingthere.png</smallImage>\n            </branding>\n            <label>Getting There</label>\n            <lowerThreshold>101</lowerThreshold>\n        </level>\n        <level>\n            <branding> \n                <smallImage>communities_shared _document_folder/replevel_skilled.png</smallImage>\n            </branding>\n            <label>Skilled</label>\n            <lowerThreshold>151</lowerThreshold>\n        </level>\n        <level>\n            <branding> \n                <smallImage>communities_shared _document_folder/replevel_expert.png</smallImage>\n            </branding>\n            <label>Expert</label>\n            <lowerThreshold>201</lowerThreshold>\n        </level>\n        <level>\n            <branding> \n                <smallImage>communities_shared _document_folder/replevel_mentor.png</smallImage>\n            </branding>\n            <label>Mentor</label>\n            <lowerThreshold>251</lowerThreshold>\n        </level>\n        <level>\n            <branding> \n                <smallImage>communities_shared _document_folder/replevel_guru.png</smallImage>\n            </branding>\n            <label>Guru</label>\n            <lowerThreshold>301</lowerThreshold>\n        </level>\n    </reputationLevels>\n    <reputationPointsRules>\n        <pointsRule>\n            <eventType>FeedItemWriteAPost</eventType>\n            <points>5</points>\n        </pointsRule>\n        <pointsRule>\n            <eventType>FeedItemWriteAComment</eventType>\n            <points>3</points>\n        </pointsRule>\n        <pointsRule>\n            <eventType>FeedItemReceiveAComment</eventType>\n            <points>10</points>\n        </pointsRule>\n        <pointsRule>\n            <eventType>FeedItemLikeSomething</eventType>\n            <points>3</points>\n        </pointsRule>\n        <pointsRule>\n            <eventType>FeedItemReceiveALike</eventType>\n            <points>5</points>\n        </pointsRule>\n        <pointsRule>\n            <eventType>FeedItemMentionSomeone</eventType>\n            <points>5</points>\n        </pointsRule>\n        <pointsRule>\n            <eventType>FeedItemSomeoneMentionsYou</eventType>\n            <points>10</points>\n        </pointsRule>\n        <pointsRule>\n            <eventType>FeedItemShareAPost</eventType>\n            <points>5</points>\n        </pointsRule>\n        <pointsRule>\n            <eventType>FeedItemSomeoneSharesYourPost</eventType>\n            <points>10</points>\n        </pointsRule>\n    </reputationPointsRules>\n    <selfRegistration>false</selfRegistration>\n    <sendWelcomeEmail>true</sendWelcomeEmail>\n    <site>Network_11</site>\n    <status>UnderConstruction</status>\n    <tabs>\n        <defaultTab>Chatter</defaultTab>\n        <standardTab>Chatter</standardTab>\n        <standardTab>Account</standardTab>\n        <standardTab>Campaign</standardTab>\n        <standardTab>Case</standardTab>\n        <standardTab>Console</standardTab>\n        <standardTab>Contact</standardTab>\n        <standardTab>Contract</standardTab>\n        <standardTab>Dashboard</standardTab>\n        <standardTab>JigsawSearch</standardTab>\n        <standardTab>File</standardTab>\n        <standardTab>CollaborationGroup</standardTab>\n        <standardTab>home</standardTab>\n        <standardTab>Idea</standardTab>\n        <standardTab>Lead</standardTab>\n        <standardTab>Opportunity</standardTab>\n        <standardTab>Product2</standardTab>\n        <standardTab>UserProfile</standardTab>\n        <standardTab>report</standardTab>\n        <standardTab>Solution</standardTab>\n    </tabs>\n    <urlPathPrefix>network1</urlPathPrefix>\n    <welcomeTemplate>unfiled$public/CommunityWelcomeEmailTemplate</welcomeTemplate>\n</Network>"
+    }
+  ]
+}

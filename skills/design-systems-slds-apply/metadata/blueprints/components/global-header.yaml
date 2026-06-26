@@ -1,0 +1,120 @@
+name: Global Header
+description: The primary navigation header that appears at the top of the application, providing access to global navigation,
+  search, notifications, and user account functions.
+category: Navigation
+slds_classes:
+  root: slds-global-header
+  elements:
+  - class: slds-global-header__logo
+    description: Container for application logo or brand
+    purpose: Displays the primary brand identity
+  - class: slds-global-header__item
+    description: Individual navigation item wrapper
+    purpose: Wraps each navigation element
+  modifiers: []
+  states:
+  - class: slds-is-active
+    description: Active navigation item state
+    trigger: Applied to currently selected navigation item
+  - class: slds-has-notification
+    description: Notification indicator state
+    trigger: Applied when notifications are present
+variants:
+- name: Base
+  description: Standard global header with full navigation
+  classes:
+  - slds-global-header
+  usage_context: Default implementation for application header
+  differences: Full-featured header with logo, navigation, and user controls
+- name: Minimal
+  description: Minimal global header with essential elements only
+  classes:
+  - slds-global-header
+  usage_context: Simplified header for focused experiences
+  differences: Reduced elements focusing on core navigation
+lightning_component:
+  name: No direct component
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: No direct Lightning Base Component equivalent - typically implemented using lightning-layout and custom components
+accessibility:
+  keyboard_support:
+  - Tab navigation through header elements
+  - Enter/Space to activate navigation items
+  - Arrow keys for dropdown navigation
+  - Escape to close open menus
+  screen_reader:
+  - Header landmark identified
+  - Navigation structure announced
+  - User account information communicated
+  - Notification status indicated
+  aria_attributes:
+  - role='banner' for header landmark
+  - role='navigation' for nav sections
+  - aria-label for navigation areas
+  - aria-expanded for dropdown menus
+  - aria-current for active navigation
+  - aria-live for notification updates
+usage_guidelines:
+  when_to_use:
+  - As the primary application header
+  - For global navigation and branding
+  - When users need access to account functions
+  - For consistent cross-application navigation
+  when_not_to_use:
+  - For page-specific headers (use page headers instead)
+  - In embedded or widget contexts
+  - When space is extremely limited
+  best_practices:
+  - Keep navigation items concise and clear
+  - Prioritize most important functions
+  - Provide clear visual hierarchy
+  - Ensure responsive behavior across devices
+  - Maintain consistent branding
+  common_mistakes:
+  - Overcrowding with too many navigation items
+  - Poor mobile responsive behavior
+  - Inconsistent styling across applications
+  - Missing accessibility landmarks
+code_examples:
+- title: Basic Global Header
+  description: Simplified global header with essential elements
+  code: "<header class=\"slds-global-header\" role=\"banner\">\n      <div class=\"slds-global-header__logo\">\n        <a\
+    \ href=\"#\" class=\"\">\n          <img src=\"/assets/images/logo-minimal.svg\" alt=\"Logo\" class=\"\">\n        </a>\n\
+    \      </div>\n      <nav class=\"\" role=\"navigation\" aria-label=\"Primary\">\n        <ul class=\"\">\n          <li\
+    \ class=\"slds-global-header__item\">\n            <a href=\"#\" class=\"slds-is-active\">Dashboard</a>\n          </li>\n\
+    \          <li class=\"slds-global-header__item\">\n            <a href=\"#\" class=\"\">Reports</a>\n          </li>\n\
+    \        </ul>\n      </nav>\n      <div class=\"\">\n        <span class=\"slds-avatar slds-avatar_circle slds-avatar_small\"\
+    >\n          <img alt=\"User\" src=\"/assets/images/avatar.jpg\">\n        </span>\n      </div>\n      </header>\n"
+dependencies:
+  css_files:
+  - global-header.css
+  - avatar.css
+  - button.css
+  - input.css
+  javascript:
+  - global-header.js
+  icons:
+  - utility-sprite.svg
+  - standard-sprite.svg
+  other_components:
+  - avatar
+  - button
+  - input
+  - notification
+related_components:
+- name: Global Navigation
+  relationship: similar
+  description: Similar global navigation concept
+- name: Page Headers
+  relationship: alternative
+  description: Alternative header for page-specific content
+- name: App Launcher
+  relationship: depends-on
+  description: Often launched from global header
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/global-header/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

@@ -1,0 +1,87 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AIScoringModelDefinition - Metadata API",
+  "description": "Represents information about a machine learning model that’s used by the Scoring Framework for Industries Cloud Einstein. The machine learning model is used for scoring, including its configuration.",
+  "file_information": ".aiScoringModelDefinition",
+  "directory_location": "aiScoringModelDefinitions",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "aiModelConfig": {
+      "type": "string",
+      "required": true,
+      "description": "ID of an AI model configuration related to the AI scoring model record."
+    },
+    "aiScoringModelDefVersions": {
+      "type": "AIScoringModelDefVersion[]",
+      "description": "Represents information of various versions of a model."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description for an AIScoringModelDefinition record."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for the AIScoringModelDefinition metadata component, which is defined when the AIScoringModelDefinition metadata component is created."
+    }
+  },
+  "sub_types": {
+    "AIScoringModelDefVersion": {
+      "aiScoringModelDefinition": {
+        "type": "string",
+        "required": true,
+        "description": "Parent AIScoringModelDefinition record that’s related to an AIScoringModelDefVersion record."
+      },
+      "aiScoringSteps": {
+        "type": "AIScoringStep[]",
+        "description": "Represents information about a step associated with an AI scoring model version."
+      },
+      "developerName": {
+        "type": "string",
+        "required": true,
+        "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Label is Record Type Name."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "A user-friendly name for the AIScoringModelDefVersion component name, which is defined when the AIScoringModelDefVersion component name is created."
+      },
+      "modelMode": {
+        "type": "AIScoringModelDefVersionMode (enumeration of type string)",
+        "required": true,
+        "description": "Mode of an AI scoring model.Values are: DEPLOY TRAIN TRAIN_AND_DEPLOY"
+      }
+    },
+    "AIScoringStep": {
+      "aiModelConfigStep": {
+        "type": "string",
+        "required": true,
+        "description": "ID of the AI model config step that’s related to the AIScoringStep record."
+      },
+      "stepDetail": {
+        "type": "string",
+        "description": "Scoring step details in JSON format."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AIScoringModelDefVersion\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"aiScoringModelDefinition\" type=\"xsd:string\"/>\n        <xsd:element name=\"aiScoringSteps\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AIScoringStep\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"modelMode\" type=\"tns:AIScoringModelDefVersionMode\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"AIScoringModelDefVersionMode\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TRAIN\"/>\n    <xsd:enumeration value=\"DEPLOY\"/>\n    <xsd:enumeration value=\"TRAIN_AND_DEPLOY\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"AIScoringModelDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"aiModelConfig\" type=\"xsd:string\"/>\n        <xsd:element name=\"aiScoringModelDefVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AIScoringModelDefVersion\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"AIScoringStep\">\n  <xsd:sequence>\n    <xsd:element name=\"aiModelConfigStep\" type=\"xsd:string\"/>\n    <xsd:element name=\"stepDetail\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here’s an example of an AIScoringModelDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AIScoringModelDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <aiModelConfig>Prediction_Scores_for_Accounts</aiModelConfig>\n    <aiScoringModelDefVersions>\n        <fullName>V1</fullName>\n        <aiScoringModelDefinition>Test</aiScoringModelDefinition>\n        <aiScoringSteps>\n            <aiModelConfigStep>Prediction_Scores_for_Accounts.GrainSelector</aiModelConfigStep>\n            <stepDetail>{label:Account,name:Account}</stepDetail>\n        </aiScoringSteps>\n        <aiScoringSteps>\n            <aiModelConfigStep>Prediction_Scores_for_Accounts.AugmentedDataset</aiModelConfigStep>\n        </aiScoringSteps>\n        <aiScoringSteps>\n            <aiModelConfigStep>Prediction_Scores_for_Accounts.TargetConditionBuilder</aiModelConfigStep>\n            <stepDetail>{specificOutcomeDefined:Yes,label:Financial accounts are associated with an account,name:FA_Target}</stepDetail>\n        </aiScoringSteps>\n        <aiScoringSteps>\n            <aiModelConfigStep>Prediction_Scores_for_Accounts.InputVariableSelector</aiModelConfigStep>\n        </aiScoringSteps>\n        <aiScoringSteps>\n            <aiModelConfigStep>Prediction_Scores_for_Accounts.CustomFilter</aiModelConfigStep>\n        </aiScoringSteps>\n        <aiScoringSteps>\n            <aiModelConfigStep>Prediction_Scores_for_Accounts.WriteBackConnector</aiModelConfigStep>\n        </aiScoringSteps>\n        <developerName>V1</developerName>\n        <masterLabel>V1</masterLabel>\n        <modelMode>TRAIN_AND_DEPLOY</modelMode>\n    </aiScoringModelDefVersions>\n    <description>Test for metadata</description>\n    <masterLabel>Test</masterLabel>\n</AIScoringModelDefinition>"
+    }
+  ]
+}

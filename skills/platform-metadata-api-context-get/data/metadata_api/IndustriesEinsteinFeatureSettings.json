@@ -1,0 +1,34 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "IndustriesEinsteinFeatureSettings - Metadata API",
+  "description": "Represents the settings for enabling the Industries Einstein feature.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "documentReaderConfidenceOrgValue": {
+      "type": "double",
+      "required": true,
+      "description": "Specify the confidence score threshold to indicate the reliability of data in a document. You can enter a number from 0 to 100, with up to two decimal places, where 0 is the least confident and 100 is the most confident."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"IndustriesEinsteinFeatureSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"documentReaderConfidenceOrgValue\" type=\"xsd:double\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a IndustriesEinsteinFeatureSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<IndustriesEinsteinFeatureSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <documentReaderConfidenceOrgValue>61</documentReaderConfidenceOrgValue>\n</IndustriesEinsteinFeatureSettings>"
+    }
+  ]
+}

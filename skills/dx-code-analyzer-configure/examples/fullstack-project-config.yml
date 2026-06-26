@@ -1,0 +1,46 @@
+# Code Analyzer Configuration — Full-Stack Salesforce Project
+#
+# This file contains ONLY overrides. Code Analyzer's built-in defaults
+# handle everything else. Only add entries here that intentionally
+# change behavior for your project.
+#
+# Usage:
+#   Place at project root as code-analyzer.yml
+#   Validate: sf code-analyzer config --config-file code-analyzer.yml
+
+# Exclude non-project files
+ignores:
+  files:
+    - "**/node_modules/**"
+    - "**/.sfdx/**"
+    - "**/.sf/**"
+    - "**/jest-mocks/**"
+    - "**/__tests__/**"
+    - "**/*.min.js"
+    - "**/staticresources/jquery*"
+    - "**/staticresources/bootstrap*"
+
+# Engine tuning — only what differs from defaults
+engines:
+  # SFGE: increase heap for large Apex codebases
+  sfge:
+    java_max_heap_size: "4g"
+  # ESLint: use project's existing config for LWC-specific rules
+  eslint:
+    auto_discover_eslint_config: true
+
+# Rule overrides — only rules that need project-specific treatment
+rules:
+  pmd:
+    # Promote security rules (default is High → make Critical)
+    ApexCRUDViolation:
+      severity: 1
+    ApexSOQLInjection:
+      severity: 1
+    # Demote noisy documentation rule
+    ApexDoc:
+      severity: 5
+  eslint:
+    # Demote console warnings in development (default is Moderate)
+    no-console:
+      severity: 4

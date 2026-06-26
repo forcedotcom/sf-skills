@@ -1,0 +1,96 @@
+# GitHub Actions Workflow — Code Analyzer Quality Gate
+#
+# Scans pull requests for code quality and security violations.
+# Uploads SARIF results to GitHub Code Scanning for inline annotations.
+#
+# Usage:
+#   Copy to .github/workflows/code-analyzer.yml in your repository
+#   Customize severity-threshold and rule-selector as needed
+#
+# Prerequisites:
+#   - Repository must have GitHub Advanced Security enabled for SARIF upload
+#   - Or remove the "Upload SARIF" step for basic artifact-only workflow
+
+name: Code Analyzer
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'force-app/**'
+      - 'src/**'
+      - '**/*.cls'
+      - '**/*.trigger'
+      - '**/*.js'
+      - '**/*.ts'
+      - '**/*.html'
+      - '**/*.flow-meta.xml'
+      - 'code-analyzer.yml'
+  push:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+  security-events: write  # Required for SARIF upload
+
+jobs:
+  code-analysis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for diff-based scans
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: Install Salesforce CLI
+        run: npm install -g @salesforce/cli
+
+      - name: Install Code Analyzer
+        run: sf plugins install @salesforce/plugin-code-analyzer
+
+      - name: Verify installation
+        run: |
+          sf --version
+          sf plugins --core | grep code-analyzer
+          java -version
+          node --version
+
+      - name: Run Code Analyzer
+        run: |
+          sf code-analyzer run \
+            --rule-selector Recommended \
+            --severity-threshold 2 \
+            --output-file results.sarif \
+            --output-file results.json \
+            --output-file results.html \
+            --config-file code-analyzer.yml
+
+      - name: Upload SARIF to GitHub Security
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
+          category: code-analyzer
+
+      - name: Upload Results as Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-analyzer-results
+          path: |
+            results.json
+            results.html
+          retention-days: 30

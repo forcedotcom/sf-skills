@@ -1,0 +1,64 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PricingActionParameters - Metadata API",
+  "description": "Represents the pricing action that's associated with a context definition and pricing procedure.",
+  "file_information": ".pricingActionParameters",
+  "directory_location": "pricingActionParameters",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "contextDefinition": {
+      "type": "string",
+      "required": true,
+      "description": "Context definition record that's associated with the pricing action."
+    },
+    "contextMapping": {
+      "type": "string",
+      "required": true,
+      "description": "Context mapping record that's associated with the pricing action."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "Unique name of the pricing action parameter record. The name must begin with a letter and use only alphanumeric characters and underscores. The name must not include spaces, end with an underscore, or have two consecutive underscores."
+    },
+    "effectiveFrom": {
+      "type": "dateTime",
+      "required": true,
+      "description": "Date and time from when the pricing action becomes effective."
+    },
+    "effectiveTo": {
+      "type": "dateTime",
+      "description": "Date and time till when the pricing action is in effect."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Master label of the pricing action parameter."
+    },
+    "objectName": {
+      "type": "string",
+      "description": "Name of the object that's associated with the pricing action. Valid values are: Case Contract Opportunity Order Quote SalesAgreement WorkOrder"
+    },
+    "pricingProcedure": {
+      "type": "string",
+      "description": "Pricing procedure record that's associated with this pricing action."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PricingActionParameters component.",
+      "code": "<PricingActionParameters xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <developerName>CMEDefaultActionParameters</developerName>\n    <objectName>ORDER</objectName>\n    <pricingProcedure>PP</pricingProcedure>\n    <effectiveFrom>2024-04-08T07:32:00.000Z</effectiveFrom>\n    <effectiveTo>2024-04-11T07:32:00.000Z</effectiveTo>\n    <contextDefinition>SalesTransactionContext__stdctx</contextDefinition>\n    <contextMapping>SalesAgreementEntitiesMapping</contextMapping>\n    <masterLabel>PAP_test</masterLabel>\n</PricingActionParameters>"
+    }
+  ]
+}

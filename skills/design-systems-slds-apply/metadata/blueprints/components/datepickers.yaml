@@ -1,0 +1,130 @@
+name: Datepickers
+description: Input controls that allow users to select dates through a calendar interface, providing visual date selection
+  with navigation between months and years.
+category: Input
+slds_classes:
+  root: slds-datepicker
+  elements:
+  - class: slds-datepicker__filter
+    description: Container for month/year navigation
+    purpose: Holds navigation controls for calendar
+  - class: slds-datepicker__filter_month
+    description: Month selection control
+    purpose: Allows selection of specific month
+  - class: slds-datepicker__month
+    description: Calendar month grid container
+    purpose: Contains the calendar grid for date selection
+  - class: slds-day
+    description: Individual calendar day cell
+    purpose: Represents a single selectable date
+  modifiers: []
+  states:
+  - class: slds-is-today
+    description: Current date state
+    trigger: Highlights today's date
+  - class: slds-is-selected
+    description: Selected date state
+    trigger: Currently selected date
+variants:
+- name: Base
+  description: Standard calendar datepicker
+  classes:
+  - slds-datepicker
+  usage_context: Default datepicker for date selection
+  differences: Calendar grid with month/year navigation
+lightning_component:
+  name: lightning-input (type='date')
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-input
+  mapping_notes: Mapped through lightning-input with type='date' which provides native datepicker
+accessibility:
+  keyboard_support:
+  - Tab to focus datepicker elements
+  - Arrow keys to navigate calendar dates
+  - Enter/Space to select dates
+  - Page Up/Down to navigate months
+  - Shift+Page Up/Down to navigate years
+  screen_reader:
+  - Current month and year announced
+  - Date selection changes communicated
+  - Navigation between calendar periods announced
+  - Today's date and selected date clearly identified
+  aria_attributes:
+  - role='grid' for calendar container
+  - role='gridcell' for individual dates
+  - aria-selected for chosen date
+  - aria-label for month/year navigation
+  - aria-live for dynamic date updates
+usage_guidelines:
+  when_to_use:
+  - For date selection in forms
+  - When users need visual calendar navigation
+  - For scheduling or planning interfaces
+  - When date ranges or specific dates are important
+  when_not_to_use:
+  - For approximate dates (use text input)
+  - When calendar interface is not helpful
+  - For very distant past or future dates
+  best_practices:
+  - Provide clear month and year navigation
+  - Highlight current date and selection clearly
+  - Support keyboard navigation throughout
+  - Handle date formatting consistently
+  - Provide appropriate date constraints
+  common_mistakes:
+  - Poor keyboard navigation implementation
+  - Unclear visual indicators for selection
+  - Not handling edge cases (leap years, etc.)
+  - Inconsistent date formatting
+code_examples:
+- title: Calendar Datepicker
+  code: "<div class=\"slds-datepicker\" role=\"dialog\" aria-label=\"Date picker\">\n      <div class=\"slds-datepicker__filter\
+    \ slds-grid\">\n        <div class=\"slds-datepicker__filter_month slds-grid slds-grid_align-spread slds-grow\">\n   \
+    \       <button class=\"slds-button slds-button_icon slds-button_icon-container\" title=\"Previous Month\">\n        \
+    \    <svg class=\"slds-button__icon\" aria-hidden=\"true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#left\"\
+    ></use>\n            </svg>\n            <span class=\"slds-assistive-text\">Previous Month</span>\n          </button>\n\
+    \          <h2 class=\"slds-align-middle\" aria-live=\"assertive\" aria-atomic=\"true\">October 2024</h2>\n          <button\
+    \ class=\"slds-button slds-button_icon slds-button_icon-container\" title=\"Next Month\">\n            <svg class=\"slds-button__icon\"\
+    \ aria-hidden=\"true\">\n              <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#right\"></use>\n\
+    \            </svg>\n            <span class=\"slds-assistive-text\">Next Month</span>\n          </button>\n        </div>\n\
+    \      </div>\n      <table class=\"slds-datepicker__month\" role=\"grid\" aria-labelledby=\"month\">\n        <thead>\n\
+    \          <tr>\n            <th scope=\"col\"><abbr title=\"Sunday\">Sun</abbr></th>\n            <th scope=\"col\"><abbr\
+    \ title=\"Monday\">Mon</abbr></th>\n            <th scope=\"col\"><abbr title=\"Tuesday\">Tue</abbr></th>\n          \
+    \  <th scope=\"col\"><abbr title=\"Wednesday\">Wed</abbr></th>\n            <th scope=\"col\"><abbr title=\"Thursday\"\
+    >Thu</abbr></th>\n            <th scope=\"col\"><abbr title=\"Friday\">Fri</abbr></th>\n            <th scope=\"col\"\
+    ><abbr title=\"Saturday\">Sat</abbr></th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr>\n      \
+    \      <td class=\"slds-day\" role=\"gridcell\" aria-selected=\"false\">\n              <span class=\"slds-day\">1</span>\n\
+    \            </td>\n            <td class=\"slds-day\" role=\"gridcell\" aria-selected=\"false\">\n              <span\
+    \ class=\"slds-day\">2</span>\n            </td>\n            <td class=\"slds-day slds-is-selected\" role=\"gridcell\"\
+    \ aria-selected=\"true\">\n              <span class=\"slds-day\">3</span>\n            </td>\n            <!-- Additional\
+    \ days... -->\n          </tr>\n        </tbody>\n      </table>\n      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - datepicker.css
+  - grid.css
+  - button.css
+  javascript:
+  - datepicker.js
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - button-icon
+  - grid
+  - icons
+related_components:
+- name: Input
+  relationship: depends-on
+  description: Often combined with text input for date entry
+- name: Datetime Picker
+  relationship: variant
+  description: Extended version including time selection
+- name: Timepicker
+  relationship: similar
+  description: Complementary component for time selection
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/datepickers/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

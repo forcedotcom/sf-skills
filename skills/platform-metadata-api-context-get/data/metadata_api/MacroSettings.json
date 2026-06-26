@@ -1,0 +1,36 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "MacroSettings - Metadata API",
+  "description": "Represents an organization’s Macro settings, such as whether or not folders is enabled. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableAdvancedSearch": {
+      "type": "boolean",
+      "description": "Indicates whether users can search all macro text fields (true) or not (false)."
+    },
+    "macrosInFolders": {
+      "type": "boolean",
+      "description": "Indicates whether users can organize and share macros using folders (true) or not (false). Available in API version 44.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"MacroSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"contextualMacroFiltering\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAdvancedSearch\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"macrosInFolders\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is a sample Macro settings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MacroSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableAdvancedSearch>true</enableAdvancedSearch>\n    <macrosInFolders>true</macrosInFolders>\n</MacroSettings>"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ExtlClntAppMobileSettings - Metadata API",
+  "description": "Represents an external client app’s mobile app settings, such as screen lock on a mobile device.",
+  "file_information": ".ecaMobile",
+  "directory_location": "extlClntAppMobileSettings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "externalClientApplication": {
+      "type": "string",
+      "description": "The name of the associated external client app.",
+      "required": true
+    },
+    "isScreenLockEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether the mobile app locks the screen after a specified timeout value.",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "description": "Label for the external client app’s mobile app settings configuration."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ExtlClntAppMobileSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"externalClientApplication\" type=\"xsd:string\"/>\n        <xsd:element name=\"isScreenLockEnabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

@@ -1,0 +1,162 @@
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- CHILD-TO-PARENT QUERY (Dot Notation Pattern)
+-- ═══════════════════════════════════════════════════════════════════════════════
+--
+-- Traverse UP the relationship hierarchy using dot notation.
+-- Access parent fields directly from the child record query.
+--
+-- USE WHEN:
+-- • Starting from child object and need parent details
+-- • Filtering based on parent field values
+-- • Need to flatten parent-child data into a single row
+--
+-- LIMITS:
+-- • Maximum 5 levels of parent traversal
+-- • Standard objects use relationship name (e.g., Account.Name)
+-- • Custom objects use __r suffix (e.g., Custom_Parent__r.Name)
+--
+-- ═══════════════════════════════════════════════════════════════════════════════
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- BASIC: Contact with Account details
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, FirstName, LastName, Email, Phone,
+    Account.Id,
+    Account.Name,
+    Account.Industry,
+    Account.Type
+FROM Contact
+WHERE Account.Industry = 'Technology'
+ORDER BY Account.Name, LastName
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- TWO LEVELS: Contact with Account and Account Owner
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, FirstName, LastName, Email,
+    Account.Name,
+    Account.Industry,
+    Account.Owner.Name,
+    Account.Owner.Email,
+    Account.Owner.Department
+FROM Contact
+WHERE Account.Owner.IsActive = true
+AND Account.Type = 'Customer'
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- THREE LEVELS: Opportunity Line Item to Product to Product Family
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, Quantity, UnitPrice, TotalPrice,
+    Opportunity.Name,
+    Opportunity.StageName,
+    Opportunity.Account.Name,
+    Product2.Name,
+    Product2.ProductCode,
+    Product2.Family
+FROM OpportunityLineItem
+WHERE Opportunity.StageName = 'Closed Won'
+AND Opportunity.CloseDate = THIS_YEAR
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- CASE with Account and Contact chain
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, CaseNumber, Subject, Status, Priority,
+    Account.Name,
+    Account.Industry,
+    Account.BillingCity,
+    Contact.Name,
+    Contact.Email,
+    Contact.Phone,
+    Owner.Name
+FROM Case
+WHERE Status = 'New'
+AND Account.Type = 'Customer'
+ORDER BY Priority DESC, CreatedDate ASC
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- TASK with polymorphic Who and What (simple version)
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Subject, Status, ActivityDate,
+    Who.Name,
+    What.Name,
+    Owner.Name
+FROM Task
+WHERE Status != 'Completed'
+AND ActivityDate <= NEXT_WEEK
+ORDER BY ActivityDate ASC
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- FILTERING on parent fields
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, StageName, Amount, CloseDate
+FROM Opportunity
+WHERE Account.Industry IN ('Technology', 'Healthcare', 'Finance')
+AND Account.AnnualRevenue > 1000000
+AND Account.BillingCountry = 'USA'
+AND StageName NOT IN ('Closed Won', 'Closed Lost')
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- CUSTOM OBJECT: Child to Custom Parent
+-- Replace field names with your actual API names
+-- ───────────────────────────────────────────────────────────────────────────────
+-- SELECT Id, Name, Amount__c, Date__c,
+--     Parent_Object__r.Name,
+--     Parent_Object__r.Status__c,
+--     Parent_Object__r.Account__r.Name,
+--     Parent_Object__r.Account__r.Owner.Name
+-- FROM Child_Object__c
+-- WHERE Parent_Object__r.Status__c = 'Active'
+-- AND Parent_Object__r.Account__r.Industry = 'Technology'
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- SELF-REFERENTIAL: Account hierarchy (ParentId)
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, Industry, Type,
+    Parent.Name AS ParentAccountName,
+    Parent.Industry AS ParentIndustry,
+    Parent.Parent.Name AS GrandparentAccountName
+FROM Account
+WHERE ParentId != null
+ORDER BY Parent.Name, Name
+
+-- ───────────────────────────────────────────────────────────────────────────────
+-- USER hierarchy (ManagerId)
+-- ───────────────────────────────────────────────────────────────────────────────
+SELECT Id, Name, Username, Title, Department,
+    Manager.Name AS ManagerName,
+    Manager.Title AS ManagerTitle,
+    Manager.Manager.Name AS SkipLevelManagerName
+FROM User
+WHERE IsActive = true
+AND ManagerId != null
+ORDER BY Manager.Name, Name
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- APEX PROCESSING PATTERN
+-- ═══════════════════════════════════════════════════════════════════════════════
+/*
+// Query with parent fields
+List<Contact> contacts = [
+    SELECT Id, FirstName, LastName,
+        Account.Name,
+        Account.Industry,
+        Account.Owner.Name
+    FROM Contact
+    WHERE Account.Industry = 'Technology'
+];
+
+// Access parent fields directly
+for (Contact con : contacts) {
+    System.debug('Contact: ' + con.FirstName + ' ' + con.LastName);
+    System.debug('  Account: ' + con.Account.Name);
+    System.debug('  Industry: ' + con.Account.Industry);
+    System.debug('  Owner: ' + con.Account.Owner.Name);
+}
+*/
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- SF CLI USAGE
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- sf data query \
+--   --query "SELECT Id, Name, Account.Name, Account.Industry FROM Contact LIMIT 10" \
+--   --target-org myorg \
+--   --json

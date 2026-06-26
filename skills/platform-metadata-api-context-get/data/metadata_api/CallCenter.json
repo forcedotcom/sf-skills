@@ -1,0 +1,124 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CallCenter - Metadata API",
+  "description": "Represents the Call Center definition used to integrate Salesforce with a third-party computer-telephony integration (CTI) system, a partner telephony system, or partner Contact Center as a Service (CCaaS) system.",
+  "file_information": ".callCenter",
+  "directory_location": "callCenters",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "adapterUrl": {
+      "type": "string",
+      "description": "Optional field. A URL that points to an adapter."
+    },
+    "contactCenterChannels": {
+      "type": "ContactCenterChannel[]",
+      "description": "Relates Bring Your Own Channel for Contact Center as a Service (CCaaS) messaging channels to a CallCenter and represents the routing details for a voicemail configuration."
+    },
+    "displayName": {
+      "type": "string",
+      "required": true,
+      "description": "The display name of this call center."
+    },
+    "displayNameLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label of the displayName field in Call Center setup page."
+    },
+    "internalNameLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label of the internalName field in Call Center setup page."
+    },
+    "sections": {
+      "type": "CallCenterSection[]",
+      "description": "Custom setup items defined for this call center."
+    },
+    "version": {
+      "type": "string",
+      "description": "The version of this call center."
+    }
+  },
+  "sub_types": {
+    "CallCenterSection": {
+      "items": {
+        "type": "CallCenterItem[]",
+        "description": "Contains the label, name, and value that describe the sections."
+      },
+      "label": {
+        "type": "string",
+        "required": true,
+        "description": "The label of the section."
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the section."
+      }
+    },
+    "CallCenterItem": {
+      "label": {
+        "type": "string",
+        "required": true,
+        "description": "The label of the custom setup item."
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the custom setup item."
+      },
+      "value": {
+        "type": "string",
+        "required": true,
+        "description": "The value of the custom setup item."
+      }
+    },
+    "ContactCenterChannel": {
+      "channel": {
+        "type": "string",
+        "required": true,
+        "description": "For Bring Your Own Channel for CCaaS, this field represents the unique ID of the Bring Your Own Channel messaging channel (MessagingChannel) that’s associated with the contact center (CallCenterId). Available in API version 60.0 and later."
+      },
+      "contactCenter": {
+        "type": "string",
+        "required": true,
+        "description": "For Bring Your Own Channel for CCaaS, this field represents the unique ID of the contact center (CallCenterId) that’s associated with the Bring Your Own Channel messaging channel (MessagingChannel). Available in API version 60.0 and later."
+      },
+      "omniCallbackFallbackQueue": {
+        "type": "string",
+        "description": "If callbacks are configured for the contact center and the contact center uses Omni-Channel Unified Routing, this field represents the unique ID of the fallback queue to use if contact request routing through an Omni-Channel flow fails. Don't change the value in this field. Instead, configure contact request routing in Lightning Experience. Available in API version 65.0 and later."
+      },
+      "omniCallbackHandler": {
+        "type": "string",
+        "description": "If callbacks are configured for the contact center and the contact center uses Omni-Channel Unified Routing, this field represents the unique ID of the flow or queue used to route contact requests. Don't change the value in this field. Instead, configure contact request routing in Lightning Experience. Available in API version 65.0 and later."
+      },
+      "voiceMailFallbackQueue": {
+        "type": "string",
+        "description": "If voicemail routing is configured for the contact center, this field represents the unique ID of the fallback queue to use if voicemail routing fails. Don't change the value in this field. Instead, configure voicemail routing in Lightning Experience."
+      },
+      "voiceMailHandler": {
+        "type": "string",
+        "description": "If voicemail routing is configured for the contact center, this field represents the unique ID of the flow used to route voicemails. Don't change the value in this field. Instead, configure voicemail routing in Lightning Experience."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CallCenter\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"adapterUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"contactCenterChannels\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ContactCenterChannel\"/>\n        <xsd:element name=\"customSettings\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"displayName\" type=\"xsd:string\"/>\n        <xsd:element name=\"displayNameLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"internalNameLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"sections\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CallCenterSection\"/>\n        <xsd:element name=\"vendorCallCenterStatusMaps\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:VendorCallCenterStatusMap\"/>\n        <xsd:element name=\"version\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"CallCenterItem\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CallCenterSection\">\n  <xsd:sequence>\n    <xsd:element name=\"items\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CallCenterItem\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ContactCenterChannel\">\n  <xsd:sequence>\n    <xsd:element name=\"channel\" type=\"xsd:string\"/>\n    <xsd:element name=\"contactCenter\" type=\"xsd:string\"/>\n    <xsd:element name=\"omniCallbackFallbackQueue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"omniCallbackHandler\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"voiceMailFallbackQueue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"voiceMailHandler\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"VendorCallCenterStatusMap\">\n  <xsd:sequence>\n    <xsd:element name=\"externalStatus\" type=\"xsd:string\"/>\n    <xsd:element name=\"servicePresenceStatus\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CallCenter component:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CallCenter xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <adapterUrl>http://localhost:11000</adapterUrl>\n    <displayName>Demo Call Center Adapter</displayName>\n    <displayNameLabel>Display Name</displayNameLabel>\n    <internalNameLabel>Internal Name</internalNameLabel>\n    <sections>\n        <items>\n            <label>Description</label>\n            <name>reqDescription</name>\n            <value>Demo Call Center Adapter</value>\n        </items>\n        <items>\n            <label>CTI Connector ProgId</label>\n            <name>reqProgId</name>\n            <value>DemoAdapter.DemoAdapter.1</value>\n        </items>\n        <items>\n            <label>Version</label>\n            <name>reqVersion</name>\n            <value>3.0</value>\n        </items>\n        <items>\n            <label>CTI Adapter URL</label>\n            <name>reqAdapterUrl</name>\n            <value>http://localhost:11000</value>\n        </items>\n        <label>General Information</label>\n        <name>reqGeneralInfo</name>\n    </sections>\n    <sections>\n        <items>\n            <label>Outside Prefix</label>\n            <name>reqOutsidePrefix</name>\n            <value>1</value>\n        </items>\n        <items>\n            <label>Long Distance Prefix</label>\n            <name>reqLongDistPrefix</name>\n            <value>1</value>\n        </items>\n        <items>\n            <label>International Prefix</label>\n            <name>reqInternationalPrefix</name>\n            <value>01</value>\n        </items>\n        <label>Dialing Options</label>\n        <name>reqDialingOptions</name>\n    </sections>\n    <version>4</version>\n</CallCenter>"
+    }
+  ]
+}

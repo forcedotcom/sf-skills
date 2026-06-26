@@ -1,0 +1,128 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SamlSsoConfig - Metadata API",
+  "description": "Represents a SAML Single Sign-On configuration. This type extends the Metadata metadata type and inherits its fullName field. Single sign-on (SSO) is an authentication method that enables users to access multiple applications with one login and one set of credentials. For example, after users log in to your org, they can automatically access all apps from the App Launcher. You can set up your Salesforce org to trust a third-party identity provider to authenticate users. Or you can configure a third-party app to rely on your org for authentication.",
+  "file_information": ".samlssoconfig",
+  "directory_location": "samlssoconfigs",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "attributeNameIdFormat": {
+      "type": "string",
+      "description": "For SAML 2.0, only and when identityLocation is set to Attribute. Possible values include unspecified, emailAddress, or persistent. All legal values can be found in the “Name Identifier Format Identifiers” section of the Assertions and Protocols SAML 2.0 specification."
+    },
+    "attributeName": {
+      "type": "string",
+      "description": "The name of the identity provider’s application. Get this name from your identity provider."
+    },
+    "decryptionCertificate": {
+      "type": "string",
+      "description": "The name of the certificate to use for decrypting incoming SAML assertions. This certificate is saved in the organization’s Certificate and Key Management list. Available in API version 30.0 and later."
+    },
+    "errorUrl": {
+      "type": "string",
+      "description": "When there's an error during login, specify the URL of the page where users are directed. It must be publicly accessible, such as a public site Visualforce page. The URL can be absolute or relative."
+    },
+    "executionUserId": {
+      "type": "string",
+      "description": "The user that runs the Apex handler class. The user must have the Manage Users permission. If you specify a SAML JIT handler class, a user is required."
+    },
+    "identityLocation": {
+      "type": "SamlIdentityLocationType (enumeration of type string)",
+      "description": "The location in the assertion where a user is identified. Valid values are: SubjectNameId — The identity is in the <Subject> statement of the assertion. Attribute — The identity is specified in an <AttributeValue>, located in the <Attribute> of the assertion."
+    },
+    "identityMapping": {
+      "type": "SamlIdentityType (enumeration of type string)",
+      "description": "The identifier the service provider uses for the user during Just-in-Time user provisioning. Valid values are: Username — The user’s Salesforce username. FederationId — The federation ID from the user object; the identifier used by the service provider for the user. UserId — The user ID from the user’s Salesforce organization."
+    },
+    "issuer": {
+      "type": "string",
+      "description": "The identification string for the Identity Provider."
+    },
+    "loginUrl": {
+      "type": "string",
+      "description": "For SAML 2.0 only: The URL where Salesforce sends a SAML request to start the login sequence."
+    },
+    "logoutUrl": {
+      "type": "string",
+      "description": "For SAML 2.0 only: The URL to direct the user to when they click the Logout link. The default is https://salesforce.com."
+    },
+    "name": {
+      "type": "string",
+      "description": "The unique name used by the API and managed packages. The name must begin with a letter and use only alphanumeric characters and underscores. The name cannot end with an underscore or have two consecutive underscores."
+    },
+    "oauthTokenEndpoint": {
+      "type": "string",
+      "description": "For SAML 2.0 only: The ACS URL used with enabling Salesforce as an identity provider in the web single sign-on OAuth assertion flow."
+    },
+    "redirectBinding": {
+      "type": "boolean",
+      "description": "Choose the binding mechanism your identity provider requests for your SAML messages. Values are: HTTP POST — HTTP POST binding sends SAML messages using base64-encoded HTML forms. HTTP Redirect — HTTP Redirect binding sends base64-encoded and URL-encoded SAML messages within URL parameters."
+    },
+    "requestSignatureMethod": {
+      "type": "string",
+      "description": "The method that’s used to sign the SAML request. Valid values are RSA-SHA1 and RSA-SHA256."
+    },
+    "requestSigningCertId": {
+      "type": "string",
+      "description": "The 18-digit ID for the certificate used to generate the signature on a SAML request to the identity provider. The certificate is saved in the Certificate and Key Management page in Setup."
+    },
+    "salesforceLoginUrl": {
+      "type": "string",
+      "description": "The URL associated with login for the web single sign-on flow. Note: When encryption is enabled, the URL has a parameter containing the ID of the SAML configuration, sc=samlSsoConfigId. For example, https://mycompany.my.salesforce.com?sc=0LEB0000000CCC. This change applies to API Version 47.0 and later."
+    },
+    "samlEntityId": {
+      "type": "string",
+      "description": "The issuer in SAML requests generated by Salesforce, and is also the expected audience of any inbound SAML Responses. Salesforce recommends that you use your My Domain login URL."
+    },
+    "samlJitHandlerId": {
+      "type": "string",
+      "description": "The name of an existing Apex class that implements the Auth.SamlJitHandler interface."
+    },
+    "samlVersion": {
+      "type": "SamlType (enumeration of type string)",
+      "description": "The SAML version in use. Valid values are: SAML1_1 — SAML 1.1 SAML2_0 — SAML 2.0"
+    },
+    "singleLogoutBinding": {
+      "type": "SamlSpSLOBinding (enumeration of type string)",
+      "description": "The HTTP binding type. This value determines where to put the LogoutRequest or LogoutResponse in the SAML request during single logout (SLO). The value is base64 encoded. Valid values are: RedirectBinding — Sent in the query string, deflated. PostBinding — Sent in the POST body, not deflated."
+    },
+    "singleLogoutUrl": {
+      "type": "string",
+      "description": "The SAML single logout endpoint. This URL is the endpoint where Salesforce sends LogoutRequests (when Salesforce initiates a logout), or LogoutResponses (when the identity provider initiates a logout)."
+    },
+    "useConfigRequestMethod": {
+      "type": "boolean",
+      "description": "If true, applies the selected Request Signature Method (RSM) during single logout. If false, the default RSM (RSA-SHA1) is applied."
+    },
+    "useSameDigestAlgoForSigning": {
+      "type": "boolean",
+      "description": "If true, uses a digest algorithm based on the selected Request Signature Method (RSM). For example, if the selected RSM is RSA-SHA256, the digest algorithm is set to SHA-256. If false, uses the default digest algorithm (SHA-1), regardless of the selected RSM. This field is available in API version 55.0 and later. You can edit this field only for legacy SAML configurations created before Spring ’22. For configurations created after Spring ’22, this field is true by default."
+    },
+    "userProvisioning": {
+      "type": "boolean",
+      "description": "If true, Just-in-Time user provisioning is enabled, which creates users the first time they log in. Specify Federation ID for the identityMapping value to use this feature."
+    },
+    "validationCert": {
+      "type": "string",
+      "description": "The certificate used to validate the request. Get this certificate from your identity provider."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SamlIdentityLocationType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"SubjectNameId\"/>\n    <xsd:enumeration value=\"Attribute\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"SamlIdentityType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Username\"/>\n    <xsd:enumeration value=\"FederationId\"/>\n    <xsd:enumeration value=\"UserId\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"SamlSpSLOBinding\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"RedirectBinding\"/>\n    <xsd:enumeration value=\"PostBinding\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"SamlSsoConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"attributeName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"attributeNameIdFormat\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"decryptionCertificate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"errorUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"executionUserId\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"identityLocation\" type=\"tns:SamlIdentityLocationType\"/>\n        <xsd:element name=\"identityMapping\" type=\"tns:SamlIdentityType\"/>\n        <xsd:element name=\"issuer\" type=\"xsd:string\"/>\n        <xsd:element name=\"loginUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"logoutUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"oauthTokenEndpoint\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"redirectBinding\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"requestSignatureMethod\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"requestSigningCertId\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"salesforceLoginUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"samlEntityId\" type=\"xsd:string\"/>\n        <xsd:element name=\"samlJitHandlerId\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"samlVersion\" type=\"tns:SamlType\"/>\n        <xsd:element name=\"singleLogoutBinding\" minOccurs=\"0\" type=\"tns:SamlSpSLOBinding\"/>\n        <xsd:element name=\"singleLogoutUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"useConfigRequestMethod\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"useSameDigestAlgoForSigning\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"userProvisioning\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"validationCert\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"SamlType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"SAML1_1\"/>\n    <xsd:enumeration value=\"SAML2_0\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a SamlSsoConfig component. The validation certificate string has been truncated for readability.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SamlSsoConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <identityLocation>SubjectNameId</identityLocation>\n  <identityMapping>FederationId</identityMapping>\n  <issuer>https://my-idp.my.salesforce.com</issuer>\n  <loginUrl>\n    https://my-idp.my.salesforce.com/idp/endpoint/HttpRedirect\n  </loginUrl>\n  <logoutUrl>https://www.salesforce.com</logoutUrl>\n  <name>SomeCompany</name>\n  <oauthTokenEndpoint>\n    https://login.salesforce.com/services/oauth2/token?so=00DD0000000\n  </oauthTokenEndpoint>\n  <redirectBinding>true</redirectBinding>\n  <requestSignatureMethod>RSA-SHA1</requestSignatureMethod>\n  <salesforceLoginUrl>\n    https://login.salesforce.com?so=00DD0000000JxeI\n  </salesforceLoginUrl>\n  <samlEntityId>\n    https://saml.salesforce.com/customPath\n  </samlEntityId>\n  <samlVersion>SAML2_0</samlVersion>\n  <useConfigRequestMethod>true</useConfigRequestMethod>\n  <userProvisioning>false</userProvisioning>\n  <validationCert>\n    MIIEojCCA4qgAwIBAgIOATtxsoBFAAAAAD4...\n  </validationCert>\n</SamlSsoConfig>"
+    }
+  ]
+}

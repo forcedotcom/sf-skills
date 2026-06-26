@@ -1,0 +1,116 @@
+name: Tree Grid
+description: A data table component that combines hierarchical tree structure with tabular data display, allowing expansion
+  and collapse of nested data rows.
+category: Data
+slds_classes:
+  root: slds-tree_container
+  elements:
+  - class: slds-tree__item
+    description: Individual tree grid row
+    purpose: Represents a single data item with potential children
+  modifiers: []
+  states:
+  - class: slds-is-expanded
+    description: Expanded tree node state
+    trigger: When tree node children are visible
+  - class: slds-is-collapsed
+    description: Collapsed tree node state
+    trigger: When tree node children are hidden
+  - class: slds-is-selected
+    description: Selected tree node state
+    trigger: When tree node is selected
+variants:
+- name: Base
+  description: Standard tree grid with hierarchical data
+  classes:
+  - slds-tree_container
+  usage_context: Default tree grid for hierarchical tabular data
+  differences: Data table with expandable/collapsible hierarchical rows
+lightning_component:
+  name: lightning-tree-grid
+  url: https://developer.salesforce.com/docs/component-library/bundle/lightning-tree-grid
+  mapping_notes: Direct mapping - Lightning component implements SLDS tree grid blueprint
+accessibility:
+  keyboard_support:
+  - Tab navigation through table cells and controls
+  - Arrow keys for cell and row navigation
+  - Enter/Space to toggle expansion
+  - Right arrow to expand collapsed nodes
+  - Left arrow to collapse expanded nodes
+  screen_reader:
+  - Table structure with row and column headers announced
+  - Hierarchical relationships communicated
+  - Expansion state changes announced
+  - Selection changes communicated
+  aria_attributes:
+  - role='treegrid' for tree grid container
+  - role='row' for table rows
+  - role='gridcell' for individual cells
+  - aria-expanded for expandable rows
+  - aria-selected for selectable rows
+  - aria-level for hierarchy depth
+usage_guidelines:
+  when_to_use:
+  - For hierarchical data that needs tabular presentation
+  - When users need to see relationships and data together
+  - For nested data structures with multiple attributes
+  - When expansion/collapse functionality improves usability
+  when_not_to_use:
+  - For flat data (use regular data table instead)
+  - When hierarchy is not meaningful to users
+  - For simple tree navigation (use tree component)
+  best_practices:
+  - Use clear visual indicators for hierarchy levels
+  - Provide consistent expand/collapse behavior
+  - Show loading states for dynamically loaded children
+  - Maintain good column alignment across hierarchy levels
+  - Support keyboard navigation throughout
+  common_mistakes:
+  - Poor visual hierarchy indication
+  - Inconsistent column alignment in nested rows
+  - Missing keyboard navigation support
+  - Unclear expansion/collapse controls
+code_examples:
+- title: Basic Tree Grid
+  code: "<div class=\"slds-tree_container\">\n      <table class=\"\" role=\"treegrid\" aria-label=\"Hierarchical data\">\n\
+    \        <thead>\n          <tr>\n            <th scope=\"col\">Name</th>\n            <th scope=\"col\">Type</th>\n \
+    \           <th scope=\"col\">Size</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr role=\"row\"\
+    \ aria-level=\"1\" aria-expanded=\"true\" tabindex=\"0\">\n            <td role=\"gridcell\" class=\"\">\n           \
+    \   <button class=\"slds-button slds-button_icon slds-button_icon-x-small\">\n                <svg class=\"slds-button__icon\"\
+    \ aria-hidden=\"true\">\n                  <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#chevronright\"\
+    ></use>\n                </svg>\n              </button>\n              Documents\n            </td>\n            <td\
+    \ role=\"gridcell\">Folder</td>\n            <td role=\"gridcell\">--</td>\n          </tr>\n          <tr role=\"row\"\
+    \ aria-level=\"2\" tabindex=\"0\">\n            <td role=\"gridcell\" style=\"padding-left: 2rem;\">\n              Report.pdf\n\
+    \            </td>\n            <td role=\"gridcell\">PDF</td>\n            <td role=\"gridcell\">1.2 MB</td>\n      \
+    \    </tr>\n        </tbody>\n      </table>\n      </div>\n"
+styling_hooks: []
+dependencies:
+  css_files:
+  - tree-grid.css
+  - tree.css
+  - table.css
+  javascript:
+  - tree-grid.js
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - tree
+  - data-tables
+  - button-icon
+related_components:
+- name: Data Tables
+  relationship: parent
+  description: Base table functionality with tree hierarchy added
+- name: Tree
+  relationship: similar
+  description: Similar hierarchical structure without tabular data
+- name: Accordion
+  relationship: similar
+  description: Similar expand/collapse concept for content sections
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/tree-grid/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

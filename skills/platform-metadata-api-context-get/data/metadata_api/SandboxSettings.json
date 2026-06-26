@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SandboxSettings - Metadata API",
+  "description": "Represents Sandbox settings. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "disableSandboxExpirationEmails": {
+      "type": "boolean",
+      "description": "Indicates whether to disable sandbox expiration email notifications for the source (production) org: true or false. When disabled in the source (production) org, users no longer receive email notifications for impending deletions of sandboxes that have been inactive for 180 days or longer."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SandboxSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"disableSandboxExpirationEmails\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"sandboxDetailNewUIOptOut\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a SandboxSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SandboxSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <disableSandboxExpirationEmails>true</disableSandboxExpirationEmails>\n</SandboxSettings>"
+    }
+  ]
+}

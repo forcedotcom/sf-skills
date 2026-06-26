@@ -1,0 +1,173 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "IdentityVerificationProcDef - Metadata API",
+  "description": "Represents the definition of the identity verification process.",
+  "file_information": ".IdentityVerificationProcDef",
+  "directory_location": "IdentityVerificationProcDefs",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "identityVerificationProcDtls": {
+      "type": "IdentityVerificationProcDtl[]",
+      "description": "A list of Identity Verification Process Detail elements."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label of the Identity Verification Process Definition record."
+    },
+    "searchLayoutType": {
+      "type": "IdentityVerificationSearchLayoutType (enumeration of type string)",
+      "required": true,
+      "description": "The display layout of the search component. Valid values are: Stack Tab"
+    }
+  },
+  "sub_types": {
+    "IdentityVerificationProcDtl": {
+      "apexClass": {
+        "type": "string",
+        "description": "The Apex class that is used to search and verify data in an external system."
+      },
+      "dataSourceType": {
+        "type": "IdentityVerificationDataSourceType (enumeration of type string)",
+        "required": true,
+        "description": "The source type of the data.Valid values are: External Salesforce"
+      },
+      "developerName": {
+        "type": "string",
+        "required": true,
+        "description": "The developer name of Identity verification process detail. Can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+      },
+      "displayRecordFieldName": {
+        "type": "string",
+        "description": "The name of the field that contains information about the record that's shown to the user after identity verification is successful. Available in API version 58.0 and later."
+      },
+      "identityVerificationProcFlds": {
+        "type": "IdentityVerificationProcFld[]",
+        "description": "A list of Identity Verification Process Field elements."
+      },
+      "isActive": {
+        "type": "boolean",
+        "description": "Indicates whether the record is active (true) or not (false)."
+      },
+      "isRetryAllowedAfterLimit": {
+        "type": "boolean",
+        "description": "For internal use only."
+      },
+      "linkedIdVerfProcessDet": {
+        "type": "string",
+        "description": "The record containing the details of the linked identity verification process. Available in API version 58.0 and later."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "The label of the Identity Verification Process Detail record."
+      },
+      "objectName": {
+        "type": "string",
+        "description": "The name of the object on which the search is performed and data is verified."
+      },
+      "optionalVerifiersMinVerfCount": {
+        "type": "int",
+        "description": "The number of optional verifiers that must be checked."
+      },
+      "retryLimit": {
+        "type": "int",
+        "description": "For internal use only."
+      },
+      "searchFilter": {
+        "type": "string",
+        "description": "A comma-separated list of predefined filter conditions that are used to refine the scope of the search."
+      },
+      "searchRecordUniqueIdField": {
+        "type": "string",
+        "description": "The field storing the unique identifier of a record displayed in the search results."
+      },
+      "searchResultSortBy": {
+        "type": "string",
+        "description": "The values that are used to sort the search results."
+      },
+      "searchSequenceNumber": {
+        "type": "int",
+        "required": true,
+        "description": "The sequence in which the search is performed and the search result is displayed."
+      },
+      "searchType": {
+        "type": "IdentityVerificationSearchType (enumeration of type string)",
+        "required": true,
+        "description": "The type of search being performed. Valid values are: Object-Based Text-Based"
+      }
+    },
+    "IdentityVerificationProcFld": {
+      "customFieldLabel": {
+        "type": "string",
+        "description": "The custom label for the field that contains the verification data."
+      },
+      "dataSourceType": {
+        "type": "IdentityVerificationProcFldDataSourceType (enumeration of type string)",
+        "required": true,
+        "description": "The source type of the data. Valid values are: External Salesforce"
+      },
+      "developerName": {
+        "type": "string",
+        "required": true,
+        "description": "The developer name of Identity Verification Process Field. Can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. Available in API version 58.0 and later."
+      },
+      "fieldDataType": {
+        "type": "IdentityVerificationProcFldFieldDataType (enumeration of type string)",
+        "description": "The data type of the field in the external data source that's defined in the identity verification process detail. Available in API version 58.0 and later. Valid values are: address checkbox currency dateonly datetime email number other percent phone picklist reference text timeonly url"
+      },
+      "fieldName": {
+        "type": "string",
+        "required": true,
+        "description": "The label of the field that contains the verification data based on the selected field type. Available in API version 58.0 and later."
+      },
+      "fieldType": {
+        "type": "IdentityVerificationProcFldFieldType (enumeration of type string)",
+        "required": true,
+        "description": "Indicates the type of field. Valid values are: additionalResultField optionalVerifier requiredVerifier resultField searchField searchFilter"
+      },
+      "fieldValueFormula": {
+        "type": "string",
+        "description": "Stores the formula that is applied to the field value."
+      },
+      "isActive": {
+        "type": "boolean",
+        "description": "Indicates whether the record is active (true) or not (false)."
+      },
+      "isManualInput": {
+        "type": "boolean",
+        "description": "Indicates whether the user can manually enter the identity verification details (true) or not (false). The default value of this field is false. Available in API version 58.0 and later."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "A user-friendly name for Identity Verification Process Field."
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "required": true,
+        "description": "The sequence number of the field."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"IdentityVerificationDataSourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Salesforce\"/>\n    <xsd:enumeration value=\"External\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"IdentityVerificationProcDef\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"identityVerificationProcDtls\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:IdentityVerificationProcDtl\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"searchLayoutType\" type=\"tns:IdentityVerificationSearchLayoutType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"IdentityVerificationProcDtl\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"apexClass\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"dataSourceType\" type=\"tns:IdentityVerificationDataSourceType\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"displayRecordFieldName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"identityVerificationProcFlds\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:IdentityVerificationProcFld\"/>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isRetryAllowedAfterLimit\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"linkedIdVerfProcessDet\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"objectName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"optionalVerifiersMinVerfCount\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"retryLimit\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"searchFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"searchRecordUniqueIdField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"searchResultSortBy\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"searchSequenceNumber\" type=\"xsd:int\"/>\n        <xsd:element name=\"searchType\" type=\"tns:IdentityVerificationSearchType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"IdentityVerificationProcFld\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"customFieldLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"dataSourceType\" type=\"tns:IdentityVerificationProcFldDataSourceType\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"fieldDataType\" minOccurs=\"0\" type=\"tns:IdentityVerificationProcFldFieldDataType\"/>\n        <xsd:element name=\"fieldName\" type=\"xsd:string\"/>\n        <xsd:element name=\"fieldType\" type=\"tns:IdentityVerificationProcFldFieldType\"/>\n        <xsd:element name=\"fieldValueFormula\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isManualInput\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"sequenceNumber\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"IdentityVerificationProcFldDataSourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Salesforce\"/>\n    <xsd:enumeration value=\"External\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"IdentityVerificationProcFldFieldDataType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"address\"/>\n    <xsd:enumeration value=\"checkbox\"/>\n    <xsd:enumeration value=\"currency\"/>\n    <xsd:enumeration value=\"dateonly\"/>\n    <xsd:enumeration value=\"datetime\"/>\n    <xsd:enumeration value=\"email\"/>\n    <xsd:enumeration value=\"number\"/>\n    <xsd:enumeration value=\"percent\"/>\n    <xsd:enumeration value=\"phone\"/>\n    <xsd:enumeration value=\"picklist\"/>\n    <xsd:enumeration value=\"reference\"/>\n    <xsd:enumeration value=\"text\"/>\n    <xsd:enumeration value=\"timeonly\"/>\n    <xsd:enumeration value=\"url\"/>\n    <xsd:enumeration value=\"other\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"IdentityVerificationProcFldFieldType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"requiredVerifier\"/>\n    <xsd:enumeration value=\"optionalVerifier\"/>\n    <xsd:enumeration value=\"searchField\"/>\n    <xsd:enumeration value=\"resultField\"/>\n    <xsd:enumeration value=\"additionalResultField\"/>\n    <xsd:enumeration value=\"searchFilter\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"IdentityVerificationSearchLayoutType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Tab\"/>\n    <xsd:enumeration value=\"Stack\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"IdentityVerificationSearchType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Text-Based\"/>\n    <xsd:enumeration value=\"Object-Based\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is an example of an IdentityVerificationProcDef component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<IdentityVerificationProcDef xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <identityVerificationProcDtls>\n      <fullName>Sample93AccountSearch</fullName>\n      <dataSourceType>Salesforce</dataSourceType>\n      <developerName>Sample93AccountSearch</developerName>\n      <identityVerificationProcFlds>\n         <fullName>Sample93AccountName</fullName>\n         <dataSourceType>Salesforce</dataSourceType>\n         <developerName>Sample93AccountName</developerName>\n         <fieldName>Name</fieldName>\n         <fieldType>requiredVerifier</fieldType>\n         <isActive>false</isActive>\n         <masterLabel>Sample93 Account Name</masterLabel>\n         <fieldValueFormula>abcd</fieldValueFormula>\n         <customFieldLabel>Name</customFieldLabel>\n         <sequenceNumber>1</sequenceNumber>\n         <isManualInput>false</isManualInput>\n      </identityVerificationProcFlds>\n      <identityVerificationProcFlds>\n         <fullName>Sample93Phone</fullName>\n         <dataSourceType>Salesforce</dataSourceType>\n         <developerName>Sample93Phone</developerName>\n         <fieldName>phone</fieldName>\n         <fieldType>optionalVerifier</fieldType>\n         <isActive>false</isActive>\n         <masterLabel>Sample93 Phone</masterLabel>\n         <sequenceNumber>93</sequenceNumber>\n         <isManualInput>false</isManualInput>\n      </identityVerificationProcFlds>\n      <identityVerificationProcFlds>\n         <fullName>Sample93PostalCode</fullName>\n         <dataSourceType>Salesforce</dataSourceType>\n         <developerName>Sample93PostalCode</developerName>\n         <fieldName>BillingPostalCode</fieldName>\n         <fieldType>optionalVerifier</fieldType>\n         <isActive>true</isActive>\n         <masterLabel>Sample93 Postal Code</masterLabel>\n         <sequenceNumber>4</sequenceNumber>\n         <isManualInput>false</isManualInput>\n      </identityVerificationProcFlds>\n      <identityVerificationProcFlds>\n         <fullName>Sample93Account</fullName>\n         <dataSourceType>Salesforce</dataSourceType>\n         <developerName>Sample93Account</developerName>\n         <fieldName>Name</fieldName>\n         <fieldType>resultField</fieldType>\n         <isActive>false</isActive>\n         <masterLabel>Sample93 Account</masterLabel>\n         <sequenceNumber>1</sequenceNumber>\n         <isManualInput>false</isManualInput>\n      </identityVerificationProcFlds>\n      <isActive>true</isActive>\n      <masterLabel>Sample93 Account Search</masterLabel>\n      <objectName>Account</objectName>\n      <searchRecordUniqueIdField>Id</searchRecordUniqueIdField>\n      <searchSequenceNumber>1</searchSequenceNumber>\n      <searchType>Text-Based</searchType>\n      <searchResultSortBy>Name</searchResultSortBy>\n      <optionalVerifiersMinVerfCount>1</optionalVerifiersMinVerfCount>\n      <isRetryAllowedAfterLimit>false</isRetryAllowedAfterLimit>\n      <retryLimit>5</retryLimit>\n      <searchFilter></searchFilter>\n      <displayRecordFieldName>LastModifiedById</displayRecordFieldName>\n   </identityVerificationProcDtls>\n   <masterLabel>Sample93 Verification Flow</masterLabel>\n   <searchLayoutType>Tab</searchLayoutType>\n</IdentityVerificationProcDef>"
+    }
+  ]
+}

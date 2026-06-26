@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "KeywordList - Metadata API",
+  "description": "Represents a list of keywords used in Experience Cloud site moderation. This keyword list is a type of moderation criteria that defines offensive language or inappropriate content that you don’t want in your site.",
+  "file_information": ".keywords",
+  "directory_location": "moderation",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "string",
+      "description": "A description of the keyword list."
+    },
+    "keywords": {
+      "type": "Keyword[]",
+      "description": "The keywords you want moderate in your Experience Cloud site."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Label for the keyword list.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "Keyword": {
+      "keyword": {
+        "type": "string",
+        "description": "Keywords you want to moderate. Keywords can only be up to 100 characters and can include letters, numbers, spaces, and special characters. Wildcard characters aren’t supported.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Keyword\">\n  <xsd:sequence>\n    <xsd:element name=\"keyword\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"KeywordList\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"keywords\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Keyword\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a KeywordList component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<KeywordList xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <masterLabel>Bad Word List</masterLabel>\n   <description>List of bad words updated by Joe in Nov 2015.</description>\n   <keywords>\n     <keyword>bad-word</keyword>\n   </keywords>\n   <keywords>\n     <keyword>b a d w o r d</keyword>\n   </keywords>\n   <keywords>\n     <keyword>b@dword</keyword>\n   </keywords>\n</KeywordList>"
+    }
+  ]
+}

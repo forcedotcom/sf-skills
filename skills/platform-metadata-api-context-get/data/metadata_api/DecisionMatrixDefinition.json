@@ -1,0 +1,140 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DecisionMatrixDefinition - Metadata API",
+  "description": "Represents a definition of a decision matrix.",
+  "file_information": ".decisionMatrixDefinition",
+  "directory_location": "decisionMatrixDefinition",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "Describes a decision matrix definition."
+    },
+    "groupKey": {
+      "type": "string",
+      "description": "A key for grouping matrix rows in different versions, such as a geographic region or a product code."
+    },
+    "label": {
+      "type": "string",
+      "required": true,
+      "description": "The UI label of a decision matrix definition."
+    },
+    "processType": {
+      "type": "ExpsSetProcessType (enumeration of type string)",
+      "description": "The process type that uses the expression set rule. Valid values are: Bre GpaCalculation InsuranceClaimProcessing—Available in API version 65.0 and later. ItServiceManagement—Available in API version 65.0 and later. PlanCostCalculation RatingDiscovery StudentInformationSystem—Available in API version 65.0 and later. StudentSuccess Note: When Business Rules Engine is enabled for a Salesforce instance, the default value is 'Bre’. Other usage types may be available to you depending on your industry solution and permission sets. Available in API version 59.0 and later."
+    },
+    "subGroupKey": {
+      "type": "string",
+      "description": "A subgroup key for grouping matrix rows in different versions, such as a geographic region or a product code. For example, if the groupKey is Country, the subGroupKey can be State or Province."
+    },
+    "type": {
+      "type": "DecisionMatrixType (enumeration of type string)",
+      "description": "The type of a decision matrix. Valid values are: Grouped Standard"
+    },
+    "versions": {
+      "type": "DecisionMatrixDefinitionVersion[]",
+      "description": "Represents an array of decision matrix version definitions in a decision matrix. This array must contain at least one version."
+    }
+  },
+  "sub_types": {
+    "DecisionMatrixDefinitionVersion": {
+      "columns": {
+        "type": "DecisionMatrixDefinitionVersionColumn[]",
+        "description": "Represents an array of columns in a decision matrix definition version."
+      },
+      "decisionMatrixDefinition": {
+        "type": "string",
+        "description": "The full name of a decision matrix version."
+      },
+      "endDate": {
+        "type": "dateTime",
+        "description": "The date until which a decision matrix definition version is available for use."
+      },
+      "groupKeyValue": {
+        "type": "string",
+        "description": "The value of the groupKey for a decision matrix definition version. For example, if the groupKey is Country, the groupKeyValue can be United States."
+      },
+      "label": {
+        "type": "string",
+        "required": true,
+        "description": "The UI label of a decision matrix definition version."
+      },
+      "rank": {
+        "type": "int",
+        "description": "The rank of the Decision Matrix Definition Version. When more than one enabled version matches a decision matrix call, and the start date time to end date time spans overlap, the version with the highest rank is chosen. Available in API version 64.0 and later."
+      },
+      "startDate": {
+        "type": "dateTime",
+        "required": true,
+        "description": "The date from when a decision matrix definition version is available for use."
+      },
+      "status": {
+        "type": "DecisionMatrixDefStatus (enumeration of type string)",
+        "required": true,
+        "description": "Specifies the status of a decision matrix definition version. Valid values are: Active Draft Inactive InvalidDraft Obsolete"
+      },
+      "subGroupKeyValue": {
+        "type": "string",
+        "description": "The value of the subgroup key for a decision matrix definition version. For example, if the subGroupKey is State or Province, the subGroupKeyValue can be California."
+      },
+      "versionNumber": {
+        "type": "int",
+        "required": true,
+        "description": "The version number of a decision matrix definition."
+      }
+    },
+    "DecisionMatrixDefinitionVersionColumn": {
+      "columnType": {
+        "type": "DecisionMatrixColumnType (enumeration of type string)",
+        "required": true,
+        "description": "Specifies whether a column is for an input or output. Valid values are: Input Output"
+      },
+      "dataType": {
+        "type": "DecisionMatrixDataType (enumeration of type string)",
+        "required": true,
+        "description": "The type of data that’s stored in a column. Valid values are: Boolean Currency Number NumberRange Percent Text TextRange"
+      },
+      "displaySequence": {
+        "type": "int",
+        "required": true,
+        "description": "Represents the position of a column in the column order."
+      },
+      "isWildcardColumn": {
+        "type": "boolean",
+        "required": true,
+        "description": "Specifies whether a column stores a wildcard value (true) or not (false). The default value is false."
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "The full name of a decision matrix definition version column."
+      },
+      "rangeValue": {
+        "type": "string",
+        "description": "A list of values that define range boundaries."
+      },
+      "wildcardValue": {
+        "type": "string",
+        "description": "The wildcard value such as ALL."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DecisionMatrixDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DecisionMatrixDefinition\n\txmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<label>HealthCloudUM_ValidRegions</label>\n\t<type>Standard</type>\n\t<versions>\n\t\t<fullName>HealthCloudUM_ValidRegions_V1</fullName>\n\t\t<columns>\n\t\t\t<columnType>Input</columnType>\n\t\t\t<dataType>Text</dataType>\n\t\t\t<displaySequence>2</displaySequence>\n\t\t\t<isWildcardColumn>false</isWildcardColumn>\n\t\t\t<name>State</name>\n\t\t</columns>\n\t\t<columns>\n\t\t\t<columnType>Input</columnType>\n\t\t\t<dataType>Text</dataType>\n\t\t\t<displaySequence>1</displaySequence>\n\t\t\t<isWildcardColumn>false</isWildcardColumn>\n\t\t\t<name>City</name>\n\t\t</columns>\n\t\t<columns>\n\t\t\t<columnType>Output</columnType>\n\t\t\t<dataType>Boolean</dataType>\n\t\t\t<displaySequence>3</displaySequence>\n\t\t\t<isWildcardColumn>false</isWildcardColumn>\n\t\t\t<name>IsValid</name>\n\t\t</columns>\n\t\t<decisionMatrixDefinition>HealthCloudUM_ValidRegions</decisionMatrixDefinition>\n\t\t<label>HealthCloudUM_ValidRegions V1</label>\n\t\t<startDate>2022-05-02T13:04:06.000Z</startDate>\n\t\t<status>Draft</status>\n\t\t<versionNumber>1</versionNumber>\n\t</versions>\n</DecisionMatrixDefinition>"
+    }
+  ]
+}

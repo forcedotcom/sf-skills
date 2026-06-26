@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DeploymentSettings - Metadata API",
+  "description": "Represents the settings affecting how deployments behave in the org. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "doesSkipAsyncApexValidation": {
+      "type": "boolean",
+      "description": "Indicates whether deployments from this org skip asynchronous Apex validations (true) or not (false). The default value is true. Set this field to false when an Apex class in the package you’re deploying is used by an Apex batch job that could run during the deployment. The deployment of a package containing an Apex class that is used by a running batch job fails without validation."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DeploymentSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"doesSkipAsyncApexValidation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DeploymentSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DeploymentSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <doesSkipAsyncApexValidation>true</doesSkipAsyncApexValidation>\n</DeploymentSettings>"
+    }
+  ]
+}

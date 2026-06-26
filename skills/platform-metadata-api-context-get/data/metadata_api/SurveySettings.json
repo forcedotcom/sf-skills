@@ -1,0 +1,44 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SurveySettings - Metadata API",
+  "description": "Represents an org’s survey settings. Use the SurveySettings component to enable Salesforce Surveys, enable Customer Lifecycle Maps, and choose whether the owner of a survey can manage the responses.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableGenerativeAISurveys": {
+      "type": "boolean",
+      "description": "Indicates whether AI-Generated Surveys is enabled for your org (true) or not (false). The default value is false. Available in API version 62.0 and later."
+    },
+    "enableIndustriesCxmEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether Customer Lifecycle Maps is enabled for your org (true) or not (false). The default value is false."
+    },
+    "enableSurvey": {
+      "type": "boolean",
+      "description": "Indicates whether Surveys is enabled for your org (true) or not (false). The default value is false."
+    },
+    "enableSurveyOwnerCanManageResponse": {
+      "type": "boolean",
+      "description": "Indicates whether the owner of a survey can manage its responses. The default value is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"SurveySettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableConversationalSurveys\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableGenerativeAISurveys\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableIndustriesCxmEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSurvey\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSurveyInvLinkWithoutAppExtension\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSurveyOwnerCanManageResponse\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This example shows a sample SurveySettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SurveySettingsxmlns=\"http://soap.sforce.com/2006/04/metadata\">\n<enableIndustriesCxmEnabled>false</enableIndustriesCxmEnabled>\n<enableSurvey>true</enableSurvey>\n<enableSurveyOwnerCanManageResponse>false</enableSurveyOwnerCanManageResponse>\n<enableGenerativeAISurveys>false</enableGenerativeAISurveys>\n</SurveySettings>"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExpressionSetObjectAlias - Metadata API",
+  "description": "Represents information about the alias of the source object that’s used in an expression set.",
+  "file_information": ".expressionSetObjectAlias",
+  "directory_location": "expressionSetObjectAlias",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "dataType": {
+      "type": "ExpsSetObjectDataType (enumeration of type string)",
+      "required": true,
+      "description": "The data type of the object alias.Values are: JSON sObject"
+    },
+    "mappings": {
+      "type": "ExpressionSetObjectAliasField[]",
+      "description": "The mapping between a source field and its corresponding field alias."
+    },
+    "objectApiName": {
+      "type": "string",
+      "required": true,
+      "description": "The API name of the top-level object, when the data type is sObject. The key of the top-level object, when the data type is JSON."
+    },
+    "usageType": {
+      "type": "ExpsSetProcessType (enumeration of type string)",
+      "required": true,
+      "description": "The type of application associated with the industry that's using an expression set. Your Salesforce org admin can define the values.Valid values are: Bre GpaCalculation InsuranceClaimProcessing—Available in API version 65.0 and later. ItServiceManagement—Available in API version 65.0 and later. PlanCostCalculation RatingDiscovery StudentInformationSystem—Available in API version 65.0 and later. StudentSuccess When Business Rules Engine is enabled for a Salesforce instance, the default value is 'Bre’. Other usage types are available to you depending on your industry solution and permission sets."
+    }
+  },
+  "sub_types": {
+    "ExpressionSetObjectAliasField": {
+      "fieldAlias": {
+        "type": "string",
+        "required": true,
+        "description": "The field alias associated with the source field name."
+      },
+      "sourceFieldName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the source field for which the field alias is created. The source field name under an object alias must be unique."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ExpressionSetObjectAlias component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ExpressionSetObjectAlias xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <dataType>sObject</dataType>\n    <mappings>\n        <fieldAlias>dum2</fieldAlias>\n        <sourceFieldName>CreatedBy.Contact.Name</sourceFieldName>\n    </mappings>\n    <mappings>\n        <fieldAlias>dum3</fieldAlias>\n        <sourceFieldName>CreatedBy.Name</sourceFieldName>\n    </mappings>\n    <mappings>\n        <fieldAlias>dum1</fieldAlias>\n        <sourceFieldName>Owner.Contact.Name</sourceFieldName>\n    </mappings>\n    <objectApiName>Account</objectApiName>\n    <usageType>Bre</usageType>\n</ExpressionSetObjectAlias>"
+    }
+  ]
+}

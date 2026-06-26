@@ -1,0 +1,136 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ActivitiesSettings - Metadata API",
+  "description": "Represents an org's activity settings, and its user interface settings for the calendar. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "allowUsersToRelateMultipleContactsToTasksAndEvents": {
+      "type": "boolean",
+      "description": "This field indicates whether Shared Activities is enabled. When the value is true, allows users to relate multiple contacts to a task or event. Important: Beginning with API v36.0, this field is read-only in all versions of the API. You can’t change the value of this field. Even though this field was updateable before Spring '16, changing this field’s value wasn't supported and could have resulted in an incorrect integration. If you have code in older API versions that changes the value of this field, ensure that you update that code to prevent any errors."
+    },
+    "autoRelateEventAttendees": {
+      "type": "boolean",
+      "description": "When users add attendees to events, events are automatically related to up to 50 contacts or one lead. An attendee is matched by their email address to a contact or lead. Admins control this field on the Activity Settings page. Available in API version 42.0 and later."
+    },
+    "enableActivityReminders": {
+      "type": "boolean",
+      "description": "Enables popup activity reminders for an organization. Admins control this field on the Activity Settings page."
+    },
+    "enableCalendarHomeLWC": {
+      "type": "boolean",
+      "description": "Enables Lightning Web Components for Calendar. Increases the default item limit in Calendar Home and applies styling enhancements to improve readability. Admins control this field on the Activity Settings page."
+    },
+    "enableClickCreateEvents": {
+      "type": "boolean",
+      "description": "Lets users create events in day and weekly calendar views by double-clicking a specific time slot and entering the details of the event in an overlay. Hovering over an event displays an overlay where users can view the event details or delete the event without leaving the page. Admins use a mini page layout to configure the fields shown in the overlays. Doesn’t support recurring events or multi-person events. Admins control this field on the User Interface settings page."
+    },
+    "enableDragAndDropScheduling": {
+      "type": "boolean",
+      "description": "Lets users create events associated with records by dragging a record from a list view onto a calendar view and entering the details of the event in an overlay. Hovering over an event displays an overlay where users can view the event details or delete the event without leaving the page. Admins use a mini page layout to configure the fields shown in the overlays. Admins control this field on the User Interface settings page."
+    },
+    "enableEmailTracking": {
+      "type": "boolean",
+      "description": "Enables tracking of outbound HTML emails if an organization uses HTML email templates. Admins control this field on the Activity Settings page."
+    },
+    "enableFlowTaskNotifsViaApex": {
+      "type": "boolean",
+      "description": "If Apex invokes Process Builder to create a task, determines whether an email is sent (true) or not (false)."
+    },
+    "enableGroupTasks": {
+      "type": "boolean",
+      "description": "Lets users assign independent copies of a new task to multiple users. Admins control this field on the Activity Settings page."
+    },
+    "enableHideChildEventsPreference": {
+      "type": "boolean",
+      "description": "Enables hiding child events from the calendar or activity views. This setting is useful if you have complex event hierarchies and want to simplify the views by hiding less relevant details. This field is available in API version 50.0 and later. Admins control this field on the Activity Settings page."
+    },
+    "enableListViewScheduling": {
+      "type": "boolean",
+      "description": "Extends the functionality of enableDragAndDropScheduling and enableClickCreateEvents to list view calendars. Admins control this field on the User Interface settings page."
+    },
+    "enableLogNote": {
+      "type": "boolean",
+      "description": "Enables the option to create and associate a note on an existing record."
+    },
+    "enableMLSingleClientProfile": {
+      "type": "boolean",
+      "description": "Enable creating a client profile using machine learning. When this setting is enabled, Salesforce uses machine learning algorithms to analyze and consolidate client data, providing a more comprehensive client profile. This can help sales and service teams to better understand their clients and provide more personalized interactions. This field is available in API version 50.0 and later. Admins control this field on the Activity Settings page."
+    },
+    "enableMultidayEvents": {
+      "type": "boolean",
+      "description": "Enables creation of events that end more than 24 hours after they start. Admins control this field on the Activity Settings page."
+    },
+    "enableRecurringEvents": {
+      "type": "boolean",
+      "description": "Enables creation of events that repeat at specified intervals. Admins control this field on the Activity Settings page."
+    },
+    "enableRecurringTasks": {
+      "type": "boolean",
+      "description": "Enables creation of tasks that repeat at specified intervals. Admins control this field on the Activity Settings page."
+    },
+    "enableRollUpActivToContactsAcct": {
+      "type": "boolean",
+      "description": "Enables a contact’s activities to be rolled up and displayed on the contact’s primary account. Default value is true. Available in API versions 47.0 and later."
+    },
+    "enableSidebarCalendarShortcut": {
+      "type": "boolean",
+      "description": "In the sidebar, displays a shortcut link to a user’s last-used calendar view. Admins control this field on the Activity Settings page."
+    },
+    "enableSimpleTaskCreateUI": {
+      "type": "boolean",
+      "description": "Allows admins to specify whether tapping New Task in Salesforce opens a regular task record edit page or a page that displays key task fields first. Admins control this field on the Activity Settings page."
+    },
+    "enableTimelineCompDateSort": {
+      "type": "boolean",
+      "description": "Allows admins to sort past activities by completed date (true). If false, activities are sorted by due date. Admins control this field on the Activity Settings page."
+    },
+    "enableUNSTaskDelegatedToNotifications": {
+      "type": "boolean",
+      "description": "On the Activity Settings page, exposes a setting for Admins to hide or show a user setting that lets individual users enable or disable email notifications when tasks are assigned to them."
+    },
+    "enableUserListViewCalendars": {
+      "type": "boolean",
+      "description": "Allows users to create and view user list view calendars in Lightning Experience. Available in API versions 47.0 and later"
+    },
+    "meetingRequestsLogo": {
+      "type": "string",
+      "description": "Available when showCustomLogoMeetingRequests is enabled. Uploads a custom logo. An administrator can select only a logo that has been uploaded to certain folders in the Documents tab. Admins control this field on the Activity Settings page."
+    },
+    "showCustomLogoMeetingRequests": {
+      "type": "boolean",
+      "description": "Displays a custom logo in meeting request emails and on a meeting’s Web page. Invitees see the logo when a user either invites them to an event or requests a meeting. Admins control this field on the Activity Settings page."
+    },
+    "showEventDetailsMultiUserCalendar": {
+      "type": "boolean",
+      "description": "Displays event details on-screen rather than in hover text. Admins control this field on the Activity Settings page."
+    },
+    "showHomePageHoverLinksForEvents": {
+      "type": "boolean",
+      "description": "In the calendar section of the Home tab: When a user hovers over the subject of an event, a hover link displays an overlay with selected event details. (Hover links are always available in other calendar views.) When a user clicks the subject of an event, displays the event detail page. Admins use a mini page layout to configure the fields shown in the overlay. Admins control this field on the User Interface settings page."
+    },
+    "showMyTasksHoverLinks": {
+      "type": "boolean",
+      "description": "In the My Tasks section of the Home tab and on the calendar day view: When a user hovers over the subject of a task, a hover link displays an overlay with selected task details. When a user clicks the subject of a task, displays the task detail page. Admins use a mini page layout to configure the fields shown in the overlay. Admins control this field on the User Interface settings page."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ActivitiesSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"allowUsersToRelateMultipleContactsToTasksAndEvents\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"autoRelateEventAttendees\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableActivityReminders\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCalendarHomeLWC\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableClickCreateEvents\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDragAndDropScheduling\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEmailTracking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFlowTaskNotifsViaApex\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableGroupTasks\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableHideChildEventsPreference\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableListViewScheduling\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLogNote\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMLSingleClientProfile\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMultidayEvents\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRecurringEvents\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRecurringTasks\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRollUpActivToContactsAcct\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSidebarCalendarShortcut\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSimpleTaskCreateUI\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableTimelineCompDateSort\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableUNSTaskDelegatedToNotifications\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableUserListViewCalendars\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"meetingRequestsLogo\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"showCustomLogoMeetingRequests\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showEventDetailsMultiUserCalendar\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showHomePageHoverLinksForEvents\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showMyTasksHoverLinks\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an activity settings file:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ActivitiesSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableActivityReminders>true</enableActivityReminders>\n    <autoRelateEventAttendees>true</autoRelateEventAttendees>\n    <enableClickCreateEvents>true</enableClickCreateEvents>\n    <enableDragAndDropScheduling>true</enableDragAndDropScheduling>\n    <enableEmailTracking>true</enableEmailTracking>\n    <enableGroupTasks>true</enableGroupTasks>\n    <enableListViewScheduling>true</enableListViewScheduling>\n    <enableMultidayEvents>true</enableMultidayEvents>\n    <enableRecurringEvents>true</enableRecurringEvents>\n    <enableRollUpActivToContactsAcct>true</enableRollUpActivToContactsAcct>\n    <enableRecurringTasks>true</enableRecurringTasks>\n    <enableTimelineCompDateSort>true</enableTimelineCompDateSort>\n    <enableUserListViewCalendars>true</enableUserListViewCalendars>\n    <enableSidebarCalendarShortcut>true</enableSidebarCalendarShortcut>\n    <meetingRequestsLogo>Folder02/logo03.png</meetingRequestsLogo>\n    <showCustomLogoMeetingRequests>true</showCustomLogoMeetingRequests>\n    <showEventDetailsMultiUserCalendar>true</showEventDetailsMultiUserCalendar>\n    <showHomePageHoverLinksForEvents>true</showHomePageHoverLinksForEvents>\n    <showMyTasksHoverLinks>true</showMyTasksHoverLinks>\n</ActivitiesSettings>"
+    }
+  ]
+}

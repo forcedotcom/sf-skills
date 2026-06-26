@@ -1,0 +1,18 @@
+name: retrieve_genai_plugin
+argv:
+  - sf
+  - project
+  - retrieve
+  - start
+  - --target-org
+  - "{{ORG_ALIAS}}"
+  - --target-metadata-dir
+  - "{{TARGET_DIR}}"
+  - --json
+extra_argv_anchor: --target-metadata-dir
+timeout_seconds: 300
+required_params: [ORG_ALIAS, TARGET_DIR]
+success_check: stdout_json_status_zero
+auth_required_stderr_patterns:
+  - NoOrgAuthenticationError
+  - AuthInfoError

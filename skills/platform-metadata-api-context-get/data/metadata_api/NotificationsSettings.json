@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "NotificationsSettings - Metadata API",
+  "description": "Represents an organization’s mobile settings.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableActivityReminderBrowserNotifs": {
+      "type": "boolean",
+      "description": "Reserved for internal use."
+    },
+    "enableMobileAppPushNotifications": {
+      "type": "boolean",
+      "description": "Indicates whether mobile push notifications are enabled."
+    },
+    "enableNotifications": {
+      "type": "boolean",
+      "description": "Indicates whether notifications are enabled."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"NotificationsSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableActvityReminderBrowserNotifs\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMobileAppPushNotifications\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableNotifications\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is a sample notifications.settings metadata file.",
+      "code": "<NotificationsSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableMobileAppPushNotifications>true</enableMobileAppPushNotifications>\n    <enableNotifications>true</enableNotifications>\n</NotificationsSettings>"
+    }
+  ]
+}

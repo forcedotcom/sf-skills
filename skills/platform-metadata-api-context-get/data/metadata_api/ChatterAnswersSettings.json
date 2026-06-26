@@ -1,0 +1,76 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ChatterAnswersSettings - Metadata API",
+  "description": "Represents the metadata used to manage settings for Chatter Answers.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "emailFollowersOnBestAnswer": {
+      "type": "boolean",
+      "description": "Indicates whether users are notified when a best answer is selected for a question that they’re following (true) or not (false)."
+    },
+    "emailFollowersOnReply": {
+      "type": "boolean",
+      "description": "Indicates whether users are notified when other users reply to questions that they’re following (true) or not (false)."
+    },
+    "emailOwnerOnPrivateReply": {
+      "type": "boolean",
+      "description": "Indicates whether users are notified when customer support responds to their questions privately (true) or not (false)."
+    },
+    "emailOwnerOnReply": {
+      "type": "boolean",
+      "description": "Indicates whether users are notified when other users reply to their questions (true) or not (false)."
+    },
+    "enableAnswerViaEmail": {
+      "type": "boolean",
+      "description": "Indicates whether users can post answers by replying to email notifications (true) or not (false). This field is available in API version 29.0 and later."
+    },
+    "enableChatterAnswers": {
+      "type": "boolean",
+      "description": "Indicates whether the Chatter Answers feature is enabled in the organization (true) or not (false)."
+    },
+    "enableFacebookSSO": {
+      "type": "boolean",
+      "description": "Indicates whether users can sign in to your Chatter Answers forums with their Facebook logins (true) or not (false). To enable this feature, you must define and enable a Facebook authentication provider in your organization’s security controls and enable Auth Providers in your organization."
+    },
+    "enableInlinePublisher": {
+      "type": "boolean",
+      "description": "Indicates whether users can filter search results by articles or questions before they post a question to any of your Chatter Answers forums (true) or not (false). Also, adds Title and Body fields to questions for easier text input and scanning. This field is available in API version 29.0 and later."
+    },
+    "enableReputation": {
+      "type": "boolean",
+      "description": "Indicates whether user reputations appear as hover text on their profile pictures (true) or not (false). Reputation is enabled across all zones. To enable the reputation setting, you must enable Reputation in your organization."
+    },
+    "enableRichTextEditor": {
+      "type": "boolean",
+      "description": "Indicates whether the rich text editor is enabled for users to format text and upload images when posting questions (true) or not (false). To enable rich text editor, you must enable Optimize Question Flow."
+    },
+    "facebookAuthProvider": {
+      "type": "string",
+      "description": "The name of an existing Facebook authentication provider. To implement Facebook Single Sign On for your Chatter Answers forums, you must choose a Facebook authentication provider."
+    },
+    "showInPortals": {
+      "type": "boolean",
+      "description": "Indicates whether Chatter Answers can be added as a tab to your Customer portal or partner portal (true) or not (false)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ChatterAnswersSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"emailFollowersOnBestAnswer\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"emailFollowersOnReply\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"emailOwnerOnPrivateReply\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"emailOwnerOnReply\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAnswerViaEmail\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableChatterAnswers\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFacebookSSO\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableInlinePublisher\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableReputation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRichTextEditor\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"facebookAuthProvider\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"showInPortals\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example chatteranswers.settings metadata file:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ChatterAnswersSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <emailFollowersOnBestAnswer>true</emailFollowersOnBestAnswer>\n    <emailFollowersOnReply>true</emailFollowersOnReply>\n    <emailOwnerOnPrivateReply>true</emailOwnerOnPrivateReply>\n    <emailOwnerOnReply>true</emailOwnerOnReply>\n    <enableChatterAnswers>true</enableChatterAnswers>\n    <enableFacebookSSO>true</enableFacebookSSO>\n    <enableInlinePublisher>true</enableInlinePublisher>\n    <enableReputation>true</enableReputation>\n    <enableRichTextEditor>true</enableRichTextEditor>\n    <facebookAuthProvider>FacebookAuthProvider</facebookAuthProvider>\n    <showInPortals>true</showInPortals>\n</ChatterAnswersSettings>"
+    }
+  ]
+}

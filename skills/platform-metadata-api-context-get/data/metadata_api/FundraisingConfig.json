@@ -1,0 +1,86 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "FundraisingConfig - Metadata API",
+  "description": "Represents a collection of settings to configure the fundraising product.",
+  "file_information": ".fundraisingConfig",
+  "directory_location": "fundraisingConfigs",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "donorMatchingMethod": {
+      "type": "DonorMatchingMethod (enumeration of type string)",
+      "description": "Reserved for future use."
+    },
+    "failedTransactionCount": {
+      "type": "int",
+      "description": "The count of consecutive failed past transactions before the gift commitment status is changed to Failing. If set to 0, the status is never auto-changed to Failing."
+    },
+    "householdSoftCreditRole": {
+      "type": "string",
+      "description": "Reserved for future use."
+    },
+    "installmentExtDayCount": {
+      "type": "int",
+      "description": "The duration in the number of days before or after an unpaid transaction in a gift commitment is marked as another installment in the gift commitment schedule. The unpaid transaction within the grace period is considered a gift transaction."
+    },
+    "isHshldSoftCrAutoCrea": {
+      "type": "boolean",
+      "description": "Reserved for future use."
+    },
+    "lapsedUnpaidTrxnCount": {
+      "type": "int",
+      "description": "The count of consecutive unpaid past transactions before the gift commitment status is changed to Lapsed. If set to 0, the status is never auto-changed to Lapsed."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "A user-friendly name for FundraisingConfig, which is defined when the FundraisingConfig is created."
+    },
+    "shouldClosePaidRcrCmt": {
+      "type": "boolean",
+      "description": "Indicates whether to automatically close a recurring gift commitment when it has no ongoing or future schedule and no unpaid transaction (true) or not (false). The default value is false. Available in API version 59.0 and later."
+    },
+    "shouldCreateRcrSchdTrxn": {
+      "type": "boolean",
+      "description": "Indicates whether the next transaction in a recurring schedule is automatically created (true) or not (false). The default value is true. Available in API version 59.0 and later."
+    },
+    "utmCampaignSrcObj": {
+      "type": "string",
+      "description": "Name of the sObject of the campaign for which the donation was received. Available in API version 64.0 and later."
+    },
+    "utmCampaignSrcObjField": {
+      "type": "string",
+      "description": "Name of the field on the sObject in utmCampaignSrcObj of the campaign for which the donation was received. Available in API version 64.0 and later."
+    },
+    "utmMediumSrcObj": {
+      "type": "string",
+      "description": "Name of the sObject that stores data about the message channel from which the donation originated. Available in API version 64.0 and later."
+    },
+    "utmMediumSrcObjField": {
+      "type": "string",
+      "description": "Name of the field on the sObject in utmMediumSrcObj that stores data about the message channel from which the donation originated. Available in API version 64.0 and later."
+    },
+    "utmSourceSrcObj": {
+      "type": "string",
+      "description": "Name of the sObject that stores data about the source of a donation. Available in API version 64.0 and later."
+    },
+    "utmSourceSrcObjField": {
+      "type": "string",
+      "description": "Name of the field on the sObject in utmSourceSrcObj that stores data about the source of a donation. Available in API version 64.0 and later."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a FundraisingConfig component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<FundraisingConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <lapsedUnpaidTrxnCount>5</lapsedUnpaidTrxnCount>\n    <householdSoftCreditRole>Admin</householdSoftCreditRole>\n    <isHshldSoftCrAutoCrea>true</isHshldSoftCrAutoCrea>\n    <installmentExtDayCount>7</installmentExtDayCount>\n    <donorMatchingMethod>No_Matching</donorMatchingMethod>\n    <donorExternalIdField>TestExtId__c</donorExternalIdField>\n    <failedTransactionCount>12</failedTransactionCount>\n    <outreachSourceCodeGenFmla>OutreachSourceCodeGenFmla</outreachSourceCodeGenFmla>\n    <shouldCreateRcrSchdTrxn>true</shouldCreateRcrSchdTrxn>\n    <shouldClosePaidRcrCmt>false</shouldClosePaidRcrCmt>\n    <masterLabel>MasterLabel</masterLabel>\n    <utmMediumSrcObj>UTM Medium Src Obj</utmMediumSrcObj>\n    <utmMediumSrcObjField>UTM Medium Src Obj Field</utmMediumSrcObjField>\n    <utmSourceSrcObj>UTM Source Src Obj</utmSourceSrcObj>\n    <utmSourceSrcObjField>UTM Source Src Obj Field</utmSourceSrcObjField>\n    <utmCampaignSrcObj>UTM Campaign Src Obj</utmCampaignSrcObj>\n    <utmCampaignSrcObjField>UTM Campaign Src Obj Field</utmCampaignSrcObjField>\n</FundraisingConfig>"
+    }
+  ]
+}

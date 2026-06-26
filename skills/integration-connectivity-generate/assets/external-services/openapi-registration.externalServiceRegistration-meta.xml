@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    External Service Registration Template: OpenAPI/Swagger
+
+    Use Case: Auto-generate Apex from OpenAPI specification
+    - REST API integrations
+    - Type-safe API calls
+    - Automatic request/response serialization
+
+    Supported Schema Types:
+    - OpenApi3 (OpenAPI 3.0.x) - RECOMMENDED
+    - OpenApi (OpenAPI 2.0 / Swagger)
+
+    Prerequisites:
+    1. Named Credential configured for authentication
+    2. Valid OpenAPI specification (JSON or YAML)
+
+    Setup Steps:
+    1. Replace {{placeholder}} values
+    2. Embed OpenAPI schema OR reference URL
+    3. Deploy to org
+    4. Use generated Apex classes: ExternalService.{{ServiceName}}
+
+    File Location: force-app/main/default/externalServiceRegistrations/{{ServiceName}}.externalServiceRegistration-meta.xml
+-->
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- Display name in Setup -->
+    <label>{{ServiceLabel}}</label>
+
+    <!-- Description of the service -->
+    <description>{{ServiceDescription}}</description>
+
+    <!--
+    Named Credential for authentication
+    Must be deployed BEFORE this External Service
+    -->
+    <namedCredential>{{NamedCredentialName}}</namedCredential>
+
+    <!--
+    Schema Type: OpenApi3 or OpenApi (2.0)
+    OpenAPI 3.0 is recommended for new integrations
+    -->
+    <schemaType>OpenApi3</schemaType>
+
+    <!--
+    Status: Complete, Draft, or Invalid
+    Set to Complete for production use
+    -->
+    <status>Complete</status>
+
+    <!--
+    OpenAPI Schema Content
+    Embed the full OpenAPI JSON schema here
+    OR use schemaUrl to reference external URL
+
+    Example minimal OpenAPI 3.0 schema:
+    -->
+    <schema>
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "{{ServiceTitle}}",
+    "version": "1.0.0",
+    "description": "{{ServiceDescription}}"
+  },
+  "servers": [
+    {
+      "url": "{{BaseUrl}}"
+    }
+  ],
+  "paths": {
+    "/{{resourcePath}}": {
+      "get": {
+        "operationId": "get{{ResourceName}}",
+        "summary": "Get {{ResourceName}}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/{{ResourceName}}"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "create{{ResourceName}}",
+        "summary": "Create {{ResourceName}}",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/{{ResourceName}}Input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/{{ResourceName}}"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "{{ResourceName}}": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "{{ResourceName}}Input": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
+    </schema>
+
+    <!--
+    Alternative: Reference schema from URL
+    <schemaUrl>https://api.example.com/openapi.json</schemaUrl>
+    -->
+
+    <!--
+    Operations configuration
+    Define which operations to include/exclude
+    -->
+    <operations>
+        <active>true</active>
+        <name>get{{ResourceName}}</name>
+    </operations>
+    <operations>
+        <active>true</active>
+        <name>create{{ResourceName}}</name>
+    </operations>
+
+    <!--
+    Generated Apex Usage:
+
+    // Get instance of the service
+    ExternalService.{{ServiceName}} service = new ExternalService.{{ServiceName}}();
+
+    // Call GET operation
+    ExternalService.{{ServiceName}}_get{{ResourceName}}_Response resp =
+        service.get{{ResourceName}}('record-id-123');
+
+    // Call POST operation
+    ExternalService.{{ServiceName}}_create{{ResourceName}}_Request req =
+        new ExternalService.{{ServiceName}}_create{{ResourceName}}_Request();
+    req.name = 'New Item';
+    ExternalService.{{ServiceName}}_create{{ResourceName}}_Response resp =
+        service.create{{ResourceName}}(req);
+    -->
+</ExternalServiceRegistration>

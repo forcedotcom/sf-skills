@@ -1,0 +1,81 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition",
+    "child_metadata_types"
+  ],
+  "title": "ArticleType - Metadata API",
+  "description": "Represents the metadata associated with an article type.",
+  "file_information": "An ArticleType is defined as a custom object and is stored in the objects folder. ArticleTypes have a suffix __kav (instead of __c for custom objects). ArticleType field names have a suffix of __c like other custom objects, and must be dot-qualified with the name of the article type to which they belong. This is shown in the following sample package.xml file:\n\n```\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Package xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <fullName>articlefilemetadata</fullName>\n    <apiAccessLevel>Unrestricted</apiAccessLevel>\n    <types>\n        <members>newarticle__kav.description__c</members>\n        <name>CustomField</name>\n    </types>\n    <types>\n        <members>newarticle__kav</members>\n        <name>CustomObject</name>\n    </types>\n</Package>\n```",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "articleTypeChannelDisplay": {
+      "type": "articleTypeChannelDisplay",
+      "description": "Represents the article-type templates used to display an article in the various channels. See “Article Type Templates” in the Salesforce online help."
+    },
+    "deploymentStatus": {
+      "type": "DeploymentStatus (enumeration of type string)",
+      "description": "A string which represents the deployment status of a custom object or field. Valid values are: InDevelopment Deployed"
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the article type. Maximum of 1000 characters."
+    },
+    "fields": {
+      "type": "CustomField[]",
+      "description": "Represents one or more fields in the article type."
+    },
+    "gender": {
+      "type": "Gender",
+      "description": "Indicates the gender of the noun that represents the object. This is used for languages where words need different treatment depending on their gender."
+    },
+    "label": {
+      "type": "string",
+      "description": "Label that represents the object throughout the Salesforce user interface."
+    },
+    "pluralLabel": {
+      "type": "string",
+      "description": "Plural version of the label value."
+    },
+    "startsWith": {
+      "type": "StartsWith (enumeration of type string)",
+      "description": "Indicates whether the noun starts with a vowel, consonant, or is a special character. This is used for languages where words need different treatment depending on the first character. Valid values are listed in StartsWith."
+    }
+  },
+  "sub_types": {
+    "ArticleTypeChannelDisplay": {
+      "articleTypeTemplates": {
+        "type": "ArticleTypeTemplate[]",
+        "description": "Indicates which article-type template applies in the specified channel."
+      }
+    },
+    "ArticleTypeTemplate": {
+      "channel": {
+        "type": "string",
+        "description": "Specifies the channel where the article-type template applies: AllChannels: all the available channels. App: the Articles tab in Salesforce Knowledge. Pkb: the public knowledge base. Csp: the Customer Portal. Prm: the partner portal."
+      },
+      "page": {
+        "type": "string",
+        "description": "Represents the name of the custom Visualforce page used as a custom article-type template. Use this field when you select template"
+      },
+      "template": {
+        "type": "string",
+        "description": "Indicates the article-type template used for the specified channel: Page: custom Visualforce page. When specifying this value, you must also set the page field with the Visualforce page name. Tab: display the sections you defined in the layout as tabs. Toc: display the sections you defined in the layout as table of content."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "A sample article type definition follows:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomObject xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <articleTypeChannelDisplay>\n        <articleTypeTemplates>\n            <channel>App</channel>\n            <template>Tab</template>\n        </articleTypeTemplates>\n        <articleTypeTemplates>\n            <channel>Prm</channel>\n            <template>Tab</template>\n        </articleTypeTemplates>\n        <articleTypeTemplates>\n            <channel>Csp</channel>\n            <template>Tab</template>\n        </articleTypeTemplates>\n        <articleTypeTemplates>\n            <channel>Pkb</channel>\n            <template>Toc</template>\n        </articleTypeTemplates>\n    </articleTypeChannelDisplay>\n    <deploymentStatus>Deployed</deploymentStatus>\n    <description>Article type with custom fields</description>\n    <fields>\n        <fullName>description__c</fullName>\n        <label>Description</label>\n        <length>48</length>\n        <type>Text</type>\n    </fields>\n    <label>newarticle</label>\n    <pluralLabel>newarticles</pluralLabel>\n</CustomObject>"
+    }
+  ],
+  "child_metadata_types": "This entity contains the following child metadata types:\n\n- ArticleType_Layout\n- ChannelLayout\n- ArticleType_CustomField"
+}

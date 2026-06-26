@@ -1,0 +1,188 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LiveChatButton - Metadata API",
+  "description": "Represents a Chat deployment’s settings for the button that customers click to chat with an agent and the chat window, such as the label that appears on the button and the pre-chat form that appears before a chat begins. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".liveChatButton",
+  "directory_location": "liveChatButtons",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "animation": {
+      "type": "LiveChatButtonPresentation (enumeration of type string)",
+      "description": "The type of animation for a chat invitation. Valid values are: Slide Fade Appear Custom"
+    },
+    "autoGreeting": {
+      "type": "string",
+      "description": "The customized greeting message that the customer receives when an agent accepts a chat request from the chat button or invitation. Available in API version 29.0 and later."
+    },
+    "chasitorIdleTimeout": {
+      "type": "int",
+      "description": "Specifies the amount of idle time before the chat times out. The idle time starts being counted after the agent sends the last chat message. Available in API version 35.0 and later."
+    },
+    "chasitorIdleTimeoutWarning": {
+      "type": "int",
+      "description": "Specifies the amount of idle time before a warning appears. The idle time starts being counted after the agent sends the last chat message. Available in API version 35.0 and later."
+    },
+    "chatPage": {
+      "type": "string",
+      "description": "Specifies the page that hosts your chat if that page differs from the Chat window."
+    },
+    "customAgentName": {
+      "type": "string",
+      "description": "The agent’s name as it appears to customers in the chat window. Available in API version 29.0 and later."
+    },
+    "deployments": {
+      "type": "LiveChatButtonDeployments",
+      "description": "Specifies the deployments associated with the button."
+    },
+    "enableQueue": {
+      "type": "boolean",
+      "description": "Indicates whether queuing is enabled (true) or not (false)."
+    },
+    "inviteEndPosition": {
+      "type": "LiveChatButtonInviteEndPosition (enumeration of type string)",
+      "description": "The end position of the chat invitation. Valid values include: TopLeft Top TopRight Left Center Right BottomLeft Bottom BottomRight"
+    },
+    "inviteImage": {
+      "type": "string",
+      "description": "The custom button graphic that appears for the invitation."
+    },
+    "inviteStartPosition": {
+      "type": "LiveChatButtonInviteStartPosition (enumeration of type string)",
+      "description": "The start position of the chat invitation. Valid values include: TopLeft TopLeftTop Top TopRightTop TopRight TopRightRight Right BottomRightRight BottomRight BottomRightBottom Bottom BottomLeftBottom BottomLeft BottomLeftLeft Left TopLeftLeft"
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Specifies whether the chat button or invitation is active."
+    },
+    "label": {
+      "type": "string",
+      "description": "Specifies the text that appears on the button."
+    },
+    "numberOfReroutingAttempts": {
+      "type": "int",
+      "description": "Specifies the number of times a chat request can be rerouted to available agents if all agents reject the chat request. Available in API version 30.0 and later."
+    },
+    "offlineImage": {
+      "type": "string",
+      "description": "Specifies the image that appears on the button when no agents are available to chat."
+    },
+    "onlineImage": {
+      "type": "string",
+      "description": "Specifies the image that appears on the button when agents are available to chat."
+    },
+    "optionsCustomRoutingIsEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether custom routing is enabled for incoming chat requests (true) or not (false). Available in API version 30.0 and later."
+    },
+    "optionsHasChasitorIdleTimeout": {
+      "type": "boolean",
+      "description": "Indicates whether the visitor idle timeout feature is enabled. Available in API version 35.0 and later."
+    },
+    "optionsHasInviteAfterAccept": {
+      "type": "boolean",
+      "description": "Indicates whether a new chat invitation triggers after a customer accepts a previous chat invitation (true) or not (false)."
+    },
+    "optionsHasInviteAfterReject": {
+      "type": "boolean",
+      "description": "Indicates whether a new chat invitation triggers after a customer rejects a previous chat invitation (true) or not (false)."
+    },
+    "optionsHasRerouteDeclinedRequest": {
+      "type": "boolean",
+      "description": "Indicates whether a chat request, which has been rejected by all available agents, is rerouted to available agents again (true) or not (false). Available in API version 30.0 and later."
+    },
+    "optionsIsAutoAccept": {
+      "type": "boolean",
+      "description": "Indicates whether a chat request is automatically accepted by the agent it’s assigned to (true) or not (false). For chat buttons and automated chat invitations with routingType set to MostAvailable or LeastActive. Available in API version 30.0 and later."
+    },
+    "optionsIsInviteAutoRemove": {
+      "type": "boolean",
+      "description": "Indicates whether a chat invitation is set to automatically disappear from a customer’s screen after a certain amount of time (true) or not (false)."
+    },
+    "overallQueueLength": {
+      "type": "int",
+      "description": "Specifies the maximum number of chat requests that are allowed to queue."
+    },
+    "perAgentQueueLength": {
+      "type": "int",
+      "description": "Specifies the number of chat requests that are allowed to queue for an agent with the required skills."
+    },
+    "postChatPage": {
+      "type": "string",
+      "description": "Specifies the name of the post-chat form to which customers are routed when the chat ends."
+    },
+    "postChatUrl": {
+      "type": "string",
+      "description": "Specifies the URL of the post-chat form to which customers are routed when the chat ends."
+    },
+    "preChatFormPage": {
+      "type": "string",
+      "description": "Specifies the name of the pre-chat form to which customers are routed before a chat begins."
+    },
+    "preChatFormUrl": {
+      "type": "string",
+      "description": "Specifies the URL of the pre-chat form to which customers are routed when the chat begins."
+    },
+    "pushTimeOut": {
+      "type": "int",
+      "description": "Specifies the number of seconds an agent has to answer an incoming chat request before the request is routed to another agent."
+    },
+    "routingType": {
+      "type": "LiveChatButtonRoutingType (enumeration of type string)",
+      "description": "Specifies how incoming chats are routed to agents when a customer pushes a button. Valid values are: Choice LeastActive MostAvailable"
+    },
+    "site": {
+      "type": "string",
+      "description": "Specifies the Salesforce site that hosts your custom chat button images or custom chat page. You must have the CustomDomain permission enabled in your organization before you can use a Salesforce site with Chat."
+    },
+    "skills": {
+      "type": "LiveChatButtonSkills",
+      "description": "Specifies the skills associated with the button. When a customer clicks the button to chat, they’re automatically routed to agents with those skills."
+    },
+    "timeToRemoveInvite": {
+      "type": "int",
+      "description": "Specifies how long the invitation is displayed (in seconds) to customers before it disappears."
+    },
+    "type": {
+      "type": "LiveChatButtonType (enumeration of type string)",
+      "description": "The chat button type. Valid values are: Standard Invite",
+      "required": true
+    },
+    "windowLanguage": {
+      "type": "Language",
+      "description": "Specifies the language preferences for the chat window associated with the button."
+    }
+  },
+  "sub_types": {
+    "LiveChatButtonSkills": {
+      "skill": {
+        "type": "string",
+        "description": "Specifies the name of the skill."
+      }
+    },
+    "LiveChatButtonDeployments": {
+      "deployment": {
+        "type": "string",
+        "description": "Specifies the name of the deployment."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"Language\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"en_US\"/>\n    <xsd:enumeration value=\"de\"/>\n    <xsd:enumeration value=\"es\"/>\n    <xsd:enumeration value=\"fr\"/>\n    <xsd:enumeration value=\"it\"/>\n    <xsd:enumeration value=\"ja\"/>\n    <xsd:enumeration value=\"sv\"/>\n    <xsd:enumeration value=\"ko\"/>\n    <xsd:enumeration value=\"zh_TW\"/>\n    <xsd:enumeration value=\"zh_CN\"/>\n    <xsd:enumeration value=\"pt_BR\"/>\n    <xsd:enumeration value=\"nl_NL\"/>\n    <xsd:enumeration value=\"da\"/>\n    <xsd:enumeration value=\"th\"/>\n    <xsd:enumeration value=\"fi\"/>\n    <xsd:enumeration value=\"ru\"/>\n    <xsd:enumeration value=\"es_MX\"/>\n    <xsd:enumeration value=\"no\"/>\n    <xsd:enumeration value=\"hu\"/>\n    <xsd:enumeration value=\"pl\"/>\n    <xsd:enumeration value=\"cs\"/>\n    <xsd:enumeration value=\"tr\"/>\n    <xsd:enumeration value=\"in\"/>\n    <xsd:enumeration value=\"ro\"/>\n    <xsd:enumeration value=\"vi\"/>\n    <xsd:enumeration value=\"uk\"/>\n    <xsd:enumeration value=\"iw\"/>\n    <xsd:enumeration value=\"el\"/>\n    <xsd:enumeration value=\"bg\"/>\n    <xsd:enumeration value=\"en_GB\"/>\n    <xsd:enumeration value=\"ar\"/>\n    <xsd:enumeration value=\"sk\"/>\n    <xsd:enumeration value=\"pt_PT\"/>\n    <xsd:enumeration value=\"hr\"/>\n    <xsd:enumeration value=\"sl\"/>\n    <xsd:enumeration value=\"fr_CA\"/>\n    <xsd:enumeration value=\"ka\"/>\n    <xsd:enumeration value=\"sr\"/>\n    <xsd:enumeration value=\"sh\"/>\n    <xsd:enumeration value=\"en_AU\"/>\n    <xsd:enumeration value=\"en_MY\"/>\n    <xsd:enumeration value=\"en_IN\"/>\n    <xsd:enumeration value=\"en_PH\"/>\n    <xsd:enumeration value=\"en_CA\"/>\n    <xsd:enumeration value=\"ro_MD\"/>\n    <xsd:enumeration value=\"bs\"/>\n    <xsd:enumeration value=\"mk\"/>\n    <xsd:enumeration value=\"lv\"/>\n    <xsd:enumeration value=\"lt\"/>\n    <xsd:enumeration value=\"et\"/>\n    <xsd:enumeration value=\"sq\"/>\n    <xsd:enumeration value=\"sh_ME\"/>\n    <xsd:enumeration value=\"mt\"/>\n    <xsd:enumeration value=\"ga\"/>\n    <xsd:enumeration value=\"eu\"/>\n    <xsd:enumeration value=\"cy\"/>\n    <xsd:enumeration value=\"is\"/>\n    <xsd:enumeration value=\"cac\"/>\n    <xsd:enumeration value=\"quc\"/>\n    <xsd:enumeration value=\"cak\"/>\n    <xsd:enumeration value=\"ms\"/>\n    <xsd:enumeration value=\"tl\"/>\n    <xsd:enumeration value=\"lb\"/>\n    <xsd:enumeration value=\"rm\"/>\n    <xsd:enumeration value=\"hy\"/>\n    <xsd:enumeration value=\"hi\"/>\n    <xsd:enumeration value=\"ur\"/>\n    <xsd:enumeration value=\"bn\"/>\n    <xsd:enumeration value=\"de_AT\"/>\n    <xsd:enumeration value=\"de_CH\"/>\n    <xsd:enumeration value=\"ta\"/>\n    <xsd:enumeration value=\"ar_DZ\"/>\n    <xsd:enumeration value=\"ar_BH\"/>\n    <xsd:enumeration value=\"ar_EG\"/>\n    <xsd:enumeration value=\"ar_IQ\"/>\n    <xsd:enumeration value=\"ar_JO\"/>\n    <xsd:enumeration value=\"ar_KW\"/>\n    <xsd:enumeration value=\"ar_LB\"/>\n    <xsd:enumeration value=\"ar_LY\"/>\n    <xsd:enumeration value=\"ar_MA\"/>\n    <xsd:enumeration value=\"ar_OM\"/>\n    <xsd:enumeration value=\"ar_QA\"/>\n    <xsd:enumeration value=\"ar_SA\"/>\n    <xsd:enumeration value=\"ar_SD\"/>\n    <xsd:enumeration value=\"ar_SY\"/>\n    <xsd:enumeration value=\"ar_TN\"/>\n    <xsd:enumeration value=\"ar_AE\"/>\n    <xsd:enumeration value=\"ar_YE\"/>\n    <xsd:enumeration value=\"zh_SG\"/>\n    <xsd:enumeration value=\"zh_HK\"/>\n    <xsd:enumeration value=\"en_HK\"/>\n    <xsd:enumeration value=\"en_IE\"/>\n    <xsd:enumeration value=\"en_SG\"/>\n    <xsd:enumeration value=\"en_ZA\"/>\n    <xsd:enumeration value=\"fr_BE\"/>\n    <xsd:enumeration value=\"fr_LU\"/>\n    <xsd:enumeration value=\"fr_CH\"/>\n    <xsd:enumeration value=\"de_BE\"/>\n    <xsd:enumeration value=\"de_LU\"/>\n    <xsd:enumeration value=\"it_CH\"/>\n    <xsd:enumeration value=\"nl_BE\"/>\n    <xsd:enumeration value=\"es_AR\"/>\n    <xsd:enumeration value=\"es_BO\"/>\n    <xsd:enumeration value=\"es_CL\"/>\n    <xsd:enumeration value=\"es_CO\"/>\n    <xsd:enumeration value=\"es_CR\"/>\n    <xsd:enumeration value=\"es_DO\"/>\n    <xsd:enumeration value=\"es_EC\"/>\n    <xsd:enumeration value=\"es_SV\"/>\n    <xsd:enumeration value=\"es_GT\"/>\n    <xsd:enumeration value=\"es_HN\"/>\n    <xsd:enumeration value=\"es_NI\"/>\n    <xsd:enumeration value=\"es_PA\"/>\n    <xsd:enumeration value=\"es_PY\"/>\n    <xsd:enumeration value=\"es_PE\"/>\n    <xsd:enumeration value=\"es_PR\"/>\n    <xsd:enumeration value=\"es_US\"/>\n    <xsd:enumeration value=\"es_UY\"/>\n    <xsd:enumeration value=\"es_VE\"/>\n    <xsd:enumeration value=\"ca\"/>\n    <xsd:enumeration value=\"af\"/>\n    <xsd:enumeration value=\"sw\"/>\n    <xsd:enumeration value=\"zu\"/>\n    <xsd:enumeration value=\"xh\"/>\n    <xsd:enumeration value=\"te\"/>\n    <xsd:enumeration value=\"ml\"/>\n    <xsd:enumeration value=\"kn\"/>\n    <xsd:enumeration value=\"mr\"/>\n    <xsd:enumeration value=\"gu\"/>\n    <xsd:enumeration value=\"pa\"/>\n    <xsd:enumeration value=\"en_NZ\"/>\n    <xsd:enumeration value=\"mi\"/>\n    <xsd:enumeration value=\"my\"/>\n    <xsd:enumeration value=\"fa\"/>\n    <xsd:enumeration value=\"km\"/>\n    <xsd:enumeration value=\"am\"/>\n    <xsd:enumeration value=\"kk\"/>\n    <xsd:enumeration value=\"ht\"/>\n    <xsd:enumeration value=\"sm\"/>\n    <xsd:enumeration value=\"haw\"/>\n    <xsd:enumeration value=\"zh_MY\"/>\n    <xsd:enumeration value=\"ru_LT\"/>\n    <xsd:enumeration value=\"ru_PL\"/>\n    <xsd:enumeration value=\"ru_AM\"/>\n    <xsd:enumeration value=\"ru_KZ\"/>\n    <xsd:enumeration value=\"ru_KG\"/>\n    <xsd:enumeration value=\"ru_BY\"/>\n    <xsd:enumeration value=\"ru_MD\"/>\n    <xsd:enumeration value=\"ru_UA\"/>\n    <xsd:enumeration value=\"en_AE\"/>\n    <xsd:enumeration value=\"en_BE\"/>\n    <xsd:enumeration value=\"en_CY\"/>\n    <xsd:enumeration value=\"en_DE\"/>\n    <xsd:enumeration value=\"en_IL\"/>\n    <xsd:enumeration value=\"en_IT\"/>\n    <xsd:enumeration value=\"en_NL\"/>\n    <xsd:enumeration value=\"en_MT\"/>\n    <xsd:enumeration value=\"en_ES\"/>\n    <xsd:enumeration value=\"en_PL\"/>\n    <xsd:enumeration value=\"en_DK\"/>\n    <xsd:enumeration value=\"en_SE\"/>\n    <xsd:enumeration value=\"en_NO\"/>\n    <xsd:enumeration value=\"en_FR\"/>\n    <xsd:enumeration value=\"en_HU\"/>\n    <xsd:enumeration value=\"en_CZ\"/>\n    <xsd:enumeration value=\"en_SK\"/>\n    <xsd:enumeration value=\"en_RO\"/>\n    <xsd:enumeration value=\"en_CH\"/>\n    <xsd:enumeration value=\"en_AL\"/>\n    <xsd:enumeration value=\"en_AD\"/>\n    <xsd:enumeration value=\"en_AG\"/>\n    <xsd:enumeration value=\"en_AT\"/>\n    <xsd:enumeration value=\"en_BS\"/>\n    <xsd:enumeration value=\"en_BB\"/>\n    <xsd:enumeration value=\"en_BZ\"/>\n    <xsd:enumeration value=\"en_BA\"/>\n    <xsd:enumeration value=\"en_BG\"/>\n    <xsd:enumeration value=\"en_HR\"/>\n    <xsd:enumeration value=\"en_DM\"/>\n    <xsd:enumeration value=\"en_EE\"/>\n    <xsd:enumeration value=\"en_FI\"/>\n    <xsd:enumeration value=\"en_GI\"/>\n    <xsd:enumeration value=\"en_GR\"/>\n    <xsd:enumeration value=\"en_GD\"/>\n    <xsd:enumeration value=\"en_GY\"/>\n    <xsd:enumeration value=\"en_IS\"/>\n    <xsd:enumeration value=\"en_JM\"/>\n    <xsd:enumeration value=\"en_JP\"/>\n    <xsd:enumeration value=\"en_LV\"/>\n    <xsd:enumeration value=\"en_LI\"/>\n    <xsd:enumeration value=\"en_LT\"/>\n    <xsd:enumeration value=\"en_LU\"/>\n    <xsd:enumeration value=\"en_MC\"/>\n    <xsd:enumeration value=\"en_ME\"/>\n    <xsd:enumeration value=\"en_MK\"/>\n    <xsd:enumeration value=\"en_PT\"/>\n    <xsd:enumeration value=\"en_RS\"/>\n    <xsd:enumeration value=\"en_SI\"/>\n    <xsd:enumeration value=\"en_KR\"/>\n    <xsd:enumeration value=\"en_KN\"/>\n    <xsd:enumeration value=\"en_LC\"/>\n    <xsd:enumeration value=\"en_VC\"/>\n    <xsd:enumeration value=\"en_TW\"/>\n    <xsd:enumeration value=\"en_TH\"/>\n    <xsd:enumeration value=\"en_TT\"/>\n    <xsd:enumeration value=\"en_TR\"/>\n    <xsd:enumeration value=\"nl_SR\"/>\n    <xsd:enumeration value=\"fr_HT\"/>\n    <xsd:enumeration value=\"de_LI\"/>\n    <xsd:enumeration value=\"es_AD\"/>\n    <xsd:enumeration value=\"sv_FI\"/>\n    <xsd:enumeration value=\"el_CY\"/>\n    <xsd:enumeration value=\"fr_MA\"/>\n    <xsd:enumeration value=\"kl\"/>\n    <xsd:enumeration value=\"ji\"/>\n    <xsd:enumeration value=\"hmn\"/>\n    <xsd:enumeration value=\"eo\"/>\n    <xsd:enumeration value=\"iw_EO\"/>\n    <xsd:enumeration value=\"eo_US\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"LiveChatButton\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"animation\" minOccurs=\"0\" type=\"tns:LiveChatButtonPresentation\"/>\n        <xsd:element name=\"autoGreeting\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"chasitorIdleTimeout\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"chasitorIdleTimeoutWarning\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"chatPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customAgentName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"deployments\" minOccurs=\"0\" type=\"tns:LiveChatButtonDeployments\"/>\n        <xsd:element name=\"enableQueue\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"inviteEndPosition\" minOccurs=\"0\" type=\"tns:LiveChatButtonInviteEndPosition\"/>\n        <xsd:element name=\"inviteImage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"inviteStartPosition\" minOccurs=\"0\" type=\"tns:LiveChatButtonInviteStartPosition\"/>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"numberOfReroutingAttempts\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"offlineImage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"onlineImage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"optionsCustomRoutingIsEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"optionsHasChasitorIdleTimeout\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"optionsHasInviteAfterAccept\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"optionsHasInviteAfterReject\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"optionsHasRerouteDeclinedRequest\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"optionsIsAutoAccept\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"optionsIsInviteAutoRemove\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"overallQueueLength\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"perAgentQueueLength\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"postChatPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"postChatUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"preChatFormPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"preChatFormUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"pushTimeOut\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"routingType\" type=\"tns:LiveChatButtonRoutingType\"/>\n        <xsd:element name=\"site\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"skills\" minOccurs=\"0\" type=\"tns:LiveChatButtonSkills\"/>\n        <xsd:element name=\"timeToRemoveInvite\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"type\" type=\"tns:LiveChatButtonType\"/>\n        <xsd:element name=\"windowLanguage\" minOccurs=\"0\" type=\"tns:Language\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"LiveChatButtonDeployments\">\n  <xsd:sequence>\n    <xsd:element name=\"deployment\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"LiveChatButtonInviteEndPosition\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TopLeft\"/>\n    <xsd:enumeration value=\"Top\"/>\n    <xsd:enumeration value=\"TopRight\"/>\n    <xsd:enumeration value=\"Left\"/>\n    <xsd:enumeration value=\"Center\"/>\n    <xsd:enumeration value=\"Right\"/>\n    <xsd:enumeration value=\"BottomLeft\"/>\n    <xsd:enumeration value=\"Bottom\"/>\n    <xsd:enumeration value=\"BottomRight\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"LiveChatButtonInviteStartPosition\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TopLeft\"/>\n    <xsd:enumeration value=\"TopLeftTop\"/>\n    <xsd:enumeration value=\"Top\"/>\n    <xsd:enumeration value=\"TopRightTop\"/>\n    <xsd:enumeration value=\"TopRight\"/>\n    <xsd:enumeration value=\"TopRightRight\"/>\n    <xsd:enumeration value=\"Right\"/>\n    <xsd:enumeration value=\"BottomRightRight\"/>\n    <xsd:enumeration value=\"BottomRight\"/>\n    <xsd:enumeration value=\"BottomRightBottom\"/>\n    <xsd:enumeration value=\"Bottom\"/>\n    <xsd:enumeration value=\"BottomLeftBottom\"/>\n    <xsd:enumeration value=\"BottomLeft\"/>\n    <xsd:enumeration value=\"BottomLeftLeft\"/>\n    <xsd:enumeration value=\"Left\"/>\n    <xsd:enumeration value=\"TopLeftLeft\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"LiveChatButtonPresentation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Slide\"/>\n    <xsd:enumeration value=\"Fade\"/>\n    <xsd:enumeration value=\"Appear\"/>\n    <xsd:enumeration value=\"Custom\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"LiveChatButtonRoutingType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Choice\"/>\n    <xsd:enumeration value=\"LeastActive\"/>\n    <xsd:enumeration value=\"MostAvailable\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"LiveChatButtonSkills\">\n  <xsd:sequence>\n    <xsd:element name=\"skill\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"LiveChatButtonType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Standard\"/>\n    <xsd:enumeration value=\"Invite\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here’s a sample of a liveChatButton file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LiveChatButton xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <deployments/>\n    <enableQueue>false</enableQueue>\n    <isActive>true</isActive>\n    <label>CustomerSupportButton</label>\n    <optionsCustomRoutingIsEnabled>false</optionsCustomRoutingIsEnabled>\n    <optionsHasChasitorIdleTimeout>false</optionsHasChasitorIdleTimeout>\n    <optionsHasInviteAfterAccept>false</optionsHasInviteAfterAccept>\n    <optionsHasInviteAfterReject>false</optionsHasInviteAfterReject>\n    <optionsHasRerouteDeclinedRequest>false</optionsHasRerouteDeclinedRequest>\n    <optionsIsAutoAccept>false</optionsIsAutoAccept>\n    <optionsIsInviteAutoRemove>false</optionsIsInviteAutoRemove>\n    <postChatUrl>https://help.salesforce.com</postChatUrl>\n    <routingType>Choice</routingType>\n    <skills>\n        <skill>Chat</skill>\n    </skills>\n    <type>Standard</type>\n</LiveChatButton>"
+    }
+  ]
+}

@@ -1,0 +1,230 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DataConnector - Metadata API",
+  "description": "Represents the white-labeled metadata configuration for an external connector in Data 360.",
+  "file_information": ".dataconnector",
+  "directory_location": "dataconnectors",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "attributes": {
+      "type": "DataConnectorAttribute[]",
+      "description": "A list of configurable attributes for the data connector."
+    },
+    "description": {
+      "type": "string",
+      "required": true,
+      "description": "The description of the data connector."
+    },
+    "errors": {
+      "type": "DataConnectorError[]",
+      "description": "A list of error messages or codes related to the connector’s behavior or configuration validation."
+    },
+    "features": {
+      "type": "DataConnectorFeature[] (enumeration of type string)",
+      "description": "A list of features supported by the data connector. Values are: Override"
+    },
+    "icon": {
+      "type": "string",
+      "description": "A static resource in SVG format with dimensions of 100x100 pixels and a file size not exceeding 100 KB."
+    },
+    "licenseAgreement": {
+      "type": "string",
+      "description": "Text of the license agreement associated with the data connector."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The display label of the connector used in user interface (UI)."
+    },
+    "ownerLocation": {
+      "type": "string",
+      "description": "A description or URL that specifies where the connector is maintained or hosted."
+    },
+    "ownerLogo": {
+      "type": "string",
+      "description": "A static resource in SVG format with dimensions of 100x100 pixels and a file size not exceeding 100 KB."
+    },
+    "ownerName": {
+      "type": "string",
+      "description": "The name of the organization that owns the connector."
+    },
+    "parentConnector": {
+      "type": "string",
+      "description": "The API name of the connector. For example, AwsS3, SNOWFLAKE, ICEBERG, and so on."
+    },
+    "releaseLevel": {
+      "type": "DataConnectorReleaseLevel (enumeration of type string)",
+      "required": true,
+      "description": "Indicates the connector’s lifecycle stage.Values are: BETA GA IN_DEV PILOT"
+    },
+    "supportEmail": {
+      "type": "string",
+      "description": "The support email address users can contact for help with the connector."
+    },
+    "supportMessage": {
+      "type": "string",
+      "description": "A support-related message or instruction displayed."
+    },
+    "supportPhone": {
+      "type": "string",
+      "description": "The support phone number users can call for help with the connector."
+    },
+    "translations": {
+      "type": "LocalizedValue[]",
+      "description": "A list of localized labels and descriptions to support multiple languages in the UI."
+    }
+  },
+  "sub_types": {
+    "DataConnectorAttribute": {
+      "capabilities": {
+        "type": "DataConnectorCapability[] (enumeration of type string)",
+        "description": "A list of supported capabilities for the data connector.Values are: DataIn DataInDelete DataInHeader DataInIncremental DataInSelector DataInStructured DataInUnstructured DataOut Hidden UniqueGroup ZeroCopyIn"
+      },
+      "command": {
+        "type": "string",
+        "description": "The command string executed during data operations, such as import or sync."
+      },
+      "commandAttributes": {
+        "type": "string",
+        "description": "A list of attributes passed with the command."
+      },
+      "dataType": {
+        "type": "DataConnectorDataType (enumeration of type string)",
+        "required": true,
+        "description": "Specifies the type of data input expected.Values are: CHECKBOX COMBOBOX DATE DATETIME EMAIL IDP NAMED_CREDENTIAL NUMBER PASSWORD PASSWORD_FILE PRIVATE_NETWORK_ROUTE RADIO RADIO_BUTTONS TEXT TEXTAREA TIME TOGGLE"
+      },
+      "defaultValue": {
+        "type": "string",
+        "description": "The default value assigned to the field if no user input is provided."
+      },
+      "editable": {
+        "type": "boolean",
+        "description": "Indicates whether the field value can be modified by the user."
+      },
+      "externalName": {
+        "type": "string",
+        "required": true,
+        "description": "The unique name used to reference the connector externally, such as in API calls."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "The label used for display in the UI."
+      },
+      "max": {
+        "type": "string",
+        "description": "The maximum allowable value or length for the field."
+      },
+      "min": {
+        "type": "string",
+        "description": "The minimum allowable value or length for the field."
+      },
+      "options": {
+        "type": "DataConnectorAttributeOpt[]",
+        "description": "A list of selectable options available for the field."
+      },
+      "order": {
+        "type": "int",
+        "required": true,
+        "description": "The display order or evaluation order of the field."
+      },
+      "pattern": {
+        "type": "string",
+        "description": "The validation pattern used to ensure input follows a defined format."
+      },
+      "placeholder": {
+        "type": "string",
+        "description": "The placeholder text displayed in the input field when empty."
+      },
+      "readonly": {
+        "type": "boolean",
+        "description": "Indicates whether the field is read-only."
+      },
+      "required": {
+        "type": "boolean",
+        "description": "Indicates whether the field must have a value."
+      },
+      "secure": {
+        "type": "boolean",
+        "description": "Indicates whether the field contains sensitive data and should be masked."
+      },
+      "tooltip": {
+        "type": "string",
+        "description": "The tooltip text shown to users for additional guidance."
+      },
+      "translations": {
+        "type": "LocalizedValue[]",
+        "description": "A list of localized labels and descriptions for use in different languages."
+      },
+      "validationMessageError": {
+        "type": "string",
+        "description": "The error message shown when input validation fails for this field."
+      }
+    },
+    "DataConnectorAttributeOpt": {
+      "capabilities": {
+        "type": "DataConnectorCapability[] (enumeration of type string)",
+        "description": "A list of capabilities supported by the data connector.Values are: DataIn DataInDelete DataInHeader DataInIncremental DataInSelector DataInStructured DataInUnstructured DataOut Hidden UniqueGroup ZeroCopyIn"
+      },
+      "conditionAttributes": {
+        "type": "string",
+        "description": "A list of attributes used to define conditions in the connector configuration."
+      },
+      "externalName": {
+        "type": "string",
+        "required": true,
+        "description": "The unique name used to reference the connector externally, such as in API calls."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "The display label for the connector used in the UI."
+      },
+      "order": {
+        "type": "int",
+        "required": true,
+        "description": "The order or priority of the connector in processing context."
+      },
+      "translations": {
+        "type": "LocalizedValue[]",
+        "description": "A list of localized labels and descriptions for use in different languages."
+      }
+    },
+    "DataConnectorError": {
+      "externalName": {
+        "type": "string",
+        "required": true,
+        "description": "The unique name used to reference the object externally, such as in API calls. Must be unique across the namespace."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "The label displayed in the UI."
+      },
+      "translations": {
+        "type": "LocalizedValue[]",
+        "description": "A list of localized labels and descriptions for use in different languages."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DataConnector\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"attributes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DataConnectorAttribute\"/>\n        <xsd:element name=\"description\" type=\"xsd:string\"/>\n        <xsd:element name=\"errors\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DataConnectorError\"/>\n        <xsd:element name=\"features\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DataConnectorFeature\"/>\n        <xsd:element name=\"icon\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"licenseAgreement\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"ownerLocation\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"ownerLogo\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"ownerName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"parentConnector\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"releaseLevel\" type=\"tns:DataConnectorReleaseLevel\"/>\n        <xsd:element name=\"supportEmail\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"supportMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"supportPhone\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"translations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LocalizedValue\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"DataConnectorAttribute\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"capabilities\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DataConnectorCapability\"/>\n        <xsd:element name=\"command\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"commandAttributes\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"dataType\" type=\"tns:DataConnectorDataType\"/>\n        <xsd:element name=\"defaultValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"editable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"externalName\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"max\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"min\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"options\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DataConnectorAttributeOpt\"/>\n        <xsd:element name=\"order\" type=\"xsd:int\"/>\n        <xsd:element name=\"pattern\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"placeholder\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"readonly\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"required\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"secure\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"tooltip\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"translations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LocalizedValue\"/>\n        <xsd:element name=\"validationMessageError\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"DataConnectorAttributeOpt\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"capabilities\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DataConnectorCapability\"/>\n        <xsd:element name=\"conditionAttributes\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalName\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"order\" type=\"xsd:int\"/>\n        <xsd:element name=\"translations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LocalizedValue\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"DataConnectorCapability\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Hidden\"/>\n    <xsd:enumeration value=\"DataIn\"/>\n    <xsd:enumeration value=\"DataInStructured\"/>\n    <xsd:enumeration value=\"DataInUnstructured\"/>\n    <xsd:enumeration value=\"DataOut\"/>\n    <xsd:enumeration value=\"ZeroCopyIn\"/>\n    <xsd:enumeration value=\"UniqueGroup\"/>\n    <xsd:enumeration value=\"DataInHeader\"/>\n    <xsd:enumeration value=\"DataInSelector\"/>\n    <xsd:enumeration value=\"DataInIncremental\"/>\n    <xsd:enumeration value=\"DataInDelete\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"DataConnectorDataType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"CHECKBOX\"/>\n    <xsd:enumeration value=\"COMBOBOX\"/>\n    <xsd:enumeration value=\"RADIO\"/>\n    <xsd:enumeration value=\"RADIO_BUTTONS\"/>\n    <xsd:enumeration value=\"DATE\"/>\n    <xsd:enumeration value=\"DATETIME\"/>\n    <xsd:enumeration value=\"TIME\"/>\n    <xsd:enumeration value=\"EMAIL\"/>\n    <xsd:enumeration value=\"PASSWORD\"/>\n    <xsd:enumeration value=\"PASSWORD_FILE\"/>\n    <xsd:enumeration value=\"NUMBER\"/>\n    <xsd:enumeration value=\"TEXT\"/>\n    <xsd:enumeration value=\"TEXTAREA\"/>\n    <xsd:enumeration value=\"NAMED_CREDENTIAL\"/>\n    <xsd:enumeration value=\"IDP\"/>\n    <xsd:enumeration value=\"TOGGLE\"/>\n    <xsd:enumeration value=\"PRIVATE_NETWORK_ROUTE\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"DataConnectorError\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"externalName\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"translations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LocalizedValue\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"DataConnectorFeature\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Hidden\"/>\n    <xsd:enumeration value=\"DataIn\"/>\n    <xsd:enumeration value=\"DataInStructured\"/>\n    <xsd:enumeration value=\"DataInUnstructured\"/>\n    <xsd:enumeration value=\"DataOut\"/>\n    <xsd:enumeration value=\"ZeroCopyIn\"/>\n    <xsd:enumeration value=\"DataInFrequentIngest\"/>\n    <xsd:enumeration value=\"FileBased\"/>\n    <xsd:enumeration value=\"FileBasedDataSync\"/>\n    <xsd:enumeration value=\"ObjectBased\"/>\n    <xsd:enumeration value=\"Streaming\"/>\n    <xsd:enumeration value=\"StaticSchema\"/>\n    <xsd:enumeration value=\"ReadonlyConnection\"/>\n    <xsd:enumeration value=\"Override\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"DataConnectorReleaseLevel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"IN_DEV\"/>\n    <xsd:enumeration value=\"PILOT\"/>\n    <xsd:enumeration value=\"BETA\"/>\n    <xsd:enumeration value=\"GA\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"LocalizedValue\">\n  <xsd:sequence>\n    <xsd:element name=\"aspect\" minOccurs=\"0\" type=\"tns:TranslationAspect\"/>\n    <xsd:element name=\"language\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"outOfDate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"TranslationAspect\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Master\"/>\n    <xsd:enumeration value=\"RelationshipLabel\"/>\n    <xsd:enumeration value=\"Description\"/>\n    <xsd:enumeration value=\"Help\"/>\n    <xsd:enumeration value=\"NameFieldLabel\"/>\n    <xsd:enumeration value=\"ErrorMessage\"/>\n    <xsd:enumeration value=\"InfoMessage\"/>\n    <xsd:enumeration value=\"PausedText\"/>\n    <xsd:enumeration value=\"InputLabel\"/>\n    <xsd:enumeration value=\"NextOrFinishLabel\"/>\n    <xsd:enumeration value=\"BackLabel\"/>\n    <xsd:enumeration value=\"PauseLabel\"/>\n    <xsd:enumeration value=\"FirstName\"/>\n    <xsd:enumeration value=\"LastName\"/>\n    <xsd:enumeration value=\"MiddleName\"/>\n    <xsd:enumeration value=\"Salutation\"/>\n    <xsd:enumeration value=\"Suffix\"/>\n    <xsd:enumeration value=\"InformalName\"/>\n    <xsd:enumeration value=\"Title\"/>\n    <xsd:enumeration value=\"Phone\"/>\n    <xsd:enumeration value=\"Email\"/>\n    <xsd:enumeration value=\"Address\"/>\n    <xsd:enumeration value=\"Street\"/>\n    <xsd:enumeration value=\"City\"/>\n    <xsd:enumeration value=\"State\"/>\n    <xsd:enumeration value=\"StateCode\"/>\n    <xsd:enumeration value=\"PostalCode\"/>\n    <xsd:enumeration value=\"Country\"/>\n    <xsd:enumeration value=\"CountryCode\"/>\n    <xsd:enumeration value=\"Latitude\"/>\n    <xsd:enumeration value=\"Longitude\"/>\n    <xsd:enumeration value=\"Body\"/>\n    <xsd:enumeration value=\"Summary\"/>\n    <xsd:enumeration value=\"Url\"/>\n    <xsd:enumeration value=\"ActionButtonLink\"/>\n    <xsd:enumeration value=\"ActionButtonLabel\"/>\n    <xsd:enumeration value=\"DismissButtonLabel\"/>\n    <xsd:enumeration value=\"Header\"/>\n    <xsd:enumeration value=\"VideoLink\"/>\n    <xsd:enumeration value=\"ImageAltText\"/>\n    <xsd:enumeration value=\"ImageLink\"/>\n    <xsd:enumeration value=\"Custom\"/>\n    <xsd:enumeration value=\"DefaultValue\"/>\n    <xsd:enumeration value=\"Version\"/>\n    <xsd:enumeration value=\"AttributeName\"/>\n    <xsd:enumeration value=\"UsageType\"/>\n    <xsd:enumeration value=\"ProcessName\"/>\n    <xsd:enumeration value=\"GroupName\"/>\n    <xsd:enumeration value=\"Label\"/>\n    <xsd:enumeration value=\"ParameterValue\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DataConnector component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DataConnector xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <masterLabel>Iceberg Override</masterLabel>\n    <icon>Salesforce</icon>\n    <parentConnector>ICEBERG</parentConnector>\n    <releaseLevel>BETA</releaseLevel>\n    <description>Connect to Apache Iceberg tables</description>\n    <features>Override</features>\n    <ownerName>Slack</ownerName>\n    <ownerLogo>Salesforce</ownerLogo>\n    <ownerLocation>Settle, USA</ownerLocation>\n    <supportMessage>Click download logs before reachout</supportMessage>\n    <supportPhone>+15788467513</supportPhone>\n    <licenseAgreement>https://www.salesforce.com/company/legal</licenseAgreement>\n    <attributes>\n        <fullName>IcebergOverride_storageSourceType</fullName>\n        <externalName>storageSourceType</externalName>\n        <masterLabel>Storage Type</masterLabel>\n        <dataType>COMBOBOX</dataType>\n        <defaultValue>CATALOG_PROVIDED</defaultValue>\n        <capabilities>DataIn</capabilities>\n        <capabilities>Hidden</capabilities>\n        <order>20</order>\n        <editable>true</editable>\n        <required>true</required>\n        <secure>true</secure>\n    </attributes>\n</DataConnector>"
+    }
+  ]
+}

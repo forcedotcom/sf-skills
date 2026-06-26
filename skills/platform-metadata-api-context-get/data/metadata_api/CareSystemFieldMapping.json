@@ -1,0 +1,58 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CareSystemFieldMapping - Metadata API",
+  "description": "Represents a mapping from source system fields to Salesforce objects and fields. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".careSystemFieldMapping",
+  "directory_location": "careSystemFieldMappings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "externalIdField": {
+      "type": "string",
+      "description": "The ID of the field in the external system."
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether this field mapping is active (true) or not (false). The default value is False."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t currently impact the behavior of the metadata type."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The name of the care system field mapping.",
+      "required": true
+    },
+    "role": {
+      "type": "SourceSystemFieldRole (enumeration of type string)",
+      "description": "The role the field represents. Valid values are: Patient—When the role field is set to Patient, the Enrollment API uses the value of externalIdField as the patient ID. This role can be used when targetObject is set to Account. RemoteMonitoringDevice—Indicates which externalIdField on the Asset object maps to the Device field in the CareObservation object. This role can be used when targetObject is set to Asset. RemoteMonitoringPatient—Indicates which externalIdField on the Account object maps to the ObservedSubject field in the Care Observation object. This role is used when targetObject is set to Account. ServiceProvider—The Enrollment API uses the value of externalIdField as the provider ID. This role is used when targetObject is set to Account. NotApplicable—This role is used when targetObject is set to CareProgram or Product, which means that there is no applicable role.",
+      "required": true
+    },
+    "sourceSystem": {
+      "type": "string",
+      "description": "The system where the record originated."
+    },
+    "targetObject": {
+      "type": "string",
+      "description": "The name of the Salesforce object to which the external system field is mapped."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CareSystemFieldMapping\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"externalIdField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"role\" type=\"tns:SourceSystemFieldRole\"/>\n        <xsd:element name=\"sourceSystem\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetObject\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SourceSystemFieldRole\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"NotApplicable\"/>\n    <xsd:enumeration value=\"Patient\"/>\n    <xsd:enumeration value=\"ServiceProvider\"/>\n    <xsd:enumeration value=\"RemoteMonitoringPatient\"/>\n    <xsd:enumeration value=\"RemoteMonitoringDevice\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CareSystemFieldMapping component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CareSystemFieldMapping xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <externalIdField>AccountNumber</externalIdField>\n    <isActive>true</isActive>\n    <isProtected>false</isProtected>\n    <masterLabel>Map1</masterLabel>\n    <role>Patient</role>\n    <sourceSystem>Epic</sourceSystem>\n    <targetObject>Account</targetObject>\n</CareSystemFieldMapping>"
+    }
+  ]
+}

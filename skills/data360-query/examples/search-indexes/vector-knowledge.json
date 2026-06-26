@@ -1,0 +1,43 @@
+{
+  "label": "My_kav",
+  "developerName": "My_kav",
+  "sourceDmoDeveloperName": "ssot__KnowledgeArticleVersion__dlm",
+  "chunkDmoName": "My_kav chunk",
+  "chunkDmoDeveloperName": "My_kav_chunk",
+  "vectorDmoName": "My_kav index",
+  "vectorDmoDeveloperName": "My_kav_index",
+  "searchType": "VECTOR",
+  "vectorEmbedding": {
+    "vectorEmbeddingRelatedFields": []
+  },
+  "chunkingConfiguration": {
+    "fieldLevelConfigurations": [
+      {
+        "sourceDmoDeveloperName": "ssot__KnowledgeArticleVersion__dlm",
+        "sourceDmoFieldDeveloperName": "ssot__Name__c",
+        "config": {
+          "id": "passage_extraction",
+          "userValues": [
+            { "id": "strip_html", "value": "true" },
+            { "id": "max_tokens", "value": "512" }
+          ]
+        }
+      }
+    ]
+  },
+  "vectorEmbeddingConfiguration": {
+    "embeddingModel": {
+      "id": "e5_large_v2",
+      "userValues": [
+        { "id": "dimension", "value": "1024" },
+        { "id": "max_token_limit", "value": "512" }
+      ]
+    },
+    "index": {
+      "id": "HNSW",
+      "userValues": []
+    },
+    "similarityMetric": "COSINE"
+  },
+  "rankingConfigurations": []
+}

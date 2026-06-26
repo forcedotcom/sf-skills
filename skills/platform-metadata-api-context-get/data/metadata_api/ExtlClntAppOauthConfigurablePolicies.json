@@ -1,0 +1,153 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExtlClntAppOauthConfigurablePolicies - Metadata API",
+  "description": "Represents the policies configured by the admin for an OAuth-enabled external client app.",
+  "file_information": ".ecaOauthPlcy",
+  "directory_location": "extlClntAppOauthPolicies",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "apexHandler": {
+      "type": "string",
+      "description": "Name of the Apex handler. Available in API version 61.0 and later."
+    },
+    "clientCredentialsFlowUser": {
+      "type": "string",
+      "description": "The execution user for the OAuth 2.0 client credentials flow. Salesforce returns access tokens on behalf of this user. This user must have the API Only permission. Available in API version 60.0 and later."
+    },
+    "commaSeparatedCustomScopes": {
+      "type": "string",
+      "description": "Custom scope names in a comma-separated list. Available in API version 61.0 and later."
+    },
+    "commaSeparatedPermissionSet": {
+      "type": "string",
+      "description": "Permission set IDs in a comma-separated list. This field or commaSeparatedProfile is used when permittedUsersPolicyType is set to AdminApprovedPreAuthorized."
+    },
+    "commaSeparatedProfile": {
+      "type": "string",
+      "description": "Profiles in a comma-separated list. This field or commaSeparatedPermissionSet is used when permittedUsersPolicyType is set to AdminApprovedPreAuthorized."
+    },
+    "customAttributes": {
+      "type": "ExtlClntAppOauthPoliciesAttribute[]",
+      "description": "Unique attributes to be included as admin defaults. The maximum number accepted is 128. Each custom attribute must have a unique key and use an available field."
+    },
+    "executeHandlerAs": {
+      "type": "string",
+      "description": "Username of the Apex handler's execution user. Available in API version 61.0 and later."
+    },
+    "externalClientApplication": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the external client app associated with this OAuth policies file."
+    },
+    "guestJwtTimeout": {
+      "type": "int",
+      "description": "If guestJwtSessionTimeoutType is set to Custom, this field defines the amount of time before a JWT-based access token issued to a guest user expires. Values are in minutes.These values are available in API version 61.0 and later. 1—1 Minute 5—5 Minutes 10—10 Minutes 15—15 Minutes 30—30 Minutes These values are available in API version 65.0 and later. 60—1 Hour 90—90 Minutes 120—2 Hours 240—4 Hours 480—8 Hours 720—12 Hours If guestJwtSessionTimeoutType is set to UserSession, omit this field."
+    },
+    "guestJwtSessionTimeoutType": {
+      "type": "JWTSessionTimeoutType (enumeration of type string)",
+      "description": "Specifies how the JWT-based access token timeout is defined for guest users. Valid values are: UserSession—Salesforce uses the value from the sessionTimeout field in the ProfileSessionSetting type for the Experience Cloud guest user profile.If there's no profile session timeout for the user, Salesforce uses the sessionTimeout value from the SessionSettings type. If both are defined, Salesforce defaults to the profile session timeout. Custom—Salesforce uses the value from the guestJwtTimeout field. Available in API version 65.0 and later."
+    },
+    "ipRelaxationPolicyType": {
+      "type": "string",
+      "description": "The policy that determines IP restrictions. Values are: Enforce Bypass Bypass_2factor Enforce_RelaxRefresh"
+    },
+    "isClientCredentialsFlowEnabled": {
+      "type": "boolean",
+      "description": "If true, the client credentials flow is enabled. The default value is false. Available in API version 60.0 and later."
+    },
+    "isGuestCodeCredFlowEnabled": {
+      "type": "boolean",
+      "description": "If true, the external client app can use the guest user variation of the Authorization Code and Credentials Flow. To use this flow variation, the external client app must also be configured to issue JWT-based access tokens. The default value is false. Available in API version 61.0 and later."
+    },
+    "isNamedUserJwtEnabled": {
+      "type": "boolean",
+      "description": "Deprecated. If true, the external client app issues JWT-based access tokens instead of opaque access tokens. If this field is available, it means that the isNamedUserJwtEnabled field in the ExtlClntAppGlobalOauthSettings type is set to true. The default value is false."
+    },
+    "isTokenExchangeFlowEnabled": {
+      "type": "boolean",
+      "description": "If truetrue, the token exchange flow is enabled. The default value is false. Available in API version 60.0 and later."
+    },
+    "label": {
+      "type": "string",
+      "description": "The OAuth policies name for the external client app."
+    },
+    "namedUserJwtTimeout": {
+      "type": "int",
+      "description": "If namedUserJwtSessionTimeoutType is set to Custom, the amount of time before a JWT-based access token issued to a named user expires. Values are in minutes.These values are available in API version 61.0 and later. 1—1 Minute 5—5 Minutes 10—10 Minutes 15—15 Minutes 30—30 Minutes These values are available in API version 65.0 and later. 60—1 Hour 90—90 Minutes 120—2 Hours 240—4 Hours 480—8 Hours 720—12 Hours"
+    },
+    "namedUserJwtSessionTimeoutType": {
+      "type": "JWTSessionTimeoutType (enumeration of type string)",
+      "description": "Specifies how the JWT-based access token timeout is defined for named users. Valid values are: UserSession—Salesforce uses the value from the sessionTimeout field in the ProfileSessionSetting type for the named user's profile.If there's no profile session timeout for the user, Salesforce uses the sessionTimeout value from the SessionSettings type. If both are defined, Salesforce defaults to the profile session timeout. Custom—Salesforce uses the value from the namedUserJwtTimeout field. Available in API version 65.0 and later."
+    },
+    "permittedUsersPolicyType": {
+      "type": "PermittedUsersPolicyType (enumeration of type string)",
+      "description": "The policy that determines which users are allowed in the external client app.Values are: AdminApprovedPreAuthorized AllSelfAuthorized"
+    },
+    "policyAction": {
+      "type": "PolicyAction (enumeration of type string)",
+      "description": "Requires users to verify their identity with two-factor authentication when they log in to the external client app. Use RaiseSessionLevel along with requiredSessionLevel to determine the security posture. Values are: Block RaiseSessionLevel"
+    },
+    "refreshTokenPolicyType": {
+      "type": "RefreshTokenPolicyType (enumeration of type string)",
+      "description": "The type of policy that determines when a token must be refreshed.Values are: Infinite SpecificInactivity SpecificLifetime Zero"
+    },
+    "refreshTokenValidityPeriod": {
+      "type": "int",
+      "description": "The number of units of measure used to specify validity when refresh token policy type is set to SpecificInactivity or SpecificLifetime."
+    },
+    "refreshTokenValidityUnit": {
+      "type": "string",
+      "description": "The unit of measurement that is used to specify validity when refresh token policy type is set to SpecificInactivity or SpecificLifetime.Values are: Days Hours Months"
+    },
+    "requiredSessionLevel": {
+      "type": "SessionSecurityLevel (enumeration of type string)",
+      "description": "Defines the security posture.Values are: HIGH_ASSURANCE LOW STANDARD"
+    },
+    "sessionTimeoutInMinutes": {
+      "type": "int",
+      "description": "Length of time the external client app’s session lasts. This field applies only if the app issues opaque tokens."
+    },
+    "singleLogoutUrl": {
+      "type": "string",
+      "description": "URL where Salesforce sends a logout request when users log out of Salesforce."
+    },
+    "startUrl": {
+      "type": "string",
+      "description": "URL where users are directed after they authenticate."
+    }
+  },
+  "sub_types": {
+    "ExtlClntAppOauthPoliciesAttribute": {
+      "formula": {
+        "type": "string",
+        "required": true,
+        "description": "The existing field that includes the desired information. For example, Organization.Country."
+      },
+      "key": {
+        "type": "string",
+        "required": true,
+        "description": "A unique name for the attribute. For example, country."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ExtlClntAppOauthConfigurablePolicies\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"apexHandler\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"clientCredentialsFlowUser\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"commaSeparatedCustomScopes\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"commaSeparatedPermissionSet\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"commaSeparatedProfile\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customAttributes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ExtlClntAppOauthPoliciesAttribute\"/>\n        <xsd:element name=\"executeHandlerAs\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalClientApplication\" type=\"xsd:string\"/>\n        <xsd:element name=\"guestJwtSessionTimeoutType\" minOccurs=\"0\" type=\"tns:JWTSessionTimeoutType\"/>\n        <xsd:element name=\"guestJwtTimeout\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"ipRelaxationPolicyType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isClientCredentialsFlowEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isGuestCodeCredFlowEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isTokenExchangeFlowEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"namedUserJwtSessionTimeoutType\" minOccurs=\"0\" type=\"tns:JWTSessionTimeoutType\"/>\n        <xsd:element name=\"namedUserJwtTimeout\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"permittedUsersPolicyType\" minOccurs=\"0\" type=\"tns:PermittedUsersPolicyType\"/>\n        <xsd:element name=\"policyAction\" minOccurs=\"0\" type=\"tns:PolicyAction\"/>\n        <xsd:element name=\"refreshTokenPolicyType\" minOccurs=\"0\" type=\"tns:RefreshTokenPolicyType\"/>\n        <xsd:element name=\"refreshTokenValidityPeriod\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"refreshTokenValidityUnit\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"requiredSessionLevel\" minOccurs=\"0\" type=\"tns:SessionSecurityLevel\"/>\n        <xsd:element name=\"sessionTimeoutInMinutes\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"singleLogoutUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"startUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ExtlClntAppOauthPoliciesAttribute\">\n  <xsd:sequence>\n    <xsd:element name=\"formula\" type=\"xsd:string\"/>\n    <xsd:element name=\"key\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"JWTSessionTimeoutType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"UserSession\"/>\n    <xsd:enumeration value=\"Custom\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"PermittedUsersPolicyType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AllSelfAuthorized\"/>\n    <xsd:enumeration value=\"AdminApprovedPreAuthorized\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PolicyAction\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Block\"/>\n    <xsd:enumeration value=\"RaiseSessionLevel\"/>\n    <xsd:enumeration value=\"StepUpMFA\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"RefreshTokenPolicyType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Infinite\"/>\n    <xsd:enumeration value=\"Zero\"/>\n    <xsd:enumeration value=\"SpecificLifetime\"/>\n    <xsd:enumeration value=\"SpecificInactivity\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"SessionSecurityLevel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"LOW\"/>\n    <xsd:enumeration value=\"STANDARD\"/>\n    <xsd:enumeration value=\"HIGH_ASSURANCE\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This example shows an ExtlClntAppOauthConfigurablePolicies component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ExtlClntAppOauthConfigurablePolicies xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <externalClientApplication>myeca</externalClientApplication>\n    <label>myecapolicy</label>\n    <apexHandler>MyEcaOauthApexHandler</apexHandler>\n    <executeHandlerAs>admin@example.org</executeHandlerAs>\n    <refreshTokenPolicyType>SpecificLifetime</refreshTokenPolicyType>\n    <refreshTokenValidityPeriod>1</refreshTokenValidityPeriod>\n    <refreshTokenValidityUnit>Days</refreshTokenValidityUnit>\n    <ipRelaxationPolicyType>Enforce</ipRelaxationPolicyType>\n    <permittedUsersPolicyType>AdminApprovedPreAuthorized</permittedUsersPolicyType>\n    <commaSeparatedPermissionSet>PermSetExample</commaSeparatedPermissionSet>\n    <commaSeparatedCustomScopes>CustomScopeExample</commaSeparatedCustomScopes>\n    <sessionTimeoutInMinutes>1</sessionTimeoutInMinutes>\n    <requiredSessionLevel>HIGH_ASSURANCE</requiredSessionLevel>\n    <policyAction>RaiseSessionLevel</policyAction>\n    <singleLogoutUrl>https://www.example.com</singleLogoutUrl>\n    <startUrl>https://www.example.com</startUrl>\n    <guestJwtSessionTimeoutType>UserSession</guestJwtSessionTimeoutType>\n    <namedUserJwtSessionTimeoutType>Custom</namedUserJwtSessionTimeoutType>\n    <namedUserJwtTimeout>10</namedUserJwtSessionTimeout>\n</ExtlClntAppOauthConfigurablePolicies>"
+    }
+  ]
+}

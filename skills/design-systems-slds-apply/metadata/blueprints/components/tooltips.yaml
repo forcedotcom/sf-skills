@@ -1,0 +1,107 @@
+name: "Tooltips"
+description: "Small overlay elements that provide brief, contextual information about UI elements when users hover or focus on them."
+category: "Overlay"
+slds_classes:
+  root: "slds-tooltip"
+  elements:
+    - class: "slds-tooltip__body"
+      description: "Content area of the tooltip"
+      purpose: "Contains the tooltip text or information"
+  modifiers:
+    - class: "slds-nubbin_top"
+      description: "Top-pointing nubbin"
+      usage: "When tooltip appears below the trigger"
+    - class: "slds-nubbin_bottom"
+      description: "Bottom-pointing nubbin"
+      usage: "When tooltip appears above the trigger"
+    - class: "slds-nubbin_left"
+      description: "Left-pointing nubbin"
+      usage: "When tooltip appears to the right of trigger"
+    - class: "slds-nubbin_right"
+      description: "Right-pointing nubbin"
+      usage: "When tooltip appears to the left of trigger"
+  states: []
+variants:
+  - name: "Base"
+    description: "Standard tooltip with informational content"
+    classes:
+      - "slds-tooltip"
+    usage_context: "Default tooltip for contextual help or information"
+    differences: "Small overlay with brief informational text"
+lightning_component:
+  name: "No direct component"
+  url: "https://developer.salesforce.com/docs/component-library/overview/components"
+  mapping_notes: "No direct Lightning Base Component - typically implemented through title attributes or custom components"
+accessibility:
+  keyboard_support:
+    - "Tooltip appears on focus of trigger element"
+    - "Tooltip disappears when focus leaves trigger"
+    - "No additional keyboard interactions required"
+  screen_reader:
+    - "Tooltip content announced when trigger receives focus"
+    - "Alternative text provided through aria-describedby"
+    - "Brief, informational content appropriately announced"
+  aria_attributes:
+    - "aria-describedby linking trigger to tooltip"
+    - "role='tooltip' for tooltip semantic"
+    - "id attribute for tooltip reference"
+usage_guidelines:
+  when_to_use:
+    - "For brief explanations of UI elements"
+    - "To provide additional context without cluttering interface"
+    - "For icon-only buttons or controls"
+    - "When space constraints limit inline help text"
+  when_not_to_use:
+    - "For critical information users must see"
+    - "For complex content or instructions"
+    - "On mobile devices where hover is unavailable"
+    - "For actionable content (use popovers instead)"
+  best_practices:
+    - "Keep tooltip text brief and informative"
+    - "Position tooltips to avoid blocking important content"
+    - "Use consistent timing for tooltip appearance"
+    - "Ensure tooltips are discoverable via keyboard"
+    - "Avoid tooltips on tooltips"
+  common_mistakes:
+    - "Making tooltip text too long or complex"
+    - "Using tooltips for critical information"
+    - "Poor positioning that blocks content"
+    - "Not providing keyboard access to tooltip content"
+code_examples:
+  - title: "Basic Tooltip"
+    code: |
+      <div class="slds-tooltip slds-nubbin_bottom" role="tooltip" id="help-tooltip">
+            <div class="slds-tooltip__body">This is helpful information about the element.</div>
+            </div>
+styling_hooks:
+  - name: "--slds-c-tooltip-color-background"
+    description: "Background color for tooltips"
+    category: "color"
+  - name: "--slds-c-tooltip-text-color"
+    description: "Text color for tooltips"
+    category: "color"
+dependencies:
+  css_files:
+    - "tooltip.css"
+    - "nubbins.css"
+  javascript:
+    - "tooltip.js"
+  icons: []
+  other_components: []
+related_components:
+  - name: "Popover"
+    relationship: "similar"
+    description: "Similar overlay for more complex content"
+  - name: "Help Text"
+    relationship: "alternative"
+    description: "Alternative for persistent contextual help"
+  - name: "Icons"
+    relationship: "depends-on"
+    description: "Often used to provide tooltips for icon meanings"
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/tooltips/"
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-12"
+  review_status: "complete"
+  notes: " Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth."

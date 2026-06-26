@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SvcCatalogCategory - Metadata API",
+  "description": "Represents the grouping of individual catalog items in Service Catalog.",
+  "file_information": ".category",
+  "directory_location": "svcCatalogCategories",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "image": {
+      "type": "string",
+      "description": "The developer name of a content document to be displayed in the Service Catalog for this category."
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates if a catalog category is active."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value. This value currently has no impact."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The primary label for the catalog category record."
+    },
+    "parentCategory": {
+      "type": "string",
+      "description": "If provided, the name of another SvcCatalogCategory that this category should appear under. The parent category in this field can’t have its own parent category. Categories can’t have more than one level of nesting."
+    },
+    "sortOrder": {
+      "type": "int",
+      "description": "Displays a set order for catalog category entities."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SvcCatalogCategory\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"image\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"parentCategory\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sortOrder\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a SvcCatalogCategory component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SvcCatalogCategory xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <image>AdobeStock_287068722</image>\n    <isActive>true</isActive>\n    <isProtected>false</isProtected>\n    <masterLabel>Workplace Services</masterLabel>\n    <sortOrder>4</sortOrder>\n</SvcCatalogCategory>"
+    }
+  ]
+}

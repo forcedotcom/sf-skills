@@ -1,0 +1,198 @@
+name: Brand Band
+description: A visual header component that displays branding elements, organizational identity, and context information,
+  typically positioned at the top of applications to establish brand presence and visual hierarchy.
+category: Layout
+slds_classes:
+  root: slds-brand-band
+  elements: []
+  modifiers:
+  - class: slds-brand-band_small
+    description: Small brand band height
+    usage: For compact brand display
+  - class: slds-brand-band_medium
+    description: Medium brand band height
+    usage: Standard brand band sizing
+  - class: slds-brand-band_large
+    description: Large brand band height
+    usage: For prominent brand display
+  - class: slds-brand-band_cover
+    description: Cover-style brand band
+    usage: For full-width background coverage
+  states: []
+variants:
+- name: Base
+  description: Standard brand band with basic branding
+  classes:
+  - slds-brand-band
+  usage_context: Default implementation for application branding
+  differences: Basic brand display with title and optional image
+- name: Small
+  description: Compact brand band for minimal branding
+  classes:
+  - slds-brand-band
+  - slds-brand-band_small
+  usage_context: When space is limited or subtle branding is preferred
+  differences: Reduced height and compact layout
+- name: Large
+  description: Prominent brand band for strong brand presence
+  classes:
+  - slds-brand-band
+  - slds-brand-band_large
+  usage_context: For landing pages or primary brand displays
+  differences: Increased height and prominent branding elements
+- name: Cover
+  description: Full-width background brand band
+  classes:
+  - slds-brand-band
+  - slds-brand-band_cover
+  usage_context: For hero-style brand presentations
+  differences: Full-width background with overlay content
+lightning_component:
+  name: lightning-brand-band
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: Brand band functionality often implemented through custom header components or app branding
+accessibility:
+  keyboard_support:
+  - Tab navigation through brand band interactive elements
+  - Focus management for brand band controls
+  screen_reader:
+  - Brand information properly announced
+  - Image alt text provided for brand images
+  - Brand context clearly communicated
+  aria_attributes:
+  - role='banner' for page header branding
+  - aria-label for brand context
+  - aria-describedby for additional brand information
+usage_guidelines:
+  when_to_use:
+  - For establishing application or organizational branding
+  - When brand presence needs to be prominent
+  - In application headers and landing pages
+  - For organizational identity and context
+  when_not_to_use:
+  - In content areas where branding would be distracting
+  - For functional navigation (use navigation components)
+  - When minimal branding approach is preferred
+  best_practices:
+  - Keep branding consistent across application
+  - Ensure brand elements are accessible
+  - Use appropriate sizing for context
+  - Maintain brand guidelines and standards
+  - Consider responsive behavior
+  common_mistakes:
+  - Overusing brand elements throughout interface
+  - Poor contrast for brand text and images
+  - Inconsistent brand presentation
+  - Missing accessibility considerations
+code_examples:
+- title: Basic Brand Band
+  description: Standard brand band with logo and title
+  code: "<div class=\"slds-brand-band\" role=\"banner\">\n      <div class=\"\">\n        <div class=\"\">\n          <div\
+    \ class=\"slds-media slds-media_center\">\n            <div class=\"slds-media__figure\">\n              <div class=\"\
+    \">\n                <img src=\"/assets/images/logo.png\" alt=\"Company Logo\" style=\"height: 40px;\" />\n          \
+    \    </div>\n            </div>\n            <div class=\"slds-media__body\">\n              <h1 class=\"slds-text-heading_medium\"\
+    >\n                Application Name\n              </h1>\n              <p class=\"slds-text-body_small slds-text-color_weak\"\
+    >\n                Powered by Salesforce\n              </p>\n            </div>\n          </div>\n        </div>\n \
+    \     </div>\n      </div>\n"
+- title: Large Brand Band
+  description: Prominent brand band with additional controls
+  code: "<div class=\"slds-brand-band slds-brand-band_large\" role=\"banner\">\n      <div class=\"slds-p-around_medium\"\
+    >\n        <div class=\"\">\n          <div class=\"slds-grid slds-grid_align-spread slds-grid_vertical-align-center\"\
+    >\n            <div class=\"slds-col\">\n              <div class=\"slds-media slds-media_center\">\n                <div\
+    \ class=\"slds-media__figure\">\n                  <div class=\"\">\n                    <span class=\"slds-icon_container\
+    \ slds-icon_container_circle\" style=\"background-color: #1589ee;\">\n                      <svg class=\"slds-icon slds-icon_large\"\
+    \ aria-hidden=\"true\" style=\"fill: white;\">\n                        <use xlink:href=\"/assets/icons/standard-sprite/svg/symbols.svg#sales_cloud\"\
+    ></use>\n                      </svg>\n                    </span>\n                  </div>\n                </div>\n\
+    \                <div class=\"slds-media__body\">\n                  <h1 class=\"slds-text-heading_large\">\n        \
+    \            Sales Cloud\n                  </h1>\n                  <p class=\"slds-text-body_regular slds-text-color_weak\"\
+    >\n                    Enterprise Customer Relationship Management\n                  </p>\n                </div>\n \
+    \             </div>\n            </div>\n            <div class=\"slds-col slds-no-flex\">\n              <div class=\"\
+    \">\n                <div class=\"slds-button-group\" role=\"group\">\n                  <button class=\"slds-button slds-button_neutral\"\
+    >\n                    Settings\n                  </button>\n                  <button class=\"slds-button slds-button_brand\"\
+    >\n                    Get Started\n                  </button>\n                </div>\n              </div>\n      \
+    \      </div>\n          </div>\n        </div>\n      </div>\n      </div>\n"
+- title: Small Brand Band
+  description: Compact brand band for minimal branding
+  code: "<div class=\"slds-brand-band slds-brand-band_small\" role=\"banner\">\n      <div class=\"slds-p-horizontal_medium\
+    \ slds-p-vertical_small\">\n        <div class=\"\">\n          <div class=\"slds-media slds-media_center\">\n       \
+    \     <div class=\"slds-media__figure\">\n              <div class=\"\">\n                <span class=\"slds-icon_container\"\
+    \ style=\"background-color: transparent;\">\n                  <svg class=\"slds-icon slds-icon_small\" aria-hidden=\"\
+    true\" style=\"fill: #0176d3;\">\n                    <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#salesforce1\"\
+    ></use>\n                  </svg>\n                </span>\n              </div>\n            </div>\n            <div\
+    \ class=\"slds-media__body\">\n              <h1 class=\"slds-text-heading_small\">\n                Service Console\n\
+    \              </h1>\n            </div>\n          </div>\n        </div>\n      </div>\n      </div>\n"
+- title: Cover Brand Band
+  description: Full-width background brand band with overlay
+  code: "<div class=\"slds-brand-band slds-brand-band_cover slds-brand-band_large\" role=\"banner\" style=\"background: linear-gradient(135deg,\
+    \ #667eea 0%, #764ba2 100%); color: white;\">\n      <div class=\"slds-p-around_large\">\n        <div class=\"slds-text-align_center\"\
+    >\n          <div class=\"slds-m-bottom_medium\">\n            <span class=\"slds-icon_container slds-icon_container_circle\"\
+    \ style=\"background-color: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3);\">\n              <svg class=\"\
+    slds-icon\" aria-hidden=\"true\" style=\"fill: white;\">\n                <use xlink:href=\"/assets/icons/standard-sprite/svg/symbols.svg#marketing_cloud\"\
+    ></use>\n              </svg>\n            </span>\n          </div>\n          <h1 class=\"slds-text-heading_large slds-m-bottom_small\"\
+    \ style=\"color: white;\">\n            Marketing Cloud\n          </h1>\n          <p class=\"slds-text-body_regular\
+    \ slds-m-bottom_medium\" style=\"color: rgba(255,255,255,0.8);\">\n            Drive personalized customer journeys at\
+    \ scale\n          </p>\n          <div class=\"\">\n            <button class=\"slds-button slds-button_neutral\">\n\
+    \              Learn More\n            </button>\n            <button class=\"slds-button slds-button_brand slds-m-left_small\"\
+    >\n              Start Free Trial\n            </button>\n          </div>\n        </div>\n      </div>\n      </div>\n"
+- title: Lightning Styled Brand Band
+  description: Brand band with Lightning Design System styling
+  code: "<div class=\"slds-brand-band slds-brand-band_medium\" role=\"banner\">\n      <div class=\"slds-p-around_medium\"\
+    \ style=\"background-color: #f3f2f2; border-bottom: 3px solid #0176d3;\">\n        <div class=\"\">\n          <div class=\"\
+    slds-grid slds-grid_align-spread slds-grid_vertical-align-center\">\n            <div class=\"slds-col\">\n          \
+    \    <div class=\"slds-media slds-media_center\">\n                <div class=\"slds-media__figure\">\n              \
+    \    <div class=\"\">\n                    <span class=\"slds-icon_container\" style=\"background-color: #0176d3;\">\n\
+    \                      <svg class=\"slds-icon\" aria-hidden=\"true\" style=\"fill: white;\">\n                       \
+    \ <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#lightning_component\"></use>\n                      </svg>\n\
+    \                    </span>\n                  </div>\n                </div>\n                <div class=\"slds-media__body\"\
+    >\n                  <h1 class=\"slds-text-heading_medium\">\n                    Lightning Experience\n             \
+    \     </h1>\n                  <p class=\"slds-text-body_small slds-text-color_weak\">\n                    Modern CRM\
+    \ Platform\n                  </p>\n                </div>\n              </div>\n            </div>\n            <div\
+    \ class=\"slds-col slds-no-flex\">\n              <div class=\"\">\n                <span class=\"slds-badge\">\n    \
+    \              Beta\n                </span>\n              </div>\n            </div>\n          </div>\n        </div>\n\
+    \      </div>\n      </div>\n"
+- title: Brand Band with Navigation
+  description: Brand band integrated with primary navigation
+  code: "<div class=\"slds-brand-band\" role=\"banner\">\n      <div class=\"\">\n        <div class=\"slds-p-around_medium\"\
+    \ style=\"border-bottom: 1px solid #e5e5e5;\">\n          <div class=\"slds-grid slds-grid_align-spread slds-grid_vertical-align-center\"\
+    >\n            <div class=\"slds-col\">\n              <div class=\"slds-media slds-media_center\">\n                <div\
+    \ class=\"slds-media__figure\">\n                  <div class=\"\">\n                    <img src=\"/assets/images/company-logo.svg\"\
+    \ alt=\"Company\" style=\"height: 32px;\" />\n                  </div>\n                </div>\n                <div class=\"\
+    slds-media__body\">\n                  <h1 class=\"slds-text-heading_small\">\n                    Customer Portal\n \
+    \                 </h1>\n                </div>\n              </div>\n            </div>\n            <div class=\"slds-col\
+    \ slds-no-flex\">\n              <nav class=\"\" aria-label=\"Primary navigation\">\n                <ul class=\"slds-list_horizontal\
+    \ slds-has-dividers_right\">\n                  <li class=\"slds-list__item\">\n                    <a href=\"#dashboard\"\
+    \ class=\"slds-text-link\">Dashboard</a>\n                  </li>\n                  <li class=\"slds-list__item\">\n\
+    \                    <a href=\"#cases\" class=\"slds-text-link\">Cases</a>\n                  </li>\n                \
+    \  <li class=\"slds-list__item\">\n                    <a href=\"#account\" class=\"slds-text-link\">Account</a>\n   \
+    \               </li>\n                </ul>\n              </nav>\n            </div>\n          </div>\n        </div>\n\
+    \      </div>\n      </div>\n"
+dependencies:
+  css_files:
+  - brand-band.css
+  - grid.css
+  - media-object.css
+  javascript: []
+  icons:
+  - standard-sprite.svg
+  - utility-sprite.svg
+  other_components:
+  - button
+  - badge
+  - media-object
+related_components:
+- name: Global Header
+  relationship: similar
+  description: Similar header functionality
+- name: Page Header
+  relationship: similar
+  description: Similar page-level header concept
+- name: Global Navigation
+  relationship: depends-on
+  description: Often used together with navigation
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/brand-band/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

@@ -1,0 +1,48 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ServiceAISetupDefinition - Metadata API",
+  "description": "Represents settings for an Einstein for Service feature such as Einstein Article Recommendations. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".serviceAISetupDescription",
+  "directory_location": "serviceAISetupDescriptions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "appSourceType": {
+      "type": "ApplicationSourceType (enumeration of type string)",
+      "description": "The target application for the configuration. Valid values are: REPLY_RECOMMENDATION—Einstein Reply Recommendations ARTICLE_RECOMMENDATION—Einstein Article Recommendations UTTERANCE_RECOMMENDATION—Einstein Bot utterances FAQ—Einstein Bot frequently asked questions",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "description": "A reference to the configuration.",
+      "required": true
+    },
+    "setupStatus": {
+      "type": "ServiceAISetupDefStatus (enumeration of type string)",
+      "description": "The status of the configuration. Valid values are: FIELDS_SELECTED TRAINING READY_TO_ACTIVATE SERVING RETIRED ARCHIVED READY_FOR_REVIEW",
+      "required": true
+    },
+    "supportedLanguages": {
+      "type": "string",
+      "description": "Required when appSourceType is ARTICLE_RECOMMENDATION. Language codes for selected and supported languages.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ApplicationSourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"REPLY_RECOMMENDATION\"/>\n    <xsd:enumeration value=\"ARTICLE_RECOMMENDATION\"/>\n    <xsd:enumeration value=\"UTTERANCE_RECOMMENDATION\"/>\n    <xsd:enumeration value=\"FAQ\"/>\n    <xsd:enumeration value=\"EAR_FOR_CONVERSATION\"/>\n    <xsd:enumeration value=\"USE_CASE_EXPLORER\"/>\n    <xsd:enumeration value=\"EAR_FOR_VOICE\"/>\n    <xsd:enumeration value=\"COPILOT_UTTERANCE_ANALYSIS\"/>\n    <xsd:enumeration value=\"COPILOT_UTTERANCE_ANALYSIS_AGGREGATION\"/>\n    <xsd:enumeration value=\"COPILOT_UTTERANCE_ANALYSIS_PROCESSING\"/>\n    <xsd:enumeration value=\"AGENTFORCE_INTERACTION_EXPLORER_MOMENT_GENERATION\"/>\n    <xsd:enumeration value=\"AGENTFORCE_INTERACTION_EXPLORER_CLUSTERING\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ServiceAISetupDefStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"FIELDS_SELECTED\"/>\n    <xsd:enumeration value=\"TRAINING\"/>\n    <xsd:enumeration value=\"READY_TO_ACTIVATE\"/>\n    <xsd:enumeration value=\"SERVING\"/>\n    <xsd:enumeration value=\"RETIRED\"/>\n    <xsd:enumeration value=\"ARCHIVED\"/>\n    <xsd:enumeration value=\"READY_FOR_REVIEW\"/>\n    <xsd:enumeration value=\"TRAINING_FAILURE\"/>\n    <xsd:enumeration value=\"INVALID_TRAINING_FIELDS\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ServiceAISetupDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"appSourceType\" type=\"tns:ApplicationSourceType\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"setupStatus\" type=\"tns:ServiceAISetupDefStatus\"/>\n        <xsd:element name=\"supportedLanguages\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here’s an example of a ServiceAISetupDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ServiceAISetupDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <appSourceType>ARTICLE_RECOMMENDATION</appSourceType>\n    <name>SA1601228426202</name>\n    <setupStatus>ARCHIVED</setupStatus>\n    <supportedLanguages>en,de,fr,it,es,pt,nl</supportedLanguages>\n</ServiceAISetupDefinition>"
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+name: "Publishers"
+
+description: "A component for creating and publishing content, posts, or comments. Provides an input area with formatting options and action buttons for submitting user-generated content."
+
+category: "Complex Components"
+
+slds_classes:
+  root: "slds-publisher"
+  elements:
+    - class: "slds-publisher__input"
+      description: "Input area for content creation"
+      purpose: "Text input or textarea for user content"
+    - class: "slds-publisher__actions"
+      description: "Container for publisher actions"
+      purpose: "Holds submit and formatting buttons"
+    - class: "slds-publisher__toggle-visibility"
+      description: "Toggle element for publisher visibility"
+      purpose: "Controls visibility of publisher component"
+  modifiers: []
+  states:
+    - class: "slds-is-active"
+      description: "Active state for publisher"
+      trigger: "When publisher is expanded and ready for input"
+
+variants:
+  - name: "Base"
+    description: "Standard publisher for creating posts or comments"
+    classes: ["slds-publisher"]
+    usage_context: "Default publisher implementation"
+    differences: "Input area with action buttons for content creation"
+
+lightning_component:
+  name: ""
+  url: "https://developer.salesforce.com/docs/component-library/overview/components"
+  mapping_notes: "No direct Lightning Base Component - typically built with lightning-textarea and custom components"
+
+accessibility:
+  keyboard_support:
+    - "Tab to navigate between input and buttons"
+    - "Enter in input field may submit (depending on implementation)"
+    - "Escape to cancel/collapse publisher"
+    - "Keyboard shortcuts for formatting (if supported)"
+  screen_reader:
+    - "Input field label announced"
+    - "Character count announced (if present)"
+    - "Action button purposes announced"
+    - "Submit confirmation announced"
+  aria_attributes:
+    - "aria-label on input field"
+    - "aria-describedby for character limits or hints"
+    - "aria-disabled on submit when invalid"
+    - "role='textbox' on input area"
+
+usage_guidelines:
+  when_to_use:
+    - "For creating social posts or updates"
+    - "For commenting systems"
+    - "In collaboration or communication features"
+    - "When users need to create content"
+  when_not_to_use:
+    - "For simple form inputs (use form elements)"
+    - "When content creation isn't primary action"
+    - "For search inputs"
+    - "When rich text editing isn't needed"
+  best_practices:
+    - "Provide clear submit action button"
+    - "Show character limits if applicable"
+    - "Support basic text formatting"
+    - "Auto-save drafts when possible"
+    - "Provide cancel/clear option"
+    - "Handle empty submissions gracefully"
+  common_mistakes:
+    - "Missing cancel or clear option"
+    - "No character limit indication"
+    - "Poor mobile keyboard handling"
+    - "Not preserving draft content"
+    - "Unclear submit button state"
+
+code_examples:
+  - title: "Basic Publisher"
+    code: |
+      <div class="slds-publisher slds-is-active">
+        <label for="publisher-textarea" class="slds-assistive-text">Write a post</label>
+        <textarea id="publisher-textarea" class="slds-publisher__input slds-textarea" placeholder="What's on your mind?"></textarea>
+        <div class="slds-publisher__actions slds-grid slds-grid_align-spread">
+          <ul class="slds-grid">
+            <li>
+              <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small" title="Attach a file">
+                <svg class="slds-button__icon" aria-hidden="true">
+                  <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#attach"></use>
+                </svg>
+                <span class="slds-assistive-text">Attach a file</span>
+              </button>
+            </li>
+          </ul>
+          <button class="slds-button slds-button_brand">Post</button>
+        </div>
+      </div>
+    description: "Basic publisher with text input and post button"
+  - title: "Publisher with Formatting Options"
+    code: |
+      <div class="slds-publisher slds-is-active">
+        <label for="rich-publisher-textarea" class="slds-assistive-text">Write a post</label>
+        <textarea id="rich-publisher-textarea" class="slds-publisher__input slds-textarea" placeholder="Share your thoughts..."></textarea>
+        <div class="slds-publisher__actions slds-grid slds-grid_align-spread">
+          <ul class="slds-grid slds-grid_vertical-align-center">
+            <li>
+              <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small" title="Bold">
+                <svg class="slds-button__icon" aria-hidden="true">
+                  <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#bold"></use>
+                </svg>
+                <span class="slds-assistive-text">Bold</span>
+              </button>
+            </li>
+            <li>
+              <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small" title="Italic">
+                <svg class="slds-button__icon" aria-hidden="true">
+                  <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#italic"></use>
+                </svg>
+                <span class="slds-assistive-text">Italic</span>
+              </button>
+            </li>
+            <li>
+              <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small" title="Link">
+                <svg class="slds-button__icon" aria-hidden="true">
+                  <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#link"></use>
+                </svg>
+                <span class="slds-assistive-text">Insert link</span>
+              </button>
+            </li>
+          </ul>
+          <div class="slds-grid">
+            <button class="slds-button slds-button_neutral slds-m-right_x-small">Cancel</button>
+            <button class="slds-button slds-button_brand">Publish</button>
+          </div>
+        </div>
+      </div>
+    description: "Publisher with text formatting options and cancel button"
+
+styling_hooks: []
+
+dependencies:
+  css_files: ["publishers.css", "textarea.css", "button.css"]
+  javascript:
+    - "Input validation"
+    - "Character counting"
+    - "Submit handling"
+    - "Draft auto-save"
+  icons:
+    - "utility:attach"
+    - "utility:bold"
+    - "utility:italic"
+    - "utility:link"
+  other_components: ["textarea", "button"]
+
+related_components:
+  - name: "Feed"
+    relationship: "complementary"
+    description: "Displays published content from publisher"
+  - name: "Rich Text Editor"
+    relationship: "alternative"
+    description: "More advanced editing capabilities"
+  - name: "Textarea"
+    relationship: "contains"
+    description: "Input element within publisher"
+
+references:
+  official_docs: "https://v1.lightningdesignsystem.com/components/publishers/"
+
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-11-11"
+  author: "SLDS Documentation Team"
+  slds_version: "2.27.2"
+  review_status: "complete"
+  source: "official-slds"
+  notes: "Created from official SLDS documentation and design-system-internal source code"
+

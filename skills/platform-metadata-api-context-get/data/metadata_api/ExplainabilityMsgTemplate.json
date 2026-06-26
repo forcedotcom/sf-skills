@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExplainabilityMsgTemplate - Metadata API",
+  "description": "Represents information about the template that contains the decision explanation message for a specified expression set step type.",
+  "file_information": ".explainabilityMsgTemplate",
+  "directory_location": "ExplainabilityMsgTemplates",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "evaluationResult": {
+      "type": "EvaluationResult (enumeration of type string)",
+      "required": true,
+      "description": "The type of result for which the message template can be used. The step type for which the result is evaluated can be a condition, conditional group, or branch.Valid values are: Failed Passed NoResult"
+    },
+    "expressionSetStepType": {
+      "type": "ExpressionSetStepType (enumeration of type string)",
+      "required": true,
+      "description": "The step type in an expression set that uses the explainability message template.Valid values are: Aggregation Branch BusinessElement Calculation Condition DecisionTableLookup ListEnabledGroup ListFilter MatrixLookup ReferenceProcedure"
+    },
+    "expsSetProcessType": {
+      "type": "ExpsSetProcessType (enumeration of type string)",
+      "required": true,
+      "description": "The type of industry that’s using the expression set.Valid values are: Bre GpaCalculation InsuranceClaimProcessing—Available in API version 65.0 and later. ItServiceManagement—Available in API version 65.0 and later. PlanCostCalculation RatingDiscovery StudentInformationSystem—Available in API version 65.0 and later. StudentSuccess When Business Rules Engine is enabled for a Salesforce instance, the default value is 'Bre’. Other process types are available to you depending on your industry solution and permission sets."
+    },
+    "isDefault": {
+      "type": "boolean",
+      "description": "Indicates whether the decision explainer template for a specified step type is default (true) or not (false)."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Master label the for ExplainabilityMsgTemplate."
+    },
+    "message": {
+      "type": "string",
+      "required": true,
+      "description": "The message associated with the template for a specific expression set step type."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ExplainabilityMsgTemplate component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ExplainabilityMsgTemplate\n\txmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<evaluationResult>Passed</evaluationResult>\n\t<expressionSetStepType>Condition</expressionSetStepType>\n\t<expsSetProcessType>ProductQualification</expsSetProcessType>\n\t<isDefault>false</isDefault>\n\t<masterLabel>ML EMT testDM</masterLabel>\n\t<message>EMT Testing</message>\n</ExplainabilityMsgTemplate>"
+    }
+  ]
+}

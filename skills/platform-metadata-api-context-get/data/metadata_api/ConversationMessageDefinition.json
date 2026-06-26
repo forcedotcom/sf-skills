@@ -1,0 +1,380 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ConversationMessageDefinition - Metadata API",
+  "description": "Represents a messaging component in an Enhanced Messaging channel or Messaging for In-App and Web session.",
+  "file_information": ".conversationMessageDefinition",
+  "directory_location": "conversationMessageDefinitions",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "constants": {
+      "type": "ConversationMessageConstant[]",
+      "description": "An array of constants that defines the messaging components. Constants support multiple data types, including text, URL, and image."
+    },
+    "contentCategory": {
+      "type": "ConversationMessageContentCategory (enumeration of type string)",
+      "description": "Specifies the business intent of the Conversation Message Definition. Valid values are: AccountUpdate Authentication Feedback OrderUpdate PromotionalOutreach Reminder Response"
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the conversation message definition."
+    },
+    "label": {
+      "type": "string",
+      "description": "A user-friendly name for ConversationMessageDefinition, which is defined whenConversationMessageDefinition is created."
+    },
+    "language": {
+      "type": "string",
+      "description": "The language of the conversation message definition."
+    },
+    "messageHandlers": {
+      "type": "ConversationMessageHandler[]",
+      "description": "An array of message handlers."
+    },
+    "messageLayouts": {
+      "type": "ConversationMessageLayout[]",
+      "description": "An array of message layouts."
+    },
+    "optionsParameter": {
+      "type": "ConversationMessageOptionsParameter[]",
+      "description": "An array of options parameter of the ConversationMessageDefinition."
+    },
+    "parameters": {
+      "type": "ConversationMessageParameter[]",
+      "description": "An array of parameters."
+    },
+    "type": {
+      "type": "ConversationMessageDefinitionType (enumeration of type string)",
+      "required": true,
+      "description": "The type of the conversation message definition. Valid values are: Action ApexForm AuthenticationRequest AutoResponse Link Notification PaymentRequest Picklist RecordPicker RecordView TimePicker"
+    }
+  },
+  "sub_types": {
+    "ConversationMessageConstant": {
+      "compositeValues": {
+        "type": "ConversationMessageConstantCompositeValue[]",
+        "description": "An array of composite values of ConversationMessageConstant."
+      },
+      "constantType": {
+        "type": "ConversationMessageConstantType (enumeration of type string)",
+        "required": true,
+        "description": "The conversation message constant type. Valid values are: Custom Image Options SubTitle Title Url"
+      },
+      "label": {
+        "type": "string",
+        "description": "The UI label of the conversation message constant."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the conversation message constant."
+      },
+      "primitiveValues": {
+        "type": "ConversationMessageConstantPrimitiveValue (enumeration of type string)",
+        "description": "An array of primitive values of ConversationMessageConstant."
+      },
+      "valueType": {
+        "type": "ConversationMessageValueType (enumeration of type string)",
+        "description": "The type of the conversation message constant value. Valid values are: Boolean Date DateTime Double ImageId Integer RecordId Text Url"
+      }
+    },
+    "ConversationMessageConstantCompositeValue": {
+      "constantItems": {
+        "type": "ConversationMessageConstant[]",
+        "description": "An array of constant items."
+      },
+      "identifier": {
+        "type": "string",
+        "required": true,
+        "description": "The client identifier."
+      }
+    },
+    "ConversationMessageConstantPrimitiveValue": {
+      "contentAssetName": {
+        "type": "string",
+        "description": "Represents the value for type = ImageAsset"
+      },
+      "textValue": {
+        "type": "string",
+        "description": "Represents the value for type = Text"
+      },
+      "type": {
+        "type": "ConversationMessageConstantValueType (enumeration of type string)",
+        "required": true,
+        "description": "The type of the conversation message constant primitive value. Valid values are: FileAsset ImageAsset Text Url"
+      },
+      "urlValue": {
+        "type": "string",
+        "description": "Represents the value for type = Url"
+      }
+    },
+    "ConversationMessageHandler": {
+      "activeRequestDurationMinutes": {
+        "type": "int",
+        "required": true,
+        "description": "The duration of an active request in minutes."
+      },
+      "handlerName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the message handler."
+      },
+      "handlerType": {
+        "type": "ConversationMessageHandlerType (enumeration of type string)",
+        "required": true,
+        "description": "The type of message handler. Valid values are: ApexFormProvider. Available in API version 65.0 and later. AuthProvider PaymentProvider QuickAction Survey. Available in API version 65.0 and later."
+      }
+    },
+    "ConversationMessageLayout": {
+      "externalTemplates": {
+        "type": "ConvMsgExternalTemplateVersion[]",
+        "description": "The external template version of the ConversationMessageLayout."
+      },
+      "formatType": {
+        "type": "ConversationMessageFormatType (enumeration of type string)",
+        "required": true,
+        "description": "The format type of the conversation message layout. Valid values are: Application Buttons Carousel EncryptedOAuthToken ExternalTemplate Flow Inputs ListPicker Media Payment QuickReplies RichLink Text TimePicker WebView"
+      },
+      "layoutItems": {
+        "type": "ConversationMessageLayoutItem[]",
+        "description": "An array of layout items."
+      },
+      "messageType": {
+        "type": "ConversationMessageType (enumeration of type string)",
+        "required": true,
+        "description": "The conversation message type. Valid values are: AuthenticationRequest Choices Form PaymentRequest StaticContent"
+      }
+    },
+    "ConvMsgExternalTemplateVersion": {
+      "accountIdentifier": {
+        "type": "string",
+        "required": true,
+        "description": "The account identifier. For WhatsApp channels, this is the WABA ID."
+      },
+      "accountName": {
+        "type": "string",
+        "required": true,
+        "description": "The account name."
+      },
+      "language": {
+        "type": "string",
+        "required": true,
+        "description": "The language of the conversation message external template."
+      },
+      "status": {
+        "type": "ConvMsgExternalTemplateVersionStatus (enumeration of type string)",
+        "required": true,
+        "description": "The status of the conversation message external template. Valid values are: Approved. The template version is approved. Blocked. The template version is blocked. Available in API version 65.0 and later. Deleted. The template version is deleted. Available in API version 65.0 and later. Disabled. The template version is disabled because of recurring negative customer feedback. InAppeal. The rejected template version is being appealed. Available in API version 65.0 and later. LimitExceeded. Available in API version 65.0 and later. OutOfSync. The template versions in the messaging service and Salesforce are out of sync. Available in API version 65.0 and later. Paused. The template version is paused because of recurring negative customer feedback or low read rates. Pending. The template version awaits Meta's approval. PendingDeletion. The template version is pending deletion. Available in API version 65.0 and later. Rejected. The template version was rejected during Meta’s review process."
+      },
+      "templateName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the conversation message external template."
+      },
+      "templateVersionIdentifier": {
+        "type": "string",
+        "required": true,
+        "description": "The template version identifier."
+      }
+    },
+    "ConversationMessageLayoutItem": {
+      "collectionType": {
+        "type": "ConversationMessageCollectionType (enumeration of type string)",
+        "required": true,
+        "description": "The type of conversation message collection. Valid values are: DynamicList None StaticList"
+      },
+      "compositeValues": {
+        "type": "ConversationMessageLayoutCompositeValue[]",
+        "description": "An array of composite values of the ConversationMessageLayoutItem."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the conversation message layout item."
+      },
+      "primitiveValues": {
+        "type": "ConversationMessageLayoutPrimitiveValue[]",
+        "description": "An array of primitive values of the ConversationMessageLayoutItem."
+      }
+    },
+    "ConversationMessageLayoutCompositeValue": {
+      "compositeTypeName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the conversation message layout composite value type."
+      },
+      "layoutItems": {
+        "type": "ConversationMessageLayoutItem[]",
+        "description": "An array of layout items."
+      },
+      "valueSourceReference": {
+        "type": "string",
+        "description": "The source of the conversation message layout composite value."
+      }
+    },
+    "ConversationMessageLayoutPrimitiveValue": {
+      "contentAssetName": {
+        "type": "string",
+        "description": "The content asset name."
+      },
+      "fieldName": {
+        "type": "string",
+        "description": "The name of the conversation message layout primitive value field."
+      },
+      "formulaTemplate": {
+        "type": "string",
+        "description": "The formula template defines the content for each entry in the list."
+      },
+      "literalValue": {
+        "type": "string",
+        "description": "The literal primitive value of the conversation message layout."
+      },
+      "mergeFields": {
+        "type": "ConversationMessageMergeField[]",
+        "description": "Inserts multiple values to a list."
+      },
+      "type": {
+        "type": "ConversationMessageLayoutValueType (enumeration of type string)",
+        "required": true,
+        "description": "The type of the conversation message layout primitive value. Valid values are: FormulaTemplate Literal MediaAsset SourcePrimitiveValue SourceSobjectField SourceSobjectFieldValue SourceSobjectFormula"
+      },
+      "valueFormula": {
+        "type": "string",
+        "description": "The formula of the conversation message layout primitive value."
+      },
+      "valueSourceReference": {
+        "type": "string",
+        "description": "The source of the conversation message layout primitive value."
+      }
+    },
+    "ConversationMessageMergeField": {
+      "formulaTemplate": {
+        "type": "string",
+        "required": true,
+        "description": "The formula template of the conversation message merge field."
+      },
+      "mergeFieldType": {
+        "type": "ConversationMessageMergeFieldType (enumeration of type string)",
+        "required": true,
+        "description": "The type of the conversation message merge field. Valid value is ListTemplate."
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the conversation message merge field."
+      },
+      "valueSourceReference": {
+        "type": "string",
+        "required": true,
+        "description": "The source of the conversation message merge field value."
+      }
+    },
+    "ConversationMessageOptionsParameter": {
+      "compositeTypeDetails": {
+        "type": "ConversationMessageParameterCompositeDetails[]",
+        "description": "An array of composite details of ConversationMessageOptionsParameter."
+      },
+      "optionsParameterType": {
+        "type": "ConversationMessageOptionsParameterType (enumeration of type string)",
+        "required": true,
+        "description": "The type of conversation message options parameter. Valid values are: CustomCompositeOptions CustomPrimitiveOptions RecordIdOptions TimeSlotOptions"
+      },
+      "primitiveTypeDetails": {
+        "type": "ConversationMessageParameterPrimitiveDetails",
+        "description": "The primitive type details of conversation message options parameter."
+      }
+    },
+    "ConversationMessageParameterCompositeDetails": {
+      "compositeChildItems": {
+        "type": "ConversationMessageParameterCompositeDetails[]",
+        "description": "The composite child items of the conversation message parameter."
+      },
+      "isList": {
+        "type": "boolean",
+        "description": "Indicates whether the conversation message parameter composite details field is a list item (true) or not (false). The default value is false."
+      },
+      "isRequired": {
+        "type": "boolean",
+        "description": "Indicates whether the conversation message parameter is required (true) or not (false). The default value is false."
+      },
+      "label": {
+        "type": "string",
+        "description": "The UI label of the conversation message parameter composite details field."
+      },
+      "maxListItems": {
+        "type": "int",
+        "description": "The maximum number of list items in the conversation message parameter composite details field."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the conversation message parameter composite details field."
+      },
+      "primitiveChildItems": {
+        "type": "ConversationMessageParameterPrimitiveDetails[]",
+        "description": "An array of primitive child items."
+      }
+    },
+    "ConversationMessageParameterPrimitiveDetails": {
+      "isList": {
+        "type": "boolean",
+        "description": "Indicates whether the conversation message parameter primitive details field is a list item (true) or not (false). The default value is false."
+      },
+      "isRequired": {
+        "type": "boolean",
+        "description": "Indicates whether the conversation message parameter primitive details field is required (true) or not (false). The default value is false."
+      },
+      "label": {
+        "type": "string",
+        "description": "The UI label of the conversation message parameter primitive details field."
+      },
+      "maxListItems": {
+        "type": "int",
+        "description": "The maximum number of list items that are allowed in the conversation message parameter primitive details field."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the conversation message parameter primitive details field."
+      },
+      "sobjectType": {
+        "type": "string",
+        "description": "The sObject type."
+      },
+      "valueType": {
+        "type": "ConversationMessageValueType (enumeration of type string)",
+        "description": "The type of the conversation message parameter value. Valid values are: Boolean Date DateTime Double ImageId Integer RecordId Text Url"
+      }
+    },
+    "ConversationMessageParameter": {
+      "compositeTypeDetails": {
+        "type": "ConversationMessageParameterCompositeDetails",
+        "description": "An array of composite type details."
+      },
+      "parameterType": {
+        "type": "ConversationMessageParameterType (enumeration of type string)",
+        "required": true,
+        "description": "The type of conversation message parameter. Valid values are: CustomComposite CustomPrimitive RecordIds"
+      },
+      "primitiveTypeDetails": {
+        "type": "ConversationMessageParameterPrimitiveDetails",
+        "description": "An array of primitive type details."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ConvMsgExternalErrorCode\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"InvalidParameter\"/>\n    <xsd:enumeration value=\"IntegrityError\"/>\n    <xsd:enumeration value=\"InternalError\"/>\n    <xsd:enumeration value=\"PublishError\"/>\n    <xsd:enumeration value=\"DeprecationError\"/>\n    <xsd:enumeration value=\"MetricsThresholdNotReached\"/>\n    <xsd:enumeration value=\"InvalidAccessToken\"/>\n    <xsd:enumeration value=\"ValidationError\"/>\n    <xsd:enumeration value=\"Other\"/>\n    <xsd:enumeration value=\"OutOfSync\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConvMsgExternalRejectionReason\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AbusiveContent\"/>\n    <xsd:enumeration value=\"IncorrectCategory\"/>\n    <xsd:enumeration value=\"InvalidFormat\"/>\n    <xsd:enumeration value=\"Scam\"/>\n    <xsd:enumeration value=\"Other\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConvMsgExternalTemplateVersion\">\n  <xsd:sequence>\n    <xsd:element name=\"accountIdentifier\" type=\"xsd:string\"/>\n    <xsd:element name=\"accountName\" type=\"xsd:string\"/>\n    <xsd:element name=\"errorCode\" minOccurs=\"0\" type=\"tns:ConvMsgExternalErrorCode\"/>\n    <xsd:element name=\"errorMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"externalConfigJson\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"headerAssetHandle\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"language\" type=\"xsd:string\"/>\n    <xsd:element name=\"layoutJson\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"rejectionReason\" minOccurs=\"0\" type=\"tns:ConvMsgExternalRejectionReason\"/>\n    <xsd:element name=\"status\" type=\"tns:ConvMsgExternalTemplateVersionStatus\"/>\n    <xsd:element name=\"templateName\" type=\"xsd:string\"/>\n    <xsd:element name=\"templateVersionIdentifier\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" minOccurs=\"0\" type=\"tns:ConvMsgExternalTemplateVersionType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ConvMsgExternalTemplateVersionStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Pending\"/>\n    <xsd:enumeration value=\"Rejected\"/>\n    <xsd:enumeration value=\"Approved\"/>\n    <xsd:enumeration value=\"Paused\"/>\n    <xsd:enumeration value=\"Disabled\"/>\n    <xsd:enumeration value=\"InAppeal\"/>\n    <xsd:enumeration value=\"PendingDeletion\"/>\n    <xsd:enumeration value=\"Deleted\"/>\n    <xsd:enumeration value=\"LimitExceeded\"/>\n    <xsd:enumeration value=\"Blocked\"/>\n    <xsd:enumeration value=\"OutOfSync\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConvMsgExternalTemplateVersionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Legacy\"/>\n    <xsd:enumeration value=\"Template\"/>\n    <xsd:enumeration value=\"Flow\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConversationMessageCollectionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"StaticList\"/>\n    <xsd:enumeration value=\"DynamicList\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConversationMessageConstant\">\n  <xsd:sequence>\n    <xsd:element name=\"compositeValues\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageConstantCompositeValue\"/>\n    <xsd:element name=\"constantType\" type=\"tns:ConversationMessageConstantType\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"primitiveValues\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageConstantPrimitiveValue\"/>\n    <xsd:element name=\"valueType\" minOccurs=\"0\" type=\"tns:ConversationMessageValueType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConversationMessageConstantCompositeValue\">\n  <xsd:sequence>\n    <xsd:element name=\"constantItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageConstant\"/>\n    <xsd:element name=\"identifier\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConversationMessageConstantPrimitiveValue\">\n  <xsd:sequence>\n    <xsd:element name=\"contentAssetName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"textValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:ConversationMessageConstantValueType\"/>\n    <xsd:element name=\"urlValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ConversationMessageConstantType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Title\"/>\n    <xsd:enumeration value=\"Url\"/>\n    <xsd:enumeration value=\"Image\"/>\n    <xsd:enumeration value=\"Options\"/>\n    <xsd:enumeration value=\"SubTitle\"/>\n    <xsd:enumeration value=\"Custom\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConversationMessageConstantValueType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Text\"/>\n    <xsd:enumeration value=\"Url\"/>\n    <xsd:enumeration value=\"ImageAsset\"/>\n    <xsd:enumeration value=\"FileAsset\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConversationMessageContentCategory\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Reminder\"/>\n    <xsd:enumeration value=\"Feedback\"/>\n    <xsd:enumeration value=\"OrderUpdate\"/>\n    <xsd:enumeration value=\"AccountUpdate\"/>\n    <xsd:enumeration value=\"PromotionalOutreach\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConversationMessageDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"constants\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageConstant\"/>\n        <xsd:element name=\"contentCategory\" minOccurs=\"0\" type=\"tns:ConversationMessageContentCategory\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"language\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"messageHandlers\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageHandler\"/>\n        <xsd:element name=\"messageLayouts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageLayout\"/>\n        <xsd:element name=\"optionsParameter\" minOccurs=\"0\" type=\"tns:ConversationMessageOptionsParameter\"/>\n        <xsd:element name=\"parameters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageParameter\"/>\n        <xsd:element name=\"type\" type=\"tns:ConversationMessageDefinitionType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ConversationMessageDefinitionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"RecordView\"/>\n    <xsd:enumeration value=\"RecordPicker\"/>\n    <xsd:enumeration value=\"Picklist\"/>\n    <xsd:enumeration value=\"TimePicker\"/>\n    <xsd:enumeration value=\"Link\"/>\n    <xsd:enumeration value=\"AuthenticationRequest\"/>\n    <xsd:enumeration value=\"Action\"/>\n    <xsd:enumeration value=\"AutoResponse\"/>\n    <xsd:enumeration value=\"PaymentRequest\"/>\n    <xsd:enumeration value=\"Notification\"/>\n    <xsd:enumeration value=\"ApexForm\"/>\n    <xsd:enumeration value=\"CatalogMessage\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConversationMessageFormatType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Text\"/>\n    <xsd:enumeration value=\"RichLink\"/>\n    <xsd:enumeration value=\"Media\"/>\n    <xsd:enumeration value=\"Buttons\"/>\n    <xsd:enumeration value=\"Carousel\"/>\n    <xsd:enumeration value=\"QuickReplies\"/>\n    <xsd:enumeration value=\"ListPicker\"/>\n    <xsd:enumeration value=\"TimePicker\"/>\n    <xsd:enumeration value=\"EncryptedOAuthToken\"/>\n    <xsd:enumeration value=\"Application\"/>\n    <xsd:enumeration value=\"Inputs\"/>\n    <xsd:enumeration value=\"WebView\"/>\n    <xsd:enumeration value=\"Payment\"/>\n    <xsd:enumeration value=\"ExternalTemplate\"/>\n    <xsd:enumeration value=\"Flow\"/>\n    <xsd:enumeration value=\"Catalog\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConversationMessageHandler\">\n  <xsd:sequence>\n    <xsd:element name=\"activeRequestDurationMinutes\" type=\"xsd:int\"/>\n    <xsd:element name=\"handlerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"handlerType\" type=\"tns:ConversationMessageHandlerType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ConversationMessageHandlerType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"QuickAction\"/>\n    <xsd:enumeration value=\"AuthProvider\"/>\n    <xsd:enumeration value=\"PaymentProvider\"/>\n    <xsd:enumeration value=\"Survey\"/>\n    <xsd:enumeration value=\"ApexFormProvider\"/>\n    <xsd:enumeration value=\"CatalogProvider\"/>\n    <xsd:enumeration value=\"PaymentStatusProvider\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConversationMessageLayout\">\n  <xsd:sequence>\n    <xsd:element name=\"externalTemplates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConvMsgExternalTemplateVersion\"/>\n    <xsd:element name=\"formatType\" type=\"tns:ConversationMessageFormatType\"/>\n    <xsd:element name=\"layoutItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageLayoutItem\"/>\n    <xsd:element name=\"layoutVariant\" type=\"tns:ConversationMessageLayoutVariant\" nillable=\"true\"/>\n    <xsd:element name=\"messageType\" type=\"tns:ConversationMessageType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConversationMessageLayoutCompositeValue\">\n  <xsd:sequence>\n    <xsd:element name=\"compositeTypeName\" type=\"xsd:string\"/>\n    <xsd:element name=\"layoutItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageLayoutItem\"/>\n    <xsd:element name=\"valueSourceReference\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConversationMessageLayoutItem\">\n  <xsd:sequence>\n    <xsd:element name=\"collectionType\" type=\"tns:ConversationMessageCollectionType\"/>\n    <xsd:element name=\"compositeValues\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageLayoutCompositeValue\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"primitiveValues\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageLayoutPrimitiveValue\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConversationMessageLayoutPrimitiveValue\">\n  <xsd:sequence>\n    <xsd:element name=\"contentAssetName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"fieldName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"formulaTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"literalValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"mergeFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageMergeField\"/>\n    <xsd:element name=\"type\" type=\"tns:ConversationMessageLayoutValueType\"/>\n    <xsd:element name=\"valueFormula\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueSourceReference\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ConversationMessageLayoutValueType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Literal\"/>\n    <xsd:enumeration value=\"MediaAsset\"/>\n    <xsd:enumeration value=\"SourceSobjectFieldValue\"/>\n    <xsd:enumeration value=\"SourceSobjectFormula\"/>\n    <xsd:enumeration value=\"SourcePrimitiveValue\"/>\n    <xsd:enumeration value=\"FormulaTemplate\"/>\n    <xsd:enumeration value=\"SourceSobjectField\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConversationMessageLayoutVariant\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AppleBusinessChat\"/>\n    <xsd:enumeration value=\"WhatsApp\"/>\n    <xsd:enumeration value=\"SingleProduct\"/>\n    <xsd:enumeration value=\"MultiProduct\"/>\n    <xsd:enumeration value=\"FullCatalog\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConversationMessageMergeField\">\n  <xsd:sequence>\n    <xsd:element name=\"formulaTemplate\" type=\"xsd:string\"/>\n    <xsd:element name=\"mergeFieldType\" type=\"tns:ConversationMessageMergeFieldType\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueSourceReference\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ConversationMessageMergeFieldType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ListTemplate\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConversationMessageOptionsParameter\">\n  <xsd:sequence>\n    <xsd:element name=\"compositeTypeDetails\" minOccurs=\"0\" type=\"tns:ConversationMessageParameterCompositeDetails\"/>\n    <xsd:element name=\"optionsParameterType\" type=\"tns:ConversationMessageOptionsParameterType\"/>\n    <xsd:element name=\"primitiveTypeDetails\" minOccurs=\"0\" type=\"tns:ConversationMessageParameterPrimitiveDetails\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ConversationMessageOptionsParameterType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"RecordIdOptions\"/>\n    <xsd:enumeration value=\"TimeSlotOptions\"/>\n    <xsd:enumeration value=\"CustomPrimitiveOptions\"/>\n    <xsd:enumeration value=\"CustomCompositeOptions\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConversationMessageParameter\">\n  <xsd:sequence>\n    <xsd:element name=\"compositeTypeDetails\" minOccurs=\"0\" type=\"tns:ConversationMessageParameterCompositeDetails\"/>\n    <xsd:element name=\"parameterType\" type=\"tns:ConversationMessageParameterType\"/>\n    <xsd:element name=\"primitiveTypeDetails\" minOccurs=\"0\" type=\"tns:ConversationMessageParameterPrimitiveDetails\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConversationMessageParameterCompositeDetails\">\n  <xsd:sequence>\n    <xsd:element name=\"compositeChildItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageParameterCompositeDetails\"/>\n    <xsd:element name=\"isList\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"maxListItems\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"name\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"primitiveChildItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageParameterPrimitiveDetails\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConversationMessageParameterPrimitiveDetails\">\n  <xsd:sequence>\n    <xsd:element name=\"isList\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"maxListItems\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"name\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sobjectType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueType\" minOccurs=\"0\" type=\"tns:ConversationMessageValueType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ConversationMessageParameterType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"RecordIds\"/>\n    <xsd:enumeration value=\"CustomPrimitive\"/>\n    <xsd:enumeration value=\"CustomComposite\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConversationMessageType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"StaticContent\"/>\n    <xsd:enumeration value=\"Choices\"/>\n    <xsd:enumeration value=\"Form\"/>\n    <xsd:enumeration value=\"AuthenticationRequest\"/>\n    <xsd:enumeration value=\"PaymentRequest\"/>\n    <xsd:enumeration value=\"CatalogMessage\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConversationMessageValueType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Text\"/>\n    <xsd:enumeration value=\"Boolean\"/>\n    <xsd:enumeration value=\"Integer\"/>\n    <xsd:enumeration value=\"Double\"/>\n    <xsd:enumeration value=\"Date\"/>\n    <xsd:enumeration value=\"DateTime\"/>\n    <xsd:enumeration value=\"Url\"/>\n    <xsd:enumeration value=\"RecordId\"/>\n    <xsd:enumeration value=\"ImageId\"/>\n    <xsd:enumeration value=\"FileId\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ConversationMessageDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ConversationMessageDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <constants>\n        <constantType>Custom</constantType>\n        <label>imageAsset</label>\n        <name>imageAsset</name>\n        <primitiveValues>\n            <contentAssetName>Screenshot_20240402_at_32437PM</contentAssetName>\n            <type>ImageAsset</type>\n        </primitiveValues>\n        <valueType>ImageId</valueType>\n    </constants>\n    <constants>\n        <constantType>Custom</constantType>\n        <label>message</label>\n        <name>message</name>\n        <primitiveValues>\n            <textValue>Favourite Season</textValue>\n            <type>Text</type>\n        </primitiveValues>\n        <valueType>Text</valueType>\n    </constants>\n    <constants>\n        <constantType>Custom</constantType>\n        <label>Prompt1</label>\n        <name>Prompt1</name>\n        <primitiveValues>\n            <textValue>Choose one option</textValue>\n            <type>Text</type>\n        </primitiveValues>\n        <valueType>Text</valueType>\n    </constants>\n    <constants>\n        <compositeValues>\n            <constantItems>\n                <constantType>Image</constantType>\n                <primitiveValues>\n                    <contentAssetName>Screenshot_20240321_at_53957PM3</contentAssetName>\n                    <type>ImageAsset</type>\n                </primitiveValues>\n            </constantItems>\n            <constantItems>\n                <constantType>SubTitle</constantType>\n                <primitiveValues>\n                    <textValue>January</textValue>\n                    <type>Text</type>\n                </primitiveValues>\n            </constantItems>\n            <constantItems>\n                <constantType>Title</constantType>\n                <primitiveValues>\n                    <textValue>Jan</textValue>\n                    <type>Text</type>\n                </primitiveValues>\n            </constantItems>\n            <identifier>1c6f8c4d-7bce-1649-fa45-db587bcfbb29</identifier>\n        </compositeValues>\n        <compositeValues>\n            <constantItems>\n                <constantType>Image</constantType>\n                <primitiveValues>\n                    <contentAssetName>Screenshot_20240321_at_53957PM4</contentAssetName>\n                    <type>ImageAsset</type>\n                </primitiveValues>\n            </constantItems>\n            <constantItems>\n                <constantType>SubTitle</constantType>\n                <primitiveValues>\n                    <textValue>December</textValue>\n                    <type>Text</type>\n                </primitiveValues>\n            </constantItems>\n            <constantItems>\n                <constantType>Title</constantType>\n                <primitiveValues>\n                    <textValue>Dec</textValue>\n                    <type>Text</type>\n                </primitiveValues>\n            </constantItems>\n            <identifier>fb8bb328-7bc7-2830-6194-2ae7ece055ad</identifier>\n        </compositeValues>\n        <compositeValues>\n            <constantItems>\n                <constantType>Image</constantType>\n                <primitiveValues>\n                    <contentAssetName>Screenshot_20240321_at_53912PM1</contentAssetName>\n                    <type>ImageAsset</type>\n                </primitiveValues>\n            </constantItems>\n            <constantItems>\n                <constantType>SubTitle</constantType>\n                <primitiveValues>\n                    <textValue>March</textValue>\n                    <type>Text</type>\n                </primitiveValues>\n            </constantItems>\n            <constantItems>\n                <constantType>Title</constantType>\n                <primitiveValues>\n                    <textValue>March</textValue>\n                    <type>Text</type>\n                </primitiveValues>\n            </constantItems>\n            <identifier>570baa88-fa4d-4b31-0e84-92f87b35af0a</identifier>\n        </compositeValues>\n        <constantType>Options</constantType>\n    </constants>\n    <constants>\n        <constantType>Title</constantType>\n        <primitiveValues>\n            <textValue>What is your favourite month?</textValue>\n            <type>Text</type>\n        </primitiveValues>\n    </constants>\n    <label>Favourite Month</label>\n    <language>en_US</language>\n    <messageLayouts>\n        <formatType>Buttons</formatType>\n        <layoutItems>\n            <collectionType>DynamicList</collectionType>\n            <compositeValues>\n                <compositeTypeName>TitleOptionItem</compositeTypeName>\n                <layoutItems>\n                    <collectionType>None</collectionType>\n                    <compositeValues>\n                        <compositeTypeName>TitleItem</compositeTypeName>\n                        <layoutItems>\n                            <collectionType>None</collectionType>\n                            <name>title</name>\n                            <primitiveValues>\n                                <type>SourcePrimitiveValue</type>\n                                <valueSourceReference>Constants.Options.ListItem.SubTitle</valueSourceReference>\n                            </primitiveValues>\n                        </layoutItems>\n                    </compositeValues>\n                    <name>titleItem</name>\n                </layoutItems>\n                <valueSourceReference>Constants.Options</valueSourceReference>\n            </compositeValues>\n            <name>optionItems</name>\n        </layoutItems>\n        <layoutItems>\n            <collectionType>None</collectionType>\n            <name>text</name>\n            <primitiveValues>\n                <type>SourcePrimitiveValue</type>\n                <valueSourceReference>Constants.Title</valueSourceReference>\n            </primitiveValues>\n        </layoutItems>\n        <messageType>Choices</messageType>\n    </messageLayouts>\n    <messageLayouts>\n        <formatType>ListPicker</formatType>\n        <layoutItems>\n            <collectionType>None</collectionType>\n            <compositeValues>\n                <compositeTypeName>TitleImageItem</compositeTypeName>\n                <layoutItems>\n                    <collectionType>None</collectionType>\n                    <name>imageId</name>\n                    <primitiveValues>\n                        <type>SourcePrimitiveValue</type>\n                        <valueSourceReference>Constants.imageAsset</valueSourceReference>\n                    </primitiveValues>\n                </layoutItems>\n                <layoutItems>\n                    <collectionType>None</collectionType>\n                    <name>title</name>\n                    <primitiveValues>\n                        <type>SourcePrimitiveValue</type>\n                        <valueSourceReference>Constants.Title</valueSourceReference>\n                    </primitiveValues>\n                </layoutItems>\n            </compositeValues>\n            <name>message</name>\n        </layoutItems>\n        <layoutItems>\n            <collectionType>DynamicList</collectionType>\n            <compositeValues>\n                <compositeTypeName>TitleOptionItem</compositeTypeName>\n                <layoutItems>\n                    <collectionType>None</collectionType>\n                    <compositeValues>\n                        <compositeTypeName>TitleImageItem</compositeTypeName>\n                        <layoutItems>\n                            <collectionType>None</collectionType>\n                            <name>imageId</name>\n                            <primitiveValues>\n                                <type>SourcePrimitiveValue</type>\n                                <valueSourceReference>Constants.Options.ListItem.Image</valueSourceReference>\n                            </primitiveValues>\n                        </layoutItems>\n                        <layoutItems>\n                            <collectionType>None</collectionType>\n                            <name>title</name>\n                            <primitiveValues>\n                                <type>SourcePrimitiveValue</type>\n                                <valueSourceReference>Constants.Options.ListItem.Title</valueSourceReference>\n                            </primitiveValues>\n                        </layoutItems>\n                    </compositeValues>\n                    <name>titleItem</name>\n                </layoutItems>\n                <valueSourceReference>Constants.Options</valueSourceReference>\n            </compositeValues>\n            <name>optionItems</name>\n        </layoutItems>\n        <layoutItems>\n            <collectionType>None</collectionType>\n            <compositeValues>\n                <compositeTypeName>TitleImageItem</compositeTypeName>\n                <layoutItems>\n                    <collectionType>None</collectionType>\n                    <name>imageId</name>\n                    <primitiveValues>\n                        <type>SourcePrimitiveValue</type>\n                        <valueSourceReference>Constants.imageAsset</valueSourceReference>\n                    </primitiveValues>\n                </layoutItems>\n                <layoutItems>\n                    <collectionType>None</collectionType>\n                    <name>title</name>\n                    <primitiveValues>\n                        <type>SourcePrimitiveValue</type>\n                        <valueSourceReference>Constants.message</valueSourceReference>\n                    </primitiveValues>\n                </layoutItems>\n            </compositeValues>\n            <name>reply</name>\n        </layoutItems>\n        <layoutItems>\n            <collectionType>None</collectionType>\n            <name>title</name>\n            <primitiveValues>\n                <type>SourcePrimitiveValue</type>\n                <valueSourceReference>Constants.Title</valueSourceReference>\n            </primitiveValues>\n        </layoutItems>\n        <messageType>Choices</messageType>\n    </messageLayouts>\n    <messageLayouts>\n        <formatType>Carousel</formatType>\n        <layoutItems>\n            <collectionType>DynamicList</collectionType>\n            <compositeValues>\n                <compositeTypeName>TitleItemWithInteractions</compositeTypeName>\n                <layoutItems>\n                    <collectionType>StaticList</collectionType>\n                    <compositeValues>\n                        <compositeTypeName>TitleOptionItem</compositeTypeName>\n                        <layoutItems>\n                            <collectionType>None</collectionType>\n                            <compositeValues>\n                                <compositeTypeName>TitleItem</compositeTypeName>\n                                <layoutItems>\n                                    <collectionType>None</collectionType>\n                                    <name>title</name>\n                                    <primitiveValues>\n                                        <literalValue>Select One</literalValue>\n                                        <type>Literal</type>\n                                    </primitiveValues>\n                                </layoutItems>\n                            </compositeValues>\n                            <name>titleItem</name>\n                        </layoutItems>\n                    </compositeValues>\n                    <name>interactionItems</name>\n                </layoutItems>\n                <layoutItems>\n                    <collectionType>None</collectionType>\n                    <compositeValues>\n                        <compositeTypeName>TitleImageItem</compositeTypeName>\n                        <layoutItems>\n                            <collectionType>None</collectionType>\n                            <name>imageId</name>\n                            <primitiveValues>\n                                <type>SourcePrimitiveValue</type>\n                                <valueSourceReference>Constants.Options.ListItem.Image</valueSourceReference>\n                            </primitiveValues>\n                        </layoutItems>\n                        <layoutItems>\n                            <collectionType>None</collectionType>\n                            <name>subTitle</name>\n                            <primitiveValues>\n                                <type>SourcePrimitiveValue</type>\n                                <valueSourceReference>Constants.Options.ListItem.SubTitle</valueSourceReference>\n                            </primitiveValues>\n                        </layoutItems>\n                        <layoutItems>\n                            <collectionType>None</collectionType>\n                            <name>title</name>\n                            <primitiveValues>\n                                <type>SourcePrimitiveValue</type>\n                                <valueSourceReference>Constants.Title</valueSourceReference>\n                            </primitiveValues>\n                        </layoutItems>\n                    </compositeValues>\n                    <name>titleItem</name>\n                </layoutItems>\n                <valueSourceReference>Constants.Options</valueSourceReference>\n            </compositeValues>\n            <name>items</name>\n        </layoutItems>\n        <messageType>Choices</messageType>\n    </messageLayouts>\n    <messageLayouts>\n        <formatType>Text</formatType>\n        <layoutItems>\n            <collectionType>None</collectionType>\n            <name>text</name>\n            <primitiveValues>\n                <formulaTemplate>{!$Constants.Title}\n{!$Constants.Prompt1}:\n{!$ListTemplates.OptionsList}</formulaTemplate>\n                <mergeFields>\n                    <formulaTemplate>{!$ListItem.Index}. {!$ListItem.Value.Title}{!BR()}</formulaTemplate>\n                    <mergeFieldType>ListTemplate</mergeFieldType>\n                    <name>OptionsList</name>\n                    <valueSourceReference>Constants.Options</valueSourceReference>\n                </mergeFields>\n                <type>FormulaTemplate</type>\n            </primitiveValues>\n        </layoutItems>\n        <messageType>StaticContent</messageType>\n    </messageLayouts>\n    <type>Picklist</type>\n</ConversationMessageDefinition>"
+    }
+  ]
+}

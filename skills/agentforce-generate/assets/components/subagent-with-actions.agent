@@ -1,0 +1,40 @@
+# Subagent with Actions Template
+# A subagent that integrates with external systems via Flow or Apex actions
+# This is a PARTIAL template - use within a complete agent file
+#
+# Two-Level Action System:
+#   Level 1: subagent.actions block DEFINES actions (with target:, inputs:, outputs:)
+#   Level 2: reasoning.actions block INVOKES them (with @actions.name, with/set)
+#
+# Usage: Replace {{placeholders}} with your values
+# Note: Actions defined inside subagent are local to that subagent
+
+subagent {{subagent_name}}:
+	description: "{{SubagentDescription}}"
+
+	# Level 1: DEFINE actions available to this subagent
+	actions:
+		{{action_name}}:
+			description: "{{ActionDescription}}"
+			inputs:
+				{{input_name}}: {{input_type}}
+					description: "{{InputDescription}}"
+			outputs:
+				{{output_name}}: {{output_type}}
+					description: "{{OutputDescription}}"
+			target: "{{ActionTarget}}"  # flow://FlowName or apex://ClassName
+
+	reasoning:
+		instructions: ->
+			| {{SubagentInstructions}}
+			| Use the available actions to help the user.
+			| Capture and communicate results clearly.
+
+		# Level 2: INVOKE the actions defined above
+		actions:
+			invoke_action: @actions.{{action_name}}
+				with {{input_name}}=...
+				set @variables.{{result_variable}} = @outputs.{{output_name}}
+
+			back_to_menu: @utils.transition to @subagent.agent_router
+				description: "Return to main menu"

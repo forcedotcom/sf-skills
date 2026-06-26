@@ -1,0 +1,88 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LightningTypeBundle - Metadata API",
+  "description": "Represents a custom Lightning type. Use this type to override the default user interface to create a customized appearance based on your business requirements. Deploy this bundle to your organization to implement the overrides.",
+  "file_information": "LightningTypeBundle components are stored in the lightningTypes folder.\n\nHere’s an example of the LightningTypeBundle structure.\n\n```\n+--myMetadataPackage\n    +--lightningTypes (1)\n        +--TYPE_NAME (2)\n           +--schema.json (3)\n           +--CHANNEL_NAME (4)\n              +--editor.json (5) OR +--renderer.json (6)\n```\n\nThe bundle includes these resources.\n\n- The lightningTypes folder (1) contains a folder for each created custom Lightning type in the format {typeName} (2).\n- Each custom lightning type folder contains a schema.json file (3) that defines the JSON schema that drives the custom Lightning type validation.\n- Optional channel-specific folders (4). To override the default UI for a specific Salesforce application, the bundle contains a folder named after that channel. The supported channel folders are: lightningDesktopGenAi (Agentforce Employee agent in Lightning Experience) enhancedWebChat (Agentforce Service agent via Enhanced Chat v2) lightningMobileGenAi (Agentforce Employee agent on Mobile and Agentforce Service agent via Enhanced Chat v2 on Mobile) experienceBuilder (Experience Builder) Inside the {channelName} folder, you can configure: The editor.json file (5) containing custom user interface and editor information The renderer.json file (6) containing custom user interface and renderer informationThis file isn’t supported in experienceBuilder. Note\n- lightningDesktopGenAi (Agentforce Employee agent in Lightning Experience)\n- enhancedWebChat (Agentforce Service agent via Enhanced Chat v2)\n- lightningMobileGenAi (Agentforce Employee agent on Mobile and Agentforce Service agent via Enhanced Chat v2 on Mobile)\n- experienceBuilder (Experience Builder)\n- The editor.json file (5) containing custom user interface and editor information\n- The renderer.json file (6) containing custom user interface and renderer informationThis file isn’t supported in experienceBuilder. Note",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "Describes the lightning type."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the name of a LightningTypeBundle which is defined when the LightningTypeBundle is created."
+    },
+    "resources": {
+      "type": "LightningTypeBundleResource[]",
+      "description": "The list of resource files in the lightningTypes folder."
+    }
+  },
+  "sub_types": {
+    "LightningTypeBundleResource": {
+      "fileName": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the resource file."
+      },
+      "filePath": {
+        "type": "string",
+        "required": true,
+        "description": "Path of the resource file."
+      },
+      "source": {
+        "type": "base64Binary",
+        "required": true,
+        "description": "The JSON content of the resource."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"LightningTypeBundle\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"resources\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LightningTypeBundleResource\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"LightningTypeBundleResource\">\n  <xsd:sequence>\n    <xsd:element name=\"fileName\" type=\"xsd:string\"/>\n    <xsd:element name=\"filePath\" type=\"xsd:string\"/>\n    <xsd:element name=\"fileType\" type=\"xsd:string\"/>\n    <xsd:element name=\"source\" type=\"xsd:base64Binary\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This example shows the directory structure in the .zip file of a custom Lightning type named flightResponse:",
+      "code": "+--lightningTypes\n    +--flightResponse\n        +--schema.json\n        +--lightningDesktopGenAi\n            +--renderer.json"
+    },
+    {
+      "description": "In this example, the custom Lightning type flightResponse is a complex type that references an Apex class named Flight.",
+      "code": "global class Flight {\n\n    @AuraEnabled\n    global String flightId;\n\n    @AuraEnabled\n    global Integer numLayovers;\n\n    @AuraEnabled\n    global Boolean isPetAllowed;\n\n    @AuraEnabled\n    global Long price;\n\n    @AuraEnabled\n    global Double discountPercentage;\n\n    @AuraEnabled\n    global Integer durationInMin;\n\n    global Flight(String flightId, Integer numLayovers, Boolean isPetAllowed,\n                  Long price, Double discountPercentage, Integer durationInMin) {\n        this.flightId = flightId;\n        this.numLayovers = numLayovers;\n        this.isPetAllowed = isPetAllowed;\n        this.price = price;\n        this.discountPercentage = discountPercentage;\n        this.durationInMin = durationInMin;\n     }\n}\nglobal class FlightRequestFilter {\n\n    @AuraEnabled\n    global Long price;\n\n    @AuraEnabled\n    global Double discountPercentage;\n}"
+    },
+    {
+      "description": "Here are the contents of the files in the flightResponse directory. This sample code shows the contents of the schema.json file.",
+      "code": "{\n  \"title\": \"My Flight Response\",\n  \"description\": \"My Flight Response\",\n  \"lightning:type\": \"@apexClassType/c__Flight\"\n}"
+    },
+    {
+      "description": "Contents of the renderer.json file.",
+      "code": "{\n  \"renderer\": {\n    \"componentOverrides\": {\n      \"$\": {\n        \"definition\": \"c/flightDetails\"\n      }\n    }\n  }\n}"
+    },
+    {
+      "description": "This example shows the directory structure in the .zip file of a custom Lightning type named flightFilter:",
+      "code": "+--lightningTypes\n    +--flightFilter\n        +--schema.json\n        +--lightningDesktopGenAi\n            +--editor.json"
+    },
+    {
+      "description": "In this example, the custom Lightning type flightFilter is a complex type that references an Apex class named FlightRequestFilter.",
+      "code": "global class Flight {\n\n    @AuraEnabled\n    global String flightId;\n\n    @AuraEnabled\n    global Integer numLayovers;\n\n    @AuraEnabled\n    global Boolean isPetAllowed;\n\n    @AuraEnabled\n    global Long price;\n\n    @AuraEnabled\n    global Double discountPercentage;\n\n    @AuraEnabled\n    global Integer durationInMin;\n\n    global Flight(String flightId, Integer numLayovers, Boolean isPetAllowed,\n                  Long price, Double discountPercentage, Integer durationInMin) {\n        this.flightId = flightId;\n        this.numLayovers = numLayovers;\n        this.isPetAllowed = isPetAllowed;\n        this.price = price;\n        this.discountPercentage = discountPercentage;\n        this.durationInMin = durationInMin;\n     }\n}\nglobal class FlightRequestFilter {\n\n    @AuraEnabled\n    global Long price;\n\n    @AuraEnabled\n    global Double discountPercentage;\n}"
+    },
+    {
+      "description": "Here are the contents of the files in the flightFilter directory. This sample code shows the contents of the schema.json file.",
+      "code": "{\n  \"title\": \"Flight Filter\",\n  \"description\": \"Flight Filter\",\n  \"lightning:type\": \"@apexClassType/c__FlightRequestFilter\"\n}"
+    },
+    {
+      "description": "Contents of the editor.json file.",
+      "code": "{\n  \"editor\": {\n    \"componentOverrides\": {\n      \"$\": {\n        \"definition\": \"c/flightFilter\"\n      }\n    }\n  }\n}"
+    }
+  ]
+}

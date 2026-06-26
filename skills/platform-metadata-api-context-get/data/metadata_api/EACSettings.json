@@ -1,0 +1,112 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EACSettings - Metadata API",
+  "description": "Represents the Einstein Activity Capture metadata type. Use Einstein Activity Capture to add emails and events from your Microsoft or Google account to the activity timeline of related Salesforce records. Automatically sync contact and event data between your Microsoft or Google account and Salesforce. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".EAC",
+  "directory_location": "Settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "addRcCompToFlexiPages": {
+      "type": "boolean",
+      "description": "Indicates whether the Recommended Connections component is automatically added (true) to standard contact, lead, and person account Lightning record pages or not (false). Default value is false. Available in API version 53.0 and later."
+    },
+    "autoContactCreationPref": {
+      "type": "boolean",
+      "description": "Indicates whether Automatic Contact Creation is enabled (true) or not (false). Default value is false. Available in API version 61.0 and later."
+    },
+    "autoContactEnrichmentPref": {
+      "type": "boolean",
+      "description": "Indicates whether Automatic Contact Enhancements is enabled (true) or not (false). Default value is false. Available in API version 61.0 and later."
+    },
+    "automatedEmailFilter": {
+      "type": "boolean",
+      "description": "Indicates whether the setting to prevent automated emails from being shared is on (true) or not (false). Available in API version 54.0 and later."
+    },
+    "autoPopulateGoogleMeetLinks": {
+      "type": "boolean",
+      "description": "Indicates whether the details to join with Google Meet are added (true) to the Google version of the event or not (false) when sales reps create events in Salesforce. The Google Meet details don’t sync back to Salesforce. Default value is false. Available in API version 53.0 and later."
+    },
+    "enableActivityAnalyticsPref": {
+      "type": "boolean",
+      "description": "Indicates whether the Activities dashboard is enabled (true) or not (false). For orgs that enable Einstein Activity Capture after the Summer ‘21 release, the default value is false. Available in API version 53.0 and later."
+    },
+    "enableActivityCapture": {
+      "type": "boolean",
+      "description": "Indicates whether Einstein Activity Capture is enabled (true) or not (false). provisionProductivityFeatures must be true to use this feature. To ensure that your org's requirements for handling sensitive data are met, see Einstein Activity Capture Considerations. Default value is false."
+    },
+    "enableActivityMetrics": {
+      "type": "boolean",
+      "description": "Indicates whether Activity Metrics are enabled (true) or not (false). enableActivityCapture must be true to use this feature. Before enabling this feature, see Considerations for Using Activity Metrics. Default value is false."
+    },
+    "enableActivitySyncEngine": {
+      "type": "boolean",
+      "description": "Indicates whether combined sync and capture is enabled for events, contacts, and emails (true) or not (false). Default value is false."
+    },
+    "enableEACForEveryonePref": {
+      "type": "boolean",
+      "description": "Indicates whether users who have the enableActivityCapture set to false can still see emails and events in their Salesforce timeline (true) or not (false). Default value is true."
+    },
+    "enableEnforceEacSharingPref": {
+      "type": "boolean",
+      "description": "Indicates whether new Einstein Activity Capture users are required to keep their activity sharing setting as Don’t Share (true) or not (false). Users can still share individual emails and events, and respond to sharing requests from other users."
+    },
+    "enableInboxActivitySharing": {
+      "type": "boolean",
+      "description": "Indicates whether the default activity sharing for new users is set to Everyone (true) or not (false). For example, if enableInboxActivitySharing is true, then new Einstein Activity Capture users have their activity sharing set to Everyone by default. This setting does not affect the activity sharing setting of existing users. Default value is true."
+    },
+    "enableInsightsInTimeline": {
+      "type": "boolean",
+      "description": "Indicates whether Email Insights is enabled (true) or not (false). Default value is true."
+    },
+    "enableInsightsInTimelineEacStd": {
+      "type": "boolean",
+      "description": "Indicates whether Email Insights is enabled for users with an Einstein Activity Capture Standard permission set (true) or not (false). For more information, see \"Turn On Einstein Email Insights\" in Salesforce Help. Default value is false."
+    },
+    "provisionProductivityFeatures": {
+      "type": "boolean",
+      "description": "Indicates whether your org is ready for productivity features to be enabled (true) or not (false). Default value is false."
+    },
+    "relationshipGraphPref": {
+      "type": "boolean",
+      "description": "Indicates whether Buyer Relationship Map is enabled (true) or not (false). Default value is true. Available in API version 61.0 and later."
+    },
+    "salesforceEventsOnlyPref": {
+      "type": "boolean",
+      "description": "Indicates whether the activity timeline shows only events that are Salesforce records (true) or not (false). For more information, see Guidelines for Using Events with Einstein Activity Capture Available in API version 53.0 and later."
+    },
+    "sensitiveEmailFilter": {
+      "type": "boolean",
+      "description": "Indicates whether the setting to prevent sensitive emails from being shared is on (true) or not (false). Available in API version 54.0 and later."
+    },
+    "syncEmailToCoreActivity": {
+      "type": "boolean",
+      "description": "Indicates whether Sync Email as Salesforce Activity is turned on (true) or not (false). Available in API version 63.0 and later."
+    },
+    "syncInternalEvents": {
+      "type": "boolean",
+      "description": "Indicates whether internal events sync between the connected account and Salesforce (true) or not (false). Events are internal when all attendees are part of the internal domain. Available in API version 53.0 and later."
+    },
+    "s2XSvcAccEmail": {
+      "type": "boolean",
+      "description": "Indicates whether a warning email has be sent to the customer if they're using Service Account OAuth on Exchange Online (true) or not (false). Default value is false. Available in API version 62.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EACSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"addRcCompToFlexiPages\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"autoContactCreationPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"autoContactEnrichmentPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"autoPopulateGoogleMeetLinks\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"automatedEmailFilter\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"dSThresholdNotification\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableActivityAnalyticsPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableActivityCapture\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableActivityMetrics\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableActivitySyncEngine\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEACForEveryonePref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEnforceEacSharingPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableInboxActivitySharing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableInsightsInTimeline\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableInsightsInTimelineEacStd\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableUnifiedActivitiesPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"provisionProductivityFeatures\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"relationshipGraphPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"s2XSvcAccEmail\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"salesforceEventsOnlyPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"sensitiveEmailFilter\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showEACCalendarPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"syncEmailToCoreActivity\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"syncInternalEvents\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of the EAC.settings file:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EACSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<enableActivityCapture>true</enableActivityCapture>\n\t<enableActivityMetrics>true</enableActivityMetrics>\n\t<enableActivitySyncEngine>true</enableActivitySyncEngine>\n\t<enableEACForEveryonePref>true</enableEACForEveryonePref>\n\t<enableInboxActivitySharing>true</enableInboxActivitySharing>\n\t<enableInsightsInTimeline>true</enableInsightsInTimeline>\n\t<enableInsightsInTimelineEacStd>true</enableInsightsInTimelineEacStd>\n\t<provisionProductivityFeatures>true</provisionProductivityFeatures>\n</EACSettings>"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "WaveTemplateBundle - Metadata API",
+  "description": "Represents an Analytics template bundle, which can be used to create Analytics apps. A bundle contains an Analytics template definition and all its related resources.This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": "An Analytics template bundle is a folder that contains definition files for a template. Unlike other metadata components, a WaveTemplateBundle component isn’t represented by a single component file, but instead by a collection of JSON and CSV definition files. Each definition file represents a resource in a template, such as lenses, dashboards, dataflows, and comma-separated values. For example, this directory structure shows the hierarchy of the folders and files for one Analytics Template definition, template1.\n\n```\nwaveTemplates\n    template1\n        template-info.json\n        variables.json\n        ui.json\n        extFiles\n            PostalCodes.csv\n```\n\nAnalytics template bundles must be under a top-level folder that’s named waveTemplates. Each bundle must have its own subfolder under the waveTemplates folder and be named with the template's fully qualified API name. The bundle folder must contain a template-info.json file to specify the metadata about the template and the references to other definition files. An entire bundle doesn’t have a suffix and definition files can have one of the following suffixes.\n\nSuffix | Component Type\n--- | ---\n.json | JavaScript Object Notation\n.csv | Comma-Separated Values",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "assetIcon": {
+      "type": "string",
+      "description": "The icon to use by default for new Analytics apps based on this template. Valid values are 1.png through 20.png."
+    },
+    "description": {
+      "type": "string",
+      "description": "The specification of the template."
+    },
+    "label": {
+      "type": "string",
+      "description": "The label of the template.",
+      "required": true
+    },
+    "templateType": {
+      "type": "string",
+      "description": "The type of the template. Valid values are: App Dashboard Lens",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WaveTemplateBundle\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"assetIcon\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"assetVersion\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"templateType\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

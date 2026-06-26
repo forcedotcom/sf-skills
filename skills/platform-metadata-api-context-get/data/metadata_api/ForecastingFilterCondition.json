@@ -1,0 +1,62 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ForecastingFilterCondition - Metadata API",
+  "description": "Represents the custom filter condition logic for including or excluding data from opportunity forecasts.",
+  "file_information": ".ForecastingFilterCondition",
+  "directory_location": "ForecastingFilterConditions",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "fieldName": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the opportunity field to be filtered."
+    },
+    "forecastingFilter": {
+      "type": "string",
+      "required": true,
+      "description": "The ID of the forecast filter."
+    },
+    "forecastingSourceDefinition": {
+      "type": "string",
+      "description": "The ID of the forecasting source definition."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label for this object, which displays in Setup. The label is in the default language locale for the organization. If there’s no default language locale, the label is in en_US."
+    },
+    "operation": {
+      "type": "FilterOperation (enumeration of type string)",
+      "required": true,
+      "description": "The operator in the filter condition. Possible values are: equals greaterOrEqual—greater than or equal to greaterThan lessOrEqual—less than or equal to lessThan notEqual—not equal to"
+    },
+    "sortOrder": {
+      "type": "int",
+      "required": true,
+      "description": "The index value for the condition. This value represents the condition in the FilterLogic field on the ForecastingFilter object. For example, 1."
+    },
+    "value": {
+      "type": "string",
+      "description": "The value of the filter condition. If multiple values are specified, they must be separated by a comma delimiter. Note: If you have multiple currencies enabled, and add a custom filter on a currency field as part of your forecast type definition, the corporate currency at the time the filter was created is used. If you have a single currency enabled, the absolute value is used in your filter condition."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"FilterOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"equals\"/>\n    <xsd:enumeration value=\"notEqual\"/>\n    <xsd:enumeration value=\"lessThan\"/>\n    <xsd:enumeration value=\"greaterThan\"/>\n    <xsd:enumeration value=\"lessOrEqual\"/>\n    <xsd:enumeration value=\"greaterOrEqual\"/>\n    <xsd:enumeration value=\"contains\"/>\n    <xsd:enumeration value=\"notContain\"/>\n    <xsd:enumeration value=\"startsWith\"/>\n    <xsd:enumeration value=\"includes\"/>\n    <xsd:enumeration value=\"excludes\"/>\n    <xsd:enumeration value=\"within\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ForecastingFilterCondition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"colName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"fieldName\" type=\"xsd:string\"/>\n        <xsd:element name=\"forecastingFilter\" type=\"xsd:string\"/>\n        <xsd:element name=\"forecastingSourceDefinition\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"operation\" type=\"tns:FilterOperation\"/>\n        <xsd:element name=\"sortOrder\" type=\"xsd:int\"/>\n        <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ForecastingFilterCondition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ForecastingFilterCondition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <colName>mostlikely</colName>\n    <fieldName>Amount</fieldName>\n    <forecastingFilter>d</forecastingFilter>\n    <forecastingSourceDefinition>d7</forecastingSourceDefinition>\n    <masterLabel>FFC_Opportunity</masterLabel>\n    <operation>greaterThan</masterLabel>\n    <sortOrder>1</masterLabel>\n    <value>100000</value>\n</ForecastingFilterCondition>"
+    }
+  ]
+}

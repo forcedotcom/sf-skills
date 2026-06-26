@@ -1,0 +1,60 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "sub_types",
+    "wsdl_segment"
+  ],
+  "title": "SharingBaseRule - Metadata API",
+  "description": "Represents sharing rule settings such as access level and to whom access is granted.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "accessLevel": {
+      "type": "string",
+      "description": "The access level that the sharing rule grants.",
+      "required": true
+    },
+    "accountSettings": {
+      "type": "AccountSharingRuleSettings[]",
+      "description": "The access level for the account’s children (case, contact, and opportunity)."
+    },
+    "description": {
+      "type": "string",
+      "description": "Describes the sharing rule. Maximum of 1000 characters."
+    },
+    "label": {
+      "type": "string",
+      "description": "Label for the sharing rule.",
+      "required": true
+    },
+    "sharedTo": {
+      "type": "SharedTo",
+      "description": "Specifies who the record is shared with.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "AccountSharingRuleSettings": {
+      "caseAccessLevel": {
+        "type": "string",
+        "description": "The access level that the user or group has to cases associated with the account. Possible values are: None Read Edit",
+        "required": true
+      },
+      "contactAccessLevel": {
+        "type": "string",
+        "description": "The access level that the user or group has to contacts associated with the account. Possible values are: None Read Edit",
+        "required": true
+      },
+      "opportunityAccessLevel": {
+        "type": "string",
+        "description": "The access level that the user or group has to opportunities associated with the account. Possible values are: None Read Edit",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AccountSharingRuleSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"caseAccessLevel\" type=\"xsd:string\"/>\n    <xsd:element name=\"contactAccessLevel\" type=\"xsd:string\"/>\n    <xsd:element name=\"opportunityAccessLevel\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SharedTo\">\n  <xsd:sequence>\n    <xsd:element name=\"allCustomerPortalUsers\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"allInternalUsers\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"allPartnerUsers\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"channelProgramGroup\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"channelProgramGroups\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"group\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"groups\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"guestUser\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"managerSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"managers\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"portalRole\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"portalRoleAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"queue\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"role\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"roleAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"roleAndSubordinatesInternal\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"roles\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"rolesAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territories\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territoriesAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territory\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territoryAndSubordinates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SharingBaseRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"accessLevel\" type=\"xsd:string\"/>\n        <xsd:element name=\"accountSettings\" minOccurs=\"0\" type=\"tns:AccountSharingRuleSettings\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"sharedTo\" type=\"tns:SharedTo\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharingCriteriaRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:SharingBaseRule\">\n      <xsd:sequence>\n        <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"criteriaItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n        <xsd:element name=\"includeRecordsOwnedByAll\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharingGuestRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:SharingBaseRule\">\n      <xsd:sequence>\n        <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"criteriaItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n        <xsd:element name=\"includeHVUOwnedRecords\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharingOwnerRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:SharingBaseRule\">\n      <xsd:sequence>\n        <xsd:element name=\"sharedFrom\" type=\"tns:SharedTo\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharingRules\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"sharingCriteriaRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingCriteriaRule\"/>\n        <xsd:element name=\"sharingGuestRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingGuestRule\"/>\n        <xsd:element name=\"sharingOwnerRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingOwnerRule\"/>\n        <xsd:element name=\"sharingTerritoryRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingTerritoryRule\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharingTerritoryRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:SharingOwnerRule\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

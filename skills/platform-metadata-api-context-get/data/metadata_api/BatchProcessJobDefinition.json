@@ -1,0 +1,175 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "BatchProcessJobDefinition - Metadata API",
+  "description": "Represents the details of a Batch Management job definition.",
+  "file_information": ".batchProcessJobDefinition",
+  "directory_location": "batchProcessJobDefinitions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "batchSize": {
+      "type": "integer",
+      "description": "Number of records that each Batch Management job can process. Flow type Batch Management jobs can process up to 2000 records and Loyalty Program Process type Batch Management jobs can process up to 250 records.",
+      "required": true
+    },
+    "dataSource": {
+      "type": "BatchDataSource[]",
+      "description": "Source of information whose records must be processed by the Batch Management job.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the Batch Management job, up to 255 characters."
+    },
+    "executionProcessApiName": {
+      "type": "string",
+      "description": "API name of process that must be executed by the Batch Management job. This field is available in API version 55.0 and later. If the batch job’s type is Flow, enter the API name of an active flow that the batch job must execute. If the batch job’s type is Loyalty Program Process, enter: Transaction_Journals if you want the batch job to process Transaction Journal records by applying the applicable active loyalty program process of the type TransactionJournal. API name of an active loyalty process of the type TierProcessing if you want the batch job to run the loyalty program process to assess the tier of eligible members. The API name consists of the name of the process, the process type, and the name of the loyalty program separated by two consecutive underscores. For example, the process API name is Update Member Tier__TierProcessing__Inner Circle if the process name is Update Member Tier, the process type is TierProcessing, and the loyalty program name is Inner Circle. You can use database-based APEX classes that let you use flex queues in the Batch Management job, allowing to place more than 5 jobs in a queue. This functionality is applicable to all Industry Clouds that use managed packages. See Apex Flex Queue."
+    },
+    "flowApiName": {
+      "type": "string",
+      "description": "API name of an active flow process that must be executed by the Batch Management job. You can either specify the flow API name in the executionProcessApiName field or in the flowApiName field."
+    },
+    "flowInputVariable": {
+      "type": "string",
+      "description": "Input variable of associated flow that is used by the batch job to uniquely identify records."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Name of the Batch Management job, up to 80 characters.",
+      "required": true
+    },
+    "processGroup": {
+      "type": "string",
+      "description": "Name of the group for which the Batch Management job processes records.",
+      "required": true
+    },
+    "retryCount": {
+      "type": "integer",
+      "description": "Number of times this Batch Management job must be rerun in case it fails. The maximum retry count is 3. Valid values are 1–3.",
+      "required": true
+    },
+    "retryInterval": {
+      "type": "integer",
+      "description": "Number of milliseconds after which the Batch Management job must be rerun in case it fails. Valid values are 1,000–10,000.",
+      "required": true
+    },
+    "status": {
+      "type": "string",
+      "description": "Indicates the status of the Batch Management job. Valid values are Active and Inactive."
+    },
+    "type": {
+      "type": "string (enumeration of type string)",
+      "description": "The type of process that the Batch Management job must execute. This field is available in API version 55.0 and later. Valid values are: BulkUpdate Calc—Data Processing Engine ConsumptionOveragesCalculation DecisionTableRefresh DeepCloneSalesAgreement FlattenAccountIOUHierarchyBatchJob Flow EnergyUseRecordCreationBatchJob EntitlementCreationBatchJob HighScaleBreProcess IndustriesLSCommercial InvoiceDTPRunBatchJob InvoiceRecoveryRunBatchJob InvoiceRunBatchJob LifeSciProviderActivityGoalSharingBatchJob LoyaltyProgramProcess NetUnitRateCalculation NextGenCommitmentBatchProcessingJob ManagerProvisioning PbbToOptyConversion ProductCatalogCacheRefresh PromotionChannelPropagationBatchJob RatableSummaryCreation ServiceProcess StoreAssortmentPropagationBatchJob SummaryCreation WorkDotComToHRManagerProvisioning"
+    }
+  },
+  "sub_types": {
+    "BatchDataSource": {
+      "condition": {
+        "type": "string",
+        "description": "Criteria defined to filter the records.",
+        "required": true
+      },
+      "criteria": {
+        "type": "string",
+        "description": "Type of filter criteria that’s used to filter records for processing."
+      },
+      "dataSourceType": {
+        "type": "string",
+        "description": "Type of data source that's used to create the batch job definition. Valid values are: SingleSobject MultiSobject Available in API version 64.0 and later."
+      },
+      "filters": {
+        "type": "BatchDataSrcFilterCriteria[]",
+        "description": "Filter criterion that decides which records must be processed by the Batch Management job."
+      },
+      "orderFields": {
+        "type": "BatchDataSourceOrderField",
+        "description": "Fields that are used to order the records before the records are added to a batch in a job."
+      },
+      "sourceObject": {
+        "type": "string",
+        "description": "API name of an object whose records must be processed by the batch job. If the batch job type is Loyalty Program Process, the source object must be: TransactionJournal if the batch job is used to process transaction journals by applying the applicable loyalty program process. An object that stores the details of loyalty program members whose tier must be assessed by the loyalty program process specified in the executionProcessApiName field.",
+        "required": true
+      },
+      "sourceObjectField": {
+        "type": "string",
+        "description": "API name of the source object field that uniquely identifies records for which the batch job is executed. This field is available in API version 57.0 and later. This field is only applicable when the batch job’s type is Loyalty Program Process and a TierProcess type active loyalty program process is specified in the executionProcessApiName field. Specify the API name of a field that is a lookup to the LoyaltyProgramMember object and uniquely identifies the members whose tier must be assessed."
+      }
+    },
+    "BatchDataSrcFilterCriteria": {
+      "domainObjectName": {
+        "type": "string",
+        "description": "Name of the object the field is associated with. Available in API version 64.0 and later."
+      },
+      "dynamicValueType": {
+        "type": "string",
+        "description": "Data type of the input variable used as a filter."
+      },
+      "fieldName": {
+        "type": "string",
+        "description": "Name of the field that must be used to filter records.",
+        "required": true
+      },
+      "fieldPath": {
+        "type": "string",
+        "description": "Stores the path to a field in the object. Available in API version 64.0 and later."
+      },
+      "fieldValue": {
+        "type": "string",
+        "description": "Value of the field that must be filtered. Specify the field if isDynamicValue is set to False.",
+        "required": true
+      },
+      "isDynamicValue": {
+        "type": "boolean",
+        "description": "Indicates whether the filter criteria is dynamic.",
+        "required": true
+      },
+      "operator": {
+        "type": "string (enumeration of type string)",
+        "description": "Operator that is specified in the filter criteria. Valid values are: equals excludes greaterThan greaterThanOrEqualTo in includes lessThan LessThanOrEqualTo GreaterOrEqual like notEquals notIn",
+        "required": true
+      },
+      "sequenceNo": {
+        "type": "integer",
+        "description": "Sequence number used to refer the criteria in a filter.",
+        "required": true
+      }
+    },
+    "BatchDataSourceOrderField": {
+      "domainObjectName": {
+        "type": "string",
+        "description": "Name of the object the field is associated with. Available in API version 64.0 and later.",
+        "required": true
+      },
+      "fieldName": {
+        "type": "string",
+        "description": "Name of the field that must be used to filter records. Available in API version 64.0 and later.",
+        "required": true
+      },
+      "fieldPath": {
+        "type": "string",
+        "description": "Stores the path to a field in the object. Available in API version 64.0 and later.",
+        "required": true
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a BatchProcessJobDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<BatchProcessJobDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <batchSize>10</batchSize>\n   <dataSource>\n      <condition>1</condition>\n      <criteria>all</criteria>\n      <filters>\n         <dynamicValue>false</dynamicValue>\n         <dynamicValueType>string</dynamicValueType>\n         <fieldName>Name</fieldName>\n         <fieldValue>abcd</fieldValue>\n         <operator>equals</operator>\n         <sequenceNo>1</sequenceNo>\n      </filters>\n      <sourceObject>Account</sourceObject>\n   </dataSource>\n   <flowApiName>Flow1</flowApiName>\n   <flowInputVariable>recordId</flowInputVariable>\n   <masterLabel>BatchJob1</masterLabel>\n   <processGroup>Loyalty</processGroup>\n   <retryCount>2</retryCount>\n   <retryInterval>1000</retryInterval>\n   <status>Inactive</status>\n   <description>test</description>\n   <type>Flow</type>\n   <executionProcessApiName>testFlow</executionProcessApiName>\n</BatchProcessJobDefinition>"
+    },
+    {
+      "description": "The following is an example of a Flow object used in Metadata API.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--\n   ~ Copyright 2020 Salesforce, Inc.\n   ~ All Rights Reserved\n   ~ Company Confidential\n-->\n<Flow xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <apiVersion>51.0</apiVersion>\n   <interviewLabel>Flow1 {!$Flow.CurrentDateTime}</interviewLabel>\n   <label>Flow1</label>\n   <processMetadataValues>\n      <name>BuilderType</name>\n      <value>\n         <stringValue>LightningFlowBuilder</stringValue>\n      </value>\n   </processMetadataValues>\n   <processMetadataValues>\n      <name>OriginBuilderType</name>\n      <value>\n         <stringValue>LightningFlowBuilder</stringValue>\n      </value>\n   </processMetadataValues>\n   <processType>AutoLaunchedFlow</processType>\n   <recordLookups>\n      <name>getAcc</name>\n      <label>getAcc</label>\n      <locationX>614</locationX>\n      <locationY>465</locationY>\n      <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>\n      <filterLogic>and</filterLogic>\n      <filters>\n         <field>Id</field>\n         <operator>EqualTo</operator>\n         <value>\n            <elementReference>recordId</elementReference>\n         </value>\n      </filters>\n      <getFirstRecordOnly>true</getFirstRecordOnly>\n      <object>Account</object>\n      <storeOutputAutomatically>true</storeOutputAutomatically>\n   </recordLookups>\n   <start>\n      <locationX>73</locationX>\n      <locationY>213</locationY>\n      <connector>\n         <targetReference>getAcc</targetReference>\n      </connector>\n   </start>\n   <status>Draft</status>\n   <variables>\n      <name>recordId</name>\n      <dataType>String</dataType>\n      <isCollection>false</isCollection>\n      <isInput>true</isInput>\n      <isOutput>false</isOutput>\n   </variables>\n</Flow>"
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ServiceProcess - Metadata API",
+  "description": "Represents a process created in Service Process Studio and its associated attributes.",
+  "file_information": ".serviceprocess",
+  "directory_location": "serviceprocess",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "A meaningful explanation of the service process."
+    },
+    "processLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A meaningful name for the service process."
+    },
+    "serviceProcessAttributes": {
+      "type": "ServiceProcessAttribute[]",
+      "description": "Custom attributes that store the data associated with the service process."
+    },
+    "serviceProcessDependencies": {
+      "type": "ServiceProcessDependency[]",
+      "description": "Dependent components of the service process, such as OmniScripts or flows."
+    },
+    "serviceProcessItemGroups": {
+      "type": "ServiceProcessItemGroup[]",
+      "description": "Groups of related ServiceProcessAttribute records."
+    },
+    "shortDescription": {
+      "type": "string",
+      "description": "A brief meaningful explanation of the service process."
+    },
+    "usageType": {
+      "type": "SvcCatalogItemUsageType (enumeration of type string)",
+      "required": true,
+      "description": "The Cloud that uses this service process. Values are: CustomerService Employee FinancialServices Industry (available in version 58.0 and later)"
+    }
+  },
+  "sub_types": {
+    "ServiceProcessAttribute": {
+      "attributeType": {
+        "type": "SvcCtlgItemAttrAttributeType (enumeration of type string)",
+        "description": "A Base attribute corresponds to a SvcCatalogRequest field, which is subject to field-level security. An Extended attribute is only a ServiceProcessAttribute object record, which isn't subject to field-level security.Values are: Base Extended The default is Extended."
+      },
+      "dataType": {
+        "type": "SvcCatalogItemAttrDataType (enumeration of type string)",
+        "description": "The data type of the attribute. Values are: Attachment Checkbox Currency Date Datetime DisplayText Email IPAddress Integer ListOfAttachment(available in API version 65.0 and later) ListOfBoolean ListOfDouble ListOfInteger ListOfMaps ListOfString Lookup Map MultilineText MultiSelectPicklist(available in API version 65.0 and later) Number NumericScale Password(available in API version 65.0 and later) Percentage Picklist Queue RadioButton(available in API version 65.0 and later) SingleCheckbox (available in API version 59.0 and later) SinglelineText Text Toggle (available in API version 59.0 and later) Url The default is Text. Note: Selecting Currency doesn't cause an error, but currency conversions aren't supported."
+      },
+      "description": {
+        "type": "string",
+        "description": "A meaningful explanation of the attribute."
+      },
+      "developerName": {
+        "type": "string",
+        "required": true,
+        "description": "A system name for the attribute."
+      },
+      "fieldIdentifier": {
+        "type": "string",
+        "description": "For a Base attribute, the Developer Name of the SvcCatalogRequest field. This field can be standard or custom."
+      },
+      "groupApiName": {
+        "type": "string",
+        "description": "The apiName of the ServiceProcessItemGroup to which this attribute belongs."
+      },
+      "inputVariableValue": {
+        "type": "string",
+        "description": "The default value of the attribute."
+      },
+      "isRequired": {
+        "type": "boolean",
+        "description": "Specifies whether the attribute is required. The default is false."
+      },
+      "label": {
+        "type": "string",
+        "required": true,
+        "description": "A meaningful name for the attribute."
+      },
+      "parentAttribute": {
+        "type": "string",
+        "description": "The parent attribute of this attribute. For example, a Latitude attribute can have GeoLocation as a parent."
+      },
+      "sortOrder": {
+        "type": "int",
+        "description": "The position of the attribute in the payload relative to other attributes having no parent or the same parent."
+      }
+    },
+    "ServiceProcessDependency": {
+      "dependencyReference": {
+        "type": "string",
+        "required": true,
+        "description": "The Developer Name of the flow, OmniScript, Integration Definition, or preprocessor Apex class."
+      },
+      "processStepName": {
+        "type": "SvcCtlgItemDpndProcType (enumeration of type string)",
+        "description": "Name of the step in a service process.Values are: FulfillmentFlow IntegrationDefinition Preprocessor RequestForm"
+      },
+      "type": {
+        "type": "SvcCatalogItemDependencyType (enumeration of type string)",
+        "required": true,
+        "description": "The type of dependent component.Values are: FlowDefinition IntegrationProviderDef OmniScriptConfig PreprocessorApexClass"
+      }
+    },
+    "ServiceProcessItemGroup": {
+      "apiName": {
+        "type": "string",
+        "required": true,
+        "description": "The API Name of the group."
+      },
+      "groupName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the group."
+      },
+      "sortOrder": {
+        "type": "int",
+        "required": true,
+        "description": "The group display order."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ServiceProcess component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ServiceProcess xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <processLabel>EmailUpdate</processLabel>\n   <usageType>FinancialServices</usageType>\n   <serviceProcessAttributes>\n      <label>EmailAddress</label>\n      <developerName>EmailAddress</developerName>\n      <dataType>Text</dataType>\n      <groupApiName>Info</groupApiName>\n   </serviceProcessAttributes>\n   <serviceProcessDependencies>\n      <dependencyReference>EmailPreprocessor</dependencyReference>\n      <type>PreprocessorApexClass</type>\n   </serviceProcessDependencies>\n   <serviceProcessItemGroups>\n        <apiName>Info</apiName>\n        <groupName>Info</groupName>\n        <sortOrder>1</sortOrder>\n    </serviceProcessItemGroups>\n</ServiceProcess>"
+    }
+  ]
+}

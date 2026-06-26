@@ -1,0 +1,102 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "file_suffix_and_directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition",
+    "child_metadata_types"
+  ],
+  "title": "DigitalExperienceBundle - Metadata API",
+  "description": "Represents a text-based code structure of your organization’s workspaces, organized by workspace type, and each workspace’s content items.",
+  "file_information": "DigitalExperienceBundle components have the suffix .digitalExperience and are stored in the digitalExperiences folder.\n\nDigitalExperienceBundle uses workspaces and content types to organize your data in a content-focused structure.\n\n- Workspace: For enhanced Lightning Web Runtime (LWR) sites, a collection of related content items that form the site when combined with data from the DigitalExperienceConfig metadata type.For Salesforce CMS, a collection of related content items contained in a general workspace. For Marketing Cloud, a collection of related content items contained in a marketing or general workspace. The maximum length for a workspace name is 80 characters. Note\n- Workspace type: A way to categorize different kinds of workspaces. For example, the workspace type for enhanced LWR sites is site, and the workspace type for marketing workspaces in Marketing Cloud is marketing. The workspace type determines which content types are available in the workspace. In the DigitalExperienceBundle folder structure, all workspaces of a given type are under that workspace type. site, marketing, and general are the supported workspace types.\n- Content types: A way to categorize different kinds of content in a workspace. For example, all routes in an enhanced LWR site are stored under a content type folder called sfdc_cms__route. Similarly, forms for a marketing workspace are stored under a content type folder called sfdc_cms__form.\n- Content items: For enhanced LWR sites, the individual settings and site components that make up an enhanced LWR site. For example, each of the routes in an enhanced LWR site is a single content item.For marketing workspaces, the content items used in marketing campaigns. For example, each form in a workspace is a single content item.\n\nHere’s an example of the DigitalExperienceBundle structure.\n\nWhen retrieved, DigitalExperienceBundle contains workspace type folders (1) under the digitalExperiences folder.\n\nThe marketing folder contains one or more workspace folders (2), each representing a marketing workspace in Marketing Cloud. The site folder contains one or more workspace folders (3), each representing the workspace for an individual enhanced LWR site. Each workspace folder contains an XML file with information about the workspace, such as the label. For enhanced LWR sites, be sure to keep the label value in sync with the site’s network name.\n\nEach workspace folder also contains several content type folders that represent each of the different content types (4) used in that workspace. For example, marketing workspaces support landing pages, forms, emails, and referenced images and branding.\n\nFinally, each content type folder can contain one or more content subfolders. Each content subfolder can contain additional subfolders and several files that, when combined, represent an individual content item, such as a specific view (5).\n\n- A _meta.json file that contains the metadata for the content item. Use the _meta.json file to learn the location of a content item within the workspace, or to move the content item to another location, including creating a new location for the content item. You can also use the _meta.json file to view a content item’s parent-child relationships, to move the content item from one parent to another, or to remove a parent-child relationship entirely.\n- A content.json file that contains the primary version of the content item. Each content.json file includes values for the content item’s type, title, and content body. Use this file to edit the content’s properties on your local machine or scratch org and then deploy.\n- If applicable, additional JSON files that represent variants of the content item, such as language translations.\n\nNote: Before you deploy the DigitalExperienceBundle in a target org, make sure that any translated variants of content in the target org are also in the source org. If the target org contains a JSON file for a translated variant that isn’t in the source org, deploying the DigitalExperienceBundle fails.\n\nThe _meta.json file contains several properties:\n\nProperty | Description\n--- | ---\napiName | Field Type string Description Required. The name of the associated content item. The apiName allows only alphanumeric and underscore characters and must begin with a letter. You can use an apiName one time per content type in a given workspace. For example, a single workspace can contain both a view named “home” and a route named “home” but can’t contain two views named “home”.\nparent | Field Type string Description The developer name of the content item’s parent. If the content item doesn’t have a parent, then either the parent value is blank or the parent property isn’t displayed at all.\npath | Field Type string Description The location of the content item within the workspace’s folder structure. The value is blank for content types at the root level, such as appPage and site.\ntype | Field Type string Description Required. The full name of the content type from which the content item was created. The type is prefixed with sfdc_cms__. For example, all views in a site workspace have the content type sfdc_cms__view.",
+  "file_suffix_and_directory_location": {
+    "apiName": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the associated content item. The apiName allows only alphanumeric and underscore characters and must begin with a letter. You can use an apiName one time per content type in a given workspace. For example, a single workspace can contain both a view named “home” and a route named “home” but can’t contain two views named “home”."
+    },
+    "parent": {
+      "type": "string",
+      "description": "The developer name of the content item’s parent. If the content item doesn’t have a parent, then either the parent value is blank or the parent property isn’t displayed at all."
+    },
+    "path": {
+      "type": "string",
+      "description": "The location of the content item within the workspace’s folder structure. The value is blank for content types at the root level, such as appPage and site."
+    },
+    "type": {
+      "type": "string",
+      "required": true,
+      "description": "The full name of the content type from which the content item was created. The type is prefixed with sfdc_cms__. For example, all views in a site workspace have the content type sfdc_cms__view."
+    }
+  },
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "Contains the description of the workspace. For site workspaces, this value is empty."
+    },
+    "digitalExperienceFolderShares": {
+      "type": "DigitalExperienceFolderShare[]",
+      "description": "The list of folders in the source marketing workspace that are shared with target marketing workspaces. Available in API version 61.0 and later."
+    },
+    "label": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for DigitalExperienceBundle, which is defined when the DigitalExperienceBundle is created."
+    },
+    "spaceResources": {
+      "type": "DigitalExperience[]",
+      "description": "The list of resources in this DigitalExperienceBundle. Each resource represents a content type, such as views, routes, themes, and languageSettings."
+    }
+  },
+  "sub_types": {
+    "DigitalExperience": {
+      "fileName": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the resource file."
+      },
+      "filePath": {
+        "type": "string",
+        "description": "Path to the file within the artifact folder."
+      },
+      "format": {
+        "type": "string",
+        "required": true,
+        "description": "Only JSON is allowed."
+      }
+    },
+    "DigitalExperienceFolderShare": {
+      "folderPath": {
+        "type": "string",
+        "description": "The root folder of the shared workspace. The allowed value is _root."
+      },
+      "sharedWith": {
+        "type": "SharedWith[]",
+        "description": "The list of target workspaces that the source workspace is shared with."
+      }
+    },
+    "SharedWith": {
+      "fullyQualifiedName": {
+        "type": "string",
+        "description": "The target workspace that the source workspace is shared with. It uses the format workspace_type/target_workspace_name. For example, marketing/Workspace2."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DigitalExperience\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"fileName\" type=\"xsd:string\"/>\n        <xsd:element name=\"filePath\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"format\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"DigitalExperienceBundle\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"digitalExperienceFolderShares\" minOccurs=\"0\" type=\"tns:DigitalExperienceFolderShares\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"modules\" minOccurs=\"0\" type=\"tns:DigitalExperienceModuleCollection\"/>\n        <xsd:element name=\"spaceResources\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DigitalExperience\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"DigitalExperienceFolderShare\">\n  <xsd:sequence>\n    <xsd:element name=\"folderPath\" type=\"xsd:string\"/>\n    <xsd:element name=\"sharedWith\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharedWith\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DigitalExperienceFolderShares\">\n  <xsd:sequence>\n    <xsd:element name=\"digitalExperienceFolderShare\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DigitalExperienceFolderShare\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DigitalExperienceModule\">\n  <xsd:sequence>\n    <xsd:element name=\"fullyQualifiedName\" type=\"xsd:string\"/>\n    <xsd:element name=\"moduleConfig\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"status\" type=\"tns:ManagedContentSpaceModuleStatusEnum\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DigitalExperienceModuleCollection\">\n  <xsd:sequence>\n    <xsd:element name=\"module\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DigitalExperienceModule\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ManagedContentSpaceModuleStatusEnum\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ENABLED\"/>\n    <xsd:enumeration value=\"DISABLED\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SharedWith\">\n  <xsd:sequence>\n    <xsd:element name=\"fullyQualifiedName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DigitalExperienceBundle component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DigitalExperienceBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>content</description>\n    <label>isv1</label>\n</DigitalExperienceBundle>"
+    }
+  ],
+  "child_metadata_types": "This entity contains the following child metadata types:\n\n- DigitalExperienceBundle_Marketing_Workspace_Bundle_and_Folders\n- DigitalExperienceBundle_Site_Workspace_Bundle_and_Folders"
+}

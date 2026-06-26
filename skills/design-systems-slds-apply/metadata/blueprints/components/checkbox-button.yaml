@@ -1,0 +1,204 @@
+name: Checkbox Button
+description: A checkbox input styled as a button that allows users to toggle selection states, providing an alternative visual
+  presentation to traditional checkboxes with enhanced interaction design.
+category: Input
+slds_classes:
+  root: slds-checkbox_button
+  elements:
+  - class: slds-checkbox_button-group
+    description: Container for checkbox button groups
+    purpose: Groups related checkbox buttons
+  - class: slds-checkbox_button
+    description: Checkbox button wrapper
+    purpose: Contains checkbox input and label styling
+  - class: slds-checkbox_button__label
+    description: Checkbox button label
+    purpose: Provides the button appearance and text
+  - class: slds-checkbox_faux
+    description: Visual checkbox indicator
+    purpose: Button-styled visual representation
+  modifiers: []
+  states:
+  - class: slds-is-selected
+    description: Selected checkbox button state
+    trigger: Applied when checkbox is checked
+  - class: slds-has-focus
+    description: Focused checkbox button state
+    trigger: Applied when checkbox button has focus
+  - class: slds-is-disabled
+    description: Disabled checkbox button state
+    trigger: Applied when checkbox is disabled
+variants:
+- name: Base
+  description: Standard checkbox button
+  classes:
+  - slds-checkbox_button
+  usage_context: Default implementation for button-style checkboxes
+  differences: Basic button-styled checkbox with standard sizing
+- name: Group
+  description: Multiple checkbox buttons in a group
+  classes:
+  - slds-checkbox_button-group
+  usage_context: When multiple related checkbox buttons are used together
+  differences: Grouped layout with consistent spacing and alignment
+- name: Stretch
+  description: Full-width checkbox button
+  classes:
+  - slds-checkbox_button
+  usage_context: When button should fill container width
+  differences: Button stretches to full container width
+lightning_component:
+  name: lightning-checkbox-button
+  url: https://developer.salesforce.com/docs/component-library/overview/components
+  mapping_notes: Checkbox button functionality often implemented through lightning-checkbox-group or custom implementations
+accessibility:
+  keyboard_support:
+  - Tab navigation to checkbox buttons
+  - Space to toggle checkbox selection
+  - Arrow keys for group navigation
+  - Enter to activate checkbox button
+  screen_reader:
+  - Checkbox button state clearly announced
+  - Selection changes communicated
+  - Group relationships described
+  aria_attributes:
+  - aria-checked for checkbox state
+  - aria-describedby for additional information
+  - aria-labelledby for group labeling
+  - role='checkbox' for button checkboxes
+usage_guidelines:
+  when_to_use:
+  - When checkbox needs button-like appearance
+  - For toggle selections that benefit from button styling
+  - In interfaces where buttons provide better UX than checkboxes
+  - For multi-select options with prominent visual treatment
+  when_not_to_use:
+  - For single yes/no decisions (use radio buttons)
+  - When traditional checkbox styling is more appropriate
+  - For simple form inputs without special styling needs
+  best_practices:
+  - Provide clear visual feedback for selection states
+  - Use consistent sizing within groups
+  - Ensure adequate touch targets for mobile
+  - Group related checkbox buttons logically
+  - Maintain keyboard accessibility
+  common_mistakes:
+  - Using checkbox buttons for mutually exclusive options
+  - Poor visual distinction between selected/unselected states
+  - Inconsistent button sizing within groups
+  - Missing keyboard accessibility
+code_examples:
+- title: Basic Checkbox Button
+  description: Single checkbox styled as a button
+  code: "<div class=\"slds-form-element\">\n      <label class=\"slds-form-element__label\">Select Options</label>\n     \
+    \ <div class=\"slds-form-element__control\">\n        <span class=\"slds-checkbox_button\">\n          <input type=\"\
+    checkbox\" id=\"checkbox-button-01\" value=\"option1\" />\n          <label class=\"slds-checkbox_button__label\" for=\"\
+    checkbox-button-01\">\n            <span class=\"slds-checkbox_faux\">Option 1</span>\n          </label>\n        </span>\n\
+    \      </div>\n      </div>\n"
+- title: Checkbox Button Group
+  description: Multiple checkbox buttons grouped together
+  code: "<fieldset class=\"slds-form-element\">\n      <legend class=\"slds-form-element__legend slds-form-element__label\"\
+    >\n        Choose Your Interests\n      </legend>\n      <div class=\"slds-form-element__control\">\n        <div class=\"\
+    slds-checkbox_button-group\" role=\"group\" aria-labelledby=\"checkbox-group-label\">\n          <span class=\"slds-checkbox_button\"\
+    >\n            <input type=\"checkbox\" id=\"checkbox-button-02\" name=\"interests\" value=\"technology\" />\n       \
+    \     <label class=\"slds-checkbox_button__label\" for=\"checkbox-button-02\">\n              <span class=\"slds-checkbox_faux\"\
+    >Technology</span>\n            </label>\n          </span>\n          <span class=\"slds-checkbox_button\">\n       \
+    \     <input type=\"checkbox\" id=\"checkbox-button-03\" name=\"interests\" value=\"sports\" />\n            <label class=\"\
+    slds-checkbox_button__label\" for=\"checkbox-button-03\">\n              <span class=\"slds-checkbox_faux\">Sports</span>\n\
+    \            </label>\n          </span>\n          <span class=\"slds-checkbox_button\">\n            <input type=\"\
+    checkbox\" id=\"checkbox-button-04\" name=\"interests\" value=\"music\" />\n            <label class=\"slds-checkbox_button__label\"\
+    \ for=\"checkbox-button-04\">\n              <span class=\"slds-checkbox_faux\">Music</span>\n            </label>\n \
+    \         </span>\n          <span class=\"slds-checkbox_button\">\n            <input type=\"checkbox\" id=\"checkbox-button-05\"\
+    \ name=\"interests\" value=\"travel\" />\n            <label class=\"slds-checkbox_button__label\" for=\"checkbox-button-05\"\
+    >\n              <span class=\"slds-checkbox_faux\">Travel</span>\n            </label>\n          </span>\n        </div>\n\
+    \      </div>\n      </fieldset>\n"
+- title: Stretch Checkbox Buttons
+  description: Full-width checkbox buttons for mobile or constrained layouts
+  code: "<div class=\"slds-form-element\">\n      <label class=\"slds-form-element__label\">Notification Preferences</label>\n\
+    \      <div class=\"slds-form-element__control\">\n        <div class=\"slds-checkbox_button-group\">\n          <span\
+    \ class=\"slds-checkbox_button\">\n            <input type=\"checkbox\" id=\"checkbox-button-06\" name=\"notifications\"\
+    \ value=\"email\" checked />\n            <label class=\"slds-checkbox_button__label\" for=\"checkbox-button-06\">\n \
+    \             <span class=\"slds-checkbox_faux\">\n                <svg class=\"slds-icon slds-icon_x-small slds-m-right_small\"\
+    \ aria-hidden=\"true\">\n                  <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#email\"></use>\n\
+    \                </svg>\n                Email Notifications\n              </span>\n            </label>\n          </span>\n\
+    \          <span class=\"slds-checkbox_button\">\n            <input type=\"checkbox\" id=\"checkbox-button-07\" name=\"\
+    notifications\" value=\"sms\" />\n            <label class=\"slds-checkbox_button__label\" for=\"checkbox-button-07\"\
+    >\n              <span class=\"slds-checkbox_faux\">\n                <svg class=\"slds-icon slds-icon_x-small slds-m-right_small\"\
+    \ aria-hidden=\"true\">\n                  <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#sms\"></use>\n\
+    \                </svg>\n                SMS Notifications\n              </span>\n            </label>\n          </span>\n\
+    \          <span class=\"slds-checkbox_button\">\n            <input type=\"checkbox\" id=\"checkbox-button-08\" name=\"\
+    notifications\" value=\"push\" checked />\n            <label class=\"slds-checkbox_button__label\" for=\"checkbox-button-08\"\
+    >\n              <span class=\"slds-checkbox_faux\">\n                <svg class=\"slds-icon slds-icon_x-small slds-m-right_small\"\
+    \ aria-hidden=\"true\">\n                  <use xlink:href=\"/assets/icons/utility-sprite/svg/symbols.svg#notification\"\
+    ></use>\n                </svg>\n                Push Notifications\n              </span>\n            </label>\n   \
+    \       </span>\n        </div>\n      </div>\n      </div>\n"
+- title: Compact Checkbox Buttons
+  description: Compact checkbox buttons for limited space
+  code: "<div class=\"slds-form-element\">\n      <label class=\"slds-form-element__label\">Quick Filters</label>\n      <div\
+    \ class=\"slds-form-element__control\">\n        <div class=\"slds-checkbox_button-group\">\n          <span class=\"\
+    slds-checkbox_button\">\n            <input type=\"checkbox\" id=\"checkbox-button-09\" name=\"filters\" value=\"active\"\
+    \ checked />\n            <label class=\"slds-checkbox_button__label\" for=\"checkbox-button-09\">\n              <span\
+    \ class=\"slds-checkbox_faux\">Active</span>\n            </label>\n          </span>\n          <span class=\"slds-checkbox_button\"\
+    >\n            <input type=\"checkbox\" id=\"checkbox-button-10\" name=\"filters\" value=\"pending\" />\n            <label\
+    \ class=\"slds-checkbox_button__label\" for=\"checkbox-button-10\">\n              <span class=\"slds-checkbox_faux\"\
+    >Pending</span>\n            </label>\n          </span>\n          <span class=\"slds-checkbox_button\">\n          \
+    \  <input type=\"checkbox\" id=\"checkbox-button-11\" name=\"filters\" value=\"closed\" />\n            <label class=\"\
+    slds-checkbox_button__label\" for=\"checkbox-button-11\">\n              <span class=\"slds-checkbox_faux\">Closed</span>\n\
+    \            </label>\n          </span>\n        </div>\n      </div>\n      </div>\n"
+- title: Disabled Checkbox Button
+  description: Checkbox button in disabled state
+  code: "<div class=\"slds-form-element\">\n      <label class=\"slds-form-element__label\">Available Options</label>\n  \
+    \    <div class=\"slds-form-element__control\">\n        <div class=\"slds-checkbox_button-group\">\n          <span class=\"\
+    slds-checkbox_button\">\n            <input type=\"checkbox\" id=\"checkbox-button-12\" name=\"options\" value=\"basic\"\
+    \ checked />\n            <label class=\"slds-checkbox_button__label\" for=\"checkbox-button-12\">\n              <span\
+    \ class=\"slds-checkbox_faux\">Basic Plan</span>\n            </label>\n          </span>\n          <span class=\"slds-checkbox_button\"\
+    >\n            <input type=\"checkbox\" id=\"checkbox-button-13\" name=\"options\" value=\"premium\" />\n            <label\
+    \ class=\"slds-checkbox_button__label\" for=\"checkbox-button-13\">\n              <span class=\"slds-checkbox_faux\"\
+    >Premium Plan</span>\n            </label>\n          </span>\n          <span class=\"slds-checkbox_button slds-is-disabled\"\
+    >\n            <input type=\"checkbox\" id=\"checkbox-button-14\" name=\"options\" value=\"enterprise\" disabled />\n\
+    \            <label class=\"slds-checkbox_button__label\" for=\"checkbox-button-14\">\n              <span class=\"slds-checkbox_faux\"\
+    >Enterprise Plan (Coming Soon)</span>\n            </label>\n          </span>\n        </div>\n      </div>\n      </div>\n"
+- title: Checkbox Buttons with Description
+  description: Checkbox buttons with additional descriptive text
+  code: "<fieldset class=\"slds-form-element\">\n      <legend class=\"slds-form-element__legend slds-form-element__label\"\
+    >\n        Select Features\n      </legend>\n      <div class=\"slds-form-element__control\">\n        <div class=\"slds-checkbox_button-group\"\
+    >\n          <span class=\"slds-checkbox_button\">\n            <input type=\"checkbox\" id=\"checkbox-button-15\" name=\"\
+    features\" value=\"analytics\" />\n            <label class=\"slds-checkbox_button__label\" for=\"checkbox-button-15\"\
+    >\n              <span class=\"slds-checkbox_faux\">\n                <div class=\"slds-text-align_left\">\n         \
+    \         <div class=\"slds-text-body_regular\">Advanced Analytics</div>\n                  <div class=\"slds-text-body_small\
+    \ slds-text-color_weak\">\n                    Detailed reporting and insights\n                  </div>\n           \
+    \     </div>\n              </span>\n            </label>\n          </span>\n          <span class=\"slds-checkbox_button\"\
+    >\n            <input type=\"checkbox\" id=\"checkbox-button-16\" name=\"features\" value=\"api\" checked />\n       \
+    \     <label class=\"slds-checkbox_button__label\" for=\"checkbox-button-16\">\n              <span class=\"slds-checkbox_faux\"\
+    >\n                <div class=\"slds-text-align_left\">\n                  <div class=\"slds-text-body_regular\">API Access</div>\n\
+    \                  <div class=\"slds-text-body_small slds-text-color_weak\">\n                    Integrate with external\
+    \ systems\n                  </div>\n                </div>\n              </span>\n            </label>\n          </span>\n\
+    \        </div>\n      </div>\n      </fieldset>\n"
+dependencies:
+  css_files:
+  - checkbox-button.css
+  - form-element.css
+  javascript:
+  - checkbox-button.js
+  icons:
+  - utility-sprite.svg
+  other_components:
+  - form-element
+  - checkbox
+related_components:
+- name: Checkbox
+  relationship: alternative
+  description: Traditional checkbox alternative
+- name: Radio Button Group
+  relationship: similar
+  description: Similar grouped selection concept
+- name: Button Group
+  relationship: similar
+  description: Similar button grouping layout
+references:
+  official_docs: https://v1.lightningdesignsystem.com/components/checkbox-button/
+metadata:
+  version: 1.0.0
+  last_updated: '2025-11-12'
+  review_status: complete
+  notes: ' Cleaned invalid classes and CSS variables on 2025-11-12 using slds-plus.css as source of truth.'

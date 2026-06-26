@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CorsWhitelistOrigin - Metadata API",
+  "description": "Represents an origin in the CORS allowlist.",
+  "file_information": ".corswhitelistorigin",
+  "directory_location": "corswhitelistorigins",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "urlPattern": {
+      "type": "String",
+      "description": "A URL pattern for the origin. The origin URL pattern must include the HTTPS protocol and a domain name, and can include a port. The wildcard character (*) is supported and must be in front of a second-level domain name. For example, https://*.example.com adds all subdomains of example.com to the allowlist. Google Chrome™ and Mozilla® Firefox® browser extensions are also allowed as resources in API version 53 and later. Chrome extensions must use the prefix chrome-extension:// and 32 characters without digits or capital letters, for example chrome-extension://abdkkegmcbiomijcbdaodaflgehfffed. Firefox extensions must use the prefix moz-extension:// and an 8-4-4-4-12 format of small alphanumeric characters, for example moz-extension://1234ab56-78c9-1df2-3efg-4567891hi1j2. The origin URL pattern can be an IP address. But an IP address and a domain that resolve to the same address aren’t the same origin, and you must add them to the CORS allowlist as separate entries."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CorsWhitelistOrigin\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"urlPattern\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here’s an example of a CorsWhitelistOrigin component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CorsWhitelistOrigin xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <developerName>CorsWhitelistEntry1</developerName>\n    <urlPattern>https://*.example.com</urlPattern>\n</CorsWhitelistOrigin>"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PublicKeyCertificate - Metadata API",
+  "description": "Represents the public key certificate. On this entity we store a public certificate or a JSON web key, which is used to validate the customer-provided JWT.",
+  "file_information": ".PublicKeyCertificate",
+  "directory_location": "PublicKeyCertificate",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "A description of the public key certificate."
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether the public key certificate is active (true) or inactive (false). The default value is false."
+    },
+    "jsonWebKey": {
+      "type": "string",
+      "description": "Represents a public cryptographic key that can be used to verify the validity of a token."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label for the public key certificate."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PublicKeyCertificate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"jsonWebKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PublicKeyCertificate component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PublicKeyCertificate xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <masterLabel>pck1</masterLabel>\n    <isActive>true</isActive>\n    <description>This is my description for a test PublicKeyCertificate</description>\n    <jsonWebKey>\n{\n  \"kid\":\"123456\",\n  \"alg\":\"RS256\",\n  \"use\":\"sig\",\n  \"kty\":\"RSA\",\n  \"x5c\":[\"<Your public certificate>\"],\n  \"y\":\"y\",\n  \"n\":\"<Base64-encoded modulus>\",\n  \"e\":\"<Base64-encoded public exponent>\",\n  \"crv\":\"crv\",\n  \"d\":\"d\",\n  \"k\":\"k\"\n}\n    </jsonWebKey>\n</PublicKeyCertificate>"
+    },
+    {
+      "description": "The following is an example package.xml that references the previous definition.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--\n  ~ Copyright 2024 salesforce.com, inc.\n  ~ All Rights Reserved\n  ~ Company Confidential\n  -->\n\n<Package xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <types>\n        <members>*</members>\n        <name>PublicKeyCertificate</name>\n    </types>\n    <version>62.0</version>\n</Package>"
+    }
+  ]
+}

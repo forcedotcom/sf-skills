@@ -1,0 +1,52 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "FuelType - Metadata API",
+  "description": "Represents a custom fuel type in an org.",
+  "file_information": ".fuelType",
+  "directory_location": "fuelTypes",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "Description about the fuel type."
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether the fuel type is active (true) or not (false). The default value is false."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type. The default value is false."
+    },
+    "isStationaryAssetFuel": {
+      "type": "boolean",
+      "description": "Indicates whether the fuel type is used in stationary assets (true) or not (false). The default value is false."
+    },
+    "isVehicleAssetFuel": {
+      "type": "boolean",
+      "description": "Indicates whether the fuel type is used in a vehicle asset (true) or not (false). The default value is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for FuelType, which is defined when the FuelType is created."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a FuelType component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<FuelType xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>This is Petrol Fuel Type</description>\n    <isProtected>true</isProtected>\n    <isActive>true</isActive>\n    <isStationaryAssetFuel>true</isStationaryAssetFuel>\n    <isVehicleAssetFuel>true</isVehicleAssetFuel>\n    <masterLabel>Petrol</masterLabel>\n</FuelType>"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "GenAiPromptTemplateActv - Metadata API",
+  "description": "Represents the activation status of a Salesforce-provided prompt template.",
+  "file_information": ".genAiPromptTemplateActivation",
+  "directory_location": "genAiPromptTemplateActivations",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "accessLevel": {
+      "type": "GenAiPromptTemplateActvAccessLevel (enumeration of type string)",
+      "description": "Indicates which users can access the Salesforce-provided prompt template. Valid values are: Allowed—Users with access to Prompt Builder can see the prompt template. Blocked—Only admin users with access to Prompt Builder can see the prompt template."
+    },
+    "developerName": {
+      "type": "string",
+      "description": "Name of the activation record. This name can contain only underscores and alphanumeric characters. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "A user-friendly name for GenAiPromptTemplateActv, which is defined when the GenAiPromptTemplateActv is created."
+    },
+    "templateDeveloperName": {
+      "type": "string",
+      "description": "Name of the Salesforce-provided prompt template that the activation record is associated with."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a GenAiPromptTemplateActv component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<GenAiPromptTemplateActv xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <MasterLabel> Activation Record for Prompt Template </MasterLabel>\n    <PromptTemplateDeveloperName>einstein_gpt__introductionLeadEmail\n    </PromptTemplateDeveloperName>\n    <DeveloperName>HideIntroductionLeadEmail</DeveloperName>\n    <Description>Status of template </Description>\n    <AccessLevel>BLOCKED</AccessLevel>\n</GenAiPromptTemplateActv>"
+    }
+  ]
+}

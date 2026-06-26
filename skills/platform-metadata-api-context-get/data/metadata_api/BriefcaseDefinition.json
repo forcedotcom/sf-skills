@@ -1,0 +1,127 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "BriefcaseDefinition - Metadata API",
+  "description": "Represents a briefcase definition. A briefcase makes selected records available for specific users and groups to view when they’re offline in the Salesforce Field Service mobile app for iOS and Android. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".briefcaseDefinition",
+  "directory_location": "briefcaseDefinitions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "briefcaseRules": {
+      "type": "BriefcaseRule[]",
+      "description": "A list of rules that specify which records are included in the briefcase."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the briefcase."
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether the briefcase is active by default (true) or inactive (false). Activate a briefcase to make the selected records available to assignees.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Label for the briefcase name that appears in the Salesforce user interface.",
+      "required": true
+    },
+    "type": {
+      "type": "BriefcaseType",
+      "description": "Applies if multiple briefcase types are available in your org. Enum values include: Standard: Standard briefcase that can be used with priming APIs. HighVolume: Increased capacity briefcase that’s used with performance priming in the Salesforce Field Service mobile app. MobileAppSync: Automatically generated briefcase that’s used for performance priming in the Salesforce Field Service mobile app."
+    }
+  },
+  "sub_types": {
+    "BriefcaseRule": {
+      "briefcaseRuleFilters": {
+        "type": "BriefcaseRuleFilter[]",
+        "description": "A list of filters on a rule."
+      },
+      "filterLogic": {
+        "type": "string",
+        "description": "The filter logic for record selection, for example, 1 AND 2 where 1 and 2 correspond to filter 1 and filter 2. Filter logic operators include AND and OR."
+      },
+      "isAscendingOrder": {
+        "type": "boolean",
+        "description": "Indicates whether the records should be sorted in ascending order (true) or descending order (false)."
+      },
+      "isRelatedFilesRule": {
+        "type": "boolean",
+        "description": "Indicates whether the briefcase rule is part of a hierarchical set of rules that configure the offline priming of file attachments. Available only for the Offline App (Salesforce Mobile App Plus). To configure the offline priming of file attachments, create a set of four hierarchical briefcase rules: A rule with targetEntity set to the object with the file attachments at the first level A rule with targetEntity set to ContentDocumentLink at the second level A rule with targetEntity set to ContentDocument at the third level A rule with targetEntity set to ContentVersion at the fourth level See the Declarative Metadata Sample Definition section for an example briefcase definition that configures the offline priming of file attachments. The ContentDocumentLink, ContentDocument, and ContentVersion rules must all have isRelatedFilesRule set to true. To delete a briefcase configuration for file attachments, you must delete the ContentDocumentLink rule and all of its nested rules. You can’t delete a single rule within the hierarchy of ContentDocumentLink, ContentDocument, and ContentVersion rules. When isRelatedFilesRule is set to true, you must use the recordLimit field to limit the number of file attachments returned by a briefcase rule. Apply the same recordLimit value across the ContentDocumentLink, ContentDocument, and ContentVersion rules. You can optionally filter file attachments by file size and file type through Briefcase Builder in Setup. After you set a value for isRelatedFilesRule, you can no longer modify the field. The value that you set persists for the life of the rule."
+      },
+      "orderBy": {
+        "type": "string",
+        "description": "The field to order the records by, which determines how the records can be sorted. For example, Account Name or Created By."
+      },
+      "queryScope": {
+        "type": "FilterScope (enumeration of type string)",
+        "description": "A group of records to restrict the scope of this rule. Valid values include: Everything AssignedToMe Mine The AssignedToMe scope is supported for the ServiceAppointment object only."
+      },
+      "recordLimit": {
+        "type": "int",
+        "description": "The maximum number of records for an object on the briefcase rule. The maximum is 50,000 records that meet the criteria. However, the records returned by one briefcase rule must fit within the maximum limit of 50,000 records across active briefcases. If there are more records that match the criteria than the record limit allows, the orderBy field determines which records are returned."
+      },
+      "relatedRules": {
+        "type": "BriefcaseRule[]",
+        "description": "A list of rules that are related to the current rule."
+      },
+      "relationshipField": {
+        "type": "string",
+        "description": "Required for relatedRules. Defines the Salesforce object field that relates the relatedRules field to another relatedRules field or the briefcaseRules field on the BriefcaseDefinition metadata type that it's nested in. For example, an Account object rule can be related to a Contact object rule using the Account ID object field. In this example, the value for the related rule's relationshipField is AccountID.",
+        "required": true
+      },
+      "relationshipType": {
+        "type": "BriefcaseRuleRelationshipType (enumeration of type string)",
+        "description": "Required for relatedRules. Defines the relationship between the relatedRules field and another relatedRules field or the briefcaseRules field on the BriefcaseDefinition metadata type that it's nested in. Valid values include: ParentToChild ChildToParent",
+        "required": true
+      },
+      "targetEntity": {
+        "type": "string",
+        "description": "The API name of the standard object, custom object, or custom metadata type that the briefcase rule selects records from. If the targetEntity is a custom metadata type, the briefcase rule can’t include any other fields. You can add only one briefcase rule for the same custom metadata type in a briefcase. Custom metadata types are supported as the targetEntity for top-level rules only–you can’t create a related rule with targetEntity as a custom metadata type.",
+        "required": true
+      }
+    },
+    "BriefcaseRuleFilter": {
+      "filterOperator": {
+        "type": "BriefcaseFilterOperator (enumeration of type string)",
+        "description": "The comparison operator for this rule filter. Capitalization matters with date filter operators. Be sure to specify date literals in uppercase. Some valid date literals include TODAY, YESTERDAY and TOMORROW. Valid values include: d—Ends with e—Equals g—Greater than h—Greater than or equal l—Less than m—Less than or equal n—Not equals. This value is applicable only when filterValue is empty. s—Starts with",
+        "required": true
+      },
+      "filterSeqNumber": {
+        "type": "int",
+        "description": "The filter number. When you apply multiple filters, the filters are numbered sequentially, 1, 2, 3, and so on.",
+        "required": true
+      },
+      "filterValue": {
+        "type": "string",
+        "description": "The value that the field and criteria evaluate. For example, true or false for a boolean field whose criteria or filter operator is Equals. Be sure to specify date literals in uppercase. Some valid date literals include TODAY, YESTERDAY and TOMORROW. For targetEntityField values that accept a user ID, such as OwnerId or CreatedById, enter $User.Id to pass the ID of the user making the request. To evaluate targetEntityField by whether the field is empty or not empty, leave filterValue blank and set filterOperator to e (equals) or n (not equals)."
+      },
+      "targetEntityField": {
+        "type": "string",
+        "description": "The API name of the field to filter by. This field is from the targetEntity on BriefcaseRule. Compound fields aren't supported. Fields encrypted with deterministic encryption can be used in filters with equals and not equals operators.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"BriefcaseDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"briefcaseRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BriefcaseRule\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"BriefcaseFilterOperator\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"e\"/>\n    <xsd:enumeration value=\"n\"/>\n    <xsd:enumeration value=\"l\"/>\n    <xsd:enumeration value=\"g\"/>\n    <xsd:enumeration value=\"m\"/>\n    <xsd:enumeration value=\"h\"/>\n    <xsd:enumeration value=\"s\"/>\n    <xsd:enumeration value=\"d\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"BriefcaseRule\">\n  <xsd:sequence>\n    <xsd:element name=\"briefcaseRuleFilters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BriefcaseRuleFilter\"/>\n    <xsd:element name=\"filterLogic\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isAscendingOrder\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"orderBy\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"queryScope\" minOccurs=\"0\" type=\"tns:FilterScope\"/>\n    <xsd:element name=\"recordLimit\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"relatedRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BriefcaseRule\"/>\n    <xsd:element name=\"relationshipField\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"relationshipType\" minOccurs=\"0\" type=\"tns:BriefcaseRuleRelationshipType\"/>\n    <xsd:element name=\"targetEntity\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BriefcaseRuleFilter\">\n  <xsd:sequence>\n    <xsd:element name=\"filterOperator\" type=\"tns:BriefcaseFilterOperator\"/>\n    <xsd:element name=\"filterSeqNumber\" type=\"xsd:int\"/>\n    <xsd:element name=\"filterValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetEntityField\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"BriefcaseRuleRelationshipType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ParentToChild\"/>\n    <xsd:enumeration value=\"ChildToParent\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FilterScope\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Everything\"/>\n    <xsd:enumeration value=\"Mine\"/>\n    <xsd:enumeration value=\"Queue\"/>\n    <xsd:enumeration value=\"Delegated\"/>\n    <xsd:enumeration value=\"MyTerritory\"/>\n    <xsd:enumeration value=\"MyTeamTerritory\"/>\n    <xsd:enumeration value=\"Team\"/>\n    <xsd:enumeration value=\"SalesTeam\"/>\n    <xsd:enumeration value=\"AssignedToMe\"/>\n    <xsd:enumeration value=\"MineAndMyGroups\"/>\n    <xsd:enumeration value=\"ScopingRule\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example definition of a briefcase definition. If you include a rule filter, you must include a filter logic.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<BriefcaseDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <briefcaseRules>\n        <briefcaseRuleFilters>\n           <filterOperator>g</filterOperator>\n           <filterSeqNumber>1</filterSeqNumber>\n           <filterValue>50000.00</filterValue>\n           <targetEntityField>AnnualRevenue</targetEntityField>\n        </briefcaseRuleFilters>\n        <briefcaseRuleFilters>\n            <filterOperator>l</filterOperator>\n            <filterSeqNumber>2</filterSeqNumber>\n            <filterValue>50</filterValue>\n            <targetEntityField>NumberOfEmployees</targetEntityField>\n        </briefcaseRuleFilters>\n        <filterLogic>1 AND 2</filterLogic>\n        <isAscendingOrder>false</isAscendingOrder>\n        <orderBy>NumberOfEmployees</orderBy>\n        <queryScope>Everything</queryScope>\n        <recordLimit>1000</recordLimit>\n        <targetEntity>Account</targetEntity>\n    </briefcaseRules>\n    <description>Account Briefcase</description>\n    <isActive>true</isActive>\n    <masterLabel>Account With Standard Fields</masterLabel>\n</BriefcaseDefinition>"
+    },
+    {
+      "description": "This example briefcase definition configures the offline priming of file attachments for the WorkOrder object. Files Priming is available only for the Offline App (Salesforce Mobile App Plus).",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<BriefcaseDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n   <briefcaseRules>\n       <isAscendingOrder>false</isAscendingOrder>\n       <orderBy>SystemModstamp</orderBy>\n       <queryScope>Everything</queryScope>\n       <recordLimit>25</recordLimit>\n       <targetEntity>WorkOrder</targetEntity>\n       <relatedRules>\n           <targetEntity>ContentDocumentLink</targetEntity>\n           <relationshipField>LinkedEntityId</relationshipField>\n           <relationshipType>ParentToChild</relationshipType>\n           <isAscendingOrder>false</isAscendingOrder>\n           <isRelatedFilesRule>true</isRelatedFilesRule>\n           <queryScope>Everything</queryScope>\n           <recordLimit>2</recordLimit>\n           <relatedRules>\n               <targetEntity>ContentDocument</targetEntity>\n               <relationshipField>ContentDocumentId</relationshipField>\n               <relationshipType>ChildToParent</relationshipType>\n               <isAscendingOrder>false</isAscendingOrder>\n               <isRelatedFilesRule>true</isRelatedFilesRule>\n               <queryScope>Everything</queryScope>\n               <recordLimit>2</recordLimit>\n               <relatedRules>\n                   <targetEntity>ContentVersion</targetEntity>\n                   <relationshipField>ContentDocumentId</relationshipField>\n                   <relationshipType>ParentToChild</relationshipType>\n                   <isAscendingOrder>false</isAscendingOrder>\n                   <isRelatedFilesRule>true</isRelatedFilesRule>\n                   <queryScope>Everything</queryScope>\n                   <recordLimit>2</recordLimit>\n               </relatedRules>\n           </relatedRules>\n       </relatedRules>\n   </briefcaseRules>\n   <description xsi:nil=\"true\"/>\n   <isActive>true</isActive>\n   <masterLabel>WorkOrder with Related Files</masterLabel>\n</BriefcaseDefinition>"
+    }
+  ]
+}
