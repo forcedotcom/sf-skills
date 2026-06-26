@@ -1,3 +1,18 @@
+# [1.22.0](https://github.com/forcedotcom/sf-skills/compare/1.21.0...1.22.0) (2026-06-26)
+
+
+### Bug Fixes
+
+* allow nested YAML lists in metadata sub-keys (sync with internal) @W-23173617@ ([#298](https://github.com/forcedotcom/sf-skills/issues/298)) ([a95d0d3](https://github.com/forcedotcom/sf-skills/commit/a95d0d3f828b92eb332fdd5b8e4305b00e170937))
+
+
+### Features
+
+* Release 1 new skill: getting-metadata-api-context @W-23151783 ([19ee934](https://github.com/forcedotcom/sf-skills/commit/19ee934c6722273c99ff8c93fc157443192f0b1c))
+* Release Skills Renaming by domain first convention @W-23187998@ ([b40d286](https://github.com/forcedotcom/sf-skills/commit/b40d286458452f10dec2b86d22d2448ad3060102))
+
+
+
 # [1.21.0](https://github.com/forcedotcom/sf-skills/compare/1.20.0...1.21.0) (2026-06-24)
 
 
