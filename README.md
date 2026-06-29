@@ -9,9 +9,9 @@ The skills are contributed by Salesforce and the broader community. It’s optim
 ```
 sf-skills/
 ├── skills/               # Directory-based executable workflows
-│   ├── generating-apex/
-│   ├── generating-custom-object/
-│   ├── generating-flow/
+│   ├── platform-apex-generate/
+│   ├── platform-custom-object-generate/
+│   ├── automation-flow-generate/
 │   └── ...
 ├── samples/              # Synced sample apps (e.g. from npm)
 │   └── ui-bundle-template-app-react-sample-b2e/

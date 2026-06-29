@@ -146,7 +146,7 @@ Do not consider a task complete until all three steps have been run successfully
 
 ### Data access (Salesforce)
 
-**Before writing any code that connects to Salesforce, you MUST invoke the `using-ui-bundle-salesforce-data` skill. Do not write any data access code without consulting it first.**
+**Before writing any code that connects to Salesforce, you MUST invoke the `experience-ui-bundle-salesforce-data-access` skill. Do not write any data access code without consulting it first.**
 
 This applies to: GraphQL queries/mutations, REST calls, SDK initialization, custom hooks that fetch data, or any code that imports from `@salesforce/platform-sdk`.
 
