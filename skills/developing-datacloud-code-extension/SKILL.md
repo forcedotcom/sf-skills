@@ -1,6 +1,6 @@
 ---
 name: developing-datacloud-code-extension
-description: "Develop and deploy Data Cloud Code Extensions using SF CLI plugin. Use this skill when creating custom Python transformations for Data Cloud, deploying code extensions, or testing data transformations. Supports init, run, scan, and deploy operations."
+description: "Develop and deploy Data Cloud Code Extensions using SF CLI plugin. Use this skill when writing or updating code extension scripts, creating new projects, scanning, testing, or deploying. Covers the full lifecycle: write, init, scan, run, and deploy."
 metadata:
   version: "1.0"
 ---
@@ -13,6 +13,7 @@ This skill provides a complete workflow for developing, testing, and deploying c
 
 ## When to Use
 
+- User wants to write or update a code extension script (entrypoint.py)
 - User wants to create a new code extension project
 - User needs to test a code extension locally
 - User wants to scan code for required permissions
