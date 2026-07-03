@@ -119,6 +119,6 @@ Key classes:
 
 ## Deep Reference
 
-- Icon implementation guidance: `guidance/icons-guidance.md`
-- Icons overview: `guidance/overviews/icons.md`
-- Full icon metadata (1,732 icons with synonyms): `metadata/icon-metadata.json`
+- Icon implementation guidance: `references/icons-guidance.md`
+- Icons overview: `references/overviews/icons.md`
+- Full icon metadata (1,732 icons with synonyms): `assets/icon-metadata.json`

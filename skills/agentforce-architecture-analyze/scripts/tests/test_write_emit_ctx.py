@@ -32,9 +32,9 @@ from . import _bootstrap  # noqa: F401
 
 
 def _tools_dir() -> pathlib.Path:
-    """Absolute path to the skill's tools/ dir — where the scripts live."""
+    """Absolute path to the skill's scripts/ dir — where the emit helpers live."""
     here = pathlib.Path(__file__).resolve()
-    return here.parent.parent.parent / "tools"
+    return here.parent.parent
 
 
 def _run_script(script_name: str, env: dict) -> subprocess.CompletedProcess:
@@ -439,7 +439,7 @@ class EmitResultPositionalSafetyTests(unittest.TestCase):
 
     def test_build_block_happy_path_auto_promotes_without_asserting(self):
         """Sanity: the assertion does NOT fire under normal operation."""
-        # Force import of emit_result from the tools/ dir.
+        # Force import of emit_result from the scripts/ dir.
         import importlib.util
         spec = importlib.util.spec_from_file_location(
             "emit_result_mod", _tools_dir() / "emit_result.py",

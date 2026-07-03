@@ -27,7 +27,7 @@ This document details how platform-data-manage fits into the multi-skill workflo
 
 ---
 
-## ⚠️ Why platform-data-manage Goes LAST
+## Why platform-data-manage Goes LAST
 
 **platform-data-manage operates on REMOTE org data.** Objects/fields must be deployed before platform-data-manage can:
 - Insert records

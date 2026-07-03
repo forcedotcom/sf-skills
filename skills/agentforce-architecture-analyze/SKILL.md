@@ -135,7 +135,7 @@ set -e
 # Final RESULT block is emit_result.py's stdout — MUST be the last thing
 # stdout sees. emit_result exits 0 on render success; the bash harness
 # propagates main.py's rc for the agent's exit status.
-WORK_DIR="$WORK_DIR" python3 "$SKILL_ROOT/tools/emit_result.py"
+WORK_DIR="$WORK_DIR" python3 "$SKILL_ROOT/scripts/emit_result.py"
 exit "$_rc"
 ```
 

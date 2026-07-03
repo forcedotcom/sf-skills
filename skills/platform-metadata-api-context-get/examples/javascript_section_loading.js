@@ -32,7 +32,7 @@ function loadMetadataJson(metadataFile) {
  * Token savings: ~70-80% compared to loading entire file
  */
 function loadSingleSectionExample() {
-    const metadataFile = path.join('data', 'metadata_api', 'CustomObject.json');
+    const metadataFile = path.join('assets', 'metadata_api', 'CustomObject.json');
 
     // Read and parse the JSON file
     const data = loadMetadataJson(metadataFile);
@@ -52,7 +52,7 @@ function loadSingleSectionExample() {
  * Token savings: ~60-75% compared to loading entire file
  */
 function loadMultipleSectionsExample() {
-    const metadataFile = path.join('data', 'metadata_api', 'Flow.json');
+    const metadataFile = path.join('assets', 'metadata_api', 'Flow.json');
 
     const data = loadMetadataJson(metadataFile);
 
@@ -72,7 +72,7 @@ function loadMultipleSectionsExample() {
  * Best practice: Always check what sections are available
  */
 function loadWithSectionCheck() {
-    const metadataFile = path.join('data', 'metadata_api', 'Profile.json');
+    const metadataFile = path.join('assets', 'metadata_api', 'Profile.json');
 
     const data = loadMetadataJson(metadataFile);
 
@@ -102,7 +102,7 @@ function loadWithSectionCheck() {
  * Example 4: Async/Promise version (modern Node.js)
  */
 async function loadSingleSectionAsync() {
-    const metadataFile = path.join('data', 'metadata_api', 'ApexClass.json');
+    const metadataFile = path.join('assets', 'metadata_api', 'ApexClass.json');
 
     // Use async file operations
     const fileContent = await fs.promises.readFile(metadataFile, 'utf-8');
@@ -127,7 +127,7 @@ async function loadSingleSectionAsync() {
  * This is what NOT to do - it loads the entire file into context:
  *
  * // Read tool approach (WRONG):
- * // Read data/metadata_api/CustomObject.json  // Loads ALL sections!
+ * // Read assets/metadata_api/CustomObject.json  // Loads ALL sections!
  *
  * // This injects the entire file (including massive WSDL segments)
  * // into your context, wasting 60-80% of tokens.

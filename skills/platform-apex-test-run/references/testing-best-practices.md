@@ -324,7 +324,7 @@ static void testBulkOperation_StaysWithinLimits() {
 
 ## Common Anti-Patterns to Avoid
 
-### ❌ SeeAllData=true
+### SeeAllData=true
 
 ```apex
 // ❌ BAD: Depends on org data
@@ -342,7 +342,7 @@ static void testGoodPattern() {
 }
 ```
 
-### ❌ No Assertions
+### No Assertions
 
 ```apex
 // ❌ BAD: No assertions - test passes even if code is broken
@@ -364,7 +364,7 @@ static void testWithAssertions() {
 }
 ```
 
-### ❌ Hardcoded IDs
+### Hardcoded IDs
 
 ```apex
 // ❌ BAD: Hardcoded IDs fail across orgs

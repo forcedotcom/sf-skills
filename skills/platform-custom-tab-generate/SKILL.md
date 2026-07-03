@@ -17,16 +17,16 @@ Use this skill when you need to:
 
 # CustomTab Metadata Specification
 
-## 📋 Overview
+## Overview
 Custom tabs for navigating to objects, web content, or Visualforce pages within Salesforce applications.
 
-## 🎯 Purpose
+## Purpose
 - Provide navigation to custom objects
 - Link to external web content
 - Access Visualforce pages
 - Organize application navigation
 
-## ⚙️ Required Properties
+## Required Properties
 
 ### Core Tab Properties
 - **customObject**: `true` for custom object tabs, `false` for all others.
@@ -36,7 +36,7 @@ Custom tabs for navigating to objects, web content, or Visualforce pages within 
 - **page**: Visualforce page name (for Visualforce tabs)
 
 
-### 🚨 STRICT ELEMENT ALLOWLIST — READ THIS FIRST
+### STRICT ELEMENT ALLOWLIST — READ THIS FIRST
 
 **The root element MUST always be `<CustomTab>` (NOT `<Tab>`).** The XML namespace must be `xmlns="http://soap.sforce.com/2006/04/metadata"`.
 
@@ -48,7 +48,7 @@ Only the elements listed below are valid. **Any element not on this list WILL ca
 | **Web tabs** | `<customObject>` (required, set to `false`), `<label>` (required), `<motif>` (required), `<url>` (required), `<urlEncodingKey>` (required, set to `UTF-8`), `<description>` (optional), `<frameHeight>` (optional) |
 | **Visualforce tabs** | `<customObject>` (required, set to `false`), `<label>` (required), `<motif>` (required), `<page>` (required), `<description>` (optional) |
 
-### ⚠️ FORBIDDEN ELEMENTS (every one of these causes a deployment error)
+### FORBIDDEN ELEMENTS (every one of these causes a deployment error)
 `<sobjectName>`, `<name>`, `<fullName>`, `<apiVersion>`, `<isHidden>`, `<tabVisibility>`, `<type>`, `<mobileReady>`, `<urlFrameHeight>`, `<urlType>`, `<urlRedirect>`, `<encodingKey>`, `<height>`, `<auraComponent>`
 
 Also forbidden:
@@ -57,7 +57,7 @@ Also forbidden:
 - Empty elements like `<page></page>` or `<description></description>`
 - Any element not in the allowlist table above
 
-## 🔧 Tab Types
+## Tab Types
 
 ### Object Tabs
 - **Purpose**: Navigate to custom or standard objects
@@ -123,7 +123,7 @@ Also forbidden:
 </CustomTab>
 ```
 
-## 🎨 Tab Configuration
+## Tab Configuration
 
 ### Tab Style
 - **Default**: Use standard tab styling
@@ -133,17 +133,17 @@ Also forbidden:
 - **Default**: Visible to all users with access
 - **Custom**: Can be configured for specific user profiles
 
-## 📱 Supported Applications
+## Supported Applications
 - **Standard Apps**: Available in standard Salesforce applications
 - **Custom Apps**: Can be included in custom applications
 - **Community Apps**: Available in community applications
 
-## 🔗 Integration Points
+## Integration Points
 - **Object Relationships**: Links to related object records
 - **Web Content**: External website integration
 - **Visualforce Pages**: Custom page functionality
 - **Lightning Components**: Modern component integration
-## ✅ Best Practices
+## Best Practices
 - Use clear, descriptive tab labels
 - Choose appropriate tab types for functionality
 - **Select a unique, contextually relevant motif for each tab** — do not default every tab to the same icon

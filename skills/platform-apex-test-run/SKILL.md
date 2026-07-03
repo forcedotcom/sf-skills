@@ -143,7 +143,7 @@ Next step: <fix class, add test, rerun scope, or widen regression>
 | `assets/test-data-factory.cls` | Template: reusable `TestDataFactory` with create and insert helpers |
 | `assets/dml-mock.cls` | Template: `IDML` interface + `DMLMock` implementation for database-free unit tests |
 | `assets/stub-provider-example.cls` | Template: `StubProvider`-based dependency injection stub |
-| `hooks/scripts/parse-test-results.py` | Post-tool hook — parses `sf apex run test` JSON output and formats failures for the auto-fix loop |
+| `scripts/parse-test-results.py` | Post-tool hook — parses `sf apex run test` JSON output and formats failures for the auto-fix loop |
 
 ---
 

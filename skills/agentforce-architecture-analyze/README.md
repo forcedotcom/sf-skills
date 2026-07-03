@@ -73,12 +73,11 @@ agentforce-architecture-analyze/
 │   ├── finalize.py                Merge waves → metadata_tree.json
 │   ├── render_architecture.py     architecture.md + Mermaid graph
 │   ├── resolve_invocation_target.py  ID-prefix router for NGA InvocationTargets
+│   ├── emit_env.py                Env-var emit helper (Phase 0.5)
+│   ├── emit_result.py             Final RESULT block renderer
+│   ├── sanitize.py                Stdin → safe-string filter
+│   ├── write_emit_ctx.py          Per-phase ctx writer
 │   └── tests/                     Unit + integration tests (unittest)
-└── tools/
-    ├── emit_env.py                Env-var emit helper (Phase 0.5)
-    ├── emit_result.py             Final RESULT block renderer
-    ├── sanitize.py                Stdin → safe-string filter
-    └── write_emit_ctx.py          Per-phase ctx writer
 ```
 
 ---

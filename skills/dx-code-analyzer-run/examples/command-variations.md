@@ -297,7 +297,7 @@ sf code-analyzer run \
 
 ## Anti-Patterns (DO NOT USE)
 
-### ❌ Using `--format` flag
+### Using `--format` flag
 ```bash
 # WRONG - v3 syntax, does not exist in v4+
 sf code-analyzer run --format json
@@ -306,7 +306,7 @@ sf code-analyzer run --format json
 
 ---
 
-### ❌ Using `$TIMESTAMP` variable in command
+### Using `$TIMESTAMP` variable in command
 ```bash
 # WRONG - variable substitution fails in permission prompts
 sf code-analyzer run --output-file "./results-${TIMESTAMP}.json"
@@ -315,7 +315,7 @@ sf code-analyzer run --output-file "./results-${TIMESTAMP}.json"
 
 ---
 
-### ❌ Running in background for long scans
+### Running in background for long scans
 ```bash
 # WRONG - loses output stream
 sf code-analyzer run --rule-selector sfge &
@@ -324,7 +324,7 @@ sf code-analyzer run --rule-selector sfge &
 
 ---
 
-### ❌ Partial rule names
+### Partial rule names
 ```bash
 # WRONG - returns 0 results
 sf code-analyzer run --rule-selector "no-hardcoded-values"

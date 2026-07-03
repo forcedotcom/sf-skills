@@ -10,7 +10,7 @@ or malformed input could inject fake KEY=VALUE pairs that downstream consumers
 would treat as authoritative.
 
 Usage:
-    _safe=$(python3 "$SKILL/tools/sanitize.py" "$raw_value")
+    _safe=$(python3 "$SKILL/scripts/sanitize.py" "$raw_value")
 
 Arguments:
     argv[1]  raw string (may be empty)

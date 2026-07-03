@@ -15,7 +15,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const INDEX_PATH = path.join(__dirname, '..', 'metadata', 'hooks-index.json');
+const INDEX_PATH = path.join(__dirname, '..', 'assets', 'hooks-index.json');
 
 function loadHooks() {
   if (!fs.existsSync(INDEX_PATH)) {

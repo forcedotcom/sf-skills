@@ -68,7 +68,7 @@ node scripts/search-blueprints.cjs --name "modals"
 
 ### How to read a blueprint YAML
 
-Each file in `metadata/blueprints/components/{name}.yaml` contains:
+Each file in `assets/blueprints/components/{name}.yaml` contains:
 
 ```yaml
 name: "Modals"
@@ -107,6 +107,6 @@ Rules for custom components:
 
 ## Deep Reference
 
-- Full blueprint details: `guidance/blueprints-index.md`
-- All blueprint YAMLs: `metadata/blueprints/components/`
+- Full blueprint details: `references/blueprints-index.md`
+- All blueprint YAMLs: `assets/blueprints/components/`
 - LBC documentation: [Lightning Component Library](https://developer.salesforce.com/docs/component-library/overview/components)

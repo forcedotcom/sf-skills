@@ -12,7 +12,7 @@ Retrieves metadata from a Salesforce org to your local project using `sf project
 
 ---
 
-## ⚠️ Tool Restrictions
+## Tool Restrictions
 
 **Use ONLY the Bash tool** to execute `sf project retrieve start`. Do NOT use MCP tools — ignore them completely.
 

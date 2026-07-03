@@ -1,48 +1,33 @@
 ---
 name: platform-custom-field-generate
-description: "Use this skill when users need to create, generate, or validate Salesforce Custom Field metadata. Trigger when users mention custom fields, field types, Roll-up Summary fields, Master-Detail relationships, Lookup relationships, formula fields, picklists, or field metadata. Also use when users encounter field deployment errors, especially around Roll-up Summary format, Master-Detail constraints, or formula issues. Always use this skill for any custom field metadata work, field generation, or field troubleshooting."
+description: "Use this skill when users need to create, generate, or validate Salesforce Custom Field metadata. Trigger when users mention custom fields, field types, Roll-up Summary fields, Master-Detail relationships, Lookup relationships, formula fields, picklists, dependent (controlling) picklists, referencing a value set from a field, or scoping/limiting picklist values for a specific record type. Also use when users encounter field deployment errors, especially around Roll-up Summary format, Master-Detail constraints, formula issues, or a record type that won't deploy without a business process. Use this skill for custom field metadata work, field generation, and field troubleshooting. DO NOT TRIGGER for creating or customizing the value set itself — defining a new GlobalValueSet, or modifying a StandardValueSet catalog like Industry or Lead Source — use platform-value-set-generate instead; this skill covers the field that references a value set, not the value set definition."
 metadata:
   version: "1.0"
+  minApiVersion: "51.0"
 ---
-
-## When to Use This Skill
-
-Use this skill when you need to:
-- Create custom fields on any object
-- Generate field metadata for any field type
-- Set up relationship fields (Lookup or Master-Detail)
-- Create formula or roll-up summary fields
-- Troubleshoot deployment errors related to custom fields
 
 # Salesforce Custom Field Generator and Validator
 
 ## Overview
 
-Generate and validate Salesforce Custom Field metadata with mandatory constraints to prevent deployment errors. This skill has special focus on the **highest-failure-rate field types**: Roll-up Summary and Master-Detail relationships.
-
-## Specification
-
-## 1. Purpose
-
-This document defines the mandatory constraints for generating CustomField metadata XML. The agent must verify these constraints before outputting XML to prevent Metadata API deployment errors.
-
-**Critical Focus Areas:**
-- Roll-up Summary field format errors
-- Master-Detail field attribute restrictions
-- Lookup Filter restrictions
+Generates and validates Salesforce CustomField metadata XML, with special handling for the **highest-failure-rate types** — Roll-Up Summary and Master-Detail. The agent must verify the constraints below before outputting XML to prevent Metadata API deployment errors.
 
 ---
 
-## 2. Universal Mandatory Attributes
+## 1. Universal Mandatory Attributes
 
 Every generated field must include these tags:
 
 | Attribute | Requirement | Notes |
 |-----------|-------------|-------|
-| `<fullName>` | Required | Derive from `<label>`: capitalize each word, replace spaces with `_`, append `__c`. Must start with a letter. E.g., label `Total Contract Value` → `Total_Contract_Value__c` |
+| `<fullName>` | Required | **Field** name only: derive from `<label>` — capitalize each word, replace spaces with `_`, append `__c`. Must start with a letter. E.g., label `Total Contract Value` → `Total_Contract_Value__c`. ⚠️ This rule is for the FIELD name. **Picklist VALUE `<fullName>` is different — keep it exactly as the user spelled it, spaces and all, no `__c`** (e.g. `Closed Won`, NOT `Closed_Won`). See [`references/advanced-picklists.md`](references/advanced-picklists.md) (ref §3). |
 | `<label>` | Required | The UI name (Title Case) |
-| `<description>` | Mandatory | State the business "why" behind the field |
-| `<inlineHelpText>` | Mandatory | Provide actionable guidance for the end-user. Must add value beyond the label (e.g., "Enter the value in USD including tax" instead of just "The amount") |
+| `<description>` | Always include | Explain the business reason *why* this field exists. |
+| `<inlineHelpText>` | Always include | Actionable end-user guidance that adds value beyond the label (e.g., "Enter the value in USD including tax", not "The amount"). |
+
+`<description>` and `<inlineHelpText>` are mandatory outputs even though the Metadata API does not enforce them — omitting them produces low-quality metadata.
+
+**File path (SFDX source format):** save each field as `force-app/main/default/objects/<Object>/fields/<FieldName>__c.field-meta.xml`, where `<Object>` is the object's API name (`Account`, `Opportunity`, or a custom `Inventory_Item__c`). A correct XML at the wrong path is never seen by the Metadata API.
 
 ### External ID Configuration
 
@@ -52,7 +37,7 @@ Every generated field must include these tags:
 
 ---
 
-## 3. Technical Interplay: Precision, Scale, and Length
+## 2. Precision, Scale, and Length Rules
 
 To ensure deployment success, follow these mathematical constraints:
 
@@ -64,7 +49,7 @@ To ensure deployment success, follow these mathematical constraints:
 
 ### The "Fixed 255" Rule
 
-For standard TextArea types, the Metadata API requires `<length>255</length>`, even though it isn't configurable in the UI.
+**TextArea: always include `<length>255</length>` exactly** — this literal value is required by the Metadata API and **omitting it fails deployment**, even though the UI exposes no length control. Unlike every other type where `length` is a value you calculate, TextArea's is a fixed constant.
 
 ### Visible Lines
 
@@ -72,9 +57,9 @@ Mandatory for Long/Rich text and Multi-select picklists to control UI height.
 
 ---
 
-## 4. Field Data Types
+## 3. Field Data Types
 
-### 4.1 Simple Attribute Types
+### 3.1 Simple Attribute Types
 
 | Type | `<type>` Value | Required Attributes |
 |------|----------------|---------------------|
@@ -89,7 +74,7 @@ Mandatory for Long/Rich text and Multi-select picklists to control UI height.
 | Currency | `Currency` | Default precision: 18, scale: 2 |
 | Percent | `Percent` | Default precision: 5, scale: 2 |
 | Phone | `Phone` | Standardizes phone number formatting |
-| Picklist | `Picklist` | `valueSet` with `valueSetDefinition` and `restricted` |
+| Picklist | `Picklist` | `valueSet` containing EITHER `valueSetDefinition` (inline) OR `valueSetName` (reference); `restricted` (see "Picklist `restricted` default" below; advanced cases in §3.4) |
 | Text | `Text` | `length` (Max 255) |
 | Text Area | `TextArea` | `<length>255</length>` |
 | Text (Long) | `LongTextArea` | `length`, `visibleLines` (default 3) |
@@ -97,45 +82,73 @@ Mandatory for Long/Rich text and Multi-select picklists to control UI height.
 | Time | `Time` | Stores time only (no date) |
 | URL | `Url` | Validates for protocol and format |
 
-### 4.2 Computed & Multi-Value Types
+### 3.2 Computed & Multi-Value Types
 
 | Type | `<type>` Value | Required Attributes |
 |------|----------------|---------------------|
 | Formula | Result type (e.g., `Number`) | `formula`, `formulaTreatBlanksAs` |
-| Roll-Up Summary | `Summary` | See Section 6 for complete requirements |
+| Roll-Up Summary | `Summary` | See Section 5 for complete requirements |
 | Multi-Select Picklist | `MultiselectPicklist` | `valueSet`, `visibleLines` (default 4) |
 
-### 4.3 Specialized Types
+### 3.3 Specialized Types
 
 | Type | `<type>` Value | Required Attributes |
 |------|----------------|---------------------|
 | Geolocation | `Location` | `scale`, `displayLocationInDecimal` |
 
-### Picklist `restricted` Rule
+### Picklist `restricted` default
 
-The `<restricted>` boolean inside `<valueSet>` controls whether only admin-defined values are allowed.
-
-- IF user does not specify → default to `<restricted>true</restricted>` (restricted, avoids performance issues with large picklist value sets)
-- IF user explicitly says the picklist should allow custom/new values, or mentions "unrestricted" or "open" → set `<restricted>false</restricted>`
-- Restricted picklists are limited to 1,000 total values (active + inactive)
+**Always set `<restricted>true</restricted>`** inside `<valueSet>` unless the user explicitly says the picklist should accept custom values not in the admin-defined list (e.g. "unrestricted"/"open"). Restricted sets are capped at 1,000 total values (active + inactive). Minimal inline shape:
 
 ```xml
 <valueSet>
   <restricted>true</restricted>
   <valueSetDefinition>
     <sorted>false</sorted>
-    <value>
-      <fullName>Option_A</fullName>
-      <default>false</default>
-      <label>Option A</label>
-    </value>
+    <value><fullName>Option_A</fullName><default>false</default><label>Option A</label></value>
   </valueSetDefinition>
 </valueSet>
 ```
 
+### 3.4 Advanced Picklists
+
+The inline `<valueSetDefinition>` above is the simple case. Full rules and worked ✅/❌
+examples for everything below are in
+[`references/advanced-picklists.md`](references/advanced-picklists.md) — load it for any
+non-trivial picklist. Section numbers in parentheses below (e.g. "ref §1") point to that
+reference file, not to this skill. The hard rules:
+
+- **Value-set reference (ref §1).** A `<valueSet>` holds EITHER `<valueSetName>` (reference) OR
+  `<valueSetDefinition>` (inline) — **never both**. Reference by the **bare** developer name —
+  Standard set `Industry`, GlobalValueSet `Priority_Levels` with **NO `__gvs`** and no `__c`
+  (the `__gvs` suffix is org-storage display only; the Metadata API uses the bare name). A
+  value-set-backed field is `<restricted>true</restricted>`. Creating the value set is the
+  `platform-value-set-generate` skill's job; this one only references it.
+- **Value-name fidelity (ref §3).** A picklist value's `<fullName>`/`<label>` keep the user's exact
+  text **including spaces** (`Closed Won`, never `Closed_Won`). The space→`_` + `__c` rule is for
+  the FIELD name only.
+- **Dependent picklists (ref §2).** Use the **modern API 38.0+** form: `<controllingField>` +
+  one `<valueSettings>` (`<controllingFieldValue>`+`<valueName>`) per pair; never the legacy
+  `<picklist>`/`<picklistValues>`/`<controllingFieldValues>` tags. **Both** controlling and
+  dependent fields MUST be `<restricted>true</restricted>`, even if the request doesn't say so.
+- **Enhanced value attributes (ref §3).** `<value>` entries also accept `<color>` (hex, leading
+  `#`), `<isActive>` (`false` retires a value), and a value-level `<description>`.
+- **Scoping a picklist to a record type (ref §5).** Per-record-type value visibility lives on the
+  **RecordType** (`<picklistValues>`), not the field. The RecordType file carries its own
+  `<fullName>` (bare developer name). **First decide if the object needs a BusinessProcess:**
+  only **Opportunity / Lead / Case / Solution** require one — they won't deploy without a
+  `<businessProcess>` (`Required field is missing: businessProcess`), even when only a custom
+  picklist is filtered. There you emit **two coupled files**: the `businessProcesses/<Name>.businessProcess-meta.xml`
+  file AND a matching `<businessProcess><Name></businessProcess>` inside the `<RecordType>` (after
+  `<active>`, before `<picklistValues>`; the `<fullName>` in the BP file is **bare**, never
+  object-qualified). **Custom objects (`*__c`) and all other standard objects (Account, Contact, …)
+  need NO BusinessProcess — emit the RecordType alone; do not invent one.** **Scope limit:**
+  picklist-value visibility per record type only — NOT general record-type authoring (compact
+  layouts, page layouts, branding).
+
 ---
 
-## 5. Master-Detail Relationship Rules ⭐ CRITICAL
+## 4. Master-Detail Relationship Rules CRITICAL
 
 Master-Detail fields have **strict attribute restrictions** that differ from Lookup fields. Violating these rules causes deployment failures.
 
@@ -160,35 +173,24 @@ Master-Detail fields have **strict attribute restrictions** that differ from Loo
 | `<reparentableMasterDetail>` | ✅ Optional | ❌ Not applicable |
 | `<writeRequiresMasterRead>` | ✅ Optional | ❌ Not applicable |
 
-### ❌ INCORRECT — Master-Detail with forbidden attributes:
+### INCORRECT — Master-Detail with forbidden attributes:
 
 ```xml
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
   <fullName>Account__c</fullName>
-  <label>Account</label>
   <type>MasterDetail</type>
   <referenceTo>Account</referenceTo>
   <relationshipName>Contacts</relationshipName>
   <relationshipOrder>0</relationshipOrder>
-  <required>true</required>           <!-- WRONG: Remove this -->
-  <deleteConstraint>Cascade</deleteConstraint>  <!-- WRONG: Remove this -->
-  <lookupFilter>                       <!-- WRONG: Remove this entire block -->
-    <active>true</active>
-    <filterItems>
-      <field>Account.Type</field>
-      <operation>equals</operation>
-      <value>Customer</value>
-    </filterItems>
-  </lookupFilter>
+  <required>true</required>                     <!-- WRONG: remove -->
+  <deleteConstraint>Cascade</deleteConstraint>  <!-- WRONG: remove -->
+  <lookupFilter>...</lookupFilter>              <!-- WRONG: remove entire block -->
 </CustomField>
 ```
 
-**Errors:**
-- `Master-Detail Relationship Fields Cannot be Optional or Required`
-- `Can not specify 'deleteConstraint' for a CustomField of type MasterDetail`
-- `Lookup filters are only supported on Lookup Relationship Fields`
+**Errors:** `Master-Detail Relationship Fields Cannot be Optional or Required` · `Can not specify 'deleteConstraint' for a CustomField of type MasterDetail` · `Lookup filters are only supported on Lookup Relationship Fields`
 
-### ✅ CORRECT — Master-Detail field:
+### CORRECT — Master-Detail field:
 
 ```xml
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
@@ -206,7 +208,7 @@ Master-Detail fields have **strict attribute restrictions** that differ from Loo
 </CustomField>
 ```
 
-### ✅ CORRECT — Lookup field (with optional attributes):
+### CORRECT — Lookup field (with optional attributes):
 
 ```xml
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
@@ -240,7 +242,7 @@ Master-Detail fields have **strict attribute restrictions** that differ from Loo
 
 ---
 
-## 6. Roll-Up Summary Field Rules ⭐ CRITICAL
+## 5. Roll-Up Summary Field Rules CRITICAL
 
 Roll-up Summary fields have the **highest deployment failure rate**. Follow these rules exactly.
 
@@ -268,7 +270,7 @@ Roll-up Summary fields have the **highest deployment failure rate**. Follow thes
 
 **CRITICAL:** Both `summaryForeignKey` and `summarizedField` MUST use the fully qualified format:
 
-```
+```text
 ChildObjectAPIName__c.FieldAPIName__c
 ```
 
@@ -276,7 +278,7 @@ ChildObjectAPIName__c.FieldAPIName__c
 - `summaryForeignKey` = `ChildObject__c.MasterDetailFieldOnChild__c`
 - `summarizedField` = `ChildObject__c.FieldToSummarize__c`
 
-### ❌ INCORRECT — Roll-Up Summary with common errors:
+### INCORRECT — Roll-Up Summary with common errors:
 
 ```xml
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
@@ -295,7 +297,7 @@ ChildObjectAPIName__c.FieldAPIName__c
 - `Can not specify 'precision' for a CustomField of type Summary`
 - `Must specify the name in the CustomObject.CustomField format (e.g. Account.MyNewCustomField)`
 
-### ✅ CORRECT — Roll-Up Summary (SUM operation):
+### CORRECT — Roll-Up Summary (SUM operation):
 
 ```xml
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
@@ -311,51 +313,7 @@ ChildObjectAPIName__c.FieldAPIName__c
 </CustomField>
 ```
 
-### ✅ CORRECT — Roll-Up Summary (COUNT operation):
-
-```xml
-<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-  <fullName>Line_Item_Count__c</fullName>
-  <label>Line Item Count</label>
-  <description>Count of related line items</description>
-  <inlineHelpText>Automatically calculated from child records</inlineHelpText>
-  <type>Summary</type>
-  <summaryOperation>count</summaryOperation>
-  <summaryForeignKey>Order_Line_Item__c.Order__c</summaryForeignKey>
-  <!-- NO summarizedField needed for COUNT -->
-  <!-- NO precision, scale, required, or length -->
-</CustomField>
-```
-
-### ✅ CORRECT — Roll-Up Summary (MIN operation):
-
-```xml
-<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-  <fullName>Earliest_Due_Date__c</fullName>
-  <label>Earliest Due Date</label>
-  <description>Earliest due date among all line items</description>
-  <inlineHelpText>Shows the soonest deadline</inlineHelpText>
-  <type>Summary</type>
-  <summaryOperation>min</summaryOperation>
-  <summarizedField>Order_Line_Item__c.Due_Date__c</summarizedField>
-  <summaryForeignKey>Order_Line_Item__c.Order__c</summaryForeignKey>
-</CustomField>
-```
-
-### ✅ CORRECT — Roll-Up Summary (MAX operation):
-
-```xml
-<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-  <fullName>Highest_Price__c</fullName>
-  <label>Highest Price</label>
-  <description>Maximum unit price among all line items</description>
-  <inlineHelpText>Shows the most expensive item</inlineHelpText>
-  <type>Summary</type>
-  <summaryOperation>max</summaryOperation>
-  <summarizedField>Order_Line_Item__c.Unit_Price__c</summarizedField>
-  <summaryForeignKey>Order_Line_Item__c.Order__c</summaryForeignKey>
-</CustomField>
-```
+**COUNT:** identical structure to SUM but **omit `<summarizedField>` entirely** (and keep `<summaryForeignKey>`). **MIN / MAX:** identical to SUM — just `<summaryOperation>min</summaryOperation>` or `max`, with `<summarizedField>` pointing at the field to find the minimum/maximum of. The Quick Reference table below covers all four.
 
 ### Roll-Up Summary Quick Reference
 
@@ -374,7 +332,7 @@ ChildObjectAPIName__c.FieldAPIName__c
 
 ---
 
-## 7. Formula Field Rules
+## 6. Formula Field Rules
 
 ### Formula Result Types
 
@@ -393,7 +351,7 @@ A Formula is not a type itself. The `<formula>` tag is added to a field whose `<
 - IF formula result type = `Number`, `Currency`, or `Percent` → set `<formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>`
 - IF formula result type = `Text`, `Date`, or `DateTime` → set `<formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>`
 
-### ❌ INCORRECT — Using Formula as type:
+### INCORRECT — Using Formula as type:
 
 ```xml
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
@@ -404,7 +362,7 @@ A Formula is not a type itself. The `<formula>` tag is added to a field whose `<
 </CustomField>
 ```
 
-### ✅ CORRECT — Formula field:
+### CORRECT — Formula field:
 
 ```xml
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
@@ -419,26 +377,15 @@ A Formula is not a type itself. The `<formula>` tag is added to a field whose `<
 </CustomField>
 ```
 
-### Formula Field Dependencies
+### Formula Field Dependencies & Functions
 
-Formula fields that reference other fields will fail deployment if the referenced field does not exist or has not been deployed yet. Ensure all referenced fields are deployed before the formula field.
-
-### Specific Function Guidelines
-
-| Function | Rule |
-|----------|------|
-| `TEXT()` | MUST NOT be used with Text fields. If the field is already Text, remove the `TEXT()` wrapper. |
-| `CASE()` | Last parameter is always the default value. Total parameter count MUST be even (value-result pairs + default). |
-| `VALUE()` | MUST only be used with Text fields. If a Number is passed as parameter, remove the `VALUE()` wrapper. |
-| `DAY()` | MUST only be used with Date fields. If a DateTime field is used, convert it to Date first (e.g., `DAY(DATEVALUE(DateTimeField__c))`). |
-| `MONTH()` | MUST only be used with Date fields. If a DateTime field is used, convert it to Date first (e.g., `MONTH(DATEVALUE(DateTimeField__c))`). |
-| `DATEVALUE()` | MUST only be used with DateTime fields. If a Date field is used, remove the `DATEVALUE()` wrapper. |
-| `ISPICKVAL()` | MUST be used when checking equality of a Picklist field. NEVER use `==` with Picklist fields. |
-| `ISCHANGED()` | Use `ISCHANGED()` to check if a field value has changed. Do not manually compare with `PRIORVALUE()`. |
+- Formula fields that reference other fields fail deployment if the referenced field doesn't exist or hasn't deployed yet — deploy referenced fields first.
+- Use `ISPICKVAL()` (not `==`) for picklist comparisons.
+- For the full formula-function reference (TEXT/VALUE/CASE/DAY/MONTH/DATEVALUE/ISCHANGED type rules), defer to the `platform-validation-rule-generate` skill, which owns formula-function correctness.
 
 ---
 
-## 8. Common Deployment Errors
+## 7. Common Deployment Errors
 
 | Error Message | Cause | Fix |
 |---------------|-------|-----|
@@ -447,10 +394,14 @@ Formula fields that reference other fields will fail deployment if the reference
 | `DUPLICATE_DEVELOPER_NAME` | Field fullName already exists on the object | Use a unique business-driven name |
 | `MAX_RELATIONSHIPS_EXCEEDED` | More than 2 Master-Detail or 15 Lookup fields on the object | Use Lookup for 3rd+ Master-Detail; review Lookup count |
 | Reserved keyword error | Using `Order__c`, `Group__c`, etc. | Rename to `Status_Order__c`, etc. |
+| `Value set must reference a value set name or define a value set, but not both` | `<valueSet>` has both `<valueSetName>` and `<valueSetDefinition>` | Keep exactly one (see Section 3.4) |
+| `duplicate value found: [X] is defined multiple times` | Two `<value>` entries share a `<fullName>` | Make every picklist value `<fullName>` unique |
+| `Invalid fullName` on a picklist value | Value `<fullName>` starts with a digit or contains hyphens | Start with a letter; no hyphens, no leading digit. Spaces ARE allowed — do NOT underscore them (see §3.4 value-name fidelity) |
+| `Element ...picklist is not allowed` | Deprecated ≤37.0 dependent-picklist syntax (`<picklist>`/`<picklistValues>`/`<controllingFieldValues>`) | Use the modern `valueSettings`/`controllingFieldValue`/`valueName` form (Section 3.4) |
 
 ---
 
-## 9. Verification Checklist
+## 8. Verification Checklist
 
 Before generating CustomField XML, verify:
 
@@ -460,7 +411,7 @@ Before generating CustomField XML, verify:
 - [ ] Is `<label>` in Title Case?
 - [ ] Are there no XML comments (`<!-- ... -->`) before the root `<CustomField>` element? (Comments before the root element break SDR's parser)
 
-### Master-Detail Field Checks ⭐ CRITICAL
+### Master-Detail Field Checks CRITICAL
 - [ ] Is `<required>` attribute ABSENT? (Master-Detail is always required)
 - [ ] Is `<deleteConstraint>` attribute ABSENT? (Master-Detail always cascades)
 - [ ] Is `<lookupFilter>` block ABSENT? (Only for Lookup fields)
@@ -471,7 +422,16 @@ Before generating CustomField XML, verify:
 - [ ] Is `<deleteConstraint>` set to `SetNull`, `Restrict`, or `Cascade`?
 - [ ] Is `<relationshipName>` in plural PascalCase?
 
-### Roll-Up Summary Field Checks ⭐ CRITICAL
+### Picklist Field Checks
+- [ ] Does each `<valueSet>` contain EITHER `<valueSetName>` OR `<valueSetDefinition>` — never both?
+- [ ] For a value-set reference: is `<restricted>true</restricted>` set?
+- [ ] For a StandardValueSet reference: is the name the bare enum with NO `__c` (e.g. `Industry`)?
+- [ ] For a GlobalValueSet reference: is the name the **bare** developer name with NO `__gvs` suffix?
+- [ ] For dependent picklists: is `<controllingField>` set, with one `<valueSettings>` (`<controllingFieldValue>` + `<valueName>`) per pair?
+- [ ] For dependent picklists: is the deprecated `<picklist>`/`<picklistValues>`/`<controllingFieldValues>` form ABSENT?
+- [ ] Are all picklist value `<fullName>` values unique, start with a letter, and free of hyphens? (spaces are allowed — do NOT replace them with underscores, per the §3.4 value-name fidelity rule)
+
+### Roll-Up Summary Field Checks CRITICAL
 - [ ] Is `<precision>` attribute ABSENT?
 - [ ] Is `<scale>` attribute ABSENT?
 - [ ] Is `<summaryForeignKey>` in format `ChildObject__c.MasterDetailField__c`?

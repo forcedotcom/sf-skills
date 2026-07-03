@@ -175,7 +175,7 @@ action contract stable.
 
 ---
 
-## ⛔ Guardrails (Mandatory)
+## Guardrails (Mandatory)
 
 Stop and ask the user if any of these would be introduced:
 - Dynamic method execution based on user input (no reflection)

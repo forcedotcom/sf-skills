@@ -13,9 +13,9 @@ Determine which category the request falls into:
 
 | Category | Examples | Implementation Guide |
 |----------|----------|---------------------|
-| **Page** | New routed page (contacts, dashboard, settings) | `implementation/page.md` |
-| **Header / Footer** | Site-wide nav bar, footer, branding | `implementation/header-footer.md` |
-| **Component** | Widget, card, table, form, dialog | `implementation/component.md` |
+| **Page** | New routed page (contacts, dashboard, settings) | `references/page.md` |
+| **Header / Footer** | Site-wide nav bar, footer, branding | `references/header-footer.md` |
+| **Component** | Widget, card, table, form, dialog | `references/component.md` |
 
 ---
 

@@ -1,3 +1,21 @@
+# [1.29.0](https://github.com/forcedotcom/sf-skills/compare/1.28.0...1.29.0) (2026-07-03)
+
+
+### Features
+
+* Release 2 new skills: platform-value-set-generate, dx-code-analyzer-custom-rule-create @W-23286064@ ([e07b6b3](https://github.com/forcedotcom/sf-skills/commit/e07b6b37b399107249f056213cf73f7e6d469653))
+
+
+
+# [1.28.0](https://github.com/forcedotcom/sf-skills/compare/1.27.0...1.28.0) (2026-07-03)
+
+
+### Features
+
+* Release: Standardize skill folder structure scripts/, references/, assets/ @W-23262449@ ([3a358c3](https://github.com/forcedotcom/sf-skills/commit/3a358c3b1cce0e0df8c6ba09cc7cd48bb0295341))
+
+
+
 # [1.27.0](https://github.com/forcedotcom/sf-skills/compare/1.26.0...1.27.0) (2026-06-29)
 
 

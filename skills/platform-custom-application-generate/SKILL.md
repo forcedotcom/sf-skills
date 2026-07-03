@@ -19,7 +19,7 @@ Use this skill when you need to:
 
 Custom applications (Lightning Apps) that group tabs and functionality to provide a focused user experience for specific business processes. Always configured for Lightning Experience.
 
-## 🎯 Purpose
+## Purpose
 - Organize related functionality into focused applications
 - Group tabs and components for specific user roles
 - Provide tailored user experiences
@@ -29,7 +29,7 @@ Custom applications (Lightning Apps) that group tabs and functionality to provid
 - Override standard actions with custom Lightning pages for enhanced user experience
 - Enable profile-specific experiences through profile action overrides
 
-## ⚙️ Required Properties
+## Required Properties
 
 ### Core Application Properties
 - **fullName**: API name of the application
@@ -51,7 +51,7 @@ Custom applications (Lightning Apps) that group tabs and functionality to provid
 - **isNavPersonalizationDisabled**: Personalization setting (default: false)
 - **isNavTabPersistenceDisabled**: Tab persistence setting (default: false)
 
-## 🔧 Application Configuration
+## Application Configuration
 
 ### Navigation Type Selection (CRITICAL)
 **Decision Criteria for navType:**
@@ -116,7 +116,7 @@ Custom applications (Lightning Apps) that group tabs and functionality to provid
 - **profileActionOverrides.profile**: Profile API name (e.g., "Admin", "Standard User")
     - Enables different page layouts for different user profiles
 
-## 📱 Device Support
+## Device Support
 
 ### Desktop Configuration
 - **formFactor**: "Large"
@@ -130,7 +130,7 @@ Custom applications (Lightning Apps) that group tabs and functionality to provid
 - **formFactor**: "Medium"
 - **tabs**: Tablet-appropriate tab selection
 
-## 🎨 User Experience Features
+## User Experience Features
 
 ### Navigation Behavior
 - **Auto Temporary Tabs**: Can be enabled/disabled
@@ -142,12 +142,12 @@ Custom applications (Lightning Apps) that group tabs and functionality to provid
 - **Screen Reader**: Compatible with assistive technologies
 - **High Contrast**: Support for high contrast modes
 
-## 🔗 Integration Points
+## Integration Points
 - **Custom Tabs**: Include custom object and web tabs
 - **Standard Tabs**: Include standard Salesforce tabs
 - **Lightning Pages**: Integrate with Lightning page layouts
 - **Components**: Include custom Lightning components
-## ✅ Best Practices
+## Best Practices
 - **Always use Lightning UI**: Set `uiType` to "Lightning" for modern apps
 - **Choose appropriate navigation**: CRITICAL - Analyze requirements carefully for `navType` selection
     - Use "Standard" (DEFAULT) for general business applications
@@ -168,7 +168,7 @@ Custom applications (Lightning Apps) that group tabs and functionality to provid
 - **Leverage action overrides**: Customize page layouts for specific objects using FlexiPages from flexipage expert
 - **Use profile overrides**: Provide role-specific experiences by referencing different flexipage expert generated pages per profile
 
-## 🎯 Enhancement Rules
+## Enhancement Rules
 - **uiType**: Always set to "Lightning" for modern app experience
 - **navType**: CRITICAL DECISION - Analyze user requirements carefully
     - Set to "Standard" (DEFAULT) for general business applications
@@ -192,7 +192,7 @@ Custom applications (Lightning Apps) that group tabs and functionality to provid
 - **Profile Action Overrides**: Reference flexipage expert generated pages for role-based customization
 - **Form Factors**: Use "Large" for desktop, "Small" for mobile in overrides
 
-## ⚠️ CRITICAL Verification Checklist (MUST VERIFY)
+## CRITICAL Verification Checklist (MUST VERIFY)
 - [ ] All tabs are included in the application
 - [ ] **navType IS CORRECTLY SET** - Verify Console vs Standard selection
 - [ ] Default to "Standard" for most general business applications

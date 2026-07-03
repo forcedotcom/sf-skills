@@ -95,7 +95,7 @@ Approximate token counts for different loading strategies:
 **User**: "I need to create a custom object metadata file for a Student object"
 
 **Response approach** (Token-efficient):
-1. Load ONLY the `fields` section from `data/metadata_api/CustomObject.json`
+1. Load ONLY the `fields` section from `assets/metadata_api/CustomObject.json`
 2. Review required fields: `label`, `nameField`, `deploymentStatus`, `sharingModel`
 3. If needed, also load the `declarative_metadata_sample_definition` section for XML structure example
 4. Generate XML with correct namespace
@@ -108,7 +108,7 @@ Approximate token counts for different loading strategies:
 **User**: "What fields are available in a Flow metadata type?"
 
 **Response approach** (Token-efficient):
-1. Load ONLY the `fields` section from `data/metadata_api/Flow.json`
+1. Load ONLY the `fields` section from `assets/metadata_api/Flow.json`
 2. List field names, types, and descriptions
 3. Highlight required fields and common patterns
 4. Skip `wsdl_segment`, `description`, and other sections
@@ -120,7 +120,7 @@ Approximate token counts for different loading strategies:
 **User**: "How do I add object permissions to a Profile?"
 
 **Response approach** (Token-efficient):
-1. Load ONLY the `fields` section from `data/metadata_api/Profile.json`
+1. Load ONLY the `fields` section from `assets/metadata_api/Profile.json`
 2. Find `objectPermissions` field definition within that section
 3. Show structure and required sub-fields
 4. If XML example needed, separately load `declarative_metadata_sample_definition`
@@ -132,7 +132,7 @@ Approximate token counts for different loading strategies:
 **User**: "What's the metadata file structure for an Apex class?"
 
 **Response approach** (Token-efficient):
-1. Load the `fields` and `description` sections from `data/metadata_api/ApexClass.json`
+1. Load the `fields` and `description` sections from `assets/metadata_api/ApexClass.json`
 2. Show the simple structure (apiVersion, status)
 3. Explain the relationship between `.cls` and `.cls-meta.xml` files
 4. Load `file_information` section only if directory structure details needed

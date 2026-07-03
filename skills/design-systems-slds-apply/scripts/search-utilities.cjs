@@ -13,8 +13,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const INDEX_PATH = path.join(__dirname, '..', 'metadata', 'utilities-index.json');
-const GUIDANCE_DIR = path.join(__dirname, '..', 'guidance', 'utilities');
+const INDEX_PATH = path.join(__dirname, '..', 'assets', 'utilities-index.json');
+const GUIDANCE_DIR = path.join(__dirname, '..', 'references', 'utilities');
 
 function loadUtilities() {
   if (!fs.existsSync(INDEX_PATH)) {
@@ -100,7 +100,7 @@ function run() {
 
     const guidePath = path.join(GUIDANCE_DIR, `${catKey}.md`);
     if (fs.existsSync(guidePath)) {
-      console.log(`\nDetailed guidance: guidance/utilities/${catKey}.md`);
+      console.log(`\nDetailed guidance: references/utilities/${catKey}.md`);
     }
     return;
   }

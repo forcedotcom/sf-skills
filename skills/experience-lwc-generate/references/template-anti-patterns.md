@@ -26,7 +26,7 @@ This guide documents systematic errors in Lightning Web Component templates, wit
 
 **Critical Rule**: LWC templates do NOT support JavaScript expressions. Only property references are allowed.
 
-### ❌ BAD: Arithmetic in Template
+### BAD: Arithmetic in Template
 
 ```html
 <!-- LLM generates this - DOES NOT WORK -->
@@ -37,7 +37,7 @@ This guide documents systematic errors in Lightning Web Component templates, wit
 </template>
 ```
 
-### ✅ GOOD: Use Getters
+### GOOD: Use Getters
 
 ```javascript
 // component.js
@@ -69,7 +69,7 @@ export default class PriceCalculator extends LightningElement {
 </template>
 ```
 
-### ❌ BAD: String Concatenation in Template
+### BAD: String Concatenation in Template
 
 ```html
 <!-- DOES NOT WORK -->
@@ -79,7 +79,7 @@ export default class PriceCalculator extends LightningElement {
 </template>
 ```
 
-### ✅ GOOD: Computed Properties
+### GOOD: Computed Properties
 
 ```javascript
 // component.js
@@ -112,7 +112,7 @@ export default class Greeting extends LightningElement {
 
 **Critical Rule**: Ternary operators (`condition ? a : b`) are NOT allowed in LWC templates.
 
-### ❌ BAD: Ternary in Template
+### BAD: Ternary in Template
 
 ```html
 <!-- LLM generates this - DOES NOT WORK -->
@@ -123,7 +123,7 @@ export default class Greeting extends LightningElement {
 </template>
 ```
 
-### ✅ GOOD: Use Getters for Conditional Values
+### GOOD: Use Getters for Conditional Values
 
 ```javascript
 // component.js
@@ -155,7 +155,7 @@ export default class StatusDisplay extends LightningElement {
 </template>
 ```
 
-### ✅ GOOD: Use if:true/if:false for Conditional Rendering
+### GOOD: Use if:true/if:false for Conditional Rendering
 
 ```html
 <!-- component.html -->
@@ -189,7 +189,7 @@ get hasCount() {
 
 **Critical Rule**: Object literals (`{}`) cannot be passed directly as attribute values.
 
-### ❌ BAD: Inline Object Literals
+### BAD: Inline Object Literals
 
 ```html
 <!-- LLM generates this - DOES NOT WORK -->
@@ -206,7 +206,7 @@ get hasCount() {
 </template>
 ```
 
-### ✅ GOOD: Define Objects in JavaScript
+### GOOD: Define Objects in JavaScript
 
 ```javascript
 // component.js
@@ -237,7 +237,7 @@ export default class ParentComponent extends LightningElement {
 </template>
 ```
 
-### ❌ BAD: Inline Array Literals
+### BAD: Inline Array Literals
 
 ```html
 <!-- DOES NOT WORK -->
@@ -246,7 +246,7 @@ export default class ParentComponent extends LightningElement {
 </template>
 ```
 
-### ✅ GOOD: Define Arrays in JavaScript
+### GOOD: Define Arrays in JavaScript
 
 ```javascript
 // component.js
@@ -272,7 +272,7 @@ export default class ColorPicker extends LightningElement {
 
 **Critical Rule**: No method calls, comparisons, or logical operators in templates.
 
-### ❌ BAD: Method Calls in Template
+### BAD: Method Calls in Template
 
 ```html
 <!-- LLM generates this - DOES NOT WORK -->
@@ -284,7 +284,7 @@ export default class ColorPicker extends LightningElement {
 </template>
 ```
 
-### ✅ GOOD: Use Getters for Transformations
+### GOOD: Use Getters for Transformations
 
 ```javascript
 // component.js
@@ -322,7 +322,7 @@ export default class DataDisplay extends LightningElement {
 </template>
 ```
 
-### ❌ BAD: Comparisons in Template
+### BAD: Comparisons in Template
 
 ```html
 <!-- DOES NOT WORK -->
@@ -337,7 +337,7 @@ export default class DataDisplay extends LightningElement {
 </template>
 ```
 
-### ✅ GOOD: Getter-Based Comparisons
+### GOOD: Getter-Based Comparisons
 
 ```javascript
 // component.js
@@ -363,7 +363,7 @@ get isActive() {
 </template>
 ```
 
-### ❌ BAD: Logical Operators in Template
+### BAD: Logical Operators in Template
 
 ```html
 <!-- DOES NOT WORK -->
@@ -378,7 +378,7 @@ get isActive() {
 </template>
 ```
 
-### ✅ GOOD: Computed Boolean Properties
+### GOOD: Computed Boolean Properties
 
 ```javascript
 // component.js
@@ -408,7 +408,7 @@ get isNotLoading() {
 
 ## 5. Event Handler Mistakes
 
-### ❌ BAD: Inline Event Handlers with Arguments
+### BAD: Inline Event Handlers with Arguments
 
 ```html
 <!-- LLM generates this - DOES NOT WORK -->
@@ -419,7 +419,7 @@ get isNotLoading() {
 </template>
 ```
 
-### ✅ GOOD: Handler Functions with Data Attributes
+### GOOD: Handler Functions with Data Attributes
 
 ```html
 <!-- component.html -->
@@ -449,7 +449,7 @@ handleChange(event) {
 }
 ```
 
-### ❌ BAD: Event Binding with bind()
+### BAD: Event Binding with bind()
 
 ```html
 <!-- DOES NOT WORK -->
@@ -458,7 +458,7 @@ handleChange(event) {
 </template>
 ```
 
-### ✅ GOOD: Use Data Attributes for Context
+### GOOD: Use Data Attributes for Context
 
 ```html
 <!-- component.html -->
@@ -491,7 +491,7 @@ handleItemClick(event) {
 
 ## 6. Iteration Anti-Patterns
 
-### ❌ BAD: Missing Key in Iteration
+### BAD: Missing Key in Iteration
 
 ```html
 <!-- LLM forgets key - causes rendering issues -->
@@ -502,7 +502,7 @@ handleItemClick(event) {
 </template>
 ```
 
-### ✅ GOOD: Always Include Key
+### GOOD: Always Include Key
 
 ```html
 <!-- component.html -->
@@ -513,7 +513,7 @@ handleItemClick(event) {
 </template>
 ```
 
-### ❌ BAD: Using Index as Key
+### BAD: Using Index as Key
 
 ```html
 <!-- Anti-pattern: index can cause issues with reordering -->
@@ -524,7 +524,7 @@ handleItemClick(event) {
 </template>
 ```
 
-### ✅ GOOD: Use Unique Identifier as Key
+### GOOD: Use Unique Identifier as Key
 
 ```javascript
 // If items don't have unique IDs, generate them
@@ -545,7 +545,7 @@ connectedCallback() {
 </template>
 ```
 
-### ❌ BAD: Nested Iteration Without Proper Keys
+### BAD: Nested Iteration Without Proper Keys
 
 ```html
 <!-- PROBLEMATIC -->
@@ -562,7 +562,7 @@ connectedCallback() {
 </template>
 ```
 
-### ✅ GOOD: Compound Keys for Nested Iteration
+### GOOD: Compound Keys for Nested Iteration
 
 ```javascript
 // component.js
@@ -595,7 +595,7 @@ get processedCategories() {
 
 ## 7. Conditional Rendering Issues
 
-### ❌ BAD: if:true on Non-Boolean Values
+### BAD: if:true on Non-Boolean Values
 
 ```html
 <!-- LLM assumes truthy/falsy works like JS - it doesn't always -->
@@ -612,7 +612,7 @@ get processedCategories() {
 </template>
 ```
 
-### ✅ GOOD: Explicit Boolean Conversion
+### GOOD: Explicit Boolean Conversion
 
 ```javascript
 // component.js
@@ -638,7 +638,7 @@ get hasCount() {
 </template>
 ```
 
-### ❌ BAD: Multiple Conditions Without Else
+### BAD: Multiple Conditions Without Else
 
 ```html
 <!-- Verbose and error-prone -->
@@ -655,7 +655,7 @@ get hasCount() {
 </template>
 ```
 
-### ✅ GOOD: Use a State Getter
+### GOOD: Use a State Getter
 
 ```javascript
 // component.js
@@ -694,7 +694,7 @@ get isEmptyState() { return this.viewState === 'empty'; }
 
 ## 8. Slot and Composition Errors
 
-### ❌ BAD: Named Slot with Wrong Syntax
+### BAD: Named Slot with Wrong Syntax
 
 ```html
 <!-- LLM uses Vue/React slot syntax -->
@@ -711,7 +711,7 @@ get isEmptyState() { return this.viewState === 'empty'; }
 </template>
 ```
 
-### ✅ GOOD: LWC Slot Syntax
+### GOOD: LWC Slot Syntax
 
 ```html
 <!-- Parent component using slots -->
@@ -746,7 +746,7 @@ get isEmptyState() { return this.viewState === 'empty'; }
 
 ## 9. Data Binding Mistakes
 
-### ❌ BAD: Two-Way Binding Syntax
+### BAD: Two-Way Binding Syntax
 
 ```html
 <!-- LLM uses Angular/Vue two-way binding - doesn't exist in LWC -->
@@ -757,7 +757,7 @@ get isEmptyState() { return this.viewState === 'empty'; }
 </template>
 ```
 
-### ✅ GOOD: One-Way Binding with Event Handler
+### GOOD: One-Way Binding with Event Handler
 
 ```html
 <!-- component.html -->
@@ -790,7 +790,7 @@ handleInputChange(event) {
 }
 ```
 
-### ❌ BAD: Direct Property Mutation in Template
+### BAD: Direct Property Mutation in Template
 
 ```html
 <!-- Cannot mutate in template -->
@@ -799,7 +799,7 @@ handleInputChange(event) {
 </template>
 ```
 
-### ✅ GOOD: Mutate in Handler
+### GOOD: Mutate in Handler
 
 ```javascript
 // component.js
@@ -821,7 +821,7 @@ handleIncrement() {
 
 ## 10. Style and Class Binding
 
-### ❌ BAD: Dynamic Styles in Template
+### BAD: Dynamic Styles in Template
 
 ```html
 <!-- LLM uses React/Vue style binding - doesn't work in LWC -->
@@ -836,7 +836,7 @@ handleIncrement() {
 </template>
 ```
 
-### ✅ GOOD: CSS Custom Properties (Recommended)
+### GOOD: CSS Custom Properties (Recommended)
 
 ```javascript
 // component.js
@@ -864,7 +864,7 @@ renderedCallback() {
 </template>
 ```
 
-### ✅ GOOD: Computed Style String (When Necessary)
+### GOOD: Computed Style String (When Necessary)
 
 ```javascript
 // component.js
@@ -880,7 +880,7 @@ get dynamicStyle() {
 </template>
 ```
 
-### ❌ BAD: Dynamic Class with Expression
+### BAD: Dynamic Class with Expression
 
 ```html
 <!-- DOES NOT WORK -->
@@ -890,7 +890,7 @@ get dynamicStyle() {
 </template>
 ```
 
-### ✅ GOOD: Computed Class String
+### GOOD: Computed Class String
 
 ```javascript
 // component.js

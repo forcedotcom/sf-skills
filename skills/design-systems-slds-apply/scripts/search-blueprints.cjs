@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const BLUEPRINTS_DIR = path.join(__dirname, '..', 'metadata', 'blueprints', 'components');
+const BLUEPRINTS_DIR = path.join(__dirname, '..', 'assets', 'blueprints', 'components');
 
 function loadBlueprints() {
   const blueprints = [];
@@ -67,7 +67,7 @@ function run() {
     console.log(`Category: ${bp.category}`);
     console.log(`Root class: ${bp.rootClass}`);
     console.log(`Description: ${bp.description}`);
-    console.log(`\nFull YAML: metadata/blueprints/components/${bp.file}.yaml`);
+    console.log(`\nFull YAML: assets/blueprints/components/${bp.file}.yaml`);
     console.log('\nRead the full YAML file for classes, modifiers, states, accessibility, and example HTML.');
     return;
   }

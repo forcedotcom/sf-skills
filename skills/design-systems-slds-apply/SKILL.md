@@ -85,7 +85,7 @@ If no LBC exists (or not using LWC), select an SLDS Blueprint. See [references/c
 
 ## Hook Naming Traps
 
-SLDS hook families do NOT all follow the same naming pattern. Agents frequently invent hooks that don't exist by assuming `{prefix}-{number}` works universally. **Always verify a hook exists** via the bundled `search-hooks.cjs` script or `metadata/hooks-index.json` before using it.
+SLDS hook families do NOT all follow the same naming pattern. Agents frequently invent hooks that don't exist by assuming `{prefix}-{number}` works universally. **Always verify a hook exists** via the bundled `search-hooks.cjs` script or `assets/hooks-index.json` before using it.
 
 ### Trap 1: Font size hooks are NOT numbered
 
@@ -130,10 +130,10 @@ Run the appropriate search command **before** emitting any SLDS artifact:
 
 | Artifact | Verification command | Source of truth |
 |----------|---------------------|-----------------|
-| Styling hook (`--slds-g-*`) | `node scripts/search-hooks.cjs --prefix "<hook-name>"` | `metadata/hooks-index.json` |
-| Utility class (`slds-*`) | `node scripts/search-utilities.cjs --search "<class-name>"` | `metadata/utilities-index.json` |
-| Blueprint / CSS class | `node scripts/search-blueprints.cjs --search "<pattern>"` then read the YAML | `metadata/blueprints/components/*.yaml` |
-| Icon | `node scripts/search-icons.cjs --query "<description>"` | `metadata/icon-metadata.json` |
+| Styling hook (`--slds-g-*`) | `node scripts/search-hooks.cjs --prefix "<hook-name>"` | `assets/hooks-index.json` |
+| Utility class (`slds-*`) | `node scripts/search-utilities.cjs --search "<class-name>"` | `assets/utilities-index.json` |
+| Blueprint / CSS class | `node scripts/search-blueprints.cjs --search "<pattern>"` then read the YAML | `assets/blueprints/components/*.yaml` |
+| Icon | `node scripts/search-icons.cjs --query "<description>"` | `assets/icon-metadata.json` |
 
 If the search returns no match: **do not use the artifact.** Find an alternative from the search results or build custom with verified hooks.
 
@@ -187,10 +187,10 @@ This skill bundles comprehensive SLDS knowledge. Read files as needed -- don't r
 
 | Folder | Content | Index |
 |--------|---------|-------|
-| `guidance/overviews/` | Foundational concepts (color, spacing, typography, etc.) | [guidance/README.md](guidance/README.md) |
-| `guidance/styling-hooks/` | Hook categories with detailed usage | [guidance/README.md](guidance/README.md) |
-| `guidance/utilities/` | 27 utility class categories | [guidance/README.md](guidance/README.md) |
-| `guidance/slds-development-guide.md` | Full SLDS development guide | -- |
+| `references/overviews/` | Foundational concepts (color, spacing, typography, etc.) | [references/README.md](references/README.md) |
+| `references/styling-hooks/` | Hook categories with detailed usage | [references/README.md](references/README.md) |
+| `references/utilities/` | 27 utility class categories | [references/README.md](references/README.md) |
+| `references/slds-development-guide.md` | Full SLDS development guide | -- |
 
 ### Raw Metadata (structured data for lookup)
 
@@ -198,10 +198,10 @@ This skill bundles comprehensive SLDS knowledge. Read files as needed -- don't r
 
 | File | Content | Lines |
 |------|---------|-------|
-| `metadata/blueprints/components/*.yaml` | 85 blueprint specs (classes, variants, a11y, HTML) | ~50-200 each |
-| `metadata/hooks-index.json` | 523 hooks with values and CSS properties | ~6,300 |
-| `metadata/icon-metadata.json` | 1,732 icons with synonyms for search | ~38,500 |
-| `metadata/utilities-index.json` | 1,147 utility classes with CSS rules | ~6,900 |
+| `assets/blueprints/components/*.yaml` | 85 blueprint specs (classes, variants, a11y, HTML) | ~50-200 each |
+| `assets/hooks-index.json` | 523 hooks with values and CSS properties | ~6,300 |
+| `assets/icon-metadata.json` | 1,732 icons with synonyms for search | ~38,500 |
+| `assets/utilities-index.json` | 1,147 utility classes with CSS rules | ~6,900 |
 
 ---
 
@@ -219,7 +219,7 @@ Identify:
 
 1. **If LWC**: Check the [Lightning Component Library](https://developer.salesforce.com/docs/component-library/overview/components) for an LBC
 2. **Search blueprints**: `node scripts/search-blueprints.cjs --search "<pattern>"`
-3. **Read the blueprint YAML**: `metadata/blueprints/components/<name>.yaml` for exact classes, modifiers, states, and accessibility requirements
+3. **Read the blueprint YAML**: `assets/blueprints/components/<name>.yaml` for exact classes, modifiers, states, and accessibility requirements
 4. **No match?** Build custom with hooks (see Phase 3)
 
 Details: [references/component-selection.md](references/component-selection.md)
@@ -249,7 +249,7 @@ npx @salesforce-ux/slds-linter@latest lint <component-path>
 
 The linter catches hardcoded values, class overrides, and deprecated tokens. **Fix all violations before proceeding.** Do not rationalize violations as acceptable.
 
-**Step 2: Verify no invented hooks.** Confirm every `--slds-g-*` hook in the output exists in `metadata/hooks-index.json`. Cross-reference against the T051 check in [checklists.md](checklists.md).
+**Step 2: Verify no invented hooks.** Confirm every `--slds-g-*` hook in the output exists in `assets/hooks-index.json`. Cross-reference against the T051 check in [checklists.md](checklists.md).
 
 **Step 3: Run through [checklists.md](checklists.md)** for the checks the linter cannot automate:
 - All `var(--slds-g-*)` have fallback values (T002)

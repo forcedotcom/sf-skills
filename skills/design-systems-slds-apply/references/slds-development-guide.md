@@ -158,13 +158,13 @@ export default class MyModal extends LightningModal {
 
 ## Core Rules
 
-### Do ✅
+### Do
 - Follow hierarchy: LBC → Blueprints → Styling Hooks → Custom CSS
 - Use `var(--slds-g-*)` with fallbacks for all themeable values
 - Create custom classes (e.g., `my-*`) instead of overriding `.slds-*`
 - Verify components/hooks exist before implementing
 
-### Don't ❌
+### Don't
 - Hard-code colors, spacing, or typography
 - Override `.slds-*` classes directly
 - Use deprecated `--lwc-*` tokens as primary values

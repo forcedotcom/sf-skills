@@ -36,7 +36,7 @@ This error is particularly common in LLM-generated code because the LLM may:
 
 ### Rule: Every field accessed must be in the SELECT clause
 
-### ❌ BAD: Accessing Unqueried Fields
+### BAD: Accessing Unqueried Fields
 
 ```apex
 // Query only includes Id and Name
@@ -54,7 +54,7 @@ for (Account acc : accounts) {
 }
 ```
 
-### ✅ GOOD: Query All Accessed Fields
+### GOOD: Query All Accessed Fields
 
 ```apex
 // Query ALL fields that will be accessed
@@ -91,7 +91,7 @@ Fields can be accessed in many places—ensure coverage for all:
 
 ### Rule: Parent relationship fields require dot notation in SELECT
 
-### ❌ BAD: Missing Relationship Fields
+### BAD: Missing Relationship Fields
 
 ```apex
 // Contact query without Account relationship fields
@@ -108,7 +108,7 @@ for (Contact c : contacts) {
 }
 ```
 
-### ✅ GOOD: Include Relationship Fields
+### GOOD: Include Relationship Fields
 
 ```apex
 // Use dot notation to include parent fields
@@ -136,7 +136,7 @@ for (Contact c : contacts) {
 | Parent (lookup/master-detail) | 5 levels | `Contact.Account.Owner.Manager.Name` |
 | Child (subquery) | 1 level | `Account -> Contacts` (cannot nest subqueries) |
 
-### ❌ BAD: Assuming Relationship is Populated
+### BAD: Assuming Relationship is Populated
 
 ```apex
 List<Contact> contacts = [SELECT Id, AccountId FROM Contact];
@@ -150,7 +150,7 @@ for (Contact c : contacts) {
 }
 ```
 
-### ✅ GOOD: Query Relationship or Use Separate Query
+### GOOD: Query Relationship or Use Separate Query
 
 ```apex
 // Option 1: Include relationship field
@@ -189,7 +189,7 @@ for (Contact c : contacts) {
 
 ### Rule: Dynamic field access (using `get()`) also requires queried fields
 
-### ❌ BAD: Dynamic Access to Unqueried Field
+### BAD: Dynamic Access to Unqueried Field
 
 ```apex
 List<Account> accounts = [SELECT Id, Name FROM Account];
@@ -201,7 +201,7 @@ for (Account acc : accounts) {
 }
 ```
 
-### ✅ GOOD: Query Fields Used Dynamically
+### GOOD: Query Fields Used Dynamically
 
 ```apex
 // If you know which fields will be accessed dynamically, query them
@@ -213,7 +213,7 @@ for (Account acc : accounts) {
 }
 ```
 
-### ✅ GOOD: Build Dynamic Query
+### GOOD: Build Dynamic Query
 
 ```apex
 // For truly dynamic scenarios, build the query dynamically
@@ -232,7 +232,7 @@ List<Account> accounts = Database.query(query);
 
 ### Rule: Aggregate queries return `AggregateResult`, not sObjects
 
-### ❌ BAD: Treating Aggregate as sObject
+### BAD: Treating Aggregate as sObject
 
 ```apex
 // This returns AggregateResult, not Account
@@ -255,7 +255,7 @@ for (AggregateResult ar : results) {
 }
 ```
 
-### ✅ GOOD: Use get() for Aggregate Results
+### GOOD: Use get() for Aggregate Results
 
 ```apex
 AggregateResult[] results = [
@@ -291,7 +291,7 @@ for (AggregateResult ar : results) {
 
 ### Rule: Child relationship subqueries create nested lists
 
-### ❌ BAD: Accessing Subquery Fields Incorrectly
+### BAD: Accessing Subquery Fields Incorrectly
 
 ```apex
 // Query with contact subquery
@@ -312,7 +312,7 @@ for (Account acc : accounts) {
 }
 ```
 
-### ✅ GOOD: Proper Subquery Field Access
+### GOOD: Proper Subquery Field Access
 
 ```apex
 // Query all needed fields in subquery

@@ -12,7 +12,7 @@ Assigns one or more permission sets to org users using `sf org assign permset`. 
 
 ---
 
-## ⚠️ Tool Restrictions
+## Tool Restrictions
 
 **Use ONLY the Bash tool** to execute `sf org assign permset`. Do NOT use MCP tools like `assign_permission_set` — ignore them completely.
 

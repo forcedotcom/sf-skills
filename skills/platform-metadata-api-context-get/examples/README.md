@@ -2,7 +2,7 @@
 
 This directory contains working code examples demonstrating how to programmatically load only specific sections from metadata JSON files.
 
-## ⚠️ Critical Warning
+## Critical Warning
 
 **NEVER use built-in tools like Read, cat, or any other tool that loads entire JSON files into context!**
 
@@ -27,7 +27,7 @@ python3 examples/python_section_loading.py
 **Key Pattern**:
 ```python
 import json
-with open('data/metadata_api/CustomObject.json') as f:
+with open('assets/metadata_api/CustomObject.json') as f:
     data = json.load(f)
     fields_only = data.get('fields', {})  # Only extract 'fields'
 ```
@@ -49,7 +49,7 @@ node examples/javascript_section_loading.js
 **Key Pattern**:
 ```javascript
 const fs = require('fs');
-const data = JSON.parse(fs.readFileSync('data/metadata_api/CustomObject.json', 'utf-8'));
+const data = JSON.parse(fs.readFileSync('assets/metadata_api/CustomObject.json', 'utf-8'));
 const fieldsOnly = data.fields || {};  // Only extract 'fields'
 ```
 
@@ -82,7 +82,7 @@ chmod +x examples/bash_section_loading.sh
 **Key Pattern**:
 ```bash
 # Extract only the 'fields' section
-jq '.fields' data/metadata_api/CustomObject.json
+jq '.fields' assets/metadata_api/CustomObject.json
 ```
 
 ## Token Savings
@@ -130,23 +130,23 @@ Choose based on your need:
 
 ## Anti-Patterns (What NOT to Do)
 
-### ❌ Wrong: Using Read Tool
+### Wrong: Using Read Tool
 ```bash
 # This loads the ENTIRE file into context (2,000 tokens)
-Read data/metadata_api/CustomObject.json
+Read assets/metadata_api/CustomObject.json
 ```
 
-### ❌ Wrong: Using cat/type
+### Wrong: Using cat/type
 ```bash
 # This loads the ENTIRE file into context (2,000 tokens)
-cat data/metadata_api/CustomObject.json
-type data/metadata_api/CustomObject.json
+cat assets/metadata_api/CustomObject.json
+type assets/metadata_api/CustomObject.json
 ```
 
-### ✅ Correct: Programmatic Section Extraction
+### Correct: Programmatic Section Extraction
 ```bash
 # This loads only the 'fields' section (200 tokens)
-jq '.fields' data/metadata_api/CustomObject.json
+jq '.fields' assets/metadata_api/CustomObject.json
 ```
 
 ## Adapting to Other Languages

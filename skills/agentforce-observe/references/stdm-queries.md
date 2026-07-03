@@ -24,9 +24,9 @@ Methods:
 mkdir -p <project-root>/force-app/main/default/classes
 
 # Copy from the skill's apex directory
-cp ../apex/AgentforceOptimizeService.cls \
+cp ../assets/apex/AgentforceOptimizeService.cls \
    <project-root>/force-app/main/default/classes/
-cp ../apex/AgentforceOptimizeService.cls-meta.xml \
+cp ../assets/apex/AgentforceOptimizeService.cls-meta.xml \
    <project-root>/force-app/main/default/classes/
 ```
 

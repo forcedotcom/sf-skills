@@ -22,7 +22,7 @@ Code produced by this skill should score high on T-series checks.
 | **Shadow hooks** | Shadows use `var(--slds-g-shadow-*)` | T040 |
 | **Border radius hooks** | Border radius uses `var(--slds-g-radius-*)` | T041 |
 | **Color hooks numbered** | Every `--slds-g-color-*` hook ends in a number (no bare `on-surface`, `on-accent`, etc.) | T050 |
-| **No invented hooks** | Every hook referenced actually exists in `metadata/hooks-index.json` | T051 |
+| **No invented hooks** | Every hook referenced actually exists in `assets/hooks-index.json` | T051 |
 | **No hardcoded colors** | No hex, rgb, or named colors (linter also catches this) | linter |
 | **No class overrides** | No `.slds-*` class overrides (linter also catches this) | linter |
 | **No deprecated tokens** | No `--lwc-*` tokens (linter also catches this) | linter |

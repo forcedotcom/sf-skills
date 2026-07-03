@@ -120,6 +120,6 @@ node scripts/search-utilities.cjs --pattern "slds-p-around_*"
 
 ## Deep Reference
 
-- Utility index: `guidance/utilities/index.md`
-- Individual category guides: `guidance/utilities/{category}.md`
-- Full metadata (1,147 classes): `metadata/utilities-index.json`
+- Utility index: `references/utilities/index.md`
+- Individual category guides: `references/utilities/{category}.md`
+- Full metadata (1,147 classes): `assets/utilities-index.json`

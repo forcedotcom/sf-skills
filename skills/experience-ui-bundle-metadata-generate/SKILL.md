@@ -149,5 +149,5 @@ Whenever the app references a new external domain: CDN images, external fonts, t
 
 Always also set `isApplicableToConnectSrc` to `true` for preflight/redirect handling.
 
-4. **Create the metadata file** — follow `implementation/csp-metadata-format.md` for the `.cspTrustedSite-meta.xml` format. Place in `force-app/main/default/cspTrustedSites/`.
+4. **Create the metadata file** — follow `references/csp-metadata-format.md` for the `.cspTrustedSite-meta.xml` format. Place in `force-app/main/default/cspTrustedSites/`.
 

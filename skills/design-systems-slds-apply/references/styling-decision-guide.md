@@ -24,7 +24,7 @@ Component hooks are scoped to specific Lightning Base Components. To find availa
 2. **Browser DevTools**: Render the LBC, inspect the element, and look for `--slds-c-*` properties in the computed styles
 3. **Known patterns**: Component hooks follow `--slds-c-{component}-{property}-{state}` naming, e.g., `--slds-c-button-success-shadow-hover`
 
-There is no centralized metadata file for `--slds-c-*` hooks — they are documented per-component. Some examples exist in `guidance/overviews/shadows.md` and `guidance/styling-hooks/index.md`.
+There is no centralized metadata file for `--slds-c-*` hooks — they are documented per-component. Some examples exist in `references/overviews/shadows.md` and `references/styling-hooks/index.md`.
 
 ---
 
@@ -46,7 +46,7 @@ Always use `var()` with a fallback value:
 
 The fallback in `var(--slds-g-*, fallback)` is used when the hook isn't loaded (e.g., outside Lightning Experience, in static HTML previews, or during SSR). Use the **light-mode default** value:
 
-1. **Look up the value in `metadata/hooks-index.json`** — each hook has a `value` field showing its resolved default
+1. **Look up the value in `assets/hooks-index.json`** — each hook has a `value` field showing its resolved default
 2. **Use the search script**: `node scripts/search-hooks.cjs --prefix "--slds-g-color-surface-"` shows values
 3. **Common defaults**: `#ffffff` for surfaces, `#181818` for text, `1rem` for spacing-4, `0.25rem` for radius-border-2
 
@@ -218,11 +218,11 @@ Some dimension values have no SLDS hook (e.g., `min-width: 7rem` for label align
 
 ## Deep Reference
 
-- Styling hooks index: `guidance/styling-hooks/index.md`
-- Color hooks deep dive: `guidance/styling-hooks/color/`
-- Color overview (85-5-10 rule): `guidance/overviews/color.md`
-- Spacing overview: `guidance/overviews/spacing.md`
-- Typography hooks: `guidance/styling-hooks/typography.md`
-- Borders overview: `guidance/overviews/borders.md`
-- Shadows overview: `guidance/overviews/shadows.md`
-- All 523 hooks searchable: `metadata/hooks-index.json`
+- Styling hooks index: `references/styling-hooks/index.md`
+- Color hooks deep dive: `references/styling-hooks/color/`
+- Color overview (85-5-10 rule): `references/overviews/color.md`
+- Spacing overview: `references/overviews/spacing.md`
+- Typography hooks: `references/styling-hooks/typography.md`
+- Borders overview: `references/overviews/borders.md`
+- Shadows overview: `references/overviews/shadows.md`
+- All 523 hooks searchable: `assets/hooks-index.json`

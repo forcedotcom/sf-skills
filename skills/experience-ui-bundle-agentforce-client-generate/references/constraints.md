@@ -65,19 +65,19 @@ When updating an existing component:
 
 ## Examples
 
-### ❌ Wrong - Using containerStyle
+### Wrong - Using containerStyle
 
 ```tsx
 <AgentforceConversationClient agentId="0Xx..." containerStyle={{ width: 420, height: 600 }} />
 ```
 
-### ✅ Correct - Using width/height directly
+### Correct - Using width/height directly
 
 ```tsx
 <AgentforceConversationClient agentId="0Xx..." width="420px" height="600px" />
 ```
 
-### ❌ Wrong - Creating CSS file
+### Wrong - Creating CSS file
 
 ```css
 /* agent-styles.css */
@@ -93,7 +93,7 @@ import "./agent-styles.css";
 <AgentforceConversationClient className="agentforce-chat" />;
 ```
 
-### ✅ Correct - Using styleTokens
+### Correct - Using styleTokens
 
 ```tsx
 <AgentforceConversationClient
@@ -105,7 +105,7 @@ import "./agent-styles.css";
 />
 ```
 
-### ❌ Wrong - Creating style tag
+### Wrong - Creating style tag
 
 ```tsx
 <>
@@ -114,7 +114,7 @@ import "./agent-styles.css";
 </>
 ```
 
-### ✅ Correct - Using styleTokens
+### Correct - Using styleTokens
 
 ```tsx
 <AgentforceConversationClient
@@ -125,10 +125,10 @@ import "./agent-styles.css";
 />
 ```
 
-### ❌ Wrong - Editing implementation file
+### Wrong - Editing implementation file
 
 Reading or editing: `node_modules/@salesforce/ui-bundle-template-feature-react-agentforce-conversation-client/src/AgentforceConversationClient.tsx`
 
-### ✅ Correct - Editing usage file
+### Correct - Editing usage file
 
 Reading and editing: usage files where the component is imported and used (for example, `src/app.tsx`, a route component, or a feature page)

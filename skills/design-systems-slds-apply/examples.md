@@ -24,7 +24,7 @@ node scripts/search-blueprints.cjs --search "modal"
 # Found: Modals (category: Overlay, root: slds-modal)
 ```
 
-**Read blueprint YAML** for class details: `metadata/blueprints/components/modals.yaml`
+**Read blueprint YAML** for class details: `assets/blueprints/components/modals.yaml`
 
 Key takeaway: `LightningModal` handles the `slds-modal`, `slds-backdrop`, and ARIA attributes automatically. No need to apply blueprint classes manually in LWC.
 
@@ -99,8 +99,8 @@ node scripts/search-blueprints.cjs --search "badge"
 ```
 
 **Read YAMLs:**
-- `metadata/blueprints/components/cards.yaml` -- classes: `slds-card`, `slds-card__header`, `slds-card__body`, `slds-card__footer`
-- `metadata/blueprints/components/badges.yaml` -- classes: `slds-badge`, modifiers: `slds-badge_lightest`, `slds-badge_inverse`
+- `assets/blueprints/components/cards.yaml` -- classes: `slds-card`, `slds-card__header`, `slds-card__body`, `slds-card__footer`
+- `assets/blueprints/components/badges.yaml` -- classes: `slds-badge`, modifiers: `slds-badge_lightest`, `slds-badge_inverse`
 
 ### Phase 3: Apply Styling
 

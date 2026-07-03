@@ -511,7 +511,7 @@ export default class ComposedStateComponent extends LightningElement {
 
 ## Anti-Patterns to Avoid
 
-### ❌ BAD: Mutating Objects In Place
+### BAD: Mutating Objects In Place
 
 ```javascript
 // DON'T - won't trigger reactivity
@@ -519,7 +519,7 @@ this.user.name = 'New Name';
 this.items.push(newItem);
 ```
 
-### ✅ GOOD: Create New References
+### GOOD: Create New References
 
 ```javascript
 // DO - triggers reactivity
@@ -527,7 +527,7 @@ this.user = { ...this.user, name: 'New Name' };
 this.items = [...this.items, newItem];
 ```
 
-### ❌ BAD: Heavy Computation in Getters
+### BAD: Heavy Computation in Getters
 
 ```javascript
 // DON'T - runs every render cycle
@@ -539,7 +539,7 @@ get expensiveComputation() {
 }
 ```
 
-### ✅ GOOD: Cache Computed Values
+### GOOD: Cache Computed Values
 
 ```javascript
 _cachedResult;
@@ -558,7 +558,7 @@ get optimizedComputation() {
 }
 ```
 
-### ❌ BAD: Forgetting to Unsubscribe
+### BAD: Forgetting to Unsubscribe
 
 ```javascript
 // DON'T - memory leak
@@ -567,7 +567,7 @@ connectedCallback() {
 }
 ```
 
-### ✅ GOOD: Clean Up Subscriptions
+### GOOD: Clean Up Subscriptions
 
 ```javascript
 // DO - proper cleanup

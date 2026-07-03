@@ -49,7 +49,7 @@ This skill is designed for use with Claude Code. To use it:
 
 - **SKILL.md**: Complete skill documentation with usage guidelines
 - **references/metadata_index_table.md**: Index of all metadata types
-- **data/metadata_api/**: JSON files for each metadata type
+- **assets/metadata_api/**: JSON files for each metadata type
 
 ## Token Optimization
 

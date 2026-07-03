@@ -1,6 +1,6 @@
 ---
 name: mobile-platform-native-capabilities-integrate
-description: "Build a Salesforce LWC that uses native mobile device capabilities — barcode scanner, biometrics, location, NFC, calendar, contacts, document scanner, geofencing, AR space capture, app review, and payments. Use this skill when the user asks for an LWC that scans a barcode, captures a photo of a document, reads location or geofences, prompts for biometrics, reads/writes the device calendar or contacts, taps NFC, takes a payment, prompts for an app review, or scans an AR space. Also triggers on \"lightning/mobileCapabilities\", \"mobile capability\", \"Nimbus\", \"device capability\". Do not use for mobile offline / Komaci priming reviews (use `mobile-platform-offline-validate`) or for picking generic Lightning base components (use a generic Lightning base components skill)."
+description: "Build a Salesforce LWC that uses native mobile device capabilities — barcode scanner, biometrics, location, NFC, calendar, contacts, document scanner, geofencing, AR space capture, app review, and payments. Use this skill when the user asks for an LWC that scans a barcode, captures a photo of a document, reads location or geofences, prompts for biometrics, reads/writes the device calendar or contacts, taps NFC, takes a payment, prompts for an app review, or scans an AR space. Also triggers on \"lightning/mobileCapabilities\", \"mobile capability\", \"Nimbus\", \"device capability\". Do not use for mobile offline / Komaci priming reviews (use `mobile-platform-offline-validate`) or for picking generic Lightning base components (use `design-systems-slds-apply`)."
 metadata:
   version: "1.0"
 ---
@@ -32,8 +32,8 @@ Do NOT use this skill for:
 
 - Mobile-offline review of an LWC (lwc:if, inline GraphQL, Komaci-priming
   violations) — use `mobile-platform-offline-validate`.
-- Picking generic Lightning Base Components — use
-  `using-lightning-base-components`.
+- Choosing or styling generic Lightning Base Components / SLDS blueprints —
+  use `design-systems-slds-apply`.
 
 ## Prerequisites
 

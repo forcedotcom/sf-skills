@@ -6,7 +6,7 @@ does `from config import ...`. Tests mirror that by inserting scripts/
 onto sys.path.
 
 fs_guard is now sourced via ``from config import fs_guard`` (config.py
-re-exports it from the plugin _shared/ package). No tools/ entry on
+re-exports it from the plugin _shared/ package). No separate entry on
 sys.path is required — config.py's dev-fallback walks up to the repo's
 ``plugins/investigating-agentforce-architecture/shared/`` when ``scripts/_shared/``
 hasn't yet been mirrored by install.sh / the build script.

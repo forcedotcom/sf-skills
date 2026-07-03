@@ -17,7 +17,7 @@
 # Ensure jq is available before doing anything else
 command -v jq >/dev/null 2>&1 || { echo "Error: jq is required but not installed." >&2; exit 1; }
 
-METADATA_DIR="data/metadata_api"
+METADATA_DIR="assets/metadata_api"
 
 
 # Example 1: Load ONLY the 'fields' section from CustomObject.json
@@ -115,10 +115,10 @@ extract_specific_fields() {
 # This is what NOT to do - it loads the entire file into context:
 #
 # Read tool approach (WRONG):
-# Read data/metadata_api/CustomObject.json  # Loads ALL sections!
+# Read assets/metadata_api/CustomObject.json  # Loads ALL sections!
 #
 # cat approach (WRONG):
-# cat data/metadata_api/CustomObject.json  # Loads entire file!
+# cat assets/metadata_api/CustomObject.json  # Loads entire file!
 #
 # This injects the entire file (including massive WSDL segments)
 # into your context, wasting 60-80% of tokens.

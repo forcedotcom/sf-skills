@@ -245,7 +245,7 @@ font-size: var(--slds-g-font-size-base); /* Or use rem values */
 
 ## Critical Rules
 
-### ✅ DO:
+### DO:
 
 - Reference hooks with `var()`: `color: var(--slds-g-color-accent-1);`
 - Use numbered spacing: `spacing-4` not `spacing-medium`
@@ -254,7 +254,7 @@ font-size: var(--slds-g-font-size-base); /* Or use rem values */
 - Pair container colors with on-colors for text/icons
 - Follow the 50-point rule for text contrast, 40-point rule for UI elements
 
-### ❌ DON'T:
+### DON'T:
 
 - Reassign hook values: `--slds-g-color-accent-1: #ff0000;` ❌
 - Use private hooks (`--_slds-*` or `--slds-s-*`)

@@ -44,10 +44,10 @@ from tests.fixtures import genai_payloads as fx  # type: ignore
 _REPO_SOQL_DIR = Path(__file__).resolve().parent.parent.parent / "assets" / "soql"
 soql_loader.SOQL_DIR = _REPO_SOQL_DIR
 
-# emit_result.py lives under tools/; tests invoke it via subprocess so the
+# emit_result.py lives under scripts/; tests invoke it via subprocess so the
 # tool's RESULT-formatting logic is exercised under the same contract the
 # SKILL.md Bash wrapper uses.
-_TOOLS_DIR = Path(__file__).resolve().parent.parent.parent / "tools"
+_TOOLS_DIR = Path(__file__).resolve().parent.parent
 
 
 # ---------------------------------------------------------------------------

@@ -83,7 +83,7 @@ import sys
 
 # local, dependency-free token scrub mirroring the patterns in
 # `scripts/rest_client.redact_text`. Keeping the redactor inline preserves
-# the tools/ <-> scripts/ decoupling (tools/ is stdlib-only by policy) and
+# the scripts/ emit helpers (stdlib-only by policy) and
 # avoids adding a sys.path hop on every write_emit_ctx invocation. The two
 # implementations must stay in sync; the shared regex shapes are:
 # * Authorization: Bearer <token>

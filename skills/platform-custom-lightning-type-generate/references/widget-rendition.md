@@ -1,15 +1,15 @@
 # Widget Generation Guide
 
-## 📋 Overview
+## Overview
 Widgets are reusable pieces of UI similar to templates, with placeholders for actual data values. The purpose of this file is to assist developers in creating mosaic renditions for CLTs.
 
-## 🎯 Purpose
+## Purpose
 Widgets render data in a structured and unified way across various Salesforce experiences like Slack, Mobile, LEX etc.
 
 ## Schema Grounding
 Widget generation is **always schema-grounded** using a CLT's schema. The schema describes the data shape the widget should render. Extract property names, types, required vs optional, and nesting from the schema; then follow the full **Workflow** below, using this extracted structure to guide every step. Do not add or remove properties relative to the schema.
 
-## ⚙️ Composition
+## Composition
 A widget is a UEM (Unified Experience Model) tree of blocks and regions. The widget you return must follow the Typescript interfaces below:
 
 ```ts
@@ -28,7 +28,7 @@ interface RegionType {
 ```
 ---
 
-## 🔧 Available Metadata Actions
+## Available Metadata Actions
 
 ### When to Use Each Action
 
@@ -88,7 +88,7 @@ interface RegionType {
 
 ---
 
-## 💡Workflow
+## Workflow
 
 1. **Schema Parsing**
 - Parse the schema and extract: property names, types, required vs optional, and nested structure. Use this as the **widget spec**.
@@ -115,7 +115,7 @@ interface RegionType {
 
 ---
 
-## ⚠️ Important Notes
+## Important Notes
 
 - **widget spec** includes both required and optional attributes - review carefully to ensure valid configuration.
 - When using **`execute_metadata_action`** tool, always supply **`parameters`** with the required fields above; missing `parameters` or required keys causes hard failures, not partial results.

@@ -228,7 +228,7 @@ public void processWithSafety(List<Account> accounts) {
 
 ## Benchmarking Anti-Patterns
 
-### ❌ Don't Do These
+### Don't Do These
 
 | Anti-Pattern | Problem | Solution |
 |--------------|---------|----------|

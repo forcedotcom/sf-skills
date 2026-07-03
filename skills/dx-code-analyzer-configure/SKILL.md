@@ -1,14 +1,31 @@
 ---
 name: dx-code-analyzer-configure
-description: "Set up, configure, and troubleshoot Salesforce Code Analyzer for any project. Handles installation, prerequisite checks, diagnosing broken setups, creating and editing code-analyzer.yml overrides, engine-specific settings, ignore patterns, severity overrides, and CI/CD pipeline setup. TRIGGER when: user says 'set up code analyzer', 'configure code analyzer', 'install code analyzer', 'code analyzer not working', 'fix my setup', 'scan is failing', 'check my setup', 'is code analyzer installed', 'enable/disable engine', 'exclude files', 'change severity', 'set up GitHub Actions', 'set up CI/CD', 'add code analyzer to pipeline', 'make pipeline fail', 'update my workflow', 'quality gate', 'fail on violations', 'scan changed files only', 'add SARIF', 'code-analyzer.yml', 'ESLint config', 'increase SFGE memory', or reports errors running Code Analyzer. DO NOT TRIGGER when: user wants to run a scan (use dx-code-analyzer-run), fix violations, explain rules, create custom rules, or suppress violations."
+description: "Set up, configure, and troubleshoot Salesforce Code Analyzer for any project. Handles installation, prerequisite checks, diagnosing broken setups, creating and editing code-analyzer.yml overrides, engine-specific settings, ignore patterns, severity overrides, and CI/CD pipeline setup. TRIGGER when: user says 'set up code analyzer', 'configure code analyzer', 'install code analyzer', 'code analyzer not working', 'fix my setup', 'scan failing', 'check my setup', 'enable/disable engine', 'exclude files', 'change severity', 'set up GitHub Actions', 'set up CI/CD', 'add to pipeline', 'pipeline fail', 'update my workflow', 'quality gate', 'fail on violations', 'scan changed files only', 'add SARIF', 'code-analyzer.yml', 'ESLint config', 'increase SFGE memory', or reports errors running Code Analyzer. DO NOT TRIGGER when: user wants to run a scan (use dx-code-analyzer-run), fix violations, explain rules, create custom rules (use dx-code-analyzer-custom-rule-create), or suppress violations."
 metadata:
   version: "1.0"
-  argument-hint: "[--check-prerequisites] [--generate-config] [--engine pmd|eslint|cpd|retire-js|regex|flow|sfge|apexguru] [--ci github-actions|jenkins]"
+  relatedSkills:
+    - "dx-code-analyzer-run"
+    - "dx-code-analyzer-custom-rule-create"
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+    - tool: ["java"]
+      semver: ">=11.0.0"
+    - tool: ["node"]
+      semver: ">=18.0.0"
+    - tool: ["python3"]
+      semver: ">=3.10.0"
+    - tool: ["git"]
+      semver: ">=2.0.0"
+    - tool: ["npm"]
+      semver: ">=9.0.0"
 ---
 
 # Configuring Code Analyzer Skill
 
 ## Overview
+
+> **Ecosystem:** This skill is part of a 3-skill Code Analyzer suite — `dx-code-analyzer-run` (scans & results) · `dx-code-analyzer-configure` (setup, config, CI/CD) · `dx-code-analyzer-custom-rule-create` (custom rule authoring).
 
 This skill manages the `code-analyzer.yml` configuration file — the single source of truth for how Code Analyzer behaves in a project. All customization (engines, rules, ignores, suppressions) is done by creating or editing this file. If the file doesn't exist, this skill creates it in the current working directory.
 
@@ -26,8 +43,9 @@ This skill manages the `code-analyzer.yml` configuration file — the single sou
 - Environment validation and troubleshooting
 
 **Out of scope:**
-- Running scans (use `dx-code-analyzer-run` skill)
-- Fixing violations, explaining rules, creating custom rules, suppression management
+- Running scans → use `dx-code-analyzer-run` skill
+- Fixing violations, explaining rules, suppression management → use `dx-code-analyzer-run` skill
+- Creating custom rules → use `dx-code-analyzer-custom-rule-create` skill
 
 ---
 
@@ -127,7 +145,7 @@ ls code-analyzer.yml code-analyzer.yaml 2>/dev/null
 
 The CLI auto-discovers `code-analyzer.yml` in the current directory. Since scans run from project root, the file must live there.
 
-### ⚠️ Rule Name Resolution — ALWAYS Before Writing YAML
+### Rule Name Resolution — ALWAYS Before Writing YAML
 
 When a user references rules by partial, descriptive, or approximate names (e.g., "the doc rule", "CRUD violation", "console rule", "hardcoded values"), you MUST resolve to exact rule names using the lookup in **Step 6.1** BEFORE writing any YAML. The `code-analyzer.yml` file silently ignores rule names that don't exactly match — there is no error, the override just won't apply.
 
@@ -381,14 +399,10 @@ engines:
     target_org: "my-org-alias"
   flow:
     python_command: "python3"
-  regex:
-    custom_rules:
-      NoHardcodedIds:
-        regex: "/[a-zA-Z0-9]{15,18}/"
-        file_extensions: [".cls", ".trigger"]
-        description: "Detects hardcoded Salesforce record IDs"
-        severity: 2
-        tags: ["Security"]
+  # regex.custom_rules — use the dx-code-analyzer-custom-rule-create skill to create these.
+  # Never hand-write regex patterns into code-analyzer.yml: quotes/backslashes
+  # inside YAML cause parsing failures. The create-regex-rule.js script handles
+  # serialization correctly and must always be used for regex rule creation.
 ```
 
 For full property list per engine, read `<skill_dir>/references/config-schema.md`.
@@ -427,9 +441,13 @@ If a user says "scan my code" / "run code analyzer" but it fails (CLI missing, p
 
 After any successful configuration action, offer to run a scan (e.g., "Setup complete! Want me to run a scan?", "Config updated — want to scan and verify?"). If user says yes, proceed with `dx-code-analyzer-run` behavior.
 
+### When THIS skill hands off to `dx-code-analyzer-custom-rule-create`:
+
+If the user asks to create a custom rule while you are working on configuration (e.g., "also add a rule that bans System.debug", "set up a PMD XPath rule"), delegate to `dx-code-analyzer-custom-rule-create`. When that skill finishes, the `custom_rulesets` or `eslint_config_file` pointer in `code-analyzer.yml` may need to be set — that edit belongs here, in this skill.
+
 ### When user intent spans BOTH skills:
 
-Handle end-to-end: "not working" → Diagnose → Fix → Scan. "Set up and scan" → Install → Scan. "Disable ESLint and scan Apex" → Edit config → Run with `--rule-selector pmd`. Always follow through to the user's final intent.
+Handle end-to-end: "not working" → Diagnose → Fix → Scan. "Set up and scan" → Install → Scan. "Disable ESLint and scan Apex" → Edit config → Run with `--rule-selector pmd`. "Configure custom rules and scan" → dx-code-analyzer-custom-rule-create → wire config → dx-code-analyzer-run. Always follow through to the user's final intent.
 
 ---
 

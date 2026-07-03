@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ICONS_PATH = path.join(__dirname, '..', 'metadata', 'icon-metadata.json');
+const ICONS_PATH = path.join(__dirname, '..', 'assets', 'icon-metadata.json');
 
 function loadIcons() {
   if (!fs.existsSync(ICONS_PATH)) {

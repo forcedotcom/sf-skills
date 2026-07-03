@@ -55,10 +55,10 @@ Use the default template in the doc below. Values in `{braces}` are resolved pro
 
 | Metadata Type | Template Reference |
 |--------------|-------------------|
-| CustomApplication | [configure-metadata-custom-application.md](docs/configure-metadata-custom-application.md) |
+| CustomApplication | [configure-metadata-custom-application.md](references/configure-metadata-custom-application.md) |
 
 ### Execution Note for Step 4: Load and use the doc
-- Agents MUST read the full contents of the docs/*.md file referenced in Step 4 before attempting to populate metadata fields.
+- Agents MUST read the full contents of the references/*.md file referenced in Step 4 before attempting to populate metadata fields.
 - Read the file in full, replace placeholders (e.g. `{appName}`) with the resolved values, then use the expanded template to populate the metadata XML content.
 - If Step 2 determined the older field names apply, substitute `<uiBundle>` with `<webApplication>` in the generated output.
 

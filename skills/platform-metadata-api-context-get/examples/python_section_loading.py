@@ -14,7 +14,7 @@ from pathlib import Path
 
 # Resolve the data directory relative to this file, so the examples work
 # regardless of the current working directory.
-METADATA_DIR = Path(__file__).resolve().parent.parent / 'data' / 'metadata_api'
+METADATA_DIR = Path(__file__).resolve().parent.parent / 'assets' / 'metadata_api'
 
 
 def load_single_section_example():
@@ -93,7 +93,7 @@ def wrong_approach_example():
     This is what NOT to do - it loads the entire file into context:
 
     # Read tool approach (WRONG):
-    # Read data/metadata_api/CustomObject.json  # Loads ALL sections!
+    # Read assets/metadata_api/CustomObject.json  # Loads ALL sections!
 
     # This injects the entire file (including massive WSDL segments)
     # into your context, wasting 60-80% of tokens.

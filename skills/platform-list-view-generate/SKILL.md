@@ -17,14 +17,14 @@ Use this skill when you need to:
 
 # Salesforce List View Metadata Knowledge
 
-## 📋 Overview
+## Overview
 Salesforce List Views define filtered, column-based record listings on an object's tab.
 
-## 🎯 Purpose
+## Purpose
 - Provide curated, role- or task-specific subsets of records
 - Standardize commonly used filters and visible fields across teams
 
-## 🔧 Configuration
+## Configuration
 
 Unless specifically requested to be generated inline, List Views are stored at:
 - force-app/main/default/objects/<ObjectName>/listViews/<fullName>.listView-meta.xml

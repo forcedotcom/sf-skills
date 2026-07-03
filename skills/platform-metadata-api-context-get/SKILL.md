@@ -28,11 +28,11 @@ The Salesforce Metadata API allows you to retrieve, deploy, create, update, or d
 
 ## How to Use This Skill
 
-### ⚡ CRITICAL: Section-Specific Consumption
+### CRITICAL: Section-Specific Consumption
 
 **ALWAYS consume only the specific sections you need from JSON files, NOT entire files.**
 
-**CRITICAL: For `data/metadata_api/*.json` files, always use `jq` or programmatic JSON parsing to extract only the specific sections you need.** Do not load these files whole via `Read`, `cat`, `read_file`, or any other tool that injects the complete file — they contain verbose WSDL segments and other sections that waste 60-80% of tokens. (Loading small files like this SKILL.md or the index table with `Read` is fine; the rule applies specifically to the large metadata-type JSON files.)
+**CRITICAL: For `assets/metadata_api/*.json` files, always use `jq` or programmatic JSON parsing to extract only the specific sections you need.** Do not load these files whole via `Read`, `cat`, `read_file`, or any other tool that injects the complete file — they contain verbose WSDL segments and other sections that waste 60-80% of tokens. (Loading small files like this SKILL.md or the index table with `Read` is fine; the rule applies specifically to the large metadata-type JSON files.)
 
 Each JSON file contains multiple sections (fields, description, wsdl_segment, etc.). Most use cases only require 1-2 sections:
 
@@ -62,7 +62,7 @@ To get information about a specific metadata type:
 
 ## JSON File Structure
 
-Each metadata type is stored as a JSON file in `data/metadata_api/` with the following structure:
+Each metadata type is stored as a JSON file in `assets/metadata_api/` with the following structure:
 
 ```json
 {
@@ -142,13 +142,13 @@ See [`examples/README.md`](examples/README.md) for complete documentation and us
 
 **❌ NEVER use the `read_file` tool on these JSON files**:
 ```text
-read_file data/metadata_api/CustomObject.json  # Loads entire file into context!
-read_file data/metadata_api/Flow.json          # Wastes 60-80% tokens!
+read_file assets/metadata_api/CustomObject.json  # Loads entire file into context!
+read_file assets/metadata_api/Flow.json          # Wastes 60-80% tokens!
 ```
 
 **❌ NEVER load all files**:
 ```text
-read_file data/metadata_api/*.json  # This loads ~15MB of data!
+read_file assets/metadata_api/*.json  # This loads ~15MB of data!
 ```
 
 **Token Impact**:
@@ -194,7 +194,7 @@ Use one of these methods:
 - **Index search**: Check `references/metadata_index_table.md` for related types
 - **Common types**: See the "Quick Reference: Common Metadata Types" section below
 
-### Step 3: Load Selectively (Section-Specific) ⚡
+### Step 3: Load Selectively (Section-Specific)
 
 **Decision Tree for Section Loading**:
 
@@ -235,7 +235,7 @@ Use the loaded information to:
 All metadata type JSON files are located in:
 
 ```text
-data/metadata_api/
+assets/metadata_api/
 ├── CustomObject.json
 ├── Flow.json
 ├── ApexClass.json
@@ -247,8 +247,8 @@ data/metadata_api/
 ### Path Resolution
 
 When using this skill, files are referenced as:
-- Absolute: `data/metadata_api/CustomObject.json`
-- Relative to skill root: `./data/metadata_api/CustomObject.json`
+- Absolute: `assets/metadata_api/CustomObject.json`
+- Relative to skill root: `./assets/metadata_api/CustomObject.json`
 
 The skill will automatically resolve paths based on the working directory.
 
@@ -409,11 +409,11 @@ When the `fields` section gives a complex type name like `ProfileObjectPermissio
 
 ```bash
 # 1. Get the field type name from the fields section
-jq '.fields.objectPermissions' data/metadata_api/Profile.json
+jq '.fields.objectPermissions' assets/metadata_api/Profile.json
 # → {"type": "ProfileObjectPermissions[]", ...}
 
 # 2. Pull just the matching complexType from wsdl_segment using grep -A
-jq -r '.wsdl_segment' data/metadata_api/Profile.json   | grep -A 30 'complexType name="ProfileObjectPermissions"'
+jq -r '.wsdl_segment' assets/metadata_api/Profile.json   | grep -A 30 'complexType name="ProfileObjectPermissions"'
 ```
 
 The `grep -A N` window keeps token cost ~150 tokens instead of loading the whole `wsdl_segment` (which can be 5K+ tokens on large types). Use this pattern any time `fields` returns a `Foo[]` type and you need Foo's sub-fields.

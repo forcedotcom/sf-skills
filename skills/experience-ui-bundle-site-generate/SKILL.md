@@ -47,23 +47,23 @@ Use the default templates in the docs below. Values in `{braces}` are resolved p
 
 | Metadata Type | Template Reference |
 |--------------|-------------------|
-| Network | [configure-metadata-network.md](docs/configure-metadata-network.md) |
-| CustomSite | [configure-metadata-custom-site.md](docs/configure-metadata-custom-site.md) |
-| DigitalExperienceConfig | [configure-metadata-digital-experience-config.md](docs/configure-metadata-digital-experience-config.md) |
-| DigitalExperienceBundle | [configure-metadata-digital-experience-bundle.md](docs/configure-metadata-digital-experience-bundle.md) |
-| DigitalExperience (sfdc_cms__site) | [configure-metadata-digital-experience.md](docs/configure-metadata-digital-experience.md) |
+| Network | [configure-metadata-network.md](references/configure-metadata-network.md) |
+| CustomSite | [configure-metadata-custom-site.md](references/configure-metadata-custom-site.md) |
+| DigitalExperienceConfig | [configure-metadata-digital-experience-config.md](references/configure-metadata-digital-experience-config.md) |
+| DigitalExperienceBundle | [configure-metadata-digital-experience-bundle.md](references/configure-metadata-digital-experience-bundle.md) |
+| DigitalExperience (sfdc_cms__site) | [configure-metadata-digital-experience.md](references/configure-metadata-digital-experience.md) |
 
-For URL updates, see [update-site-urls.md](docs/update-site-urls.md).
+For URL updates, see [update-site-urls.md](references/update-site-urls.md).
 
 ### Execution Note for Step 3: Load and use the docs
-- Agents MUST read the full contents of each docs/*.md file referenced in Step 3 before attempting to populate metadata fields.
+- Agents MUST read the full contents of each references/*.md file referenced in Step 3 before attempting to populate metadata fields.
 - Use your platform's file-read tool (for example, `read_file`) to load these files in full, then perform placeholder substitution for values in `{braces}` using the resolved properties from Step 1.
 - Files to load:
-  - `docs/configure-metadata-network.md`
-  - `docs/configure-metadata-custom-site.md`
-  - `docs/configure-metadata-digital-experience-config.md`
-  - `docs/configure-metadata-digital-experience-bundle.md`
-  - `docs/configure-metadata-digital-experience.md`
+  - `references/configure-metadata-network.md`
+  - `references/configure-metadata-custom-site.md`
+  - `references/configure-metadata-digital-experience-config.md`
+  - `references/configure-metadata-digital-experience-bundle.md`
+  - `references/configure-metadata-digital-experience.md`
 - Read entire file contents, replace placeholders (e.g. `{siteName}`) with the resolved values, then use the expanded templates to populate the metadata XML/JSON content.
   
 ### Step 4: Do Not Modify Non-Templated Properties
@@ -88,5 +88,5 @@ sf project deploy validate --metadata Network CustomSite DigitalExperienceConfig
 **Use when** user wants to update or change site URLs (urlPathPrefix).
 
 **Steps**:
-- [ ] Read [update-site-urls.md](docs/update-site-urls.md) to understand the three-component architecture and URL update workflow
+- [ ] Read [update-site-urls.md](references/update-site-urls.md) to understand the three-component architecture and URL update workflow
 - [ ] Follow the step-by-step workflow in the doc to update URLs consistently across all three components (DigitalExperienceConfig, Network, CustomSite)

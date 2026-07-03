@@ -18,15 +18,15 @@ Use this skill when you need to:
 
 # ValidationRule Metadata Specification
 
-### 📋 Overview
+### Overview
 Validation Rules are declarative metadata components used to enforce data quality and business logic in Salesforce. They evaluate a formula expression when a record is saved and prevent the save operation if the expression returns TRUE.
 
-### 🎯 Purpose
+### Purpose
 -Enforce business rules at the data layer
 -Prevent invalid or incomplete records from being saved
 -Display meaningful error messages to guide users
 
-### ⚙️ Required Properties
+### Required Properties
 
 #### Core Validation Rule Properties
 

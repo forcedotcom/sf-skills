@@ -189,7 +189,7 @@ When no custom objects needed:
         - `referenceTo`: (Lookup only) The target object API name
 - Include only objects and fields that are relevant to the flow being generated
 
-## 🎯 Mandatory Enhancement Rules
+## Mandatory Enhancement Rules
 - **userPrompt**: REQUIRED.
     - If the user requests a **single flow**: use the user's prompt as-is.
     - If the user requests **multiple flows**: you MUST **split** the request and write a **separate, focused `userPrompt` for each individual flow**. Each `userPrompt` must describe only ONE flow. Do NOT pass the entire multi-flow request as a single `userPrompt`. See the multiple flows section below for examples.
