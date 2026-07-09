@@ -4,6 +4,8 @@ This repository provides a curated collection of Salesforce agent skills for bui
 
 The skills are contributed by Salesforce and the broader community. It’s optimized for Agentforce Vibes and can be used with any AI tool that supports skills.
 
+> ⚠️ **Expect frequent changes.** The Salesforce skills library is evolving rapidly as we refine patterns and incorporate feedback. Skills may be renamed, restructured, or removed between releases — they do not follow the same stability guarantees as GA platform APIs. If you’ve forked or synced the repository, be prepared for upstream changes that may conflict with local modifications. This repository is always the source of truth.
+
 ## 🗂️ Structure
 
 ```
