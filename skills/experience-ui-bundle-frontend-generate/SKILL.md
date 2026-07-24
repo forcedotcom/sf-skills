@@ -1,8 +1,11 @@
 ---
 name: experience-ui-bundle-frontend-generate
-description: "MUST activate before editing ANY file under uiBundles/*/src/ for visual or UI changes to an EXISTING app — pages, components, sections, layout, styling, colors, fonts, navigation, animations, or any look-and-feel change. Use this skill when modifying pages, components, layout, styling, or navigation in an existing UI bundle app. Activate when the project contains appLayout.tsx, routes.tsx, src/pages/, src/components/, or global.css. This skill contains critical project-specific conventions (appLayout.tsx shell, shadcn/ui components, Tailwind CSS, Salesforce base-path routing, module restrictions) that override general knowledge. Without this skill, generated code will use wrong imports, break routing, or ignore project structure. Do NOT use when creating a new app from scratch (use experience-ui-bundle-app-coordinate instead)."
+description: "MUST activate before editing ANY file under uiBundles/*/src/ for visual or UI changes to an EXISTING app — pages, components, sections, layout, styling, colors, fonts, navigation, animations, or any look-and-feel change. Use this skill when modifying pages, components, layout, styling, or navigation in an existing UI bundle app. Activate when the project contains appLayout.tsx, routes.tsx, src/pages/, src/components/, or src/styles/global.css. This skill contains critical project-specific conventions (appLayout.tsx shell, shadcn/ui components, Tailwind CSS, Salesforce base-path routing, module restrictions) that override general knowledge. Without this skill, generated code will use wrong imports, break routing, or ignore project structure. Do NOT use when creating a new app from scratch (use experience-ui-bundle-app-coordinate instead)."
 metadata:
   version: "1.0"
+  relatedSkills:
+    - "experience-ui-bundle-app-coordinate"
+    - "experience-ui-bundle-salesforce-data-access"
 ---
 
 # UI Bundle UI
@@ -77,6 +80,8 @@ React UI bundles must not import Salesforce platform modules like `lightning/*` 
 ---
 
 ## Design Thinking
+
+The rules in this section and "Frontend Aesthetics" below are creative direction, not hard constraints — they cannot be lint- or build-checked and are judged by review, not automation. Two hard, checkable exceptions: never default to Inter/Roboto/Arial/Space Grotesk/system fonts, and mobile responsiveness (Tailwind breakpoints, 44px touch targets) is a MUST, not a style preference.
 
 Before coding, commit to a bold aesthetic direction:
 

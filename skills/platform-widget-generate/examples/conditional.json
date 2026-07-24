@@ -1,0 +1,73 @@
+{
+  "type": "lightning__agentforceWidget",
+  "contentBody": {
+    "widgetBody": {
+      "definition": "tile/widget",
+      "children": [
+        {
+          "definition": "tile/column",
+          "attributes": { "gap": "md", "padding": "md" },
+          "children": [
+            {
+              "definition": "tile/callout",
+              "meta": { "if": "{!$attrs.showBanner}" },
+              "attributes": { "variant": "warning", "title": "Announcement" },
+              "children": [
+                {
+                  "definition": "tile/text",
+                  "attributes": { "text": "{!$attrs.bannerMessage}", "variant": "body" }
+                }
+              ]
+            },
+            {
+              "definition": "tile/card",
+              "meta": { "if": "{!$attrs.isVerified}" },
+              "attributes": { "padding": "md", "variant": "outlined" },
+              "children": [
+                {
+                  "definition": "tile/row",
+                  "attributes": { "gap": "sm", "align": "center" },
+                  "children": [
+                    {
+                      "definition": "tile/icon",
+                      "attributes": { "name": "check-circle", "color": "success" }
+                    },
+                    {
+                      "definition": "tile/text",
+                      "attributes": { "text": "{!$attrs.welcomeMessage}", "variant": "body" }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "definition": "tile/card",
+              "meta": {
+                "forEach": "{!$attrs.tasks}",
+                "forItem": "$task",
+                "if": "{!$task.isUrgent}"
+              },
+              "attributes": { "padding": "md", "variant": "outlined" },
+              "children": [
+                {
+                  "definition": "tile/row",
+                  "attributes": { "gap": "md", "justify": "between", "align": "center" },
+                  "children": [
+                    {
+                      "definition": "tile/text",
+                      "attributes": { "text": "{!$task.title}", "variant": "h4" }
+                    },
+                    {
+                      "definition": "tile/badge",
+                      "attributes": { "label": "{!$task.priority}", "variant": "secondary" }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

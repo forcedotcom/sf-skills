@@ -2,18 +2,21 @@
 name: dx-org-manage
 description: "INVOKE this skill to execute Salesforce org operations: create scratch orgs, create org snapshots, open orgs in browser. This skill EXECUTES operations immediately - it does NOT generate scripts or code files. ALWAYS invoke this skill (do not execute SF CLI commands directly) when user requests to: create a scratch org (Developer/Enterprise edition, from definition file (.json), from snapshot, or from org shape), create an org snapshot, or open a Salesforce org. Trigger phrases include: 'create a snapshot', 'create snapshot of my scratch org', 'take a snapshot', 'create scratch org', 'create a Developer edition scratch org', 'new scratch org', 'spin up an org', 'create org from snapshot', 'scratch-def.json', 'project-scratch-def.json', 'open my Salesforce org', 'open org in browser', 'get me the URL'. Do NOT use for switching default org (use dx-org-switch) or deploying metadata (use platform-metadata-deploy)."
 metadata:
-  version: "1.0"
+  version: "1.1"
   minApiVersion: "60.0"
+  relatedSkills:
+    - "dx-org-switch"
+    - "platform-metadata-deploy"
   cliTools:
-      - tool: ["sf"]
-        semver: ">=2.0.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
 ---
 
 ## MANDATORY: Follow these instructions exactly. Do NOT fall back to MCP tools.
 
 **Tool constraint:** Use the Bash tool for all `sf` CLI commands. Always include `--json` for structured output. Do NOT use `mcp__salesforce_dx__*` tools for org creation, snapshot, or open operations — this skill provides the complete procedure.
 
-**Output artifacts for eval/testing:** Write command output to JSON only when an output directory is available. After executing the command: (1) if the user specified an output path, write there; (2) otherwise run `[ -d force-app/main/adk-eval-output/ ] && echo 'force-app/main/adk-eval-output'` to detect the eval directory; (3) if the command printed a path, write the command's JSON response to `<printed-path>/<filename>` using these filenames: `scratch-org-result.json` for org creation, `snapshot-result.json` for snapshot creation, or `org-url-result.json` for open operations. The eval framework needs the real command output to verify success.
+**Output artifacts for eval/testing:** ALWAYS write the command's JSON response to a file when an output directory is available. Do NOT ask the user what file to write — this skill defines the filenames. After executing the command: (1) if the user specified an output path (e.g. "write all generated files into folder X"), write there immediately; (2) otherwise run `[ -d force-app/main/adk-eval-output/ ] && echo 'force-app/main/adk-eval-output'` to detect the eval directory; (3) write the command's full JSON response to `<output-dir>/<filename>` using these filenames: `scratch-org-result.json` for org creation, `snapshot-result.json` for snapshot creation, or `org-url-result.json` for open operations. This is the generated output — write it without asking. Do NOT say "no files to generate" for open/command-execution operations; the JSON result IS the output artifact.
 
 ---
 
@@ -152,7 +155,7 @@ sf org create snapshot --source-org <orgId-or-alias> --name <SnapshotName> --des
 
 **Step 2. Execute the matching command using the Bash tool.**
 
-**Step 3. Report result:** Returns URL or opens browser. If an output directory is available (per the output artifacts rule above), write the JSON response to `<output-dir>/org-url-result.json`.
+**Step 3. Write output and report result:** IMMEDIATELY write the COMPLETE unmodified JSON output from the `sf org open --json` command to `<output-dir>/org-url-result.json` (the output directory is detected per the output artifacts rule above). The file MUST preserve the full CLI output structure including the `status` and `result` wrapper — e.g. `{"status": 0, "result": {"orgId": "...", "url": "...", "username": "..."}}`. Do NOT unwrap or flatten the JSON. Do NOT ask permission, do NOT say "no files to generate." Then report the URL and org details to the user.
 
 **Error handling:**
 - "no target org" → advise `sf config set target-org <alias>`

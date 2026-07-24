@@ -1,0 +1,66 @@
+{
+  "type": "lightning__agentforceWidget",
+  "contentBody": {
+    "widgetBody": {
+      "definition": "tile/widget",
+      "children": [
+        {
+          "definition": "tile/column",
+          "attributes": { "gap": "md", "padding": "md" },
+          "children": [
+            {
+              "definition": "tile/text",
+              "attributes": { "text": "{!$attrs.title}", "variant": "h1" }
+            },
+            {
+              "definition": "tile/card",
+              "meta": { "forEach": "{!$attrs.products}", "forItem": "$product" },
+              "attributes": { "padding": "md", "variant": "outlined" },
+              "children": [
+                {
+                  "definition": "tile/row",
+                  "attributes": { "gap": "md", "justify": "between", "align": "center" },
+                  "children": [
+                    {
+                      "definition": "tile/column",
+                      "attributes": { "gap": "xs" },
+                      "children": [
+                        {
+                          "definition": "tile/text",
+                          "attributes": { "text": "{!$product.name}", "variant": "h3" }
+                        },
+                        {
+                          "definition": "tile/text",
+                          "attributes": { "text": "{!$product.category}", "variant": "caption", "color": "muted" }
+                        }
+                      ]
+                    },
+                    {
+                      "definition": "tile/text",
+                      "attributes": { "text": "{!$product.price}", "variant": "h4", "color": "primary" }
+                    }
+                  ]
+                },
+                {
+                  "definition": "tile/row",
+                  "attributes": { "gap": "sm", "align": "center" },
+                  "meta": { "forEach": "{!$product.features}", "forItem": "$feature" },
+                  "children": [
+                    {
+                      "definition": "tile/icon",
+                      "attributes": { "name": "{!$feature.icon}", "size": "sm", "color": "success" }
+                    },
+                    {
+                      "definition": "tile/text",
+                      "attributes": { "text": "{!$feature.label}", "variant": "caption", "color": "muted" }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -4,7 +4,7 @@
 This configuration file creates a **net-new, default** CustomApplication metadata record for a Lightning Experience app that hosts a React UI bundle. It is not intended to edit or modify an existing CustomApplication record. Use this template only when provisioning a brand-new Custom Application for a UI bundle.
 
 ## File Location
-```
+```xml
 <sourceDir>/applications/{appName}.app-meta.xml
 ```
 

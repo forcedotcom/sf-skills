@@ -3,6 +3,16 @@ name: experience-ui-bundle-custom-app-generate
 description: "MUST activate when the project contains a uiBundles/*/src/ directory and the task involves creating or configuring a Custom Application for hosting a UI bundle in Lightning Experience. Use this skill when creating a CustomApplication metadata record to surface the UI bundle in the App Launcher. Activate when files matching applications/*.app-meta.xml exist and need modification, or when the user wants to expose their app via the Lightning App Launcher without a Digital Experience Site. Do NOT use platform-custom-application-generate for this — UI bundle apps do not use tabs, action overrides, or flexipages."
 metadata:
   version: "1.0"
+  minApiVersion: "51.0"
+  relatedSkills:
+    - "platform-custom-application-generate"
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  mcpTools:
+    salesforce-api-context:
+      tools: ["get_metadata_type_fields"]
+      semver: ">=1.0.0"
 ---
 
 # Custom Application for React UI Bundles
@@ -28,9 +38,9 @@ Determine values for all properties before constructing anything. Use the resolu
 ### Step 2: Query API Context (Version-Aware Field Discovery)
 Call `salesforce-api-context` MCP tools to discover which fields exist for the target org's API version. This ensures the generated metadata is compatible with the user's Salesforce version.
 
-**Required calls:**
-1. Call `get_metadata_type_fields` for `CustomApplication` — check whether the `uiBundle` field exists
-2. Call `get_metadata_type_fields` for `UIBundle` — check whether the `target` field exists
+**Required calls — use the `metadataType` parameter exactly as shown. Do not substitute a `detail` parameter or any other shape; `metadataType` is the only parameter this tool accepts:**
+1. `get_metadata_type_fields({ "metadataType": "CustomApplication" })` — check whether the `uiBundle` field exists in the response's field list
+2. `get_metadata_type_fields({ "metadataType": "UIBundle" })` — check whether the `target` field exists in the response's field list
 
 **Field resolution based on API response:**
 
@@ -63,7 +73,20 @@ Use the default template in the doc below. Values in `{braces}` are resolved pro
 - If Step 2 determined the older field names apply, substitute `<uiBundle>` with `<webApplication>` in the generated output.
 
 ### Step 5: Update UI Bundle Meta XML
-If Step 2 confirmed the `target` field exists on `UIBundle`, add `<target>CustomApplication</target>` to the `.uibundle-meta.xml` file (skip if the field doesn't exist in the org's API version):
+This step edits an **existing** file — it never creates a new one. `UIBundle` is a bundle-style metadata type: its meta XML normally lives inside its own folder at `uiBundles/{appName}/{appName}.uibundle-meta.xml`, alongside the bundle's other source files (e.g. `index.html`, `src/`). Some older or hand-authored projects may instead have it at the flat path `uiBundles/{appName}.uibundle-meta.xml` (no subfolder).
+
+Run `scripts/resolve-uibundle-path.sh "{appName}"` — it prints the path of the existing meta XML (preferring the nested layout, falling back to the flat layout). Edit that exact file in place; do not create a second file at the other path or migrate it to a different layout as part of this skill.
+
+If Step 2 confirmed the `target` field exists on `UIBundle`, add `<target>CustomApplication</target>` inside the existing `<UIBundle>` element of that file, preserving every other existing element and value untouched (skip this step entirely if the field doesn't exist in the org's API version — do not create the file or add `<target>` in that case).
+
+**Do NOT:**
+- Create a new `.uibundle-meta.xml` file
+- Create a second `.uibundle-meta.xml` file at a different path when one already exists (nested or flat) — edit the existing one in place, wherever it is
+- Leave the original `uiBundles/{appName}/{appName}.uibundle-meta.xml` (or `uiBundles/{appName}.uibundle-meta.xml`, if that's the existing layout) unmodified while adding `<target>` somewhere else
+
+The only files this skill produces or modifies are `applications/{appName}.app-meta.xml` (new) and the existing `{appName}.uibundle-meta.xml` (edited in place, only if `<target>` applies). Any other UI-bundle-related file appearing in the output is a bug.
+
+Example of the fully updated file (at `uiBundles/{appName}/{appName}.uibundle-meta.xml`, or the flat path if that's the existing layout) — this illustrates the end state of the existing file, not a new file to create:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -86,7 +109,8 @@ Before deploying, confirm:
 - [ ] API context was queried to determine available fields (Step 2)
 - [ ] `applications/{appName}.app-meta.xml` exists with correct content
 - [ ] The bundle reference field matches the org's API version (`<uiBundle>` or `<webApplication>`)
-- [ ] If `target` field is supported: `.uibundle-meta.xml` has `<target>CustomApplication</target>`
+- [ ] If `target` field is supported: the **existing** `{appName}.uibundle-meta.xml` (nested at `uiBundles/{appName}/`, or flat at `uiBundles/`, whichever already existed) has `<target>CustomApplication</target>`
+- [ ] No extra `.uibundle-meta.xml` file was created — exactly one `{appName}.uibundle-meta.xml` exists, at whichever path it already lived at
 - [ ] Deployment validates successfully:
 ```bash
 sf project deploy validate --metadata CustomApplication UIBundle --target-org ${usernameOrAlias}

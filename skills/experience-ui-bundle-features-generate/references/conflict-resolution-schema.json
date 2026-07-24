@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "UI Bundle Features Conflict Resolution",
+  "description": "Schema for conflict-resolution.json used by @salesforce/ui-bundle-features CLI",
+  "type": "object",
+  "patternProperties": {
+    "^.+$": {
+      "type": "string",
+      "enum": ["overwrite", "skip"],
+      "description": "Resolution strategy for a conflicting file path. 'overwrite' replaces the existing file, 'skip' keeps the existing file."
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "src/appLayout.tsx": "overwrite",
+      "src/routes.tsx": "skip"
+    }
+  ]
+}

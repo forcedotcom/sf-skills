@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Canonical field-completion (type einstein_gpt__fieldCompletion) prompt template.
+
+  This is a TEMPLATE with @@PLACEHOLDERS@@ substituted by
+  scripts/add-field-suggestion.sh. Do not deploy this file directly.
+
+  Placeholders:
+    @@DEVNAME@@           - GenAiPromptTemplate developerName, e.g. RecommendRiskforOpp
+    @@MASTERLABEL@@       - human label, e.g. "Recommend Risk for Opportunity"
+    @@FIELD@@             - Opportunity field API name, e.g. Risk__c
+    @@FIELDLABEL@@        - field label, e.g. "Risk"
+    @@CHARCAP@@           - SuggestedNewValue max chars = the field's own length (<=255)
+    @@FIELD_GOAL@@        - one sentence: what to think about for this field
+    @@FIELD_INSTRUCTION@@ - one line: field-specific extraction guidance
+
+  Everything else is the OOTB Pipeline Management instruction body, VERBATIM.
+  Only the field name and the two field-specific lines above ever change.
+
+  Structure invariants (verified against a live org, do NOT alter):
+    - <type>einstein_gpt__fieldCompletion</type>
+    - input <apiName>RelatedEntity</apiName> is platform-fixed for Metadata-API
+      authored templates; the body resolves against <referenceName>Input:Opportunity</referenceName>
+    - body merge fields use {!$Input:Opportunity.<field>}
+    - <relatedField> is object-qualified: Opportunity.<field>
+    - a <templateDataProviders> block is REQUIRED because the body references
+      {!$Flow:sales_pipe_mgmt__GetOppGroundingData.Prompt}
+    - <status>Published</status>
+    - NO <versionIdentifier>/<activeVersionIdentifier> here; the deploy round-trip
+      in add-field-suggestion.sh adds them (deploy -> retrieve identifier -> set
+      active -> redeploy). Never hand-author or guess the identifier.
+-->
+<GenAiPromptTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Field generation prompt for the Opportunity @@FIELDLABEL@@ field</description>
+    <developerName>@@DEVNAME@@</developerName>
+    <masterLabel>@@MASTERLABEL@@</masterLabel>
+    <overridable>false</overridable>
+    <relatedEntity>Opportunity</relatedEntity>
+    <relatedField>Opportunity.@@FIELD@@</relatedField>
+    <templateVersions>
+        <content>You are an AI Assistant to a Sales Representative.
+ You must think about @@FIELD_GOAL@@
+ You must analyze all of the following data sources: call transcript, email, and content note and extract information in order to provide the suggested new value for the &quot;@@FIELDLABEL@@&quot; field of the opportunity, reasoning for the suggested new value, and snippets that capture the most important and relevant information from the data sources. @@FIELD_INSTRUCTION@@
+ The data may not be available in all the &lt;DataSources&gt; and you must strictly generate a SuggestedNewValue, Reasoning, DueDate, and Sources value based on whatever &lt;DataSources&gt; is available. You must strictly only generate an empty and zero values for the following keys: SuggestedNewValue, Reasoning, DueDate, and Sources if the call transcript, email, and content note within the &lt;DataSources&gt; are blank, empty, or contain a placeholder. You must convert all this information into a concise assessment.
+ The call transcript contains metadata, but you must strictly ignore all of this metadata, because you must only extract key insights from the actual conversation.
+
+&lt;DataSources&gt;
+ &quot;&quot;&quot;
+ {!$Flow:sales_pipe_mgmt__GetOppGroundingData.Prompt}
+ &quot;&quot;&quot;
+ Opportunity Current @@FIELDLABEL@@ Value:
+ &quot;&quot;&quot;
+ {!$Input:Opportunity.@@FIELD@@}
+ &quot;&quot;&quot;
+ &lt;/DataSources&gt;
+
+When I ask you to generate Suggested New Value of the &apos;@@FIELDLABEL@@&apos; field, Reasoning, and Snippets, you must strictly follow my instructions below:
+ For the Suggested New Value of the &apos;@@FIELDLABEL@@&apos; field, here are your instructions:
+ &quot;&quot;&quot;
+ The &quot;SuggestedNewValue&quot; must be a maximum of @@CHARCAP@@ characters.
+ If dates and names are available, you must strictly include the relevant dates and the people associated with each item.
+ You must strictly not generate any content or information that you do not have any data or basis on.
+ &quot;&quot;&quot;
+
+For the Reasoning, here are your instructions:
+ &quot;&quot;&quot;
+ Give a clear and concise explanation and make sure that the reasoning, suggested new value of the &apos;@@FIELDLABEL@@&apos; field, sources and snippets must directly support each other consistently and logically.
+ You must explicitly mention all the sources and snippets when you generate your reasoning.
+ If dates and names are available, you must strictly Include the relevant dates and the people associated with each item.
+ You must strictly avoid any redundancies in your reasoning.
+ &quot;&quot;&quot;
+
+For the Snippets, here are your instructions:
+ &quot;&quot;&quot;
+ Each data source is clearly labelled and you must strictly review the data source label and the data within it and make sure that it strictly aligns.
+ You must strictly include the author, owner, or writer of the snippet, for example, you must always include the name of the author, owner, or writer at the beginning of the snippet.
+ The snippet must include direct quotes, specific phrases or sentences from the provided data source as supporting evidence. It must be concrete evidence that supports the reasoning.
+ You must consistently use the correct capitalization and spelling in your snippets and avoid any redundancies.
+ &quot;&quot;&quot;
+
+The value for the &quot;source&quot; object must be the exact record ID extracted from the &lt;DataSources&gt;.
+ You must strictly extract the EmailMessageId for emails.
+ You must strictly extract the latestVideoOrVoiceCallRecordId for call transcripts.
+ You must strictly extract the latestContentNoteRecordId for content notes.
+
+You must generate the output in JSON structure with the following keys: FieldName, SuggestedNewValue, OriginalValue,Reasoning, DueDate, and Sources.
+ Output must be valid JSON that can be parsed without modification.
+ Do not include markdown, code fences, comments, or text outside the JSON object.
+ Do not include any text, explanations, code blocks (like ```json), or markdown. The response must be the raw JSON string only.
+ Always return one and only one valid JSON object.
+ The Sources key must contain an array of objects, each with source and snippet keys.
+
+The character limit of the value for the &quot;Reasoning&quot; key is strictly 250 characters.
+ The character limit of the value for the &quot;Snippet&quot; key is 100.
+ The value for the &quot;DueDate&quot; must strictly be 30 days.
+ {
+ &quot;FieldName&quot;: &quot;@@FIELD@@&quot;,
+ &quot;SuggestedNewValue&quot;: &quot;value&quot;,
+ &quot;OriginalValue&quot;: &quot;{!$Input:Opportunity.@@FIELD@@}&quot;,
+ &quot;Reasoning&quot;: &quot;value&quot;,
+ &quot;DueDate&quot;: &quot;30 days&quot;,
+ &quot;Sources&quot;: [
+ {
+ &quot;source&quot;: &quot;value&quot;,
+ &quot;snippet&quot;: &quot;value&quot;
+ },
+ {
+ &quot;source&quot;: &quot;value&quot;,
+ &quot;snippet&quot;: &quot;value&quot;
+ },
+ {
+ &quot;source&quot;: &quot;value&quot;,
+ &quot;snippet&quot;: &quot;value&quot;
+ }]
+ }
+ After filling in the values for the JSON, check the following items:
+ - The value for the key &quot;SuggestedNewValue&quot; MUST be at most @@CHARCAP@@ characters in length (counting spaces, punctuation, and symbols). Count the characters and if this count is greater than @@CHARCAP@@, you MUST revise the value. Prioritize clarity and conciseness.
+ - You must replace any placeholder that exactly matches the pattern &quot;[Provide:{field api label}]&quot; with an empty string. You must not replace any other text that does not follow this exact pattern.</content>
+        <inputs>
+            <apiName>RelatedEntity</apiName>
+            <definition>SOBJECT://Opportunity</definition>
+            <referenceName>Input:Opportunity</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultGPT4Omni</primaryModel>
+        <status>Published</status>
+        <templateDataProviders>
+            <definition>flow://sales_pipe_mgmt__GetOppGroundingData</definition>
+            <parameters>
+                <definition>SOBJECT://Opportunity</definition>
+                <isRequired>true</isRequired>
+                <parameterName>RelatedEntity</parameterName>
+                <valueExpression>{!$Input:Opportunity}</valueExpression>
+            </parameters>
+            <referenceName>Flow:sales_pipe_mgmt__GetOppGroundingData</referenceName>
+        </templateDataProviders>
+    </templateVersions>
+    <type>einstein_gpt__fieldCompletion</type>
+    <visibility>Global</visibility>
+</GenAiPromptTemplate>

@@ -3,14 +3,17 @@ name: experience-ui-bundle-app-coordinate
 description: "MUST activate when the user wants to build, create, or generate a React application, React app, web application, single-page application (SPA), or frontend application — even if no project files exist yet. MUST also activate when the project contains a uiBundles/*/src/ directory or sfdx-project.json and the prompt says create, build, construct, or generate a new app, site, or page from scratch — even if the prompt also describes visual styling. MUST also activate when the task spans more than one ui-bundle skill. Use this skill when building a complete app end-to-end. Do NOT use for Lightning Experience apps with custom objects (use platform-lightning-app-coordinate). Do NOT use for single-concern edits to an existing page (use experience-ui-bundle-frontend-generate)."
 metadata:
   version: "1.0"
-  relatedSkills: experience-ui-bundle-project-generate, experience-ui-bundle-metadata-generate, experience-ui-bundle-features-generate, experience-ui-bundle-salesforce-data-access, experience-ui-bundle-frontend-generate, experience-ui-bundle-agentforce-client-generate, experience-ui-bundle-file-upload-generate, experience-ui-bundle-deploy, experience-ui-bundle-site-generate, experience-ui-bundle-custom-app-generate
-  cliTools:
-    - tool: ["sf"]
-      semver: ">=2.0.0"
-    - tool: ["npm"]
-      semver: ">=7.0.0"
-    - tool: ["npx"]
-      semver: ">=7.0.0"
+  relatedSkills:
+    - "experience-ui-bundle-project-generate"
+    - "experience-ui-bundle-metadata-generate"
+    - "experience-ui-bundle-features-generate"
+    - "experience-ui-bundle-salesforce-data-access"
+    - "experience-ui-bundle-frontend-generate"
+    - "experience-ui-bundle-agentforce-client-generate"
+    - "experience-ui-bundle-file-upload-generate"
+    - "experience-ui-bundle-deploy"
+    - "experience-ui-bundle-site-generate"
+    - "experience-ui-bundle-custom-app-generate"
 ---
 
 # Building a UI Bundle App
@@ -126,7 +129,7 @@ Search, describe, and install features (auth, shadcn, search, navigation, GraphQ
     v
 Resolve conflicts (two-pass: --on-conflict error, then --conflict-resolution)
     v
-Integrate __example__ files into target files, then delete them
+Integrate __examples__ files into target files (verify build succeeds), then delete them
 ```
 
 Installs pre-built, tested feature packages. See "Prompt Classification Keywords" above for the full trigger keyword list and negative-phrasing handling — these features provide the foundation that UI components build on top of.
