@@ -117,6 +117,7 @@ If any constraint would be violated in generated code, **stop and explain the pr
 - `SELECT *` does not exist in SOQL -- always specify the exact fields needed
 - Apply `LIMIT` clauses to bound result sets; use `ORDER BY` for deterministic results
 - When querying Custom Metadata Types (objects ending with `__mdt`), do NOT use SOQL — use the built-in methods (`{CustomMdt__mdt}.getAll().values()`, `getInstance()`, etc.)
+- Queries executed in `without sharing` keyword classes with API versions 67.0 and up will throw when the running user does not have the proper field or object-level security. If API versions are being updated, ensure queries are safeguarded properly. Only by passing the `System.AccessLevel.SYSTEM_MODE` class to queries, or by using the `WITH SYSTEM_MODE` modifier after a query's `WHERE` clause will ensure backwards compatibility
 
 ### Caching
 
@@ -126,7 +127,7 @@ If any constraint would be violated in generated code, **stop and explain the pr
 ### Security
 
 - Default to `with sharing`; document justification for `without sharing` or `inherited sharing`
-- `WITH USER_MODE` in SOQL and `AccessLevel.USER_MODE` for `Database` DML for CRUD/FLS enforcement
+- `WITH USER_MODE` in SOQL and `AccessLevel.USER_MODE` for `Database` DML for CRUD/FLS enforcement — these are the defaults for _all_ Apex classes with API versions of 67.0 or higher
 - Validate dynamic field/operator names via allowlist or `Schema.describe`
 - Named Credentials for all external credentials/API keys
 - `AuraHandledException` for `@AuraEnabled` user-facing errors (no internal details)
@@ -153,7 +154,7 @@ Before finalizing, verify: CRUD/FLS enforced (SOQL + DML) · explicit sharing ke
 - Add guard clauses for null/empty inputs at the top of every public method; match style to context: `return` early in private/trigger-handler methods, `throw` exceptions in public APIs, `record.addError()` in validation services
 - Return empty collections instead of `null`
 - Use safe navigation (`?.`) for chained property access
-- Never dereference `map.get(key)` inline unless presence is guaranteed; use `containsKey`, assignment+null check, or safe navigation first
+- Never dereference `map.get(key)` inline unless presence is guaranteed; use `containsKey`, assignment + null check, or safe navigation first
 - Use null coalescing (`??`) for default values
 - Prefer `String.isBlank(value)` over manual checks like `value == null || value.trim().isEmpty()`
 
@@ -220,7 +221,7 @@ Method-level format:
 ### Code Structure & Architecture
 
 - Single responsibility per class; max 500 lines -- split when exceeded
-- Return Early: validate preconditions at method top, return/throw immediately
+- Return early: validate preconditions at method top, return/throw immediately
 - Extract private helpers for methods over ~40 lines
 - Use Dependency Injection (constructor/method params) for testability
 - Prefer composition and narrow interfaces over deep inheritance; extend via new implementations, not modifications

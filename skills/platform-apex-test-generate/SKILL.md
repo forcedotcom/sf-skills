@@ -189,6 +189,10 @@ Deliverables per test class:
 - `{ClassName}Test.cls` + `{ClassName}Test.cls-meta.xml` (match API version of class under test; default `66.0`)
 - `TestDataFactory.cls` + `TestDataFactory.cls-meta.xml` (if not already present)
 
+## API version considerations
+
+Apex running in API versions 66.0 and below defaults to using the `without sharing` keyword when not explicitly specified and runs in system mode by default; Apex running in API versions 67.0 and higher defaults to running in user mode, which means that upgrading API versions to something that crosses the 67.0 boundary can cause downstream test failures without code having explicitly changed. This is especially true in test classes, where it's rare for the `sharing` keywords to have been declared at all. Whenever API versions are upgraded across this critical boundary, additional uplift may be necessary to ensure tests are properly passing.
+
 ## Reference Files
 
 Load on demand for detailed patterns:

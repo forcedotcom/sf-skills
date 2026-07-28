@@ -91,6 +91,7 @@ Cover:
 | "Uncommitted work pending" error in callout test | DML and HTTP callouts cannot be mixed in the same test context without `Test.startTest()` wrapping |
 | Mock not taking effect in test | Ensure `Test.setMock()` is called before the code that makes the callout |
 | `@TestSetup` data missing in test method | `@TestSetup` data is committed per test method — re-query it; do not store in static variables |
+|  API version 67.0 and higher without necessary access level checks | Ensuring user running test has the proper field and object-level permissions when performing DML or querying |
 
 ---
 
