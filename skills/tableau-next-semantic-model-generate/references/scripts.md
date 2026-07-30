@@ -12,6 +12,10 @@ python scripts/discover_sdm.py --list
 
 # Inspect SDM structure (objects, fields, calc fields, metrics, RELATIONSHIPS)
 python scripts/discover_sdm.py --sdm {{SDM_NAME}} --json
+
+# Data-presence gate for a DLO/DMO (field-richness is NOT data-presence)
+python scripts/query_data.py --count {{Object__dll-or-__dlm}}
+# Exit: 0 = shippable, 1 = indeterminate (advisory), 2 = confirmed empty (hard-block)
 ```
 
 ## Build an SDM from scratch (anchor + incremental)
