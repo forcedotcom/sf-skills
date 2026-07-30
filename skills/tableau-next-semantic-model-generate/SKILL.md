@@ -330,8 +330,12 @@ Format: `fieldApiName:tableApiName` (repeat `--additional-dimension` for multipl
 **Creation success is not data success.** Empty results (empty source, filter excludes everything, expression resolves to nothing) → dashboard shows "No results to show." Check with `--verify-only`:
 
 ```bash
-python scripts/create_metric.py --sdm <SDM> --name <Metric_mtc> --verify-only
-python scripts/create_calc_field.py --sdm <SDM> --type measurement --name <Field_clc> --verify-only
+# --verify-only ignores --label/--calculated-field/--time-* but argparse still requires them; pass any values.
+python scripts/create_metric.py --sdm <SDM> --name <Metric_mtc> \
+  --label "verify" --calculated-field <ANY_clc> \
+  --time-field <ANY_TimeField> --time-table <ANY_TimeTable> \
+  --verify-only
+python scripts/create_calc_field.py --sdm <SDM> --type measurement --name <Field_clc> --label "verify" --verify-only
 ```
 
 Non-zero exit + **NOT shippable** = don't proceed to dashboards. Full protocol (why not to re-POST, `query_data.py --count` for raw objects, empty-source guidance) in **[references/concepts.md](references/concepts.md)** and [references/empty-source-handling.md](references/empty-source-handling.md).
@@ -353,7 +357,7 @@ python scripts/update_sdm.py {{SDM_NAME}} \
 python scripts/update_sdm.py {{SDM_NAME}} --agent-enabled --dry-run
 
 # Confirm via discovery (stored state, not CLI success message)
-python scripts/discover_sdm.py {{SDM_NAME}} --json
+python scripts/discover_sdm.py --sdm {{SDM_NAME}} --json
 ```
 
 The update is a PATCH (partial body — server merges), idempotent. `--categories` takes controlled "Semantic Category" values only — the server rejects unknown values with `Invalid Semantic Category`.

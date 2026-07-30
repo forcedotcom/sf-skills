@@ -418,20 +418,33 @@ Downstream builders that consume this contract should enforce this pre-POST and 
 
 ## Error Responses
 
-All endpoints return structured error responses:
+Salesforce API error responses come in two shapes depending on the endpoint.
+
+**Array form (most common):** a top-level JSON array of one or more error objects.
+
+```json
+[
+  {
+    "errorCode": "INVALID_API_INPUT",
+    "message": "Field 'Amount' is not found in the semantic model.",
+    "fields": ["dataObjectFields"]
+  }
+]
+```
+
+**Single-object form:** a bare JSON object (used by some endpoints and by the platform for auth/session errors).
 
 ```json
 {
-  "error": {
-    "code": "INVALID_FIELD",
-    "message": "Field 'Amount' not found in semantic model 'Sales_Cloud12_backward'",
-    "details": {
-      "fieldName": "Amount",
-      "availableFields": ["Total_Amount", "Close_Date", "Stage"]
-    }
-  }
+  "errorCode": "INVALID_SESSION_ID",
+  "message": "Session expired or invalid.",
+  "fields": []
 }
 ```
+
+A `localizedMessage` key may appear in place of (or alongside) `message` in platform-level errors.
+
+The `fields` array is present when the error is scoped to specific request fields; it is omitted or empty otherwise.
 
 **Common Error Codes:**
 - `INVALID_TOKEN`: Authentication token is invalid or expired

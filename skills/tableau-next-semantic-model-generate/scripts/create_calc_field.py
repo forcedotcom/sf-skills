@@ -139,7 +139,7 @@ def main() -> int:
 
     # Measurement-specific
     parser.add_argument("--aggregation", default="UserAgg",
-                        choices=["Sum", "Avg", "Count", "Min", "Max", "UserAgg", "Median"],
+                        choices=["Sum", "Avg", "Count", "CountDistinct", "Min", "Max", "UserAgg"],
                         help="Aggregation type (for measurements, default: UserAgg)")
     parser.add_argument("--data-type", choices=["Number", "Text", "Boolean", "DateTime"],
                         help="Data type (default: Number for measurements, inferred for dimensions)")

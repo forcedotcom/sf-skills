@@ -26,7 +26,7 @@ python scripts/create_calc_field.py \
   --type measurement \
   --name Total_Revenue_clc \
   --label "Total Revenue" \
-  --expression "SUM([Amount])" \
+  --expression "SUM([Opportunity_TAB_Sales_Cloud].[Amount])" \
   --aggregation Sum
 
 # Step 2: Create metric
@@ -141,7 +141,7 @@ python scripts/create_calc_field.py \
   --type measurement \
   --name Win_Rate_clc \
   --label "Win Rate" \
-  --expression "SUM([Won_Count]) / SUM([Total_Count])" \
+  --expression "SUM([Opportunity_TAB_Sales_Cloud].[Won_Count]) / SUM([Opportunity_TAB_Sales_Cloud].[Total_Count])" \
   --aggregation UserAgg
 
 # Step 2: Create metric
@@ -169,7 +169,7 @@ python scripts/create_calc_field.py \
   --type measurement \
   --name Weighted_Pipeline_clc \
   --label "Weighted Pipeline Value" \
-  --expression "SUM([Amount] * [Probability])" \
+  --expression "SUM([Opportunity_TAB_Sales_Cloud].[Amount] * [Opportunity_TAB_Sales_Cloud].[Probability])" \
   --aggregation Sum
 
 # Step 2: Create metric
@@ -197,7 +197,7 @@ python scripts/create_calc_field.py \
   --type measurement \
   --name Avg_Sales_Cycle_clc \
   --label "Average Sales Cycle (Days)" \
-  --expression "AVG(DATEDIFF('day', [Created_Date], [Close_Date]))" \
+  --expression "AVG(DATEDIFF('day', [Opportunity_TAB_Sales_Cloud].[Created_Date], [Opportunity_TAB_Sales_Cloud].[Close_Date]))" \
   --aggregation Avg
 
 # Step 2: Create metric
@@ -375,12 +375,12 @@ After creating a metric, test it by:
 
 | Pattern | Calc Field Expression | Aggregation | Use Case |
 |---------|----------------------|-------------|----------|
-| Simple sum | `SUM([Field])` | Sum | Total revenue, total count |
-| Average | `AVG([Field])` | Avg | Average deal size, average duration |
-| Ratio | `SUM([A]) / SUM([B])` | UserAgg | Win rate, conversion rate |
-| Weighted | `SUM([A] * [B])` | Sum | Weighted pipeline, risk-adjusted |
-| Time calc | `AVG(DATEDIFF('day', [Start], [End]))` | Avg | Sales cycle, time to close |
-| Conditional sum | `SUM(IF condition THEN [Field] ELSE 0 END)` | Sum | Won revenue, qualified leads |
+| Simple sum | `SUM([Table].[Field])` | Sum | Total revenue, total count |
+| Average | `AVG([Table].[Field])` | Avg | Average deal size, average duration |
+| Ratio | `SUM([Table].[A]) / SUM([Table].[B])` | UserAgg | Win rate, conversion rate |
+| Weighted | `SUM([Table].[A] * [Table].[B])` | Sum | Weighted pipeline, risk-adjusted |
+| Time calc | `AVG(DATEDIFF('day', [Table].[Start], [Table].[End]))` | Avg | Sales cycle, time to close |
+| Conditional sum | `SUM(IF condition THEN [Table].[Field] ELSE 0 END)` | Sum | Won revenue, qualified leads |
 
 ## Metric Lifecycle
 

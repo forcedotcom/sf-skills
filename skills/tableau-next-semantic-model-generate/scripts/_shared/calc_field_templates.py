@@ -119,7 +119,7 @@ def build_calculated_measurement(
         api_name: API name (must end with _clc)
         label: Display label
         expression: Tableau formula expression
-        aggregation_type: Aggregation type (Sum, Avg, Count, Min, Max, UserAgg, Median)
+        aggregation_type: Aggregation type (Sum, Avg, Count, CountDistinct, Min, Max, UserAgg)
         data_type: Data type (Number, Text, Boolean, DateTime)
         decimal_place: Decimal places for Number fields
         description: Field description
@@ -155,11 +155,11 @@ def build_calculated_measurement(
         final_agg_type = aggregation_type
         level = "Row"
         # Validate explicit aggregation types are allowed
-        if final_agg_type not in ("Sum", "Avg", "Count", "Min", "Max", "Median", "UserAgg"):
+        if final_agg_type not in ("Sum", "Avg", "Count", "CountDistinct", "Min", "Max", "UserAgg"):
             import warnings
             warnings.warn(
                 f"Explicit aggregation type '{final_agg_type}' may not be supported. "
-                f"Common types: Sum, Avg, Count, Min, Max, Median"
+                f"Common types: Sum, Avg, Count, CountDistinct, Min, Max"
             )
     
     payload = {
@@ -262,7 +262,7 @@ def validate_calc_field(
 
     # Check aggregation type
     if field_type == "measurement" and aggregation_type:
-        valid_agg = ["Sum", "Avg", "Count", "Min", "Max", "UserAgg", "Median"]
+        valid_agg = ["Sum", "Avg", "Count", "CountDistinct", "Min", "Max", "UserAgg"]
         if aggregation_type not in valid_agg:
             errors.append(f"aggregationType must be one of: {', '.join(valid_agg)}")
 
